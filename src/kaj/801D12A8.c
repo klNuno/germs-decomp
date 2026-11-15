@@ -2,7 +2,9 @@
 
 typedef struct Unk_801D12A8 {
     struct Unk_801D12A8 *unk0;
-    u8 unk4[0x34];
+    u8 unk4[0x1C];
+    s16 unk20;
+    u8 unk22[0x16];
     s32 unk38;
     void *unk3C;
 } Unk_801D12A8;
@@ -29,11 +31,14 @@ typedef struct {
     s32 unk2C;
 } Unk_801D1774;
 typedef struct {
-    u8 unk0[0x19];
+    u8 unk0[0x17];
+    u8 unk17;
+    u8 unk18;
     u8 unk19;
     u8 unk1A;
     u8 unk1B;
-    u8 unk1C[0x68];
+    u8 unk1C[0x40];
+    u8 unk5C[0x28];
     u32 *unk84;
     s32 unk88;
 } Unk_801E6FF0;
@@ -51,6 +56,25 @@ typedef struct {
 } Unk_801D1BD4;
 s32 ClearImage(Unk_801D1BD4 *rect, s32 r, s32 g, s32 b);
 s32 DrawSync(s32 mode);
+void func_801CD54C(s32 arg0, char *arg1, char *arg2, s32 arg3);
+extern char D_801DFDFC[];
+typedef struct Unk_801E6DA0 {
+    s32 unk0;
+    s32 unk4;
+    s16 unk8;
+    s16 unkA;
+    u8 unkC[0x8];
+    s32 unk14;
+} Unk_801E6DA0;
+extern Unk_801E6DA0 D_801E6DA0;
+s32 VSync(s32 mode);
+void ResetGraph(s32 mode);
+void PutDispEnv(void *env);
+void PutDrawEnv(void *env);
+void DrawOTag(u32 *ot);
+extern s32 D_801E2D60;
+extern s16 D_801E2D64;
+s32 D_801DFE0C;
 
 void func_801D12A8(Unk_801D12A8 *arg0) {
     Unk_801DFBD0 *p = &D_801DFBD0;
@@ -146,7 +170,42 @@ Unk_801D12A8 *func_801D15C8(u32 arg0) {
     return node;
 }
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801D12A8", func_801D164C);
+void func_801D164C(void) {
+    Unk_801DFBD0 *p = &D_801DFBD0;
+    Unk_801D12A8 *res;
+    s32 i;
+
+    p->unk0 = 16;
+    {
+        s32 n = 16;
+        Unk_801D12A8 *base = func_801CC898(n * sizeof(Unk_801D12A8));
+        Unk_801D12A8 *cur;
+        Unk_801D12A8 *next;
+
+        if (base == 0) {
+            res = 0;
+        } else {
+            cur = base;
+            next = base + 1;
+            for (i = 1; i < n; i++) {
+                cur->unk0 = next;
+                cur = next;
+                next = cur + 1;
+            }
+            cur->unk0 = 0;
+            res = base;
+        }
+    }
+    p->unk4 = res;
+    if (res == 0) {
+        func_801CD54C(3, "Error Allocating Sharing Table", D_801DFDFC, 0x78);
+    }
+    for (i = 0; i < p->unk0; i++) {
+        p->unk4[i].unk20 = i;
+    }
+    p->unk8 = p->unk4;
+    p->unkC = 0;
+}
 
 void func_801D172C(void) {
     Unk_801DFBD0 *p = &D_801DFBD0;
@@ -207,7 +266,42 @@ Unk_801E6FF0 *func_801D1A58(void) {
     return D_801DFFD0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801D12A8", func_801D1AAC);
+void func_801D1AAC(Unk_801E6FF0 *arg0) {
+    s32 t;
+    s32 d;
+    s32 v;
+
+    if (arg0->unk17 == 0) {
+        DrawSync(0);
+        VSync(2);
+        t = VSync(-1);
+    } else {
+        VSync(2);
+        t = VSync(-1);
+        ResetGraph(1);
+    }
+    PutDispEnv(arg0->unk5C);
+    PutDrawEnv(arg0);
+    v = D_801E2D60 + 1;
+    D_801E2D60 = v;
+    if (v == 0) {
+        v = 1;
+    }
+    D_801E2D60 = v;
+    D_801E2D64 = D_801E2D64 == 0;
+    DrawOTag(arg0->unk84 + 0x1FFF);
+    {
+        Unk_801E6DA0 *p = &D_801E6DA0;
+        s32 last = D_801DFE0C;
+
+        D_801DFE0C = t;
+        d = t - last;
+        p->unk14 = d;
+        if (d < 0) {
+            p->unk14 = d + 0x7FFFFFFF;
+        }
+    }
+}
 
 void func_801D1BAC(u8 arg0, u8 arg1, u8 arg2) {
     Unk_801E6FF0 *p = D_801E6FF0;

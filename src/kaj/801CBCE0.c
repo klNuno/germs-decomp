@@ -17,8 +17,35 @@ s32 D_801DFFC0;
 s32 D_801DFFC4;
 void free3(void *ptr);
 void func_801D1300(s32 arg0);
+typedef struct Unk_801CC1E8 {
+    s32 unk0;
+    u32 unk4;
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+} Unk_801CC1E8;
+void *func_801CC898(u32 size);
+void *memcpy(void *dst, void *src, u32 n);
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801CBCE0", func_801CBCE0);
+void func_801CBCE0(void) {
+    u32 q;
+    s32 n;
+
+    n = D_801DFAD4.unk10 << 1;
+    q = (u32)func_801CC898(n * sizeof(Unk_801CC1E8));
+    if (q == 0) {
+        func_801CD54C(3, "Error Reallocating EVENT Queue", D_801DFDB4, 0x27);
+    }
+    if (D_801DFAD4.unk4 != 0) {
+        memcpy((void *)((D_801DFAD4.unk10 - D_801DFAD4.unk8) * sizeof(Unk_801CC1E8) + q), D_801DFAD4.unk0, D_801DFAD4.unk4 * sizeof(Unk_801CC1E8));
+    }
+    memcpy((void *)q, (void *)(D_801DFAD4.unk4 * sizeof(Unk_801CC1E8) + (u32)D_801DFAD4.unk0), (D_801DFAD4.unk10 - D_801DFAD4.unk8) * sizeof(Unk_801CC1E8));
+    D_801DFAD4.unk8 = 0;
+    D_801DFAD4.unk4 = D_801DFAD4.unk10;
+    free3(D_801DFAD4.unk0);
+    D_801DFAD4.unk0 = (void *)q;
+    D_801DFAD4.unk10 = n;
+}
 
 INCLUDE_ASM("asm/nonmatchings/kaj/801CBCE0", func_801CBDF0);
 

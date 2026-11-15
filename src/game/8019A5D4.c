@@ -11,6 +11,8 @@ typedef struct { s32 unk0; s32 unk4; s16 unk8; } Unk_801E1058;
 extern Unk_801DFE68 D_801DFE68;
 extern Unk_801E1058 D_801E1058;
 typedef struct { s16 unk0; s16 unk2; } Unk_801A216C;
+extern s32 D_801D77E0[];
+void func_8018C50C(s32 a, s32 b, s32 c, s16 d, s16 e);
 
 INCLUDE_ASM("asm/nonmatchings/game/8019A5D4", func_8019A5D4);
 
@@ -93,7 +95,25 @@ INCLUDE_ASM("asm/nonmatchings/game/8019A5D4", func_801A1AB8);
 
 INCLUDE_ASM("asm/nonmatchings/game/8019A5D4", func_801A1EC0);
 
-INCLUDE_ASM("asm/nonmatchings/game/8019A5D4", func_801A1FD4);
+void func_801A1FD4(s16 arg0, s16 arg1) {
+    s32 i = (arg1 - 1) * 3;
+
+    switch (arg0) {
+    case 4:
+        i += 0x27;
+        break;
+    case 5:
+        i += 0x39;
+        break;
+    case 6:
+        i += 0x57;
+        break;
+    case 7:
+        i += 0x69;
+        break;
+    }
+    func_8018C50C(D_801D77E0[i], 0, D_801D77E0[i + 1], D_801D77E0[i + 2], 1);
+}
 
 void func_801A20A8(void) {
     func_801A0978(0, 1);

@@ -1,14 +1,14 @@
 #include "common.h"
 
 typedef struct Unk_801CCB70 {
-    void *unk0;
+    struct Unk_801CCB70 *unk0;
     struct Unk_801CCB70 *unk4;
     void *unk8;
 } Unk_801CCB70;
 typedef struct Unk_801CCAF4 {
     Unk_801CCB70 *unk0;
-    void *unk4;
-    void *unk8;
+    Unk_801CCB70 *unk4;
+    Unk_801CCB70 *unk8;
     s32 unkC;
 } Unk_801CCAF4;
 void *func_801CC898(u32 size);
@@ -40,6 +40,7 @@ typedef struct Unk_801CD78C {
 } Unk_801CD78C;
 void srand(u32 seed);
 extern u32 D_801E6DAC[];
+extern char D_80172BB4[];
 
 void func_801CCAF4(Unk_801CCAF4 **arg0) {
     *arg0 = func_801CC898(0x10);
@@ -71,13 +72,139 @@ void func_801CCB70(Unk_801CCAF4 *arg0) {
     free3(arg0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801CCAF4", func_801CCBF4);
+void func_801CCBF4(Unk_801CCAF4 *arg0, void *arg1) {
+    Unk_801CCB70 *node;
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801CCAF4", func_801CCCF4);
+    node = func_801CC898(0xC);
+    if (node == NULL) {
+        func_801CD54C(3, D_80172BB4, D_801DFDC4, 0x3C);
+    }
+    node->unk8 = arg1;
+    node->unk0 = NULL;
+    node->unk4 = NULL;
+    if (arg0->unk0 == NULL) {
+        arg0->unk0 = node;
+        arg0->unk4 = node;
+        arg0->unk8 = node;
+        arg0->unkC = 1;
+    } else {
+        if (arg0->unk0 == arg0->unk8) {
+            node->unk4 = arg0->unk8;
+            arg0->unk0->unk0 = node;
+            arg0->unk0 = node;
+            arg0->unk8 = node;
+            arg0->unkC++;
+        } else {
+            node->unk4 = arg0->unk8;
+            node->unk0 = arg0->unk8->unk0;
+            arg0->unk8->unk0 = node;
+            arg0->unk8 = node;
+            node->unk0->unk4 = node;
+            arg0->unkC++;
+        }
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801CCAF4", func_801CCDF8);
+void func_801CCCF4(Unk_801CCAF4 *arg0, void *arg1) {
+    Unk_801CCB70 *node;
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801CCAF4", func_801CCEE8);
+    node = func_801CC898(0xC);
+    if (node == NULL) {
+        func_801CD54C(3, D_80172BB4, D_801DFDC4, 0x61);
+    }
+    node->unk8 = arg1;
+    node->unk0 = NULL;
+    node->unk4 = NULL;
+    if (arg0->unk0 == NULL) {
+        arg0->unk0 = node;
+        arg0->unk4 = node;
+        arg0->unk8 = node;
+        arg0->unkC = 1;
+    } else {
+        if (arg0->unk4 == arg0->unk8) {
+            node->unk0 = arg0->unk8;
+            arg0->unk4->unk4 = node;
+            arg0->unk4 = node;
+            arg0->unk8 = node;
+            arg0->unkC++;
+        } else {
+            node->unk0 = arg0->unk8;
+            node->unk4 = arg0->unk8->unk4;
+            arg0->unk8->unk4 = node;
+            arg0->unk8 = node;
+            node->unk4->unk0 = node;
+            arg0->unkC++;
+        }
+    }
+}
+
+void func_801CCDF8(Unk_801CCAF4 *arg0) {
+    Unk_801CCB70 *node;
+
+    node = arg0->unk8;
+    if (arg0->unk0 == arg0->unk4) {
+        arg0->unk0 = NULL;
+        arg0->unk4 = NULL;
+        arg0->unk8 = NULL;
+        arg0->unkC = 0;
+    } else {
+        if (arg0->unk0 == node) {
+            arg0->unk8 = node->unk4;
+            arg0->unk8->unk0 = NULL;
+        } else {
+            arg0->unk8 = node->unk0;
+            arg0->unk8->unk4 = node->unk4;
+            if (node->unk4 != NULL) {
+                node->unk4->unk0 = node->unk0;
+            }
+        }
+        arg0->unkC--;
+    }
+    node->unk0 = NULL;
+    node->unk4 = NULL;
+    node->unk8 = NULL;
+    if (arg0->unk0 == node) {
+        arg0->unk0 = arg0->unk8;
+    }
+    if (arg0->unk4 == node) {
+        arg0->unk4 = arg0->unk8;
+    }
+    free3(node);
+}
+
+void func_801CCEE8(Unk_801CCAF4 *arg0) {
+    Unk_801CCB70 *node;
+
+    node = arg0->unk8;
+    if (arg0->unk0 == arg0->unk4) {
+        arg0->unk0 = NULL;
+        arg0->unk4 = NULL;
+        arg0->unk8 = NULL;
+        arg0->unkC = 0;
+    } else {
+        if (arg0->unk4 == node) {
+            arg0->unk8 = node->unk0;
+            arg0->unk8->unk4 = NULL;
+        } else {
+            arg0->unk8 = node->unk4;
+            arg0->unk8->unk0 = node->unk0;
+            if (node->unk0 != NULL) {
+                node->unk0->unk4 = node->unk4;
+            }
+        }
+        arg0->unkC--;
+    }
+    node->unk0 = NULL;
+    node->unk4 = NULL;
+    node->unk8 = NULL;
+    if (arg0->unk0 == node) {
+        arg0->unk0 = arg0->unk8;
+    }
+    if (arg0->unk4 == node) {
+        arg0->unk4 = arg0->unk8;
+    }
+    free3(node);
+}
 
 s32 func_801CCFD8(Unk_801CCAF4 *arg0) {
     if (arg0 == NULL) {

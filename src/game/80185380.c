@@ -2,7 +2,19 @@
 
 typedef struct Unk_801854B8 {
     u16 unk0;
-    u8 unk2[0x76];
+    u8 unk2[4];
+    s16 unk6;
+    u8 unk8[0xC];
+    s32 unk14;
+    s32 unk18;
+    s32 unk1C;
+    u8 unk20[8];
+    s32 unk28;
+    u8 unk2C[0x14];
+    s32 unk40;
+    s32 unk44;
+    s32 unk48;
+    u8 unk4C[0x2C];
     void *unk78;
     void *unk7C;
 } Unk_801854B8;
@@ -84,8 +96,54 @@ Unk_801854B8 *func_801855C8(u16 arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/game/80185380", func_80185664);
 
-INCLUDE_ASM("asm/nonmatchings/game/80185380", func_80185794);
+void func_80185794(s32 arg0, s32 arg1, s32 arg2) {
+    Unk_801DFE80 *list = D_801DFE80;
+    Unk_801854B8 *item;
 
-INCLUDE_ASM("asm/nonmatchings/game/80185380", func_80185858);
+    if (list->unkC == 0) {
+        return;
+    }
+    list->unk8 = list->unk0;
+    while (1) {
+        item = list->unk8->unk8;
+        if (item != NULL) {
+            item->unk28 = 0;
+            item->unk40 = item->unk14 - arg0;
+            item->unk44 = item->unk18 - arg1;
+            item->unk48 = item->unk1C - arg2;
+        }
+        if (func_801CD000(list) != 0) {
+            break;
+        }
+        list->unk8 = list->unk8->unk4;
+    }
+}
+
+void func_80185858(u16 arg0, s16 arg1) {
+    Unk_801DFE80 *list = D_801DFE80;
+    Unk_801854B8 *item;
+    Unk_801854B8 *found;
+
+    if (list->unkC == 0) {
+        found = NULL;
+    } else {
+        list->unk8 = list->unk0;
+        while (1) {
+            item = list->unk8->unk8;
+            if (item != NULL && item->unk0 == arg0) {
+                found = item;
+                break;
+            }
+            if (func_801CD000(list) != 0) {
+                found = NULL;
+                break;
+            }
+            list->unk8 = list->unk8->unk4;
+        }
+    }
+    if (found != NULL && found->unk6 != arg1) {
+        found->unk6 = arg1;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/game/80185380", func_80185918);

@@ -132,12 +132,40 @@ def normalize(unit):
         if key not in seen:
             seen.add(key)
             uniq.append(d)
+    uniq = order_types(uniq)
     out = "\n".join(includes) + "\n\n"
     if uniq:
         out += "\n".join(uniq) + "\n\n"
     out += "\n\n".join(bodies) + "\n"
     if tail:
         out += "\n" + "\n".join(tail) + "\n"
+    return out
+
+
+def order_types(decls):
+    """Keep the order, except that a type definition moves above the first item that names it
+    (a candidate may refine a unit type in place with a field of a type it adds further down)."""
+    defs = {}
+    for d in decls:
+        name = type_name(d)
+        if name and name not in defs:
+            defs[name] = d
+    out, done, busy = [], set(), set()
+
+    def visit(d):
+        if id(d) in done or id(d) in busy:
+            return
+        busy.add(id(d))
+        for word in re.findall(r"\b\w+\b", " ".join(code_of(l) for l in d.splitlines())):
+            dep = defs.get(word)
+            if dep is not None and dep is not d:
+                visit(dep)
+        busy.discard(id(d))
+        done.add(id(d))
+        out.append(d)
+
+    for d in decls:
+        visit(d)
     return out
 
 
