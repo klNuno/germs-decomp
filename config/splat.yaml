@@ -1,0 +1,87 @@
+# splat config for SLPS_021.07 (retail, sha1 below). Section bounds checked on our exe:
+# .rodata 0x80170000..0x80173054, .text 0x80173054..0x801D7328 (last jr ra at 0x801D7320),
+# .data 0x801D7328..0x801DFC58, .sdata from gp 0x801DFC58 (set at 0x801C88BC) to 0x801DFE50,
+# bss 0x801DFE50..0x801E7A10, cleared by __SN_ENTRY_POINT.
+# Text units: game/<addr> is the game's own code (13 source files, named by their assert strings);
+# psyq/<addr> are Sony library runs found by tools/psyq/match.py (asm, never decompiled);
+# kaj/<addr> are the pieces between them that no Sony signature matches: the developer's own
+# library (assert strings kaj.c, ll.c, misc.c, tim.c, timer.c, tss.c, cdmgr.c), linked among Sony's.
+# Every unit is one address block for now: file boundaries come with the layout study.
+name: Germs Nerawareta Machi (SLPS-02107)
+sha1: 178e728643d9b456436f4d19c9e07db11ab8aa2c
+options:
+  basename: germs
+  platform: psx
+  compiler: GCC
+  base_path: ..
+  target_path: extract/SLPS_021.07
+  asm_path: asm
+  asset_path: assets
+  src_path: src
+  build_path: build
+  ld_script_path: linker/germs.ld
+  symbol_addrs_path:
+    - config/symbol_addrs.txt
+    - config/symbol_addrs.psyq.txt
+  undefined_funcs_auto_path: linker/undefined_funcs_auto.txt
+  undefined_syms_auto_path: linker/undefined_syms_auto.txt
+
+  gp_value: 0x801DFC58
+  ld_gp_expression: main_SDATA_START
+  find_file_boundaries: True
+  migrate_rodata_to_functions: False
+  disassemble_all: True
+  use_legacy_include_asm: False
+  include_asm_macro_style: maspsx_hack
+  o_as_suffix: False
+
+  asm_function_macro: glabel
+  asm_jtbl_label_macro: jlabel
+  asm_data_macro: dlabel
+  asm_end_label: endlabel
+
+  section_order: [".rodata", ".text", ".data", ".sdata", ".sbss", ".bss"]
+  subalign: 4
+  ld_bss_is_noload: True
+  ld_align_section_vram_end: False
+  ld_align_segment_vram_end: False
+
+  string_encoding: SHIFT-JIS
+  data_string_encoding: SHIFT-JIS
+  rodata_string_guesser_level: 2
+  data_string_guesser_level: 2
+
+segments:
+  - name: header
+    type: header
+    start: 0x0
+
+  - name: main
+    type: code
+    start: 0x800
+    vram: 0x80170000
+    bss_size: 0x7BC0
+    subsegments:
+      # One .rodata block for now: jump tables stay there (no migration) until units get their own.
+      - [0x800, rodata, main]
+      - [0x3854, c, game/80173054]  # game code: action.c .. vehicle.c by their assert strings, in link order
+      - [0x3D1D0, asm, psyq/801AC9D0]  # LIBAPI,LIBC,LIBC2,LIBCARD,LIBCD,LIBETC,LIBGPU,LIBGS,LIBGTE,LIBMATH,LIBMCRD,LIBSN,LIBSND,LIBSPU
+      - [0x5C4E0, c, kaj/801CBCE0]  # no Sony signature, calls Sony code only
+      - [0x5CF68, asm, psyq/801CC768]  # LIBAPI
+      - [0x5D098, c, kaj/801CC898]  # no Sony signature, calls Sony code only
+      - [0x5D1F4, asm, psyq/801CC9F4]  # LIBAPI,LIBETC,LIBMCRD
+      - [0x5D2F4, c, kaj/801CCAF4]  # no Sony signature, calls Sony code only
+      - [0x5E050, asm, psyq/801CD850]  # LIBAPI,LIBGS,LIBSND,LIBSPU
+      - [0x5FF90, c, kaj/801CF790]  # no Sony signature, calls Sony code only
+      - [0x60420, asm, psyq/801CFC20]  # LIBGPU,LIBGS
+      - [0x60570, c, kaj/801CFD70]  # no Sony signature, calls Sony code only
+      - [0x60ED0, asm, psyq/801D06D0]  # LIBAPI
+      - [0x61080, c, kaj/801D0880]  # no Sony signature, calls Sony code only
+      - [0x61938, asm, psyq/801D1138]  # LIBGTE
+      - [0x61AA8, c, kaj/801D12A8]  # no Sony signature, calls Sony code only
+      - [0x62420, asm, psyq/801D1C20]  # LIBGPU,LIBGS,LIBGTE
+      - [0x62670, c, kaj/801D1E70]  # no Sony signature, calls Sony code only
+      - [0x67B28, data, main]
+      - [0x70458, sdata, main]
+      - { type: bss, vram: 0x801DFE50, name: main }
+  - [0x70650]

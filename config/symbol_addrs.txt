@@ -1,0 +1,1 @@
+// Our own names, with evidence. Sony names live in symbol_addrs.psyq.txt.
