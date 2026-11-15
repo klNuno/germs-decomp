@@ -56,6 +56,8 @@ extern u32 D_801E6DAC[];
 void EnterCriticalSection(void);
 void ExitCriticalSection(void);
 void func_801D0414(s32 arg0);
+void *realloc3(void *ptr, s32 size);
+void func_801CFEB0(s32 arg0, s32 arg1, s32 arg2);
 
 s32 func_801CFD70(void) {
     Unk_801DFBB8 *q;
@@ -88,7 +90,59 @@ s32 func_801CFD70(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801CFD70", func_801CFEB0);
+void func_801CFEB0(s32 arg0, s32 arg1, s32 arg2) {
+    Unk_801DFBB8 *q;
+    Unk_801DFBB8 *p;
+    Unk_801D05F8 *e;
+    Unk_801D05F8 tmp;
+    s32 n;
+    s32 t;
+    s32 i;
+    s32 j;
+
+    EnterCriticalSection();
+    q = &D_801DFBB8;
+    if (q->unkC != 0) {
+        n = q->unk4 << 1;
+        e = realloc3(D_801DFBB8.unk0, (n + 1) * sizeof(Unk_801D05F8));
+        if (e == NULL) {
+            ExitCriticalSection();
+            func_801CD54C(3, "Error Reallocating TIMER Queue", D_801DFDF4, 0x80);
+        }
+        D_801DFBB8.unk0 = e;
+        q->unk4 = n;
+        q->unkC = 0;
+    }
+    q->unk0[++q->unk8].unk4 = (void *)arg1;
+    q->unk0[q->unk8].unk8 = arg2;
+    t = arg0 + D_801E6DAC[0];
+    if (t < 0) {
+        q->unk0[q->unk8].unk0 = t + 0x80000001;
+        q->unk0[q->unk8].unkC = 1;
+    } else {
+        q->unk0[q->unk8].unk0 = t;
+        q->unk0[q->unk8].unkC = 0;
+    }
+    if (q->unk8 == q->unk4) {
+        q->unkC = 1;
+    }
+    p = &D_801DFBB8;
+    i = q->unk8;
+    if (i != 1) {
+        j = i >> 1;
+        tmp = p->unk0[i];
+        while (p->unk0[j].unk0 - tmp.unk0 > 0) {
+            p->unk0[i] = p->unk0[j];
+            i = j;
+            if (i < 2) {
+                break;
+            }
+            j = i >> 1;
+        }
+        p->unk0[i] = tmp;
+    }
+    ExitCriticalSection();
+}
 
 s16 func_801D0134(void) {
     Unk_801DFBB8 *q;

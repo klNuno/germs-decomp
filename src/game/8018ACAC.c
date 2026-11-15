@@ -96,6 +96,27 @@ typedef struct { u8 unk0[0x10]; s16 unk10; u16 unk12; s16 unk14; u16 unk16; s32 
 void *memset(void *dst, s32 c, u32 n);
 s32 LoadImage2(void *rect, void *p);
 void func_801A2678(s32 arg0);
+typedef struct { s16 unk0; s16 unk2; } Unk_8018C864_1C;
+typedef struct { u8 unk0[0x1C]; Unk_8018C864_1C *unk1C; } Unk_8018C864;
+typedef struct { u16 unk0; u8 unk2[2]; u8 unk4[0x24]; } Unk_801891A4;
+Unk_801891A4 *func_801891A4(s16 arg0);
+s32 strlen(char *s);
+u16 *Krom2RawAdd2(u16 sjis);
+typedef struct {
+    s16 unk0[5];
+    s16 unkA;
+    char *unkC;
+    s16 unk10;
+    s16 unk12;
+    s16 unk14;
+    s16 unk16;
+    s16 unk18;
+    s16 unk1A;
+    s16 unk1C;
+    u8 unk1E[2];
+    char unk20[4];
+} Unk_8018C554;
+char *strncpy(char *dst, char *src, u32 n);
 
 INCLUDE_ASM("asm/nonmatchings/game/8018ACAC", func_8018ACAC);
 
@@ -493,7 +514,61 @@ void func_8018C50C(s32 a, s32 b, s32 c, s16 d, s16 e) {
     p->unk10 = e;
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/8018ACAC", func_8018C554);
+void func_8018C554(u16 arg0, char *arg1, s16 arg2, s16 arg3, u16 arg4, u16 arg5, u16 arg6, u32 arg7, u16 arg8) {
+    Unk_8018C554 *p = (Unk_8018C554 *)&D_801E0340;
+    Unk_801E0368 *g = &D_801E0368;
+
+    p->unkA = 1;
+    switch ((s16)g->unk0[arg2]) {
+    case 0:
+        p->unk0[3] = 0;
+        break;
+    case 10:
+        p->unk0[3] = 2;
+        break;
+    case 1000:
+        p->unk0[3] = 3;
+        break;
+    case 2000:
+        p->unk0[3] = 4;
+        break;
+    default:
+        p->unk0[3] = 1;
+        break;
+    }
+    p->unk0[1] = 1;
+    p->unkC = NULL;
+    p->unk0[2] = arg6;
+    memset(p->unk20, 0, 4);
+    strncpy(p->unk20, arg1, 3);
+    p->unk16 = arg3;
+    p->unk18 = arg4;
+    p->unk1A = arg5;
+    p->unk14 = 0;
+    p->unk1C = arg8;
+    if (arg2 != 13 && (u16)(arg2 - 11) < 16 && (u32)(*(g->unk0 + arg2) - 11) < 90) {
+        p->unk14 = 1;
+    }
+    if (arg0 == 1) {
+        switch ((arg7 >> 16) & 0xFF) {
+        case 0xF6:
+            p->unk10 = 1;
+            p->unk12 = arg7 & 0xFF;
+            break;
+        case 0xF9:
+            p->unk10 = 2;
+            p->unk12 = arg7 & 0xFF;
+            break;
+        default:
+            p->unk10 = 0;
+            p->unk12 = (s8)(arg7 >> 8);
+            break;
+        }
+    } else {
+        p->unk10 = ((arg7 & 0xFF00) >> 8) + 2;
+        p->unk12 = arg7 & 0xFF;
+    }
+}
 
 s16 func_8018C750(s16 a) {
     do {
@@ -529,7 +604,154 @@ s32 func_8018C810(s32 a) {
     return r;
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/8018ACAC", func_8018C864);
+void func_8018C864(s32 a, s32 b, s32 c) {
+    s16 r[4];
+    u16 buf[0x20];
+    Unk_8018C864 *p;
+    Unk_801891A4 *e;
+    u16 *d;
+    u16 *f;
+    s32 i;
+    s32 t;
+    s32 j;
+    s32 n;
+    s32 x;
+
+    p = (Unk_8018C864 *)func_801A44B8(a);
+    e = func_801891A4(c);
+    if (p == NULL || e == NULL) {
+        return;
+    }
+    x = p->unk1C->unk0;
+    b += p->unk1C->unk2;
+    r[2] = 2;
+    r[3] = 15;
+    r[0] = x;
+    r[1] = b;
+    n = strlen((char *)e->unk4);
+    for (i = 0; i < 24; i += 2) {
+        d = buf;
+        if (i < n) {
+            f = Krom2RawAdd2((e->unk4[i] << 8) | e->unk4[i + 1]);
+            for (j = 0; j < 15; j++, f++) {
+                {
+                    u16 v;
+                    s32 k;
+                    s32 sh;
+                    s32 m;
+                    u16 c1;
+                    u16 c2;
+
+                    m = 4;
+                    v = 0;
+                    k = 7;
+                    sh = 0;
+                    do {
+                        c1 = (*f >> k) & 1 ? 2 : 14;
+                        k--;
+                        c2 = (*f >> k) & 1 ? 2 : 14;
+                        k--;
+                        if (c1 == c2) {
+                            v |= c1 << sh;
+                        } else {
+                            v |= 10 << sh;
+                        }
+                        sh += 4;
+                    } while (k > m);
+                    d[0] = v;
+                }
+                {
+                    u16 v;
+                    s32 k;
+                    s32 sh;
+                    s32 m;
+                    u16 c1;
+                    u16 c2;
+
+                    m = 0;
+                    v = 0;
+                    k = 3;
+                    sh = 0;
+                    do {
+                        c1 = (*f >> k) & 1 ? 2 : 14;
+                        k--;
+                        c2 = (*f >> k) & 1 ? 2 : 14;
+                        k--;
+                        if (c1 == c2) {
+                            v |= c1 << sh;
+                        } else {
+                            v |= 10 << sh;
+                        }
+                        sh += 4;
+                    } while (k > m);
+                    t = d[0];
+                    t |= (u16)(v << 8);
+                    d[0] = t;
+                    d++;
+                }
+                {
+                    u16 v;
+                    s32 k;
+                    s32 sh;
+                    s32 m;
+                    u16 c1;
+                    u16 c2;
+
+                    m = 12;
+                    v = 0;
+                    k = 15;
+                    sh = 0;
+                    do {
+                        c1 = (*f >> k) & 1 ? 2 : 14;
+                        k--;
+                        c2 = (*f >> k) & 1 ? 2 : 14;
+                        k--;
+                        if (c1 == c2) {
+                            v |= c1 << sh;
+                        } else {
+                            v |= 10 << sh;
+                        }
+                        sh += 4;
+                    } while (k > m);
+                    d[0] = v;
+                }
+                {
+                    u16 v;
+                    s32 k;
+                    s32 sh;
+                    s32 m;
+                    u16 c1;
+                    u16 c2;
+
+                    m = 8;
+                    v = 0;
+                    k = 11;
+                    sh = 0;
+                    do {
+                        c1 = (*f >> k) & 1 ? 2 : 14;
+                        k--;
+                        c2 = (*f >> k) & 1 ? 2 : 14;
+                        k--;
+                        if (c1 == c2) {
+                            v |= c1 << sh;
+                        } else {
+                            v |= 10 << sh;
+                        }
+                        sh += 4;
+                    } while (k > m);
+                    t = d[0];
+                    t |= (u16)(v << 8);
+                    d[0] = t;
+                    d++;
+                }
+            }
+        } else {
+            memset(d, 0xEE, 0x40);
+        }
+        LoadImage2(r, buf);
+        r[0] += 2;
+    }
+}
 
 void func_8018CB70(Unk_801E058C *p, s32 b) {
     s32 i;

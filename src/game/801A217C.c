@@ -93,6 +93,12 @@ s16 SsSepOpen(u32 *addr, s16 vab_id, s16 seq_num);
 extern char D_80171708[];
 typedef struct { u16 unk0[0xA]; u16 unk14; u8 unk16[0x7DE]; } Unk_801A37E4;
 void *memset(void *dst, s32 c, u32 n);
+typedef struct { u8 unk0[0x44]; u16 unk44; u8 unk46[6]; s16 unk4C; } Unk_801A358C;
+s32 D_801DFD90;
+extern s32 D_801E6DB4[];
+s16 func_8018C750(s16 a);
+s32 rsin(s32 a);
+void func_801A2678(s32 arg0);
 
 INCLUDE_RODATA("asm/nonmatchings/game/801A217C", D_801716EC);
 
@@ -307,7 +313,74 @@ void func_801A33E8(Unk_801A3B5C *arg0) {
     p->unk0 = arg0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/801A217C", func_801A358C);
+void func_801A358C(Unk_801A358C *arg0) {
+    s32 dt = D_801E6DB4[0];
+    s16 lim;
+    s32 l;
+    s32 t;
+    s32 n;
+    s16 a;
+
+    D_801DFD84 += dt;
+    if (D_801DFD84 > 12000) {
+        D_801DFD84 -= 12000;
+    }
+    switch (D_801DFD90) {
+    case 2:
+        if (arg0->unk44 == 1 || arg0->unk44 == 3) {
+            arg0->unk4C = 0;
+            D_801DFD84 = 0;
+            D_801DFD88 = 0;
+            D_801DFD8C = 0;
+        }
+        break;
+    case 1:
+    case 3:
+        if (arg0->unk44 == 2) {
+            arg0->unk4C = 0;
+            D_801DFD84 = 0;
+            D_801DFD88 = 0;
+            D_801DFD8C = 0;
+        }
+        break;
+    }
+    D_801DFD90 = arg0->unk44;
+    switch (arg0->unk44) {
+    case 2:
+        lim = 15;
+        break;
+    case 1:
+    case 3:
+        lim = 30;
+        break;
+    default:
+        goto reset;
+    }
+    l = lim;
+    t = ((D_801DFD8C * 360 << 12) / l - 90) >> 12;
+    D_801DFD8C += dt;
+    n = D_801DFD84 / l;
+    if (D_801DFD8C > l) {
+        D_801DFD8C = l;
+    }
+    a = func_8018C750(t);
+    arg0->unk4C = rsin((s16)((a << 12) / 360)) * 25 / 4096 + 25;
+    if (n != D_801DFD88) {
+        func_801A2678(3);
+        arg0->unk4C = 0;
+        D_801DFD8C = 0;
+    }
+    D_801DFD88 = n;
+    return;
+reset:
+    arg0->unk4C = 0;
+    D_801DFD84 = 0;
+    D_801DFD88 = 0;
+    D_801DFD8C = 0;
+    if (arg0->unk44 == 4) {
+        func_801A2678(0xE);
+    }
+}
 
 Unk_801A37E4 *func_801A37E4(u16 *arg0, s32 arg1, Unk_801A217C *arg2) {
     Unk_801E02D8 *p = &D_801E02D8;

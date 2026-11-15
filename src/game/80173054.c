@@ -140,8 +140,51 @@ Unk_801DFC60 *D_801DFC60;
 s32 D_801DFC64;
 Unk_80176890 *D_801DFC6C;
 Unk_801767D4 *D_801DFC70;
+typedef struct {
+    u16 unk0;
+    u16 unk2;
+    s32 unk4;
+} Unk_80173250;
+typedef struct {
+    Unk_80173250 *unk0;
+    s32 unk4;
+    char **unk8;
+} Unk_80173054;
+s32 atoi(char *s);
+void func_8018C414(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+void func_8018C50C(s32 a, s32 b, s32 c, s16 d, s16 e);
+void func_8018C554(s32 arg0, char *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
+extern u16 D_801E0368[];
 
-INCLUDE_ASM("asm/nonmatchings/game/80173054", func_80173054);
+void func_80173054(Unk_80173054 *arg0, s32 *arg1) {
+    Unk_80173250 *cmd = arg0->unk0;
+    s32 a, b, c, d;
+    s32 x, y, z;
+
+    switch (cmd->unk2) {
+    case 0:
+        if (atoi(arg0->unk8[0]) != 0) {
+            func_8018C414(1, 0, 1, 0);
+        } else {
+            func_8018C414(1, 1, 1, 2);
+        }
+        break;
+    case 1:
+    case 3:
+        a = (s16)atoi(arg0->unk8[4]);
+        b = (s16)atoi(arg0->unk8[2]);
+        c = (s16)atoi(arg0->unk8[3]);
+        d = (s16)atoi(arg0->unk8[5]);
+        func_8018C554(cmd->unk2, arg0->unk8[1], a, arg0->unk8[0][0], b, c, d, *arg1, 1);
+        break;
+    case 2:
+        x = atoi(arg0->unk8[0]) * 10;
+        y = atoi(arg0->unk8[1]) * 10;
+        z = atoi(arg0->unk8[2]) * 10;
+        func_8018C50C(x, y, z, atoi(arg0->unk8[3]), 1);
+        break;
+    }
+}
 
 INCLUDE_RODATA("asm/nonmatchings/game/80173054", D_80170000);
 
@@ -157,7 +200,41 @@ INCLUDE_RODATA("asm/nonmatchings/game/80173054", D_8017008C);
 
 INCLUDE_RODATA("asm/nonmatchings/game/80173054", D_801700B0);
 
-INCLUDE_ASM("asm/nonmatchings/game/80173054", func_80173250);
+void func_80173250(Unk_80173054 *arg0) {
+    u16 *vars = D_801E0368;
+    Unk_80173250 *cmd = arg0->unk0;
+    s32 v = atoi(arg0->unk8[0]);
+
+    switch (cmd->unk2) {
+    case 0:
+        vars[cmd->unk4] = v;
+        break;
+    case 1:
+        vars[cmd->unk4] -= v;
+        break;
+    case 2:
+        vars[cmd->unk4] += v;
+        break;
+    case 3:
+        vars[cmd->unk4] *= v;
+        break;
+    case 4:
+        vars[cmd->unk4] /= (s16)v;
+        break;
+    case 5:
+        vars[cmd->unk4] = (s16)vars[cmd->unk4] % (s16)v;
+        break;
+    case 6:
+        vars[cmd->unk4] = vars[(s16)v];
+        break;
+    case 7:
+        vars[cmd->unk4] -= vars[(s16)v];
+        break;
+    case 8:
+        vars[cmd->unk4] += vars[(s16)v];
+        break;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/game/80173054", func_8017345C);
 

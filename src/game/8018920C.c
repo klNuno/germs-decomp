@@ -39,7 +39,13 @@ typedef struct {
     s16 unk24C;
 } Unk_801E0368;
 extern Unk_801E0368 D_801E0368;
-typedef struct { s16 unk0[3]; s16 unk6; s16 unk8[3]; s16 unkE; } Unk_801E1040;
+typedef struct {
+    s16 unk0[3];
+    s16 unk6;
+    s16 unk8[3];
+    s16 unkE;
+    s16 unk10;
+} Unk_801E1040;
 extern Unk_801E1040 D_801E1040;
 void func_80189C3C(s32 a, s16 b);
 void func_8018A3F8(s32 a);
@@ -71,7 +77,8 @@ typedef struct {
     s16 unk38;
     s16 unk3A[5];
     s16 unk44;
-    u8 unk46[4];
+    s16 unk46;
+    s16 unk48;
     s16 unk4A;
     s32 unk4C;
     u8 unk50[8];
@@ -133,6 +140,14 @@ typedef struct { u8 unk0; u8 unk1; u8 unk2; u8 unk3; } Unk_801D7730;
 extern Unk_801D7730 D_801D7730[];
 void func_8018BB00(s16 a, s16 b);
 void func_80189DE8(Unk_801E0710 *arg0);
+s16 (*D_801DFEE4)(Unk_801895E0 *a);
+s16 func_80174D6C(void *arg0);
+void func_8017D574(u32 arg0);
+void func_80183E88(char *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
+void func_80189AC0(Unk_801E0710 *a);
+u16 D_801DFD28;
+u16 D_801DFD2A;
+u16 D_801DFD2C;
 
 void func_8018920C(void) {
     D_801DFEC8 = OpenEvent(0xF3000000, 2, 0x1000, func_80194FAC);
@@ -153,7 +168,89 @@ void func_8018920C(void) {
     D_801DFF50 = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/8018920C", func_80189350);
+void func_80189350(Unk_801895E0 *a) {
+    Unk_801E0710_5C *q = D_801E076C[0];
+    Unk_801DFFE8 *p = &D_801DFFE8;
+    Unk_801E0368 *g = &D_801E0368;
+    s32 hi;
+    s32 lo;
+
+    p->unk0 = a->unkC;
+    p->unk4 = a->unk8;
+    p->unkC = 0;
+    p->unk8 = 0;
+    p->unkE = -1;
+    p->unkA = -1;
+    if (D_801DFEE4 != NULL && D_801DFEE4(a) != 0) {
+        return;
+    }
+    switch (a->unk8) {
+    case 0xFC:
+        if (func_801752F4(a->unkC, 1) == 0) {
+            q->unk42 &= 0xFFFB;
+            func_80174840(0);
+        } else {
+            p->unk6 = 1;
+        }
+        break;
+    case 0xFD:
+        hi = ((u8 *)&a->unkC)[1] >> 4;
+        lo = (u16)a->unkC & 0xFFF;
+        if (func_801A7ED4(hi, lo, 1) == 0) {
+            if (hi == 0 && lo == 0) {
+                /* " 7クルマ1に乗る       3○" */
+                func_80183E88(" 7\203N\203\213\203}1\202\311\217\346\202\351       3\201\233", 1, -1, 8, -1, 0, 1);
+            } else {
+                q->unk42 &= 0xFFFB;
+                func_80174840(0);
+            }
+        } else {
+            p->unk6 = 1;
+        }
+        break;
+    case 0xFE:
+        if ((s16)g->unk0[0x3E] < 5) {
+            /* "営業時間 ５：００〜２４：００" */
+            func_80183E88("\211c\213\306\216\236\212\324 \202T\201F\202O\202O\201`\202Q\202S\201F\202O\202O", 1, -1, 0, -1, 0, 1);
+        } else {
+            switch (((u8 *)&a->unkC)[1]) {
+            case 1:
+                /* " 7バス停 Ｃ１０１系統   3○" */
+                func_80183E88(" 7\203o\203X\222\342 \202b\202P\202O\202P\214n\223\235   3\201\233", 1, -1, 8, -1, 0, 1);
+                break;
+            case 2:
+                /* " 7バス停 Ｃ１０２系統   3○" */
+                func_80183E88(" 7\203o\203X\222\342 \202b\202P\202O\202Q\214n\223\235   3\201\233", 1, -1, 8, -1, 0, 1);
+                break;
+            case 3:
+                /* " 7バス停 Ｃ１０３系統   3○" */
+                func_80183E88(" 7\203o\203X\222\342 \202b\202P\202O\202R\214n\223\235   3\201\233", 1, -1, 8, -1, 0, 1);
+                break;
+            default:
+                /* " 7バス停" */
+                func_80183E88(" 7\203o\203X\222\342", 1, -1, 0, -1, 0, 1);
+                break;
+            }
+        }
+        break;
+    case 0xFF:
+        /* " 7電話ボックス       3○" */
+        func_80183E88(" 7\223d\230b\203{\203b\203N\203X       3\201\233", 1, -1, 8, -1, 0, 1);
+        break;
+    case 0x80:
+        func_8017D574(a->unkC);
+        break;
+    default:
+        if (func_80174D6C(a->unk10) == 0) {
+            q->unk42 &= 0xFFFB;
+            func_80174840(0);
+            break;
+        }
+    case 0xF7:
+        p->unk6 = 1;
+        break;
+    }
+}
 
 void func_801895E0(Unk_801895E0 *a) {
     Unk_801DFFE8 *p = &D_801DFFE8;
@@ -423,7 +520,72 @@ void func_80189DE8(Unk_801E0710 *a) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/8018920C", func_80189F50);
+void func_80189F50(Unk_801E0710 *a) {
+    s32 i;
+    s32 m;
+    Unk_801E0768 *p;
+    u16 n;
+
+    if (a->unk44 != 0) {
+        a->unk44 = 0;
+        func_80189AC0(a);
+    }
+    if (a->unk46 != 0) {
+        a->unk46 = 0;
+        func_80189DE8(a);
+    }
+    if (a->unk48 != 0) {
+        p = a->unk58;
+        a->unk48 = 0;
+        m = p->unk8[p->unk2] * 16 / 100;
+        func_801A4944(0x400, 0x50, 0x5F);
+        for (i = 0x50; i < m + 0x50; i++) {
+            func_801A461C(0x400, i, 0x7E8A);
+        }
+    }
+    if (D_801DFD1C != 0) {
+        n = D_801DFD22;
+        if ((s16)((s16)n % 3) == 0) {
+            func_801A461C(0x400, 1, D_801DFD28);
+        } else if ((s16)((s16)n % 3) == 2) {
+            func_801A461C(0x400, 1, 0);
+        }
+        if ((s16)n >= 11) {
+            D_801DFD1C = 0;
+            D_801DFD22 = 0;
+            func_801A4824(0x400, 1, 3, 0);
+        }
+        D_801DFD22++;
+    }
+    if (D_801DFD1E != 0) {
+        n = D_801DFD24;
+        if ((s16)((s16)n % 3) == 0) {
+            func_801A461C(0x400, 2, D_801DFD2A);
+        } else if ((s16)((s16)n % 3) == 2) {
+            func_801A461C(0x400, 2, 0);
+        }
+        if ((s16)n >= 11) {
+            D_801DFD1E = 0;
+            D_801DFD24 = 0;
+            func_801A4824(0x400, 1, 3, 0);
+        }
+        D_801DFD24++;
+    }
+    if (D_801DFD20 != 0) {
+        n = D_801DFD26;
+        if ((s16)((s16)n % 3) == 0) {
+            func_801A461C(0x400, 3, D_801DFD2C);
+        } else if ((s16)((s16)n % 3) == 2) {
+            func_801A461C(0x400, 3, 0);
+        }
+        if ((s16)n >= 11) {
+            D_801DFD20 = 0;
+            D_801DFD26 = 0;
+            func_801A4824(0x400, 1, 3, 0);
+        }
+        D_801DFD26++;
+    }
+}
 
 void func_8018A24C(void) {
     Unk_801E0710 *q = &D_801E0710;
@@ -464,7 +626,51 @@ void func_8018A24C(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/8018920C", func_8018A3F8);
+void func_8018A3F8(s32 a) {
+    Unk_801E1040 *c = &D_801E1040;
+    Unk_801E0368 *g = &D_801E0368;
+    s16 m = g->unk0[0x3E];
+    s16 n;
+    s32 v;
+
+    if (m == 5) {
+        if ((s16)g->unk0[0x3F] == 0 || (s16)a != 0) {
+            c->unk10 = 1;
+        }
+        c->unk8[0] = g->unk0[0x3F] + 1;
+        if (c->unk0[0] != 0) {
+            n = c->unk8[0];
+            v = n * 0x2A + n * 2 / 3 + 0x600;
+            v = v * 0x7A >> 12;
+            SetFarColor(v, v, v);
+        }
+    } else if (m >= 6 && m < 0x12) {
+        if ((m == 6 && (s16)g->unk0[0x3F] == 0) || (s16)a != 0) {
+            c->unk10 = 0;
+            c->unk8[0] = 0;
+            if (c->unk0[0] != 0) {
+                SetFarColor(0x7A, 0x7A, 0x7A);
+            }
+        }
+    } else if (m == 0x12) {
+        if ((s16)g->unk0[0x3F] == 0 || (s16)a != 0) {
+            c->unk10 = 1;
+        }
+        c->unk8[0] = 0x3C - g->unk0[0x3F];
+        if (c->unk0[0] != 0) {
+            n = c->unk8[0];
+            v = n * 0x2A + n * 2 / 3 + 0x600;
+            v = v * 0x7A >> 12;
+            SetFarColor(v, v, v);
+        }
+    } else if ((m == 0x13 && (s16)g->unk0[0x3F] == 0) || (s16)a != 0) {
+        c->unk10 = 1;
+        c->unk8[0] = 0;
+        if (c->unk0[0] != 0) {
+            SetFarColor(0x2D, 0x2D, 0x2D);
+        }
+    }
+}
 
 void func_8018A5F0(Unk_801E0710 *a, Unk_801E0368 *b, s32 c, s32 d) {
     s32 i;

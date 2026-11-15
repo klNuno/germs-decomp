@@ -33,6 +33,32 @@ extern u32 D_801E6DAC[];
 void func_801CBCE0(void);
 void func_801CFEB0(s32 arg0, s32 arg1, s32 arg2);
 void func_801D0414(s32 arg0);
+s32 func_801CC3DC(s32 arg0, s32 arg1, s32 arg2);
+typedef struct Unk_801D12A8 {
+    struct Unk_801D12A8 *unk0;
+    u8 unk4[0x1C];
+    s16 unk20;
+    s16 unk22;
+    s16 unk24;
+    s16 unk26;
+    s16 unk28;
+    u8 unk2A[0x2];
+    s32 unk2C;
+    void (*unk30)(struct Unk_801D12A8 *);
+    void (*unk34)(struct Unk_801D12A8 *);
+    void (*unk38)(struct Unk_801D12A8 *);
+    void *unk3C;
+} Unk_801D12A8;
+typedef struct {
+    s32 unk0;
+    Unk_801D12A8 *unk4;
+    Unk_801D12A8 *unk8;
+    Unk_801D12A8 *unkC;
+} Unk_801DFBD0;
+extern Unk_801DFBD0 D_801DFBD0;
+void func_801D12A8(Unk_801D12A8 *arg0);
+void func_801D14F0(Unk_801D12A8 *arg0);
+extern s32 D_801E6DB4[];
 
 void func_801CBCE0(void) {
     u32 q;
@@ -54,7 +80,56 @@ void func_801CBCE0(void) {
     D_801DFAD4.unk10 = n;
 }
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801CBCE0", func_801CBDF0);
+void func_801CBDF0(s32 *arg0) {
+    Unk_801DFAD4 *q;
+    Unk_801CC1E8 *e;
+    Unk_801D12A8 *t;
+    Unk_801DFBD0 *p = &D_801DFBD0;
+    s32 n = arg0[2];
+    s32 i;
+    s32 ok;
+
+    if (n > 0 && n < p->unk0 + 1) {
+        t = &p->unk4[n - 1];
+        if ((t->unk28 > 0 && t->unk24 >= t->unk26) || (t->unk28 < 0 && t->unk24 <= t->unk26)) {
+            t->unk24 = t->unk26;
+            t->unk34(t);
+            EnterCriticalSection();
+            q = &D_801DFAD4;
+            ok = 0;
+            if (q->unk10 == q->unkC) {
+                func_801CBCE0();
+            }
+            i = q->unk4;
+            q->unkC++;
+            q->unk4 = (i + 1) % q->unk10;
+            e = &((Unk_801CC1E8 *)D_801DFAD4.unk0)[i];
+            e->unk0 = 0x100;
+            e->unk4 = D_801E6DAC[0];
+            if (e != NULL) {
+                e->unk8 = n - 1;
+                e->unkC = 0;
+                e->unk10 = t->unk22;
+                ok = 1;
+            }
+            ExitCriticalSection();
+            if (ok) {
+                func_801D14F0(t);
+            } else {
+                func_801D12A8(t);
+            }
+        } else {
+            t->unk30(t);
+            if (t->unk2C == 2 && D_801E6DB4[0] < 11) {
+                t->unk24 += t->unk28 * D_801E6DB4[0];
+            } else {
+                t->unk24 += t->unk28;
+            }
+            func_801CC3DC(t->unk2C, n, 0);
+        }
+        arg0[0] = 0;
+    }
+}
 
 s32 func_801CC02C(s32 *arg0) {
     Unk_801CC1E8 *e;
