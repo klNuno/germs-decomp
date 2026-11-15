@@ -85,7 +85,13 @@ void func_8018DBA4(Unk_801E6FF0 *arg0, s32 arg1);
 void func_801AC30C(Unk_801E6FF0 *arg0);
 void func_80179C50(Unk_801E6FF0 *arg0, s32 arg1);
 void func_801D1AAC(Unk_801E6FF0 *arg0);
-typedef struct { u16 unk0; u8 unk2[0x2E]; u16 unk30; u8 unk32[0x2E]; } Unk_80188FEC;
+typedef struct {
+    u16 unk0;
+    u8 unk2[2];
+    char unk4[0x2C];
+    u16 unk30;
+    u8 unk32[0x2E];
+} Unk_80188FEC;
 typedef struct { u8 unk0[0xE]; s16 unkE; } Unk_801A0820;
 Unk_80188FEC *func_80188FEC(s16 arg0);
 s32 func_801A216C(Unk_801A216C *arg0, Unk_801A216C *arg1);
@@ -112,7 +118,9 @@ typedef struct {
     s16 unk60;
     u8 unk62[0x1E];
     s16 unk80;
-    u8 unk82[0x176];
+    u8 unk82[0x10];
+    u16 unk92;
+    u8 unk94[0x164];
     u16 unk1F8;
 } Unk_801E0368;
 void func_801A0820(Unk_801A0820 *arg0);
@@ -137,6 +145,24 @@ extern s16 D_801D7B10[];
 extern s16 D_801D7B1C[];
 extern s16 D_801D7B28[];
 extern s16 D_801DFD74[];
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    u8 unk4[0x58];
+    Unk_801E076C *unk5C;
+} Unk_801E0710;
+typedef struct { u16 unk0; u8 unk2[2]; char unk4[0x24]; } Unk_801891A4;
+typedef struct { char *unk0; char *unk4; char *unk8; } Unk_801D7B34;
+void func_801A0D58(s16 arg0);
+extern Unk_801E0710 D_801E0710;
+extern Unk_801D7B34 D_801D7B34[];
+Unk_801891A4 *func_801891A4(s16 arg0);
+void func_801831EC(s16 arg0, s16 arg1, char *arg2, s16 arg3, s32 arg4);
+s16 func_801882AC(Unk_801E0710 *a, s16 b, s16 c, s16 d, s16 e);
+void func_8018C1B0(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+void func_80199C68(s16 arg0);
+void *memset(void *dst, s32 c, u32 n);
+int sprintf(char *buf, const char *fmt, ...);
 
 INCLUDE_ASM("asm/nonmatchings/game/8019A5D4", func_8019A5D4);
 
@@ -437,7 +463,156 @@ void func_801A0D58(s16 arg0) {
 
 INCLUDE_RODATA("asm/nonmatchings/game/8019A5D4", D_801715C4);
 
-INCLUDE_ASM("asm/nonmatchings/game/8019A5D4", func_801A0EDC);
+s16 func_801A0EDC(s16 arg0) {
+    Unk_801E0710 *q = &D_801E0710;
+    Unk_801E1058 *p = &D_801E1058;
+    Unk_801E0368 *r = &D_801E0368;
+    Unk_801E076C *e = q->unk5C;
+    char buf[0x80];
+    Unk_801D7B34 *t;
+    Unk_80188FEC *a;
+    Unk_801891A4 *b;
+    char *s;
+    s32 i;
+    s16 found = 0;
+    s16 ret;
+    s16 v;
+    s32 j;
+    s16 m;
+    Unk_801E1058 *p2;
+
+    switch (arg0) {
+    case 7:
+        if (p->unk12[0] >= 0) {
+            t = &D_801D7B34[p->unkE];
+            a = func_80188FEC(p->unk12[0]);
+            if (a != NULL) {
+                if ((s16)a->unk30 == q->unk2) {
+                    s = t->unk4;
+                } else if ((s16)a->unk30 < q->unk2) {
+                    s = t->unk8;
+                } else {
+                    s = t->unk0;
+                }
+                func_801831EC(1, 1, s, 1, 2);
+                memset(buf, 0, 0x80);
+                sprintf(buf, " 8%s1, \202\360\216\363\202\257\216\346\202\301\202\275", a->unk4);
+                func_801831EC(1, 1, buf, 2, 2);
+            }
+        }
+        break;
+    case 8:
+        ret = -1;
+        if (p->unk4 != 0) {
+            if (p->unk12[0] >= 0) {
+                b = func_801891A4(p->unk12[0] + 100);
+                if (b != NULL) {
+                    memset(buf, 0, 0x80);
+                    sprintf(buf, " 8%s2\202\314\222n\220\175\202\313", b->unk4);
+                    func_801831EC(1, 1, buf, 2, 2);
+                    func_80183E88(D_801715C4, 3, -1, 0, -1, 0, 1);
+                    if (e->unk42 & 0x100) {
+                        e->unk42 &= 0xFEFF;
+                    }
+                }
+            }
+        } else if (p->unk12[0] >= 0) {
+            ret = p->unk12[0];
+            if (D_801DFF78 == 0) {
+                ret += 10;
+            } else if (D_801DFF78 == 1) {
+                ret += 30;
+            }
+        }
+        break;
+    case 9:
+        if (p->unk12[0] >= 0) {
+            b = func_801891A4(p->unk12[0]);
+            if (b != NULL) {
+                memset(buf, 0, 0x80);
+                sprintf(buf, " 8%s1\202\360\221I\221\360\202\265\202\275", b->unk4);
+                func_801831EC(1, 1, buf, 2, 1);
+                func_801A0D58(0);
+                func_801882AC(q, 1, p->unk12[0], 0, 0);
+                func_8018C1B0(1, 1, 1, 2);
+                func_801A0D58(1);
+                func_8018C1B0(1, 1, 1, 2);
+                func_80183E88(" 2\202\250\224\346\202\352\227l\202\305\202\265\202\275", 3, -1, 0, -1, 0, 1);
+            }
+        }
+        break;
+    default:
+        if (p->unk4 != 0) {
+            for (i = 0; i < 3; i++) {
+                if (p->unk12[i] >= 0) {
+                    b = func_801891A4(p->unk12[i]);
+                    if (b != NULL) {
+                        memset(buf, 0, 0x80);
+                        sprintf(buf, " 8%s1, \202\360\216\363\202\257\216\346\202\301\202\275", b->unk4);
+                        func_801831EC(1, 1, buf, 2, 2);
+                    }
+                }
+            }
+            if (arg0 == 4) {
+                if (p->unk6 != 0) {
+                    func_80183E88(" 6\202\240\202\350\202\252\202\306\202\244\202\262\202\264\202\242\202\334\202\265\202\275, \203N\203b\203N\203b\203N", 3, -1, 0, -1, 0, 1);
+                } else {
+                    func_80183E88(" 2\202\307\202\244\202\340\202\240\202\350\202\252\202\306\202\244\202\262\202\264\202\242\202\334\202\265\202\275", 3, -1, 0, -1, 0, 1);
+                }
+            } else if (arg0 == 5) {
+                func_80183E88(" 2\202\334\202\275\201A\202\346\202\353\202\265\202\255\202\250\212\350\202\242\202\265\202\334\202\267", 3, -1, 0, -1, 0, 1);
+            }
+        } else {
+            if (q->unk0 == 0xFF && p->unkE == 0) {
+                p->unkE = 1;
+            }
+            for (i = 0; i < 3; i++) {
+                if (p->unk12[i] >= 0) {
+                    if (!found) {
+                        found = 1;
+                    }
+                    v = func_801882AC(q, 1, p->unk12[i], p->unkE, 0);
+                    if (v >= 0) if (v != 0) {
+                        p->unkE = 1;
+                    }
+                }
+            }
+            if (found) {
+                r->unk92++;
+            }
+            if (arg0 == 4) {
+                if (p->unk6 != 0) {
+                    func_80183E88(" 6\202\240\202\350\202\252\202\306\202\244\202\262\202\264\202\242\202\334\202\265\202\275, \203N\203b\203N\203b\203N", 3, -1, 0, -1, 0, 1);
+                } else {
+                    func_80183E88(" 2\202\307\202\244\202\340\202\240\202\350\202\252\202\306\202\244\202\262\202\264\202\242\202\334\202\265\202\275", 3, -1, 0, -1, 0, 1);
+                }
+            } else if (arg0 == 5) {
+                func_80183E88(" 2\202\334\202\275\201A\202\346\202\353\202\265\202\255\202\250\212\350\202\242\202\265\202\334\202\267", 3, -1, 0, -1, 0, 1);
+            }
+        }
+        break;
+    }
+    p2 = &D_801E1058;
+    D_801E1058.unk0 = 0;
+    p2->unk2 = -1;
+    p2->unk4 = 0;
+    p2->unk6 = 0;
+    p2->unk8 = 0;
+    p2->unkA = 0;
+    p2->unkC = 0;
+    p2->unkE = 0;
+    p2->unk10 = 0;
+    m = -1;
+    for (j = 2; j >= 0; j--) {
+        p2->unk12[j] = m;
+    }
+    p2->unk18 = NULL;
+    p2->unk1C = NULL;
+    if (arg0 == 3 || arg0 == 6) {
+        func_80199C68(2);
+    }
+    return ret;
+}
 
 INCLUDE_ASM("asm/nonmatchings/game/8019A5D4", func_801A14A0);
 

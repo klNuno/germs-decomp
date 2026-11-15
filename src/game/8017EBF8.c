@@ -435,6 +435,48 @@ u16 *Krom2RawAdd2(u16 sjis);
 s32 StoreImage2(void *rect, void *p);
 extern s32 D_801D76A4[];
 void func_80182D34(char *arg0, s16 arg1);
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    s16 unk4[2];
+    s32 unk8[0xF];
+} Unk_801E0710_58;
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    u32 unk4;
+    u32 unk8;
+    u8 padC[0x8];
+    u16 unk14;
+    u8 pad16[0x2];
+    u16 unk18;
+    u8 pad1A[0x2];
+    u16 unk1C;
+    u8 pad1E[0x2];
+    u16 unk20;
+    u8 pad22[0x2];
+    u16 unk24;
+    u8 pad26[0x2];
+    u16 unk28;
+    u8 pad2A[0x8];
+    s16 unk32;
+    u8 pad34[0x2];
+    s16 unk36;
+    u8 pad38[0x20];
+    Unk_801E0710_58 *unk58;
+    void *unk5C;
+} Unk_801E0710;
+typedef struct {
+    u16 unk0;
+    u16 unk2;
+    u8 pad4[0x2C];
+    s16 unk30;
+    u8 pad32[0x1E];
+    u16 unk50;
+} Unk_80188FEC;
+extern Unk_801E0710 D_801E0710;
+void func_801A3F90(s32 a, s32 b, s32 c, s32 d, s32 e, s32 f);
+Unk_80188FEC *func_80188FEC(s16 arg0);
 
 void func_8017EBF8(Unk_801802A0 *arg0, s32 arg1) {
     Unk_80184230 rect;
@@ -917,7 +959,199 @@ void func_80180B04(Unk_80181C10 *arg0, s32 arg1, s32 arg2) {
     func_801A461C(0x237, arg0->unk6 + 1, 0x23F);
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/8017EBF8", func_80180D8C);
+void func_80180D8C(Unk_80181C10 *arg0, s32 arg1) {
+    Unk_801E0710 *g = &D_801E0710;
+    Unk_801E0368 *h = &D_801E0368;
+    Unk_801E0710_58 *p = g->unk58;
+    Unk_80188FEC *e;
+    s32 n;
+    s32 j;
+    s32 i;
+    s32 id;
+    s32 col;
+    s32 k;
+    s32 m;
+    s32 c;
+
+    if ((s16)arg1 != 0) {
+        func_801A2678(0x11);
+        arg0->unk6 = 1 - arg0->unk6;
+        if (arg0->unk6 != 0) {
+            func_801A4A68(0x23A, 0);
+            func_801A4A68(0x23B, 1);
+        } else {
+            func_801A4A68(0x23A, 1);
+            func_801A4A68(0x23B, 0);
+        }
+        return;
+    }
+    func_801A4A68(0x23A, 1);
+    func_801A4A68(0x23B, 0);
+    func_801A4824(0x23A, 0x10, 0xEF, 0x421);
+    func_801A4824(0x23B, 0x10, 0xDF, 0x421);
+    func_801A4824(0x23B, 0x60, 0x64, 0x14C6);
+    func_801A4824(0x23B, 0x70, 0x74, 0x14C6);
+    col = 0x3D40;
+    n = g->unk4 / 6329;
+    if (n == 0 && g->unk4 != 0) {
+        n = 1;
+    }
+    if (n > 32) {
+        n = 32;
+    }
+    if (n != 0) {
+        for (j = 0; j < n; j++) {
+            func_801A461C(0x23A, j + 0x10, (u16)col);
+        }
+    }
+    n = (g->unk2 << 5) / 50 + 1;
+    if (n > 32) {
+        n = 32;
+    }
+    if (n != 0) {
+        for (j = 0; j < n; j++) {
+            func_801A461C(0x23A, j + 0x30, (u16)col);
+        }
+    }
+    n = (g->unk4 << 4) / g->unk8;
+    if (n == 0 && g->unk4 != 0) {
+        n = 1;
+    }
+    if (n > 16) {
+        n = 16;
+    }
+    if (n != 0) {
+        for (j = 0; j < n; j++) {
+            func_801A461C(0x23A, j + 0x50, (u16)col);
+        }
+    }
+    col = 0xB4;
+    n = g->unk32 > 16 ? 16 : g->unk32;
+    if (n != 0) {
+        for (j = 0; j < n; j++) {
+            func_801A461C(0x23A, j + 0x60, (u16)col);
+        }
+    }
+    col = 0x3D40;
+    n = g->unk36 > 32 ? 32 : g->unk36;
+    if (n != 0) {
+        for (j = 0; j < n; j++) {
+            func_801A461C(0x23A, j + 0x70, (u16)col);
+        }
+    }
+    n = (g->unk28 << 4) / 100 + 1;
+    if (n > 16) {
+        n = 16;
+    }
+    if (n != 0) {
+        for (j = 0; j < n; j++) {
+            func_801A461C(0x23A, j + 0x90, (u16)col);
+        }
+    }
+    n = (h->unk0[0x5A] + 15) / 16;
+    if (n != 0) {
+        for (j = 0; j < n; j++) {
+            func_801A461C(0x23A, j + 0xA0, (u16)col);
+        }
+    }
+    n = (h->unk0[0x5D] + 15) / 16;
+    if (n != 0) {
+        for (j = 0; j < n; j++) {
+            func_801A461C(0x23A, j + 0xB0, (u16)col);
+        }
+    }
+    n = (h->unk0[0x5B] + 15) / 16;
+    if (n != 0) {
+        for (j = 0; j < n; j++) {
+            func_801A461C(0x23A, j + 0xC0, (u16)col);
+        }
+    }
+    n = (h->unk0[0x5C] + 15) / 16;
+    if (n != 0) {
+        for (j = 0; j < n; j++) {
+            func_801A461C(0x23A, j + 0xD0, (u16)col);
+        }
+    }
+    c = (h->unk0[0x5E] + 15) / 16;
+    if (c != 0) {
+        for (j = 0; j < c; j++) {
+            func_801A461C(0x23A, j + 0xE0, (u16)col);
+        }
+    }
+    col = 0x3D40;
+    n = (g->unk14 << 4) / 100 + 1;
+    if (n > 16) {
+        n = 16;
+    }
+    if (n != 0) {
+        for (j = 0; j < n; j++) {
+            func_801A461C(0x23B, j + 0x10, (u16)col);
+        }
+    }
+    n = (g->unk18 << 4) / 100 + 1;
+    if (n > 16) {
+        n = 16;
+    }
+    if (n != 0) {
+        for (j = 0; j < n; j++) {
+            func_801A461C(0x23B, j + 0x20, (u16)col);
+        }
+    }
+    n = (g->unk1C << 4) / 100 + 1;
+    if (n > 16) {
+        n = 16;
+    }
+    if (n != 0) {
+        for (j = 0; j < n; j++) {
+            func_801A461C(0x23B, j + 0x30, (u16)col);
+        }
+    }
+    n = (g->unk20 << 4) / 100 + 1;
+    if (n > 16) {
+        n = 16;
+    }
+    if (n != 0) {
+        for (j = 0; j < n; j++) {
+            func_801A461C(0x23B, j + 0x40, (u16)col);
+        }
+    }
+    n = (g->unk24 << 4) / 100 + 1;
+    if (n > 16) {
+        n = 16;
+    }
+    if (n != 0) {
+        for (j = 0; j < n; j++) {
+            func_801A461C(0x23B, j + 0x50, (u16)col);
+        }
+    }
+    for (i = 0; i < 2; i++) {
+        id = p->unk4[i];
+        if (id >= 0) {
+            e = func_80188FEC(id);
+            if (e != NULL) {
+                func_801A461C(0x23B, (i * 16 + 0x60) + e->unk2, 0x154);
+                n = (e->unk30 << 5) / 50 + 1;
+                if (n > 32) {
+                    n = 32;
+                }
+                k = i * 32 + 0x80;
+                if (n != 0) {
+                    for (j = 0; j < n; j++) {
+                        func_801A461C(0x23B, k + j, (u16)col);
+                    }
+                }
+                n = (e->unk50 << 12) / 25600;
+                m = i * 16 + 0xC0;
+                if (n != 0) {
+                    for (j = 0; j < n; j++) {
+                        func_801A461C(0x23B, m + j, (u16)col);
+                    }
+                }
+                func_801A3F90(0x23C, (u16)(id / 9), (u16)(id % 9), 0x23B, 0x21, (u16)(i * 42 + 0x53));
+            }
+        }
+    }
+}
 
 void func_8018164C(Unk_80181C10 *arg0, s32 arg1, s16 arg2) {
     Unk_801E0368 *g = &D_801E0368;
@@ -1355,7 +1589,168 @@ void func_80182518(s32 arg0, s16 arg1) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/8017EBF8", func_80182860);
+static inline s16 func_80182860_inline(s16 flag) {
+    Unk_801DFFE8 *q = &D_801DFFE8;
+    if (D_801DFE78 >= D_801DFE76) {
+        if (flag) {
+            func_80184160();
+        }
+        return -1;
+    }
+    if (D_801DFE70 >= 16) {
+        D_801DFE70 = 0;
+        D_801DFE72++;
+    }
+    if (D_801DFE72 >= 3) {
+        D_801DFE70 = 0;
+        if (flag) {
+            q->unk6 = 3;
+            q->unk8 = 8;
+            func_801A4A68(0x40A, 1);
+        }
+        return 1;
+    }
+    return 0;
+}
+
+s16 func_80182860(s32 arg0, s32 arg1) {
+    s16 r[4];
+    u16 buf[0x40];
+    Unk_801A44B8 *p;
+    u16 *d;
+    u16 *f;
+    u8 *s;
+    u8 c;
+    s16 st;
+    s32 j;
+
+    p = func_801A44B8(D_801DFCB0);
+    if (p == NULL) {
+        return 0;
+    }
+    r[2] = 4;
+    r[0] = 0;
+    r[1] = 0;
+    r[3] = 16;
+loop:
+    st = func_80182860_inline(arg1);
+    if (st < 0) {
+        return 0;
+    }
+    if (st == 1) {
+        return 1;
+    }
+    s = (u8 *)arg0 + D_801DFE78;
+    c = s[0];
+    if ((s8)s[0] >= 0) {
+        D_801DFE78++;
+        switch (c) {
+        case ' ':
+            D_801DFE70++;
+            break;
+        case ',':
+            D_801DFE70 = 0;
+            D_801DFE72++;
+            break;
+        default:
+            D_801DFE74 = c - '0';
+            break;
+        }
+        goto loop;
+    }
+    d = buf;
+    f = Krom2RawAdd2((s[0] << 8) | s[1]);
+    memset(d, 0, 0x80);
+    for (j = 0; j < 15; j++, f++) {
+        {
+            u16 v;
+            u16 c;
+            s32 k;
+            s32 sh;
+            s32 m;
+
+            m = 4;
+            v = 0;
+            for (k = 7, sh = 0; k >= m; k--, sh += 4) {
+                c = (d[0] & (0xF << sh)) >> sh;
+                if ((*f >> k) & 1) {
+                    c = D_801DFE74;
+                }
+                v |= c << sh;
+            }
+            *d++ = v;
+        }
+        {
+            u16 v;
+            u16 c;
+            s32 k;
+            s32 sh;
+            s32 m;
+
+            m = 0;
+            v = 0;
+            for (k = 3, sh = 0; k >= m; k--, sh += 4) {
+                c = (d[0] & (0xF << sh)) >> sh;
+                if ((*f >> k) & 1) {
+                    c = D_801DFE74;
+                }
+                v |= c << sh;
+            }
+            *d++ = v;
+        }
+        {
+            u16 v;
+            u16 c;
+            s32 k;
+            s32 sh;
+            s32 m;
+
+            m = 12;
+            v = 0;
+            for (k = 15, sh = 0; k >= m; k--, sh += 4) {
+                c = (d[0] & (0xF << sh)) >> sh;
+                if ((*f >> k) & 1) {
+                    c = D_801DFE74;
+                }
+                v |= c << sh;
+            }
+            *d++ = v;
+        }
+        {
+            u16 v;
+            u16 c;
+            s32 k;
+            s32 sh;
+            s32 m;
+
+            m = 8;
+            v = 0;
+            for (k = 11, sh = 0; k >= m; k--, sh += 4) {
+                c = (d[0] & (0xF << sh)) >> sh;
+                if ((*f >> k) & 1) {
+                    c = D_801DFE74;
+                }
+                v |= c << sh;
+            }
+            *d++ = v;
+        }
+    }
+    r[0] = p->unk1C->unk0 + D_801DFE70 * 4;
+    r[1] = p->unk1C->unk2 + D_801DFE72 * 16;
+    LoadImage2(r, buf);
+    D_801DFE70++;
+    D_801DFE78 += 2;
+    if ((s16)arg1) {
+        if (func_80182860_inline(1) < 0) {
+            return 0;
+        }
+    } else {
+        if (func_80182860_inline(0) <= 0) {
+            return 0;
+        }
+    }
+    return 1;
+}
 
 void func_80182D34(char *arg0, s16 arg1) {
     s16 r[4];

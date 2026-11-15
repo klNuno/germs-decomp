@@ -99,6 +99,33 @@ extern s32 D_801E6DB4[];
 s16 func_8018C750(s16 a);
 s32 rsin(s32 a);
 void func_801A2678(s32 arg0);
+typedef struct { s16 unk0; s16 unk2; s16 unk4; s16 unk6; s16 unk8; s16 unkA; s16 unkC; s16 unkE; s16 unk10; s16 unk12; } Unk_801D7B58;
+extern Unk_801D7B58 D_801D7B58[];
+typedef struct { u8 unk0; u8 unk1; u8 unk2; u8 unk3; u8 unk4; u8 unk5[0xB]; } Unk_801A2678_20;
+typedef struct { u8 unk0; u8 unk1; u8 unk2; u8 unk3; u8 unk4[0x10]; s16 unk14; u8 unk16[0x1EA]; } Unk_801A2678_820;
+typedef struct {
+    u8 unk0[0x12];
+    u16 unk12;
+    u8 unk14[4];
+    u8 unk18;
+    u8 unk19;
+    u8 unk1A[6];
+    Unk_801A2678_20 unk20[128];
+    Unk_801A2678_820 unk820[1];
+} Unk_801A2678;
+s16 SsUtKeyOnV(s16 voice, s16 vabId, s16 prog, s16 tone, s16 note, s16 fine, s16 voll, s16 volr);
+typedef struct { u8 unk0; u8 unk1; u8 unk2; u8 unk3; u8 unk4; u8 unk5[0xB]; } Unk_801A2C60_20;
+typedef struct { u8 unk0; u8 unk1; u8 unk2; u8 unk3; u8 unk4[0x10]; s16 unk14; u8 unk16[0x1EA]; } Unk_801A2C60_820;
+typedef struct {
+    u8 unk0[0x12];
+    u16 unk12;
+    u8 unk14[4];
+    u8 unk18;
+    u8 unk19;
+    u8 unk1A[6];
+    Unk_801A2C60_20 unk20[128];
+    Unk_801A2C60_820 unk820[1];
+} Unk_801A2C60;
 
 INCLUDE_RODATA("asm/nonmatchings/game/801A217C", D_801716EC);
 
@@ -244,9 +271,240 @@ void func_801A25B4(s32 arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/801A217C", func_801A2678);
+void func_801A2678(s32 arg0) {
+    Unk_801E02D8 *p = &D_801E02D8;
+    Unk_801D7B58 *ent;
+    Unk_801E02DC *se;
+    Unk_801A2678_820 *tone;
+    s16 vol[2];
+    s32 i;
+    s16 pan;
+    u8 m;
+    Unk_801A2678_20 *prg;
+    s16 min;
+    s16 idx;
 
-INCLUDE_ASM("asm/nonmatchings/game/801A217C", func_801A2C60);
+    se = NULL;
+    ent = &D_801D7B58[arg0];
+    for (i = 0; i < p->unk14; i++) {
+        se = p->unk4[i];
+        if (se->unk4 == ent->unk4) {
+            break;
+        }
+    }
+    if (i == p->unk14) {
+        return;
+    }
+    if (ent->unkC != -1) {
+        vol[0] = ent->unkC;
+    } else {
+        vol[0] = 0x7F;
+    }
+    if (ent->unkE != -1) {
+        vol[1] = ent->unkE;
+    } else {
+        vol[1] = 0x7F;
+    }
+
+    m = ((Unk_801A2678 *)se->unk8)->unk18;
+    pan = ((Unk_801A2678 *)se->unk8)->unk19;
+    vol[0] = vol[0] * m >> 7;
+    vol[1] = vol[1] * m >> 7;
+    if (pan < 0x40) {
+        vol[1] = vol[1] / (0x40 - pan);
+    } else if (pan > 0x40) {
+        vol[0] = vol[0] / (pan - 0x40);
+    }
+
+    prg = &((Unk_801A2678 *)se->unk8)->unk20[ent->unk6];
+    m = prg->unk1;
+    pan = prg->unk4;
+    vol[0] = vol[0] * m >> 7;
+    vol[1] = vol[1] * m >> 7;
+    if (pan < 0x40) {
+        vol[1] = vol[1] / (0x40 - pan);
+    } else if (pan > 0x40) {
+        vol[0] = vol[0] / (pan - 0x40);
+    }
+
+    tone = ((Unk_801A2678 *)se->unk8)->unk820;
+    for (i = 0; i < ((Unk_801A2678 *)se->unk8)->unk12; i++, tone++) {
+        if (tone->unk14 == ent->unk6) {
+            break;
+        }
+    }
+    if (i < ((Unk_801A2678 *)se->unk8)->unk12) {
+        m = tone->unk2;
+        pan = tone->unk3;
+        vol[0] = vol[0] * m >> 7;
+        vol[1] = vol[1] * m >> 7;
+        if (pan < 0x40) {
+            vol[1] = vol[1] / (0x40 - pan);
+        } else if (pan > 0x40) {
+            vol[0] = vol[0] / (pan - 0x40);
+        }
+    }
+
+    for (i = 0; i < 8; i++) {
+        if (D_801E1078[i].unk0 == 1 && D_801E1078[i].unk2 == arg0) {
+            break;
+        }
+    }
+    if (i == 8) {
+        min = 0x7FFF;
+        idx = -1;
+        for (i = 0; i < 8; i++) {
+            if (D_801E1078[i].unkC == -1) {
+                break;
+            }
+            if (D_801E1078[i].unk10 < min) {
+                idx = i;
+                min = D_801E1078[i].unk10;
+            }
+        }
+        if (i == 8) {
+            i = 0;
+            if (idx != -1) {
+                i = idx;
+            }
+            D_801E1078[i].unk10 = 0;
+            SsUtKeyOffV(D_801E1078[i].unkC);
+        }
+        D_801E1078[i].unk0 = 1;
+        D_801E1078[i].unk2 = arg0;
+        D_801E1078[i].unkA = se->unk4;
+        D_801E1078[i].unkC = SsUtKeyOnV(i, se->unk0, ent->unk6, ent->unk8, ent->unkA, 0, vol[0], vol[1]);
+        D_801E1078[i].unkE = 1;
+        D_801E1078[i].unk12 = ent->unk10;
+        if (ent->unk10 != 0) {
+            D_801E1078[i].unk10 = 0x7FFF;
+        } else {
+            D_801E1078[i].unk10++;
+        }
+    } else {
+        if (D_801E1078[i].unkE != 0) {
+            SsUtKeyOffV(D_801E1078[i].unkC);
+        }
+        D_801E1078[i].unkC = SsUtKeyOnV(D_801E1078[i].unkC, se->unk0, ent->unk6, ent->unk8, ent->unkA, 0, vol[0], vol[1]);
+        if (D_801E1078[i].unk12 == 0) {
+            D_801E1078[i].unk10++;
+        }
+    }
+}
+
+void func_801A2C60(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6) {
+    Unk_801E02D8 *p = &D_801E02D8;
+    Unk_801E02DC *se;
+    Unk_801A2C60_820 *tone;
+    s16 vol[2];
+    s16 flag;
+    s32 i;
+    s16 pan;
+    u8 m;
+    Unk_801A2C60_20 *prg;
+    s16 min;
+    s16 idx;
+
+    vol[0] = arg4;
+    vol[1] = arg5;
+    se = NULL;
+    flag = arg6;
+    for (i = 0; i < p->unk14; i++) {
+        se = p->unk4[i];
+        if (se->unk4 == arg0) {
+            break;
+        }
+    }
+    if (i == p->unk14) {
+        return;
+    }
+    m = ((Unk_801A2C60 *)se->unk8)->unk18;
+    pan = ((Unk_801A2C60 *)se->unk8)->unk19;
+    vol[0] = vol[0] * m >> 7;
+    vol[1] = vol[1] * m >> 7;
+    if (pan < 0x40) {
+        vol[1] = vol[1] / (0x40 - pan);
+    } else if (pan > 0x40) {
+        vol[0] = vol[0] / (pan - 0x40);
+    }
+
+    prg = &((Unk_801A2C60 *)se->unk8)->unk20[arg1];
+    m = prg->unk1;
+    pan = prg->unk4;
+    vol[0] = vol[0] * m >> 7;
+    vol[1] = vol[1] * m >> 7;
+    if (pan < 0x40) {
+        vol[1] = vol[1] / (0x40 - pan);
+    } else if (pan > 0x40) {
+        vol[0] = vol[0] / (pan - 0x40);
+    }
+
+    tone = ((Unk_801A2C60 *)se->unk8)->unk820;
+    for (i = 0; i < ((Unk_801A2C60 *)se->unk8)->unk12; i++, tone++) {
+        if (tone->unk14 == arg1) {
+            break;
+        }
+    }
+    if (i < ((Unk_801A2C60 *)se->unk8)->unk12) {
+        m = tone->unk2;
+        pan = tone->unk3;
+        vol[0] = vol[0] * m >> 7;
+        vol[1] = vol[1] * m >> 7;
+        if (pan < 0x40) {
+            vol[1] = vol[1] / (0x40 - pan);
+        } else if (pan > 0x40) {
+            vol[0] = vol[0] / (pan - 0x40);
+        }
+    }
+
+    for (i = 0; i < 8; i++) {
+        if (D_801E1078[i].unk0 == 0 && D_801E1078[i].unk4 == arg1 && D_801E1078[i].unk6 == arg2 && D_801E1078[i].unk8 == arg3) {
+            break;
+        }
+    }
+    if (i == 8) {
+        min = 0x7FFF;
+        idx = -1;
+        for (i = 0; i < 8; i++) {
+            if (D_801E1078[i].unkC == -1) {
+                break;
+            }
+            if (D_801E1078[i].unk10 < min) {
+                idx = i;
+                min = D_801E1078[i].unk10;
+            }
+        }
+        if (i == 8) {
+            i = 0;
+            if (idx != -1) {
+                i = idx;
+            }
+            D_801E1078[i].unk10 = 0;
+            SsUtKeyOffV(D_801E1078[i].unkC);
+        }
+        D_801E1078[i].unk0 = 0;
+        D_801E1078[i].unk4 = arg1;
+        D_801E1078[i].unk6 = arg2;
+        D_801E1078[i].unk8 = arg3;
+        D_801E1078[i].unkA = se->unk4;
+        D_801E1078[i].unkC = SsUtKeyOnV(i, se->unk0, arg1, arg2, arg3, 0, vol[0], vol[1]);
+        D_801E1078[i].unkE = 1;
+        D_801E1078[i].unk12 = flag;
+        if (flag != 0) {
+            D_801E1078[i].unk10 = 0x7FFF;
+        } else {
+            D_801E1078[i].unk10++;
+        }
+    } else {
+        if (D_801E1078[i].unkE != 0) {
+            SsUtKeyOffV(D_801E1078[i].unkC);
+        }
+        D_801E1078[i].unkC = SsUtKeyOnV(D_801E1078[i].unkC, se->unk0, arg1, arg2, arg3, 0, vol[0], vol[1]);
+        if (flag == 0) {
+            D_801E1078[i].unk10++;
+        }
+    }
+}
 
 void func_801A324C(Unk_801A324C *arg0) {
     s32 a, b, c, d, e, f, g, h;

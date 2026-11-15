@@ -1,8 +1,22 @@
 #include "common.h"
 
 typedef struct {
+    s16 unk0;
+    s16 unk2;
+    u16 unk4;
+    s16 unk6;
+    s16 unk8;
+    s16 unkA;
+} Unk_80173954;
+typedef struct {
     u16 unk0;
     u16 unk2;
+    u16 unk4;
+    u16 unk6;
+    Unk_80173954 unk8;
+    Unk_80173954 unk14;
+    Unk_80173954 unk20;
+    Unk_80173954 unk2C;
 } Unk_80174A14;
 typedef struct {
     void *unk0;
@@ -25,7 +39,13 @@ typedef struct Unk_801CCB70 {
 typedef struct { Unk_801CCB70 *unk0; Unk_801CCB70 *unk4; Unk_801CCB70 *unk8; s32 unkC; } Unk_801DFE54;
 Unk_801DFE54 *D_801DFE54;
 void func_801CCBF4(Unk_801DFE54 *a0, s32 a1);
-typedef struct { s32 unk0; s32 unk4; s32 unk8; } Unk_80174F54;
+typedef struct {
+    s32 unk0;
+    s16 unk4;
+    s16 unk6;
+    s16 unk8;
+    s16 unkA;
+} Unk_80174F54;
 typedef struct { u16 unk0; s16 unk2; s16 unk4; s16 unk6; s16 unk8; u8 unkA; u8 unkB; s16 unkC; u8 unkE; u8 unkF; s16 unk10; u16 unk12; s16 unk14; s16 unk16; s16 unk18; s16 unk1A; s16 unk1C; s16 unk1E; s32 unk20; s32 unk24; s32 unk28; s32 unk2C; s32 unk30; s32 unk34; s16 unk38; s16 unk3A; s16 unk3C; s16 unk3E; s16 unk40; s16 unk42; u8 unk44; u8 unk45; s16 unk46; s32 unk48; } Unk_801762F4;
 typedef struct { u16 unk0; s16 unk2; s32 unk4; s16 unk8; u16 unkA; u8 unkC[0xC0]; } Unk_801767D4;
 typedef struct { u16 unk0; s16 unk2; s32 unk4[8]; } Unk_80176890;
@@ -40,14 +60,6 @@ s32 func_8017CDA4(s32 a0, s32 a1, s32 a2);
 Unk_801767D4 *func_801767D4(s16 arg0);
 typedef struct { s16 unk0; s16 unk2; s16 unk4[2]; u8 unk8[0x28]; s16 unk30; s16 unk32[8]; s16 unk42; s16 unk44; s16 unk46; s16 unk48; u8 unk4A[2]; s32 unk4C; } Unk_801E0768;
 extern Unk_801E0768 *D_801E0768[];
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    u16 unk4;
-    s16 unk6;
-    s16 unk8;
-    s16 unkA;
-} Unk_80173954;
 typedef struct {
     u8 unk0[4];
     s16 unk4;
@@ -155,6 +167,40 @@ void func_8018C414(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 void func_8018C50C(s32 a, s32 b, s32 c, s16 d, s16 e);
 void func_8018C554(s32 arg0, char *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 extern u16 D_801E0368[];
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+} Unk_8017345C;
+void func_80173054(Unk_80173054 *arg0, s32 *arg1);
+void func_80173250(Unk_80173054 *arg0);
+void func_80174840(s16 arg0);
+Unk_80174F54 *func_80174F54(s32 arg0);
+s16 D_801DFC58;
+s16 D_801DFC5A;
+void func_801A461C(s32 arg0, s32 arg1, s32 arg2);
+void func_80175CD8(Unk_80173054 *arg0);
+void func_801A8264(Unk_80173054 *arg0);
+void func_801A3CC0(s32 arg0);
+void func_801A3BCC(s16 arg0);
+void func_8018519C(Unk_80173054 *arg0, Unk_801DFFE8 *arg1);
+void func_801837F0(Unk_80173054 *arg0);
+void func_8018EED4(Unk_80173054 *arg0, Unk_801DFFE8 *arg1);
+void func_80199034(Unk_80173054 *arg0, Unk_801DFFE8 *arg1);
+void func_801A324C(Unk_80173054 *arg0);
+void func_801CC1E8(s32 arg0);
+void func_801A417C(Unk_80173054 *arg0);
+void func_8018BD60(Unk_80173054 *arg0);
+void func_801A0690(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+typedef struct {
+    u8 unk0[0xC];
+    u16 unkC;
+    u16 unkE;
+    u16 unk10;
+    u16 unk12;
+} Unk_801E0710;
+void func_801CCCF4(Unk_801DFE54 *a0, s32 a1);
+extern Unk_801E0710 D_801E0710;
+s16 func_80173954(Unk_80173954 *arg0);
 
 void func_80173054(Unk_80173054 *arg0, s32 *arg1) {
     Unk_80173250 *cmd = arg0->unk0;
@@ -236,7 +282,158 @@ void func_80173250(Unk_80173054 *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/80173054", func_8017345C);
+void func_8017345C(void) {
+    Unk_801DFFE8 *s = &D_801DFFE8;
+    Unk_801DFE54 *list;
+    Unk_80173054 *cmd;
+    Unk_80173250 *c;
+    Unk_80174F54 *e;
+    Unk_80174B10 *item;
+    Unk_8017345C op;
+    s32 flag;
+    s32 a, b, d;
+    s32 n;
+
+    switch (s->unk6) {
+    case 0:
+    case 2:
+        return;
+    case 3:
+        D_801DFC5A = (D_801DFC5A + 1) % 16;
+        if (D_801DFC5A == 0) {
+            func_801A461C(0x40A, 3, 0x14BF);
+        } else if (D_801DFC5A == 8) {
+            func_801A461C(0x40A, 3, 0x8000);
+        }
+        return;
+    case 4:
+        if ((s16)s->unk10 == 0) {
+            return;
+        }
+        s->unk10 -= D_801E6DB4[0];
+        if ((s16)s->unk10 > 0) {
+            return;
+        }
+        s->unk10 = 0;
+        s->unk12 &= ~1;
+        if (s->unk12 != 0) {
+            return;
+        }
+        s->unk6 = 1;
+        break;
+    }
+
+    list = D_801DFE54;
+    n = list->unkC;
+    op.unk0 = -2;
+    if (n == 0) {
+        cmd = NULL;
+    } else {
+        Unk_80173054 *t;
+        list->unk8 = list->unk0;
+        t = (Unk_80173054 *)list->unk8->unk8;
+        op.unk0 = t->unk0->unk0;
+        cmd = t;
+        func_801CCDF8(list);
+    }
+    if (op.unk0 < 0) {
+        func_80174840(1);
+        return;
+    }
+    switch (op.unk0) {
+    case 0:
+        c = cmd->unk0;
+        e = func_80174F54(c->unk4);
+        if (e == NULL) {
+            return;
+        }
+        switch (c->unk2) {
+        case 0:
+            if (atoi(cmd->unk8[0]) != 0) {
+                e->unk6 = atoi(cmd->unk8[1]);
+            } else {
+                e->unk4 = atoi(cmd->unk8[1]);
+            }
+            break;
+        case 1:
+            e->unkA = atoi(cmd->unk8[0]);
+            break;
+        case 2:
+            e->unk8 = atoi(cmd->unk8[0]);
+            break;
+        }
+        break;
+    case 1:
+        func_80175CD8(cmd);
+        break;
+    case 2:
+        func_801A8264(cmd);
+        break;
+    case 3:
+        if (cmd->unk0->unk2 != 0) {
+            func_801A3CC0(3);
+        } else {
+            func_801A3BCC(atoi(cmd->unk8[0]));
+        }
+        break;
+    case 4:
+        func_8018519C(cmd, s);
+        break;
+    case 5:
+        func_801837F0(cmd);
+        break;
+    case 6:
+        func_80173054(cmd, (s32 *)s);
+        break;
+    case 7:
+        func_8018EED4(cmd, s);
+        break;
+    case 8:
+        func_80199034(cmd, s);
+        break;
+    case 9:
+        func_801A324C(cmd);
+        break;
+    case 10:
+        func_80173250(cmd);
+        break;
+    case 11:
+        D_801DFC58 = 1;
+        flag = 0;
+        switch (cmd->unk0->unk2) {
+        case 0:
+            s->unk6 = 4;
+            s->unk12 |= 1;
+            s->unk10 = atoi(cmd->unk8[0]) * 2;
+            break;
+        case 10:
+            cmd->unk0->unk2 = 1;
+            flag = 1;
+        case 1:
+            item = func_80174CB8(atoi(cmd->unk8[0]));
+            while (item != NULL) {
+                item = func_80173DE0(item, 1, (s16)flag);
+            }
+            break;
+        case 2:
+            func_801CC1E8(0x400);
+            break;
+        }
+        break;
+    case 12:
+        func_801A417C(cmd);
+        break;
+    case 13:
+        func_8018BD60(cmd);
+        break;
+    case 14:
+        a = atoi(cmd->unk8[0]) & 0xFF;
+        b = atoi(cmd->unk8[1]) & 0xFF;
+        d = atoi(cmd->unk8[2]) & 0xFF;
+        func_801A0690(a, b, d, (s16)atoi(cmd->unk8[3]));
+        break;
+    }
+}
 
 s16 func_80173954(Unk_80173954 *arg0) {
     Unk_801E0768 *p = D_801E0768[0];
@@ -276,7 +473,182 @@ s16 func_80173954(Unk_80173954 *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/game/80173054", func_80173A44);
 
-INCLUDE_ASM("asm/nonmatchings/game/80173054", func_80173DE0);
+static inline s16 func_80173DE0_var(Unk_80173954 *arg0) {
+    u16 *vars = D_801E0368;
+    s16 v;
+    s16 ret;
+    if (arg0->unk0 == 0) {
+        return 2;
+    }
+    v = vars[arg0->unk4];
+    ret = 1;
+    if (v >= arg0->unk8 && arg0->unkA >= v) {
+        ret = arg0->unk2 == 0;
+    } else if (arg0->unk2 == 0) {
+        ret = 0;
+    }
+    return ret;
+}
+
+static inline s16 func_80173DE0_glob(Unk_80173954 *arg0) {
+    Unk_801E0710 *g = &D_801E0710;
+    s16 v;
+    s16 ret;
+    if (arg0->unk0 == 0) {
+        return 2;
+    }
+    ret = 1;
+    switch (arg0->unk4) {
+    case 0:
+        v = g->unkC;
+        break;
+    case 1:
+        v = g->unkE;
+        break;
+    case 2:
+        v = g->unk10;
+        break;
+    case 3:
+        v = g->unk12;
+        break;
+    }
+    if (v >= arg0->unk8 && arg0->unkA >= v) {
+        if (arg0->unk2 != 0) {
+            ret = 0;
+        }
+    } else if (arg0->unk2 == 0) {
+        ret = 0;
+    }
+    return ret;
+}
+
+static inline void func_80173DE0_run(Unk_80174B10 *arg0, s16 arg1, s16 arg2) {
+    Unk_801DFE54 *list;
+    Unk_80174CB8 *e;
+    Unk_80174A14 *item;
+    s16 first = 1;
+    s32 i;
+    if (arg1 != 0) {
+        e = arg0->unk8;
+        list = D_801DFE54;
+        for (i = 0; i < arg0->unk4; i++, e++) {
+            item = e->unk0;
+            if (arg2 != 0) {
+                if (item->unk0 == 5 || *(s32 *)item == 0xB) {
+                    continue;
+                }
+                if (*(s32 *)item == 0x1000B) {
+                    item->unk2 = 10;
+                }
+            }
+            if (D_801DFC58 != 0 && first != 0) {
+                first = 0;
+                D_801DFC58 = 0;
+                list->unk8 = list->unk0;
+                func_801CCBF4(list, (s32)e);
+            } else {
+                func_801CCCF4(list, (s32)e);
+            }
+        }
+    } else {
+        Unk_801DFE54 *l2;
+        Unk_80174CB8 *e2;
+        e2 = arg0->unk8;
+        l2 = D_801DFE54;
+        for (i = 0; i < arg0->unk4; i++, e2++) {
+            item = e2->unk0;
+            if (arg2 != 0) {
+                if (item->unk0 == 5 || *(s32 *)item == 0xB) {
+                    continue;
+                }
+                if (*(s32 *)item == 0x1000B) {
+                    item->unk2 = 10;
+                }
+            }
+            if (l2->unkC == 0) {
+                func_801CCBF4(l2, (s32)e2);
+            } else {
+                l2->unk8 = l2->unk4;
+                func_801CCCF4(l2, (s32)e2);
+            }
+        }
+    }
+}
+
+static inline Unk_80174B10 *func_80173DE0_find(s16 arg0) {
+    Unk_801DFE54 *list = D_801DFE50;
+    Unk_80174B10 *item;
+    if (list->unkC == 0) {
+        return NULL;
+    }
+    if (arg0 < 0) {
+        return NULL;
+    }
+    list->unk8 = list->unk0;
+    while (1) {
+        item = list->unk8->unk8;
+        if (item != NULL && item->unk0->unk0 == arg0) {
+            return item;
+        }
+        if (func_801CD000(list) != 0) {
+            break;
+        }
+        list->unk8 = list->unk8->unk4;
+    }
+    return NULL;
+}
+
+Unk_80174B10 *func_80173DE0(Unk_80174B10 *arg0, s32 arg1, s32 arg2) {
+    Unk_80174A14 *h = arg0->unk0;
+    s16 st[4];
+    s32 n2;
+    s32 n1;
+    s32 i;
+
+    st[0] = func_80173DE0_var(&h->unk8);
+    st[1] = func_80173DE0_var(&h->unk14);
+    st[2] = func_80173DE0_glob(&h->unk20);
+    st[3] = func_80173954(&h->unk2C);
+    for (i = 0, n2 = 0; i < 4; i++) {
+        if (st[i] == 2) {
+            n2++;
+        }
+    }
+    if (n2 == 4) {
+        func_80173DE0_run(arg0, arg1, arg2);
+        if (h->unk6 == 1 || h->unk6 == 2) {
+            return func_80173DE0_find(h->unk4);
+        }
+        return NULL;
+    }
+    for (i = 0, n1 = 0; i < 4; i++) {
+        if (st[i] == 1) {
+            n1++;
+        }
+    }
+    if (h->unk2 == 0) {
+        if (n1 > 0) {
+            func_80173DE0_run(arg0, arg1, arg2);
+            if (h->unk6 == 1 || h->unk6 == 2) {
+                return func_80173DE0_find(h->unk4);
+            }
+        } else {
+            if (h->unk6 == 0 || h->unk6 == 2) {
+                return func_80173DE0_find(h->unk4);
+            }
+        }
+    } else if (n1 == 4 - n2) {
+        func_80173DE0_run(arg0, arg1, arg2);
+        if (h->unk6 == 1 || h->unk6 == 2) {
+            return func_80173DE0_find(h->unk4);
+        }
+    } else {
+        if (h->unk6 == 0 || h->unk6 == 2) {
+            return func_80173DE0_find(h->unk4);
+        }
+    }
+    return NULL;
+}
 
 void func_80174840(s16 arg0) {
     Unk_801DFFE8 *s = &D_801DFFE8;

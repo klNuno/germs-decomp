@@ -64,7 +64,9 @@ def top_level_items(decls):
 
 
 def code_of(line):
-    """The line without /* */ and // comments, for deciding where an item ends."""
+    """The line without string or char literals and comments, for deciding where an item ends.
+    A Shift-JIS literal can hold a brace byte (0x7B, 0x7D) that must not count as a brace."""
+    line = re.sub(r'"(?:[^"\\\n]|\\.)*"|\'(?:[^\'\\\n]|\\.)*\'', '""', line)
     return re.sub(r"//.*", "", re.sub(r"/\*.*?\*/", "", line)).rstrip()
 
 

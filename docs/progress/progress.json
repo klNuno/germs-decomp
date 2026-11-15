@@ -1,22 +1,22 @@
 {
  "schema_version": 1,
- "commit": "895f76d",
+ "commit": "021ccfb",
  "tracked_tree_dirty": true,
  "exe_sha1": "178e728643d9b456436f4d19c9e07db11ab8aa2c",
  "metric": "Code bytes of each function (.text of the link map). asm: still INCLUDE_ASM; c: matching C whose body still carries names we did not choose; read: matching C with only our names.",
  "totals": {
   "functions": 655,
   "bytes": 272276,
-  "bytes_in_c": 179336,
-  "functions_in_c": 576,
+  "bytes_in_c": 218360,
+  "functions_in_c": 600,
   "levels": {
    "asm": {
-    "functions": 79,
-    "bytes": 92940
+    "functions": 55,
+    "bytes": 53916
    },
    "c": {
-    "functions": 576,
-    "bytes": 179336
+    "functions": 600,
+    "bytes": 218360
    },
    "read": {
     "functions": 0,
@@ -34,10 +34,10 @@
    }
   },
   "unknowns": {
-   "unk_fields": 3526,
-   "m2c_names": 793,
-   "unk_types": 833,
-   "d_globals": 1161
+   "unk_fields": 3833,
+   "m2c_names": 845,
+   "unk_types": 914,
+   "d_globals": 1275
   },
   "sony_symbols": 643,
   "sony_bytes": 138048
@@ -73,7 +73,11 @@
      "name": "func_8017345C",
      "address": "0x8017345C",
      "bytes": 1272,
-     "level": "asm"
+     "unk_fields": 10,
+     "m2c_names": 0,
+     "unk_types": 7,
+     "d_globals": 5,
+     "level": "c"
     },
     {
      "name": "func_80173954",
@@ -95,7 +99,11 @@
      "name": "func_80173DE0",
      "address": "0x80173DE0",
      "bytes": 2656,
-     "level": "asm"
+     "unk_fields": 8,
+     "m2c_names": 3,
+     "unk_types": 1,
+     "d_globals": 0,
+     "level": "c"
     },
     {
      "name": "func_80174840",
@@ -239,7 +247,11 @@
      "name": "func_8017546C",
      "address": "0x8017546C",
      "bytes": 1348,
-     "level": "asm"
+     "unk_fields": 10,
+     "m2c_names": 2,
+     "unk_types": 4,
+     "d_globals": 2,
+     "level": "c"
     },
     {
      "name": "func_801759B0",
@@ -433,7 +445,11 @@
      "name": "func_801779B8",
      "address": "0x801779B8",
      "bytes": 2780,
-     "level": "asm"
+     "unk_fields": 13,
+     "m2c_names": 4,
+     "unk_types": 2,
+     "d_globals": 6,
+     "level": "c"
     },
     {
      "name": "func_80178494",
@@ -509,7 +525,11 @@
      "name": "func_8017917C",
      "address": "0x8017917C",
      "bytes": 1204,
-     "level": "asm"
+     "unk_fields": 17,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 8,
+     "level": "c"
     },
     {
      "name": "func_80179630",
@@ -847,7 +867,11 @@
      "name": "func_8017D604",
      "address": "0x8017D604",
      "bytes": 1252,
-     "level": "asm"
+     "unk_fields": 13,
+     "m2c_names": 1,
+     "unk_types": 6,
+     "d_globals": 10,
+     "level": "c"
     },
     {
      "name": "func_8017DAE8",
@@ -1029,7 +1053,11 @@
      "name": "func_80180D8C",
      "address": "0x80180D8C",
      "bytes": 2240,
-     "level": "asm"
+     "unk_fields": 16,
+     "m2c_names": 2,
+     "unk_types": 4,
+     "d_globals": 2,
+     "level": "c"
     },
     {
      "name": "func_8018164C",
@@ -1111,7 +1139,11 @@
      "name": "func_80182860",
      "address": "0x80182860",
      "bytes": 1236,
-     "level": "asm"
+     "unk_fields": 3,
+     "m2c_names": 2,
+     "unk_types": 1,
+     "d_globals": 5,
+     "level": "c"
     },
     {
      "name": "func_80182D34",
@@ -1809,7 +1841,11 @@
      "name": "func_801882AC",
      "address": "0x801882AC",
      "bytes": 1204,
-     "level": "asm"
+     "unk_fields": 6,
+     "m2c_names": 0,
+     "unk_types": 3,
+     "d_globals": 14,
+     "level": "c"
     },
     {
      "name": "func_80188760",
@@ -2805,7 +2841,7 @@
    "unit": "src/game/8018FA18.c",
    "game": true,
    "library": "game",
-   "bytes": 25560,
+   "bytes": 22144,
    "functions": [
     {
      "name": "func_8018FA18",
@@ -2951,7 +2987,11 @@
      "name": "func_80191AB0",
      "address": "0x80191AB0",
      "bytes": 2256,
-     "level": "asm"
+     "unk_fields": 8,
+     "m2c_names": 5,
+     "unk_types": 3,
+     "d_globals": 3,
+     "level": "c"
     },
     {
      "name": "func_80192380",
@@ -3057,13 +3097,21 @@
      "name": "func_801932F8",
      "address": "0x801932F8",
      "bytes": 1416,
-     "level": "asm"
+     "unk_fields": 16,
+     "m2c_names": 0,
+     "unk_types": 6,
+     "d_globals": 4,
+     "level": "c"
     },
     {
      "name": "func_80193880",
      "address": "0x80193880",
      "bytes": 1320,
-     "level": "asm"
+     "unk_fields": 6,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 6,
+     "level": "c"
     },
     {
      "name": "func_80193DA8",
@@ -3184,12 +3232,24 @@
      "unk_types": 2,
      "d_globals": 4,
      "level": "c"
-    },
+    }
+   ]
+  },
+  {
+   "unit": "src/game/80195098.c",
+   "game": true,
+   "library": "game",
+   "bytes": 3416,
+   "functions": [
     {
      "name": "func_80195098",
      "address": "0x80195098",
      "bytes": 1220,
-     "level": "asm"
+     "unk_fields": 9,
+     "m2c_names": 5,
+     "unk_types": 2,
+     "d_globals": 7,
+     "level": "c"
     },
     {
      "name": "func_8019555C",
@@ -3269,7 +3329,11 @@
      "name": "func_80196AE0",
      "address": "0x80196AE0",
      "bytes": 1780,
-     "level": "asm"
+     "unk_fields": 16,
+     "m2c_names": 4,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
     },
     {
      "name": "func_801971D4",
@@ -3417,7 +3481,11 @@
      "name": "func_80199548",
      "address": "0x80199548",
      "bytes": 1356,
-     "level": "asm"
+     "unk_fields": 12,
+     "m2c_names": 3,
+     "unk_types": 2,
+     "d_globals": 2,
+     "level": "c"
     },
     {
      "name": "func_80199A94",
@@ -3723,7 +3791,11 @@
      "name": "func_801A0EDC",
      "address": "0x801A0EDC",
      "bytes": 1476,
-     "level": "asm"
+     "unk_fields": 17,
+     "m2c_names": 1,
+     "unk_types": 7,
+     "d_globals": 6,
+     "level": "c"
     },
     {
      "name": "func_801A14A0",
@@ -3859,13 +3931,21 @@
      "name": "func_801A2678",
      "address": "0x801A2678",
      "bytes": 1512,
-     "level": "asm"
+     "unk_fields": 24,
+     "m2c_names": 1,
+     "unk_types": 6,
+     "d_globals": 3,
+     "level": "c"
     },
     {
      "name": "func_801A2C60",
      "address": "0x801A2C60",
      "bytes": 1516,
-     "level": "asm"
+     "unk_fields": 21,
+     "m2c_names": 7,
+     "unk_types": 5,
+     "d_globals": 2,
+     "level": "c"
     },
     {
      "name": "func_801A324C",
@@ -4305,7 +4385,11 @@
      "name": "func_801A5E0C",
      "address": "0x801A5E0C",
      "bytes": 1820,
-     "level": "asm"
+     "unk_fields": 22,
+     "m2c_names": 0,
+     "unk_types": 5,
+     "d_globals": 11,
+     "level": "c"
     },
     {
      "name": "func_801A6528",
@@ -4695,7 +4779,11 @@
      "name": "func_801A968C",
      "address": "0x801A968C",
      "bytes": 1384,
-     "level": "asm"
+     "unk_fields": 7,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
     },
     {
      "name": "func_801A9BF4",
@@ -4711,7 +4799,11 @@
      "name": "func_801A9EA4",
      "address": "0x801A9EA4",
      "bytes": 1212,
-     "level": "asm"
+     "unk_fields": 24,
+     "m2c_names": 1,
+     "unk_types": 3,
+     "d_globals": 4,
+     "level": "c"
     }
    ]
   },
@@ -4725,7 +4817,11 @@
      "name": "func_801AA360",
      "address": "0x801AA360",
      "bytes": 1404,
-     "level": "asm"
+     "unk_fields": 18,
+     "m2c_names": 1,
+     "unk_types": 5,
+     "d_globals": 6,
+     "level": "c"
     },
     {
      "name": "func_801AA8DC",
@@ -10069,7 +10165,11 @@
      "name": "func_801D42F4",
      "address": "0x801D42F4",
      "bytes": 2608,
-     "level": "asm"
+     "unk_fields": 0,
+     "m2c_names": 6,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
     },
     {
      "name": "func_801D4D24",
@@ -10105,7 +10205,11 @@
      "name": "func_801D5324",
      "address": "0x801D5324",
      "bytes": 1552,
-     "level": "asm"
+     "unk_fields": 11,
+     "m2c_names": 2,
+     "unk_types": 4,
+     "d_globals": 4,
+     "level": "c"
     },
     {
      "name": "func_801D5934",

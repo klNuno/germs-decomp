@@ -127,7 +127,12 @@ typedef struct {
     s32 unk48; s32 unk4C; Unk_8018F590 *unk50; s32 unk54; Unk_80188FEC *unk58;
 } Unk_801E02D8;
 extern Unk_801E02D8 D_801E02D8;
-typedef struct { u16 unk0; u8 unk2[0x26]; } Unk_801891A4;
+typedef struct {
+    u16 unk0;
+    u16 unk2;
+    char unk4[0x22];
+    s16 unk26;
+} Unk_801891A4;
 typedef struct { s16 unk0; s16 unk2; s16 unk4; s16 unk6; } Unk_801DFEB0;
 Unk_801DFEB0 D_801DFEB0;
 s16 D_801DFEA8;
@@ -208,7 +213,9 @@ typedef struct {
     u16 unk20;
     u8 unk22[2];
     u16 unk24;
-    u8 unk26[0x22];
+    u8 unk26[6];
+    s16 unk2C;
+    u8 unk2E[0x1A];
     s16 unk48;
     u8 unk4A[2];
     s32 unk4C;
@@ -312,6 +319,27 @@ s32 func_801CD6B4(void);
 void func_80184094(void);
 void func_8018D8B8(void);
 void func_801A4BC8(s32 arg0, s32 arg1, s32 arg2);
+extern char D_80170618[];
+extern char D_80170648[];
+extern char D_80170678[];
+extern char D_801706BC[];
+extern char D_80170700[];
+extern char D_8017073C[];
+extern char D_80170778[];
+extern char D_801707A4[];
+extern char D_801707B8[];
+extern char D_801707CC[];
+extern char D_801707E0[];
+extern char D_801707F4[];
+/* refined: unk2 u16, unk4 text, unk26 s16 (was u8 unk2[0x26]) */
+/* refined: unk26[0x22] split into unk26[6], s16 unk2C, unk2E[0x1A] */
+int sprintf(char *buf, const char *fmt, ...);
+void func_801831EC(s16 arg0, s16 arg1, char *arg2, s16 arg3, s32 arg4);
+void func_80189DE8(Unk_801E0710 *arg0);
+void func_8018ABE8(s16 a, s16 b);
+void func_80199D68(s16 arg0, s16 arg1, s16 arg2);
+void func_80199E1C(s16 arg0, s16 arg1);
+s32 func_80199FA0(void);
 
 void func_80185A60(s32 arg0, u16 arg1, s32 arg2) {
     Unk_801E0368 *g = &D_801E0368;
@@ -1195,7 +1223,156 @@ s32 func_80187D24(s16 arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/game/80185A60", func_80187E38);
 
-INCLUDE_ASM("asm/nonmatchings/game/80185A60", func_801882AC);
+s16 func_801882AC(Unk_801E0710 *a, s16 b, s16 c, s16 d, s16 e) {
+    char buf[0x80];
+    Unk_801E02D8 *p = &D_801E02D8;
+    Unk_801E0368 *q = &D_801E0368;
+    Unk_801891A4 *ent;
+    Unk_801891A4 *e2;
+    s32 n;
+    s32 i;
+    s32 j;
+    s16 ret;
+    s16 flag;
+    s16 kind;
+    s16 v;
+    s32 r;
+
+    n = p->unk2C;
+    e2 = (Unk_801891A4 *)p->unk48;
+    if (n != 0) {
+        if (c < 0) {
+            ent = NULL;
+            goto done;
+        }
+        for (j = 0; j < n; j++, e2++) {
+            if (e2->unk0 == c) {
+                ent = e2;
+                goto done;
+            }
+        }
+    }
+    ent = NULL;
+done:
+    if (ent == NULL) {
+        return -1;
+    }
+    memset(buf, 0, 0x80);
+    ret = 0;
+    kind = 3;
+    flag = 0;
+    if ((u16)(c - 0x27) < 4 || (u16)(c - 0x2F) < 4) {
+        flag = 1;
+    }
+    switch (ent->unk2) {
+    case 0:
+        v = ent->unk26;
+        if (v < 0) {
+            if (a->unk2C != 0) {
+                func_80199E1C(-v, 0);
+                if (flag) {
+                    /* " 8%s, 1を飲んで、8Ｖｉｔａｌｉｔｙ1が, 回復した" */
+                    sprintf(buf, D_80170618, ent->unk4);
+                } else {
+                    /* " 8%s, 1を食べて、8Ｖｉｔａｌｉｔｙ1が, 回復した" */
+                    sprintf(buf, D_80170648, ent->unk4);
+                }
+            } else {
+                kind = 4;
+                func_80199E1C(v, 0);
+                func_80199D68(3, 2, ent->unk26);
+                if (flag) {
+                    /* " 8%s, 1を飲んで、8Ｖｉｔａｌｉｔｙ1が, 減少し猛烈な腹痛が襲ってきた" */
+                    sprintf(buf, D_80170678, ent->unk4);
+                } else {
+                    /* " 8%s, 1を食べて、8Ｖｉｔａｌｉｔｙ1が, 減少し猛烈な腹痛が襲ってきた" */
+                    sprintf(buf, D_801706BC, ent->unk4);
+                }
+            }
+        } else if (d != 0) {
+            kind = 4;
+            func_80199E1C(-(v / 2), 0);
+            func_80199D68(3, 2, -ent->unk26);
+            if (flag) {
+                /* " 1飲み過ぎ、ハラをこわして, 8Ｖｉｔａｌｉｔｙ1が減少した" */
+                strncpy(buf, D_80170700, 0x38);
+            } else {
+                /* " 1食べ過ぎ、ハラをこわして, 8Ｖｉｔａｌｉｔｙ1が減少した" */
+                strncpy(buf, D_8017073C, 0x38);
+            }
+        } else {
+            func_80199E1C(v, 0);
+            if (flag) {
+                /* " 8%s, 1を飲んで、8Ｖｉｔａｌｉｔｙ1が, 回復した" */
+                sprintf(buf, D_80170618, ent->unk4);
+            } else {
+                /* " 8%s, 1を食べて、8Ｖｉｔａｌｉｔｙ1が, 回復した" */
+                sprintf(buf, D_80170648, ent->unk4);
+            }
+            if (a->unk0 == 0xFF && d == 0) {
+                ret = 1;
+                func_801831EC(b, 1, buf, kind, 2);
+                memset(buf, 0, 0x80);
+                /* " 8Ｖｉｔａｌｉｔｙ1がフルの, 状態に戻った" */
+                strncpy(buf, D_80170778, 0x29);
+            }
+        }
+        func_801831EC(b, 1, buf, kind, 2);
+        break;
+    case 3:
+        r = func_80199FA0();
+        if ((s16)r != 0) {
+            for (i = 0; i < 5; i++) {
+                (q->unk0 + 0x5A)[i] -= ent->unk26;
+                if ((s16)(q->unk0 + 0x5A)[i] < 0) {
+                    (q->unk0 + 0x5A)[i] = 0;
+                }
+            }
+            func_80189DE8(a);
+        }
+        memset(buf, 0, 0x80);
+        switch (ent->unk26) {
+        case 60:
+            if ((s16)r != 0) {
+                /* " 傷が多少回復した" */
+                strncpy(buf, D_801707A4, 0x11);
+            } else {
+                /* " 全身が軽くなった" */
+                strncpy(buf, D_801707B8, 0x11);
+            }
+            break;
+        case 180:
+            if ((s16)r != 0) {
+                /* " 傷がかなり回復した" */
+                strncpy(buf, D_801707CC, 0x13);
+            } else {
+                /* " 全身が軽くなった" */
+                strncpy(buf, D_801707B8, 0x11);
+            }
+            break;
+        case 360:
+            if ((s16)r != 0) {
+                /* " 傷が完全に回復した" */
+                strncpy(buf, D_801707E0, 0x13);
+            } else {
+                /* " 全身がとても軽くなった" */
+                strncpy(buf, D_801707F4, 0x17);
+            }
+            break;
+        }
+        func_8018ABE8(ent->unk26, 1);
+        func_80183E88(buf, 1, -1, 0, -1, 0, kind);
+        break;
+    case 1:
+        break;
+    default:
+        return -1;
+    }
+    if (e != 0) {
+        func_80184094();
+    }
+    return ret;
+}
 
 void func_80188760(void) {
     Unk_801E0710 *g = &D_801E0710;

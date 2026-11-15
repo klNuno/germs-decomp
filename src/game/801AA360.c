@@ -21,7 +21,26 @@ typedef struct {
 } Unk_801E076C;
 extern Unk_801E076C *D_801E076C[];
 void func_80192B8C(s32 arg0, s32 arg1);
-typedef struct { s32 unk0; s32 unk4; s32 unk8; s32 unkC; s32 unk10; s32 unk14; s32 unk18; s32 unk1C; s32 unk20; s32 unk24; s32 unk28; s32 unk2C; s32 unk30; s32 unk34; s32 unk38; } Unk_801E032C;
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+    s32 unk14;
+    s32 unk18;
+    s32 unk1C;
+    s32 unk20;
+    s32 unk24;
+    s32 unk28;
+    s32 unk2C;
+    s32 unk30;
+    s32 unk34;
+    s32 unk38;
+    u8 pad3C[0x2C];
+    s32 unk68;
+    u8 unk6C[0x20];
+} Unk_801E032C;
 extern Unk_801E032C *D_801E032C[];
 void func_801A923C(Unk_801E032C *arg0, Unk_801E076C *arg1);
 void func_801A9BF4(Unk_801E032C *arg0, Unk_801E076C *arg1);
@@ -163,10 +182,28 @@ typedef struct {
     u8 unk1C[0x8];
     s16 unk24;
     s16 unk26;
+    s16 unk28;
+    u8 pad2A[0x22];
+    s32 unk4C;
+    s32 unk50;
+    s32 unk54;
+    u8 pad58[0x4];
+    s32 unk5C;
+    s32 unk60;
+    s32 unk64;
 } Unk_801E1158;
 extern Unk_801E1158 D_801E1158;
 s16 func_801ABA88(void);
 s32 func_8019A3E8(Unk_801E0710 *arg0);
+void func_801AB774(Unk_801E076C *arg0, Unk_801AC578 *arg1);
+s16 D_801DFDA4;
+s16 D_801DFFB0;
+s32 D_801DFFB4;
+s32 func_8019A6A4(void);
+void GsSetLsMatrix(void *m);
+void RotTrans(void *v0, s32 *v1, s32 *flag);
+s32 rsin(s32 a);
+s32 rcos(s32 a);
 
 INCLUDE_RODATA("asm/nonmatchings/game/801AA360", D_80171A78);
 
@@ -174,7 +211,125 @@ INCLUDE_RODATA("asm/nonmatchings/game/801AA360", D_80171A9C);
 
 INCLUDE_RODATA("asm/nonmatchings/game/801AA360", D_80171AA8);
 
-INCLUDE_ASM("asm/nonmatchings/game/801AA360", func_801AA360);
+void func_801AA360(Unk_801E076C *arg0) {
+    Unk_801AA8DC_10 sv;
+    s32 flag;
+    Unk_801E032C *p = D_801E032C[0];
+    Unk_801E1158 *q = &D_801E1158;
+    s32 k;
+    s32 v;
+    s32 s;
+    s16 sgn;
+    s16 a;
+    s32 sn;
+    s32 cs;
+    s32 t;
+    s32 ang;
+
+    q->unk0 = 0;
+    func_801AB774((Unk_801E076C *)p, (Unk_801AC578 *)arg0);
+    sv.unk0 = 0;
+    sv.unk2 = 0;
+    sv.unk4 = (q->unk4 << 12) / 360;
+    RotMatrix(&sv, p->unk6C);
+    p->unk68 = 0;
+    k = D_801DFFB4;
+    if (q->unk2 != 0) {
+        k = D_801DFFB4 * 3;
+    }
+    if (q->unk6 == 1) {
+        v = q->unk8 * 30 + 800;
+        if (v > 6500) {
+            v = 6500;
+        }
+        if (q->unkC != 0) {
+            v -= q->unkC * 45;
+        }
+        if (v < 800) {
+            v = 800;
+        }
+        s = (v - 800) * 347436 / (k * 55086);
+    } else if (q->unk6 == -1) {
+        v = q->unkC * 30 + 800;
+        if (v > 6500) {
+            v = 6500;
+        }
+        if (q->unk8 != 0) {
+            v -= q->unk8 * 45;
+        }
+        if (v < 800) {
+            v = 800;
+        }
+        s = -((v - 800) * 347436) / (k * 72566);
+    } else {
+        s = 0;
+    }
+    s = ((s << 12) / 4) >> 12;
+    sgn = 0;
+    q->unk10 = s * D_801E6DB4[0];
+    if (q->unk4 != 0) {
+        if (q->unk4 > 0) {
+            sgn = 1;
+        } else {
+            sgn = -1;
+        }
+    }
+    a = q->unk4 < 0 ? -q->unk4 : q->unk4;
+    ang = (a << 12) / 360;
+    sn = rsin(ang);
+    cs = rcos(ang);
+    t = (sn << 12) / cs;
+    if (t == 0) {
+        q->unk18 = 0;
+    } else {
+        q->unk18 = 0xFE000 / t;
+    }
+    if (q->unk10 == 0) {
+        q->unk0 = 1;
+        q->unk18 = 0;
+        q->unk14 = 0;
+        D_801DFDA4 = 0;
+    } else {
+        arg0->unk3C = 1;
+        t = (sgn * q->unk18 * cs) >> 12;
+        GsSetLsMatrix(&p->unk1C);
+        sv.unk0 = t;
+        sv.unk2 = 0;
+        sv.unk4 = -0x98;
+        RotTrans(&sv, &q->unk5C, &flag);
+        sv.unk0 = 0;
+        sv.unk2 = 0;
+        sv.unk4 = -0x98;
+        RotTrans(&sv, &q->unk4C, &flag);
+        q->unk14 = 0;
+        if (q->unk18 != 0) {
+            q->unk14 = (sgn * ratan2(s, q->unk18) * 360) >> 12;
+            if (q->unk14 == 0) {
+                q->unk14 = 1;
+            }
+        }
+        if (s >= 25 && a >= 40 && D_801DFDA4 == 0) {
+            D_801DFDA4 = 1;
+            func_801A2678(0x1B);
+        } else {
+            D_801DFDA4 = 0;
+        }
+    }
+    if (q->unk0 != 0) {
+        if (func_8019A6A4() != 0 || func_8018D1F0() != 0) {
+            if (D_801DFFB0 != 0) {
+                D_801DFFB0 = 0;
+            }
+        } else if (D_801DFFB0 == 0) {
+            /* " 7クルマ1から降りる     3○" */
+            func_80183E88(" 7\203N\203\213\203}1\202\251\202\347\215~\202\350\202\351     3\201\233", 1, -1, 0, -1, 0, 1);
+            D_801DFFB0 = 1;
+        }
+    } else if (D_801DFFB0 != 0) {
+        func_80184094();
+        D_801DFFB0 = 0;
+    }
+}
 
 void func_801AA8DC(void) {
     Unk_801AA8DC_10 sv;

@@ -60,10 +60,19 @@ void func_801875E4(s16 arg0);
 s16 func_80188C24(s16 arg0, s16 arg1);
 typedef struct { u8 unk0[0x16]; u16 unk16; } Unk_8018E56C;
 typedef struct Unk_801E076C {
-    u8 unk0[0x40];
+    u8 unk0[0x3C];
+    s16 unk3C;
+    u8 unk3E[2];
     u16 unk40;
     u16 unk42;
-    u8 unk44[0x10];
+    u8 unk44[2];
+    u16 unk46;
+    u8 unk48[2];
+    s16 unk4A;
+    u8 unk4C[2];
+    s16 unk4E;
+    s16 unk50;
+    u8 unk52[2];
     s32 unk54;
     s32 unk58;
     s32 unk5C;
@@ -485,6 +494,15 @@ typedef struct {
     char **unk8;
 } Unk_80199034;
 s32 atoi(char *s);
+s32 func_8017BD24(s32 arg0, s32 arg1, s32 *arg2, s16 arg3);
+s32 func_8017BF50(s32 arg0, s32 arg1, s32 arg2, s32 *arg3);
+s16 func_8018F7D0(s32 arg0, s32 arg1, s32 arg2);
+s16 func_80176464(s16 arg0, s32 arg1, s32 arg2, s32 arg3);
+Unk_801762F4 *func_801762F4(s16 arg0, u16 arg1);
+u16 func_801A7CF0(s32 arg0, s32 arg1, s32 arg2, u16 arg3);
+s16 D_801DFD5C;
+s16 D_801DFD5E;
+extern s32 D_801E6DB4[];
 
 INCLUDE_RODATA("asm/nonmatchings/game/80195DF0", D_80170EDC);
 
@@ -775,7 +793,159 @@ void func_801966B4(Unk_801E0620 *arg0, s32 arg1) {
     func_80195BC8(arg0, rot, 2);
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/80195DF0", func_80196AE0);
+void func_80196AE0(Unk_801E0620 *arg0, u16 arg1, s16 arg2, s16 arg3) {
+    s16 rot[3];
+    s16 dir[3];
+    s32 y;
+    s32 col;
+    s32 s;
+    s32 c;
+    s32 dx;
+    s32 dz;
+    s32 sx;
+    s32 sz;
+    s32 px;
+    s32 pz;
+    s32 t;
+    Unk_801762F4 *e;
+    s16 moved;
+    u16 r3;
+    s16 r2;
+    s16 r1;
+    s16 step;
+
+    dz = 0;
+    dx = 0;
+    moved = 0;
+    step = 0;
+    y = 0;
+    if ((arg0->unk42 & 1) || (arg0->unk42 & 0x10)) {
+        col = 0x2000000;
+        y = 700;
+    } else {
+        col = 0x1000000;
+    }
+    rot[0] = (-arg0->unk6C << 12) / 360;
+    rot[1] = (-arg0->unk6E << 12) / 360;
+    rot[2] = (-arg0->unk70 << 12) / 360;
+    if (*(s32 *)&arg0->unk40 & 0x09020000) {
+        arg0->unk44 = 0;
+    } else {
+        if (!(arg0->unk42 & 0x39)) {
+            dir[0] = 0;
+            dir[1] = (-(arg0->unk6E + 90) << 12) / 360;
+            dir[2] = 0;
+            col = 0x1000000;
+            if (arg0->unk3E != 0) {
+                if (arg3) {
+                    func_8017A108(arg1);
+                }
+                switch (arg1) {
+                case 1:
+                    col = func_8017BF50(arg0->unk54, arg0->unk58 - arg0->unk78, arg0->unk5C, &y);
+                    break;
+                case 0:
+                case 2:
+                    col = func_8017BD24(arg0->unk54, arg0->unk5C, &y, 1);
+                    break;
+                }
+                if (arg0->unk3E == 1) {
+                    col = 0x1000000;
+                }
+                arg0->unk3E = 0;
+                func_80195098(arg0, col, moved, step);
+                arg0->unk58 = y + arg0->unk78;
+                goto end;
+            }
+            s = rsin(-rot[1]);
+            c = rcos(-rot[1]);
+            dx = (arg0->unk50 * s) >> 12;
+            dz = (arg0->unk50 * c) >> 12;
+            sx = (arg0->unk4E * rsin(-dir[1])) >> 12;
+            sz = (arg0->unk4E * rcos(-dir[1])) >> 12;
+            if (dx == 0 && dz == 0 && (sx != 0 || sz != 0)) {
+                moved = 1;
+            }
+            dx += sx;
+            dz += sz;
+            if (dx != 0 || dz != 0) {
+                arg0->unk54 += dx;
+                arg0->unk5C += dz;
+            loop:
+                if (arg0->unk50 < 0) {
+                    px = -(s * 600) >> 12;
+                    pz = -(c * 600) >> 12;
+                } else {
+                    px = (s * 600) >> 12;
+                    pz = (c * 600) >> 12;
+                }
+                r1 = func_8018F7D0(arg0->unk54 + px, arg0->unk58 - arg0->unk78, arg0->unk5C + pz);
+                if (r1 >= 0) {
+                    col = r1 + 0xF70000;
+                } else {
+                    r2 = func_80176464(-1, arg0->unk54 + px, arg0->unk58 - arg0->unk78, arg0->unk5C + pz);
+                    if (r2 >= 0) {
+                        e = func_801762F4(0, r2);
+                        if (e != NULL && e->unkF == 6) {
+                            y = e->unk24 + arg0->unk74 * 32000;
+                        }
+                        col = r2 + 0xFC0000;
+                    } else {
+                        r3 = func_801A7CF0(arg0->unk54, arg0->unk58 - arg0->unk78, arg0->unk5C, arg1);
+                        if (r3 != 0xFFFF) {
+                            col = r3 + 0xFD0000;
+                        } else {
+                            if (arg2) {
+                                func_8017AAB4(arg1);
+                            }
+                            if (arg3) {
+                                func_8017A108(arg1);
+                            }
+                            switch (arg1) {
+                            case 1:
+                                col = func_8017BF50(arg0->unk54, arg0->unk58 - arg0->unk78, arg0->unk5C, &y);
+                                break;
+                            case 0:
+                            case 2:
+                                col = func_8017BD24(arg0->unk54, arg0->unk5C, &y, 1);
+                                break;
+                            }
+                        }
+                    }
+                }
+            } else {
+                if (arg2) {
+                    func_8017AAB4(arg1);
+                }
+                if (arg3) {
+                    func_8017A108(arg1);
+                }
+            }
+        }
+        if (func_80195098(arg0, col, moved, step) != 0) {
+            t = y + arg0->unk78;
+            if (t < arg0->unk58) {
+                arg0->unk40 = 1;
+            }
+            if (arg0->unk58 < t) {
+                arg0->unk40 = 0;
+            }
+            arg0->unk58 = t;
+        } else if (r1 >= 0 || r2 >= 0 || r3 != 0xFFFF || D_801DFD5C != 0 || D_801DFD5E != 0) {
+            arg0->unk54 -= dx;
+            arg0->unk5C -= dz;
+        } else {
+            step = func_80195DF0(arg1, step, &arg0->unk54, &arg0->unk5C, dx, dz);
+            if (step != -1) {
+                goto loop;
+            }
+            arg0->unk44 = 5;
+        }
+        func_801958FC(arg0);
+    }
+end:
+    func_80195BC8(arg0, rot, arg1);
+}
 
 void func_801971D4(void) {
     Unk_801E0710 *p = &D_801E0710;
@@ -1558,7 +1728,147 @@ void func_80199370(s32 arg0, s32 arg1, s32 arg2, s16 arg3) {
     func_8019555C(e, 1);
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/80195DF0", func_80199548);
+void func_80199548(Unk_801E0710 *arg0, s32 arg1, s32 arg2) {
+    Unk_801E076C *p;
+    Unk_801E1118 *q;
+
+    p = arg0->unk5C;
+    q = &D_801E1118;
+    if (arg2 & 0x1000) {
+        p->unk3C = 1;
+        if (p->unk46) {
+            q->unk34 += D_801E6DB4[0];
+        } else {
+            p->unk6C += D_801E6DB4[0];
+        }
+    } else if (arg2 & 0x4000) {
+        p->unk3C = 1;
+        if (p->unk46) {
+            q->unk34 -= D_801E6DB4[0];
+        } else {
+            p->unk6C -= D_801E6DB4[0];
+        }
+    }
+    if (arg2 & 0x8000) {
+        p->unk3C = 1;
+        if (p->unk46) {
+            q->unk36 -= D_801E6DB4[0];
+        } else {
+            p->unk6E -= D_801E6DB4[0];
+        }
+    } else if (arg2 & 0x2000) {
+        p->unk3C = 1;
+        if (p->unk46) {
+            q->unk36 += D_801E6DB4[0];
+        } else {
+            p->unk6E += D_801E6DB4[0];
+        }
+    }
+    if (p->unk42 & 0x100) {
+        p->unk4A = 4;
+        p->unk42 &= ~0x1000;
+        return;
+    }
+    if (arg2 & 0x40) {
+        p->unk3C = 1;
+        if (p->unk42 & 0x1000) {
+            if (p->unk4A >= 5) {
+                p->unk4A--;
+                p->unk50 = p->unk4A * D_801E6DB4[0];
+            } else {
+                p->unk4A = 4;
+                p->unk42 &= ~0x1000;
+                p->unk50 = D_801E6DB4[0] * 4;
+            }
+        } else {
+            p->unk50 = -(D_801E6DB4[0] * 4);
+        }
+    } else if (arg2 & 0x10) {
+        p->unk3C = 1;
+        if ((u16)arg1 == 2 && (arg2 & 1)) {
+            if (!(p->unk42 & 0x1000)) {
+                p->unk42 |= 0x1000;
+            }
+            if (p->unk4A < 11) {
+                p->unk4A++;
+            }
+            p->unk50 = D_801E6DB4[0] * p->unk4A;
+        } else if (p->unk42 & 0x1000) {
+            if (p->unk4A >= 5) {
+                p->unk4A--;
+                p->unk50 = p->unk4A * D_801E6DB4[0];
+            } else {
+                p->unk4A = 4;
+                p->unk42 &= ~0x1000;
+                p->unk50 = D_801E6DB4[0] * 4;
+            }
+        } else {
+            p->unk50 = D_801E6DB4[0] * 4;
+        }
+    }
+    if (arg2 & 4) {
+        p->unk3C = 1;
+        if (p->unk42 & 0x1000) {
+            if (p->unk4A >= 5) {
+                p->unk4A--;
+                p->unk50 = p->unk4A * D_801E6DB4[0];
+            } else {
+                p->unk4A = 4;
+                p->unk42 &= ~0x1000;
+                p->unk50 = D_801E6DB4[0] * 4;
+            }
+        } else {
+            p->unk4E = -(D_801E6DB4[0] * 6);
+        }
+    } else if (arg2 & 8) {
+        p->unk3C = 1;
+        if (p->unk42 & 0x1000) {
+            if (p->unk4A >= 5) {
+                p->unk4A--;
+                p->unk50 = p->unk4A * D_801E6DB4[0];
+            } else {
+                p->unk4A = 4;
+                p->unk42 &= ~0x1000;
+                p->unk50 = D_801E6DB4[0] * 4;
+            }
+        } else {
+            p->unk4E = D_801E6DB4[0] * 6;
+        }
+    }
+    if (p->unk3C == 0 || (p->unk50 == 0 && p->unk4E == 0)) {
+        if (!(p->unk42 & 0x1000)) {
+            return;
+        }
+        p->unk3C = 1;
+        if (p->unk4A >= 5) {
+            p->unk4A--;
+            p->unk50 = p->unk4A * D_801E6DB4[0];
+        } else {
+            p->unk4A = 4;
+            p->unk42 &= ~0x1000;
+            p->unk50 = D_801E6DB4[0] * 4;
+        }
+    }
+    if ((u16)arg1 == 2) {
+        if (p->unk46) {
+            p->unk50 <<= 2;
+            p->unk4E <<= 2;
+        }
+    } else {
+        p->unk50 *= 10;
+        p->unk4E *= 10;
+    }
+    switch (arg0->unk3A[4]) {
+    case 2:
+        p->unk50 = p->unk50 * 9 / 10;
+        p->unk4E = p->unk4E * 9 / 10;
+        break;
+    case 3:
+        p->unk50 = p->unk50 * 7 / 10;
+        p->unk4E = p->unk4E * 7 / 10;
+        break;
+    }
+}
 
 void func_80199A94(s16 arg0, s16 arg1) {
     if (arg1 != 0) {

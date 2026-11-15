@@ -66,7 +66,8 @@ typedef struct {
     u8 padC0[0x140];
     s16 unk200;
     s16 unk202;
-    u8 pad204[0x44];
+    u8 pad204[0x40];
+    s32 unk244;
     s32 unk248;
     u8 pad24C[0x2];
     s16 unk24E;
@@ -81,6 +82,7 @@ extern Unk_801E0368 D_801E0368;
 typedef struct {
     u8 pad0[0xC];
     s32 unkC;
+    s32 unk10;
 } Unk_8017E504;
 s16 D_801DFE64;
 void func_8017A3E4(void);
@@ -425,6 +427,10 @@ extern Unk_801E6DA0 D_801E6DA0;
 typedef struct {
     u8 pad0[0x4];
     s16 unk4;
+    u8 pad6[0x2];
+    s16 unk8;
+    u8 padA[0x12];
+    char **unk1C;
 } Unk_801E1058;
 extern Unk_801E1058 D_801E1058[];
 s32 func_801CD6B4(void);
@@ -529,6 +535,25 @@ typedef struct {
 } Unk_80179848;
 void GsInitCoordinate2(void *super, void *base);
 void func_801CD028(void *arg0, void *arg1, void *arg2);
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+    s16 unk8;
+    s16 unkA;
+    s16 unkC;
+    u16 unkE;
+    s16 unk10;
+    u16 unk12;
+} Unk_801E1118;
+extern Unk_801E1118 D_801E1118;
+extern s16 D_801DFF78;
+extern s32 D_801D7450[];
+void func_801A3BCC(s32 arg0);
+void func_801A2C60(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6);
+void func_801A5650(s16 arg0);
+s16 func_801A0EDC(s16 arg0);
+void func_80199EB4(s16 arg0, s32 arg1, s32 arg2, s32 arg3);
+void func_80199370(s32 arg0, s32 arg1, s32 arg2, s16 arg3);
 
 void func_80179848(Unk_8017CCE4 *arg0, u16 arg1) {
     s32 sp10[5];
@@ -1787,7 +1812,128 @@ void func_8017D574(u32 arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/80179848", func_8017D604);
+s32 func_8017D604(Unk_8017E504 *arg0) {
+    Unk_801E0368 *a = &D_801E0368;
+    Unk_801E0340 *b = &D_801E0340;
+    Unk_801E076C *m = D_801E076C[0];
+    Unk_801E1118 *c = &D_801E1118;
+    Unk_801E1058 *d = D_801E1058;
+    Unk_801DFFE8 *e = &D_801DFFE8;
+    s32 k = arg0->unk10;
+    s16 r;
+    void *p;
+    u16 f;
+
+    if (k == 0) {
+        switch (D_801DFE68.unk0) {
+        case 7:
+            break;
+        case 5:
+            func_801A3BCC(0);
+            break;
+        default:
+            func_801A3BCC(1);
+            break;
+        }
+        if (D_801DFE68.unk0 == 1 || D_801DFE68.unk0 == 2) {
+            func_801A2678(0x1D);
+        } else {
+            func_801A2C60(10, 0x29, 0, 0x3C, 0x7F, 0x7F, 1);
+        }
+    } else if (k == 7) {
+        if (arg0->unkC == 0) {
+            a->unk244 = -1;
+        }
+        if (c->unkE == 3) {
+            c->unkE = 1;
+            func_801A5650(1);
+        } else if (c->unkE == 2) {
+            c->unkE = 0;
+            c->unk12 = 1;
+            func_801A80CC(2, 0, 1);
+        }
+    } else if (k == 11) {
+        if (!(m->unk42 & 0x4000)) {
+            func_80183E88(*d->unk1C, 3, -1, 0, -1, 0, 1);
+        }
+    } else if (k == 12) {
+        if (!(m->unk42 & 0x4000)) {
+            r = func_801A0EDC(D_801DFE68.unk0);
+            if (D_801DFE68.unk0 == 8 && D_801DFF78 >= 0) {
+                if (r >= 0) {
+                    p = func_80174CB8(r);
+                    if (p != NULL) {
+                        e->unk4 = 0;
+                        e->unk0 = 0;
+                        e->unkE = -1;
+                        e->unkA = -1;
+                        e->unkC = 0;
+                        e->unk8 = 0;
+                        e->unk6 = 1;
+                        do {
+                            p = func_80173DE0(p, 0, 0);
+                        } while (p != NULL);
+                    }
+                } else {
+                    func_801A1AB8(D_801DFE68.unk0, 0);
+                }
+            }
+        }
+    } else if (k == 4) {
+        f = m->unk42;
+        if (f & 0x80) {
+            m->unk42 = f & ~4;
+            b->unkA = 1;
+        } else if (f & 0x20) {
+            /*  横になると、深い眠りについた */
+            func_80183E88(" \211\241\202\311\202\310\202\351\202\306\201\101\220\133\202\242\226\260\202\350\202\311\202\302\202\242\202\275", 1, -1, 0, -1, 0, 0);
+            func_80186128(10, 3);
+        } else if (f & 8) {
+            if (D_801DFE68.unk0 == 9) {
+                /*  6目を閉じて・・・ */
+                func_80183E88(" 6\226\332\202\360\225\302\202\266\202\304\201\105\201\105\201\105", 1, -1, 0, -1, 0, 0);
+            } else {
+                /*  意識が遠ざかっていく */
+                func_80183E88(" \210\323\216\257\202\252\211\223\202\264\202\251\202\301\202\304\202\242\202\255", 1, -1, 0, -1, 0, 0);
+            }
+            func_80186128(10, 3);
+        } else if ((D_801DFE68.unk0 == 3 || D_801DFE68.unk0 == 6) && d->unk8 != 0) {
+            func_801A1AB8(D_801DFE68.unk0, 0);
+        }
+    } else if (k == 10) {
+        if (arg0->unkC == 0) {
+            a->unk244 = -1;
+        }
+        f = m->unk42;
+        if (f & 0x20) {
+            func_80199EB4(1, D_801D7450[D_801DFE64 * 3], D_801D7450[D_801DFE64 * 3 + 1], D_801D7450[D_801DFE64 * 3 + 2]);
+            func_80184094();
+        } else if (f & 8) {
+            if (D_801DFE68.unk0 == 9) {
+                func_80199370(500, 0, 0x3390, 0);
+            } else {
+                func_80199370(D_801D7450[D_801DFE64 * 3], D_801D7450[D_801DFE64 * 3 + 1], D_801D7450[D_801DFE64 * 3 + 2], 1);
+            }
+        }
+        func_8018C1B0(1, 1, 1, 4);
+        func_80186128(9, 3);
+    } else if (k == 9) {
+        if (arg0->unkC == 0) {
+            a->unk244 = -1;
+        }
+        f = m->unk42;
+        if (f & 0x20) {
+            m->unk42 = f & ~0x20;
+        } else if (f & 8) {
+            m->unk42 = f & ~8;
+        }
+    } else if (k == 13) {
+        if (D_801DFE68.unk0 == 0) {
+            func_801A3BCC(1);
+        }
+    }
+    return 0;
+}
 
 void func_8017DAE8(Unk_801E0710 *arg0) {
     Unk_801DFFE8 *q = &D_801DFFE8;

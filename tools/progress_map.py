@@ -16,6 +16,7 @@ Sony's PSY-Q libraries (linked as asm, never decompiled) get one bar below the m
 share of the executable.
 """
 import argparse
+import datetime
 import hashlib
 import html
 import json
@@ -248,6 +249,8 @@ def svg(r):
     Sony's PSY-Q libraries are not drawn as rectangles: they are the SDK every PS1 game of the
     time linked, not code of this game."""
     W, H, top, pad = 1200, 820, 124, 28
+    # A map regenerated for a commit cannot name that commit: an edited tree shows the date.
+    stamp = datetime.date.today().isoformat() if r["tracked_tree_dirty"] else html.escape(r["commit"])
     t = r["totals"]
     lv = t["levels"]
     g = t["bytes"]
@@ -268,8 +271,7 @@ def svg(r):
         f'<rect width="{W}" height="{H}" rx="16" fill="{SURFACE}"/>',
         '<g font-family="system-ui, -apple-system, Segoe UI, sans-serif">',
         f'<text x="{pad}" y="44" font-size="25" font-weight="700" fill="{INK}">Germs: Nerawareta Machi · decompilation</text>',
-        f'<text x="{pad}" y="72" font-size="14" fill="{INK2}">{EXE} rebuilt byte for byte · {e(r["commit"])}'
-        f'{" + edits" if r["tracked_tree_dirty"] else ""} · {t["functions"]:,} functions, '
+        f'<text x="{pad}" y="72" font-size="14" fill="{INK2}">{EXE} rebuilt byte for byte · {stamp} · {t["functions"]:,} functions, '
         f'{g:,} code bytes</text>',
         f'<text x="{W - pad}" y="44" text-anchor="end" font-size="30" font-weight="700" fill="{INK}">'
         f'{in_c:.1f}% in C</text>',
@@ -327,9 +329,9 @@ def svg(r):
     parts.append(f'<text x="{bx + gw + 16:.2f}" y="{yb + 20}" font-size="13" fill="{INK}">Sony PSY-Q '
                  f'{100 * sony / (g + sony):.0f}%: stock libraries</text>')
     u = t["unknowns"]
-    parts.append(f'<text x="{pad}" y="{H - 34}" font-size="13" fill="{INK2}">Area = code bytes · open the file and '
-                 f'hover for each function · left to name in the C: {u["unk_fields"]} unknown fields, '
-                 f'{u["m2c_names"]} m2c locals, {u["unk_types"]} Unk_ types, {u["d_globals"]} D_ globals (per function)</text>')
+    parts.append(f'<text x="{pad}" y="{H - 34}" font-size="13" fill="{INK2}">Area = code bytes · open the file to hover '
+                 f'a function · still to name: {u["unk_fields"]} unknown fields, '
+                 f'{u["m2c_names"]} m2c locals, {u["unk_types"]} Unk_ types, {u["d_globals"]} D_ globals</text>')
     parts.append(f'<text x="{pad}" y="{H - 15}" font-size="12" fill="{INK3}">Every byte already rebuilds; dark '
                  f'rectangles still come from assembly. Sony\'s libraries are shared by every PS1 game of the '
                  f'time and stay as Sony shipped them.</text>')
