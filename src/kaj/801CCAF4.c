@@ -1,8 +1,75 @@
 #include "common.h"
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801CCAF4", func_801CCAF4);
+typedef struct Unk_801CCB70 {
+    void *unk0;
+    struct Unk_801CCB70 *unk4;
+    void *unk8;
+} Unk_801CCB70;
+typedef struct Unk_801CCAF4 {
+    Unk_801CCB70 *unk0;
+    void *unk4;
+    void *unk8;
+    s32 unkC;
+} Unk_801CCAF4;
+void *func_801CC898(u32 size);
+void func_801CD54C(s32 arg0, char *arg1, char *arg2, s32 arg3);
+extern char D_801DFDC4[];
+void free3(void *ptr);
+typedef struct Unk_801E6DA0 {
+    s32 unk0;
+    s32 unk4;
+    s16 unk8;
+    s16 unkA;
+} Unk_801E6DA0;
+extern Unk_801E6DA0 D_801E6DA0;
+u32 PadRead(s32 id);
+void SsInit(void);
+void SsSetTableSize(char *table, s16 s_max, s16 t_max);
+void SsSetTickMode(s32 tick_mode);
+void SsStart(void);
+void SsSetMVol(s16 voll, s16 volr);
+extern char D_801E6DD8[];
+extern s32 D_801E6DB8[];
+void SsEnd(void);
+void func_801CDB50(void);
+typedef struct Unk_801CD78C {
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+    s32 unkC[1];
+} Unk_801CD78C;
+void srand(u32 seed);
+extern u32 D_801E6DAC[];
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801CCAF4", func_801CCB70);
+void func_801CCAF4(Unk_801CCAF4 **arg0) {
+    *arg0 = func_801CC898(0x10);
+    if (*arg0 == NULL) {
+        func_801CD54C(3, "Error Allocating LL Handle", D_801DFDC4, 0x15);
+    }
+    (*arg0)->unk0 = NULL;
+    (*arg0)->unk4 = NULL;
+    (*arg0)->unk8 = NULL;
+    (*arg0)->unkC = 0;
+}
+
+void func_801CCB70(Unk_801CCAF4 *arg0) {
+    Unk_801CCB70 *node;
+
+    while (arg0->unk0 != NULL) {
+        node = arg0->unk0;
+        arg0->unk0 = node->unk4;
+        if (node != NULL) {
+            if (node->unk8 != NULL) {
+                free3(node->unk8);
+            }
+            free3(node);
+        }
+    }
+    arg0->unk4 = NULL;
+    arg0->unk8 = NULL;
+    arg0->unkC = 0;
+    free3(arg0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/kaj/801CCAF4", func_801CCBF4);
 
@@ -12,9 +79,19 @@ INCLUDE_ASM("asm/nonmatchings/kaj/801CCAF4", func_801CCDF8);
 
 INCLUDE_ASM("asm/nonmatchings/kaj/801CCAF4", func_801CCEE8);
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801CCAF4", func_801CCFD8);
+s32 func_801CCFD8(Unk_801CCAF4 *arg0) {
+    if (arg0 == NULL) {
+        return 0;
+    }
+    return arg0->unk0 == arg0->unk8;
+}
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801CCAF4", func_801CD000);
+s32 func_801CD000(Unk_801CCAF4 *arg0) {
+    if (arg0 == NULL) {
+        return 0;
+    }
+    return arg0->unk4 == arg0->unk8;
+}
 
 INCLUDE_RODATA("asm/nonmatchings/kaj/801CCAF4", D_80172BB4);
 
@@ -40,14 +117,59 @@ INCLUDE_ASM("asm/nonmatchings/kaj/801CCAF4", func_801CD3F0);
 
 INCLUDE_ASM("asm/nonmatchings/kaj/801CCAF4", func_801CD54C);
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801CCAF4", func_801CD688);
+void func_801CD688(s16 arg0) {
+    D_801E6DA0.unk0 = 0;
+    D_801E6DA0.unk4 = 0;
+    if (arg0 != 0) {
+        D_801E6DA0.unkA = 2;
+    } else {
+        D_801E6DA0.unkA = 0;
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801CCAF4", func_801CD6B4);
+s32 func_801CD6B4(void) {
+    s32 v;
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801CCAF4", func_801CD70C);
+    if (D_801E6DA0.unkA != 1) {
+        return 0;
+    }
+    v = PadRead(1);
+    D_801E6DA0.unk4 = D_801E6DA0.unk0;
+    D_801E6DA0.unk0 = v;
+    return v;
+}
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801CCAF4", func_801CD764);
+void func_801CD70C(void) {
+    SsInit();
+    SsSetTableSize(D_801E6DD8, 1, 3);
+    SsSetTickMode(1);
+    SsStart();
+    SsSetMVol(0x7F, 0x7F);
+    D_801E6DB8[0] = 0x7F;
+}
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801CCAF4", func_801CD78C);
+void func_801CD764(void) {
+    SsEnd();
+    func_801CDB50();
+}
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801CCAF4", func_801CD808);
+void func_801CD78C(Unk_801CD78C *arg0, s32 arg1) {
+    s32 *p;
+    s32 n;
+    s32 i;
+
+    if (arg0->unk0 == 0x41 && (arg0->unk4 & 1)) {
+        p = arg0->unkC;
+        n = arg0->unk8;
+        for (i = 0; i < n; i++) {
+            p[0] -= arg1 * 4;
+            p[2] -= arg1 * 4;
+            p[4] -= arg1 * 4;
+            p += 7;
+        }
+    }
+}
+
+void func_801CD808(void) {
+    srand(((D_801E6DAC[0] & 0xF0F0F0F0) >> 4) | ((D_801E6DAC[0] & 0x0F0F0F0F) << 4));
+}

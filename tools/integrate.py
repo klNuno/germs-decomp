@@ -195,8 +195,31 @@ def main():
     # caller) must agree with its definition: replace them with the definition's own prototype.
     proto = re.sub(r"\s+", " ", body.split("{", 1)[0]).strip() + ";"
     # Only top-level lines (column 0, a type before the name): an indented `FUNC(a);` is a call.
-    head = re.sub(r"^(?:extern\s+)?[A-Za-z_][\w \t*]*[\s*]" + re.escape(func) + r"\s*\([^;{}]*\)\s*;[ \t]*$",
-                  lambda _: proto, head, flags=re.M)
+    old_decl = re.compile(r"^(?:extern\s+)?[A-Za-z_][\w \t*]*[\s*]" + re.escape(func)
+                          + r"\s*\([^;{}]*\)\s*;[ \t]*$", re.M)
+    first = old_decl.search(head)
+    if first:
+        # The prototype replaces the first old declaration in place, so every type it names
+        # (and the types those use) must be defined above it: candidate types go there, and
+        # unit types defined further down move up.
+        later = [d for d in top_level_items(head[first.end():]) if type_name(d)]
+        pool = [d for d in new if type_name(d)] + later
+        names, early = set(re.findall(r"\b\w+\b", proto)), []
+        while True:
+            more = [d for d in pool if type_name(d) in names and d not in early]
+            if not more:
+                break
+            early += more
+            for d in more:
+                names |= set(re.findall(r"\b\w+\b", d))
+        early = [d for d in pool if d in early]
+        new = [d for d in new if d not in early]
+        rest = head[first.end():]
+        for d in early:
+            if d in later:
+                rest = rest.replace(d + "\n", "", 1) if d + "\n" in rest else rest.replace(d, "", 1)
+        head = head[:first.start()] + "\n".join(early + [proto]) + rest
+        head = old_decl.sub(lambda _: proto, head)
     block = ("\n".join(new) + "\n\n" if new else "") + body + "\n"
     patched = head + block + unit[m.end():]
     # The function's own strings and constants now come from its C literals, emitted at its
