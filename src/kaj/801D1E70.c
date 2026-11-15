@@ -78,6 +78,16 @@ INCLUDE_ASM("asm/nonmatchings/kaj/801D1E70", func_801D3AD4);
 
 INCLUDE_ASM("asm/nonmatchings/kaj/801D1E70", func_801D3B30);
 
+INCLUDE_RODATA("asm/nonmatchings/kaj/801D1E70", D_80172FD0);
+
+INCLUDE_RODATA("asm/nonmatchings/kaj/801D1E70", D_80172FF8);
+
+INCLUDE_RODATA("asm/nonmatchings/kaj/801D1E70", D_80173008);
+
+INCLUDE_RODATA("asm/nonmatchings/kaj/801D1E70", D_80173018);
+
+INCLUDE_RODATA("asm/nonmatchings/kaj/801D1E70", D_80173028);
+
 INCLUDE_ASM("asm/nonmatchings/kaj/801D1E70", func_801D3B7C);
 
 INCLUDE_ASM("asm/nonmatchings/kaj/801D1E70", func_801D3C50);

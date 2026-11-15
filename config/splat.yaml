@@ -6,7 +6,10 @@
 # psyq/<addr> are Sony library runs found by tools/psyq/match.py (asm, never decompiled);
 # kaj/<addr> are the pieces between them that no Sony signature matches: the developer's own
 # library (assert strings kaj.c, ll.c, misc.c, tim.c, timer.c, tss.c, cdmgr.c), linked among Sony's.
-# Every unit is one address block for now: file boundaries come with the layout study.
+# Game units are provisional: each starts at the first function that names a source file in an
+# assert (the comment gives the file), moved earlier when the .rodata order forbids that cut. Files
+# without an assert sit inside the previous unit; the layout study fixes the real boundaries.
+# .rodata follows the same unit order (checked: every rodata symbol is referenced by one unit only).
 name: Germs Nerawareta Machi (SLPS-02107)
 sha1: 178e728643d9b456436f4d19c9e07db11ab8aa2c
 options:
@@ -29,7 +32,7 @@ options:
   gp_value: 0x801DFC58
   ld_gp_expression: main_SDATA_START
   find_file_boundaries: True
-  migrate_rodata_to_functions: False
+  migrate_rodata_to_functions: True
   disassemble_all: True
   use_legacy_include_asm: False
   include_asm_macro_style: maspsx_hack
@@ -62,9 +65,45 @@ segments:
     vram: 0x80170000
     bss_size: 0x7BC0
     subsegments:
-      # One .rodata block for now: jump tables stay there (no migration) until units get their own.
-      - [0x800, rodata, main]
-      - [0x3854, c, game/80173054]  # game code: action.c .. vehicle.c by their assert strings, in link order
+      # .rodata per text unit, in the same order as .text (each start is the first symbol the unit's
+      # code references). Game and kaj units use the dot form so splat pairs them with their c unit
+      # and migrates jump tables and strings into their function.
+      - [0x800, .rodata, game/80173054]
+      - [0xA50, .rodata, game/80179848]
+      - [0xD04, .rodata, game/80185380]
+      - [0xD44, .rodata, game/80185A60]
+      - [0x1080, .rodata, game/8018920C]
+      - [0x122C, .rodata, game/8018ACAC]
+      - [0x1280, .rodata, game/8018D2DC]
+      - [0x1358, .rodata, game/8018FA18]
+      - [0x1820, .rodata, game/8019A5D4]
+      - [0x1EEC, .rodata, game/801A217C]
+      - [0x1FF4, .rodata, game/801A3DD4]
+      - [0x21BC, .rodata, game/801A7560]
+      - [0x2278, .rodata, game/801AA360]
+      - [0x2334,  rodata, psyq/801AC9D0]
+      - [0x3334, .rodata, kaj/801CBCE0]
+      - [0x3374, .rodata, kaj/801CC898]
+      - [0x3398, .rodata, kaj/801CCAF4]
+      - [0x3588,  rodata, psyq/801CD850]
+      - [0x3688, .rodata, kaj/801CF790]
+      - [0x36D8, .rodata, kaj/801CFD70]
+      - [0x3750, .rodata, kaj/801D0880]
+      - [0x3774, .rodata, kaj/801D12A8]
+      - [0x37D0, .rodata, kaj/801D1E70]
+      - [0x3854, c, game/80173054]  # action.c asserts
+      - [0xA048, c, game/80179848]  # block.c
+      - [0x15B80, c, game/80185380]  # door.c
+      - [0x16260, c, game/80185A60]  # effect.c
+      - [0x19A0C, c, game/8018920C]  # event.c
+      - [0x1B4AC, c, game/8018ACAC]  # mail.c
+      - [0x1DADC, c, game/8018D2DC]  # mod.c
+      - [0x20218, c, game/8018FA18]  # object.c
+      - [0x2ADD4, c, game/8019A5D4]  # roadmap.c
+      - [0x3297C, c, game/801A217C]  # sound.c
+      - [0x345D4, c, game/801A3DD4]  # sprite.c
+      - [0x37D60, c, game/801A7560]  # thing.c (first valid rodata cut before its first assert, 0x801A7A04)
+      - [0x3AB60, c, game/801AA360]  # vehicle.c (last valid rodata cut before its first assert, 0x801AC158)
       - [0x3D1D0, asm, psyq/801AC9D0]  # LIBAPI,LIBC,LIBC2,LIBCARD,LIBCD,LIBETC,LIBGPU,LIBGS,LIBGTE,LIBMATH,LIBMCRD,LIBSN,LIBSND,LIBSPU
       - [0x5C4E0, c, kaj/801CBCE0]  # no Sony signature, calls Sony code only
       - [0x5CF68, asm, psyq/801CC768]  # LIBAPI
