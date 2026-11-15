@@ -39,7 +39,12 @@ typedef struct {
     u8 unk1A;
     u8 unk1B;
     u8 unk1C[0x40];
-    u8 unk5C[0x28];
+    u8 unk5C[0x14];
+    s32 unk70;
+    u32 *unk74;
+    s32 unk78;
+    s32 unk7C;
+    u32 *unk80;
     u32 *unk84;
     s32 unk88;
 } Unk_801E6FF0;
@@ -81,6 +86,19 @@ Unk_801CC1E8 *func_801CC1E8(s32 arg0);
 void func_801CC514(s32 a, s32 b);
 void EnterCriticalSection(void);
 void ExitCriticalSection(void);
+/* best 99.92 % : code bytes identical; only reloc symbol differs, target D_801E704C (spurious bss split inside D_801E6FF0[2]) vs D_801E6FF0+0x5c */
+extern char D_801DFE04[];
+extern s32 D_801E6DB4[];
+void GsInitGraph(s32 w, s32 h, s32 intl, s32 dither, s32 vrammode);
+void GsDefDispBuff(s32 x0, s32 y0, s32 x1, s32 y1);
+void SetDefDispEnv(void *env, s32 x, s32 y, s32 w, s32 h);
+void SetDefDrawEnv(void *env, s32 x, s32 y, s32 w, s32 h);
+void GsInit3D(void);
+void GsInitVcount(void);
+void SetGeomOffset(s32 ofx, s32 ofy);
+void func_801D1E00(s32 arg0);
+void SetBackColor(s32 r, s32 g, s32 b);
+void SetFarColor(s32 r, s32 g, s32 b);
 
 void func_801D12A8(Unk_801D12A8 *arg0) {
     Unk_801DFBD0 *p = &D_801DFBD0;
@@ -286,7 +304,49 @@ void func_801D1774(Unk_801D1774 *arg0, s32 arg1) {
     arg0->unk2C = 2;
 }
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801D12A8", func_801D17F0);
+void func_801D17F0(void) {
+    Unk_801E6FF0 *p;
+    s32 i;
+
+    VSync(0);
+    GsInitGraph(0x140, 0xF0, 4, 1, 0);
+    VSync(0);
+    GsDefDispBuff(0, 0, 0, 0xF0);
+    SetDefDispEnv(D_801E6FF0[0].unk5C, 0, 0xF0, 0x140, 0xF0);
+    SetDefDispEnv(D_801E6FF0[1].unk5C, 0, 0, 0x140, 0xF0);
+    SetDefDrawEnv(&D_801E6FF0[0], 0, 0, 0x140, 0xF0);
+    SetDefDrawEnv(&D_801E6FF0[1], 0, 0xF0, 0x140, 0xF0);
+    for (i = 0; i < 2; i++) {
+        p = &D_801E6FF0[i];
+        p->unk18 = 1;
+        p->unk17 = 0;
+        p->unk19 = 0;
+        p->unk1A = 0;
+        p->unk1B = 0;
+        p->unk84 = func_801CC898(0x8000);
+        if (p->unk84 == 0) {
+            func_801CD54C(3, "Error Allocating VIEW Tag", D_801DFE04, 0x30);
+        }
+        p->unk88 = (s32)func_801CC898(0x2C000);
+        if (p->unk88 == 0) {
+            func_801CD54C(3, "Error Allocating VIEW Packet", D_801DFE04, 0x35);
+        }
+        p->unk70 = 13;
+        p->unk74 = p->unk84;
+        p->unk7C = 0;
+        p->unk78 = 0;
+        p->unk80 = p->unk84 + 0x1FFF;
+    }
+    VSync(0);
+    GsInit3D();
+    GsInitVcount();
+    SetGeomOffset(0xA0, 0x78);
+    func_801D1E00(0xE4);
+    SetBackColor(0, 0, 0);
+    SetFarColor(0, 0, 0);
+    D_801DFFD0 = D_801E6FF0;
+    D_801E6DB4[0] = 0;
+}
 
 void func_801D19D0(void) {
     free3(D_801E6FF0[0].unk84);

@@ -220,6 +220,10 @@ s32 func_801D2E48(s32 arg0);
 s32 func_801D6DC8(Unk_801D6DC8 *arg0, Unk_801D6DC8 *arg1);
 u8 func_801D42F4(s16 arg0, s16 arg1, u8 arg2, s16 *arg3, s16 *arg4, u8 *arg5);
 void qsort(void *base, s32 n, s32 size, s32 (*cmp)());
+/* best 99.90 % : code bytes identical; only reloc symbol differs, target D_801DFBEC (spurious data split inside D_801DFBE0[0].unkC) vs D_801DFBE0+0xc */
+void func_801D3730(s32 arg0, s32 arg1);
+void func_801D3A14(Unk_801D3924 *arg0, Unk_801D395C *arg1);
+void func_801D5E28(Unk_801E7950 *arg0);
 
 void func_801D1E70(void) {
     Unk_801DFBE0 *p = D_801DFBE0;
@@ -376,7 +380,45 @@ s32 func_801D23FC(s32 arg0, Unk_801D2A48 *arg1, s32 *arg2, s32 arg3) {
 
 INCLUDE_ASM("asm/nonmatchings/kaj/801D1E70", func_801D254C);
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801D1E70", func_801D28C0);
+void func_801D28C0(s32 arg0) {
+    Unk_801D3924 *h;
+    Unk_801D395C *blk;
+    s32 idx;
+    s32 n;
+
+    if (arg0 == 0) {
+        return;
+    }
+    n = arg0 - 1;
+    if (((Unk_801E71C8 *)D_801E71C8)->unk4[n].unk18 == 0) {
+        return;
+    }
+    if (D_801E7188[n] <= 0) {
+        return;
+    }
+    if (--D_801E7188[n] != 0) {
+        return;
+    }
+    func_801D3730(((Unk_801E71C8 *)D_801E71C8)->unk4[n].unk1D, *(s32 *)((Unk_801E71C8 *)D_801E71C8)->unk4[n].unk18);
+    if (D_801E71C8[0] != 0 && D_801E71C8[1] == arg0) {
+        CdFlush();
+        D_801E71C8[0] = 0;
+    }
+    idx = ((Unk_801E71C8 *)D_801E71C8)->unk4[n].unk1C;
+    blk = (Unk_801D395C *)((Unk_801E71C8 *)D_801E71C8)->unk4[n].unk18;
+    if (idx < 0 || idx >= D_801DFE10) {
+        printf(D_80172FD0, D_801DFE14, 93);
+        exit(1);
+    }
+    h = (Unk_801D3924 *)D_801DFBE0[idx].unkC;
+    if (h != NULL && blk != NULL) {
+        func_801D3A14(h, blk);
+    }
+    ((Unk_801E71C8 *)D_801E71C8)->unk4[n].unk18 = 0;
+    ((Unk_801E71C8 *)D_801E71C8)->unk4[n].unk1C = 0;
+    ((Unk_801E71C8 *)D_801E71C8)->unk4[n].unk1D = 0;
+    D_801DFFD8 = 1;
+}
 
 s32 func_801D2A48(s32 arg0, s16 arg1, s16 *arg2, Unk_801D2A48 *arg3) {
     Unk_801E71A8 *p;
@@ -1392,7 +1434,84 @@ void func_801D5E28(Unk_801E7950 *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801D1E70", func_801D6120);
+static inline s32 func_801D6120_inline(Unk_801E7950 *p, s16 x, s16 y) {
+    if (p->unk0 != x || p->unk2 != y) {
+        return 1;
+    }
+    return 0;
+}
+
+static inline s32 func_801D6120_inline2(void) {
+    Unk_801E7950 *p = &D_801E7950[D_801DFE49];
+    return p->unkA > 0 ? p->unkC : 0;
+}
+
+static inline void func_801D6120_inline3(Unk_801E7950 *p, s16 x, s16 y) {
+    s32 i;
+    u8 d;
+    if (p->unk0 == x && p->unk2 == y) {
+        return;
+    }
+    for (i = 0; i < p->unkC; i++) {
+        if (p->unk10[i] != 0) {
+            func_801D28C0(p->unk10[i]);
+            p->unk10[i] = 0;
+        }
+    }
+    p->unkC = 0;
+    p->unkA = 0;
+    if (p->unk0 >= 0 && p->unk2 >= 0) {
+        d = 0;
+        func_801D40F4(p->unk0, p->unk2, p->unk8, x, y, &d);
+        p->unk8 = d;
+    } else {
+        p->unk8 = 0;
+    }
+    p->unk0 = x;
+    p->unk2 = y;
+    p->unk4 = x;
+    p->unk6 = y;
+    p->unk9 = p->unk8;
+}
+
+s32 func_801D6120(s16 arg0, s16 arg1) {
+    s16 sp1A;
+    s32 ret = 0;
+    s32 prev;
+    Unk_801E7950 *q;
+
+    if (!func_801D6120_inline(&D_801E7950[D_801DFE49], arg0, arg1)) {
+        return ret;
+    }
+    if (!func_801D6120_inline(&D_801E7950[1 - D_801DFE49], arg0, arg1)) {
+        return ret;
+    }
+    if ((s16)func_801D31B8() == 0) {
+        return ret;
+    }
+    prev = func_801D6120_inline2();
+    func_801D3724();
+    func_801D6120_inline3(&D_801E7950[1 - D_801DFE49], arg0, arg1);
+    func_801D5E28(&D_801E7950[1 - D_801DFE49]);
+    q = &D_801E7950[1 - D_801DFE49];
+    if (func_801D23FC(D_801DFFE0, D_801E7650, q->unk10, 1) == 0) {
+        q->unkA = 1;
+    }
+    D_801DFE49 = D_801DFE49 == 0;
+    func_801D6120_inline3(&D_801E7950[1 - D_801DFE49], arg0, arg1);
+    if (func_801D254C(&D_801DFFE0, D_801E7650, q->unk10, 1, &sp1A) == 0) {
+        q->unkA = 1;
+    }
+    q->unkC = D_801DFFE0;
+    if (q->unkA == 1) {
+        ret = prev != D_801DFFE0;
+    } else if (sp1A != 0) {
+        ret = 3;
+    } else {
+        ret = 2;
+    }
+    return ret;
+}
 
 void func_801D654C(s16 *arg0, s32 *arg1) {
     Unk_801E7950 *p;

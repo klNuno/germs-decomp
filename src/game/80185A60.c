@@ -234,7 +234,7 @@ s32 func_80186910(s32 *arg0);
 void func_801A4824(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 void func_801A461C(s32 arg0, s32 arg1, s32 arg2);
 void func_801D06B4(void);
-void func_80198CFC(s32 a, s32 b, s32 c, s32 d, s32 e, s32 f, s32 g, s32 h, s32 i);
+void func_80198CFC(s16 a, u16 b, s32 c, s32 d, s32 e, s16 f, s16 g, s16 h, s32 i);
 typedef struct {
     u8 unk0[0x22];
     s16 unk22;

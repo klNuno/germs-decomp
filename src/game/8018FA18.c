@@ -112,7 +112,8 @@ typedef struct {
     s16 unk7A;
     s16 unk7C;
     u16 unk7E;
-    u8 unk80[0x34];
+    u8 unk80[0x32];
+    u16 unkB2;
     s16 unkB4[5];
     u8 unkBE[0x186];
     s32 unk244;
@@ -184,10 +185,29 @@ typedef struct {
 } Unk_8019A07C;
 void func_80197688(void);
 typedef struct {
-    s32 unk0; s32 unk4; s32 unk8; s32 unkC; s32 unk10; s32 unk14;
-    s32 unk18; s32 unk1C; s32 unk20; s32 unk24; s32 unk28;
-    s32 unk2C; s32 unk30; s32 unk34;
-    u8 unk38[0x24];
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+    s32 unk14;
+    s32 unk18;
+    s32 unk1C;
+    s32 unk20;
+    s32 unk24;
+    s32 unk28;
+    s32 unk2C;
+    s32 unk30;
+    s32 unk34;
+    void *unk38;
+    void *unk3C;
+    void *unk40;
+    void *unk44;
+    void *unk48;
+    void *unk4C;
+    void *unk50;
+    void *unk54;
+    void *unk58;
     void *unk5C[1];
 } Unk_801E02D8;
 extern Unk_801E02D8 D_801E02D8;
@@ -220,7 +240,7 @@ s32 func_801CD6B4(void);
 s16 func_80193880(void);
 s16 func_8018898C(Unk_801E0710 *arg0, s32 arg1);
 void func_80193DA8(Unk_801E0710 *arg0);
-void func_80198CFC(s32 a, s32 b, s32 c, s32 d, s32 e, s32 f, s32 g, s32 h, s32 i);
+void func_80198CFC(s16 a, u16 b, s32 c, s32 d, s32 e, s16 f, s16 g, s16 h, s32 i);
 void func_80199548(Unk_801E0710 *arg0, s32 arg1, s32 arg2);
 s16 D_801DFD54;
 extern s32 D_801DFF50;
@@ -468,6 +488,12 @@ void func_801B25D0(void *arg0);
 void RotMatrixZYX(s16 *r, void *m);
 void func_80192380(Unk_80192F20 **arg0, s32 arg1, s32 arg2);
 void func_80191AB0(Unk_80192F20 *arg0, s32 arg1, s32 arg2, s16 arg3);
+void func_8017519C(void);
+typedef struct { u8 unk0[4]; } Unk_801DFF20;
+void *CdSearchFile(void *fp, char *name);
+extern s32 D_801D7744[];
+extern s32 D_801D7780[];
+void func_80184100(Unk_801DFFE8 *arg0);
 
 void func_8018FA18(Unk_80192F20 *arg0, s32 arg1) {
     u8 sp10;
@@ -718,7 +744,74 @@ void func_801905A0(Unk_80192F20 *arg0, s32 arg1) {
     func_8018E2F8((s32)o);
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/8018FA18", func_801907C8);
+void func_801907C8(Unk_80192F20 *arg0, s32 arg1, s32 arg2) {
+    u8 sp10;
+    void *buf;
+    s32 n;
+    u8 *p;
+    u32 *dst;
+    Unk_801E02D8 *g;
+
+    g = &D_801E02D8;
+    buf = func_801CC898(arg2);
+    if (buf == NULL) {
+        func_801CD54C(3, "Error Allocating IFF_ID_OTHER Buffer", D_80170B7C, 0xFD);
+    }
+    *(Unk_8018FA18 *)buf = *(Unk_8018FA18 *)((u8 *)arg0->unkC + 8);
+    if (arg2 > 0x7F8) {
+        dst = (u32 *)((u8 *)buf + 0x7F8);
+        n = arg2 - 0x7F8;
+    retry:
+        sp10 = CdMode();
+        if (!(sp10 & 0x80)) {
+            sp10 = 0x80;
+            while (CdControl(0xE, &sp10, NULL) == 0) {
+            }
+            VSync(3);
+        }
+        while (CdRead(n >> 11, dst, 0x80) == 0) {
+        }
+        if (CdReadSync(0, NULL) == -1) {
+            p = CdLastPos();
+            while (CdControl(2, p, NULL) == 0) {
+            }
+            goto retry;
+        }
+        p = CdLastPos();
+        p = CdIntToPos(CdPosToInt(p) + (n >> 11), p);
+        while (CdControl(2, p, NULL) == 0) {
+        }
+        arg0->unk4 += arg2 - 0x7F8;
+    }
+    switch (arg1) {
+    case 0x41455241:
+        g->unk38 = buf;
+        break;
+    case 0x52544341:
+        g->unk3C = buf;
+        func_8017519C();
+        break;
+    case 0x2043504E:
+        g->unk50 = buf;
+        break;
+    case 0x52414843:
+        g->unk40 = buf;
+        break;
+    case 0x594D4E45:
+        g->unk44 = buf;
+        break;
+    case 0x4D455449:
+        g->unk48 = buf;
+        break;
+    case 0x20545854:
+        g->unk5C[g->unk34] = buf;
+        g->unk34++;
+        break;
+    case 0x4E504557:
+        g->unk58 = buf;
+        break;
+    }
+}
 
 void func_80190B2C(Unk_80192F20 *arg0, s32 arg1) {
     Unk_801A4370 *o;
@@ -1032,7 +1125,88 @@ void func_80191888(Unk_80192F20 *arg0, s32 arg1) {
 
 INCLUDE_ASM("asm/nonmatchings/game/8018FA18", func_80191AB0);
 
-INCLUDE_ASM("asm/nonmatchings/game/8018FA18", func_80192380);
+void func_80192380(Unk_80192F20 **arg0, s32 arg1, s32 arg2) {
+    struct {
+        Unk_801DFF20 unk0;
+        u32 unk4;
+        char unk8[16];
+    } file;
+    u8 sp28;
+    s16 flag;
+    u8 *p;
+    u8 *q;
+    void *r;
+    u32 *dst;
+
+    flag = arg1;
+    D_801DFF18 = 1;
+    *arg0 = func_801CC898(0x10);
+    if (*arg0 == NULL) {
+        func_801CD54C(3, "Error Allocation IFF Context", D_80170B7C, 0x2AA);
+    }
+    (*arg0)->unk0 = 0;
+    (*arg0)->unk4 = 0;
+    (*arg0)->unk8 = func_801CC898(0x800);
+    if ((*arg0)->unk8 == NULL) {
+        func_801CD54C(3, "Error Allocating IFF Header", D_80170B7C, 0x2B1);
+    }
+    (*arg0)->unkC = func_801CC898(0x800);
+    if ((*arg0)->unkC == NULL) {
+        func_801CD54C(3, "Error Allocating IFF Chunk Header", D_80170B7C, 0x2B5);
+    }
+retry0:
+    if (flag) {
+        r = CdSearchFile(&file, "\\RES.R;1");
+    } else {
+        r = CdSearchFile(&file, "\\SCE.S;1");
+    }
+    if ((u32)((s32)r + 1) < 2) {
+        goto retry0;
+    }
+    *(Unk_801DFF20 *)D_801DFF20 = file.unk0;
+    while (CdControl(2, (u8 *)&file, NULL) == 0) {
+    }
+    if (arg2 > 0) {
+        if (flag) {
+            s32 n = D_801D7744[arg2];
+
+            p = D_801DFF20;
+            p = CdIntToPos(CdPosToInt(p) + (n >> 11), p);
+            while (CdControl(2, p, NULL) == 0) {
+            }
+        } else {
+            s32 n = D_801D7780[arg2];
+
+            p = D_801DFF20;
+            p = CdIntToPos(CdPosToInt(p) + (n >> 11), p);
+            while (CdControl(2, p, NULL) == 0) {
+            }
+        }
+        *(Unk_801DFF20 *)D_801DFF20 = *(Unk_801DFF20 *)CdLastPos();
+    }
+    dst = (u32 *)(*arg0)->unk8;
+    while (1) {
+        sp28 = CdMode();
+        if (!(sp28 & 0x80)) {
+            sp28 = 0x80;
+            while (CdControl(0xE, &sp28, NULL) == 0) {
+            }
+            VSync(3);
+        }
+        while (CdRead(1, dst, 0x80) == 0) {
+        }
+        if (CdReadSync(0, NULL) != -1) {
+            break;
+        }
+        q = CdLastPos();
+        while (CdControl(2, q, NULL) == 0) {
+        }
+    }
+    q = CdLastPos();
+    q = CdIntToPos(CdPosToInt(q) + 1, q);
+    while (CdControl(2, q, NULL) == 0) {
+    }
+}
 
 void func_801926B4(void) {
     Unk_80192F20 *sp10;
@@ -1117,13 +1291,209 @@ void func_801926B4(void) {
     free3(q3);
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/8018FA18", func_8019290C);
+void func_8019290C(void) {
+    Unk_80192F20 *sp10;
+    Unk_80192F20 *q;
+    Unk_80192F20 *r;
+    Unk_80192E18 *e;
+    Unk_801E02D8 *g;
+    s32 pos;
+    s32 a, b, c, d;
+    u8 *p;
+    u8 *loc;
 
-INCLUDE_ASM("asm/nonmatchings/game/8018FA18", func_80192A44);
+    func_80192380(&sp10, 1, 2);
+    q = sp10;
+    q->unk4 = 0;
+    e = q->unk8;
+    pos = e->unk0;
+    q->unk0 = e->unk4;
+    g = &D_801E02D8;
+    a = e->unk8;
+    b = e->unkC;
+    c = e->unk10;
+    d = e->unk14;
+    if (a != 0) {
+        g->unk24 = a;
+    }
+    if (b != 0) {
+        g->unk20 = b;
+    }
+    if (c != 0) {
+        g->unk30 = c;
+    }
+    if (d != 0) {
+        g->unk2C = d;
+    }
+    if (q->unk0 == 0) {
+        D_801DFF18 = 0;
+    } else {
+        loc = D_801DFF20;
+        p = CdIntToPos(CdPosToInt(loc) + (pos >> 11), loc);
+        while (CdControl(2, p, NULL) == 0) {
+        }
+    }
+    if (sp10->unk0 > 0) {
+        func_80191AB0(sp10, 0, 2, 0x400);
+    }
+    r = sp10;
+    free3(r->unk8);
+    free3(r->unkC);
+    free3(r);
+}
 
-INCLUDE_ASM("asm/nonmatchings/game/8018FA18", func_80192B8C);
+void func_80192A44(s16 arg0) {
+    Unk_80192F20 *sp10;
+    Unk_80192F20 *q;
+    Unk_80192F20 *r;
+    Unk_80192E18 *e;
+    Unk_801E02D8 *g;
+    s32 pos;
+    s32 a, b, c, d;
+    u8 *p;
+    u8 *loc;
 
-INCLUDE_ASM("asm/nonmatchings/game/8018FA18", func_80192CD0);
+    func_80192380(&sp10, 1, 7);
+    q = sp10;
+    q->unk4 = 0;
+    e = q->unk8;
+    pos = e->unk0;
+    q->unk0 = e->unk4;
+    g = &D_801E02D8;
+    a = e->unk8;
+    b = e->unkC;
+    c = e->unk10;
+    d = e->unk14;
+    if (a != 0) {
+        g->unk24 = a;
+    }
+    if (b != 0) {
+        g->unk20 = b;
+    }
+    if (c != 0) {
+        g->unk30 = c;
+    }
+    if (d != 0) {
+        g->unk2C = d;
+    }
+    if (q->unk0 == 0) {
+        D_801DFF18 = 0;
+    } else {
+        loc = D_801DFF20;
+        p = CdIntToPos(CdPosToInt(loc) + (pos >> 11), loc);
+        while (CdControl(2, p, NULL) == 0) {
+        }
+    }
+    if (sp10->unk0 > 0) {
+        func_80191AB0(sp10, 0, -1, arg0);
+    }
+    r = sp10;
+    free3(r->unk8);
+    free3(r->unkC);
+    free3(r);
+}
+
+void func_80192B8C(s32 arg0, s32 arg1) {
+    Unk_80192F20 *sp10;
+    Unk_80192F20 *q;
+    Unk_80192F20 *r;
+    Unk_80192E18 *e;
+    Unk_801E02D8 *g;
+    s32 pos;
+    s32 a, b, c, d;
+    u8 *p;
+    u8 *loc;
+
+    func_80192380(&sp10, 1, arg0);
+    q = sp10;
+    q->unk4 = 0;
+    e = q->unk8;
+    pos = e->unk0;
+    q->unk0 = e->unk4;
+    g = &D_801E02D8;
+    a = e->unk8;
+    b = e->unkC;
+    c = e->unk10;
+    d = e->unk14;
+    if (a != 0) {
+        g->unk24 = a;
+    }
+    if (b != 0) {
+        g->unk20 = b;
+    }
+    if (c != 0) {
+        g->unk30 = c;
+    }
+    if (d != 0) {
+        g->unk2C = d;
+    }
+    if (q->unk0 == 0) {
+        D_801DFF18 = 0;
+    } else {
+        loc = D_801DFF20;
+        p = CdIntToPos(CdPosToInt(loc) + (pos >> 11), loc);
+        while (CdControl(2, p, NULL) == 0) {
+        }
+    }
+    if (sp10->unk0 > 0) {
+        func_80191AB0(sp10, 0, arg1, 0);
+    }
+    r = sp10;
+    free3(r->unk8);
+    free3(r->unkC);
+    free3(r);
+}
+
+void func_80192CD0(s16 arg0) {
+    Unk_80192F20 *sp10;
+    Unk_80192F20 *q;
+    Unk_80192F20 *r;
+    Unk_80192E18 *e;
+    Unk_801E02D8 *g;
+    s32 pos;
+    s32 a, b, c, d;
+    u8 *p;
+    u8 *loc;
+
+    func_80192380(&sp10, 1, 0xC);
+    q = sp10;
+    q->unk4 = 0;
+    e = q->unk8;
+    pos = e->unk0;
+    q->unk0 = e->unk4;
+    g = &D_801E02D8;
+    a = e->unk8;
+    b = e->unkC;
+    c = e->unk10;
+    d = e->unk14;
+    if (a != 0) {
+        g->unk24 = a;
+    }
+    if (b != 0) {
+        g->unk20 = b;
+    }
+    if (c != 0) {
+        g->unk30 = c;
+    }
+    if (d != 0) {
+        g->unk2C = d;
+    }
+    if (q->unk0 == 0) {
+        D_801DFF18 = 0;
+    } else {
+        loc = D_801DFF20;
+        p = CdIntToPos(CdPosToInt(loc) + (pos >> 11), loc);
+        while (CdControl(2, p, NULL) == 0) {
+        }
+    }
+    if (sp10->unk0 > 0) {
+        func_80191AB0(sp10, 0, 2, arg0);
+    }
+    r = sp10;
+    free3(r->unk8);
+    free3(r->unkC);
+    free3(r);
+}
 
 void func_80192E18(Unk_80192F20 *arg0, u16 arg1) {
     Unk_80192E18 *e;
@@ -1264,7 +1634,82 @@ INCLUDE_RODATA("asm/nonmatchings/game/8018FA18", D_80170E18);
 
 INCLUDE_ASM("asm/nonmatchings/game/8018FA18", func_80193880);
 
-INCLUDE_ASM("asm/nonmatchings/game/8018FA18", func_80193DA8);
+void func_80193DA8(Unk_801E0710 *arg0) {
+    Unk_801E0340 *s;
+    Unk_801DFFE8 *e;
+    Unk_801DFF30 *q;
+    Unk_801E0368 *g;
+    Unk_801E076C *o;
+    Unk_80174B10 *t;
+    Unk_801DFF28 *r;
+    s32 k;
+    s16 mode;
+
+    s = &D_801E0340;
+    e = &D_801DFFE8;
+    q = &D_801DFF30;
+    g = &D_801E0368;
+    mode = e->unk6;
+    o = arg0->unk5C;
+
+    if (mode == 3) {
+        func_80184100(e);
+    } else if (mode == 2 && (e->unk8 & 8)) {
+        func_80184094();
+        func_801A2678(D_801DFFE8.unk0 == 0xFA0000 ? 0xE : 0x11);
+        switch ((u32)D_801DFFE8.unk0) {
+        case 0xFA0000:
+            func_80198CFC(2, 1, 0x76C, 0, 0x19C8, 0, 0xB4, 0, mode);
+            break;
+        case 0xFA0001:
+            func_80198CFC(0, 0, 0xDF6, 0x244, 0x1888, 6, 0x8E, 0, mode);
+            D_801DFF38 = 1;
+            s->unkA = 1;
+            break;
+        case 0xFA0002:
+            func_80198CFC(0, 0, 0xC12, 0x208, 0x18CE, -0x5A, 0xBF, 0, mode);
+            D_801DFF38 = 2;
+            D_801DFD56 = 1;
+            s->unkA = 1;
+            break;
+        case 0xFA0003:
+            if (q->unk2 == 1 || q->unk2 == 2) {
+                o->unk42 |= 0x40;
+                g->unkB2 |= 1 << (q->unk4 - 0x65);
+                func_8018DA2C(arg0->unk50, 1, 0);
+            }
+            break;
+        case 0xF0FF0A:
+        case 0xF0FF14:
+        case 0xF0FF1E:
+            k = 1;
+            r = &D_801DFF28;
+            r->unk0 = k;
+            r->unk4 = 0;
+            r->unk2 = k;
+            func_801A4A68(0, k);
+            func_801A461C(0, 4, D_801DFD5A);
+            func_801A461C(0, 5, D_801DFD58);
+            func_80183E88(D_80170E18, 3, -1, 0, -1, 0, k);
+            break;
+        case 0xF0FF46:
+            if (arg0->unk34 >= 2) {
+                /* ソファーでの仮眠は、１日２回まで */
+                func_80183E88("\203\134\203\164\203\100\201\133\202\305\202\314\211\274\226\260\202\315\201\101\202\120\223\372\202\121\211\361\202\334\202\305", 1, -1, 0, -1, 0, 4);
+                break;
+            }
+            arg0->unk34++;
+        default:
+            t = func_80174CB8(e->unkA);
+            while (t != NULL) {
+                t = func_80173DE0(t, 0, 0);
+            }
+            break;
+        }
+        e->unk6 = 1;
+        e->unk8 &= ~8;
+    }
+}
 
 void func_80194140(void) {
     Unk_801E076C *s0;

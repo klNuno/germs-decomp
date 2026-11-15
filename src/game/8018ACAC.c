@@ -117,10 +117,224 @@ typedef struct {
     char unk20[4];
 } Unk_8018C554;
 char *strncpy(char *dst, char *src, u32 n);
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    u16 unk4;
+    u16 unk6;
+    u8 unk8[0xA];
+    u16 unk12;
+} Unk_801E0324_1C;
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    s16 unk4;
+    s16 unk6;
+    s32 unk8;
+    u16 unkC;
+    s16 unkE;
+    s16 unk10;
+    u16 unk12;
+    s32 unk14;
+    s32 unk18;
+    Unk_801E0324_1C *unk1C;
+} Unk_801E0324_10;
+typedef struct {
+    u16 unk0;
+    s16 unk2;
+    s16 unk4;
+    s16 unk6;
+    u16 *unk8;
+    u16 *unkC;
+    Unk_801E0324_10 *unk10;
+    Unk_801E0324_10 *unk14;
+    Unk_801E0324_10 *unk18;
+    Unk_801E0324_10 *unk1C;
+} Unk_801E0324;
+extern Unk_801E0324 *D_801E0324[];
+s16 D_801DFEF0;
+s16 D_801DFEF2;
+s16 D_801DFEF4;
+s16 D_801DFEF6;
+s16 D_801DFEF8;
+s16 D_801DFEFA;
+s16 D_801DFEFC;
+s16 D_801DFEFE;
+typedef struct {
+    u16 unk0;
+    u16 unk2;
+    s32 unk4;
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+} Unk_8018ACAC;
+void func_801A3DD4(Unk_801E0324_10 **arg0, void *arg1);
+void func_801A43A8(s32 arg0);
 
-INCLUDE_ASM("asm/nonmatchings/game/8018ACAC", func_8018ACAC);
+void func_8018ACAC(Unk_801E0324 **arg0, Unk_8018ACAC *arg1, s16 arg2) {
+    *arg0 = func_801CC898(0x20);
+    if (*arg0 == NULL) {
+        func_801CD54C(3, "Error Allocating MAIL Handler", D_801DFD38, 0x3B);
+    }
+    (*arg0)->unk0 = arg1->unk0;
+    (*arg0)->unk2 = arg2;
+    (*arg0)->unk4 = arg1->unk2;
+    (*arg0)->unk6 = 0;
 
-INCLUDE_ASM("asm/nonmatchings/game/8018ACAC", func_8018B11C);
+    func_801A3DD4(&(*arg0)->unk10, (u8 *)arg1 + arg1->unk4);
+    func_801A43A8((s32)(*arg0)->unk10);
+    (*arg0)->unk10->unk4 = 1;
+    (*arg0)->unk10->unkC = 0x43;
+    (*arg0)->unk10->unkE = 1;
+    D_801DFEF0 = (*arg0)->unk10->unk1C->unk12;
+    D_801DFEF8 = (*arg0)->unk10->unk12;
+
+    if ((*arg0)->unk4 >= 2) {
+        func_801A3DD4(&(*arg0)->unk14, (u8 *)arg1 + arg1->unk8);
+        func_801A43A8((s32)(*arg0)->unk14);
+        (*arg0)->unk14->unk4 = 0;
+        (*arg0)->unk14->unkC = 0x43;
+        (*arg0)->unk14->unkE = 1;
+        D_801DFEF2 = (*arg0)->unk14->unk1C->unk12;
+        D_801DFEFA = (*arg0)->unk14->unk12;
+    }
+    if ((*arg0)->unk4 >= 3) {
+        func_801A3DD4(&(*arg0)->unk18, (u8 *)arg1 + arg1->unkC);
+        func_801A43A8((s32)(*arg0)->unk18);
+        (*arg0)->unk18->unk4 = 0;
+        (*arg0)->unk18->unkC = 0x43;
+        (*arg0)->unk18->unkE = 1;
+        D_801DFEF4 = (*arg0)->unk18->unk1C->unk12;
+        D_801DFEFC = (*arg0)->unk18->unk12;
+    }
+    if ((*arg0)->unk4 >= 4) {
+        func_801A3DD4(&(*arg0)->unk1C, (u8 *)arg1 + arg1->unk10);
+        func_801A43A8((s32)(*arg0)->unk1C);
+        (*arg0)->unk1C->unk4 = 0;
+        (*arg0)->unk1C->unkC = 0x43;
+        (*arg0)->unk1C->unkE = 1;
+        D_801DFEF6 = (*arg0)->unk1C->unk1C->unk12;
+        D_801DFEFE = (*arg0)->unk1C->unk12;
+    }
+
+    (*arg0)->unk8 = func_801A44B8((*arg0)->unk0 + 0x217);
+    if ((*arg0)->unk8 != NULL) {
+        func_801A461C((u16)((*arg0)->unk0 + 0x217), 7, 0x4D44);
+        func_801A461C((u16)((*arg0)->unk0 + 0x217), 9, 0x6358);
+        D_801DFF00 = (*arg0)->unk8[6];
+        (*arg0)->unk8[6] = 0x33;
+        (*arg0)->unk8[7] = 1;
+    }
+    (*arg0)->unkC = func_801A44B8(0x20C);
+    if (D_801DFD34 != NULL) {
+        D_801DFF02 = D_801DFD34[6];
+    }
+    if ((*arg0)->unkC != NULL) {
+        (*arg0)->unkC[6] = 0x29;
+    }
+}
+
+void func_8018B11C(s16 arg0) {
+    Unk_801E0324 *p = D_801E0324[0];
+    s32 v;
+    s32 n;
+    s32 max;
+
+    if (p == NULL || p->unk4 < 2) {
+        return;
+    }
+    v = p->unk6;
+    if (arg0 != 0) {
+        v++;
+    } else {
+        v--;
+    }
+    n = p->unk4 - 1;
+    max = n << 7;
+    if (max < v) {
+        v = max;
+    }
+    if (v < 0) {
+        v = 0;
+    }
+    if (p->unkC != NULL) {
+        p->unkC[6] = ((v * 114 / n) >> 7) + 41;
+    }
+    if (v == 0) {
+        p->unk10->unk4 = 1;
+        p->unk10->unkC = 0x43;
+        p->unk10->unk12 = D_801DFEF8;
+        p->unk10->unk1C->unk12 = D_801DFEF0;
+        p->unk14->unk4 = 0;
+        if (p->unk18 != NULL) {
+            p->unk18->unk4 = 0;
+        }
+        if (p->unk1C != NULL) {
+            p->unk1C->unk4 = 0;
+        }
+    } else if (v > 0 && v < 128) {
+        p->unk10->unk4 = 1;
+        p->unk10->unk12 = D_801DFEF8 - v;
+        p->unk10->unk1C->unk12 = D_801DFEF0 + v;
+        p->unk14->unk4 = 1;
+        p->unk14->unkC = p->unk10->unkC + p->unk10->unk12 - 1;
+        p->unk14->unk12 = v;
+        if (p->unk18 != NULL) {
+            p->unk18->unk4 = 0;
+        }
+        if (p->unk1C != NULL) {
+            p->unk1C->unk4 = 0;
+        }
+    } else if (v == 128) {
+        p->unk10->unk4 = 0;
+        p->unk14->unk4 = 1;
+        p->unk14->unkC = 0x43;
+        p->unk14->unk12 = D_801DFEFA;
+        p->unk14->unk1C->unk12 = D_801DFEF2;
+        if (p->unk18 != NULL) {
+            p->unk18->unk4 = 0;
+        }
+        if (p->unk1C != NULL) {
+            p->unk1C->unk4 = 0;
+        }
+    } else if (v > 128 && v < 256) {
+        p->unk10->unk4 = 0;
+        p->unk14->unk4 = 1;
+        p->unk14->unk12 = D_801DFEFA + 128 - v;
+        p->unk14->unk1C->unk12 = D_801DFEF2 - 128 + v;
+        p->unk18->unk4 = 1;
+        p->unk18->unkC = p->unk14->unkC + p->unk14->unk12 - 1;
+        p->unk18->unk12 = v - 128;
+        if (p->unk1C != NULL) {
+            p->unk1C->unk4 = 0;
+        }
+    } else if (v == 256) {
+        p->unk10->unk4 = 0;
+        p->unk14->unk4 = 0;
+        p->unk18->unk4 = 1;
+        p->unk18->unkC = 0x43;
+        p->unk18->unk12 = D_801DFEFC;
+        p->unk18->unk1C->unk12 = D_801DFEF4;
+    } else if (v > 256 && v < 384) {
+        p->unk10->unk4 = 0;
+        p->unk14->unk4 = 0;
+        p->unk18->unk4 = 1;
+        p->unk18->unk12 = D_801DFEFC + 256 - v;
+        p->unk18->unk1C->unk12 = D_801DFEF4 - 256 + v;
+        p->unk1C->unk4 = 1;
+        p->unk1C->unkC = p->unk18->unkC + p->unk18->unk12 - 1;
+        p->unk1C->unk12 = v - 256;
+    } else if (v == 384) {
+        p->unk10->unk4 = 0;
+        p->unk14->unk4 = 0;
+        p->unk18->unk4 = 0;
+        p->unk1C->unk4 = 1;
+        p->unk1C->unkC = 0x43;
+        p->unk1C->unk12 = D_801DFEFE;
+        p->unk1C->unk1C->unk12 = D_801DFEF6;
+    }
+    p->unk6 = v;
+}
 
 void func_8018B564(Unk_801E0368 *a, s16 b) {
     s32 i;

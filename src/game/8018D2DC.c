@@ -210,6 +210,19 @@ void func_8018EA00(Unk_8018F958 *arg0);
 void func_8018F958(Unk_8018F958 *arg0);
 s16 func_8018C750(s16 a);
 s32 ratan2(s32 y, s32 x);
+typedef struct {
+    u16 unk0;
+    u16 unk2;
+    u16 unk4;
+} Unk_8018EED4_0;
+typedef struct {
+    Unk_8018EED4_0 *unk0;
+    s32 unk4;
+    char **unk8;
+} Unk_8018EED4;
+s32 atoi(char *s);
+void func_8018E610(u16 arg0, s16 arg1, s16 arg2);
+void func_8018EC44(Unk_8018F590 *arg0, s32 arg1, s32 arg2, s32 arg3, s16 arg4, s16 arg5, s16 arg6, s32 arg7);
 
 INCLUDE_RODATA("asm/nonmatchings/game/8018D2DC", D_80170A80);
 
@@ -855,7 +868,87 @@ loop:
     arg0->unk1E = 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/8018D2DC", func_8018EED4);
+void func_8018EED4(Unk_8018EED4 *arg0, Unk_8018E56C *arg1) {
+    Unk_801E02D8 *p = &D_801E02D8;
+    Unk_8018F590 *e = p->unk50;
+    Unk_8018EED4_0 *cmd = arg0->unk0;
+    u16 id = cmd->unk4;
+    Unk_8018F590 *found;
+    Unk_8018F590 *t;
+    Unk_8018E56C *obj;
+    s32 i;
+    Unk_8018F590 *tb;
+    s16 *f;
+    s32 x, y, z;
+    s32 a, b;
+
+    if (p->unk20 == 0) {
+        found = NULL;
+    } else {
+        for (i = 0; i < p->unk20; i++, e++) {
+            if (e->unk0 == id) {
+                found = e;
+                goto done;
+            }
+        }
+        found = NULL;
+    }
+done:
+    if (found == NULL) {
+        return;
+    }
+    switch (cmd->unk2) {
+    case 0:
+        found->unk2 = atoi(arg0->unk8[0]);
+        break;
+    case 1:
+        found->unk6 = atoi(arg0->unk8[0]);
+        tb = D_801E0328[0];
+        f = D_801E0368;
+        t = tb + cmd->unk4;
+        if (f[cmd->unk4] == 0) {
+            break;
+        }
+        if (t->unk1A == 0) {
+            t->unk1A = 1;
+            t->unk8 *= 10;
+            t->unkC *= 10;
+            t->unk10 *= 10;
+        }
+        t->unk1B = 1;
+        t->unk1C = -1;
+        t->unk1E = 0;
+        obj = func_8018E56C(t->unk6);
+        if (obj == NULL) {
+            break;
+        }
+        if (obj->unk4 == 0) {
+            func_8018D2DC(obj, 0, 2, 0);
+        }
+        func_8018E8B8(t, obj);
+        t->unk1B = 2;
+        break;
+    case 3:
+        x = atoi(arg0->unk8[0]) * 10;
+        y = atoi(arg0->unk8[1]) * 10;
+        z = atoi(arg0->unk8[2]) * 10;
+        a = atoi(arg0->unk8[3]);
+        b = atoi(arg0->unk8[4]);
+        if (atoi(arg0->unk8[5]) == 1) {
+            arg1->unk6 = 4;
+            arg1->unk12 |= 0x10;
+        }
+        func_8018EC44(found, x, y, z, 0, a, 0, b);
+        break;
+    case 4:
+        if (atoi(arg0->unk8[1]) == 1) {
+            arg1->unk6 = 4;
+            arg1->unk12 |= 8;
+        }
+        ((void (*)())func_8018E610)((s16)found->unk6, (s16)atoi(arg0->unk8[0]), (s16)atoi(arg0->unk8[2]));
+        break;
+    }
+}
 
 void func_8018F234(void) {
     Unk_8018F590 *p;

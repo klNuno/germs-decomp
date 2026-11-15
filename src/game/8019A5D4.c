@@ -7,7 +7,20 @@ Unk_801DFF68 D_801DFF68;
 void func_801A0978(s32 arg0, s32 arg1);
 typedef struct { u16 unk0; u16 unk2; } Unk_801DFE68;
 typedef struct { s32 unk0; s32 unk4; s32 unk8; u8 unkC; } Unk_801A20CC;
-typedef struct { s32 unk0; s32 unk4; s16 unk8; } Unk_801E1058;
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    s16 unk4;
+    s16 unk6;
+    s16 unk8;
+    s16 unkA;
+    s16 unkC;
+    s16 unkE;
+    s16 unk10;
+    s16 unk12[3];
+    s16 *unk18;
+    s16 *unk1C;
+} Unk_801E1058;
 extern Unk_801DFE68 D_801DFE68;
 extern Unk_801E1058 D_801E1058;
 typedef struct { s16 unk0; s16 unk2; } Unk_801A216C;
@@ -92,6 +105,38 @@ s16 func_8018D1F0(void);
 s32 func_8018D1A0(void);
 void func_80183E88(char *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
 void func_80184094(void);
+typedef struct {
+    u8 unk0[0x14];
+    s16 unk14;
+    u8 unk16[0x4A];
+    s16 unk60;
+    u8 unk62[0x1E];
+    s16 unk80;
+    u8 unk82[0x176];
+    u16 unk1F8;
+} Unk_801E0368;
+void func_801A0820(Unk_801A0820 *arg0);
+extern Unk_801E0368 D_801E0368;
+s32 func_8018D078(s16 a, s16 b, s16 c, s16 d, s16 e, s16 *f, s16 g, s16 h, s16 i);
+extern s16 D_801D79F0[];
+extern s16 D_801D79F8[];
+extern s16 D_801D7A00[];
+extern s16 D_801D7A08[];
+extern s16 D_801D7A10[];
+extern s16 D_801D7A22[];
+extern s16 D_801D7A34[];
+extern s16 D_801D7A48[];
+extern s16 D_801D7A50[];
+extern s16 D_801D7A58[];
+extern s16 D_801D7A60[];
+extern s16 D_801D7A74[];
+extern s16 D_801D7AEC[];
+extern s16 D_801D7AF8[];
+extern s16 D_801D7B04[];
+extern s16 D_801D7B10[];
+extern s16 D_801D7B1C[];
+extern s16 D_801D7B28[];
+extern s16 D_801DFD74[];
 
 INCLUDE_ASM("asm/nonmatchings/game/8019A5D4", func_8019A5D4);
 
@@ -396,7 +441,146 @@ INCLUDE_ASM("asm/nonmatchings/game/8019A5D4", func_801A0EDC);
 
 INCLUDE_ASM("asm/nonmatchings/game/8019A5D4", func_801A14A0);
 
-INCLUDE_ASM("asm/nonmatchings/game/8019A5D4", func_801A1AB8);
+s16 func_801A1AB8(s16 arg0, s32 arg1) {
+    Unk_801E076C *e = D_801E076C[0];
+    Unk_801E0368 *q = &D_801E0368;
+    Unk_801E1058 *p = &D_801E1058;
+    s32 j;
+    s16 m;
+    s16 b;
+    s16 c;
+    s16 d;
+    s16 n;
+    s16 g;
+    s16 h;
+    s16 i;
+
+    if (func_8018D1F0() != 0) {
+        return 0;
+    }
+    D_801E1058.unk0 = 1;
+    p->unk2 = 0;
+    p->unk6 = 0;
+    p->unkA = 0;
+    p->unkC = 0;
+    p->unkE = 0;
+    p->unk10 = 0;
+    m = -1;
+    for (j = 2; j >= 0; j--) {
+        p->unk12[j] = m;
+    }
+    b = 3;
+    c = -1;
+    d = 4;
+    n = d;
+    g = 1;
+    h = 0x14E7;
+    i = 0x14FF;
+    switch (arg0) {
+    case 3:
+        if (q->unk14 == 2000) {
+            p->unk6 = 1;
+            p->unk18 = D_801D7A08;
+        } else if (q->unk1F8 >= 8 && q->unk1F8 < 10) {
+            p->unk18 = D_801D79F0;
+        } else if (q->unk1F8 >= 10 && q->unk1F8 < 14) {
+            p->unk18 = D_801D79F8;
+        } else {
+            p->unk18 = D_801D7A00;
+        }
+        p->unk1C = D_801D7AEC;
+        break;
+    case 4:
+        if (q->unk14 == 1000) {
+            p->unk18 = D_801D7A10;
+            p->unk1C = D_801D7AF8;
+        } else if (q->unk14 == 2000) {
+            p->unk6 = 1;
+            p->unk18 = D_801D7A22;
+            p->unk1C = D_801D7B04;
+        } else if (q->unk80 != 0) {
+            if (q->unk60 != 0 || !(q->unk1F8 >= 8 && q->unk1F8 < 14)) {
+                p->unk18 = D_801D7A10;
+                p->unk1C = D_801D7AF8;
+            } else {
+                p->unk6 = 1;
+                p->unk18 = D_801D7A22;
+                p->unk1C = D_801D7B04;
+            }
+        } else {
+            if (q->unk60 != 0 || (q->unk1F8 >= 8 && q->unk1F8 < 14)) {
+                p->unk18 = D_801D7A10;
+                p->unk1C = D_801D7AF8;
+            } else {
+                p->unk6 = 1;
+                p->unk18 = D_801D7A22;
+                p->unk1C = D_801D7B04;
+            }
+        }
+        p->unkA = 1;
+        p->unkC = 1;
+        break;
+    case 5:
+        p->unk1C = D_801D7B10;
+        p->unk18 = D_801D7A34;
+        p->unkA = 1;
+        p->unkC = 1;
+        break;
+    case 6:
+        p->unk1C = D_801D7AEC;
+        if (q->unk14 == 2000) {
+            p->unk6 = 1;
+            p->unk18 = D_801D7A60;
+        } else if (q->unk1F8 >= 11 && q->unk1F8 < 14) {
+            p->unk18 = D_801D7A48;
+        } else if (q->unk1F8 >= 14 && q->unk1F8 < 17) {
+            p->unk18 = D_801D7A50;
+        } else {
+            p->unk18 = D_801D7A58;
+        }
+        break;
+    case 7:
+        func_801A0820((Unk_801A0820 *)p);
+        b = 0x40B;
+        c = 0x402;
+        d = 6;
+        n = d;
+        g = 4;
+        h = 0x2969;
+        i = 0x2BFF;
+        p->unk4 = 1;
+        p->unk1C = D_801D7AEC;
+        p->unk18 = D_801D7A68;
+        break;
+    case 8:
+        e->unk42 |= 0x100;
+        if (arg1 != 0x300600) {
+            goto fail;
+        }
+        b = 0x40B;
+        c = 0x40C;
+        d = 0xD;
+        n = 6;
+        g = 4;
+        h = 0x2969;
+        i = 0x2BFF;
+        D_801DFF78 = -1;
+        p->unk1C = D_801D7B1C;
+        p->unk4 = 1;
+        p->unk18 = D_801D7A74;
+        break;
+    case 9:
+        d = 3;
+        n = d;
+        p->unk1C = D_801D7B28;
+        p->unk18 = D_801DFD74;
+        break;
+    }
+    return func_8018D078(1, b, c, d, n, p->unk18, g, h, i);
+fail:
+    func_801A0978(1, 0);
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/game/8019A5D4", func_801A1EC0);
 

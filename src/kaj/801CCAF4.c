@@ -61,6 +61,14 @@ int printf(const char *fmt, ...);
 void exit(s32 code);
 void GsMapModelingData(u32 *p);
 extern char D_80172CC8[];
+typedef struct Unk_801CD028 {
+    u32 unk0;
+    void *unk4;
+    void *unk8;
+    u32 unkC;
+} Unk_801CD028;
+void *memset(void *dst, s32 c, u32 n);
+void GsLinkObject4(u32 *tmd, Unk_801CD028 *obj, s32 n);
 
 void func_801CCAF4(Unk_801CCAF4 **arg0) {
     *arg0 = func_801CC898(0x10);
@@ -258,7 +266,124 @@ INCLUDE_RODATA("asm/nonmatchings/kaj/801CCAF4", D_80172D28);
 
 INCLUDE_RODATA("asm/nonmatchings/kaj/801CCAF4", D_80172D34);
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801CCAF4", func_801CD028);
+void func_801CD028(Unk_801CD028 **arg0, u32 *arg1, void *arg2) {
+    u32 *tmd;
+
+    if (arg1[0] != 0x41) {
+        char *msg;
+        char *file;
+        char *s;
+        s32 code;
+        s32 i;
+
+        msg = D_80172D34;
+        file = D_801DFDDC;
+        code = 10;
+        if (file == NULL) {
+            printf(D_80172CA8);
+        }
+        s = D_80172CF0;
+        for (i = 0; D_801DFAF8[i].unk0 != 15; i++) {
+            if (D_801DFAF8[i].unk0 == code) {
+                s = D_801DFAF8[i].unk4;
+                break;
+            }
+        }
+        printf(D_80172D00, 10);
+        if (*s != 0) {
+            printf(D_801DFDD0);
+            printf(D_801DFDD4, s);
+        }
+        printf(D_80172D10);
+        printf(file);
+        printf(D_80172D1C, 0x8A);
+        if (msg != NULL) {
+            printf(D_80172D28);
+            printf(D_801DFDD4, msg);
+        }
+        printf(D_801DFDD8);
+        exit(10);
+    }
+    if (*arg0 == NULL) {
+        *arg0 = func_801CC898(0x10);
+        if (*arg0 == NULL) {
+            char *msg;
+            char *file;
+            char *s;
+            s32 code;
+            s32 i;
+
+            msg = "Error Allocating GsDOBJ2 Handle";
+            file = D_801DFDDC;
+            code = 3;
+            if (file == NULL) {
+                printf(D_80172CA8);
+            }
+            s = D_80172CF0;
+            for (i = 0; D_801DFAF8[i].unk0 != 15; i++) {
+                if (D_801DFAF8[i].unk0 == code) {
+                    s = D_801DFAF8[i].unk4;
+                    break;
+                }
+            }
+            printf(D_80172D00, 3);
+            if (*s != 0) {
+                printf(D_801DFDD0);
+                printf(D_801DFDD4, s);
+            }
+            printf(D_80172D10);
+            printf(file);
+            printf(D_80172D1C, 0x8F);
+            if (msg != NULL) {
+                printf(D_80172D28);
+                printf(D_801DFDD4, msg);
+            }
+            printf(D_801DFDD8);
+            exit(3);
+        }
+    } else {
+        memset(*arg0, 0, 0x10);
+    }
+    GsMapModelingData(arg1 + 1);
+    tmd = arg1 + 3;
+    if (arg1[2] != 1) {
+        char *msg;
+        char *file;
+        char *s;
+        s32 code;
+        s32 i;
+
+        msg = "Too Many Objects in TMD";
+        file = D_801DFDDC;
+        code = 10;
+        if (file == NULL) {
+            printf(D_80172CA8);
+        }
+        s = D_80172CF0;
+        for (i = 0; D_801DFAF8[i].unk0 != 15; i++) {
+            if (D_801DFAF8[i].unk0 == code) {
+                s = D_801DFAF8[i].unk4;
+                break;
+            }
+        }
+        printf(D_80172D00, 10);
+        if (*s != 0) {
+            printf(D_801DFDD0);
+            printf(D_801DFDD4, s);
+        }
+        printf(D_80172D10);
+        printf(file);
+        printf(D_80172D1C, 0x99);
+        if (msg != NULL) {
+            printf(D_80172D28);
+            printf(D_801DFDD4, msg);
+        }
+        printf(D_801DFDD8);
+        exit(10);
+    }
+    GsLinkObject4(tmd, *arg0, 0);
+    (*arg0)->unk4 = arg2;
+}
 
 s32 func_801CD3F0(u32 *arg0) {
     char *msg;

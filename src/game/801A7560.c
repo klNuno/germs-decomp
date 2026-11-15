@@ -15,7 +15,10 @@ typedef struct Unk_801A7AFC {
     s32 unk18;
     s32 unk1C;
     s32 unk20;
-    u8 unk24[0x8];
+    s16 unk24;
+    s16 unk26;
+    s16 unk28;
+    u8 unk2A[0x2];
     s32 unk2C;
     u8 unk30[0x14];
     s32 unk44;
@@ -112,7 +115,7 @@ typedef struct {
     u16 unk46;
     u8 unk48[0xC];
     s32 unk54;
-    u8 unk58[0x4];
+    s32 unk58;
     s32 unk5C;
     u8 unk60[0xC];
     u16 unk6C;
@@ -127,7 +130,9 @@ extern s16 D_801D7FB0[];
 typedef struct { s32 unk0; s16 unk4; s16 unk6; } Unk_801E056C;
 typedef struct {
     u16 unk0[0x70];
-    u8 unkE0[0x124];
+    u8 unkE0[0x120];
+    s16 unk200;
+    u8 unk202[0x2];
     Unk_801E056C unk204[4];
     u8 unk224[0x20];
     s32 unk244;
@@ -145,9 +150,25 @@ void func_80184094(void);
 void func_801A3BCC(s16 arg0);
 s16 func_801AB310(s16 arg0);
 void func_801AC578(Unk_801E076C *arg0, s16 arg1, s32 arg2);
-typedef struct { s16 unk0; s16 unk2; s16 unk4[2]; u8 unk8[4]; s16 unkC[0x12]; s16 unk30; s16 unk32[8]; s16 unk42; s16 unk44; s16 unk46; s16 unk48; u8 unk4A[2]; s32 unk4C; } Unk_801E0768;
 typedef struct {
-    u8 unk0[0x58];
+    s16 unk0;
+    s16 unk2;
+    s16 unk4[2];
+    u8 unk8[4];
+    s16 unkC[0x12];
+    s16 unk30;
+    s16 unk32[8];
+    s16 unk42;
+    s16 unk44;
+    s16 unk46;
+    u16 unk48;
+    u8 unk4A[2];
+    s32 unk4C;
+} Unk_801E0768;
+typedef struct {
+    u8 unk0[0x4C];
+    void *unk4C;
+    u8 unk50[0x8];
     Unk_801E0768 *unk58;
     Unk_801E076C *unk5C;
 } Unk_801E0710;
@@ -159,6 +180,8 @@ typedef struct Unk_801E6DA0 {
     s32 unk4;
     s16 unk8;
     s16 unkA;
+    u8 unkC[0x8];
+    s32 unk14;
 } Unk_801E6DA0;
 extern Unk_801E6DA0 D_801E6DA0;
 s32 func_801CD6B4(void);
@@ -268,7 +291,13 @@ typedef struct {
     s32 unk30;
     s32 unk34;
     s32 unk38;
-    u8 unk3C[0x7C];
+    u8 unk3C[0x2C];
+    s32 unk68;
+    u8 unk6C[0x14];
+    s32 unk80;
+    s32 unk84;
+    s32 unk88;
+    u8 unk8C[0x2C];
     void *unkB8;
     void *unkBC;
     Unk_801A9BF4 *unkC0;
@@ -283,12 +312,186 @@ void func_801A910C(Unk_801E1118 *arg0);
 void RotMatrix(Unk_801A742C_10 *arg0, void *arg1);
 void GsInitCoordinate2(void *super, void *base);
 void func_801CD028(void *arg0, void *arg1, void *arg2);
+extern s16 D_801DFC80;
+void RotMatrixZYX(Unk_801A742C_10 *arg0, void *arg1);
+s32 func_8017CDA4(s32 a0, s32 a1, s32 a2);
+void func_801A727C(Unk_801E076C *arg0, Unk_801A7AFC *arg1, void *arg2);
+void func_801A742C(Unk_801A7AFC *arg0);
+void func_801AACF4(Unk_801A7AFC *arg0);
+void func_801AB4D4(Unk_801A7AFC *arg0, s32 arg1);
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    s16 unk4;
+    s16 unk6;
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+    s32 unk14;
+    s32 unk18;
+    Unk_801A742C_10 unk1C;
+    s16 unk24;
+    s16 unk26;
+    s16 unk28;
+    u8 unk2A[0x2];
+    Unk_801A742C_10 unk2C[4];
+    s32 unk4C;
+    s32 unk50;
+    s32 unk54;
+    u8 unk58[0x4];
+    s32 unk5C;
+    s32 unk60;
+    s32 unk64;
+} Unk_801E1158;
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    s16 unk4;
+    s16 unk6;
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+} Unk_801D7FB0;
+extern Unk_801A7AFC *D_801E0764[];
+extern Unk_801E1158 D_801E1158;
+s16 D_801DFFB0;
+s32 D_801DFFB4;
+void RotTrans(void *v0, s32 *v1, s32 *flag);
+void func_8019555C(Unk_801E076C *arg0, s16 arg1);
 
 INCLUDE_RODATA("asm/nonmatchings/game/801A7560", D_801719BC);
 
 INCLUDE_RODATA("asm/nonmatchings/game/801A7560", D_801719DC);
 
-INCLUDE_ASM("asm/nonmatchings/game/801A7560", func_801A7560);
+void func_801A7560(void) {
+    Unk_801A742C_10 sv;
+    Unk_801DFFA0 *p = D_801DFFA0;
+    Unk_801E0710 *g = &D_801E0710;
+    Unk_801E0768 *a = g->unk58;
+    Unk_801E076C *e = g->unk5C;
+    Unk_801A7AFC *o;
+
+    if (p->unkC == 0) {
+        return;
+    }
+    p->unk8 = p->unk0;
+    while (1) {
+        o = p->unk8->unk8;
+        if (o != NULL && o->unk2 != 4) {
+            if (*(s32 *)o == 0x30007) {
+                if (g->unk4C != 0 && a->unk48 >= 3) {
+                    if (o->unk4 == 0) {
+                        o->unk4 = 1;
+                    }
+                } else if (o->unk4 != 0) {
+                    o->unk4 = 0;
+                }
+            }
+            if (o->unk4 == 0) {
+                o->unk14 = 0;
+            } else {
+                if (o->unk6 != 0) {
+                    switch (o->unk2) {
+                    case 2:
+                        if (o->unk0 == 0) {
+                            func_801AACF4(o);
+                        }
+                        break;
+                    case 3:
+                        switch (o->unk0) {
+                        case 0:
+                        case 2:
+                        case 6:
+                            o->unk26 = -D_801E6DA0.unk14 + o->unk26;
+                            if (o->unk26 < 0) {
+                                o->unk26 += 360;
+                            } else if (o->unk26 > 360) {
+                                o->unk26 -= 360;
+                            }
+                            sv.unk0 = (o->unk24 << 12) / 360;
+                            sv.unk2 = (o->unk26 << 12) / 360;
+                            sv.unk4 = (o->unk28 << 12) / 360;
+                            RotMatrix(&sv, o->unk30);
+                            o->unk2C = 0;
+                            break;
+                        case 1:
+                            o->unk26 -= -D_801E6DA0.unk14;
+                            if (o->unk26 < 0) {
+                                o->unk26 += 360;
+                            } else if (o->unk26 > 360) {
+                                o->unk26 -= 360;
+                            }
+                            sv.unk0 = (o->unk24 << 12) / 360;
+                            sv.unk2 = (o->unk26 << 12) / 360;
+                            sv.unk4 = (o->unk28 << 12) / 360;
+                            RotMatrixZYX(&sv, o->unk30);
+                            o->unk2C = 0;
+                            break;
+                        case 3:
+                        case 4:
+                        case 5:
+                            o->unk26 += ~(D_801E6DA0.unk14 / 4);
+                            if (o->unk26 < 0) {
+                                o->unk26 += 360;
+                            } else if (o->unk26 > 360) {
+                                o->unk26 -= 360;
+                            }
+                            sv.unk0 = (o->unk24 << 12) / 360;
+                            sv.unk2 = (o->unk26 << 12) / 360;
+                            sv.unk4 = (o->unk28 << 12) / 360;
+                            RotMatrix(&sv, o->unk30);
+                            o->unk2C = 0;
+                            break;
+                        case 7:
+                            func_801A727C(e, o, g->unk4C);
+                            break;
+                        case 8:
+                            o->unk26 += D_801E6DA0.unk14 * 5 / 2;
+                            if (o->unk26 < 0) {
+                                o->unk26 += 360;
+                            } else if (o->unk26 > 360) {
+                                o->unk26 -= 360;
+                            }
+                            sv.unk0 = (o->unk24 << 12) / 360;
+                            sv.unk2 = (o->unk26 << 12) / 360;
+                            sv.unk4 = (o->unk28 << 12) / 360;
+                            RotMatrix(&sv, o->unk30);
+                            o->unk2C = 0;
+                            break;
+                        case 9:
+                            o->unk26 -= D_801E6DA0.unk14 * 5;
+                            if (o->unk26 < 0) {
+                                o->unk26 += 360;
+                            } else if (o->unk26 > 360) {
+                                o->unk26 -= 360;
+                            }
+                            sv.unk0 = (o->unk24 << 12) / 360;
+                            sv.unk2 = (o->unk26 << 12) / 360;
+                            sv.unk4 = (o->unk28 << 12) / 360;
+                            RotMatrix(&sv, o->unk30);
+                            o->unk2C = 0;
+                            break;
+                        case 10:
+                            func_801A742C(o);
+                            break;
+                        }
+                        break;
+                    }
+                }
+                if (o->unk10 == 0 && D_801DFC80 != 0) {
+                    o->unk14 = func_8017CDA4(o->unk18, o->unk1C, o->unk20);
+                    if (*(s32 *)o == 0) {
+                        func_801AB4D4(o, 0);
+                    }
+                }
+            }
+        }
+        if (func_801CD000(p) != 0) {
+            break;
+        }
+        p->unk8 = p->unk8->unk4;
+    }
+}
 
 void func_801A7A04(Unk_801A7AFC **arg0, u32 arg1) {
     *arg0 = func_801CC898(0x88);
@@ -977,7 +1180,109 @@ void func_801A910C(Unk_801E1118 *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/801A7560", func_801A923C);
+void func_801A923C(Unk_801E032C *arg0, Unk_801E076C *arg1) {
+    s32 v[3];
+    Unk_801A742C_10 sv;
+    s32 flag;
+    Unk_801A9BF4 *h = arg0->unkC0;
+    Unk_801A7AFC *o = D_801E0764[0];
+    Unk_801E1158 *q = &D_801E1158;
+    Unk_801D7FB0 *r = (Unk_801D7FB0 *)D_801D7FB0;
+    Unk_801E0368 *g = &D_801E0368;
+
+    arg0->unk0 = h->unk0;
+    arg0->unk2 = 0;
+    GsSetLsMatrix(o->unk30);
+    q->unk1C.unk0 = -180;
+    q->unk1C.unk2 = -120;
+    q->unk24 = 0;
+    q->unk26 = 0;
+    q->unk28 = 0;
+    q->unk1C.unk4 = 200;
+    RotTrans(&q->unk1C, v, &flag);
+    if (h->unk18 != 0) {
+        func_801CD028(&arg0->unkB8, (u8 *)arg0->unkC0 + h->unk18, &arg0->unk18);
+    }
+    GsInitCoordinate2(NULL, &arg0->unk18);
+    arg0->unk4 = o->unk18;
+    arg0->unk8 = o->unk1C + 370;
+    arg0->unkC = o->unk20;
+    arg0->unk10 = o->unk24;
+    arg0->unk12 = o->unk26;
+    arg0->unk14 = o->unk28;
+    arg0->unk30 = arg0->unk4 - arg1->unk72 * 12500;
+    arg0->unk34 = arg0->unk8 + arg1->unk74 * 32000;
+    arg0->unk38 = arg0->unkC - arg1->unk76 * 12500;
+    sv.unk0 = (arg0->unk10 << 12) / 360;
+    sv.unk2 = (arg0->unk12 << 12) / 360;
+    sv.unk4 = (arg0->unk14 << 12) / 360;
+    RotMatrix(&sv, arg0->unk1C);
+    if (h->unk1C != 0) {
+        func_801CD028(&arg0->unkBC, (u8 *)arg0->unkC0 + h->unk1C, &arg0->unk68);
+    }
+    GsInitCoordinate2(&arg0->unk18, &arg0->unk68);
+    arg0->unk80 = -180;
+    arg0->unk84 = -360;
+    arg0->unk88 = 412;
+    sv.unk0 = 56;
+    sv.unk2 = 0;
+    sv.unk4 = 0;
+    RotMatrix(&sv, arg0->unk6C);
+    arg1->unk54 = v[0] + arg1->unk72 * 12500;
+    arg1->unk58 = v[1] - arg1->unk74 * 32000;
+    arg1->unk5C = v[2] + arg1->unk76 * 12500;
+    arg1->unk6C = 0;
+    arg1->unk6E = arg0->unk12;
+    arg1->unk70 = 0;
+    func_8019555C(arg1, 1);
+    q->unk0 = 0;
+    q->unk2 = 0;
+    D_801DFFB0 = 0;
+    q->unk4 = 0;
+    q->unk8 = 0;
+    q->unkC = 0;
+    q->unk6 = 0;
+    q->unk10 = 0;
+    q->unk14 = 0;
+    q->unk18 = 0;
+    q->unk2C[0].unk0 = -75;
+    q->unk2C[0].unk2 = 0;
+    q->unk2C[0].unk4 = 102;
+    q->unk2C[1].unk0 = 75;
+    q->unk2C[1].unk2 = 0;
+    q->unk2C[1].unk4 = 102;
+    q->unk2C[2].unk0 = -75;
+    q->unk2C[2].unk2 = 0;
+    q->unk2C[2].unk4 = -152;
+    q->unk2C[3].unk0 = 75;
+    q->unk2C[3].unk2 = 0;
+    q->unk2C[3].unk4 = -152;
+    q->unk4C = 0;
+    q->unk50 = 0;
+    q->unk54 = 0;
+    q->unk5C = 0;
+    q->unk60 = 0;
+    q->unk64 = 0;
+    arg0->unk18 = 0;
+    arg0->unk68 = 0;
+    r->unk0 = 0;
+    r->unk2 = 1;
+    r->unk4 = 0;
+    r->unk8 = 0;
+    r->unkC = 0;
+    r->unk10 = 0;
+    switch (g->unk200) {
+    case 2:
+        D_801DFFB4 = 500;
+        break;
+    case 1:
+        D_801DFFB4 = 400;
+        break;
+    case 0:
+        D_801DFFB4 = 300;
+        break;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/game/801A7560", func_801A968C);
 

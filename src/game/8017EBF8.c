@@ -429,6 +429,12 @@ void func_80184814(Unk_80184814 *arg0);
 void func_80184928(Unk_80184814 *arg0);
 void func_80184A3C(Unk_80184814 *arg0);
 void func_80184B50(Unk_80184814 *arg0);
+void func_801802A0(Unk_801802A0 *arg0, s16 arg1);
+extern s16 D_801E6DAA[];
+u16 *Krom2RawAdd2(u16 sjis);
+s32 StoreImage2(void *rect, void *p);
+extern s32 D_801D76A4[];
+void func_80182D34(char *arg0, s16 arg1);
 
 void func_8017EBF8(Unk_801802A0 *arg0, s32 arg1) {
     Unk_80184230 rect;
@@ -603,7 +609,126 @@ loop:
     func_801A2678(a);
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/8017EBF8", func_801803BC);
+s16 func_801803BC(Unk_801802A0 *arg0) {
+    s32 cmd;
+    s32 result;
+    s32 ok;
+    s32 ret;
+    s32 snd;
+    Unk_801E0340 *g;
+
+    g = &D_801E0340;
+    if (D_801E6DAA[0] != 1 || arg0->unkC == 0x65 || arg0->unkC == 0x6C) {
+        return 0;
+    }
+    if (arg0->unkC == -1) {
+        return 1;
+    }
+    if (arg0->unkC == 0x66 || arg0->unkC == 0x67) {
+        ok = 1;
+    } else {
+        for (;;) {
+            switch (MemCardSync(1, &cmd, &result)) {
+            case 0:
+                continue;
+            case -1:
+                MemCardExist(0);
+                continue;
+            case 1:
+                if (cmd != 1) {
+                    continue;
+                }
+                switch (result) {
+                case 0:
+                    ok = 1;
+                    break;
+                case 3:
+                    arg0->unkC = -1;
+                    arg0->unk10 = 0;
+                case 1:
+                case 2:
+                    func_8017EE2C(arg0, result);
+                    ok = 0;
+                    break;
+                default:
+                    continue;
+                }
+                break;
+            default:
+                continue;
+            }
+            break;
+        }
+    }
+    if (ok != 0) {
+        ret = 0;
+        func_801CD6B4();
+        if (!(D_801E6DA0.unk4 & 0x20) && (D_801E6DA0.unk0 & 0x20)) {
+            ret = 1;
+            snd = 0x11;
+            switch (arg0->unkC) {
+            case 0x64:
+            case 0x68:
+                if (arg0->unk0 != 0) {
+                    arg0->unk10 = 0xC;
+                    snd = 2;
+                } else {
+                    arg0->unk10 = 0xD;
+                }
+                arg0->unkC = -1;
+                break;
+            case 0x69:
+                if (arg0->unk0 != 0) {
+                    break;
+                }
+                arg0->unk10 = 0xA;
+                arg0->unkC = -1;
+                break;
+            case 0x66:
+            case 0x67:
+                arg0->unk10 = 0;
+                arg0->unkC = -1;
+                break;
+            case 0x6A:
+                if (arg0->unk0 != 0) {
+                    arg0->unk10 = 0;
+                }
+                arg0->unkC = -1;
+                break;
+            case 0x6B:
+                arg0->unk10 = 0xE;
+                arg0->unkC = -1;
+                break;
+            default:
+                ret = 0;
+                break;
+            }
+        } else if (!(D_801E6DA0.unk4 & 0x40) && (D_801E6DA0.unk0 & 0x40)) {
+            if (arg0->unkC == 0x6B || (arg0->unk0 == 0 && arg0->unkC == 0x6A)) {
+                ret = 1;
+                snd = 8;
+                func_8017EE2C(arg0, 0x64);
+            } else {
+                func_801A2678(8);
+                func_8018C1B0(3, 0, 0, 1);
+                g->unkA = 1;
+            }
+        } else if (!(D_801E6DA0.unk4 & 0x1000) && (D_801E6DA0.unk0 & 0x1000)) {
+            if (arg0->unkC == 0x64) {
+                func_801802A0(arg0, 1);
+            }
+        } else if (!(D_801E6DA0.unk4 & 0x4000) && (D_801E6DA0.unk0 & 0x4000)) {
+            if (arg0->unkC == 0x64) {
+                func_801802A0(arg0, 0);
+            }
+        }
+        ok = ret;
+    }
+    if (ok) {
+        func_801A2678(snd);
+    }
+    return 0;
+}
 
 void func_8018073C(Unk_801802A0 *arg0) {
     s32 sp10;
@@ -1092,11 +1217,277 @@ void func_80182300(void) {
     D_801DFC94 = NULL;
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/8017EBF8", func_80182518);
+void func_80182518(s32 arg0, s16 arg1) {
+    s16 r[4];
+    u16 buf[0x40];
+    Unk_801A44B8 *p;
+    u16 *d;
+    u16 *f;
+    u8 *s;
+    u8 c;
+    s16 w;
+    s32 row;
+    s32 col;
+    s32 i;
+    s32 n;
+    s32 j;
+
+    p = func_801A44B8(D_801DFCB0);
+    if (p == NULL) {
+        return;
+    }
+    row = 0;
+    col = 0;
+    r[2] = 4;
+    r[0] = 0;
+    r[1] = 0;
+    r[3] = 16;
+    n = strlen((char *)arg0);
+    for (i = 0; i < n; ) {
+        if (row >= arg1) {
+            return;
+        }
+        s = (u8 *)arg0 + i;
+        c = s[0];
+        if ((s8)s[0] >= 0) {
+            i++;
+            switch (c) {
+            case ' ':
+                col++;
+                break;
+            case ',':
+                col = 0;
+                row++;
+                break;
+            default:
+                D_801DFE74 = c - '0';
+                break;
+            }
+            continue;
+        }
+        d = buf;
+        w = (s[0] << 8) | s[1];
+        r[0] = p->unk1C->unk0 + col * 4;
+        r[1] = p->unk1C->unk2 + row * 16;
+        f = Krom2RawAdd2(w);
+        memset(d, 0, 0x80);
+        for (j = 0; j < 15; j++, f++) {
+            {
+                u16 v;
+                u16 c;
+                s32 k;
+                s32 sh;
+                s32 m;
+
+                m = 4;
+                v = 0;
+                for (k = 7, sh = 0; k >= m; k--, sh += 4) {
+                    c = (d[0] & (0xF << sh)) >> sh;
+                    if ((*f >> k) & 1) {
+                        c = D_801DFE74;
+                    }
+                    v |= c << sh;
+                }
+                *d++ = v;
+            }
+            {
+                u16 v;
+                u16 c;
+                s32 k;
+                s32 sh;
+                s32 m;
+
+                m = 0;
+                v = 0;
+                for (k = 3, sh = 0; k >= m; k--, sh += 4) {
+                    c = (d[0] & (0xF << sh)) >> sh;
+                    if ((*f >> k) & 1) {
+                        c = D_801DFE74;
+                    }
+                    v |= c << sh;
+                }
+                *d++ = v;
+            }
+            {
+                u16 v;
+                u16 c;
+                s32 k;
+                s32 sh;
+                s32 m;
+
+                m = 12;
+                v = 0;
+                for (k = 15, sh = 0; k >= m; k--, sh += 4) {
+                    c = (d[0] & (0xF << sh)) >> sh;
+                    if ((*f >> k) & 1) {
+                        c = D_801DFE74;
+                    }
+                    v |= c << sh;
+                }
+                *d++ = v;
+            }
+            {
+                u16 v;
+                u16 c;
+                s32 k;
+                s32 sh;
+                s32 m;
+
+                m = 8;
+                v = 0;
+                for (k = 11, sh = 0; k >= m; k--, sh += 4) {
+                    c = (d[0] & (0xF << sh)) >> sh;
+                    if ((*f >> k) & 1) {
+                        c = D_801DFE74;
+                    }
+                    v |= c << sh;
+                }
+                *d++ = v;
+            }
+        }
+        LoadImage2(r, buf);
+        col++;
+        if (col >= 16) {
+            col = 0;
+            row++;
+        }
+        i += 2;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/game/8017EBF8", func_80182860);
 
-INCLUDE_ASM("asm/nonmatchings/game/8017EBF8", func_80182D34);
+void func_80182D34(char *arg0, s16 arg1) {
+    s16 r[4];
+    u16 buf[0x40];
+    Unk_801A44B8 *p;
+    u16 *d;
+    u16 *f;
+    u8 *s;
+    s16 w;
+    s16 line;
+    s32 y;
+    s32 col;
+    s32 i;
+    s32 n;
+    s32 j;
+
+    line = arg1;
+    p = func_801A44B8(D_801DFCB0);
+    if (p == NULL) {
+        return;
+    }
+    n = strlen(arg0);
+    y = D_801D76A4[arg1];
+    if (arg1 < 2) {
+        col = (32 - n) / 4;
+    } else {
+        col = 1;
+    }
+    i = 0;
+    r[2] = 4;
+    r[0] = 0;
+    r[1] = 0;
+    r[3] = 16;
+    while (i < n) {
+        s = (u8 *)arg0 + i;
+        if ((s8)s[0] >= 0) {
+            i++;
+            if (s[0] == ' ') {
+                col++;
+            }
+            continue;
+        }
+        d = buf;
+        w = (s[0] << 8) | s[1];
+        r[0] = p->unk1C->unk0 + col * 4;
+        r[1] = p->unk1C->unk2 + y;
+        f = Krom2RawAdd2(w);
+        StoreImage2(r, d);
+        for (j = 0; j < 15; j++, f++) {
+            {
+                u16 v;
+                u16 c;
+                s32 k;
+                s32 sh;
+                s32 m;
+
+                m = 4;
+                v = 0;
+                for (k = 7, sh = 0; k >= m; k--, sh += 4) {
+                    c = (d[0] & (0xF << sh)) >> sh;
+                    if ((*f >> k) & 1) {
+                        c = D_801DFE74;
+                    }
+                    v |= c << sh;
+                }
+                *d++ = v;
+            }
+            {
+                u16 v;
+                u16 c;
+                s32 k;
+                s32 sh;
+                s32 m;
+
+                m = 0;
+                v = 0;
+                for (k = 3, sh = 0; k >= m; k--, sh += 4) {
+                    c = (d[0] & (0xF << sh)) >> sh;
+                    if ((*f >> k) & 1) {
+                        c = D_801DFE74;
+                    }
+                    v |= c << sh;
+                }
+                *d++ = v;
+            }
+            {
+                u16 v;
+                u16 c;
+                s32 k;
+                s32 sh;
+                s32 m;
+
+                m = 12;
+                v = 0;
+                for (k = 15, sh = 0; k >= m; k--, sh += 4) {
+                    c = (d[0] & (0xF << sh)) >> sh;
+                    if ((*f >> k) & 1) {
+                        c = D_801DFE74;
+                    }
+                    v |= c << sh;
+                }
+                *d++ = v;
+            }
+            {
+                u16 v;
+                u16 c;
+                s32 k;
+                s32 sh;
+                s32 m;
+
+                m = 8;
+                v = 0;
+                for (k = 11, sh = 0; k >= m; k--, sh += 4) {
+                    c = (d[0] & (0xF << sh)) >> sh;
+                    if ((*f >> k) & 1) {
+                        c = D_801DFE74;
+                    }
+                    v |= c << sh;
+                }
+                *d++ = v;
+            }
+        }
+        LoadImage2(r, buf);
+        col++;
+        if (line >= 3 && col >= 15) {
+            col = 1;
+            line++;
+            y = D_801D76A4[line];
+        }
+        i += 2;
+    }
+}
 
 void func_801830A0(u8 *arg0, u16 arg1) {
     u16 a;
