@@ -1,1 +1,4 @@
 // Our own names, with evidence. Sony names live in symbol_addrs.psyq.txt.
+// Address-only splits (no name): a C function reads the second half or the tail as its own symbol.
+D_801DFCA6 = 0x801DFCA6; // size:0x2
+D_80171048 = 0x80171048;

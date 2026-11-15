@@ -231,6 +231,8 @@ typedef struct {
     s16 *unk4;
 } Unk_801D5324;
 Unk_801E71A8 *func_801D3590(s32 arg0, s32 arg1);
+Unk_801D395C *func_801D3764(Unk_801D3924 *arg0, u32 arg1);
+extern s16 D_801E71CA[];
 
 void func_801D1E70(void) {
     Unk_801DFBE0 *p = D_801DFBE0;
@@ -347,7 +349,54 @@ s32 func_801D1F70(void) {
     return ret;
 }
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801D1E70", func_801D2210);
+s32 func_801D2210(Unk_801D3060 *arg0, s32 arg1, s32 arg2) {
+    Unk_801E71A8 *p;
+    Unk_801D3924 *h;
+    Unk_801D395C *blk;
+    u32 size;
+    s32 i;
+
+    for (i = 0; i < 32; i++) {
+        p = &((Unk_801E71C8 *)D_801E71C8)->unk4[i];
+        if (p->unk18 != 0 && p->unk0 == arg0->unk0 && p->unk1C == arg1 && p->unk1D == arg2) {
+            ((Unk_801E71C8 *)D_801E71C8)->unk4[i].unk20++;
+            return i + 1;
+        }
+    }
+    if (D_801E71C8[0] == 0) {
+        for (i = 0; i < 32; i++) {
+            if (((Unk_801E71C8 *)D_801E71C8)->unk4[i].unk18 == 0) {
+                p = &((Unk_801E71C8 *)D_801E71C8)->unk4[i];
+                p->unk0 = arg0->unk0;
+                p->unk8 = arg0->unk8;
+                p->unkC = arg0->unkC;
+                p->unk10 = arg0->unk10;
+                size = arg0->unk10;
+                blk = NULL;
+                if (arg1 < 0 || arg1 >= D_801DFE10) {
+                    printf(D_80172FD0, D_801DFE14, 93);
+                    exit(1);
+                }
+                h = (Unk_801D3924 *)D_801DFBE0[arg1].unkC;
+                if (h != NULL) {
+                    blk = func_801D3764(h, size);
+                }
+                p->unk18 = (s32)blk;
+                if (blk == NULL) {
+                    break;
+                }
+                D_801E71C8[0] = 1;
+                D_801E71C8[1] = i + 1;
+                p->unk1C = arg1;
+                p->unk1D = arg2;
+                p->unk1E = 0;
+                p->unk20++;
+                return i + 1;
+            }
+        }
+    }
+    return 0;
+}
 
 s32 func_801D23FC(s32 arg0, Unk_801D2A48 *arg1, s32 *arg2, s32 arg3) {
     Unk_801E71A8 *p;
@@ -385,7 +434,110 @@ s32 func_801D23FC(s32 arg0, Unk_801D2A48 *arg1, s32 *arg2, s32 arg3) {
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801D1E70", func_801D254C);
+static inline Unk_801D395C *func_801D254C_alloc(s32 idx, u32 size) {
+    Unk_801D395C *blk = NULL;
+    Unk_801D3924 *h;
+    if (idx < 0 || idx >= D_801DFE10) {
+        printf(D_80172FD0, D_801DFE14, 93);
+        exit(1);
+    }
+    h = (Unk_801D3924 *)D_801DFBE0[idx].unkC;
+    if (h != NULL) {
+        blk = func_801D3764(h, size);
+    }
+    return blk;
+}
+
+s16 func_801D254C(s32 *arg0, Unk_801D2A48 *arg1, s32 *arg2, s32 arg3, s16 *arg4) {
+    Unk_801DFBE0 *d;
+    Unk_801D2A48 *e;
+    Unk_801E71A8 *p;
+    Unk_801D395C *blk;
+    s32 moved;
+    s32 r;
+    s32 i;
+    s32 j;
+    s32 k;
+    s32 m;
+    s32 n;
+    s32 first;
+    s32 last;
+
+    if (D_801E71C8[0] != 0) {
+        return 0;
+    }
+    d = D_801DFBE0;
+    moved = 0;
+    for (i = 0; i < D_801DFE10; i++, d++) {
+        if (func_801D395C((Unk_801D3924 *)d->unkC) != 0) {
+            func_801D35EC((Unk_801D35EC *)D_801E71C8);
+            moved |= func_801D39A0((Unk_801D3924 *)d->unkC);
+        }
+    }
+    if (moved != 0) {
+        func_801D2B60(D_801E71C8);
+    }
+    r = moved | D_801DFFD8;
+    *arg4 = r;
+    for (k = 0; k < 32; k++) {
+        ((Unk_801E71C8 *)D_801E71C8)->unk4[k].unk20 = D_801E7188[k];
+    }
+    j = 0;
+    last = -1;
+    first = -1;
+    n = 0;
+    for (k = 0; k < *arg0; k++) {
+        e = &arg1[k];
+        for (m = 0; m < 32; m++) {
+            p = &D_801E71CC[m];
+            if (p->unk0 == e->unk0 && p->unk1C == arg3 && p->unk1D == e->unk14) {
+                arg2[k] = m + 1;
+                break;
+            }
+        }
+        if (m != 32) {
+            n++;
+            continue;
+        }
+        for (; j < 32; j++) {
+            p = &D_801E71CC[j];
+            if (p->unk18 == 0 && (u16)p->unk20 != 0) {
+                blk = func_801D254C_alloc(arg3, e->unk10);
+                p->unk18 = (s32)blk;
+                if (blk == NULL) {
+                    break;
+                }
+                p->unk4 = e->unk4;
+                p->unk0 = e->unk0;
+                p->unk8 = e->unk8;
+                p->unkC = e->unkC;
+                p->unk10 = e->unk10;
+                p->unk22 = 0;
+                ((s16 *)D_801E71CC)[-2] = 1;
+                if (first < 0) {
+                    first = j;
+                }
+                if (last >= 0) {
+                    ((Unk_801E71C8 *)D_801E71C8)->unk4[last].unk1E = j + 1;
+                }
+                last = j;
+                p->unk1C = arg3;
+                p->unk1D = e->unk14;
+                p->unk1E = 0;
+                arg2[k] = last + 1;
+                j = last + 1;
+                n++;
+                break;
+            }
+        }
+    }
+    *arg0 = n;
+    if (first >= 0) {
+        D_801E71CA[0] = first + 1;
+        return 1;
+    }
+    return 0;
+}
 
 void func_801D28C0(s32 arg0) {
     Unk_801D3924 *h;
@@ -813,7 +965,60 @@ void func_801D3730(s32 arg0, s32 arg1) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801D1E70", func_801D3764);
+Unk_801D395C *func_801D3764(Unk_801D3924 *arg0, u32 arg1) {
+    Unk_801D395C *n;
+    Unk_801D395C *last;
+    Unk_801D395C *p;
+    u8 *addr;
+    u32 size;
+    u32 free;
+
+    size = ((arg1 + 3) >> 2) << 2;
+    n = func_801CC898(sizeof(Unk_801D395C));
+    if (n == NULL) {
+        return NULL;
+    }
+    if (arg0->unk14 == NULL) {
+        if ((u32)arg0->unk0 >= size) {
+            arg0->unk14 = n;
+            n->unk0 = arg0->unk4;
+            n->unk4 = size;
+            arg0->unkC++;
+            arg0->unk10 += size;
+            return n;
+        }
+    } else {
+        last = arg0->unk14;
+        while (last->unk8 != NULL) {
+            last = last->unk8;
+        }
+        free = arg0->unk8 - (last->unk0 + last->unk4);
+        if (arg0->unk18 == 0 || (arg0->unk18 == 1 && free < size)) {
+            p = arg0->unk14;
+            addr = arg0->unk4;
+            while (p != NULL) {
+                if (p->unk0 != addr) {
+                    memmove(addr, p->unk0, p->unk4);
+                    p->unk0 = addr;
+                }
+                addr = p->unk0 + p->unk4;
+                p = p->unk8;
+            }
+        }
+        free = arg0->unk8 - (last->unk0 + last->unk4);
+        if (free >= size) {
+            last->unk8 = NULL;
+            n->unk0 = last->unk0 + last->unk4;
+            n->unk4 = size;
+            last->unk8 = n;
+            arg0->unkC++;
+            arg0->unk10 += size;
+            return n;
+        }
+    }
+    free3(n);
+    return NULL;
+}
 
 void func_801D3910(s32 arg0, s32 arg1) {
     D_801DFE2C = arg1;

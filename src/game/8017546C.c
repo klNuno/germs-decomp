@@ -161,7 +161,10 @@ typedef struct {
     s16 unk8;
     u8 unkA[0x4];
     u16 unkE;
-    u8 unk10[0x74];
+    s32 unk10;
+    u8 unk14[0x4];
+    s32 unk18;
+    u8 unk1C[0x68];
     void *unk84;
     s32 unk88;
 } Unk_801DFC60;
@@ -222,6 +225,17 @@ extern u16 D_801E03E6[];
 s32 abs(s32 x);
 void func_801981D0(Unk_801762F4 *arg0, u16 arg1, s32 arg2);
 void func_801A2678(s32 arg0);
+/* best 97.51 % : uses 4 static inline helpers (one-function format broken); differs in register allocation of the cell coordinates (original copies each converted coordinate a0 -> a1/a2/a3), 8 bytes longer; plain single-function version reached 80.06 % (store-flag sltu instead of branches in the passability test, coordinate load order) */
+typedef struct {
+    u16 unk0;
+    u16 unk2;
+    u16 unk4;
+    u16 unk6;
+    u8 *unk8;
+} Unk_801DFC64;
+s32 SquareRoot0(s32 a);
+s16 func_80176464(s16 arg0, s32 arg1, s32 arg2, s32 arg3);
+s32 func_8017D414(void *arg0, s32 arg1, s32 arg2, s32 arg3);
 
 s16 func_8017546C(Unk_801762F4 *arg0, s16 arg1) {
     Unk_801E0710 *g = &D_801E0710;
@@ -746,7 +760,157 @@ Unk_80176890 *func_80176890(s16 arg0) {
     return NULL;
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/8017546C", func_801768F8);
+static inline s32 cvx(s32 x) {
+    s32 d = x - D_801DFC60->unk10;
+    s32 t = d >> 8;
+    s32 o = ((Unk_801DFC64 *)D_801DFC64)->unk0;
+    return (d & 0xFF) ? t + 1 + o : t + o;
+}
+
+static inline s32 cvz(s32 z) {
+    s32 d = z - D_801DFC60->unk18;
+    s32 t = d >> 8;
+    s32 o = ((Unk_801DFC64 *)D_801DFC64)->unk2;
+    return (d & 0xFF) ? t + 1 + o : t + o;
+}
+
+static inline s32 cell(s32 x, s32 z) {
+    Unk_801DFC64 *m = (Unk_801DFC64 *)D_801DFC64;
+    s32 i;
+    s32 sh;
+    if (x < 0 || x >= m->unk4 || z < 0 || z >= m->unk6) {
+        return 1;
+    }
+    i = z * (m->unk4 >> 2) + (x >> 2);
+    sh = (x % 4) * 2;
+    return (m->unk8[i] & (3 << sh)) >> sh;
+}
+
+static inline s16 pass(s32 v, s32 mode) {
+    if (v == 1) {
+        return 0;
+    }
+    if (mode == 1) {
+        if (v == 2) {
+            return 0;
+        }
+        if (v != 0) {
+            return 1;
+        }
+        return 0;
+    }
+    if (mode == 2 && v == 2) {
+        return 0;
+    }
+    return 1;
+}
+
+s16 func_801768F8(Unk_801762F4 *arg0, Unk_80174F54 *arg1, s32 arg2) {
+    Unk_801E076C *p;
+    s32 mode;
+    s32 d;
+    s32 x0;
+    s32 z0;
+    s32 x1;
+    s32 z1;
+    s32 dx;
+    s32 dz;
+    s32 sx;
+    s32 sz;
+    s32 err;
+    s32 i;
+    s32 ok;
+    s32 a;
+    s16 b;
+
+    if (D_801DFC60 == NULL || D_801DFC64 == 0) {
+        return 0;
+    }
+    if ((arg2 & 1) && D_801DFC60->unk8 == 0) {
+        return 0;
+    }
+    mode = 0;
+    if (!(arg2 & 2)) {
+        mode = 1;
+        if (arg2 & 0x10) {
+            mode = 2;
+        }
+    }
+    if (arg2 & 4) {
+        arg0->unk40 = 0;
+    }
+    if (arg2 & 8) {
+        arg0->unk44 = 0;
+        arg0->unk45 = 0;
+    }
+    x0 = cvx(arg0->unk20);
+    z0 = cvz(arg0->unk28);
+    if (mode == 0) {
+        x1 = cvx(arg1->unk0);
+        z1 = cvz(arg1->unk8);
+    } else {
+        x1 = cvx(arg0->unk20 + arg1->unk0);
+        z1 = cvz(arg0->unk28 + arg1->unk8);
+    }
+    dx = x1 - x0;
+    dz = z1 - z0;
+    err = 0;
+    if (dx < 0) {
+        dx = -dx;
+        sx = -1;
+    } else {
+        sx = 1;
+    }
+    sz = 1;
+    if (dz < 0) {
+        dz = -dz;
+        sz = -1;
+    }
+    if (dz < dx) {
+        for (i = 0; i <= dx; i++) {
+            ok = pass(cell(x0, z0), mode);
+            if (!ok) {
+                return 0;
+            }
+            err += dz;
+            x0 += sx;
+            if (err > dx) {
+                err -= dx;
+                z0 += sz;
+            }
+        }
+    } else {
+        for (i = 0; i <= dz; i++) {
+            ok = pass(cell(x0, z0), mode);
+            if (!ok) {
+                return 0;
+            }
+            err += dx;
+            z0 += sz;
+            if (err > 0) {
+                err -= dz;
+                x0 += sx;
+            }
+        }
+    }
+    if (arg2 & 4) {
+        x1 = arg1->unk0 - arg0->unk20;
+        d = arg1->unk8 - arg0->unk28;
+        arg0->unk40 = SquareRoot0(x1 * x1 + d * d);
+        if (arg2 & 8) {
+            p = D_801E076C[0];
+            a = (ratan2(arg1->unk4 - arg0->unk24, (u16)arg0->unk40) * 0x1680) >> 16;
+            arg0->unk45 = abs(a);
+            b = abs(p->unk6C - a);
+            if (b < 0x100) {
+                arg0->unk44 = b;
+            } else {
+                arg0->unk44 = 0xFF;
+            }
+        }
+    }
+    return 1;
+}
 
 void func_80176E2C(Unk_801762F4 *arg0) {
     Unk_80174FFC sv;
@@ -933,7 +1097,69 @@ s16 func_8017726C(Unk_801762F4 *arg0, s16 arg1) {
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/8017546C", func_80177608);
+s16 func_80177608(Unk_801762F4 *arg0, Unk_80174F54 *arg1, s16 arg2) {
+    Unk_801E076C *cam = D_801E076C[0];
+    Unk_80174FFC sv;
+    s32 y;
+    s32 r;
+    s32 x;
+    s32 z;
+    s32 dx;
+    s32 dz;
+    s32 t;
+    s32 ax;
+    s32 s;
+    s32 c;
+
+    if (D_801DFC60 == NULL) {
+        return 0;
+    }
+    if (!(D_801DFC60->unkE & 1)) {
+        return 0;
+    }
+    arg0->unk12 &= ~0x10;
+    ax = arg1->unk0;
+    if (ax == 0 && arg1->unk8 == 0) {
+        return 1;
+    }
+    r = D_801DFC70->unkA * 10;
+    x = arg0->unk20 + ax - cam->unk72 * 12500;
+    z = arg0->unk28 + arg1->unk8 - cam->unk76 * 12500;
+    s = r * rsin(arg2) >> 12;
+    c = r * rcos(arg2) >> 12;
+    if (func_80176464(arg0->unk0, x + s, arg0->unk24, z + c) >= 0) {
+        return 0;
+    }
+    r += 600;
+    dx = abs(x - cam->unk54);
+    dz = abs(z - cam->unk5C);
+    if (dx <= r && dz <= r) {
+        arg0->unk12 |= 0x10;
+        return arg0->unkE == 1;
+    }
+    if (func_8017D414(D_801DFC60->unk84, x, z, (s32)&y) == 0) {
+        return 0;
+    }
+    arg0->unk20 += arg1->unk0;
+    arg0->unk24 = y - cam->unk74 * 32000;
+    arg0->unk28 += arg1->unk8;
+    if (D_801DFC68 == NULL || D_801DFC68->unk4 == 0) {
+        return 0;
+    }
+    D_801DFC68->unk54 = arg0->unk20 - cam->unk72 * 12500;
+    D_801DFC68->unk58 = arg0->unk24 + cam->unk74 * 32000;
+    D_801DFC68->unk5C = arg0->unk28 - cam->unk76 * 12500;
+    sv.unk0 = (arg0->unk38 << 12) / 360;
+    sv.unk2 = (arg0->unk3A << 12) / 360;
+    sv.unk4 = (arg0->unk3C << 12) / 360;
+    RotMatrix(&sv, D_801DFC68->unk40);
+    D_801DFC68->unk3C = 0;
+    t = func_8017CDA4(arg0->unk20, arg0->unk24, arg0->unk28);
+    if (arg0->unk48 != t) {
+        arg0->unk48 = t;
+    }
+    return 1;
+}
 
 static inline s32 func_801779B8_inline(Unk_801762F4 *arg0, s16 n, s32 arg2, s16 arg3) {
     Unk_80174F54 v;

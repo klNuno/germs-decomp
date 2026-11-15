@@ -156,8 +156,8 @@ typedef struct { u8 pad0[0x22]; s16 unk22; s16 unk24; s16 unk26; s16 unk28; u8 p
 void func_801A80CC(s32 a, s32 b, s32 c);
 void *func_801D15C8(u32 arg0);
 s32 func_801D14B8(void *arg0);
-void func_801AC88C();
-void func_801AC91C();
+void func_801AC88C(Unk_801AC70C *arg0);
+void func_801AC91C(Unk_801AC70C *arg0);
 typedef struct { u16 unk0; u16 unk2; u16 unk4; u16 unk6; } Unk_80184230;
 s32 MoveImage(Unk_80184230 *rect, s32 x, s32 y);
 void RotMatrixZXY(Unk_801AA8DC_10 *arg0, void *arg1);
@@ -1067,9 +1067,46 @@ void func_801AC844(void) {
     q->unk16 = -1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/801AA360", func_801AC88C);
+void func_801AC88C(Unk_801AC70C *arg0) {
+    Unk_80184230 rect;
+    Unk_801AC55C *a;
+    s32 n;
+    Unk_801AC55C_1C *b;
+    s32 w;
+    s32 h;
+    s16 x;
+    s16 y;
+    a = *arg0->unk3C;
+    b = a->unk1C;
+    w = a->unk10 >> b->unk14;
+    h = a->unk12;
+    n = arg0->unk24;
+    x = b->unk0 + w * (n / 4);
+    y = b->unk2 + h * (n % 4);
+    rect.unk0 = x;
+    rect.unk2 = y;
+    rect.unk4 = w;
+    rect.unk6 = h;
+    MoveImage(&rect, 0x2F0, 0x20);
+}
 
-INCLUDE_ASM("asm/nonmatchings/game/801AA360", func_801AC91C);
+void func_801AC91C(Unk_801AC70C *arg0) {
+    Unk_801E1118 *p = &D_801E1118;
+    Unk_80184230 rect;
+    Unk_801AC55C *a = *arg0->unk3C;
+    s32 n = arg0->unk24;
+    Unk_801AC55C_1C *b = a->unk1C;
+    s32 w = a->unk10 >> b->unk14;
+    s32 h = a->unk12;
+    s16 x = b->unk0 + w * (n / 4);
+    s16 y = b->unk2 + h * (n % 4);
+    rect.unk0 = x;
+    rect.unk2 = y;
+    rect.unk4 = w;
+    rect.unk6 = h;
+    MoveImage(&rect, 0x2F0, 0x20);
+    p->unk0 = -1;
+}
 
 void func_801AC9B4(void) {
     Unk_801E1118 *p = &D_801E1118;

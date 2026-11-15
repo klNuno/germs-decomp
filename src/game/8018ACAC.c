@@ -11,8 +11,14 @@ void func_8018BA48(u16 a);
 typedef struct { s32 unk0; s16 unk4; s16 unk6; } Unk_801E056C;
 typedef struct { s16 unk0; s16 unk2; s16 unk4; s16 unk6; s16 unk8; u16 unkA; s16 unkC; s16 unkE; u16 unk10; s16 unk12; s16 unk14; s16 unk16; s16 unk18; s16 unk1A; s16 *unk1C; } Unk_801E058C;
 typedef struct {
-    u16 unk0[0x70];
-    u8 unkE0[0x124];
+    u16 unk0[0x60];
+    s16 unkC0;
+    u16 unkC2[0xF];
+    u8 unkE0[0x11C];
+    s16 unk1FC;
+    s16 unk1FE;
+    u16 unk200;
+    u16 unk202;
     Unk_801E056C unk204[4];
     Unk_801E058C unk224;
     s32 unk244;
@@ -170,6 +176,35 @@ typedef struct {
 } Unk_8018ACAC;
 void func_801A3DD4(Unk_801E0324_10 **arg0, void *arg1);
 void func_801A43A8(s32 arg0);
+s16 D_801DFD48;
+extern s32 D_801DFED4;
+extern s32 D_801DFED8;
+extern s32 D_801DFEDC;
+extern s32 D_801DFEE0;
+extern s32 D_801DFEE4;
+extern s32 D_801DFEE8;
+extern void *D_801DFE50;
+extern void *D_801DFE54;
+extern void *D_801DFE5C;
+extern void *D_801DFE80;
+extern void *D_801DFF0C;
+extern void *D_801DFF80;
+extern void *D_801DFFA0;
+void __main(void);
+void func_801CC8F0(void);
+void func_801CCAF4(void *arg0);
+void func_8018920C(void);
+void func_801A02C8(void);
+void func_80192B8C(s32 arg0, s32 arg1);
+void func_801971D4(void);
+void func_801863B4(void);
+void func_801AC9B4(void);
+void func_801A5254(s32 arg0);
+void func_801CD808(void);
+void func_8018A24C(void);
+void func_8017E544(void);
+void func_80194E5C(void);
+void func_801A9070(void);
 
 void func_8018ACAC(Unk_801E0324 **arg0, Unk_8018ACAC *arg1, s16 arg2) {
     *arg0 = func_801CC898(0x20);
@@ -586,7 +621,98 @@ s32 func_8018BD8C(s16 a) {
     return v != 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/8018ACAC", func_8018BDE8);
+void func_8018BDE8(void) {
+    Unk_801E0340 *p;
+    Unk_801E0340 *q;
+    Unk_801E0368 *r;
+    s16 f;
+    u16 a;
+    u16 b;
+
+    __main();
+    func_801CC8F0();
+    memset(&D_801E02D8, 0, 0x64);
+    D_801DFED8 = 0;
+    D_801DFEE4 = 0;
+    D_801DFEE0 = 0;
+    D_801DFEDC = 0;
+    D_801DFED4 = 0;
+    D_801DFEE8 = 0;
+    func_801CCAF4(&D_801DFE50);
+    func_801CCAF4(&D_801DFE54);
+    func_801CCAF4(&D_801DFE5C);
+    func_801CCAF4(&D_801DFE80);
+    func_801CCAF4(&D_801DFF0C);
+    func_801CCAF4(&D_801DFF80);
+    func_801CCAF4(&D_801DFFA0);
+    func_8018920C();
+    func_801A02C8();
+    func_80192B8C(1, 0);
+    r = &D_801E0368;
+    while (1) {
+        q = &D_801E0340;
+        f = D_801DFD48;
+        if (f != 0) {
+            a = r->unk200;
+            b = r->unk202;
+        }
+        memset(r, 0, sizeof(D_801E0368));
+        memset(q, 0, 0x24);
+        if (f != 0) {
+            r->unk200 = a;
+            r->unk202 = b;
+        } else {
+            r->unk200 = 1;
+            r->unk202 = 1;
+        }
+        q->unk0[0] = -1;
+        q->unk0[1] = -1;
+        func_801971D4();
+        r->unk0[0x5F] = 3;
+        r->unkC0 = -0x7E80;
+        r->unkC2[4] = 0x82;
+        r->unk0[0xA] = 100;
+        r->unk0[0xB] = 100;
+        r->unk0[0xC] = 100;
+        r->unk0[0xD] = 100;
+        r->unk0[0x1B] = 100;
+        r->unk0[0x3E] = 5;
+        r->unk0[0x3F] = 0;
+        r->unk0[0x30] = 0;
+        r->unk1FE = 0;
+        r->unk1FC = 0;
+        func_801863B4();
+        p = &D_801E0340;
+        func_801AC9B4();
+        func_801A5254(D_801DFD48);
+        func_801CD808();
+        func_801A4A68(0x400, 1);
+        func_801A4A68(0x409, 1);
+        func_8018A24C();
+        while (p->unk0[4] == 0) {
+            if (p->unk0[0] != p->unk0[1]) {
+                p->unk0[0] = p->unk0[1];
+            }
+            switch (p->unk0[0]) {
+            case 1:
+                func_8017E544();
+                break;
+            case 0:
+                func_80194E5C();
+                break;
+            case 2:
+                func_801A9070();
+                break;
+            }
+        }
+        p->unk0[4] = 0;
+        func_801A4A68(0x400, 0);
+        func_801A4A68(0x409, 0);
+        if (D_801DFD48 == 0) {
+            D_801DFD48 = 1;
+        }
+    }
+}
 
 s32 func_8018C0A0(s16 a) {
     s32 b;

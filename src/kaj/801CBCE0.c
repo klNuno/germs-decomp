@@ -175,9 +175,37 @@ found:
     return arg0[0];
 }
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801CBCE0", func_801CC1E8);
+Unk_801CC1E8 *func_801CC1E8(s32 arg0) {
+    Unk_801CC1E8 *e;
+    s32 i;
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801CBCE0", func_801CC2AC);
+    if (D_801DFAD4.unk10 == D_801DFAD4.unkC) {
+        func_801CBCE0();
+    }
+    i = D_801DFAD4.unk4;
+    D_801DFAD4.unkC++;
+    D_801DFAD4.unk4 = (i + 1) % D_801DFAD4.unk10;
+    e = &((Unk_801CC1E8 *)D_801DFAD4.unk0)[i];
+    e->unk0 = arg0;
+    e->unk4 = D_801E6DAC[0];
+    return e;
+}
+
+Unk_801CC1E8 *func_801CC2AC(s32 arg0) {
+    Unk_801CC1E8 *e;
+    s32 i;
+
+    if (D_801DFAD4.unk10 == D_801DFAD4.unkC) {
+        func_801CBCE0();
+    }
+    i = (D_801DFAD4.unk8 + D_801DFAD4.unk10 - 1) % D_801DFAD4.unk10;
+    D_801DFAD4.unkC++;
+    D_801DFAD4.unk8 = i;
+    e = &((Unk_801CC1E8 *)D_801DFAD4.unk0)[i];
+    e->unk0 = arg0;
+    e->unk4 = D_801E6DAC[0];
+    return e;
+}
 
 s32 func_801CC378(s32 *arg0) {
     if (func_801CC02C(arg0) == 0) {
