@@ -489,7 +489,6 @@ typedef struct {
 extern Unk_801E0710 D_801E0710;
 void func_801A3F90(s32 a, s32 b, s32 c, s32 d, s32 e, s32 f);
 Unk_80188FEC *func_80188FEC(s16 arg0);
-/* best 99.86 % : code bytes identical; only reloc names differ: target %gp_rel(D_801DFCA4+0x2), here a separate gp global D_801DFCA6 (s16 D_801DFCA4[2] matches 100 % with --aspsx 2.79 only) */
 s32 rand(void);
 s32 D_801DFC98;
 s32 D_801DFC9C;
@@ -504,7 +503,6 @@ Unk_801762F4 *func_801762F4(s16 arg0, u16 arg1);
 Unk_801767D4 *func_801767D4(s16 arg0);
 extern char *D_801D76C4[];
 extern char *D_801D76D0[];
-/* best 99.29 % : in the atoi branch the sound-id test loads the constant 1 after sign-extending e (target loads li v1,1 first and sign-extends into a0); same code otherwise */
 void func_801831EC(u16 arg0, s16 arg1, s32 arg2, s16 arg3, s32 arg4);
 void func_801834AC(s32 arg0);
 extern s16 D_801DFC5C;
@@ -543,6 +541,18 @@ extern s16 D_801E034A[];
 s32 MemCardCreateFile(s32 chan, char *file, s32 blocks);
 void MemCardDeleteFile(s32 chan, char *file);
 s32 MemCardWriteData(void *adrs, s32 ofs, s32 bytes);
+typedef struct {
+    char unk0[0x14];
+    s32 unk14;
+    s32 unk18;
+    void *unk1C;
+    s32 unk20;
+    char unk24[0x4];
+} Unk_8017FF0C;
+s32 MemCardGetDirentry(s32 arg0, char *arg1, Unk_8017FF0C *arg2, s32 *arg3, s32 arg4, s32 arg5);
+s32 MemCardReadFile(s32 arg0, char *arg1, void *arg2, s32 arg3, s32 arg4);
+int strncmp(const char *a, const char *b, int n);
+extern char D_801DFC90[];
 
 void func_8017EBF8(Unk_801802A0 *arg0, s32 arg1) {
     Unk_80184230 rect;
@@ -878,7 +888,108 @@ error:
     return 0x68;
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/8017EBF8", func_8017FF0C);
+s32 func_8017FF0C(Unk_801802A0 *arg0) {
+    Unk_8017FF0C dir[15];
+    s32 count;
+    s32 cmd;
+    s32 result;
+    s32 first;
+    s32 ret;
+    s32 blocks;
+    s32 found;
+    s32 i;
+    s32 j;
+    s32 n;
+    s32 y;
+    s32 m;
+    u8 *rr;
+    u8 *r2;
+    u8 *r3;
+    u8 *q;
+    u8 *t;
+    Unk_801802A0_14 *p;
+
+    ret = MemCardGetDirentry(0, D_801DFC90, dir, &count, 0, 15);
+    if (ret != 0) {
+        return ret;
+    }
+    if (arg0->unk0 != 0 && count == 0) {
+        return 0x6A;
+    }
+    blocks = 0;
+    found = 0;
+    first = 4;
+    cmd = 0;
+    result = 0;
+    for (i = 0; i < count; i++) {
+        n = dir[i].unk18 / 0x2000;
+        if (dir[i].unk18 & 0x1FFF) {
+            blocks += n + 1;
+        } else {
+            blocks += n;
+        }
+        p = arg0->unk14;
+        for (j = 0; j < 4; j++, p++) {
+            if (strncmp(dir[i].unk0, p->unk4, 0x12) == 0) {
+                p->unk0 = 1;
+                found++;
+                if (j < first) {
+                    first = j;
+                }
+            }
+        }
+    }
+    if (found == 0) {
+        first = 0;
+    }
+    if (arg0->unk0 != 0) {
+        if (found == 0) {
+            return 0x6A;
+        }
+    } else if (found == 0 && blocks == 15) {
+        return 0x6A;
+    }
+    func_801A4824(0x200, 4, 7, 0xC252);
+    p = arg0->unk14;
+    for (i = 0; i < 4; i++, p++) {
+        q = &p->unk18;
+        if (p->unk0 != 0) {
+            for (;;) {
+                switch (MemCardSync(1, &cmd, &result)) {
+                case 0:
+                    continue;
+                case -1:
+                    MemCardReadFile(0, p->unk4, q, 0, 0x80);
+                    continue;
+                case 1:
+                    if (cmd == 3 && result != 0) {
+                        return result;
+                    }
+                    break;
+                }
+                break;
+            }
+            func_801A461C(0x200, i + 4, 0x3FF);
+            t = q + 4;
+            y = i * 32 + 0xF;
+            for (m = 0; m < 2; m++) {
+                rr = (u8 *)(m * 2 + (s32)t);
+                rr += 0xD;
+                func_801A3F90(0x204, (u16)(*rr - 0x4F), 0, 0x200, (u16)(m * 8 + 0x21), (u16)y);
+                r2 = (u8 *)(m * 2 + (s32)t);
+                r2 += 0x15;
+                func_801A3F90(0x204, (u16)(*r2 - 0x4F), 0, 0x200, (u16)(m * 8 + 0x44), (u16)y);
+                r3 = (u8 *)(m * 2 + (s32)t);
+                r3 += 0x1B;
+                func_801A3F90(0x204, (u16)(*r3 - 0x4F), 0, 0x200, (u16)(m * 8 + 0x62), (u16)y);
+            }
+        }
+    }
+    arg0->unk8 = first;
+    func_801A4824(0x200, 9, 0xC, 0xC252);
+    func_801A461C(0x200, first + 9, 0x3FF);
+    return 0x64;
+}
 
 void func_801802A0(Unk_801802A0 *arg0, s16 arg1) {
     s32 i;

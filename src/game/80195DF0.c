@@ -267,7 +267,7 @@ typedef struct Unk_801E6DA0 {
 extern Unk_801E6DA0 D_801E6DA0;
 s32 func_801CD6B4(void);
 s16 func_80193880(void);
-s16 func_8018898C(Unk_801E0710 *arg0, s32 arg1);
+s16 func_8018898C(Unk_801E0710 *arg0, s16 arg1);
 void func_80193DA8(Unk_801E0710 *arg0);
 void func_80198CFC(s16 arg0, u16 arg1, s32 arg2, s32 arg3, s32 arg4, s16 arg5, s16 arg6, s16 arg7, s32 arg8);
 void func_80199548(Unk_801E0710 *arg0, s32 arg1, s32 arg2);

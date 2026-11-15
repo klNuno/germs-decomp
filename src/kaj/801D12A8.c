@@ -86,7 +86,6 @@ Unk_801CC1E8 *func_801CC1E8(s32 arg0);
 void func_801CC514(s32 a, s32 b);
 void EnterCriticalSection(void);
 void ExitCriticalSection(void);
-/* best 99.92 % : code bytes identical; only reloc symbol differs, target D_801E704C (spurious bss split inside D_801E6FF0[2]) vs D_801E6FF0+0x5c */
 extern char D_801DFE04[];
 extern s32 D_801E6DB4[];
 void GsInitGraph(s32 w, s32 h, s32 intl, s32 dither, s32 vrammode);

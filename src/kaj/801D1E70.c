@@ -221,7 +221,6 @@ s32 func_801D2E48(s32 arg0);
 s32 func_801D6DC8(Unk_801D6DC8 *arg0, Unk_801D6DC8 *arg1);
 u8 func_801D42F4(s16 arg0, s16 arg1, u8 arg2, s16 *arg3, s16 *arg4, u8 *arg5);
 void qsort(void *base, s32 n, s32 size, s32 (*cmp)());
-/* best 99.90 % : code bytes identical; only reloc symbol differs, target D_801DFBEC (spurious data split inside D_801DFBE0[0].unkC) vs D_801DFBE0+0xc */
 void func_801D3730(s32 arg0, s32 arg1);
 void func_801D3A14(Unk_801D3924 *arg0, Unk_801D395C *arg1);
 void func_801D5E28(Unk_801E7950 *arg0);

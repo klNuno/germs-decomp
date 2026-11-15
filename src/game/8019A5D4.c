@@ -165,7 +165,6 @@ void func_8018C1B0(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 void func_80199C68(s16 arg0);
 void *memset(void *dst, s32 c, u32 n);
 int sprintf(char *buf, const char *fmt, ...);
-/* best 100.00 % : code 100 %, RODATA MISMATCH only: the target label D_8017103C ("roadmap.c") also holds the 18 dialogue strings 0x80171048..0x801714EC, which the main.data table at 0x801D7AEC points to; one function cannot emit them */
 s16 *func_801A44B8(s32 arg0);
 void func_801CD54C(s32 a, char *b, char *c, s32 d);
 extern s16 D_801D7A92[];
@@ -189,6 +188,69 @@ extern s32 (*D_801DFEE0)(Unk_801A20CC *arg0);
 void func_80185858(u16 arg0, s16 arg1);
 s32 func_801A20CC(Unk_801A20CC *arg0);
 s32 func_801A211C(Unk_801A20CC *arg0);
+typedef struct { u8 unk0; u8 unk1; u8 unk2; u8 unk3; } Unk_801DFD6C;
+extern Unk_801DFD6C D_801DFD6C[2];
+typedef struct {
+    u8 unk0[8];
+    s32 unk8[2];
+    s16 unk10;
+    u16 unk12;
+    s16 unk14;
+    u8 unk16[2];
+    u16 unk18;
+    u16 unk1A;
+    s32 unk1C;
+    s32 unk20;
+} Unk_8019FDD8_1C;
+typedef struct {
+    u16 unk0;
+    u16 unk2;
+    u8 unk4[2];
+    s16 unk6;
+    s16 unk8;
+    s16 unkA;
+    s16 unkC;
+    s16 unkE;
+    u16 unk10;
+    u16 unk12;
+    u8 unk14[4];
+    u16 unk18;
+    u16 unk1A;
+    Unk_8019FDD8_1C *unk1C;
+} Unk_8019FDD8;
+typedef struct {
+    u32 unk0;
+    u8 unk4;
+    u8 unk5;
+    volatile u8 unk6;
+    u8 unk7;
+    s16 unk8;
+    s16 unkA;
+    u8 unkC;
+    u8 unkD;
+    u16 unkE;
+    s16 unk10;
+    s16 unk12;
+} Unk_8019FDD8_P;
+s32 func_801D1A2C(void);
+void SetSemiTrans(void *p, s32 abe);
+void SetDrawMode(void *p, s32 dfe, s32 dtd, s32 tpage, void *tw);
+void LoadImage(void *rect, s32 p);
+typedef struct {
+    u32 unk0;
+    u8 unk4;
+    u8 unk5;
+    volatile u8 unk6;
+    u8 unk7;
+    s16 unk8;
+    s16 unkA;
+    s16 unkC;
+    s16 unkE;
+    s16 unk10;
+    s16 unk12;
+    s16 unk14;
+    s16 unk16;
+} Unk_801A06C0;
 
 void func_8019A5D4(void) {
     Unk_801E07C0 *p = &D_801E07C0;
@@ -242,7 +304,69 @@ INCLUDE_ASM("asm/nonmatchings/game/8019A5D4", func_8019E688);
 
 INCLUDE_ASM("asm/nonmatchings/game/8019A5D4", func_8019F124);
 
-INCLUDE_ASM("asm/nonmatchings/game/8019A5D4", func_8019FDD8);
+void *func_8019FDD8(Unk_8019FDD8 *arg0, void *arg1, u32 *arg2) {
+    Unk_801E1040 *p = &D_801E1040;
+    u8 *pkt;
+    Unk_8019FDD8_P *sp;
+    u32 *ot;
+    u8 c[3];
+    u8 u;
+    s32 v;
+
+    if ((u32)func_801D1A2C() > 0xAFF8) {
+        return arg1;
+    }
+    pkt = arg1;
+    sp = (Unk_8019FDD8_P *)pkt;
+    ((u8 *)sp)[3] = 4;
+    sp->unk7 = 0x64;
+    SetSemiTrans(sp, 1);
+    sp->unkE = arg0->unk1C->unk18;
+    if (p->unk6 != 0) {
+        if ((D_801E076C[0]->unk42 & 0x100) && arg0->unk0 == 0x404) {
+            sp->unk4 = D_801DFD6C[arg0->unk8].unk0;
+            sp->unk5 = D_801DFD6C[arg0->unk8].unk1;
+            sp->unk6 = D_801DFD6C[arg0->unk8].unk2;
+        } else {
+            c[0] = D_801DFD6C[arg0->unk8].unk0 * p->unkE >> 12;
+            c[1] = D_801DFD6C[arg0->unk8].unk1 * p->unkE >> 12;
+            c[2] = D_801DFD6C[arg0->unk8].unk2 * p->unkE >> 12;
+            sp->unk4 = c[0];
+            sp->unk5 = c[1];
+            sp->unk6 = c[2];
+        }
+    } else {
+        sp->unk4 = D_801DFD6C[arg0->unk8].unk0;
+        sp->unk5 = D_801DFD6C[arg0->unk8].unk1;
+        sp->unk6 = D_801DFD6C[arg0->unk8].unk2;
+    }
+    u = arg0->unk1C->unk10 << arg0->unk1C->unk14;
+    v = arg0->unk1C->unk12;
+    if (arg0->unk2 == 1) {
+        u += arg0->unk18 * arg0->unk10;
+        v += arg0->unk1A * arg0->unk12;
+    }
+    sp->unkC = u;
+    sp->unkD = v;
+    sp->unk8 = arg0->unkA;
+    sp->unkA = arg0->unkC;
+    sp->unk10 = arg0->unk10;
+    sp->unk12 = arg0->unk12;
+    ot = arg2 + arg0->unkE;
+    *(u32 *)pkt = (*ot & 0xFFFFFF) | 0x04000000;
+    *ot = (u32)pkt & 0xFFFFFF;
+    pkt += 0x14;
+    SetDrawMode(pkt, 0, 0, arg0->unk1C->unk1A, 0);
+    ot = arg2 + arg0->unkE;
+    *(u32 *)pkt = (*ot & 0xFFFFFF) | 0x02000000;
+    *ot = (u32)pkt & 0xFFFFFF;
+    pkt += 0xC;
+    if (arg0->unk6 != 0) {
+        LoadImage(arg0->unk1C->unk8, arg0->unk1C->unk20);
+        arg0->unk6 = 0;
+    }
+    return pkt;
+}
 
 INCLUDE_ASM("asm/nonmatchings/game/8019A5D4", func_801A00EC);
 
@@ -342,7 +466,39 @@ void func_801A0690(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/8019A5D4", func_801A06C0);
+Unk_801A06C0 *func_801A06C0(Unk_801DFF68 *arg0, Unk_801A06C0 *arg1, u32 *arg2) {
+    Unk_801E1040 *p = &D_801E1040;
+    u8 c[3];
+
+    if ((u32)func_801D1A2C() <= 0xAFFA) {
+        ((u8 *)arg1)[3] = 5;
+        arg1->unk7 = 0x28;
+        SetSemiTrans(arg1, 1);
+        arg1->unk8 = 0;
+        arg1->unkA = 0;
+        arg1->unkC = 0x13F;
+        arg1->unkE = 0;
+        arg1->unk10 = 0;
+        arg1->unk12 = 0xEF;
+        arg1->unk14 = 0x13F;
+        arg1->unk16 = 0xEF;
+        if (p->unk6 != 0) {
+            c[0] = arg0->unk4 * p->unkE >> 12;
+            c[1] = arg0->unk5 * p->unkE >> 12;
+            c[2] = arg0->unk6 * p->unkE >> 12;
+            arg1->unk4 = c[0];
+            arg1->unk5 = c[1];
+            arg1->unk6 = c[2];
+        } else {
+            arg1->unk4 = arg0->unk4;
+            arg1->unk5 = arg0->unk5;
+            arg1->unk6 = arg0->unk6;
+        }
+        arg1->unk0 = (arg2[0x10] & 0xFFFFFF) | 0x05000000;
+        arg2[0x10] = (u32)arg1 & 0xFFFFFF;
+        return arg1 + 1;
+    }
+}
 
 void func_801A0820(Unk_801A0820 *arg0) {
     Unk_801A216C tab[12];

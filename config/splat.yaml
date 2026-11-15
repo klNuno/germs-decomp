@@ -74,6 +74,7 @@ segments:
       # and migrates jump tables and strings into their function.
       - [0x800, .rodata, game/80173054]
       - [0x93C, .rodata, game/8017546C]
+      - [0x9F4, .rodata, game/801768F8]
       - [0xA50, .rodata, game/80179848]
       - [0xC1C, .rodata, game/8017EBF8]
       - [0xD04, .rodata, game/80185380]
@@ -100,6 +101,7 @@ segments:
       - [0x37D0, .rodata, kaj/801D1E70]
       - [0x3854, c, game/80173054]  # action.c asserts
       - [0x5C6C, c, game/8017546C]  # no assert: jtbl cut
+      - [0x70F8, c, game/801768F8]  # no assert: gp cut (D_801DFC74 is lui before, gp from here)
       - [0xA048, c, game/80179848]  # block.c
       - [0xF3F8, c, game/8017EBF8]  # no assert: jtbl cut
       - [0x15B80, c, game/80185380]  # door.c

@@ -444,7 +444,7 @@ typedef struct {
 } Unk_801E1058;
 extern Unk_801E1058 D_801E1058[];
 s32 func_801CD6B4(void);
-s16 func_8018898C(Unk_801E0710 *arg0, s32 arg1);
+s16 func_8018898C(Unk_801E0710 *arg0, s16 arg1);
 s16 func_801A14A0(Unk_801E0710 *arg0);
 s16 func_80187E38(Unk_801E0710 *arg0);
 void func_8017DAE8(Unk_801E0710 *arg0);

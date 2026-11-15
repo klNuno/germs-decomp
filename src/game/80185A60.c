@@ -343,9 +343,14 @@ s32 func_80199FA0(void);
 extern s32 D_801E6DB4[];
 void func_8017A86C(u16 arg0);
 void func_801A25B4(s32 arg0);
-/* best 95.19 % : early unk48!=2 return laid out as bne instead of beq+j stub; D_801E6DA0 base hoist/reload and a1/s1 delay-slot scheduling around func_80187718 calls differ */
 void func_80187718(s16 arg0, s16 arg1);
 void func_8018DA2C(void *arg0, s16 arg1, s16 arg2);
+extern char D_8017080C[];
+s16 func_8018884C(Unk_801E0710 *arg0, s16 arg1, s16 arg2);
+s16 func_8018D1F0(void);
+s16 func_8018CEA0(s16 a);
+u16 func_8019A6A4(void);
+s16 func_8018898C(Unk_801E0710 *arg0, s16 arg1);
 
 void func_80185A60(s32 arg0, u16 arg1, s32 arg2) {
     Unk_801E0368 *g = &D_801E0368;
@@ -1576,7 +1581,57 @@ s16 func_8018884C(Unk_801E0710 *arg0, s16 arg1, s16 arg2) {
     return func_8018D1A0();
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/80185A60", func_8018898C);
+s16 func_8018898C(Unk_801E0710 *arg0, s16 arg1) {
+    s16 n = arg1;
+    Unk_801E0710_5C *q = arg0->unk5C;
+    Unk_801E0368 *g = &D_801E0368;
+    Unk_801E0768 *p = arg0->unk58;
+
+    if (q->unk42 & 0x4000) {
+        if (func_8018D1F0() == 1) {
+            if (D_801DFEC4 == 0) {
+                D_801DFEC4 = 1;
+                /* "  8アイテム1を方向キー上下で,  選んで下さい,     決定 3○1 やめる4 ×" */
+                func_80183E88(D_8017080C, 3, -1, 0, -1, 0, 1);
+            }
+            if (!(D_801E6DA0.unk4 & 0x20) && (D_801E6DA0.unk0 & 0x20)) {
+                if (D_801DFEC0 < 0) {
+                    D_801DFEC0 = 0;
+                }
+                func_8018884C(arg0, n, 0);
+            } else if (!(D_801E6DA0.unk4 & 0x40) && (D_801E6DA0.unk0 & 0x40)) {
+                if (D_801DFEC0 >= 0) {
+                    D_801DFEC0 = -1;
+                }
+                func_8018884C(arg0, n, 0);
+            } else if (!(D_801E6DA0.unk4 & 0x1000) && (D_801E6DA0.unk0 & 0x1000)) {
+                D_801DFEC0 = func_8018CEA0(1);
+            } else if (!(D_801E6DA0.unk4 & 0x4000) && (D_801E6DA0.unk0 & 0x4000)) {
+                D_801DFEC0 = func_8018CEA0(0);
+            }
+        }
+        return 1;
+    }
+    if (p->unk30 == 0) {
+        return 0;
+    }
+    if (func_8019A6A4() != 0) {
+        return 0;
+    }
+    if (!(D_801E6DA0.unk4 & 0x800) && (D_801E6DA0.unk0 & 0x800)) {
+        if (g->unk24C != 0) {
+            return 0;
+        }
+        if (func_8018884C(arg0, n, 1) != 0) {
+            q->unk42 |= 0x4000;
+        }
+    }
+    if (D_801DFEC4 != 0 && func_8018D1F0() == 0) {
+        D_801DFEC4 = 0;
+        func_80184094();
+    }
+    return 0;
+}
 
 s32 func_80188C24(s16 arg0, s16 arg1) {
     Unk_801E0710 *g = &D_801E0710;

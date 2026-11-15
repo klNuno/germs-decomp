@@ -1,22 +1,22 @@
 {
  "schema_version": 1,
- "commit": "346a837",
+ "commit": "4b08746",
  "tracked_tree_dirty": true,
  "exe_sha1": "178e728643d9b456436f4d19c9e07db11ab8aa2c",
  "metric": "Code bytes of each function (.text of the link map). asm: still INCLUDE_ASM; c: matching C whose body still carries names we did not choose; read: matching C with only our names.",
  "totals": {
   "functions": 655,
   "bytes": 272276,
-  "bytes_in_c": 241116,
-  "functions_in_c": 629,
+  "bytes_in_c": 245568,
+  "functions_in_c": 635,
   "levels": {
    "asm": {
-    "functions": 26,
-    "bytes": 31160
+    "functions": 20,
+    "bytes": 26708
    },
    "c": {
-    "functions": 629,
-    "bytes": 241116
+    "functions": 635,
+    "bytes": 245568
    },
    "read": {
     "functions": 0,
@@ -34,10 +34,10 @@
    }
   },
   "unknowns": {
-   "unk_fields": 4174,
-   "m2c_names": 902,
-   "unk_types": 999,
-   "d_globals": 1377
+   "unk_fields": 4249,
+   "m2c_names": 912,
+   "unk_types": 1017,
+   "d_globals": 1400
   },
   "sony_symbols": 643,
   "sony_bytes": 138048
@@ -93,7 +93,11 @@
      "name": "func_80173A44",
      "address": "0x80173A44",
      "bytes": 924,
-     "level": "asm"
+     "unk_fields": 5,
+     "m2c_names": 1,
+     "unk_types": 5,
+     "d_globals": 8,
+     "level": "c"
     },
     {
      "name": "func_80173DE0",
@@ -241,7 +245,7 @@
    "unit": "src/game/8017546C.c",
    "game": true,
    "library": "game",
-   "bytes": 17372,
+   "bytes": 5260,
    "functions": [
     {
      "name": "func_8017546C",
@@ -257,7 +261,11 @@
      "name": "func_801759B0",
      "address": "0x801759B0",
      "bytes": 808,
-     "level": "asm"
+     "unk_fields": 21,
+     "m2c_names": 0,
+     "unk_types": 5,
+     "d_globals": 5,
+     "level": "c"
     },
     {
      "name": "func_80175CD8",
@@ -388,7 +396,15 @@
      "unk_types": 2,
      "d_globals": 1,
      "level": "c"
-    },
+    }
+   ]
+  },
+  {
+   "unit": "src/game/801768F8.c",
+   "game": true,
+   "library": "game",
+   "bytes": 12112,
+   "functions": [
     {
      "name": "func_801768F8",
      "address": "0x801768F8",
@@ -1025,7 +1041,11 @@
      "name": "func_8017FF0C",
      "address": "0x8017FF0C",
      "bytes": 916,
-     "level": "asm"
+     "unk_fields": 7,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
     },
     {
      "name": "func_801802A0",
@@ -1923,7 +1943,11 @@
      "name": "func_8018898C",
      "address": "0x8018898C",
      "bytes": 664,
-     "level": "asm"
+     "unk_fields": 7,
+     "m2c_names": 2,
+     "unk_types": 3,
+     "d_globals": 5,
+     "level": "c"
     },
     {
      "name": "func_80188C24",
@@ -3773,7 +3797,11 @@
      "name": "func_8019FDD8",
      "address": "0x8019FDD8",
      "bytes": 788,
-     "level": "asm"
+     "unk_fields": 22,
+     "m2c_names": 3,
+     "unk_types": 2,
+     "d_globals": 3,
+     "level": "c"
     },
     {
      "name": "func_801A00EC",
@@ -3821,7 +3849,11 @@
      "name": "func_801A06C0",
      "address": "0x801A06C0",
      "bytes": 352,
-     "level": "asm"
+     "unk_fields": 13,
+     "m2c_names": 3,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
     },
     {
      "name": "func_801A0820",
