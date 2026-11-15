@@ -132,6 +132,10 @@ def normalize(unit):
         if key not in seen:
             seen.add(key)
             uniq.append(d)
+    # A forward `typedef struct X X;` beside the full `typedef struct X {...} X;` is a
+    # redefinition for cc1: the full one stays.
+    full = {type_name(d) for d in uniq if re.match(r"\s*typedef\s+struct\s+\w+\s*\{", d)}
+    uniq = [d for d in uniq if forward_typedef(d) not in full]
     uniq = order_types(uniq)
     out = "\n".join(includes) + "\n\n"
     if uniq:
@@ -140,6 +144,12 @@ def normalize(unit):
     if tail:
         out += "\n" + "\n".join(tail) + "\n"
     return out
+
+
+def forward_typedef(item):
+    """X for `typedef struct X X;`, else None."""
+    m = re.fullmatch(r"\s*typedef\s+struct\s+(\w+)\s+\1\s*;\s*", item)
+    return m.group(1) if m else None
 
 
 def order_types(decls):
@@ -181,6 +191,120 @@ def type_name(item):
     return m.group(1) if m else None
 
 
+SIZES = {"u8": 1, "s8": 1, "char": 1, "u16": 2, "s16": 2, "short": 2,
+         "u32": 4, "s32": 4, "int": 4, "long": 4, "float": 4, "unsigned": 4}
+DECLARATOR = re.compile(r"^(\**)\s*(unk|pad)([0-9A-Fa-f]+)\s*(?:\[\s*(0x[0-9A-Fa-f]+|\d+)\s*\])?$")
+
+
+def struct_fields(item):
+    """(head, tail, fields) of a struct whose members are all named unkXX or padXX (XX = the
+    offset), None for any other shape. A field is [offset, size or None, text, kind]: kind "pad"
+    for padXX, "soft" for a byte array (an unknown area), else "hard"."""
+    code = re.sub(r"/\*.*?\*/", "", item, flags=re.S)
+    code = re.sub(r"//[^\n]*", "", code)
+    if "{" not in code or "}" not in code:
+        return None
+    lo, hi = code.index("{"), code.rindex("}")
+    head, tail, body = code[:lo + 1].strip(), code[hi:].strip(), code[lo + 1:hi]
+    members, depth, buf = [], 0, ""
+    for ch in body:
+        buf += ch
+        depth += (ch == "{") - (ch == "}")
+        if ch == ";" and depth == 0:
+            members.append(buf.strip())
+            buf = ""
+    if buf.strip() or not members:
+        return None
+    fields = []
+    for mem in members:
+        mem = mem[:-1].strip()
+        if "{" in mem:  # a nested struct or union: one member named after its closing brace
+            text, decls = mem[:mem.rindex("}") + 1], [mem[mem.rindex("}") + 1:].strip()]
+            base = None
+        else:
+            m = re.match(r"^((?:const\s+|volatile\s+|struct\s+|union\s+|unsigned\s+|signed\s+)*\w+)\s+(.+)$", mem, re.S)
+            if not m or "(" in mem or ":" in mem:
+                return None
+            text, decls, base = m.group(1), m.group(2).split(","), m.group(1).split()[-1]
+        for decl in decls:
+            d = DECLARATOR.match(decl.strip())
+            if not d:
+                return None
+            ptr, kind, off, count = d.groups()
+            elem = 4 if ptr else SIZES.get(base)
+            n = int(count, 0) if count else 1
+            name = f"{ptr}{kind}{off}" + (f"[{count}]" if count else "")
+            if "\n" in text:
+                line = "    " + "\n    ".join(l.strip() if i in (0, text.count("\n")) else "    " + l.strip()
+                                             for i, l in enumerate(text.splitlines())) + f" {name};"
+            else:
+                line = f"    {' '.join(text.split())} {name};"
+            soft = not ptr and count and base in ("u8", "s8", "char")
+            fields.append([int(off, 16), elem * n if elem else None, line,
+                           "pad" if kind == "pad" else "soft" if soft else "hard"])
+    fields.sort(key=lambda f: f[0])
+    for x, y in zip(fields, fields[1:]):  # a struct-typed member spans up to the next member
+        if x[1] is None:
+            x[1] = y[0] - x[0]
+    return head, tail, fields
+
+
+def merge_struct(old, new):
+    """One struct from two layouts of it, or None when they disagree. Every member of both is
+    kept; a finer member replaces a coarser one only when finer ones cover it exactly (an s32
+    split into two s16); at the same offset and size the new member wins; a byte array is cut
+    short at the next member; gaps become padding."""
+    a, b = struct_fields(old), struct_fields(new)
+    if not a or not b or a[0] != b[0] or a[1] != b[1]:
+        return None
+    sizes = {(f[0], f[2]): f[1] for f in a[2] + b[2] if f[1] is not None}
+    for f in a[2] + b[2]:
+        if f[1] is None:
+            f[1] = sizes.get((f[0], f[2]))
+    hard = {}
+    for f in a[2] + b[2]:
+        if f[3] == "hard":
+            hard[(f[0], f[1])] = f
+    fields = list(hard.values())
+    keep = []
+    for f in fields:
+        inner = [g for g in fields if g is not f and None not in (f[1], g[1]) and g[1] < f[1]
+                 and f[0] <= g[0] and g[0] + g[1] <= f[0] + f[1]]
+        if not inner:
+            keep.append(f)
+            continue
+        covered = set()
+        for g in inner:
+            covered |= set(range(g[0], g[0] + g[1]))
+        if covered != set(range(f[0], f[0] + f[1])):
+            return None
+    starts = {f[0] for f in keep}
+    soft = {}
+    for f in a[2] + b[2]:
+        if f[3] == "soft" and f[0] not in starts and (f[0] not in soft or f[1] < soft[f[0]][1]):
+            soft[f[0]] = f
+    keep += soft.values()
+    keep.sort(key=lambda f: f[0])
+    for i, f in enumerate(keep):
+        nxt = keep[i + 1][0] if i + 1 < len(keep) else None
+        if f[3] == "soft" and nxt is not None and f[0] + f[1] > nxt:
+            f[1] = nxt - f[0]
+            f[2] = re.sub(r"\[[^\]]*\];$", f"[0x{f[1]:X}];", f[2])
+        if nxt is not None and (f[1] is None or f[0] + f[1] > nxt):
+            return None
+    end = max(f[0] + (f[1] or 0) for f in a[2] + b[2])
+    out, pos = [a[0]], 0
+    for f in keep:
+        if f[0] > pos:
+            out.append(f"    u8 pad{pos:X}[0x{f[0] - pos:X}];")
+        out.append(f[2])
+        pos = f[0] + (f[1] or 0)
+    if keep and keep[-1][1] is not None and end > pos:
+        out.append(f"    u8 pad{pos:X}[0x{end - pos:X}];")
+    out.append(a[1])
+    return "\n".join(out)
+
+
 def replace_types(unit, items):
     """Items that redefine a type the unit already defines replace that definition in place
     (the new function's file extended a sibling's struct); make check then judges every user of it.
@@ -195,7 +319,7 @@ def replace_types(unit, items):
                     old = cand
                     break
         if old and old in unit:
-            unit = unit.replace(old, item, 1)
+            unit = unit.replace(old, merge_struct(old, item) or item, 1)
         else:
             rest.append(item)
     return unit, rest

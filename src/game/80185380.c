@@ -2,13 +2,21 @@
 
 typedef struct Unk_801854B8 {
     u16 unk0;
-    u8 unk2[4];
+    s16 unk2;
+    s16 unk4;
     s16 unk6;
-    u8 unk8[0xC];
+    s16 unk8;
+    s16 unkA;
+    s16 unkC;
+    s16 unkE;
+    s32 unk10;
     s32 unk14;
     s32 unk18;
     s32 unk1C;
-    u8 unk20[8];
+    s16 unk20;
+    s16 unk22;
+    s16 unk24;
+    s16 unk26;
     s32 unk28;
     u8 unk2C[0x14];
     s32 unk40;
@@ -35,8 +43,41 @@ void func_801CCCF4(Unk_801DFE80 *arg0, void *arg1);
 Unk_801DFE80 *D_801DFE80;
 void func_801CCDF8(Unk_801DFE80 *arg0);
 s16 func_801CD000(Unk_801DFE80 *arg0);
+void *func_801CC898(u32 size);
+void func_801CD54C(s32 arg0, char *arg1, char *arg2, s32 arg3);
+extern char D_801DFCE8[];
+typedef struct { s16 unk0; s16 unk2; s32 unk4; void *unk8; } Unk_801A3B5C;
+typedef struct { Unk_801A3B5C *unk0; s32 unk4; s32 unk8; s32 unkC; s32 unk10; s32 unk14; } Unk_801E02D8;
+extern Unk_801E02D8 D_801E02D8[];
+typedef struct { s16 unk0[3]; s16 unk6; s16 unk8[3]; s16 unkE; } Unk_801E1040;
+extern Unk_801E1040 D_801E1040;
+void SsSepSetVol(s16 access_num, s16 seq_num, s16 voll, s16 volr);
 
-INCLUDE_ASM("asm/nonmatchings/game/80185380", func_80185380);
+void func_80185380(Unk_801854B8 **arg0, u32 arg1) {
+    *arg0 = func_801CC898(0x80);
+    if (*arg0 == NULL) {
+        func_801CD54C(3, "Error Allocating DOOR Pointer", D_801DFCE8, 0x23);
+    }
+    (*arg0)->unk4 = 0;
+    (*arg0)->unk2 = 0;
+    (*arg0)->unk6 = 1;
+    (*arg0)->unk22 = 0;
+    (*arg0)->unk8 = 2;
+    (*arg0)->unkA = 0;
+    (*arg0)->unkC = 0;
+    (*arg0)->unkE = 0;
+    (*arg0)->unk22 = 0;
+    (*arg0)->unk24 = 0;
+    (*arg0)->unk10 = 0;
+    (*arg0)->unk78 = NULL;
+    (*arg0)->unk7C = NULL;
+    if (arg1 != 0) {
+        (*arg0)->unk7C = func_801CC898(arg1);
+        if ((*arg0)->unk7C == NULL) {
+            func_801CD54C(3, "Error Allocating DOOR Buffer", D_801DFCE8, 0x36);
+        }
+    }
+}
 
 void func_801854B8(Unk_801854B8 *arg0) {
     if (arg0 != NULL) {
@@ -146,4 +187,38 @@ void func_80185858(u16 arg0, s16 arg1) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/80185380", func_80185918);
+void func_80185918(Unk_801854B8 *arg0) {
+    Unk_801E1040 *p = &D_801E1040;
+    Unk_801A3B5C *q = D_801E02D8[0].unk0;
+    s32 v;
+    s32 t;
+
+    p->unkE = arg0->unk24;
+    if (arg0->unk22 < 2) {
+        if (p->unkE < 0) {
+            p->unkE = 0;
+        }
+    } else if (p->unkE < 0x80) {
+        p->unkE = 0x80;
+    }
+    if (p->unkE > 0x1000) {
+        p->unkE = 0x1000;
+    }
+    if (((s16)arg0->unk28 > 0 && arg0->unk24 >= arg0->unk26) ||
+        ((s16)arg0->unk28 < 0 && arg0->unk24 <= arg0->unk26)) {
+        if (arg0->unk22 != 0 && q != NULL && q->unk2 >= 0) {
+            t = arg0->unk24 >> 5;
+            v = 0x7F;
+            if (t < 0x80) {
+                v = (s16)t;
+                if (t < 0) {
+                    v = 0;
+                }
+            }
+            SsSepSetVol(q->unk0, q->unk2, v, v);
+        }
+        if (arg0->unk22 != 10) {
+            p->unk6 = 0;
+        }
+    }
+}
