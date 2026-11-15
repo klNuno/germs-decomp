@@ -41,6 +41,26 @@ typedef struct Unk_801CD78C {
 void srand(u32 seed);
 extern u32 D_801E6DAC[];
 extern char D_80172BB4[];
+typedef struct Unk_801DFAF8 {
+    s32 unk0;
+    char *unk4;
+} Unk_801DFAF8;
+extern Unk_801DFAF8 D_801DFAF8[];
+extern char D_80172CA8[];
+extern char D_80172CF0[];
+extern char D_80172D00[];
+extern char D_80172D10[];
+extern char D_80172D1C[];
+extern char D_80172D28[];
+extern char D_80172D34[];
+extern char D_801DFDD0[];
+extern char D_801DFDD4[];
+extern char D_801DFDD8[];
+extern char D_801DFDDC[];
+int printf(const char *fmt, ...);
+void exit(s32 code);
+void GsMapModelingData(u32 *p);
+extern char D_80172CC8[];
 
 void func_801CCAF4(Unk_801CCAF4 **arg0) {
     *arg0 = func_801CC898(0x10);
@@ -240,9 +260,78 @@ INCLUDE_RODATA("asm/nonmatchings/kaj/801CCAF4", D_80172D34);
 
 INCLUDE_ASM("asm/nonmatchings/kaj/801CCAF4", func_801CD028);
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801CCAF4", func_801CD3F0);
+s32 func_801CD3F0(u32 *arg0) {
+    char *msg;
+    char *file;
+    char *s;
+    s32 code;
+    s32 i;
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801CCAF4", func_801CD54C);
+    if (arg0[0] != 0x41) {
+        msg = D_80172D34;
+        file = D_801DFDDC;
+        code = 10;
+        if (file == NULL) {
+            printf(D_80172CA8);
+        }
+        s = D_80172CF0;
+        for (i = 0; D_801DFAF8[i].unk0 != 15; i++) {
+            if (D_801DFAF8[i].unk0 == code) {
+                s = D_801DFAF8[i].unk4;
+                break;
+            }
+        }
+        printf(D_80172D00, 10);
+        if (*s != 0) {
+            printf(D_801DFDD0);
+            printf(D_801DFDD4, s);
+        }
+        printf(D_80172D10);
+        printf(file);
+        printf(D_80172D1C, 0xA6);
+        if (msg != NULL) {
+            printf(D_80172D28);
+            printf(D_801DFDD4, msg);
+        }
+        printf(D_801DFDD8);
+        exit(10);
+    }
+    GsMapModelingData(arg0 + 1);
+    return arg0[2];
+}
+
+void func_801CD54C(s32 arg0, char *arg1, char *arg2, s32 arg3) {
+    char *s;
+    s32 i;
+
+    if (arg2 == NULL) {
+        printf(D_80172CA8);
+    }
+    if (arg3 < 0) {
+        printf(D_80172CC8, arg3);
+    }
+    s = D_80172CF0;
+    for (i = 0; D_801DFAF8[i].unk0 != 15; i++) {
+        if (D_801DFAF8[i].unk0 == arg0) {
+            s = D_801DFAF8[i].unk4;
+            break;
+        }
+    }
+    printf(D_80172D00, arg0);
+    if (*s != 0) {
+        printf(D_801DFDD0);
+        printf(D_801DFDD4, s);
+    }
+    printf(D_80172D10);
+    printf(arg2);
+    printf(D_80172D1C, arg3);
+    if (arg1 != NULL) {
+        printf(D_80172D28);
+        printf(D_801DFDD4, arg1);
+    }
+    printf(D_801DFDD8);
+    exit(arg0);
+}
 
 void func_801CD688(s16 arg0) {
     D_801E6DA0.unk0 = 0;

@@ -26,6 +26,13 @@ typedef struct Unk_801CC1E8 {
 } Unk_801CC1E8;
 void *func_801CC898(u32 size);
 void *memcpy(void *dst, void *src, u32 n);
+s32 D_801DFFC8;
+void EnterCriticalSection(void);
+void ExitCriticalSection(void);
+extern u32 D_801E6DAC[];
+void func_801CBCE0(void);
+void func_801CFEB0(s32 arg0, s32 arg1, s32 arg2);
+void func_801D0414(s32 arg0);
 
 void func_801CBCE0(void) {
     u32 q;
@@ -49,7 +56,49 @@ void func_801CBCE0(void) {
 
 INCLUDE_ASM("asm/nonmatchings/kaj/801CBCE0", func_801CBDF0);
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801CBCE0", func_801CC02C);
+s32 func_801CC02C(s32 *arg0) {
+    Unk_801CC1E8 *e;
+    Unk_801CC1E8 *p;
+    Unk_801DFAD4 *q;
+
+    EnterCriticalSection();
+    if (D_801DFFC4 == 1) {
+        arg0[1] = D_801DFFC8;
+        arg0[0] = D_801DFFC4;
+        D_801DFFC4 = 0;
+        ExitCriticalSection();
+        return 1;
+    }
+loop:
+    q = &D_801DFAD4;
+    while (q->unkC != 0) {
+        p = (Unk_801CC1E8 *)(q->unk8 * sizeof(Unk_801CC1E8) + (u32)q->unk0);
+        if (p->unk0 != 0) {
+            e = p;
+            goto found;
+        }
+        q->unk8 = (q->unk8 + 1) % q->unk10;
+        q->unkC--;
+    }
+    e = NULL;
+found:
+    if (e != NULL) {
+        *(Unk_801CC1E8 *)arg0 = *e;
+        if (e == &((Unk_801CC1E8 *)D_801DFAD4.unk0)[D_801DFAD4.unk8]) {
+            D_801DFAD4.unk8 = (D_801DFAD4.unk8 + 1) % D_801DFAD4.unk10;
+            D_801DFAD4.unkC--;
+        } else {
+            e->unk0 = 0;
+        }
+        if (arg0[0] == 0) {
+            goto loop;
+        }
+    } else {
+        arg0[0] = 0;
+    }
+    ExitCriticalSection();
+    return arg0[0];
+}
 
 INCLUDE_ASM("asm/nonmatchings/kaj/801CBCE0", func_801CC1E8);
 
@@ -68,9 +117,72 @@ s32 func_801CC378(s32 *arg0) {
     return *arg0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801CBCE0", func_801CC3DC);
+s32 func_801CC3DC(s32 arg0, s32 arg1, s32 arg2) {
+    Unk_801DFAD4 *q;
+    Unk_801CC1E8 *e;
+    s32 i;
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801CBCE0", func_801CC514);
+    EnterCriticalSection();
+    if (arg1 == 0) {
+        arg1 = D_801DFFC0--;
+        if (D_801DFFC0 < 0) {
+            D_801DFFC0 = 0x3E9;
+        }
+    }
+    if (arg0 == 0) {
+        q = &D_801DFAD4;
+        if (q->unk10 == q->unkC) {
+            func_801CBCE0();
+        }
+        i = q->unk4;
+        q->unkC++;
+        q->unk4 = (i + 1) % q->unk10;
+        e = &((Unk_801CC1E8 *)D_801DFAD4.unk0)[i];
+        e->unk0 = 2;
+        e->unk4 = D_801E6DAC[0];
+        if (e != NULL) {
+            e->unk8 = arg1;
+            e->unkC = arg2;
+        } else {
+            arg1 = -1;
+        }
+    } else {
+        func_801CFEB0(arg0, arg1, arg2);
+    }
+    ExitCriticalSection();
+    return arg1;
+}
+
+void func_801CC514(s32 arg0, s32 arg1) {
+    Unk_801DFAD4 *q;
+    s32 n;
+    s32 i;
+    s32 t;
+
+    q = &D_801DFAD4;
+    if (arg0 & 1) {
+        D_801DFFC4 = 0;
+    }
+    n = 0;
+    EnterCriticalSection();
+    i = q->unk8;
+    for (; n < q->unkC; n++) {
+        t = ((Unk_801CC1E8 *)q->unk0)[i].unk0;
+        if (t & arg0) {
+            if (t == 0x100) {
+                func_801D1300(((Unk_801CC1E8 *)q->unk0)[arg1].unk8);
+            }
+            if (t != 2 || arg1 == 0 || ((Unk_801CC1E8 *)q->unk0)[i].unk8 == arg1) {
+                ((Unk_801CC1E8 *)q->unk0)[i].unk0 = 0;
+            }
+        }
+        i = (i + 1) % q->unk10;
+    }
+    ExitCriticalSection();
+    if (arg0 & 2) {
+        func_801D0414(arg1);
+    }
+}
 
 void func_801CC68C(void) {
     D_801DFAD4.unk10 = 0x40;

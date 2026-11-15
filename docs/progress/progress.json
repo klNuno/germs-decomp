@@ -1,0 +1,9903 @@
+{
+ "schema_version": 1,
+ "commit": "89801c9",
+ "tracked_tree_dirty": true,
+ "exe_sha1": "178e728643d9b456436f4d19c9e07db11ab8aa2c",
+ "metric": "Code bytes of each function (.text of the link map). asm: still INCLUDE_ASM; c: matching C whose body still carries names we did not choose; read: matching C with only our names.",
+ "totals": {
+  "functions": 655,
+  "bytes": 272276,
+  "bytes_in_c": 93000,
+  "functions_in_c": 451,
+  "levels": {
+   "asm": {
+    "functions": 204,
+    "bytes": 179276
+   },
+   "c": {
+    "functions": 451,
+    "bytes": 93000
+   },
+   "read": {
+    "functions": 0,
+    "bytes": 0
+   }
+  },
+  "libraries": {
+   "game": {
+    "functions": 510,
+    "bytes": 235900
+   },
+   "kaj": {
+    "functions": 145,
+    "bytes": 36376
+   }
+  },
+  "unknowns": {
+   "unk_fields": 2212,
+   "m2c_names": 488,
+   "unk_types": 560,
+   "d_globals": 783
+  },
+  "sony_symbols": 643,
+  "sony_bytes": 138048
+ },
+ "units": [
+  {
+   "unit": "src/game/80173054.c",
+   "game": true,
+   "library": "game",
+   "bytes": 9240,
+   "functions": [
+    {
+     "name": "func_80173054",
+     "address": "0x80173054",
+     "bytes": 508,
+     "level": "asm"
+    },
+    {
+     "name": "func_80173250",
+     "address": "0x80173250",
+     "bytes": 524,
+     "level": "asm"
+    },
+    {
+     "name": "func_8017345C",
+     "address": "0x8017345C",
+     "bytes": 1272,
+     "level": "asm"
+    },
+    {
+     "name": "func_80173954",
+     "address": "0x80173954",
+     "bytes": 240,
+     "unk_fields": 7,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80173A44",
+     "address": "0x80173A44",
+     "bytes": 924,
+     "level": "asm"
+    },
+    {
+     "name": "func_80173DE0",
+     "address": "0x80173DE0",
+     "bytes": 2656,
+     "level": "asm"
+    },
+    {
+     "name": "func_80174840",
+     "address": "0x80174840",
+     "bytes": 424,
+     "unk_fields": 10,
+     "m2c_names": 1,
+     "unk_types": 3,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801749E8",
+     "address": "0x801749E8",
+     "bytes": 44,
+     "unk_fields": 2,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80174A14",
+     "address": "0x80174A14",
+     "bytes": 252,
+     "unk_fields": 5,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80174B10",
+     "address": "0x80174B10",
+     "bytes": 184,
+     "unk_fields": 3,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_80174BC8",
+     "address": "0x80174BC8",
+     "bytes": 240,
+     "unk_fields": 4,
+     "m2c_names": 0,
+     "unk_types": 3,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80174CB8",
+     "address": "0x80174CB8",
+     "bytes": 180,
+     "unk_fields": 4,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80174D6C",
+     "address": "0x80174D6C",
+     "bytes": 244,
+     "unk_fields": 5,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80174E60",
+     "address": "0x80174E60",
+     "bytes": 244,
+     "unk_fields": 6,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80174F54",
+     "address": "0x80174F54",
+     "bytes": 84,
+     "unk_fields": 3,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80174FA8",
+     "address": "0x80174FA8",
+     "bytes": 84,
+     "unk_fields": 2,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80174FFC",
+     "address": "0x80174FFC",
+     "bytes": 416,
+     "unk_fields": 19,
+     "m2c_names": 2,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8017519C",
+     "address": "0x8017519C",
+     "bytes": 344,
+     "unk_fields": 20,
+     "m2c_names": 0,
+     "unk_types": 3,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801752F4",
+     "address": "0x801752F4",
+     "bytes": 376,
+     "unk_fields": 9,
+     "m2c_names": 2,
+     "unk_types": 3,
+     "d_globals": 1,
+     "level": "c"
+    }
+   ]
+  },
+  {
+   "unit": "src/game/8017546C.c",
+   "game": true,
+   "library": "game",
+   "bytes": 17372,
+   "functions": [
+    {
+     "name": "func_8017546C",
+     "address": "0x8017546C",
+     "bytes": 1348,
+     "level": "asm"
+    },
+    {
+     "name": "func_801759B0",
+     "address": "0x801759B0",
+     "bytes": 808,
+     "level": "asm"
+    },
+    {
+     "name": "func_80175CD8",
+     "address": "0x80175CD8",
+     "bytes": 720,
+     "level": "asm"
+    },
+    {
+     "name": "func_80175FA8",
+     "address": "0x80175FA8",
+     "bytes": 760,
+     "level": "asm"
+    },
+    {
+     "name": "func_801762A0",
+     "address": "0x801762A0",
+     "bytes": 84,
+     "unk_fields": 2,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801762F4",
+     "address": "0x801762F4",
+     "bytes": 124,
+     "unk_fields": 4,
+     "m2c_names": 2,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80176370",
+     "address": "0x80176370",
+     "bytes": 244,
+     "unk_fields": 7,
+     "m2c_names": 1,
+     "unk_types": 4,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80176464",
+     "address": "0x80176464",
+     "bytes": 344,
+     "unk_fields": 8,
+     "m2c_names": 4,
+     "unk_types": 3,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801765BC",
+     "address": "0x801765BC",
+     "bytes": 152,
+     "unk_fields": 8,
+     "m2c_names": 0,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80176654",
+     "address": "0x80176654",
+     "bytes": 224,
+     "unk_fields": 10,
+     "m2c_names": 3,
+     "unk_types": 3,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80176734",
+     "address": "0x80176734",
+     "bytes": 76,
+     "unk_fields": 2,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_80176780",
+     "address": "0x80176780",
+     "bytes": 84,
+     "unk_fields": 2,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801767D4",
+     "address": "0x801767D4",
+     "bytes": 104,
+     "unk_fields": 3,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8017683C",
+     "address": "0x8017683C",
+     "bytes": 84,
+     "unk_fields": 2,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80176890",
+     "address": "0x80176890",
+     "bytes": 104,
+     "unk_fields": 3,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801768F8",
+     "address": "0x801768F8",
+     "bytes": 1332,
+     "level": "asm"
+    },
+    {
+     "name": "func_80176E2C",
+     "address": "0x80176E2C",
+     "bytes": 400,
+     "unk_fields": 9,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_80176FBC",
+     "address": "0x80176FBC",
+     "bytes": 340,
+     "unk_fields": 9,
+     "m2c_names": 2,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80177110",
+     "address": "0x80177110",
+     "bytes": 348,
+     "unk_fields": 7,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8017726C",
+     "address": "0x8017726C",
+     "bytes": 924,
+     "level": "asm"
+    },
+    {
+     "name": "func_80177608",
+     "address": "0x80177608",
+     "bytes": 944,
+     "level": "asm"
+    },
+    {
+     "name": "func_801779B8",
+     "address": "0x801779B8",
+     "bytes": 2780,
+     "level": "asm"
+    },
+    {
+     "name": "func_80178494",
+     "address": "0x80178494",
+     "bytes": 524,
+     "level": "asm"
+    },
+    {
+     "name": "func_801786A0",
+     "address": "0x801786A0",
+     "bytes": 300,
+     "unk_fields": 4,
+     "m2c_names": 2,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801787CC",
+     "address": "0x801787CC",
+     "bytes": 300,
+     "unk_fields": 4,
+     "m2c_names": 2,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801788F8",
+     "address": "0x801788F8",
+     "bytes": 652,
+     "level": "asm"
+    },
+    {
+     "name": "func_80178B84",
+     "address": "0x80178B84",
+     "bytes": 384,
+     "unk_fields": 14,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_80178D04",
+     "address": "0x80178D04",
+     "bytes": 308,
+     "unk_fields": 7,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 7,
+     "level": "c"
+    },
+    {
+     "name": "func_80178E38",
+     "address": "0x80178E38",
+     "bytes": 836,
+     "level": "asm"
+    },
+    {
+     "name": "func_8017917C",
+     "address": "0x8017917C",
+     "bytes": 1204,
+     "level": "asm"
+    },
+    {
+     "name": "func_80179630",
+     "address": "0x80179630",
+     "bytes": 536,
+     "level": "asm"
+    }
+   ]
+  },
+  {
+   "unit": "src/game/80179848.c",
+   "game": true,
+   "library": "game",
+   "bytes": 21424,
+   "functions": [
+    {
+     "name": "func_80179848",
+     "address": "0x80179848",
+     "bytes": 1032,
+     "level": "asm"
+    },
+    {
+     "name": "func_80179C50",
+     "address": "0x80179C50",
+     "bytes": 512,
+     "level": "asm"
+    },
+    {
+     "name": "func_80179E50",
+     "address": "0x80179E50",
+     "bytes": 696,
+     "level": "asm"
+    },
+    {
+     "name": "func_8017A108",
+     "address": "0x8017A108",
+     "bytes": 732,
+     "level": "asm"
+    },
+    {
+     "name": "func_8017A3E4",
+     "address": "0x8017A3E4",
+     "bytes": 336,
+     "unk_fields": 13,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 4,
+     "level": "c"
+    },
+    {
+     "name": "func_8017A534",
+     "address": "0x8017A534",
+     "bytes": 436,
+     "unk_fields": 2,
+     "m2c_names": 3,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_8017A6E8",
+     "address": "0x8017A6E8",
+     "bytes": 388,
+     "unk_fields": 3,
+     "m2c_names": 2,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8017A86C",
+     "address": "0x8017A86C",
+     "bytes": 584,
+     "level": "asm"
+    },
+    {
+     "name": "func_8017AAB4",
+     "address": "0x8017AAB4",
+     "bytes": 468,
+     "unk_fields": 4,
+     "m2c_names": 3,
+     "unk_types": 2,
+     "d_globals": 5,
+     "level": "c"
+    },
+    {
+     "name": "func_8017AC88",
+     "address": "0x8017AC88",
+     "bytes": 656,
+     "level": "asm"
+    },
+    {
+     "name": "func_8017AF18",
+     "address": "0x8017AF18",
+     "bytes": 720,
+     "level": "asm"
+    },
+    {
+     "name": "func_8017B1E8",
+     "address": "0x8017B1E8",
+     "bytes": 512,
+     "level": "asm"
+    },
+    {
+     "name": "func_8017B3E8",
+     "address": "0x8017B3E8",
+     "bytes": 996,
+     "level": "asm"
+    },
+    {
+     "name": "func_8017B7CC",
+     "address": "0x8017B7CC",
+     "bytes": 996,
+     "level": "asm"
+    },
+    {
+     "name": "func_8017BBB0",
+     "address": "0x8017BBB0",
+     "bytes": 372,
+     "unk_fields": 13,
+     "m2c_names": 4,
+     "unk_types": 3,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8017BD24",
+     "address": "0x8017BD24",
+     "bytes": 556,
+     "level": "asm"
+    },
+    {
+     "name": "func_8017BF50",
+     "address": "0x8017BF50",
+     "bytes": 740,
+     "level": "asm"
+    },
+    {
+     "name": "func_8017C234",
+     "address": "0x8017C234",
+     "bytes": 1988,
+     "level": "asm"
+    },
+    {
+     "name": "func_8017C9F8",
+     "address": "0x8017C9F8",
+     "bytes": 208,
+     "unk_fields": 6,
+     "m2c_names": 2,
+     "unk_types": 3,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8017CAC8",
+     "address": "0x8017CAC8",
+     "bytes": 208,
+     "unk_fields": 6,
+     "m2c_names": 2,
+     "unk_types": 0,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_8017CB98",
+     "address": "0x8017CB98",
+     "bytes": 332,
+     "unk_fields": 13,
+     "m2c_names": 2,
+     "unk_types": 0,
+     "d_globals": 3,
+     "level": "c"
+    },
+    {
+     "name": "func_8017CCE4",
+     "address": "0x8017CCE4",
+     "bytes": 192,
+     "unk_fields": 7,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_8017CDA4",
+     "address": "0x8017CDA4",
+     "bytes": 364,
+     "unk_fields": 10,
+     "m2c_names": 3,
+     "unk_types": 3,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_8017CF10",
+     "address": "0x8017CF10",
+     "bytes": 212,
+     "unk_fields": 11,
+     "m2c_names": 3,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8017CFE4",
+     "address": "0x8017CFE4",
+     "bytes": 252,
+     "unk_fields": 5,
+     "m2c_names": 3,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8017D0E0",
+     "address": "0x8017D0E0",
+     "bytes": 144,
+     "unk_fields": 4,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8017D170",
+     "address": "0x8017D170",
+     "bytes": 76,
+     "unk_fields": 3,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8017D1BC",
+     "address": "0x8017D1BC",
+     "bytes": 252,
+     "unk_fields": 9,
+     "m2c_names": 0,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8017D2B8",
+     "address": "0x8017D2B8",
+     "bytes": 312,
+     "unk_fields": 11,
+     "m2c_names": 0,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8017D3F0",
+     "address": "0x8017D3F0",
+     "bytes": 36,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8017D414",
+     "address": "0x8017D414",
+     "bytes": 336,
+     "unk_fields": 12,
+     "m2c_names": 5,
+     "unk_types": 3,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_8017D564",
+     "address": "0x8017D564",
+     "bytes": 16,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8017D574",
+     "address": "0x8017D574",
+     "bytes": 144,
+     "unk_fields": 2,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 4,
+     "level": "c"
+    },
+    {
+     "name": "func_8017D604",
+     "address": "0x8017D604",
+     "bytes": 1252,
+     "level": "asm"
+    },
+    {
+     "name": "func_8017DAE8",
+     "address": "0x8017DAE8",
+     "bytes": 648,
+     "level": "asm"
+    },
+    {
+     "name": "func_8017DD70",
+     "address": "0x8017DD70",
+     "bytes": 564,
+     "level": "asm"
+    },
+    {
+     "name": "func_8017DFA4",
+     "address": "0x8017DFA4",
+     "bytes": 696,
+     "level": "asm"
+    },
+    {
+     "name": "func_8017E25C",
+     "address": "0x8017E25C",
+     "bytes": 680,
+     "level": "asm"
+    },
+    {
+     "name": "func_8017E504",
+     "address": "0x8017E504",
+     "bytes": 64,
+     "unk_fields": 1,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8017E544",
+     "address": "0x8017E544",
+     "bytes": 80,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8017E594",
+     "address": "0x8017E594",
+     "bytes": 1032,
+     "level": "asm"
+    },
+    {
+     "name": "func_8017E99C",
+     "address": "0x8017E99C",
+     "bytes": 604,
+     "level": "asm"
+    }
+   ]
+  },
+  {
+   "unit": "src/game/8017EBF8.c",
+   "game": true,
+   "library": "game",
+   "bytes": 26504,
+   "functions": [
+    {
+     "name": "func_8017EBF8",
+     "address": "0x8017EBF8",
+     "bytes": 564,
+     "level": "asm"
+    },
+    {
+     "name": "func_8017EE2C",
+     "address": "0x8017EE2C",
+     "bytes": 448,
+     "unk_fields": 3,
+     "m2c_names": 2,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_8017EFEC",
+     "address": "0x8017EFEC",
+     "bytes": 1800,
+     "level": "asm"
+    },
+    {
+     "name": "func_8017F6F4",
+     "address": "0x8017F6F4",
+     "bytes": 2072,
+     "level": "asm"
+    },
+    {
+     "name": "func_8017FF0C",
+     "address": "0x8017FF0C",
+     "bytes": 916,
+     "level": "asm"
+    },
+    {
+     "name": "func_801802A0",
+     "address": "0x801802A0",
+     "bytes": 284,
+     "unk_fields": 4,
+     "m2c_names": 2,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801803BC",
+     "address": "0x801803BC",
+     "bytes": 896,
+     "level": "asm"
+    },
+    {
+     "name": "func_8018073C",
+     "address": "0x8018073C",
+     "bytes": 436,
+     "unk_fields": 3,
+     "m2c_names": 3,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801808F0",
+     "address": "0x801808F0",
+     "bytes": 532,
+     "level": "asm"
+    },
+    {
+     "name": "func_80180B04",
+     "address": "0x80180B04",
+     "bytes": 648,
+     "level": "asm"
+    },
+    {
+     "name": "func_80180D8C",
+     "address": "0x80180D8C",
+     "bytes": 2240,
+     "level": "asm"
+    },
+    {
+     "name": "func_8018164C",
+     "address": "0x8018164C",
+     "bytes": 460,
+     "unk_fields": 3,
+     "m2c_names": 3,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80181818",
+     "address": "0x80181818",
+     "bytes": 588,
+     "level": "asm"
+    },
+    {
+     "name": "func_80181A64",
+     "address": "0x80181A64",
+     "bytes": 428,
+     "unk_fields": 4,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80181C10",
+     "address": "0x80181C10",
+     "bytes": 284,
+     "unk_fields": 2,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_80181D2C",
+     "address": "0x80181D2C",
+     "bytes": 624,
+     "level": "asm"
+    },
+    {
+     "name": "func_80181F9C",
+     "address": "0x80181F9C",
+     "bytes": 868,
+     "level": "asm"
+    },
+    {
+     "name": "func_80182300",
+     "address": "0x80182300",
+     "bytes": 536,
+     "level": "asm"
+    },
+    {
+     "name": "func_80182518",
+     "address": "0x80182518",
+     "bytes": 840,
+     "level": "asm"
+    },
+    {
+     "name": "func_80182860",
+     "address": "0x80182860",
+     "bytes": 1236,
+     "level": "asm"
+    },
+    {
+     "name": "func_80182D34",
+     "address": "0x80182D34",
+     "bytes": 876,
+     "level": "asm"
+    },
+    {
+     "name": "func_801830A0",
+     "address": "0x801830A0",
+     "bytes": 332,
+     "unk_fields": 0,
+     "m2c_names": 2,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801831EC",
+     "address": "0x801831EC",
+     "bytes": 704,
+     "level": "asm"
+    },
+    {
+     "name": "func_801834AC",
+     "address": "0x801834AC",
+     "bytes": 364,
+     "unk_fields": 10,
+     "m2c_names": 1,
+     "unk_types": 3,
+     "d_globals": 10,
+     "level": "c"
+    },
+    {
+     "name": "func_80183618",
+     "address": "0x80183618",
+     "bytes": 472,
+     "level": "asm"
+    },
+    {
+     "name": "func_801837F0",
+     "address": "0x801837F0",
+     "bytes": 1292,
+     "level": "asm"
+    },
+    {
+     "name": "func_80183CFC",
+     "address": "0x80183CFC",
+     "bytes": 396,
+     "unk_fields": 20,
+     "m2c_names": 1,
+     "unk_types": 5,
+     "d_globals": 10,
+     "level": "c"
+    },
+    {
+     "name": "func_80183E88",
+     "address": "0x80183E88",
+     "bytes": 524,
+     "level": "asm"
+    },
+    {
+     "name": "func_80184094",
+     "address": "0x80184094",
+     "bytes": 108,
+     "unk_fields": 1,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80184100",
+     "address": "0x80184100",
+     "bytes": 96,
+     "unk_fields": 2,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_80184160",
+     "address": "0x80184160",
+     "bytes": 100,
+     "unk_fields": 2,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801841C4",
+     "address": "0x801841C4",
+     "bytes": 108,
+     "unk_fields": 1,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 3,
+     "level": "c"
+    },
+    {
+     "name": "func_80184230",
+     "address": "0x80184230",
+     "bytes": 264,
+     "unk_fields": 9,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 5,
+     "level": "c"
+    },
+    {
+     "name": "func_80184338",
+     "address": "0x80184338",
+     "bytes": 208,
+     "unk_fields": 11,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 4,
+     "level": "c"
+    },
+    {
+     "name": "func_80184408",
+     "address": "0x80184408",
+     "bytes": 44,
+     "unk_fields": 1,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 3,
+     "level": "c"
+    },
+    {
+     "name": "func_80184434",
+     "address": "0x80184434",
+     "bytes": 160,
+     "unk_fields": 0,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 4,
+     "level": "c"
+    },
+    {
+     "name": "func_801844D4",
+     "address": "0x801844D4",
+     "bytes": 452,
+     "level": "asm"
+    },
+    {
+     "name": "func_80184698",
+     "address": "0x80184698",
+     "bytes": 380,
+     "unk_fields": 20,
+     "m2c_names": 0,
+     "unk_types": 5,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_80184814",
+     "address": "0x80184814",
+     "bytes": 276,
+     "unk_fields": 8,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_80184928",
+     "address": "0x80184928",
+     "bytes": 276,
+     "unk_fields": 8,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_80184A3C",
+     "address": "0x80184A3C",
+     "bytes": 276,
+     "unk_fields": 8,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_80184B50",
+     "address": "0x80184B50",
+     "bytes": 284,
+     "unk_fields": 8,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_80184C6C",
+     "address": "0x80184C6C",
+     "bytes": 608,
+     "level": "asm"
+    },
+    {
+     "name": "func_80184ECC",
+     "address": "0x80184ECC",
+     "bytes": 360,
+     "unk_fields": 10,
+     "m2c_names": 4,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80185034",
+     "address": "0x80185034",
+     "bytes": 360,
+     "unk_fields": 10,
+     "m2c_names": 3,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8018519C",
+     "address": "0x8018519C",
+     "bytes": 484,
+     "unk_fields": 8,
+     "m2c_names": 2,
+     "unk_types": 4,
+     "d_globals": 1,
+     "level": "c"
+    }
+   ]
+  },
+  {
+   "unit": "src/game/80185380.c",
+   "game": true,
+   "library": "game",
+   "bytes": 1760,
+   "functions": [
+    {
+     "name": "func_80185380",
+     "address": "0x80185380",
+     "bytes": 312,
+     "unk_fields": 12,
+     "m2c_names": 2,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801854B8",
+     "address": "0x801854B8",
+     "bytes": 68,
+     "unk_fields": 2,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801854FC",
+     "address": "0x801854FC",
+     "bytes": 76,
+     "unk_fields": 3,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80185548",
+     "address": "0x80185548",
+     "bytes": 128,
+     "unk_fields": 4,
+     "m2c_names": 0,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801855C8",
+     "address": "0x801855C8",
+     "bytes": 156,
+     "unk_fields": 4,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80185664",
+     "address": "0x80185664",
+     "bytes": 304,
+     "level": "asm"
+    },
+    {
+     "name": "func_80185794",
+     "address": "0x80185794",
+     "bytes": 196,
+     "unk_fields": 11,
+     "m2c_names": 3,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80185858",
+     "address": "0x80185858",
+     "bytes": 192,
+     "unk_fields": 5,
+     "m2c_names": 2,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80185918",
+     "address": "0x80185918",
+     "bytes": 328,
+     "unk_fields": 9,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 2,
+     "level": "c"
+    }
+   ]
+  },
+  {
+   "unit": "src/game/80185A60.c",
+   "game": true,
+   "library": "game",
+   "bytes": 14252,
+   "functions": [
+    {
+     "name": "func_80185A60",
+     "address": "0x80185A60",
+     "bytes": 384,
+     "unk_fields": 11,
+     "m2c_names": 3,
+     "unk_types": 3,
+     "d_globals": 5,
+     "level": "c"
+    },
+    {
+     "name": "func_80185BE0",
+     "address": "0x80185BE0",
+     "bytes": 600,
+     "level": "asm"
+    },
+    {
+     "name": "func_80185E38",
+     "address": "0x80185E38",
+     "bytes": 472,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 6,
+     "level": "c"
+    },
+    {
+     "name": "func_80186010",
+     "address": "0x80186010",
+     "bytes": 280,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 3,
+     "level": "c"
+    },
+    {
+     "name": "func_80186128",
+     "address": "0x80186128",
+     "bytes": 264,
+     "unk_fields": 9,
+     "m2c_names": 2,
+     "unk_types": 3,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_80186230",
+     "address": "0x80186230",
+     "bytes": 40,
+     "unk_fields": 2,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80186258",
+     "address": "0x80186258",
+     "bytes": 40,
+     "unk_fields": 2,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80186280",
+     "address": "0x80186280",
+     "bytes": 44,
+     "unk_fields": 2,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801862AC",
+     "address": "0x801862AC",
+     "bytes": 264,
+     "unk_fields": 14,
+     "m2c_names": 2,
+     "unk_types": 3,
+     "d_globals": 3,
+     "level": "c"
+    },
+    {
+     "name": "func_801863B4",
+     "address": "0x801863B4",
+     "bytes": 96,
+     "unk_fields": 3,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80186414",
+     "address": "0x80186414",
+     "bytes": 104,
+     "unk_fields": 2,
+     "m2c_names": 3,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8018647C",
+     "address": "0x8018647C",
+     "bytes": 224,
+     "unk_fields": 4,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 8,
+     "level": "c"
+    },
+    {
+     "name": "func_8018655C",
+     "address": "0x8018655C",
+     "bytes": 100,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801865C0",
+     "address": "0x801865C0",
+     "bytes": 112,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_80186630",
+     "address": "0x80186630",
+     "bytes": 80,
+     "unk_fields": 4,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 3,
+     "level": "c"
+    },
+    {
+     "name": "func_80186680",
+     "address": "0x80186680",
+     "bytes": 152,
+     "unk_fields": 4,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 6,
+     "level": "c"
+    },
+    {
+     "name": "func_80186718",
+     "address": "0x80186718",
+     "bytes": 100,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_8018677C",
+     "address": "0x8018677C",
+     "bytes": 108,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801867E8",
+     "address": "0x801867E8",
+     "bytes": 80,
+     "unk_fields": 4,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80186838",
+     "address": "0x80186838",
+     "bytes": 76,
+     "unk_fields": 6,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 3,
+     "level": "c"
+    },
+    {
+     "name": "func_80186884",
+     "address": "0x80186884",
+     "bytes": 140,
+     "unk_fields": 5,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_80186910",
+     "address": "0x80186910",
+     "bytes": 476,
+     "unk_fields": 14,
+     "m2c_names": 1,
+     "unk_types": 3,
+     "d_globals": 3,
+     "level": "c"
+    },
+    {
+     "name": "func_80186AEC",
+     "address": "0x80186AEC",
+     "bytes": 404,
+     "unk_fields": 10,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80186C80",
+     "address": "0x80186C80",
+     "bytes": 632,
+     "level": "asm"
+    },
+    {
+     "name": "func_80186EF8",
+     "address": "0x80186EF8",
+     "bytes": 612,
+     "level": "asm"
+    },
+    {
+     "name": "func_8018715C",
+     "address": "0x8018715C",
+     "bytes": 376,
+     "unk_fields": 12,
+     "m2c_names": 0,
+     "unk_types": 2,
+     "d_globals": 3,
+     "level": "c"
+    },
+    {
+     "name": "func_801872D4",
+     "address": "0x801872D4",
+     "bytes": 440,
+     "level": "asm"
+    },
+    {
+     "name": "func_8018748C",
+     "address": "0x8018748C",
+     "bytes": 212,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80187560",
+     "address": "0x80187560",
+     "bytes": 132,
+     "unk_fields": 5,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801875E4",
+     "address": "0x801875E4",
+     "bytes": 308,
+     "unk_fields": 8,
+     "m2c_names": 1,
+     "unk_types": 3,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80187718",
+     "address": "0x80187718",
+     "bytes": 608,
+     "level": "asm"
+    },
+    {
+     "name": "func_80187978",
+     "address": "0x80187978",
+     "bytes": 620,
+     "level": "asm"
+    },
+    {
+     "name": "func_80187BE4",
+     "address": "0x80187BE4",
+     "bytes": 320,
+     "unk_fields": 6,
+     "m2c_names": 2,
+     "unk_types": 3,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_80187D24",
+     "address": "0x80187D24",
+     "bytes": 276,
+     "unk_fields": 2,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80187E38",
+     "address": "0x80187E38",
+     "bytes": 1140,
+     "level": "asm"
+    },
+    {
+     "name": "func_801882AC",
+     "address": "0x801882AC",
+     "bytes": 1204,
+     "level": "asm"
+    },
+    {
+     "name": "func_80188760",
+     "address": "0x80188760",
+     "bytes": 236,
+     "unk_fields": 4,
+     "m2c_names": 0,
+     "unk_types": 2,
+     "d_globals": 5,
+     "level": "c"
+    },
+    {
+     "name": "func_8018884C",
+     "address": "0x8018884C",
+     "bytes": 320,
+     "unk_fields": 4,
+     "m2c_names": 3,
+     "unk_types": 1,
+     "d_globals": 5,
+     "level": "c"
+    },
+    {
+     "name": "func_8018898C",
+     "address": "0x8018898C",
+     "bytes": 664,
+     "level": "asm"
+    },
+    {
+     "name": "func_80188C24",
+     "address": "0x80188C24",
+     "bytes": 192,
+     "unk_fields": 5,
+     "m2c_names": 2,
+     "unk_types": 3,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80188CE4",
+     "address": "0x80188CE4",
+     "bytes": 260,
+     "unk_fields": 8,
+     "m2c_names": 0,
+     "unk_types": 4,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_80188DE8",
+     "address": "0x80188DE8",
+     "bytes": 36,
+     "unk_fields": 5,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80188E0C",
+     "address": "0x80188E0C",
+     "bytes": 172,
+     "unk_fields": 7,
+     "m2c_names": 1,
+     "unk_types": 4,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80188EB8",
+     "address": "0x80188EB8",
+     "bytes": 224,
+     "unk_fields": 2,
+     "m2c_names": 3,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80188F98",
+     "address": "0x80188F98",
+     "bytes": 84,
+     "unk_fields": 2,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80188FEC",
+     "address": "0x80188FEC",
+     "bytes": 104,
+     "unk_fields": 3,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80189054",
+     "address": "0x80189054",
+     "bytes": 112,
+     "unk_fields": 3,
+     "m2c_names": 2,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801890C4",
+     "address": "0x801890C4",
+     "bytes": 140,
+     "unk_fields": 3,
+     "m2c_names": 2,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80189150",
+     "address": "0x80189150",
+     "bytes": 84,
+     "unk_fields": 2,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801891A4",
+     "address": "0x801891A4",
+     "bytes": 104,
+     "unk_fields": 3,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    }
+   ]
+  },
+  {
+   "unit": "src/game/8018920C.c",
+   "game": true,
+   "library": "game",
+   "bytes": 6816,
+   "functions": [
+    {
+     "name": "func_8018920C",
+     "address": "0x8018920C",
+     "bytes": 324,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 5,
+     "level": "c"
+    },
+    {
+     "name": "func_80189350",
+     "address": "0x80189350",
+     "bytes": 656,
+     "level": "asm"
+    },
+    {
+     "name": "func_801895E0",
+     "address": "0x801895E0",
+     "bytes": 300,
+     "unk_fields": 6,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_8018970C",
+     "address": "0x8018970C",
+     "bytes": 436,
+     "unk_fields": 8,
+     "m2c_names": 0,
+     "unk_types": 3,
+     "d_globals": 3,
+     "level": "c"
+    },
+    {
+     "name": "func_801898C0",
+     "address": "0x801898C0",
+     "bytes": 104,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 4,
+     "level": "c"
+    },
+    {
+     "name": "func_80189928",
+     "address": "0x80189928",
+     "bytes": 72,
+     "unk_fields": 2,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_80189970",
+     "address": "0x80189970",
+     "bytes": 60,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801899AC",
+     "address": "0x801899AC",
+     "bytes": 276,
+     "unk_fields": 9,
+     "m2c_names": 0,
+     "unk_types": 4,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_80189AC0",
+     "address": "0x80189AC0",
+     "bytes": 380,
+     "unk_fields": 10,
+     "m2c_names": 0,
+     "unk_types": 3,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80189C3C",
+     "address": "0x80189C3C",
+     "bytes": 428,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80189DE8",
+     "address": "0x80189DE8",
+     "bytes": 360,
+     "unk_fields": 6,
+     "m2c_names": 0,
+     "unk_types": 2,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_80189F50",
+     "address": "0x80189F50",
+     "bytes": 764,
+     "level": "asm"
+    },
+    {
+     "name": "func_8018A24C",
+     "address": "0x8018A24C",
+     "bytes": 428,
+     "unk_fields": 5,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8018A3F8",
+     "address": "0x8018A3F8",
+     "bytes": 504,
+     "level": "asm"
+    },
+    {
+     "name": "func_8018A5F0",
+     "address": "0x8018A5F0",
+     "bytes": 464,
+     "unk_fields": 6,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_8018A7C0",
+     "address": "0x8018A7C0",
+     "bytes": 268,
+     "unk_fields": 2,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_8018A8CC",
+     "address": "0x8018A8CC",
+     "bytes": 156,
+     "unk_fields": 3,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_8018A968",
+     "address": "0x8018A968",
+     "bytes": 152,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 6,
+     "level": "c"
+    },
+    {
+     "name": "func_8018AA00",
+     "address": "0x8018AA00",
+     "bytes": 188,
+     "unk_fields": 3,
+     "m2c_names": 0,
+     "unk_types": 2,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_8018AABC",
+     "address": "0x8018AABC",
+     "bytes": 140,
+     "unk_fields": 2,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_8018AB48",
+     "address": "0x8018AB48",
+     "bytes": 160,
+     "unk_fields": 8,
+     "m2c_names": 0,
+     "unk_types": 2,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_8018ABE8",
+     "address": "0x8018ABE8",
+     "bytes": 196,
+     "unk_fields": 1,
+     "m2c_names": 0,
+     "unk_types": 2,
+     "d_globals": 2,
+     "level": "c"
+    }
+   ]
+  },
+  {
+   "unit": "src/game/8018ACAC.c",
+   "game": true,
+   "library": "game",
+   "bytes": 9776,
+   "functions": [
+    {
+     "name": "func_8018ACAC",
+     "address": "0x8018ACAC",
+     "bytes": 1136,
+     "level": "asm"
+    },
+    {
+     "name": "func_8018B11C",
+     "address": "0x8018B11C",
+     "bytes": 1096,
+     "level": "asm"
+    },
+    {
+     "name": "func_8018B564",
+     "address": "0x8018B564",
+     "bytes": 312,
+     "unk_fields": 2,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_8018B69C",
+     "address": "0x8018B69C",
+     "bytes": 372,
+     "unk_fields": 1,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 4,
+     "level": "c"
+    },
+    {
+     "name": "func_8018B810",
+     "address": "0x8018B810",
+     "bytes": 276,
+     "unk_fields": 3,
+     "m2c_names": 0,
+     "unk_types": 2,
+     "d_globals": 6,
+     "level": "c"
+    },
+    {
+     "name": "func_8018B924",
+     "address": "0x8018B924",
+     "bytes": 292,
+     "unk_fields": 2,
+     "m2c_names": 0,
+     "unk_types": 2,
+     "d_globals": 3,
+     "level": "c"
+    },
+    {
+     "name": "func_8018BA48",
+     "address": "0x8018BA48",
+     "bytes": 184,
+     "unk_fields": 1,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8018BB00",
+     "address": "0x8018BB00",
+     "bytes": 336,
+     "unk_fields": 1,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8018BC50",
+     "address": "0x8018BC50",
+     "bytes": 244,
+     "unk_fields": 7,
+     "m2c_names": 0,
+     "unk_types": 2,
+     "d_globals": 4,
+     "level": "c"
+    },
+    {
+     "name": "func_8018BD44",
+     "address": "0x8018BD44",
+     "bytes": 28,
+     "unk_fields": 1,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8018BD60",
+     "address": "0x8018BD60",
+     "bytes": 44,
+     "unk_fields": 2,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_8018BD8C",
+     "address": "0x8018BD8C",
+     "bytes": 92,
+     "unk_fields": 1,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8018BDE8",
+     "address": "0x8018BDE8",
+     "bytes": 696,
+     "level": "asm"
+    },
+    {
+     "name": "func_8018C0A0",
+     "address": "0x8018C0A0",
+     "bytes": 208,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_8018C170",
+     "address": "0x8018C170",
+     "bytes": 64,
+     "unk_fields": 1,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8018C1B0",
+     "address": "0x8018C1B0",
+     "bytes": 332,
+     "unk_fields": 1,
+     "m2c_names": 4,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8018C2FC",
+     "address": "0x8018C2FC",
+     "bytes": 280,
+     "unk_fields": 3,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8018C414",
+     "address": "0x8018C414",
+     "bytes": 248,
+     "unk_fields": 9,
+     "m2c_names": 0,
+     "unk_types": 3,
+     "d_globals": 3,
+     "level": "c"
+    },
+    {
+     "name": "func_8018C50C",
+     "address": "0x8018C50C",
+     "bytes": 72,
+     "unk_fields": 8,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8018C554",
+     "address": "0x8018C554",
+     "bytes": 508,
+     "level": "asm"
+    },
+    {
+     "name": "func_8018C750",
+     "address": "0x8018C750",
+     "bytes": 64,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_8018C790",
+     "address": "0x8018C790",
+     "bytes": 128,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_8018C810",
+     "address": "0x8018C810",
+     "bytes": 84,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_8018C864",
+     "address": "0x8018C864",
+     "bytes": 780,
+     "level": "asm"
+    },
+    {
+     "name": "func_8018CB70",
+     "address": "0x8018CB70",
+     "bytes": 476,
+     "unk_fields": 12,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_8018CD4C",
+     "address": "0x8018CD4C",
+     "bytes": 340,
+     "unk_fields": 10,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_8018CEA0",
+     "address": "0x8018CEA0",
+     "bytes": 472,
+     "unk_fields": 7,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8018D078",
+     "address": "0x8018D078",
+     "bytes": 296,
+     "unk_fields": 16,
+     "m2c_names": 0,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8018D1A0",
+     "address": "0x8018D1A0",
+     "bytes": 80,
+     "unk_fields": 2,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8018D1F0",
+     "address": "0x8018D1F0",
+     "bytes": 16,
+     "unk_fields": 1,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8018D200",
+     "address": "0x8018D200",
+     "bytes": 148,
+     "unk_fields": 7,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8018D294",
+     "address": "0x8018D294",
+     "bytes": 72,
+     "unk_fields": 2,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    }
+   ]
+  },
+  {
+   "unit": "src/game/8018D2DC.c",
+   "game": true,
+   "library": "game",
+   "bytes": 10044,
+   "functions": [
+    {
+     "name": "func_8018D2DC",
+     "address": "0x8018D2DC",
+     "bytes": 796,
+     "level": "asm"
+    },
+    {
+     "name": "func_8018D5F8",
+     "address": "0x8018D5F8",
+     "bytes": 228,
+     "unk_fields": 10,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_8018D6DC",
+     "address": "0x8018D6DC",
+     "bytes": 476,
+     "unk_fields": 13,
+     "m2c_names": 2,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8018D8B8",
+     "address": "0x8018D8B8",
+     "bytes": 372,
+     "unk_fields": 13,
+     "m2c_names": 0,
+     "unk_types": 4,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8018DA2C",
+     "address": "0x8018DA2C",
+     "bytes": 376,
+     "unk_fields": 14,
+     "m2c_names": 3,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8018DBA4",
+     "address": "0x8018DBA4",
+     "bytes": 692,
+     "level": "asm"
+    },
+    {
+     "name": "func_8018DE58",
+     "address": "0x8018DE58",
+     "bytes": 484,
+     "unk_fields": 14,
+     "m2c_names": 0,
+     "unk_types": 4,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_8018E03C",
+     "address": "0x8018E03C",
+     "bytes": 264,
+     "unk_fields": 9,
+     "m2c_names": 2,
+     "unk_types": 0,
+     "d_globals": 3,
+     "level": "c"
+    },
+    {
+     "name": "func_8018E144",
+     "address": "0x8018E144",
+     "bytes": 172,
+     "unk_fields": 9,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_8018E1F0",
+     "address": "0x8018E1F0",
+     "bytes": 264,
+     "unk_fields": 6,
+     "m2c_names": 1,
+     "unk_types": 4,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8018E2F8",
+     "address": "0x8018E2F8",
+     "bytes": 76,
+     "unk_fields": 3,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8018E344",
+     "address": "0x8018E344",
+     "bytes": 312,
+     "unk_fields": 12,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8018E47C",
+     "address": "0x8018E47C",
+     "bytes": 240,
+     "unk_fields": 11,
+     "m2c_names": 0,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8018E56C",
+     "address": "0x8018E56C",
+     "bytes": 164,
+     "unk_fields": 5,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8018E610",
+     "address": "0x8018E610",
+     "bytes": 200,
+     "unk_fields": 5,
+     "m2c_names": 3,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8018E6D8",
+     "address": "0x8018E6D8",
+     "bytes": 276,
+     "level": "asm"
+    },
+    {
+     "name": "func_8018E7EC",
+     "address": "0x8018E7EC",
+     "bytes": 204,
+     "unk_fields": 8,
+     "m2c_names": 0,
+     "unk_types": 2,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_8018E8B8",
+     "address": "0x8018E8B8",
+     "bytes": 328,
+     "unk_fields": 17,
+     "m2c_names": 2,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8018EA00",
+     "address": "0x8018EA00",
+     "bytes": 580,
+     "level": "asm"
+    },
+    {
+     "name": "func_8018EC44",
+     "address": "0x8018EC44",
+     "bytes": 656,
+     "level": "asm"
+    },
+    {
+     "name": "func_8018EED4",
+     "address": "0x8018EED4",
+     "bytes": 864,
+     "level": "asm"
+    },
+    {
+     "name": "func_8018F234",
+     "address": "0x8018F234",
+     "bytes": 500,
+     "level": "asm"
+    },
+    {
+     "name": "func_8018F428",
+     "address": "0x8018F428",
+     "bytes": 276,
+     "unk_fields": 9,
+     "m2c_names": 2,
+     "unk_types": 2,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_8018F53C",
+     "address": "0x8018F53C",
+     "bytes": 84,
+     "unk_fields": 2,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8018F590",
+     "address": "0x8018F590",
+     "bytes": 88,
+     "unk_fields": 3,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8018F5E8",
+     "address": "0x8018F5E8",
+     "bytes": 256,
+     "unk_fields": 13,
+     "m2c_names": 3,
+     "unk_types": 3,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8018F6E8",
+     "address": "0x8018F6E8",
+     "bytes": 232,
+     "unk_fields": 7,
+     "m2c_names": 1,
+     "unk_types": 3,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8018F7D0",
+     "address": "0x8018F7D0",
+     "bytes": 332,
+     "unk_fields": 10,
+     "m2c_names": 3,
+     "unk_types": 3,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8018F91C",
+     "address": "0x8018F91C",
+     "bytes": 60,
+     "unk_fields": 3,
+     "m2c_names": 0,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8018F958",
+     "address": "0x8018F958",
+     "bytes": 192,
+     "unk_fields": 14,
+     "m2c_names": 1,
+     "unk_types": 4,
+     "d_globals": 1,
+     "level": "c"
+    }
+   ]
+  },
+  {
+   "unit": "src/game/8018FA18.c",
+   "game": true,
+   "library": "game",
+   "bytes": 25560,
+   "functions": [
+    {
+     "name": "func_8018FA18",
+     "address": "0x8018FA18",
+     "bytes": 632,
+     "level": "asm"
+    },
+    {
+     "name": "func_8018FC90",
+     "address": "0x8018FC90",
+     "bytes": 580,
+     "level": "asm"
+    },
+    {
+     "name": "func_8018FED4",
+     "address": "0x8018FED4",
+     "bytes": 564,
+     "level": "asm"
+    },
+    {
+     "name": "func_80190108",
+     "address": "0x80190108",
+     "bytes": 624,
+     "level": "asm"
+    },
+    {
+     "name": "func_80190378",
+     "address": "0x80190378",
+     "bytes": 552,
+     "level": "asm"
+    },
+    {
+     "name": "func_801905A0",
+     "address": "0x801905A0",
+     "bytes": 552,
+     "level": "asm"
+    },
+    {
+     "name": "func_801907C8",
+     "address": "0x801907C8",
+     "bytes": 868,
+     "level": "asm"
+    },
+    {
+     "name": "func_80190B2C",
+     "address": "0x80190B2C",
+     "bytes": 608,
+     "level": "asm"
+    },
+    {
+     "name": "func_80190D8C",
+     "address": "0x80190D8C",
+     "bytes": 588,
+     "level": "asm"
+    },
+    {
+     "name": "func_80190FD8",
+     "address": "0x80190FD8",
+     "bytes": 564,
+     "level": "asm"
+    },
+    {
+     "name": "func_8019120C",
+     "address": "0x8019120C",
+     "bytes": 580,
+     "level": "asm"
+    },
+    {
+     "name": "func_80191450",
+     "address": "0x80191450",
+     "bytes": 332,
+     "unk_fields": 2,
+     "m2c_names": 3,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8019159C",
+     "address": "0x8019159C",
+     "bytes": 748,
+     "level": "asm"
+    },
+    {
+     "name": "func_80191888",
+     "address": "0x80191888",
+     "bytes": 552,
+     "level": "asm"
+    },
+    {
+     "name": "func_80191AB0",
+     "address": "0x80191AB0",
+     "bytes": 2256,
+     "level": "asm"
+    },
+    {
+     "name": "func_80192380",
+     "address": "0x80192380",
+     "bytes": 820,
+     "level": "asm"
+    },
+    {
+     "name": "func_801926B4",
+     "address": "0x801926B4",
+     "bytes": 600,
+     "level": "asm"
+    },
+    {
+     "name": "func_8019290C",
+     "address": "0x8019290C",
+     "bytes": 312,
+     "level": "asm"
+    },
+    {
+     "name": "func_80192A44",
+     "address": "0x80192A44",
+     "bytes": 328,
+     "level": "asm"
+    },
+    {
+     "name": "func_80192B8C",
+     "address": "0x80192B8C",
+     "bytes": 324,
+     "level": "asm"
+    },
+    {
+     "name": "func_80192CD0",
+     "address": "0x80192CD0",
+     "bytes": 328,
+     "level": "asm"
+    },
+    {
+     "name": "func_80192E18",
+     "address": "0x80192E18",
+     "bytes": 264,
+     "unk_fields": 10,
+     "m2c_names": 2,
+     "unk_types": 1,
+     "d_globals": 4,
+     "level": "c"
+    },
+    {
+     "name": "func_80192F20",
+     "address": "0x80192F20",
+     "bytes": 64,
+     "unk_fields": 2,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_80192F60",
+     "address": "0x80192F60",
+     "bytes": 264,
+     "unk_fields": 2,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80193068",
+     "address": "0x80193068",
+     "bytes": 656,
+     "level": "asm"
+    },
+    {
+     "name": "func_801932F8",
+     "address": "0x801932F8",
+     "bytes": 1416,
+     "level": "asm"
+    },
+    {
+     "name": "func_80193880",
+     "address": "0x80193880",
+     "bytes": 1320,
+     "level": "asm"
+    },
+    {
+     "name": "func_80193DA8",
+     "address": "0x80193DA8",
+     "bytes": 920,
+     "level": "asm"
+    },
+    {
+     "name": "func_80194140",
+     "address": "0x80194140",
+     "bytes": 460,
+     "unk_fields": 6,
+     "m2c_names": 0,
+     "unk_types": 3,
+     "d_globals": 3,
+     "level": "c"
+    },
+    {
+     "name": "func_8019430C",
+     "address": "0x8019430C",
+     "bytes": 724,
+     "level": "asm"
+    },
+    {
+     "name": "func_801945E0",
+     "address": "0x801945E0",
+     "bytes": 416,
+     "unk_fields": 3,
+     "m2c_names": 0,
+     "unk_types": 2,
+     "d_globals": 9,
+     "level": "c"
+    },
+    {
+     "name": "func_80194780",
+     "address": "0x80194780",
+     "bytes": 684,
+     "level": "asm"
+    },
+    {
+     "name": "func_80194A2C",
+     "address": "0x80194A2C",
+     "bytes": 292,
+     "unk_fields": 3,
+     "m2c_names": 2,
+     "unk_types": 1,
+     "d_globals": 4,
+     "level": "c"
+    },
+    {
+     "name": "func_80194B50",
+     "address": "0x80194B50",
+     "bytes": 212,
+     "unk_fields": 5,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_80194C24",
+     "address": "0x80194C24",
+     "bytes": 296,
+     "unk_fields": 6,
+     "m2c_names": 1,
+     "unk_types": 3,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_80194D4C",
+     "address": "0x80194D4C",
+     "bytes": 272,
+     "unk_fields": 9,
+     "m2c_names": 1,
+     "unk_types": 4,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_80194E5C",
+     "address": "0x80194E5C",
+     "bytes": 172,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80194F08",
+     "address": "0x80194F08",
+     "bytes": 164,
+     "unk_fields": 7,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_80194FAC",
+     "address": "0x80194FAC",
+     "bytes": 236,
+     "unk_fields": 7,
+     "m2c_names": 0,
+     "unk_types": 2,
+     "d_globals": 4,
+     "level": "c"
+    },
+    {
+     "name": "func_80195098",
+     "address": "0x80195098",
+     "bytes": 1220,
+     "level": "asm"
+    },
+    {
+     "name": "func_8019555C",
+     "address": "0x8019555C",
+     "bytes": 928,
+     "level": "asm"
+    },
+    {
+     "name": "func_801958FC",
+     "address": "0x801958FC",
+     "bytes": 716,
+     "level": "asm"
+    },
+    {
+     "name": "func_80195BC8",
+     "address": "0x80195BC8",
+     "bytes": 552,
+     "level": "asm"
+    }
+   ]
+  },
+  {
+   "unit": "src/game/80195DF0.c",
+   "game": true,
+   "library": "game",
+   "bytes": 18404,
+   "functions": [
+    {
+     "name": "func_80195DF0",
+     "address": "0x80195DF0",
+     "bytes": 600,
+     "level": "asm"
+    },
+    {
+     "name": "func_80196048",
+     "address": "0x80196048",
+     "bytes": 1036,
+     "level": "asm"
+    },
+    {
+     "name": "func_80196454",
+     "address": "0x80196454",
+     "bytes": 608,
+     "level": "asm"
+    },
+    {
+     "name": "func_801966B4",
+     "address": "0x801966B4",
+     "bytes": 1068,
+     "level": "asm"
+    },
+    {
+     "name": "func_80196AE0",
+     "address": "0x80196AE0",
+     "bytes": 1780,
+     "level": "asm"
+    },
+    {
+     "name": "func_801971D4",
+     "address": "0x801971D4",
+     "bytes": 412,
+     "unk_fields": 30,
+     "m2c_names": 0,
+     "unk_types": 5,
+     "d_globals": 4,
+     "level": "c"
+    },
+    {
+     "name": "func_80197370",
+     "address": "0x80197370",
+     "bytes": 792,
+     "level": "asm"
+    },
+    {
+     "name": "func_80197688",
+     "address": "0x80197688",
+     "bytes": 432,
+     "unk_fields": 21,
+     "m2c_names": 0,
+     "unk_types": 3,
+     "d_globals": 4,
+     "level": "c"
+    },
+    {
+     "name": "func_80197838",
+     "address": "0x80197838",
+     "bytes": 380,
+     "unk_fields": 12,
+     "m2c_names": 2,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801979B4",
+     "address": "0x801979B4",
+     "bytes": 508,
+     "level": "asm"
+    },
+    {
+     "name": "func_80197BB0",
+     "address": "0x80197BB0",
+     "bytes": 436,
+     "level": "asm"
+    },
+    {
+     "name": "func_80197D64",
+     "address": "0x80197D64",
+     "bytes": 464,
+     "level": "asm"
+    },
+    {
+     "name": "func_80197F34",
+     "address": "0x80197F34",
+     "bytes": 668,
+     "level": "asm"
+    },
+    {
+     "name": "func_801981D0",
+     "address": "0x801981D0",
+     "bytes": 988,
+     "level": "asm"
+    },
+    {
+     "name": "func_801985AC",
+     "address": "0x801985AC",
+     "bytes": 372,
+     "unk_fields": 11,
+     "m2c_names": 0,
+     "unk_types": 4,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_80198720",
+     "address": "0x80198720",
+     "bytes": 956,
+     "level": "asm"
+    },
+    {
+     "name": "func_80198ADC",
+     "address": "0x80198ADC",
+     "bytes": 544,
+     "level": "asm"
+    },
+    {
+     "name": "func_80198CFC",
+     "address": "0x80198CFC",
+     "bytes": 824,
+     "level": "asm"
+    },
+    {
+     "name": "func_80199034",
+     "address": "0x80199034",
+     "bytes": 828,
+     "level": "asm"
+    },
+    {
+     "name": "func_80199370",
+     "address": "0x80199370",
+     "bytes": 472,
+     "unk_fields": 20,
+     "m2c_names": 4,
+     "unk_types": 3,
+     "d_globals": 5,
+     "level": "c"
+    },
+    {
+     "name": "func_80199548",
+     "address": "0x80199548",
+     "bytes": 1356,
+     "level": "asm"
+    },
+    {
+     "name": "func_80199A94",
+     "address": "0x80199A94",
+     "bytes": 468,
+     "unk_fields": 0,
+     "m2c_names": 2,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80199C68",
+     "address": "0x80199C68",
+     "bytes": 88,
+     "unk_fields": 6,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 4,
+     "level": "c"
+    },
+    {
+     "name": "func_80199CC0",
+     "address": "0x80199CC0",
+     "bytes": 88,
+     "unk_fields": 0,
+     "m2c_names": 3,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_80199D18",
+     "address": "0x80199D18",
+     "bytes": 80,
+     "unk_fields": 0,
+     "m2c_names": 3,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_80199D68",
+     "address": "0x80199D68",
+     "bytes": 180,
+     "unk_fields": 1,
+     "m2c_names": 3,
+     "unk_types": 2,
+     "d_globals": 3,
+     "level": "c"
+    },
+    {
+     "name": "func_80199E1C",
+     "address": "0x80199E1C",
+     "bytes": 152,
+     "unk_fields": 2,
+     "m2c_names": 2,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80199EB4",
+     "address": "0x80199EB4",
+     "bytes": 236,
+     "unk_fields": 7,
+     "m2c_names": 4,
+     "unk_types": 3,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_80199FA0",
+     "address": "0x80199FA0",
+     "bytes": 56,
+     "unk_fields": 1,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_80199FD8",
+     "address": "0x80199FD8",
+     "bytes": 164,
+     "unk_fields": 7,
+     "m2c_names": 0,
+     "unk_types": 2,
+     "d_globals": 3,
+     "level": "c"
+    },
+    {
+     "name": "func_8019A07C",
+     "address": "0x8019A07C",
+     "bytes": 296,
+     "unk_fields": 18,
+     "m2c_names": 1,
+     "unk_types": 3,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_8019A1A4",
+     "address": "0x8019A1A4",
+     "bytes": 580,
+     "level": "asm"
+    },
+    {
+     "name": "func_8019A3E8",
+     "address": "0x8019A3E8",
+     "bytes": 492,
+     "level": "asm"
+    }
+   ]
+  },
+  {
+   "unit": "src/game/8019A5D4.c",
+   "game": true,
+   "library": "game",
+   "bytes": 31656,
+   "functions": [
+    {
+     "name": "func_8019A5D4",
+     "address": "0x8019A5D4",
+     "bytes": 144,
+     "level": "asm"
+    },
+    {
+     "name": "func_8019A664",
+     "address": "0x8019A664",
+     "bytes": 64,
+     "unk_fields": 5,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8019A6A4",
+     "address": "0x8019A6A4",
+     "bytes": 16,
+     "unk_fields": 1,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_8019A6B4",
+     "address": "0x8019A6B4",
+     "bytes": 636,
+     "level": "asm"
+    },
+    {
+     "name": "func_8019A930",
+     "address": "0x8019A930",
+     "bytes": 1096,
+     "level": "asm"
+    },
+    {
+     "name": "func_8019AD78",
+     "address": "0x8019AD78",
+     "bytes": 1924,
+     "level": "asm"
+    },
+    {
+     "name": "func_8019B4FC",
+     "address": "0x8019B4FC",
+     "bytes": 2416,
+     "level": "asm"
+    },
+    {
+     "name": "func_8019BE6C",
+     "address": "0x8019BE6C",
+     "bytes": 2336,
+     "level": "asm"
+    },
+    {
+     "name": "func_8019C78C",
+     "address": "0x8019C78C",
+     "bytes": 2628,
+     "level": "asm"
+    },
+    {
+     "name": "func_8019D1D0",
+     "address": "0x8019D1D0",
+     "bytes": 2284,
+     "level": "asm"
+    },
+    {
+     "name": "func_8019DABC",
+     "address": "0x8019DABC",
+     "bytes": 3020,
+     "level": "asm"
+    },
+    {
+     "name": "func_8019E688",
+     "address": "0x8019E688",
+     "bytes": 2716,
+     "level": "asm"
+    },
+    {
+     "name": "func_8019F124",
+     "address": "0x8019F124",
+     "bytes": 3252,
+     "level": "asm"
+    },
+    {
+     "name": "func_8019FDD8",
+     "address": "0x8019FDD8",
+     "bytes": 788,
+     "level": "asm"
+    },
+    {
+     "name": "func_801A00EC",
+     "address": "0x801A00EC",
+     "bytes": 476,
+     "level": "asm"
+    },
+    {
+     "name": "func_801A02C8",
+     "address": "0x801A02C8",
+     "bytes": 336,
+     "unk_fields": 11,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 9,
+     "level": "c"
+    },
+    {
+     "name": "func_801A0418",
+     "address": "0x801A0418",
+     "bytes": 468,
+     "unk_fields": 7,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 9,
+     "level": "c"
+    },
+    {
+     "name": "func_801A05EC",
+     "address": "0x801A05EC",
+     "bytes": 164,
+     "level": "asm"
+    },
+    {
+     "name": "func_801A0690",
+     "address": "0x801A0690",
+     "bytes": 48,
+     "unk_fields": 5,
+     "m2c_names": 4,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801A06C0",
+     "address": "0x801A06C0",
+     "bytes": 352,
+     "level": "asm"
+    },
+    {
+     "name": "func_801A0820",
+     "address": "0x801A0820",
+     "bytes": 344,
+     "unk_fields": 4,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801A0978",
+     "address": "0x801A0978",
+     "bytes": 464,
+     "level": "asm"
+    },
+    {
+     "name": "func_801A0B48",
+     "address": "0x801A0B48",
+     "bytes": 528,
+     "level": "asm"
+    },
+    {
+     "name": "func_801A0D58",
+     "address": "0x801A0D58",
+     "bytes": 388,
+     "unk_fields": 6,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 3,
+     "level": "c"
+    },
+    {
+     "name": "func_801A0EDC",
+     "address": "0x801A0EDC",
+     "bytes": 1476,
+     "level": "asm"
+    },
+    {
+     "name": "func_801A14A0",
+     "address": "0x801A14A0",
+     "bytes": 1560,
+     "level": "asm"
+    },
+    {
+     "name": "func_801A1AB8",
+     "address": "0x801A1AB8",
+     "bytes": 1032,
+     "level": "asm"
+    },
+    {
+     "name": "func_801A1EC0",
+     "address": "0x801A1EC0",
+     "bytes": 276,
+     "level": "asm"
+    },
+    {
+     "name": "func_801A1FD4",
+     "address": "0x801A1FD4",
+     "bytes": 212,
+     "unk_fields": 0,
+     "m2c_names": 2,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801A20A8",
+     "address": "0x801A20A8",
+     "bytes": 36,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801A20CC",
+     "address": "0x801A20CC",
+     "bytes": 80,
+     "unk_fields": 3,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801A211C",
+     "address": "0x801A211C",
+     "bytes": 80,
+     "unk_fields": 3,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801A216C",
+     "address": "0x801A216C",
+     "bytes": 16,
+     "unk_fields": 1,
+     "m2c_names": 2,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    }
+   ]
+  },
+  {
+   "unit": "src/game/801A217C.c",
+   "game": true,
+   "library": "game",
+   "bytes": 7256,
+   "functions": [
+    {
+     "name": "func_801A217C",
+     "address": "0x801A217C",
+     "bytes": 268,
+     "unk_fields": 18,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 3,
+     "level": "c"
+    },
+    {
+     "name": "func_801A2288",
+     "address": "0x801A2288",
+     "bytes": 300,
+     "unk_fields": 13,
+     "m2c_names": 0,
+     "unk_types": 2,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801A23B4",
+     "address": "0x801A23B4",
+     "bytes": 376,
+     "unk_fields": 14,
+     "m2c_names": 0,
+     "unk_types": 2,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801A252C",
+     "address": "0x801A252C",
+     "bytes": 136,
+     "unk_fields": 4,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801A25B4",
+     "address": "0x801A25B4",
+     "bytes": 196,
+     "unk_fields": 6,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801A2678",
+     "address": "0x801A2678",
+     "bytes": 1512,
+     "level": "asm"
+    },
+    {
+     "name": "func_801A2C60",
+     "address": "0x801A2C60",
+     "bytes": 1516,
+     "level": "asm"
+    },
+    {
+     "name": "func_801A324C",
+     "address": "0x801A324C",
+     "bytes": 412,
+     "unk_fields": 2,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801A33E8",
+     "address": "0x801A33E8",
+     "bytes": 420,
+     "unk_fields": 5,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 3,
+     "level": "c"
+    },
+    {
+     "name": "func_801A358C",
+     "address": "0x801A358C",
+     "bytes": 600,
+     "level": "asm"
+    },
+    {
+     "name": "func_801A37E4",
+     "address": "0x801A37E4",
+     "bytes": 396,
+     "unk_fields": 6,
+     "m2c_names": 3,
+     "unk_types": 2,
+     "d_globals": 4,
+     "level": "c"
+    },
+    {
+     "name": "func_801A3970",
+     "address": "0x801A3970",
+     "bytes": 128,
+     "unk_fields": 2,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 4,
+     "level": "c"
+    },
+    {
+     "name": "func_801A39F0",
+     "address": "0x801A39F0",
+     "bytes": 100,
+     "unk_fields": 3,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801A3A54",
+     "address": "0x801A3A54",
+     "bytes": 76,
+     "unk_fields": 1,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801A3AA0",
+     "address": "0x801A3AA0",
+     "bytes": 188,
+     "unk_fields": 4,
+     "m2c_names": 2,
+     "unk_types": 0,
+     "d_globals": 3,
+     "level": "c"
+    },
+    {
+     "name": "func_801A3B5C",
+     "address": "0x801A3B5C",
+     "bytes": 112,
+     "unk_fields": 3,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801A3BCC",
+     "address": "0x801A3BCC",
+     "bytes": 140,
+     "unk_fields": 4,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801A3C58",
+     "address": "0x801A3C58",
+     "bytes": 104,
+     "unk_fields": 3,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801A3CC0",
+     "address": "0x801A3CC0",
+     "bytes": 180,
+     "unk_fields": 9,
+     "m2c_names": 1,
+     "unk_types": 3,
+     "d_globals": 3,
+     "level": "c"
+    },
+    {
+     "name": "func_801A3D74",
+     "address": "0x801A3D74",
+     "bytes": 72,
+     "unk_fields": 5,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801A3DBC",
+     "address": "0x801A3DBC",
+     "bytes": 24,
+     "unk_fields": 1,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 3,
+     "level": "c"
+    }
+   ]
+  },
+  {
+   "unit": "src/game/801A3DD4.c",
+   "game": true,
+   "library": "game",
+   "bytes": 14220,
+   "functions": [
+    {
+     "name": "func_801A3DD4",
+     "address": "0x801A3DD4",
+     "bytes": 444,
+     "unk_fields": 15,
+     "m2c_names": 2,
+     "unk_types": 1,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801A3F90",
+     "address": "0x801A3F90",
+     "bytes": 492,
+     "unk_fields": 13,
+     "m2c_names": 6,
+     "unk_types": 4,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801A417C",
+     "address": "0x801A417C",
+     "bytes": 500,
+     "level": "asm"
+    },
+    {
+     "name": "func_801A4370",
+     "address": "0x801A4370",
+     "bytes": 56,
+     "unk_fields": 1,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801A43A8",
+     "address": "0x801A43A8",
+     "bytes": 76,
+     "unk_fields": 3,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801A43F4",
+     "address": "0x801A43F4",
+     "bytes": 196,
+     "unk_fields": 5,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801A44B8",
+     "address": "0x801A44B8",
+     "bytes": 156,
+     "unk_fields": 4,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801A4554",
+     "address": "0x801A4554",
+     "bytes": 200,
+     "level": "asm"
+    },
+    {
+     "name": "func_801A461C",
+     "address": "0x801A461C",
+     "bytes": 236,
+     "unk_fields": 7,
+     "m2c_names": 3,
+     "unk_types": 3,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801A4708",
+     "address": "0x801A4708",
+     "bytes": 284,
+     "unk_fields": 7,
+     "m2c_names": 1,
+     "unk_types": 3,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801A4824",
+     "address": "0x801A4824",
+     "bytes": 288,
+     "unk_fields": 7,
+     "m2c_names": 4,
+     "unk_types": 3,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801A4944",
+     "address": "0x801A4944",
+     "bytes": 292,
+     "unk_fields": 7,
+     "m2c_names": 3,
+     "unk_types": 3,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801A4A68",
+     "address": "0x801A4A68",
+     "bytes": 176,
+     "unk_fields": 4,
+     "m2c_names": 2,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801A4B18",
+     "address": "0x801A4B18",
+     "bytes": 176,
+     "unk_fields": 4,
+     "m2c_names": 2,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801A4BC8",
+     "address": "0x801A4BC8",
+     "bytes": 192,
+     "unk_fields": 6,
+     "m2c_names": 3,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801A4C88",
+     "address": "0x801A4C88",
+     "bytes": 380,
+     "unk_fields": 4,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 6,
+     "level": "c"
+    },
+    {
+     "name": "func_801A4E04",
+     "address": "0x801A4E04",
+     "bytes": 416,
+     "unk_fields": 10,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 6,
+     "level": "c"
+    },
+    {
+     "name": "func_801A4FA4",
+     "address": "0x801A4FA4",
+     "bytes": 688,
+     "level": "asm"
+    },
+    {
+     "name": "func_801A5254",
+     "address": "0x801A5254",
+     "bytes": 232,
+     "unk_fields": 2,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 3,
+     "level": "c"
+    },
+    {
+     "name": "func_801A533C",
+     "address": "0x801A533C",
+     "bytes": 48,
+     "unk_fields": 1,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801A536C",
+     "address": "0x801A536C",
+     "bytes": 160,
+     "unk_fields": 0,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 4,
+     "level": "c"
+    },
+    {
+     "name": "func_801A540C",
+     "address": "0x801A540C",
+     "bytes": 328,
+     "unk_fields": 5,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 3,
+     "level": "c"
+    },
+    {
+     "name": "func_801A5554",
+     "address": "0x801A5554",
+     "bytes": 252,
+     "unk_fields": 6,
+     "m2c_names": 0,
+     "unk_types": 2,
+     "d_globals": 3,
+     "level": "c"
+    },
+    {
+     "name": "func_801A5650",
+     "address": "0x801A5650",
+     "bytes": 864,
+     "level": "asm"
+    },
+    {
+     "name": "func_801A59B0",
+     "address": "0x801A59B0",
+     "bytes": 352,
+     "unk_fields": 12,
+     "m2c_names": 2,
+     "unk_types": 3,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801A5B10",
+     "address": "0x801A5B10",
+     "bytes": 292,
+     "unk_fields": 3,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 3,
+     "level": "c"
+    },
+    {
+     "name": "func_801A5C34",
+     "address": "0x801A5C34",
+     "bytes": 160,
+     "unk_fields": 4,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 5,
+     "level": "c"
+    },
+    {
+     "name": "func_801A5CD4",
+     "address": "0x801A5CD4",
+     "bytes": 204,
+     "unk_fields": 2,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 3,
+     "level": "c"
+    },
+    {
+     "name": "func_801A5DA0",
+     "address": "0x801A5DA0",
+     "bytes": 108,
+     "unk_fields": 2,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801A5E0C",
+     "address": "0x801A5E0C",
+     "bytes": 1820,
+     "level": "asm"
+    },
+    {
+     "name": "func_801A6528",
+     "address": "0x801A6528",
+     "bytes": 968,
+     "level": "asm"
+    },
+    {
+     "name": "func_801A68F0",
+     "address": "0x801A68F0",
+     "bytes": 120,
+     "unk_fields": 3,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801A6968",
+     "address": "0x801A6968",
+     "bytes": 120,
+     "unk_fields": 1,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801A69E0",
+     "address": "0x801A69E0",
+     "bytes": 60,
+     "unk_fields": 1,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801A6A1C",
+     "address": "0x801A6A1C",
+     "bytes": 168,
+     "unk_fields": 3,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 4,
+     "level": "c"
+    },
+    {
+     "name": "func_801A6AC4",
+     "address": "0x801A6AC4",
+     "bytes": 140,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801A6B50",
+     "address": "0x801A6B50",
+     "bytes": 228,
+     "unk_fields": 16,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801A6C34",
+     "address": "0x801A6C34",
+     "bytes": 640,
+     "level": "asm"
+    },
+    {
+     "name": "func_801A6EB4",
+     "address": "0x801A6EB4",
+     "bytes": 464,
+     "unk_fields": 23,
+     "m2c_names": 0,
+     "unk_types": 4,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801A7084",
+     "address": "0x801A7084",
+     "bytes": 504,
+     "level": "asm"
+    },
+    {
+     "name": "func_801A727C",
+     "address": "0x801A727C",
+     "bytes": 432,
+     "unk_fields": 17,
+     "m2c_names": 3,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801A742C",
+     "address": "0x801A742C",
+     "bytes": 308,
+     "unk_fields": 12,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    }
+   ]
+  },
+  {
+   "unit": "src/game/801A7560.c",
+   "game": true,
+   "library": "game",
+   "bytes": 11776,
+   "functions": [
+    {
+     "name": "func_801A7560",
+     "address": "0x801A7560",
+     "bytes": 1188,
+     "level": "asm"
+    },
+    {
+     "name": "func_801A7A04",
+     "address": "0x801A7A04",
+     "bytes": 248,
+     "unk_fields": 8,
+     "m2c_names": 2,
+     "unk_types": 0,
+     "d_globals": 3,
+     "level": "c"
+    },
+    {
+     "name": "func_801A7AFC",
+     "address": "0x801A7AFC",
+     "bytes": 92,
+     "unk_fields": 3,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801A7B58",
+     "address": "0x801A7B58",
+     "bytes": 76,
+     "unk_fields": 3,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801A7BA4",
+     "address": "0x801A7BA4",
+     "bytes": 152,
+     "unk_fields": 5,
+     "m2c_names": 0,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801A7C3C",
+     "address": "0x801A7C3C",
+     "bytes": 180,
+     "unk_fields": 5,
+     "m2c_names": 2,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801A7CF0",
+     "address": "0x801A7CF0",
+     "bytes": 288,
+     "unk_fields": 7,
+     "m2c_names": 4,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801A7E10",
+     "address": "0x801A7E10",
+     "bytes": 196,
+     "unk_fields": 11,
+     "m2c_names": 3,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801A7ED4",
+     "address": "0x801A7ED4",
+     "bytes": 300,
+     "unk_fields": 6,
+     "m2c_names": 3,
+     "unk_types": 3,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801A8000",
+     "address": "0x801A8000",
+     "bytes": 204,
+     "unk_fields": 5,
+     "m2c_names": 3,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801A80CC",
+     "address": "0x801A80CC",
+     "bytes": 204,
+     "unk_fields": 6,
+     "m2c_names": 3,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801A8198",
+     "address": "0x801A8198",
+     "bytes": 204,
+     "unk_fields": 6,
+     "m2c_names": 3,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801A8264",
+     "address": "0x801A8264",
+     "bytes": 268,
+     "unk_fields": 6,
+     "m2c_names": 1,
+     "unk_types": 3,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801A8370",
+     "address": "0x801A8370",
+     "bytes": 412,
+     "unk_fields": 6,
+     "m2c_names": 1,
+     "unk_types": 4,
+     "d_globals": 6,
+     "level": "c"
+    },
+    {
+     "name": "func_801A850C",
+     "address": "0x801A850C",
+     "bytes": 604,
+     "level": "asm"
+    },
+    {
+     "name": "func_801A8768",
+     "address": "0x801A8768",
+     "bytes": 332,
+     "unk_fields": 6,
+     "m2c_names": 0,
+     "unk_types": 4,
+     "d_globals": 5,
+     "level": "c"
+    },
+    {
+     "name": "func_801A88B4",
+     "address": "0x801A88B4",
+     "bytes": 644,
+     "level": "asm"
+    },
+    {
+     "name": "func_801A8B38",
+     "address": "0x801A8B38",
+     "bytes": 452,
+     "unk_fields": 1,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 8,
+     "level": "c"
+    },
+    {
+     "name": "func_801A8CFC",
+     "address": "0x801A8CFC",
+     "bytes": 512,
+     "level": "asm"
+    },
+    {
+     "name": "func_801A8EFC",
+     "address": "0x801A8EFC",
+     "bytes": 48,
+     "unk_fields": 1,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801A8F2C",
+     "address": "0x801A8F2C",
+     "bytes": 96,
+     "unk_fields": 3,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801A8F8C",
+     "address": "0x801A8F8C",
+     "bytes": 108,
+     "unk_fields": 2,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801A8FF8",
+     "address": "0x801A8FF8",
+     "bytes": 120,
+     "unk_fields": 3,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801A9070",
+     "address": "0x801A9070",
+     "bytes": 156,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 3,
+     "level": "c"
+    },
+    {
+     "name": "func_801A910C",
+     "address": "0x801A910C",
+     "bytes": 304,
+     "unk_fields": 7,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801A923C",
+     "address": "0x801A923C",
+     "bytes": 1104,
+     "level": "asm"
+    },
+    {
+     "name": "func_801A968C",
+     "address": "0x801A968C",
+     "bytes": 1384,
+     "level": "asm"
+    },
+    {
+     "name": "func_801A9BF4",
+     "address": "0x801A9BF4",
+     "bytes": 688,
+     "level": "asm"
+    },
+    {
+     "name": "func_801A9EA4",
+     "address": "0x801A9EA4",
+     "bytes": 1212,
+     "level": "asm"
+    }
+   ]
+  },
+  {
+   "unit": "src/game/801AA360.c",
+   "game": true,
+   "library": "game",
+   "bytes": 9840,
+   "functions": [
+    {
+     "name": "func_801AA360",
+     "address": "0x801AA360",
+     "bytes": 1404,
+     "level": "asm"
+    },
+    {
+     "name": "func_801AA8DC",
+     "address": "0x801AA8DC",
+     "bytes": 448,
+     "unk_fields": 23,
+     "m2c_names": 0,
+     "unk_types": 4,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801AAA9C",
+     "address": "0x801AAA9C",
+     "bytes": 600,
+     "level": "asm"
+    },
+    {
+     "name": "func_801AACF4",
+     "address": "0x801AACF4",
+     "bytes": 844,
+     "level": "asm"
+    },
+    {
+     "name": "func_801AB040",
+     "address": "0x801AB040",
+     "bytes": 352,
+     "unk_fields": 7,
+     "m2c_names": 1,
+     "unk_types": 3,
+     "d_globals": 3,
+     "level": "c"
+    },
+    {
+     "name": "func_801AB1A0",
+     "address": "0x801AB1A0",
+     "bytes": 368,
+     "unk_fields": 3,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 4,
+     "level": "c"
+    },
+    {
+     "name": "func_801AB310",
+     "address": "0x801AB310",
+     "bytes": 452,
+     "unk_fields": 4,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 5,
+     "level": "c"
+    },
+    {
+     "name": "func_801AB4D4",
+     "address": "0x801AB4D4",
+     "bytes": 672,
+     "level": "asm"
+    },
+    {
+     "name": "func_801AB774",
+     "address": "0x801AB774",
+     "bytes": 620,
+     "level": "asm"
+    },
+    {
+     "name": "func_801AB9E0",
+     "address": "0x801AB9E0",
+     "bytes": 168,
+     "unk_fields": 4,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801ABA88",
+     "address": "0x801ABA88",
+     "bytes": 488,
+     "unk_fields": 4,
+     "m2c_names": 0,
+     "unk_types": 2,
+     "d_globals": 3,
+     "level": "c"
+    },
+    {
+     "name": "func_801ABC70",
+     "address": "0x801ABC70",
+     "bytes": 1140,
+     "level": "asm"
+    },
+    {
+     "name": "func_801AC0E4",
+     "address": "0x801AC0E4",
+     "bytes": 116,
+     "unk_fields": 1,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801AC158",
+     "address": "0x801AC158",
+     "bytes": 188,
+     "unk_fields": 3,
+     "m2c_names": 2,
+     "unk_types": 0,
+     "d_globals": 3,
+     "level": "c"
+    },
+    {
+     "name": "func_801AC214",
+     "address": "0x801AC214",
+     "bytes": 100,
+     "unk_fields": 1,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801AC278",
+     "address": "0x801AC278",
+     "bytes": 148,
+     "unk_fields": 5,
+     "m2c_names": 0,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801AC30C",
+     "address": "0x801AC30C",
+     "bytes": 344,
+     "level": "asm"
+    },
+    {
+     "name": "func_801AC464",
+     "address": "0x801AC464",
+     "bytes": 68,
+     "unk_fields": 7,
+     "m2c_names": 3,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801AC4A8",
+     "address": "0x801AC4A8",
+     "bytes": 88,
+     "unk_fields": 1,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801AC500",
+     "address": "0x801AC500",
+     "bytes": 92,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801AC55C",
+     "address": "0x801AC55C",
+     "bytes": 28,
+     "unk_fields": 2,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801AC578",
+     "address": "0x801AC578",
+     "bytes": 336,
+     "unk_fields": 9,
+     "m2c_names": 3,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801AC6C8",
+     "address": "0x801AC6C8",
+     "bytes": 68,
+     "unk_fields": 0,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801AC70C",
+     "address": "0x801AC70C",
+     "bytes": 312,
+     "unk_fields": 14,
+     "m2c_names": 1,
+     "unk_types": 3,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801AC844",
+     "address": "0x801AC844",
+     "bytes": 72,
+     "unk_fields": 3,
+     "m2c_names": 0,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801AC88C",
+     "address": "0x801AC88C",
+     "bytes": 144,
+     "level": "asm"
+    },
+    {
+     "name": "func_801AC91C",
+     "address": "0x801AC91C",
+     "bytes": 152,
+     "level": "asm"
+    },
+    {
+     "name": "func_801AC9B4",
+     "address": "0x801AC9B4",
+     "bytes": 28,
+     "unk_fields": 2,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    }
+   ]
+  },
+  {
+   "unit": "psyq/801AC9D0.s.s",
+   "game": false,
+   "library": "psyq",
+   "bytes": 127760,
+   "functions": [
+    {
+     "name": "DeliverEvent",
+     "address": "0x801AC9D0",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "OpenEvent",
+     "address": "0x801AC9E0",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "CloseEvent",
+     "address": "0x801AC9F0",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "EnableEvent",
+     "address": "0x801ACA00",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "DisableEvent",
+     "address": "0x801ACA10",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "UnDeliverEvent",
+     "address": "0x801ACA20",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "EnterCriticalSection",
+     "address": "0x801ACA30",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "ExitCriticalSection",
+     "address": "0x801ACA40",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "free3",
+     "address": "0x801ACA50",
+     "bytes": 336,
+     "level": "sony"
+    },
+    {
+     "name": "InitHeap3",
+     "address": "0x801ACBA0",
+     "bytes": 96,
+     "level": "sony"
+    },
+    {
+     "name": "atoi",
+     "address": "0x801ACC00",
+     "bytes": 300,
+     "level": "sony"
+    },
+    {
+     "name": "atol",
+     "address": "0x801ACD2C",
+     "bytes": 36,
+     "level": "sony"
+    },
+    {
+     "name": "toupper",
+     "address": "0x801ACD50",
+     "bytes": 52,
+     "level": "sony"
+    },
+    {
+     "name": "tolower",
+     "address": "0x801ACD84",
+     "bytes": 60,
+     "level": "sony"
+    },
+    {
+     "name": "memcpy",
+     "address": "0x801ACDC0",
+     "bytes": 64,
+     "level": "sony"
+    },
+    {
+     "name": "memset",
+     "address": "0x801ACE00",
+     "bytes": 48,
+     "level": "sony"
+    },
+    {
+     "name": "qsort",
+     "address": "0x801ACE30",
+     "bytes": 336,
+     "level": "sony"
+    },
+    {
+     "name": "func_801ACF80",
+     "address": "0x801ACF80",
+     "bytes": 64,
+     "level": "sony"
+    },
+    {
+     "name": "rand",
+     "address": "0x801ACFC0",
+     "bytes": 48,
+     "level": "sony"
+    },
+    {
+     "name": "srand",
+     "address": "0x801ACFF0",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "strlen",
+     "address": "0x801AD000",
+     "bytes": 64,
+     "level": "sony"
+    },
+    {
+     "name": "strncmp",
+     "address": "0x801AD040",
+     "bytes": 128,
+     "level": "sony"
+    },
+    {
+     "name": "strncpy",
+     "address": "0x801AD0C0",
+     "bytes": 112,
+     "level": "sony"
+    },
+    {
+     "name": "todigit",
+     "address": "0x801AD130",
+     "bytes": 112,
+     "level": "sony"
+    },
+    {
+     "name": "sprintf",
+     "address": "0x801AD1A0",
+     "bytes": 2176,
+     "level": "sony"
+    },
+    {
+     "name": "memchr",
+     "address": "0x801ADA20",
+     "bytes": 80,
+     "level": "sony"
+    },
+    {
+     "name": "memmove",
+     "address": "0x801ADA70",
+     "bytes": 112,
+     "level": "sony"
+    },
+    {
+     "name": "ResetGraph",
+     "address": "0x801ADAE0",
+     "bytes": 372,
+     "level": "sony"
+    },
+    {
+     "name": "SetGraphDebug",
+     "address": "0x801ADC54",
+     "bytes": 92,
+     "level": "sony"
+    },
+    {
+     "name": "SetGraphQueue",
+     "address": "0x801ADCB0",
+     "bytes": 164,
+     "level": "sony"
+    },
+    {
+     "name": "GetGraphDebug",
+     "address": "0x801ADD54",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "DrawSyncCallback",
+     "address": "0x801ADD64",
+     "bytes": 96,
+     "level": "sony"
+    },
+    {
+     "name": "SetDispMask",
+     "address": "0x801ADDC4",
+     "bytes": 152,
+     "level": "sony"
+    },
+    {
+     "name": "DrawSync",
+     "address": "0x801ADE5C",
+     "bytes": 104,
+     "level": "sony"
+    },
+    {
+     "name": "func_801ADEC4",
+     "address": "0x801ADEC4",
+     "bytes": 284,
+     "level": "sony"
+    },
+    {
+     "name": "ClearImage",
+     "address": "0x801ADFE0",
+     "bytes": 144,
+     "level": "sony"
+    },
+    {
+     "name": "ClearImage2",
+     "address": "0x801AE070",
+     "bytes": 152,
+     "level": "sony"
+    },
+    {
+     "name": "LoadImage",
+     "address": "0x801AE108",
+     "bytes": 96,
+     "level": "sony"
+    },
+    {
+     "name": "StoreImage",
+     "address": "0x801AE168",
+     "bytes": 96,
+     "level": "sony"
+    },
+    {
+     "name": "MoveImage",
+     "address": "0x801AE1C8",
+     "bytes": 184,
+     "level": "sony"
+    },
+    {
+     "name": "ClearOTag",
+     "address": "0x801AE280",
+     "bytes": 200,
+     "level": "sony"
+    },
+    {
+     "name": "ClearOTagR",
+     "address": "0x801AE348",
+     "bytes": 172,
+     "level": "sony"
+    },
+    {
+     "name": "DrawPrim",
+     "address": "0x801AE3F4",
+     "bytes": 92,
+     "level": "sony"
+    },
+    {
+     "name": "DrawOTag",
+     "address": "0x801AE450",
+     "bytes": 112,
+     "level": "sony"
+    },
+    {
+     "name": "PutDrawEnv",
+     "address": "0x801AE4C0",
+     "bytes": 192,
+     "level": "sony"
+    },
+    {
+     "name": "DrawOTagEnv",
+     "address": "0x801AE580",
+     "bytes": 216,
+     "level": "sony"
+    },
+    {
+     "name": "GetDrawEnv",
+     "address": "0x801AE658",
+     "bytes": 52,
+     "level": "sony"
+    },
+    {
+     "name": "PutDispEnv",
+     "address": "0x801AE68C",
+     "bytes": 1272,
+     "level": "sony"
+    },
+    {
+     "name": "GetDispEnv",
+     "address": "0x801AEB84",
+     "bytes": 52,
+     "level": "sony"
+    },
+    {
+     "name": "GetODE",
+     "address": "0x801AEBB8",
+     "bytes": 48,
+     "level": "sony"
+    },
+    {
+     "name": "SetDrawArea",
+     "address": "0x801AEBE8",
+     "bytes": 128,
+     "level": "sony"
+    },
+    {
+     "name": "SetDrawOffset",
+     "address": "0x801AEC68",
+     "bytes": 64,
+     "level": "sony"
+    },
+    {
+     "name": "SetDrawEnv",
+     "address": "0x801AECA8",
+     "bytes": 504,
+     "level": "sony"
+    },
+    {
+     "name": "func_801AEEA0",
+     "address": "0x801AEEA0",
+     "bytes": 624,
+     "level": "sony"
+    },
+    {
+     "name": "func_801AF110",
+     "address": "0x801AF110",
+     "bytes": 32,
+     "level": "sony"
+    },
+    {
+     "name": "func_801AF130",
+     "address": "0x801AF130",
+     "bytes": 152,
+     "level": "sony"
+    },
+    {
+     "name": "func_801AF1C8",
+     "address": "0x801AF1C8",
+     "bytes": 152,
+     "level": "sony"
+    },
+    {
+     "name": "func_801AF260",
+     "address": "0x801AF260",
+     "bytes": 28,
+     "level": "sony"
+    },
+    {
+     "name": "func_801AF27C",
+     "address": "0x801AF27C",
+     "bytes": 128,
+     "level": "sony"
+    },
+    {
+     "name": "func_801AF2FC",
+     "address": "0x801AF2FC",
+     "bytes": 24,
+     "level": "sony"
+    },
+    {
+     "name": "func_801AF314",
+     "address": "0x801AF314",
+     "bytes": 224,
+     "level": "sony"
+    },
+    {
+     "name": "func_801AF3F4",
+     "address": "0x801AF3F4",
+     "bytes": 560,
+     "level": "sony"
+    },
+    {
+     "name": "func_801AF624",
+     "address": "0x801AF624",
+     "bytes": 572,
+     "level": "sony"
+    },
+    {
+     "name": "func_801AF860",
+     "address": "0x801AF860",
+     "bytes": 640,
+     "level": "sony"
+    },
+    {
+     "name": "func_801AFAE0",
+     "address": "0x801AFAE0",
+     "bytes": 36,
+     "level": "sony"
+    },
+    {
+     "name": "func_801AFB04",
+     "address": "0x801AFB04",
+     "bytes": 20,
+     "level": "sony"
+    },
+    {
+     "name": "func_801AFB18",
+     "address": "0x801AFB18",
+     "bytes": 64,
+     "level": "sony"
+    },
+    {
+     "name": "func_801AFB58",
+     "address": "0x801AFB58",
+     "bytes": 72,
+     "level": "sony"
+    },
+    {
+     "name": "func_801AFBA0",
+     "address": "0x801AFBA0",
+     "bytes": 48,
+     "level": "sony"
+    },
+    {
+     "name": "func_801AFBD0",
+     "address": "0x801AFBD0",
+     "bytes": 36,
+     "level": "sony"
+    },
+    {
+     "name": "func_801AFBF4",
+     "address": "0x801AFBF4",
+     "bytes": 688,
+     "level": "sony"
+    },
+    {
+     "name": "func_801AFEA4",
+     "address": "0x801AFEA4",
+     "bytes": 608,
+     "level": "sony"
+    },
+    {
+     "name": "func_801B0104",
+     "address": "0x801B0104",
+     "bytes": 336,
+     "level": "sony"
+    },
+    {
+     "name": "func_801B0254",
+     "address": "0x801B0254",
+     "bytes": 316,
+     "level": "sony"
+    },
+    {
+     "name": "func_801B0390",
+     "address": "0x801B0390",
+     "bytes": 52,
+     "level": "sony"
+    },
+    {
+     "name": "func_801B03C4",
+     "address": "0x801B03C4",
+     "bytes": 324,
+     "level": "sony"
+    },
+    {
+     "name": "func_801B0508",
+     "address": "0x801B0508",
+     "bytes": 160,
+     "level": "sony"
+    },
+    {
+     "name": "LoadImage2",
+     "address": "0x801B05A8",
+     "bytes": 236,
+     "level": "sony"
+    },
+    {
+     "name": "StoreImage2",
+     "address": "0x801B0694",
+     "bytes": 236,
+     "level": "sony"
+    },
+    {
+     "name": "MoveImage2",
+     "address": "0x801B0780",
+     "bytes": 324,
+     "level": "sony"
+    },
+    {
+     "name": "DrawOTag2",
+     "address": "0x801B08C4",
+     "bytes": 252,
+     "level": "sony"
+    },
+    {
+     "name": "_GPU_ResetCallback",
+     "address": "0x801B09C0",
+     "bytes": 40,
+     "level": "sony"
+    },
+    {
+     "name": "func_801B09E8",
+     "address": "0x801B09E8",
+     "bytes": 40,
+     "level": "sony"
+    },
+    {
+     "name": "GPU_cw",
+     "address": "0x801B0A10",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "printf",
+     "address": "0x801B0A20",
+     "bytes": 64,
+     "level": "sony"
+    },
+    {
+     "name": "prnt",
+     "address": "0x801B0A60",
+     "bytes": 1696,
+     "level": "sony"
+    },
+    {
+     "name": "_putchar",
+     "address": "0x801B1100",
+     "bytes": 252,
+     "level": "sony"
+    },
+    {
+     "name": "_putchar_flash",
+     "address": "0x801B11FC",
+     "bytes": 60,
+     "level": "sony"
+    },
+    {
+     "name": "putchar",
+     "address": "0x801B1238",
+     "bytes": 296,
+     "level": "sony"
+    },
+    {
+     "name": "write",
+     "address": "0x801B1360",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "Krom2RawAdd2",
+     "address": "0x801B1370",
+     "bytes": 172,
+     "level": "sony"
+    },
+    {
+     "name": "kanjitrans",
+     "address": "0x801B141C",
+     "bytes": 1324,
+     "level": "sony"
+    },
+    {
+     "name": "hankanjitrans",
+     "address": "0x801B1948",
+     "bytes": 312,
+     "level": "sony"
+    },
+    {
+     "name": "Krom2RawAdd",
+     "address": "0x801B1A80",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "bcopy",
+     "address": "0x801B1A90",
+     "bytes": 64,
+     "level": "sony"
+    },
+    {
+     "name": "SetSemiTrans",
+     "address": "0x801B1AD0",
+     "bytes": 48,
+     "level": "sony"
+    },
+    {
+     "name": "SetShadeTex",
+     "address": "0x801B1B00",
+     "bytes": 48,
+     "level": "sony"
+    },
+    {
+     "name": "SetDrawMode",
+     "address": "0x801B1B30",
+     "bytes": 160,
+     "level": "sony"
+    },
+    {
+     "name": "GsInitCoordinate2",
+     "address": "0x801B1BD0",
+     "bytes": 112,
+     "level": "sony"
+    },
+    {
+     "name": "GsInitCoord2param",
+     "address": "0x801B1C40",
+     "bytes": 44,
+     "level": "sony"
+    },
+    {
+     "name": "GsSetLsMatrix",
+     "address": "0x801B1C6C",
+     "bytes": 44,
+     "level": "sony"
+    },
+    {
+     "name": "GsSetLightMatrix",
+     "address": "0x801B1C98",
+     "bytes": 148,
+     "level": "sony"
+    },
+    {
+     "name": "GsSetLightMatrix2",
+     "address": "0x801B1D2C",
+     "bytes": 48,
+     "level": "sony"
+    },
+    {
+     "name": "GsMulCoord0",
+     "address": "0x801B1D5C",
+     "bytes": 144,
+     "level": "sony"
+    },
+    {
+     "name": "GsMulCoord2",
+     "address": "0x801B1DEC",
+     "bytes": 128,
+     "level": "sony"
+    },
+    {
+     "name": "GsMulCoord3",
+     "address": "0x801B1E6C",
+     "bytes": 128,
+     "level": "sony"
+    },
+    {
+     "name": "print_matrix",
+     "address": "0x801B1EEC",
+     "bytes": 112,
+     "level": "sony"
+    },
+    {
+     "name": "print_vector",
+     "address": "0x801B1F5C",
+     "bytes": 52,
+     "level": "sony"
+    },
+    {
+     "name": "GsSetFlatLight",
+     "address": "0x801B1F90",
+     "bytes": 1208,
+     "level": "sony"
+    },
+    {
+     "name": "func_801B2448",
+     "address": "0x801B2448",
+     "bytes": 100,
+     "level": "sony"
+    },
+    {
+     "name": "func_801B24AC",
+     "address": "0x801B24AC",
+     "bytes": 84,
+     "level": "sony"
+    },
+    {
+     "name": "Gssub_make_matrix",
+     "address": "0x801B2500",
+     "bytes": 208,
+     "level": "sony"
+    },
+    {
+     "name": "func_801B25D0",
+     "address": "0x801B25D0",
+     "bytes": 352,
+     "level": "sony"
+    },
+    {
+     "name": "GsGetLw",
+     "address": "0x801B2730",
+     "bytes": 704,
+     "level": "sony"
+    },
+    {
+     "name": "GsInitGraph",
+     "address": "0x801B29F0",
+     "bytes": 116,
+     "level": "sony"
+    },
+    {
+     "name": "func_801B2A64",
+     "address": "0x801B2A64",
+     "bytes": 284,
+     "level": "sony"
+    },
+    {
+     "name": "GsInitGraph2",
+     "address": "0x801B2B80",
+     "bytes": 104,
+     "level": "sony"
+    },
+    {
+     "name": "func_801B2BE8",
+     "address": "0x801B2BE8",
+     "bytes": 544,
+     "level": "sony"
+    },
+    {
+     "name": "GsSortClear",
+     "address": "0x801B2E08",
+     "bytes": 312,
+     "level": "sony"
+    },
+    {
+     "name": "AddPrim",
+     "address": "0x801B2F40",
+     "bytes": 64,
+     "level": "sony"
+    },
+    {
+     "name": "GsGetActiveBuff",
+     "address": "0x801B2F80",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "GsSetDrawBuffOffset",
+     "address": "0x801B2F90",
+     "bytes": 272,
+     "level": "sony"
+    },
+    {
+     "name": "GsSetDrawBuffClip",
+     "address": "0x801B30A0",
+     "bytes": 128,
+     "level": "sony"
+    },
+    {
+     "name": "GsInit3D",
+     "address": "0x801B3120",
+     "bytes": 128,
+     "level": "sony"
+    },
+    {
+     "name": "gte_init",
+     "address": "0x801B31A0",
+     "bytes": 80,
+     "level": "sony"
+    },
+    {
+     "name": "GsGetLs",
+     "address": "0x801B31F0",
+     "bytes": 720,
+     "level": "sony"
+    },
+    {
+     "name": "func_801B34C0",
+     "address": "0x801B34C0",
+     "bytes": 2192,
+     "level": "sony"
+    },
+    {
+     "name": "rsin",
+     "address": "0x801B3D50",
+     "bytes": 60,
+     "level": "sony"
+    },
+    {
+     "name": "sin_1",
+     "address": "0x801B3D8C",
+     "bytes": 148,
+     "level": "sony"
+    },
+    {
+     "name": "rcos",
+     "address": "0x801B3E20",
+     "bytes": 160,
+     "level": "sony"
+    },
+    {
+     "name": "SetFogNearFar",
+     "address": "0x801B3EC0",
+     "bytes": 272,
+     "level": "sony"
+    },
+    {
+     "name": "D_801B3FD0",
+     "address": "0x801B3FD0",
+     "bytes": 8,
+     "level": "sony"
+    },
+    {
+     "name": "InitGeom",
+     "address": "0x801B3FD8",
+     "bytes": 136,
+     "level": "sony"
+    },
+    {
+     "name": "SquareRoot0",
+     "address": "0x801B4060",
+     "bytes": 144,
+     "level": "sony"
+    },
+    {
+     "name": "InvSquareRoot",
+     "address": "0x801B40F0",
+     "bytes": 140,
+     "level": "sony"
+    },
+    {
+     "name": "VectorNormalS",
+     "address": "0x801B417C",
+     "bytes": 20,
+     "level": "sony"
+    },
+    {
+     "name": "VectorNormal",
+     "address": "0x801B4190",
+     "bytes": 48,
+     "level": "sony"
+    },
+    {
+     "name": "VectorNormalSS",
+     "address": "0x801B41C0",
+     "bytes": 48,
+     "level": "sony"
+    },
+    {
+     "name": "func_801B41F0",
+     "address": "0x801B41F0",
+     "bytes": 192,
+     "level": "sony"
+    },
+    {
+     "name": "MatrixNormal",
+     "address": "0x801B42B0",
+     "bytes": 240,
+     "level": "sony"
+    },
+    {
+     "name": "MulMatrix0",
+     "address": "0x801B43A0",
+     "bytes": 272,
+     "level": "sony"
+    },
+    {
+     "name": "ApplyMatrixLV",
+     "address": "0x801B44B0",
+     "bytes": 352,
+     "level": "sony"
+    },
+    {
+     "name": "PushMatrix",
+     "address": "0x801B4610",
+     "bytes": 164,
+     "level": "sony"
+    },
+    {
+     "name": "PopMatrix",
+     "address": "0x801B46B4",
+     "bytes": 172,
+     "level": "sony"
+    },
+    {
+     "name": "MulMatrix",
+     "address": "0x801B4760",
+     "bytes": 272,
+     "level": "sony"
+    },
+    {
+     "name": "MulMatrix2",
+     "address": "0x801B4870",
+     "bytes": 272,
+     "level": "sony"
+    },
+    {
+     "name": "SetRotMatrix",
+     "address": "0x801B4980",
+     "bytes": 48,
+     "level": "sony"
+    },
+    {
+     "name": "SetLightMatrix",
+     "address": "0x801B49B0",
+     "bytes": 48,
+     "level": "sony"
+    },
+    {
+     "name": "SetColorMatrix",
+     "address": "0x801B49E0",
+     "bytes": 48,
+     "level": "sony"
+    },
+    {
+     "name": "SetTransMatrix",
+     "address": "0x801B4A10",
+     "bytes": 32,
+     "level": "sony"
+    },
+    {
+     "name": "SetVertex0",
+     "address": "0x801B4A30",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "SetVertex1",
+     "address": "0x801B4A40",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "SetVertex2",
+     "address": "0x801B4A50",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "SetVertexTri",
+     "address": "0x801B4A60",
+     "bytes": 32,
+     "level": "sony"
+    },
+    {
+     "name": "SetRGBfifo",
+     "address": "0x801B4A80",
+     "bytes": 20,
+     "level": "sony"
+    },
+    {
+     "name": "SetIR123",
+     "address": "0x801B4A94",
+     "bytes": 20,
+     "level": "sony"
+    },
+    {
+     "name": "SetIR0",
+     "address": "0x801B4AA8",
+     "bytes": 12,
+     "level": "sony"
+    },
+    {
+     "name": "SetSZfifo3",
+     "address": "0x801B4AB4",
+     "bytes": 20,
+     "level": "sony"
+    },
+    {
+     "name": "SetSZfifo4",
+     "address": "0x801B4AC8",
+     "bytes": 24,
+     "level": "sony"
+    },
+    {
+     "name": "SetSXSYfifo",
+     "address": "0x801B4AE0",
+     "bytes": 20,
+     "level": "sony"
+    },
+    {
+     "name": "SetRii",
+     "address": "0x801B4AF4",
+     "bytes": 20,
+     "level": "sony"
+    },
+    {
+     "name": "SetMAC123",
+     "address": "0x801B4B08",
+     "bytes": 20,
+     "level": "sony"
+    },
+    {
+     "name": "SetData32",
+     "address": "0x801B4B1C",
+     "bytes": 12,
+     "level": "sony"
+    },
+    {
+     "name": "SetDQA",
+     "address": "0x801B4B28",
+     "bytes": 12,
+     "level": "sony"
+    },
+    {
+     "name": "SetDQB",
+     "address": "0x801B4B34",
+     "bytes": 12,
+     "level": "sony"
+    },
+    {
+     "name": "SetFarColor",
+     "address": "0x801B4B40",
+     "bytes": 32,
+     "level": "sony"
+    },
+    {
+     "name": "SetGeomOffset",
+     "address": "0x801B4B60",
+     "bytes": 32,
+     "level": "sony"
+    },
+    {
+     "name": "RotTrans",
+     "address": "0x801B4B80",
+     "bytes": 48,
+     "level": "sony"
+    },
+    {
+     "name": "TransposeMatrix",
+     "address": "0x801B4BB0",
+     "bytes": 64,
+     "level": "sony"
+    },
+    {
+     "name": "RotMatrix",
+     "address": "0x801B4BF0",
+     "bytes": 656,
+     "level": "sony"
+    },
+    {
+     "name": "RotMatrixZYX",
+     "address": "0x801B4E80",
+     "bytes": 656,
+     "level": "sony"
+    },
+    {
+     "name": "RotMatrixZXY",
+     "address": "0x801B5110",
+     "bytes": 656,
+     "level": "sony"
+    },
+    {
+     "name": "InitClip",
+     "address": "0x801B53A0",
+     "bytes": 288,
+     "level": "sony"
+    },
+    {
+     "name": "Clip3FP",
+     "address": "0x801B54C0",
+     "bytes": 112,
+     "level": "sony"
+    },
+    {
+     "name": "RotTransPers",
+     "address": "0x801B5530",
+     "bytes": 48,
+     "level": "sony"
+    },
+    {
+     "name": "Clip4FP",
+     "address": "0x801B5560",
+     "bytes": 128,
+     "level": "sony"
+    },
+    {
+     "name": "Clip3F",
+     "address": "0x801B55E0",
+     "bytes": 336,
+     "level": "sony"
+    },
+    {
+     "name": "Clip4F",
+     "address": "0x801B5730",
+     "bytes": 368,
+     "level": "sony"
+    },
+    {
+     "name": "ClipF",
+     "address": "0x801B58A0",
+     "bytes": 2016,
+     "level": "sony"
+    },
+    {
+     "name": "ZClipF",
+     "address": "0x801B6080",
+     "bytes": 208,
+     "level": "sony"
+    },
+    {
+     "name": "LoadAverage12",
+     "address": "0x801B6150",
+     "bytes": 80,
+     "level": "sony"
+    },
+    {
+     "name": "LoadAverage0",
+     "address": "0x801B61A0",
+     "bytes": 80,
+     "level": "sony"
+    },
+    {
+     "name": "LoadAverageShort12",
+     "address": "0x801B61F0",
+     "bytes": 136,
+     "level": "sony"
+    },
+    {
+     "name": "LoadAverageShort0",
+     "address": "0x801B6278",
+     "bytes": 136,
+     "level": "sony"
+    },
+    {
+     "name": "LoadAverageByte",
+     "address": "0x801B6300",
+     "bytes": 96,
+     "level": "sony"
+    },
+    {
+     "name": "LoadAverageCol",
+     "address": "0x801B6360",
+     "bytes": 128,
+     "level": "sony"
+    },
+    {
+     "name": "Clip3GP",
+     "address": "0x801B63E0",
+     "bytes": 132,
+     "level": "sony"
+    },
+    {
+     "name": "Clip4GP",
+     "address": "0x801B6464",
+     "bytes": 148,
+     "level": "sony"
+    },
+    {
+     "name": "Clip3G",
+     "address": "0x801B64F8",
+     "bytes": 416,
+     "level": "sony"
+    },
+    {
+     "name": "Clip4G",
+     "address": "0x801B6698",
+     "bytes": 492,
+     "level": "sony"
+    },
+    {
+     "name": "ClipG",
+     "address": "0x801B6884",
+     "bytes": 2044,
+     "level": "sony"
+    },
+    {
+     "name": "ZClipG",
+     "address": "0x801B7080",
+     "bytes": 288,
+     "level": "sony"
+    },
+    {
+     "name": "DivideFT3",
+     "address": "0x801B71A0",
+     "bytes": 432,
+     "level": "sony"
+    },
+    {
+     "name": "ReadSZfifo3",
+     "address": "0x801B7350",
+     "bytes": 32,
+     "level": "sony"
+    },
+    {
+     "name": "RotAverageNclip3",
+     "address": "0x801B7370",
+     "bytes": 144,
+     "level": "sony"
+    },
+    {
+     "name": "DivideGT3",
+     "address": "0x801B7400",
+     "bytes": 480,
+     "level": "sony"
+    },
+    {
+     "name": "DivideFT4",
+     "address": "0x801B75E0",
+     "bytes": 512,
+     "level": "sony"
+    },
+    {
+     "name": "ReadSZfifo4",
+     "address": "0x801B77E0",
+     "bytes": 32,
+     "level": "sony"
+    },
+    {
+     "name": "RotAverageNclip4",
+     "address": "0x801B7800",
+     "bytes": 176,
+     "level": "sony"
+    },
+    {
+     "name": "DivideGT4",
+     "address": "0x801B78B0",
+     "bytes": 592,
+     "level": "sony"
+    },
+    {
+     "name": "RCpolyFT3",
+     "address": "0x801B7B00",
+     "bytes": 8,
+     "level": "sony"
+    },
+    {
+     "name": "RCpolyFT3A",
+     "address": "0x801B7B08",
+     "bytes": 884,
+     "level": "sony"
+    },
+    {
+     "name": "func_801B7E7C",
+     "address": "0x801B7E7C",
+     "bytes": 132,
+     "level": "sony"
+    },
+    {
+     "name": "RCpolyGT3",
+     "address": "0x801B7F00",
+     "bytes": 8,
+     "level": "sony"
+    },
+    {
+     "name": "RCpolyGT3A",
+     "address": "0x801B7F08",
+     "bytes": 1028,
+     "level": "sony"
+    },
+    {
+     "name": "func_801B830C",
+     "address": "0x801B830C",
+     "bytes": 148,
+     "level": "sony"
+    },
+    {
+     "name": "RCpolyFT4",
+     "address": "0x801B83A0",
+     "bytes": 8,
+     "level": "sony"
+    },
+    {
+     "name": "RCpolyFT4A",
+     "address": "0x801B83A8",
+     "bytes": 1160,
+     "level": "sony"
+    },
+    {
+     "name": "func_801B8830",
+     "address": "0x801B8830",
+     "bytes": 144,
+     "level": "sony"
+    },
+    {
+     "name": "RCpolyGT4",
+     "address": "0x801B88C0",
+     "bytes": 8,
+     "level": "sony"
+    },
+    {
+     "name": "RCpolyGT4A",
+     "address": "0x801B88C8",
+     "bytes": 1380,
+     "level": "sony"
+    },
+    {
+     "name": "func_801B8E2C",
+     "address": "0x801B8E2C",
+     "bytes": 180,
+     "level": "sony"
+    },
+    {
+     "name": "ratan2",
+     "address": "0x801B8EE0",
+     "bytes": 384,
+     "level": "sony"
+    },
+    {
+     "name": "_patch_gte",
+     "address": "0x801B9060",
+     "bytes": 172,
+     "level": "sony"
+    },
+    {
+     "name": "func_801B910C",
+     "address": "0x801B910C",
+     "bytes": 52,
+     "level": "sony"
+    },
+    {
+     "name": "FlushCache",
+     "address": "0x801B9140",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "CdStatus",
+     "address": "0x801B9150",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "CdMode",
+     "address": "0x801B9160",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "CdLastCom",
+     "address": "0x801B9170",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "CdLastPos",
+     "address": "0x801B9180",
+     "bytes": 12,
+     "level": "sony"
+    },
+    {
+     "name": "CdReset",
+     "address": "0x801B918C",
+     "bytes": 108,
+     "level": "sony"
+    },
+    {
+     "name": "CdFlush",
+     "address": "0x801B91F8",
+     "bytes": 32,
+     "level": "sony"
+    },
+    {
+     "name": "CdSetDebug",
+     "address": "0x801B9218",
+     "bytes": 20,
+     "level": "sony"
+    },
+    {
+     "name": "CdComstr",
+     "address": "0x801B922C",
+     "bytes": 52,
+     "level": "sony"
+    },
+    {
+     "name": "CdIntstr",
+     "address": "0x801B9260",
+     "bytes": 52,
+     "level": "sony"
+    },
+    {
+     "name": "CdSync",
+     "address": "0x801B9294",
+     "bytes": 32,
+     "level": "sony"
+    },
+    {
+     "name": "CdReady",
+     "address": "0x801B92B4",
+     "bytes": 32,
+     "level": "sony"
+    },
+    {
+     "name": "CdSyncCallback",
+     "address": "0x801B92D4",
+     "bytes": 20,
+     "level": "sony"
+    },
+    {
+     "name": "CdReadyCallback",
+     "address": "0x801B92E8",
+     "bytes": 20,
+     "level": "sony"
+    },
+    {
+     "name": "CdControl",
+     "address": "0x801B92FC",
+     "bytes": 316,
+     "level": "sony"
+    },
+    {
+     "name": "CdControlF",
+     "address": "0x801B9438",
+     "bytes": 308,
+     "level": "sony"
+    },
+    {
+     "name": "CdControlB",
+     "address": "0x801B956C",
+     "bytes": 332,
+     "level": "sony"
+    },
+    {
+     "name": "CdMix",
+     "address": "0x801B96B8",
+     "bytes": 32,
+     "level": "sony"
+    },
+    {
+     "name": "CdGetSector",
+     "address": "0x801B96D8",
+     "bytes": 32,
+     "level": "sony"
+    },
+    {
+     "name": "CdGetSector2",
+     "address": "0x801B96F8",
+     "bytes": 32,
+     "level": "sony"
+    },
+    {
+     "name": "CdDataCallback",
+     "address": "0x801B9718",
+     "bytes": 36,
+     "level": "sony"
+    },
+    {
+     "name": "CdDataSync",
+     "address": "0x801B973C",
+     "bytes": 32,
+     "level": "sony"
+    },
+    {
+     "name": "CdIntToPos",
+     "address": "0x801B975C",
+     "bytes": 260,
+     "level": "sony"
+    },
+    {
+     "name": "CdPosToInt",
+     "address": "0x801B9860",
+     "bytes": 128,
+     "level": "sony"
+    },
+    {
+     "name": "func_801B98E0",
+     "address": "0x801B98E0",
+     "bytes": 1372,
+     "level": "sony"
+    },
+    {
+     "name": "CD_sync",
+     "address": "0x801B9E3C",
+     "bytes": 640,
+     "level": "sony"
+    },
+    {
+     "name": "CD_ready",
+     "address": "0x801BA0BC",
+     "bytes": 712,
+     "level": "sony"
+    },
+    {
+     "name": "CD_cw",
+     "address": "0x801BA384",
+     "bytes": 1036,
+     "level": "sony"
+    },
+    {
+     "name": "CD_vol",
+     "address": "0x801BA790",
+     "bytes": 136,
+     "level": "sony"
+    },
+    {
+     "name": "CD_flush",
+     "address": "0x801BA818",
+     "bytes": 212,
+     "level": "sony"
+    },
+    {
+     "name": "CD_initvol",
+     "address": "0x801BA8EC",
+     "bytes": 240,
+     "level": "sony"
+    },
+    {
+     "name": "CD_initintr",
+     "address": "0x801BA9DC",
+     "bytes": 76,
+     "level": "sony"
+    },
+    {
+     "name": "CD_init",
+     "address": "0x801BAA28",
+     "bytes": 480,
+     "level": "sony"
+    },
+    {
+     "name": "CD_datasync",
+     "address": "0x801BAC08",
+     "bytes": 360,
+     "level": "sony"
+    },
+    {
+     "name": "CD_getsector",
+     "address": "0x801BAD70",
+     "bytes": 256,
+     "level": "sony"
+    },
+    {
+     "name": "CD_getsector2",
+     "address": "0x801BAE70",
+     "bytes": 236,
+     "level": "sony"
+    },
+    {
+     "name": "CD_set_test_parmnum",
+     "address": "0x801BAF5C",
+     "bytes": 12,
+     "level": "sony"
+    },
+    {
+     "name": "func_801BAF68",
+     "address": "0x801BAF68",
+     "bytes": 216,
+     "level": "sony"
+    },
+    {
+     "name": "puts",
+     "address": "0x801BB040",
+     "bytes": 96,
+     "level": "sony"
+    },
+    {
+     "name": "CdSearchFile",
+     "address": "0x801BB0A0",
+     "bytes": 728,
+     "level": "sony"
+    },
+    {
+     "name": "func_801BB378",
+     "address": "0x801BB378",
+     "bytes": 32,
+     "level": "sony"
+    },
+    {
+     "name": "func_801BB398",
+     "address": "0x801BB398",
+     "bytes": 708,
+     "level": "sony"
+    },
+    {
+     "name": "func_801BB65C",
+     "address": "0x801BB65C",
+     "bytes": 164,
+     "level": "sony"
+    },
+    {
+     "name": "func_801BB700",
+     "address": "0x801BB700",
+     "bytes": 668,
+     "level": "sony"
+    },
+    {
+     "name": "func_801BB99C",
+     "address": "0x801BB99C",
+     "bytes": 116,
+     "level": "sony"
+    },
+    {
+     "name": "strcmp",
+     "address": "0x801BBA10",
+     "bytes": 112,
+     "level": "sony"
+    },
+    {
+     "name": "func_801BBA80",
+     "address": "0x801BBA80",
+     "bytes": 52,
+     "level": "sony"
+    },
+    {
+     "name": "func_801BBAB4",
+     "address": "0x801BBAB4",
+     "bytes": 628,
+     "level": "sony"
+    },
+    {
+     "name": "func_801BBD28",
+     "address": "0x801BBD28",
+     "bytes": 208,
+     "level": "sony"
+    },
+    {
+     "name": "func_801BBDF8",
+     "address": "0x801BBDF8",
+     "bytes": 488,
+     "level": "sony"
+    },
+    {
+     "name": "CdReadBreak",
+     "address": "0x801BBFE0",
+     "bytes": 416,
+     "level": "sony"
+    },
+    {
+     "name": "CdRead",
+     "address": "0x801BC180",
+     "bytes": 412,
+     "level": "sony"
+    },
+    {
+     "name": "CdReadSync",
+     "address": "0x801BC31C",
+     "bytes": 260,
+     "level": "sony"
+    },
+    {
+     "name": "CdReadCallback",
+     "address": "0x801BC420",
+     "bytes": 20,
+     "level": "sony"
+    },
+    {
+     "name": "CdReadMode",
+     "address": "0x801BC434",
+     "bytes": 28,
+     "level": "sony"
+    },
+    {
+     "name": "CdInit",
+     "address": "0x801BC450",
+     "bytes": 144,
+     "level": "sony"
+    },
+    {
+     "name": "func_801BC4E0",
+     "address": "0x801BC4E0",
+     "bytes": 60,
+     "level": "sony"
+    },
+    {
+     "name": "func_801BC51C",
+     "address": "0x801BC51C",
+     "bytes": 40,
+     "level": "sony"
+    },
+    {
+     "name": "func_801BC544",
+     "address": "0x801BC544",
+     "bytes": 40,
+     "level": "sony"
+    },
+    {
+     "name": "func_801BC56C",
+     "address": "0x801BC56C",
+     "bytes": 52,
+     "level": "sony"
+    },
+    {
+     "name": "VSync",
+     "address": "0x801BC5A0",
+     "bytes": 376,
+     "level": "sony"
+    },
+    {
+     "name": "func_801BC718",
+     "address": "0x801BC718",
+     "bytes": 152,
+     "level": "sony"
+    },
+    {
+     "name": "ChangeClearPAD",
+     "address": "0x801BC7B0",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "ChangeClearRCnt",
+     "address": "0x801BC7C0",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "ResetCallback",
+     "address": "0x801BC7D0",
+     "bytes": 48,
+     "level": "sony"
+    },
+    {
+     "name": "InterruptCallback",
+     "address": "0x801BC800",
+     "bytes": 48,
+     "level": "sony"
+    },
+    {
+     "name": "DMACallback",
+     "address": "0x801BC830",
+     "bytes": 48,
+     "level": "sony"
+    },
+    {
+     "name": "VSyncCallback",
+     "address": "0x801BC860",
+     "bytes": 52,
+     "level": "sony"
+    },
+    {
+     "name": "VSyncCallbacks",
+     "address": "0x801BC894",
+     "bytes": 48,
+     "level": "sony"
+    },
+    {
+     "name": "StopCallback",
+     "address": "0x801BC8C4",
+     "bytes": 48,
+     "level": "sony"
+    },
+    {
+     "name": "RestartCallback",
+     "address": "0x801BC8F4",
+     "bytes": 48,
+     "level": "sony"
+    },
+    {
+     "name": "CheckCallback",
+     "address": "0x801BC924",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "GetIntrMask",
+     "address": "0x801BC934",
+     "bytes": 24,
+     "level": "sony"
+    },
+    {
+     "name": "SetIntrMask",
+     "address": "0x801BC94C",
+     "bytes": 24,
+     "level": "sony"
+    },
+    {
+     "name": "func_801BC964",
+     "address": "0x801BC964",
+     "bytes": 216,
+     "level": "sony"
+    },
+    {
+     "name": "func_801BCA3C",
+     "address": "0x801BCA3C",
+     "bytes": 464,
+     "level": "sony"
+    },
+    {
+     "name": "func_801BCC0C",
+     "address": "0x801BCC0C",
+     "bytes": 328,
+     "level": "sony"
+    },
+    {
+     "name": "func_801BCD54",
+     "address": "0x801BCD54",
+     "bytes": 160,
+     "level": "sony"
+    },
+    {
+     "name": "func_801BCDF4",
+     "address": "0x801BCDF4",
+     "bytes": 120,
+     "level": "sony"
+    },
+    {
+     "name": "func_801BCE6C",
+     "address": "0x801BCE6C",
+     "bytes": 36,
+     "level": "sony"
+    },
+    {
+     "name": "D_801BCE90",
+     "address": "0x801BCE90",
+     "bytes": 8,
+     "level": "sony"
+    },
+    {
+     "name": "_96_remove",
+     "address": "0x801BCE98",
+     "bytes": 24,
+     "level": "sony"
+    },
+    {
+     "name": "ReturnFromException",
+     "address": "0x801BCEB0",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "ResetEntryInt",
+     "address": "0x801BCEC0",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "HookEntryInt",
+     "address": "0x801BCED0",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "setjmp",
+     "address": "0x801BCEE0",
+     "bytes": 60,
+     "level": "sony"
+    },
+    {
+     "name": "longjmp",
+     "address": "0x801BCF1C",
+     "bytes": 68,
+     "level": "sony"
+    },
+    {
+     "name": "startIntrVSync",
+     "address": "0x801BCF60",
+     "bytes": 88,
+     "level": "sony"
+    },
+    {
+     "name": "func_801BCFB8",
+     "address": "0x801BCFB8",
+     "bytes": 108,
+     "level": "sony"
+    },
+    {
+     "name": "func_801BD024",
+     "address": "0x801BD024",
+     "bytes": 44,
+     "level": "sony"
+    },
+    {
+     "name": "func_801BD050",
+     "address": "0x801BD050",
+     "bytes": 48,
+     "level": "sony"
+    },
+    {
+     "name": "startIntrDMA",
+     "address": "0x801BD080",
+     "bytes": 76,
+     "level": "sony"
+    },
+    {
+     "name": "func_801BD0CC",
+     "address": "0x801BD0CC",
+     "bytes": 384,
+     "level": "sony"
+    },
+    {
+     "name": "func_801BD24C",
+     "address": "0x801BD24C",
+     "bytes": 172,
+     "level": "sony"
+    },
+    {
+     "name": "func_801BD2F8",
+     "address": "0x801BD2F8",
+     "bytes": 40,
+     "level": "sony"
+    },
+    {
+     "name": "SetVideoMode",
+     "address": "0x801BD320",
+     "bytes": 20,
+     "level": "sony"
+    },
+    {
+     "name": "GetVideoMode",
+     "address": "0x801BD334",
+     "bytes": 28,
+     "level": "sony"
+    },
+    {
+     "name": "__adddf3",
+     "address": "0x801BD350",
+     "bytes": 896,
+     "level": "sony"
+    },
+    {
+     "name": "_add_mant_d",
+     "address": "0x801BD6D0",
+     "bytes": 176,
+     "level": "sony"
+    },
+    {
+     "name": "_dbl_shift",
+     "address": "0x801BD780",
+     "bytes": 192,
+     "level": "sony"
+    },
+    {
+     "name": "__divdf3",
+     "address": "0x801BD840",
+     "bytes": 736,
+     "level": "sony"
+    },
+    {
+     "name": "_comp_mant",
+     "address": "0x801BDB20",
+     "bytes": 80,
+     "level": "sony"
+    },
+    {
+     "name": "_dbl_shift_us",
+     "address": "0x801BDB70",
+     "bytes": 192,
+     "level": "sony"
+    },
+    {
+     "name": "func_801BDC30",
+     "address": "0x801BDC30",
+     "bytes": 80,
+     "level": "sony"
+    },
+    {
+     "name": "__floatsidf",
+     "address": "0x801BDC80",
+     "bytes": 288,
+     "level": "sony"
+    },
+    {
+     "name": "__gtdf2",
+     "address": "0x801BDDA0",
+     "bytes": 224,
+     "level": "sony"
+    },
+    {
+     "name": "__ltdf2",
+     "address": "0x801BDE80",
+     "bytes": 224,
+     "level": "sony"
+    },
+    {
+     "name": "_mainasu",
+     "address": "0x801BDF60",
+     "bytes": 112,
+     "level": "sony"
+    },
+    {
+     "name": "__muldf3",
+     "address": "0x801BDFD0",
+     "bytes": 788,
+     "level": "sony"
+    },
+    {
+     "name": "_mul_mant_d",
+     "address": "0x801BE2E4",
+     "bytes": 236,
+     "level": "sony"
+    },
+    {
+     "name": "__subdf3",
+     "address": "0x801BE3D0",
+     "bytes": 128,
+     "level": "sony"
+    },
+    {
+     "name": "__negdf2",
+     "address": "0x801BE450",
+     "bytes": 64,
+     "level": "sony"
+    },
+    {
+     "name": "_err_math",
+     "address": "0x801BE490",
+     "bytes": 112,
+     "level": "sony"
+    },
+    {
+     "name": "func_801BE500",
+     "address": "0x801BE500",
+     "bytes": 380,
+     "level": "sony"
+    },
+    {
+     "name": "SsSeqClose",
+     "address": "0x801BE67C",
+     "bytes": 36,
+     "level": "sony"
+    },
+    {
+     "name": "SsSepClose",
+     "address": "0x801BE6A0",
+     "bytes": 48,
+     "level": "sony"
+    },
+    {
+     "name": "_SsInit",
+     "address": "0x801BE6D0",
+     "bytes": 160,
+     "level": "sony"
+    },
+    {
+     "name": "SsSepOpen",
+     "address": "0x801BE770",
+     "bytes": 768,
+     "level": "sony"
+    },
+    {
+     "name": "_SsContBankChange",
+     "address": "0x801BEA70",
+     "bytes": 128,
+     "level": "sony"
+    },
+    {
+     "name": "_SsContDataEntry",
+     "address": "0x801BEAF0",
+     "bytes": 896,
+     "level": "sony"
+    },
+    {
+     "name": "_SsContMainVol",
+     "address": "0x801BEE70",
+     "bytes": 208,
+     "level": "sony"
+    },
+    {
+     "name": "_SsContPanpot",
+     "address": "0x801BEF40",
+     "bytes": 208,
+     "level": "sony"
+    },
+    {
+     "name": "_SsContExpression",
+     "address": "0x801BF010",
+     "bytes": 240,
+     "level": "sony"
+    },
+    {
+     "name": "_SsContDamper",
+     "address": "0x801BF100",
+     "bytes": 176,
+     "level": "sony"
+    },
+    {
+     "name": "_SsContExternal",
+     "address": "0x801BF1B0",
+     "bytes": 144,
+     "level": "sony"
+    },
+    {
+     "name": "_SsContNrpn1",
+     "address": "0x801BF240",
+     "bytes": 256,
+     "level": "sony"
+    },
+    {
+     "name": "_SsContNrpn2",
+     "address": "0x801BF340",
+     "bytes": 320,
+     "level": "sony"
+    },
+    {
+     "name": "_SsContRpn1",
+     "address": "0x801BF480",
+     "bytes": 112,
+     "level": "sony"
+    },
+    {
+     "name": "_SsContRpn2",
+     "address": "0x801BF4F0",
+     "bytes": 112,
+     "level": "sony"
+    },
+    {
+     "name": "_SsContResetAll",
+     "address": "0x801BF560",
+     "bytes": 192,
+     "level": "sony"
+    },
+    {
+     "name": "_SsSetNrpnVabAttr0",
+     "address": "0x801BF620",
+     "bytes": 144,
+     "level": "sony"
+    },
+    {
+     "name": "_SsSetNrpnVabAttr1",
+     "address": "0x801BF6B0",
+     "bytes": 192,
+     "level": "sony"
+    },
+    {
+     "name": "_SsSetNrpnVabAttr2",
+     "address": "0x801BF770",
+     "bytes": 144,
+     "level": "sony"
+    },
+    {
+     "name": "_SsSetNrpnVabAttr3",
+     "address": "0x801BF800",
+     "bytes": 144,
+     "level": "sony"
+    },
+    {
+     "name": "_SsSetNrpnVabAttr4",
+     "address": "0x801BF890",
+     "bytes": 176,
+     "level": "sony"
+    },
+    {
+     "name": "_SsUtResolveADSR",
+     "address": "0x801BF940",
+     "bytes": 92,
+     "level": "sony"
+    },
+    {
+     "name": "_SsUtBuildADSR",
+     "address": "0x801BF99C",
+     "bytes": 164,
+     "level": "sony"
+    },
+    {
+     "name": "_SsSetNrpnVabAttr5",
+     "address": "0x801BFA40",
+     "bytes": 192,
+     "level": "sony"
+    },
+    {
+     "name": "_SsSetNrpnVabAttr6",
+     "address": "0x801BFB00",
+     "bytes": 176,
+     "level": "sony"
+    },
+    {
+     "name": "_SsSetNrpnVabAttr7",
+     "address": "0x801BFBB0",
+     "bytes": 176,
+     "level": "sony"
+    },
+    {
+     "name": "_SsSetNrpnVabAttr8",
+     "address": "0x801BFC60",
+     "bytes": 176,
+     "level": "sony"
+    },
+    {
+     "name": "_SsSetNrpnVabAttr9",
+     "address": "0x801BFD10",
+     "bytes": 192,
+     "level": "sony"
+    },
+    {
+     "name": "_SsSetNrpnVabAttr10",
+     "address": "0x801BFDD0",
+     "bytes": 176,
+     "level": "sony"
+    },
+    {
+     "name": "_SsSetNrpnVabAttr11",
+     "address": "0x801BFE80",
+     "bytes": 176,
+     "level": "sony"
+    },
+    {
+     "name": "_SsSetNrpnVabAttr12",
+     "address": "0x801BFF30",
+     "bytes": 224,
+     "level": "sony"
+    },
+    {
+     "name": "_SsSetNrpnVabAttr13",
+     "address": "0x801C0010",
+     "bytes": 160,
+     "level": "sony"
+    },
+    {
+     "name": "_SsSetNrpnVabAttr14",
+     "address": "0x801C00B0",
+     "bytes": 160,
+     "level": "sony"
+    },
+    {
+     "name": "func_801C0150",
+     "address": "0x801C0150",
+     "bytes": 48,
+     "level": "sony"
+    },
+    {
+     "name": "_SsSetNrpnVabAttr16",
+     "address": "0x801C0180",
+     "bytes": 48,
+     "level": "sony"
+    },
+    {
+     "name": "func_801C01B0",
+     "address": "0x801C01B0",
+     "bytes": 48,
+     "level": "sony"
+    },
+    {
+     "name": "func_801C01E0",
+     "address": "0x801C01E0",
+     "bytes": 48,
+     "level": "sony"
+    },
+    {
+     "name": "func_801C0210",
+     "address": "0x801C0210",
+     "bytes": 48,
+     "level": "sony"
+    },
+    {
+     "name": "_SsSetPitchBend",
+     "address": "0x801C0240",
+     "bytes": 176,
+     "level": "sony"
+    },
+    {
+     "name": "_SsSetControlChange",
+     "address": "0x801C02F0",
+     "bytes": 560,
+     "level": "sony"
+    },
+    {
+     "name": "_SsGetMetaEvent",
+     "address": "0x801C0520",
+     "bytes": 464,
+     "level": "sony"
+    },
+    {
+     "name": "_SsNoteOn",
+     "address": "0x801C06F0",
+     "bytes": 224,
+     "level": "sony"
+    },
+    {
+     "name": "_SsSetProgramChange",
+     "address": "0x801C07D0",
+     "bytes": 112,
+     "level": "sony"
+    },
+    {
+     "name": "_SsReadDeltaValue",
+     "address": "0x801C0840",
+     "bytes": 176,
+     "level": "sony"
+    },
+    {
+     "name": "_SsInitSoundSep",
+     "address": "0x801C08F0",
+     "bytes": 992,
+     "level": "sony"
+    },
+    {
+     "name": "SsSeqPlay",
+     "address": "0x801C0CD0",
+     "bytes": 56,
+     "level": "sony"
+    },
+    {
+     "name": "SsSepPlay",
+     "address": "0x801C0D08",
+     "bytes": 72,
+     "level": "sony"
+    },
+    {
+     "name": "Snd_SetPlayMode",
+     "address": "0x801C0D50",
+     "bytes": 288,
+     "level": "sony"
+    },
+    {
+     "name": "_SsSndStop",
+     "address": "0x801C0E70",
+     "bytes": 384,
+     "level": "sony"
+    },
+    {
+     "name": "SsSeqStop",
+     "address": "0x801C0FF0",
+     "bytes": 40,
+     "level": "sony"
+    },
+    {
+     "name": "SsSepStop",
+     "address": "0x801C1018",
+     "bytes": 56,
+     "level": "sony"
+    },
+    {
+     "name": "_SsSndSetVol",
+     "address": "0x801C1050",
+     "bytes": 144,
+     "level": "sony"
+    },
+    {
+     "name": "SsSeqSetVol",
+     "address": "0x801C10E0",
+     "bytes": 104,
+     "level": "sony"
+    },
+    {
+     "name": "SsSepSetVol",
+     "address": "0x801C1148",
+     "bytes": 144,
+     "level": "sony"
+    },
+    {
+     "name": "SsSeqGetVol",
+     "address": "0x801C11D8",
+     "bytes": 56,
+     "level": "sony"
+    },
+    {
+     "name": "SsUtGetProgAtr",
+     "address": "0x801C1210",
+     "bytes": 272,
+     "level": "sony"
+    },
+    {
+     "name": "SsUtGetVagAtr",
+     "address": "0x801C1320",
+     "bytes": 576,
+     "level": "sony"
+    },
+    {
+     "name": "SsUtKeyOnV",
+     "address": "0x801C1560",
+     "bytes": 860,
+     "level": "sony"
+    },
+    {
+     "name": "SsUtKeyOffV",
+     "address": "0x801C18BC",
+     "bytes": 116,
+     "level": "sony"
+    },
+    {
+     "name": "SsUtSetReverbDelay",
+     "address": "0x801C1930",
+     "bytes": 64,
+     "level": "sony"
+    },
+    {
+     "name": "SsUtSetReverbDepth",
+     "address": "0x801C1970",
+     "bytes": 144,
+     "level": "sony"
+    },
+    {
+     "name": "SsUtSetReverbType",
+     "address": "0x801C1A00",
+     "bytes": 156,
+     "level": "sony"
+    },
+    {
+     "name": "SsUtGetReverbType",
+     "address": "0x801C1A9C",
+     "bytes": 20,
+     "level": "sony"
+    },
+    {
+     "name": "SsUtSetReverbFeedback",
+     "address": "0x801C1AB0",
+     "bytes": 64,
+     "level": "sony"
+    },
+    {
+     "name": "func_801C1AF0",
+     "address": "0x801C1AF0",
+     "bytes": 32,
+     "level": "sony"
+    },
+    {
+     "name": "func_801C1B10",
+     "address": "0x801C1B10",
+     "bytes": 32,
+     "level": "sony"
+    },
+    {
+     "name": "SsUtSetVagAtr",
+     "address": "0x801C1B30",
+     "bytes": 464,
+     "level": "sony"
+    },
+    {
+     "name": "_SsVmDoAllocate",
+     "address": "0x801C1D00",
+     "bytes": 464,
+     "level": "sony"
+    },
+    {
+     "name": "_SsVmDamperOff",
+     "address": "0x801C1ED0",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "_SsVmDamperOn",
+     "address": "0x801C1EE0",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "_SsVmFlush",
+     "address": "0x801C1EF0",
+     "bytes": 1168,
+     "level": "sony"
+    },
+    {
+     "name": "_SsVmInit",
+     "address": "0x801C2380",
+     "bytes": 848,
+     "level": "sony"
+    },
+    {
+     "name": "_SsVmKeyOn",
+     "address": "0x801C26D0",
+     "bytes": 1308,
+     "level": "sony"
+    },
+    {
+     "name": "_SsVmKeyOff",
+     "address": "0x801C2BEC",
+     "bytes": 352,
+     "level": "sony"
+    },
+    {
+     "name": "_SsVmSeKeyOn",
+     "address": "0x801C2D4C",
+     "bytes": 236,
+     "level": "sony"
+    },
+    {
+     "name": "_SsVmSeKeyOff",
+     "address": "0x801C2E38",
+     "bytes": 52,
+     "level": "sony"
+    },
+    {
+     "name": "KeyOnCheck",
+     "address": "0x801C2E6C",
+     "bytes": 20,
+     "level": "sony"
+    },
+    {
+     "name": "_SsVmAlloc",
+     "address": "0x801C2E80",
+     "bytes": 624,
+     "level": "sony"
+    },
+    {
+     "name": "note2pitch",
+     "address": "0x801C30F0",
+     "bytes": 76,
+     "level": "sony"
+    },
+    {
+     "name": "note2pitch2",
+     "address": "0x801C313C",
+     "bytes": 104,
+     "level": "sony"
+    },
+    {
+     "name": "SsPitchFromNote",
+     "address": "0x801C31A4",
+     "bytes": 300,
+     "level": "sony"
+    },
+    {
+     "name": "vmNoiseOn",
+     "address": "0x801C32D0",
+     "bytes": 1392,
+     "level": "sony"
+    },
+    {
+     "name": "vmNoiseOff",
+     "address": "0x801C3840",
+     "bytes": 64,
+     "level": "sony"
+    },
+    {
+     "name": "_SsVmKeyOffNow",
+     "address": "0x801C3880",
+     "bytes": 192,
+     "level": "sony"
+    },
+    {
+     "name": "_SsVmKeyOnNow",
+     "address": "0x801C3940",
+     "bytes": 1232,
+     "level": "sony"
+    },
+    {
+     "name": "_SsVmPBVoice",
+     "address": "0x801C3E10",
+     "bytes": 492,
+     "level": "sony"
+    },
+    {
+     "name": "_SsVmPitchBend",
+     "address": "0x801C3FFC",
+     "bytes": 228,
+     "level": "sony"
+    },
+    {
+     "name": "_SsVmSetProgVol",
+     "address": "0x801C40E0",
+     "bytes": 112,
+     "level": "sony"
+    },
+    {
+     "name": "_SsVmGetProgVol",
+     "address": "0x801C4150",
+     "bytes": 80,
+     "level": "sony"
+    },
+    {
+     "name": "_SsVmSetProgPan",
+     "address": "0x801C41A0",
+     "bytes": 112,
+     "level": "sony"
+    },
+    {
+     "name": "_SsVmGetProgPan",
+     "address": "0x801C4210",
+     "bytes": 80,
+     "level": "sony"
+    },
+    {
+     "name": "_SsVmSetSeqVol",
+     "address": "0x801C4260",
+     "bytes": 1388,
+     "level": "sony"
+    },
+    {
+     "name": "_SsVmGetSeqVol",
+     "address": "0x801C47CC",
+     "bytes": 100,
+     "level": "sony"
+    },
+    {
+     "name": "_SsVmGetSeqLVol",
+     "address": "0x801C4830",
+     "bytes": 72,
+     "level": "sony"
+    },
+    {
+     "name": "_SsVmGetSeqRVol",
+     "address": "0x801C4878",
+     "bytes": 72,
+     "level": "sony"
+    },
+    {
+     "name": "_SsVmSeqKeyOff",
+     "address": "0x801C48C0",
+     "bytes": 176,
+     "level": "sony"
+    },
+    {
+     "name": "_SsVmSelectToneAndVag",
+     "address": "0x801C4970",
+     "bytes": 208,
+     "level": "sony"
+    },
+    {
+     "name": "_SsVmSetVol",
+     "address": "0x801C4A40",
+     "bytes": 1440,
+     "level": "sony"
+    },
+    {
+     "name": "_SsVmVSetUp",
+     "address": "0x801C4FE0",
+     "bytes": 192,
+     "level": "sony"
+    },
+    {
+     "name": "SsVabClose",
+     "address": "0x801C50A0",
+     "bytes": 176,
+     "level": "sony"
+    },
+    {
+     "name": "SsVabOpenHead",
+     "address": "0x801C5150",
+     "bytes": 52,
+     "level": "sony"
+    },
+    {
+     "name": "func_801C5184",
+     "address": "0x801C5184",
+     "bytes": 108,
+     "level": "sony"
+    },
+    {
+     "name": "SsVabOpenHeadSticky",
+     "address": "0x801C51F0",
+     "bytes": 52,
+     "level": "sony"
+    },
+    {
+     "name": "SsVabFakeHead",
+     "address": "0x801C5224",
+     "bytes": 52,
+     "level": "sony"
+    },
+    {
+     "name": "func_801C5258",
+     "address": "0x801C5258",
+     "bytes": 8,
+     "level": "sony"
+    },
+    {
+     "name": "_SsVabOpenHeadWithMode",
+     "address": "0x801C5260",
+     "bytes": 1008,
+     "level": "sony"
+    },
+    {
+     "name": "SsVabTransBodyPartly",
+     "address": "0x801C5650",
+     "bytes": 400,
+     "level": "sony"
+    },
+    {
+     "name": "SsVabTransCompleted",
+     "address": "0x801C57E0",
+     "bytes": 48,
+     "level": "sony"
+    },
+    {
+     "name": "SpuInitMalloc",
+     "address": "0x801C5810",
+     "bytes": 96,
+     "level": "sony"
+    },
+    {
+     "name": "_spu_init",
+     "address": "0x801C5870",
+     "bytes": 640,
+     "level": "sony"
+    },
+    {
+     "name": "func_801C5AF0",
+     "address": "0x801C5AF0",
+     "bytes": 448,
+     "level": "sony"
+    },
+    {
+     "name": "_spu_FiDMA",
+     "address": "0x801C5CB0",
+     "bytes": 188,
+     "level": "sony"
+    },
+    {
+     "name": "_spu_Fr_",
+     "address": "0x801C5D6C",
+     "bytes": 168,
+     "level": "sony"
+    },
+    {
+     "name": "_spu_t",
+     "address": "0x801C5E14",
+     "bytes": 640,
+     "level": "sony"
+    },
+    {
+     "name": "_spu_Fw",
+     "address": "0x801C6094",
+     "bytes": 132,
+     "level": "sony"
+    },
+    {
+     "name": "_spu_Fr",
+     "address": "0x801C6118",
+     "bytes": 100,
+     "level": "sony"
+    },
+    {
+     "name": "_spu_FsetRXX",
+     "address": "0x801C617C",
+     "bytes": 68,
+     "level": "sony"
+    },
+    {
+     "name": "_spu_FsetRXXa",
+     "address": "0x801C61C0",
+     "bytes": 164,
+     "level": "sony"
+    },
+    {
+     "name": "_spu_FgetRXXa",
+     "address": "0x801C6264",
+     "bytes": 60,
+     "level": "sony"
+    },
+    {
+     "name": "_spu_FsetPCR",
+     "address": "0x801C62A0",
+     "bytes": 88,
+     "level": "sony"
+    },
+    {
+     "name": "func_801C62F8",
+     "address": "0x801C62F8",
+     "bytes": 40,
+     "level": "sony"
+    },
+    {
+     "name": "func_801C6320",
+     "address": "0x801C6320",
+     "bytes": 40,
+     "level": "sony"
+    },
+    {
+     "name": "_spu_Fw1ts",
+     "address": "0x801C6348",
+     "bytes": 104,
+     "level": "sony"
+    },
+    {
+     "name": "SpuMalloc",
+     "address": "0x801C63B0",
+     "bytes": 720,
+     "level": "sony"
+    },
+    {
+     "name": "_SpuInit",
+     "address": "0x801C6680",
+     "bytes": 232,
+     "level": "sony"
+    },
+    {
+     "name": "SpuStart",
+     "address": "0x801C6768",
+     "bytes": 120,
+     "level": "sony"
+    },
+    {
+     "name": "_SpuDataCallback",
+     "address": "0x801C67E0",
+     "bytes": 48,
+     "level": "sony"
+    },
+    {
+     "name": "_spu_gcSPU",
+     "address": "0x801C6810",
+     "bytes": 768,
+     "level": "sony"
+    },
+    {
+     "name": "SpuFree",
+     "address": "0x801C6B10",
+     "bytes": 128,
+     "level": "sony"
+    },
+    {
+     "name": "SpuSetNoiseVoice",
+     "address": "0x801C6B90",
+     "bytes": 48,
+     "level": "sony"
+    },
+    {
+     "name": "_SpuSetAnyVoice",
+     "address": "0x801C6BC0",
+     "bytes": 704,
+     "level": "sony"
+    },
+    {
+     "name": "SpuSetNoiseClock",
+     "address": "0x801C6E80",
+     "bytes": 80,
+     "level": "sony"
+    },
+    {
+     "name": "SpuSetReverb",
+     "address": "0x801C6ED0",
+     "bytes": 208,
+     "level": "sony"
+    },
+    {
+     "name": "_SpuIsInAllocateArea",
+     "address": "0x801C6FA0",
+     "bytes": 128,
+     "level": "sony"
+    },
+    {
+     "name": "_SpuIsInAllocateArea_",
+     "address": "0x801C7020",
+     "bytes": 144,
+     "level": "sony"
+    },
+    {
+     "name": "SpuSetReverbModeParam",
+     "address": "0x801C70B0",
+     "bytes": 1248,
+     "level": "sony"
+    },
+    {
+     "name": "_spu_setReverbAttr",
+     "address": "0x801C7590",
+     "bytes": 1232,
+     "level": "sony"
+    },
+    {
+     "name": "SpuSetReverbVoice",
+     "address": "0x801C7A60",
+     "bytes": 48,
+     "level": "sony"
+    },
+    {
+     "name": "SpuClearReverbWorkArea",
+     "address": "0x801C7A90",
+     "bytes": 416,
+     "level": "sony"
+    },
+    {
+     "name": "WaitEvent",
+     "address": "0x801C7C30",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "SpuSetKey",
+     "address": "0x801C7C40",
+     "bytes": 448,
+     "level": "sony"
+    },
+    {
+     "name": "SpuSetTransferStartAddr",
+     "address": "0x801C7E00",
+     "bytes": 96,
+     "level": "sony"
+    },
+    {
+     "name": "SpuSetTransferMode",
+     "address": "0x801C7E60",
+     "bytes": 48,
+     "level": "sony"
+    },
+    {
+     "name": "SpuWritePartly",
+     "address": "0x801C7E90",
+     "bytes": 144,
+     "level": "sony"
+    },
+    {
+     "name": "SpuIsTransferCompleted",
+     "address": "0x801C7F20",
+     "bytes": 176,
+     "level": "sony"
+    },
+    {
+     "name": "TestEvent",
+     "address": "0x801C7FD0",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "_spu_setInTransfer",
+     "address": "0x801C7FE0",
+     "bytes": 40,
+     "level": "sony"
+    },
+    {
+     "name": "_spu_getInTransfer",
+     "address": "0x801C8008",
+     "bytes": 24,
+     "level": "sony"
+    },
+    {
+     "name": "SpuSetVoiceAttr",
+     "address": "0x801C8020",
+     "bytes": 1536,
+     "level": "sony"
+    },
+    {
+     "name": "_spu_note2pitch",
+     "address": "0x801C8620",
+     "bytes": 208,
+     "level": "sony"
+    },
+    {
+     "name": "_spu_pitch2note",
+     "address": "0x801C86F0",
+     "bytes": 304,
+     "level": "sony"
+    },
+    {
+     "name": "SpuGetVoiceEnvelope",
+     "address": "0x801C8820",
+     "bytes": 32,
+     "level": "sony"
+    },
+    {
+     "name": "__SN_ENTRY_POINT",
+     "address": "0x801C8840",
+     "bytes": 168,
+     "level": "sony"
+    },
+    {
+     "name": "__main",
+     "address": "0x801C88E8",
+     "bytes": 112,
+     "level": "sony"
+    },
+    {
+     "name": "__do_global_dtors",
+     "address": "0x801C8958",
+     "bytes": 104,
+     "level": "sony"
+    },
+    {
+     "name": "InitHeap",
+     "address": "0x801C89C0",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "MemCardStart",
+     "address": "0x801C89D0",
+     "bytes": 112,
+     "level": "sony"
+    },
+    {
+     "name": "MemCardStop",
+     "address": "0x801C8A40",
+     "bytes": 64,
+     "level": "sony"
+    },
+    {
+     "name": "MemCardExist",
+     "address": "0x801C8A80",
+     "bytes": 104,
+     "level": "sony"
+    },
+    {
+     "name": "func_801C8AE8",
+     "address": "0x801C8AE8",
+     "bytes": 768,
+     "level": "sony"
+    },
+    {
+     "name": "MemCardAccept",
+     "address": "0x801C8DE8",
+     "bytes": 104,
+     "level": "sony"
+    },
+    {
+     "name": "func_801C8E50",
+     "address": "0x801C8E50",
+     "bytes": 680,
+     "level": "sony"
+    },
+    {
+     "name": "MemCardOpen",
+     "address": "0x801C90F8",
+     "bytes": 392,
+     "level": "sony"
+    },
+    {
+     "name": "MemCardClose",
+     "address": "0x801C9280",
+     "bytes": 68,
+     "level": "sony"
+    },
+    {
+     "name": "MemCardReadData",
+     "address": "0x801C92C4",
+     "bytes": 184,
+     "level": "sony"
+    },
+    {
+     "name": "func_801C937C",
+     "address": "0x801C937C",
+     "bytes": 316,
+     "level": "sony"
+    },
+    {
+     "name": "MemCardWriteData",
+     "address": "0x801C94B8",
+     "bytes": 184,
+     "level": "sony"
+    },
+    {
+     "name": "func_801C9570",
+     "address": "0x801C9570",
+     "bytes": 316,
+     "level": "sony"
+    },
+    {
+     "name": "MemCardReadFile",
+     "address": "0x801C96AC",
+     "bytes": 280,
+     "level": "sony"
+    },
+    {
+     "name": "func_801C97C4",
+     "address": "0x801C97C4",
+     "bytes": 320,
+     "level": "sony"
+    },
+    {
+     "name": "MemCardWriteFile",
+     "address": "0x801C9904",
+     "bytes": 280,
+     "level": "sony"
+    },
+    {
+     "name": "func_801C9A1C",
+     "address": "0x801C9A1C",
+     "bytes": 320,
+     "level": "sony"
+    },
+    {
+     "name": "MemCardGetDirentry",
+     "address": "0x801C9B5C",
+     "bytes": 608,
+     "level": "sony"
+    },
+    {
+     "name": "MemCardCallback",
+     "address": "0x801C9DBC",
+     "bytes": 20,
+     "level": "sony"
+    },
+    {
+     "name": "MemCardSync",
+     "address": "0x801C9DD0",
+     "bytes": 284,
+     "level": "sony"
+    },
+    {
+     "name": "MemCardCreateFile",
+     "address": "0x801C9EEC",
+     "bytes": 508,
+     "level": "sony"
+    },
+    {
+     "name": "MemCardDeleteFile",
+     "address": "0x801CA0E8",
+     "bytes": 436,
+     "level": "sony"
+    },
+    {
+     "name": "MemCardFormat",
+     "address": "0x801CA29C",
+     "bytes": 188,
+     "level": "sony"
+    },
+    {
+     "name": "MemCardUnformat",
+     "address": "0x801CA358",
+     "bytes": 180,
+     "level": "sony"
+    },
+    {
+     "name": "func_801CA40C",
+     "address": "0x801CA40C",
+     "bytes": 84,
+     "level": "sony"
+    },
+    {
+     "name": "func_801CA460",
+     "address": "0x801CA460",
+     "bytes": 172,
+     "level": "sony"
+    },
+    {
+     "name": "func_801CA50C",
+     "address": "0x801CA50C",
+     "bytes": 100,
+     "level": "sony"
+    },
+    {
+     "name": "open",
+     "address": "0x801CA570",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "lseek",
+     "address": "0x801CA580",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "read",
+     "address": "0x801CA590",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "close",
+     "address": "0x801CA5A0",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "nextfile",
+     "address": "0x801CA5B0",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "delete",
+     "address": "0x801CA5C0",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "firstfile_801CA5D0",
+     "address": "0x801CA5D0",
+     "bytes": 412,
+     "level": "sony"
+    },
+    {
+     "name": "func_801CA76C",
+     "address": "0x801CA76C",
+     "bytes": 260,
+     "level": "sony"
+    },
+    {
+     "name": "firstfile_801CA870",
+     "address": "0x801CA870",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "strcat",
+     "address": "0x801CA880",
+     "bytes": 176,
+     "level": "sony"
+    },
+    {
+     "name": "_card_info",
+     "address": "0x801CA930",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "_card_load",
+     "address": "0x801CA940",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "_card_write",
+     "address": "0x801CA950",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "_new_card",
+     "address": "0x801CA960",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "_card_clear",
+     "address": "0x801CA970",
+     "bytes": 64,
+     "level": "sony"
+    },
+    {
+     "name": "func_801CA9B0",
+     "address": "0x801CA9B0",
+     "bytes": 324,
+     "level": "sony"
+    },
+    {
+     "name": "_card_format",
+     "address": "0x801CAAF4",
+     "bytes": 524,
+     "level": "sony"
+    },
+    {
+     "name": "bzero",
+     "address": "0x801CAD00",
+     "bytes": 48,
+     "level": "sony"
+    },
+    {
+     "name": "_card_read",
+     "address": "0x801CAD30",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "_card_status",
+     "address": "0x801CAD40",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "UserFuncInit",
+     "address": "0x801CAD50",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "UserFuncOpen",
+     "address": "0x801CAD60",
+     "bytes": 124,
+     "level": "sony"
+    },
+    {
+     "name": "UserFuncExecute",
+     "address": "0x801CADDC",
+     "bytes": 108,
+     "level": "sony"
+    },
+    {
+     "name": "UserFuncComplete",
+     "address": "0x801CAE48",
+     "bytes": 24,
+     "level": "sony"
+    },
+    {
+     "name": "funcEvSpIOE",
+     "address": "0x801CAE60",
+     "bytes": 20,
+     "level": "sony"
+    },
+    {
+     "name": "funcEvSpError",
+     "address": "0x801CAE74",
+     "bytes": 20,
+     "level": "sony"
+    },
+    {
+     "name": "funcEvSpTimeout",
+     "address": "0x801CAE88",
+     "bytes": 20,
+     "level": "sony"
+    },
+    {
+     "name": "funcEvSpNewcard",
+     "address": "0x801CAE9C",
+     "bytes": 20,
+     "level": "sony"
+    },
+    {
+     "name": "funcEvSpIOEx",
+     "address": "0x801CAEB0",
+     "bytes": 20,
+     "level": "sony"
+    },
+    {
+     "name": "funcEvSpErrorx",
+     "address": "0x801CAEC4",
+     "bytes": 20,
+     "level": "sony"
+    },
+    {
+     "name": "funcEvSpTimeoutx",
+     "address": "0x801CAED8",
+     "bytes": 20,
+     "level": "sony"
+    },
+    {
+     "name": "funcEvSpNewcardx",
+     "address": "0x801CAEEC",
+     "bytes": 20,
+     "level": "sony"
+    },
+    {
+     "name": "_card_open",
+     "address": "0x801CAF00",
+     "bytes": 48,
+     "level": "sony"
+    },
+    {
+     "name": "_card_start",
+     "address": "0x801CAF30",
+     "bytes": 476,
+     "level": "sony"
+    },
+    {
+     "name": "_card_close",
+     "address": "0x801CB10C",
+     "bytes": 32,
+     "level": "sony"
+    },
+    {
+     "name": "_card_stop",
+     "address": "0x801CB12C",
+     "bytes": 180,
+     "level": "sony"
+    },
+    {
+     "name": "_clr_card_event",
+     "address": "0x801CB1E0",
+     "bytes": 264,
+     "level": "sony"
+    },
+    {
+     "name": "_get_card_event",
+     "address": "0x801CB2E8",
+     "bytes": 216,
+     "level": "sony"
+    },
+    {
+     "name": "_get_card_event_x",
+     "address": "0x801CB3C0",
+     "bytes": 216,
+     "level": "sony"
+    },
+    {
+     "name": "_chk_card_event",
+     "address": "0x801CB498",
+     "bytes": 60,
+     "level": "sony"
+    },
+    {
+     "name": "_chk_card_event_x",
+     "address": "0x801CB4D4",
+     "bytes": 60,
+     "level": "sony"
+    },
+    {
+     "name": "_bu_init",
+     "address": "0x801CB510",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "InitCARD_801CB520",
+     "address": "0x801CB520",
+     "bytes": 108,
+     "level": "sony"
+    },
+    {
+     "name": "StartCARD_801CB58C",
+     "address": "0x801CB58C",
+     "bytes": 56,
+     "level": "sony"
+    },
+    {
+     "name": "StopCARD_801CB5C4",
+     "address": "0x801CB5C4",
+     "bytes": 44,
+     "level": "sony"
+    },
+    {
+     "name": "SetInitPadFlag",
+     "address": "0x801CB5F0",
+     "bytes": 12,
+     "level": "sony"
+    },
+    {
+     "name": "ReadInitPadFlag",
+     "address": "0x801CB5FC",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "PAD_init_801CB60C",
+     "address": "0x801CB60C",
+     "bytes": 144,
+     "level": "sony"
+    },
+    {
+     "name": "InitPAD_801CB69C",
+     "address": "0x801CB69C",
+     "bytes": 144,
+     "level": "sony"
+    },
+    {
+     "name": "StartPAD_801CB72C",
+     "address": "0x801CB72C",
+     "bytes": 48,
+     "level": "sony"
+    },
+    {
+     "name": "StopPAD_801CB75C",
+     "address": "0x801CB75C",
+     "bytes": 56,
+     "level": "sony"
+    },
+    {
+     "name": "func_801CB794",
+     "address": "0x801CB794",
+     "bytes": 120,
+     "level": "sony"
+    },
+    {
+     "name": "func_801CB80C",
+     "address": "0x801CB80C",
+     "bytes": 56,
+     "level": "sony"
+    },
+    {
+     "name": "func_801CB844",
+     "address": "0x801CB844",
+     "bytes": 104,
+     "level": "sony"
+    },
+    {
+     "name": "func_801CB8AC",
+     "address": "0x801CB8AC",
+     "bytes": 68,
+     "level": "sony"
+    },
+    {
+     "name": "InitPAD_801CB8F0",
+     "address": "0x801CB8F0",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "StartPAD_801CB900",
+     "address": "0x801CB900",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "StopPAD_801CB910",
+     "address": "0x801CB910",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "PAD_init_801CB920",
+     "address": "0x801CB920",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "SysEnqIntRP",
+     "address": "0x801CB930",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "SysDeqIntRP",
+     "address": "0x801CB940",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "EnablePAD",
+     "address": "0x801CB950",
+     "bytes": 20,
+     "level": "sony"
+    },
+    {
+     "name": "DisablePAD",
+     "address": "0x801CB964",
+     "bytes": 20,
+     "level": "sony"
+    },
+    {
+     "name": "_patch_pad",
+     "address": "0x801CB978",
+     "bytes": 120,
+     "level": "sony"
+    },
+    {
+     "name": "_remove_ChgclrPAD",
+     "address": "0x801CB9F0",
+     "bytes": 112,
+     "level": "sony"
+    },
+    {
+     "name": "InitCARD_801CBA60",
+     "address": "0x801CBA60",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "StartCARD_801CBA70",
+     "address": "0x801CBA70",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "StopCARD_801CBA80",
+     "address": "0x801CBA80",
+     "bytes": 60,
+     "level": "sony"
+    },
+    {
+     "name": "func_801CBABC",
+     "address": "0x801CBABC",
+     "bytes": 68,
+     "level": "sony"
+    },
+    {
+     "name": "func_801CBB00",
+     "address": "0x801CBB00",
+     "bytes": 40,
+     "level": "sony"
+    },
+    {
+     "name": "_patch_card",
+     "address": "0x801CBB28",
+     "bytes": 148,
+     "level": "sony"
+    },
+    {
+     "name": "_patch_card2",
+     "address": "0x801CBBBC",
+     "bytes": 112,
+     "level": "sony"
+    },
+    {
+     "name": "_copy_memcard_patch",
+     "address": "0x801CBC2C",
+     "bytes": 52,
+     "level": "sony"
+    },
+    {
+     "name": "_ExitCard",
+     "address": "0x801CBC60",
+     "bytes": 128,
+     "level": "sony"
+    }
+   ],
+   "libraries": ""
+  },
+  {
+   "unit": "src/kaj/801CBCE0.c",
+   "game": true,
+   "library": "kaj",
+   "bytes": 2696,
+   "functions": [
+    {
+     "name": "func_801CBCE0",
+     "address": "0x801CBCE0",
+     "bytes": 272,
+     "unk_fields": 4,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801CBDF0",
+     "address": "0x801CBDF0",
+     "bytes": 572,
+     "level": "asm"
+    },
+    {
+     "name": "func_801CC02C",
+     "address": "0x801CC02C",
+     "bytes": 444,
+     "unk_fields": 8,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 3,
+     "level": "c"
+    },
+    {
+     "name": "func_801CC1E8",
+     "address": "0x801CC1E8",
+     "bytes": 196,
+     "level": "asm"
+    },
+    {
+     "name": "func_801CC2AC",
+     "address": "0x801CC2AC",
+     "bytes": 204,
+     "level": "asm"
+    },
+    {
+     "name": "func_801CC378",
+     "address": "0x801CC378",
+     "bytes": 100,
+     "unk_fields": 0,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801CC3DC",
+     "address": "0x801CC3DC",
+     "bytes": 312,
+     "unk_fields": 6,
+     "m2c_names": 3,
+     "unk_types": 2,
+     "d_globals": 3,
+     "level": "c"
+    },
+    {
+     "name": "func_801CC514",
+     "address": "0x801CC514",
+     "bytes": 376,
+     "unk_fields": 6,
+     "m2c_names": 2,
+     "unk_types": 2,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801CC68C",
+     "address": "0x801CC68C",
+     "bytes": 124,
+     "unk_fields": 5,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 4,
+     "level": "c"
+    },
+    {
+     "name": "func_801CC708",
+     "address": "0x801CC708",
+     "bytes": 44,
+     "unk_fields": 1,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801CC734",
+     "address": "0x801CC734",
+     "bytes": 52,
+     "unk_fields": 0,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    }
+   ]
+  },
+  {
+   "unit": "psyq/801CC768.s.s",
+   "game": false,
+   "library": "psyq",
+   "bytes": 304,
+   "functions": [
+    {
+     "name": "calloc3",
+     "address": "0x801CC768",
+     "bytes": 84,
+     "level": "sony"
+    },
+    {
+     "name": "func_801CC7BC",
+     "address": "0x801CC7BC",
+     "bytes": 44,
+     "level": "sony"
+    },
+    {
+     "name": "malloc3",
+     "address": "0x801CC7E8",
+     "bytes": 176,
+     "level": "sony"
+    }
+   ],
+   "libraries": ""
+  },
+  {
+   "unit": "src/kaj/801CC898.c",
+   "game": true,
+   "library": "kaj",
+   "bytes": 348,
+   "functions": [
+    {
+     "name": "func_801CC898",
+     "address": "0x801CC898",
+     "bytes": 88,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801CC8F0",
+     "address": "0x801CC8F0",
+     "bytes": 260,
+     "unk_fields": 5,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    }
+   ]
+  },
+  {
+   "unit": "psyq/801CC9F4.s.s",
+   "game": false,
+   "library": "psyq",
+   "bytes": 256,
+   "functions": [
+    {
+     "name": "PadInit",
+     "address": "0x801CC9F4",
+     "bytes": 76,
+     "level": "sony"
+    },
+    {
+     "name": "PadRead",
+     "address": "0x801CCA40",
+     "bytes": 40,
+     "level": "sony"
+    },
+    {
+     "name": "PadStop",
+     "address": "0x801CCA68",
+     "bytes": 44,
+     "level": "sony"
+    },
+    {
+     "name": "PAD_dr",
+     "address": "0x801CCA94",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "MemCardInit",
+     "address": "0x801CCAA4",
+     "bytes": 48,
+     "level": "sony"
+    },
+    {
+     "name": "MemCardEnd",
+     "address": "0x801CCAD4",
+     "bytes": 32,
+     "level": "sony"
+    }
+   ],
+   "libraries": ""
+  },
+  {
+   "unit": "src/kaj/801CCAF4.c",
+   "game": true,
+   "library": "kaj",
+   "bytes": 3420,
+   "functions": [
+    {
+     "name": "func_801CCAF4",
+     "address": "0x801CCAF4",
+     "bytes": 124,
+     "unk_fields": 4,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801CCB70",
+     "address": "0x801CCB70",
+     "bytes": 132,
+     "unk_fields": 4,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801CCBF4",
+     "address": "0x801CCBF4",
+     "bytes": 256,
+     "unk_fields": 4,
+     "m2c_names": 2,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801CCCF4",
+     "address": "0x801CCCF4",
+     "bytes": 260,
+     "unk_fields": 4,
+     "m2c_names": 2,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801CCDF8",
+     "address": "0x801CCDF8",
+     "bytes": 240,
+     "unk_fields": 4,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801CCEE8",
+     "address": "0x801CCEE8",
+     "bytes": 240,
+     "unk_fields": 4,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801CCFD8",
+     "address": "0x801CCFD8",
+     "bytes": 40,
+     "unk_fields": 2,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801CD000",
+     "address": "0x801CD000",
+     "bytes": 40,
+     "unk_fields": 2,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801CD028",
+     "address": "0x801CD028",
+     "bytes": 968,
+     "level": "asm"
+    },
+    {
+     "name": "func_801CD3F0",
+     "address": "0x801CD3F0",
+     "bytes": 348,
+     "unk_fields": 2,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 12,
+     "level": "c"
+    },
+    {
+     "name": "func_801CD54C",
+     "address": "0x801CD54C",
+     "bytes": 316,
+     "unk_fields": 2,
+     "m2c_names": 4,
+     "unk_types": 0,
+     "d_globals": 11,
+     "level": "c"
+    },
+    {
+     "name": "func_801CD688",
+     "address": "0x801CD688",
+     "bytes": 44,
+     "unk_fields": 3,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801CD6B4",
+     "address": "0x801CD6B4",
+     "bytes": 88,
+     "unk_fields": 3,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801CD70C",
+     "address": "0x801CD70C",
+     "bytes": 88,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801CD764",
+     "address": "0x801CD764",
+     "bytes": 40,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801CD78C",
+     "address": "0x801CD78C",
+     "bytes": 124,
+     "unk_fields": 4,
+     "m2c_names": 2,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801CD808",
+     "address": "0x801CD808",
+     "bytes": 72,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    }
+   ]
+  },
+  {
+   "unit": "psyq/801CD850.s.s",
+   "game": false,
+   "library": "psyq",
+   "bytes": 8000,
+   "functions": [
+    {
+     "name": "exit",
+     "address": "0x801CD850",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "GsMapModelingData",
+     "address": "0x801CD860",
+     "bytes": 112,
+     "level": "sony"
+    },
+    {
+     "name": "GsLinkObject4",
+     "address": "0x801CD8D0",
+     "bytes": 400,
+     "level": "sony"
+    },
+    {
+     "name": "SsEnd",
+     "address": "0x801CDA60",
+     "bytes": 176,
+     "level": "sony"
+    },
+    {
+     "name": "SsInit",
+     "address": "0x801CDB10",
+     "bytes": 64,
+     "level": "sony"
+    },
+    {
+     "name": "func_801CDB50",
+     "address": "0x801CDB50",
+     "bytes": 32,
+     "level": "sony"
+    },
+    {
+     "name": "SsSetMVol",
+     "address": "0x801CDB70",
+     "bytes": 80,
+     "level": "sony"
+    },
+    {
+     "name": "func_801CDBC0",
+     "address": "0x801CDBC0",
+     "bytes": 560,
+     "level": "sony"
+    },
+    {
+     "name": "SsStart",
+     "address": "0x801CDDF0",
+     "bytes": 32,
+     "level": "sony"
+    },
+    {
+     "name": "SsStart2",
+     "address": "0x801CDE10",
+     "bytes": 32,
+     "level": "sony"
+    },
+    {
+     "name": "func_801CDE30",
+     "address": "0x801CDE30",
+     "bytes": 76,
+     "level": "sony"
+    },
+    {
+     "name": "func_801CDE7C",
+     "address": "0x801CDE7C",
+     "bytes": 84,
+     "level": "sony"
+    },
+    {
+     "name": "SetRCnt",
+     "address": "0x801CDED0",
+     "bytes": 156,
+     "level": "sony"
+    },
+    {
+     "name": "GetRCnt",
+     "address": "0x801CDF6C",
+     "bytes": 56,
+     "level": "sony"
+    },
+    {
+     "name": "StartRCnt",
+     "address": "0x801CDFA4",
+     "bytes": 48,
+     "level": "sony"
+    },
+    {
+     "name": "StopRCnt",
+     "address": "0x801CDFD4",
+     "bytes": 52,
+     "level": "sony"
+    },
+    {
+     "name": "ResetRCnt",
+     "address": "0x801CE008",
+     "bytes": 56,
+     "level": "sony"
+    },
+    {
+     "name": "SsSeqCalledTbyT",
+     "address": "0x801CE040",
+     "bytes": 624,
+     "level": "sony"
+    },
+    {
+     "name": "_SsSndCrescendo",
+     "address": "0x801CE2B0",
+     "bytes": 528,
+     "level": "sony"
+    },
+    {
+     "name": "_SsSndPause",
+     "address": "0x801CE4C0",
+     "bytes": 160,
+     "level": "sony"
+    },
+    {
+     "name": "func_801CE560",
+     "address": "0x801CE560",
+     "bytes": 48,
+     "level": "sony"
+    },
+    {
+     "name": "_SsSeqPlay",
+     "address": "0x801CE590",
+     "bytes": 252,
+     "level": "sony"
+    },
+    {
+     "name": "_SsSeqGetEof",
+     "address": "0x801CE68C",
+     "bytes": 580,
+     "level": "sony"
+    },
+    {
+     "name": "_SsGetSeqData",
+     "address": "0x801CE8D0",
+     "bytes": 944,
+     "level": "sony"
+    },
+    {
+     "name": "_SsSndNextSep",
+     "address": "0x801CEC80",
+     "bytes": 256,
+     "level": "sony"
+    },
+    {
+     "name": "_SsSndReplay",
+     "address": "0x801CED80",
+     "bytes": 96,
+     "level": "sony"
+    },
+    {
+     "name": "SsSetTableSize",
+     "address": "0x801CEDE0",
+     "bytes": 544,
+     "level": "sony"
+    },
+    {
+     "name": "SsSetTickMode",
+     "address": "0x801CF000",
+     "bytes": 336,
+     "level": "sony"
+    },
+    {
+     "name": "_SsSndTempo",
+     "address": "0x801CF150",
+     "bytes": 544,
+     "level": "sony"
+    },
+    {
+     "name": "func_801CF370",
+     "address": "0x801CF370",
+     "bytes": 32,
+     "level": "sony"
+    },
+    {
+     "name": "SpuQuit",
+     "address": "0x801CF390",
+     "bytes": 128,
+     "level": "sony"
+    },
+    {
+     "name": "SpuSetCommonAttr",
+     "address": "0x801CF410",
+     "bytes": 896,
+     "level": "sony"
+    }
+   ],
+   "libraries": ""
+  },
+  {
+   "unit": "src/kaj/801CF790.c",
+   "game": true,
+   "library": "kaj",
+   "bytes": 1168,
+   "functions": [
+    {
+     "name": "func_801CF790",
+     "address": "0x801CF790",
+     "bytes": 856,
+     "level": "asm"
+    },
+    {
+     "name": "func_801CFAE8",
+     "address": "0x801CFAE8",
+     "bytes": 100,
+     "unk_fields": 2,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801CFB4C",
+     "address": "0x801CFB4C",
+     "bytes": 104,
+     "unk_fields": 5,
+     "m2c_names": 2,
+     "unk_types": 1,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801CFBB4",
+     "address": "0x801CFBB4",
+     "bytes": 108,
+     "unk_fields": 5,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 0,
+     "level": "c"
+    }
+   ]
+  },
+  {
+   "unit": "psyq/801CFC20.s.s",
+   "game": false,
+   "library": "psyq",
+   "bytes": 336,
+   "functions": [
+    {
+     "name": "GetTPage",
+     "address": "0x801CFC20",
+     "bytes": 64,
+     "level": "sony"
+    },
+    {
+     "name": "GetClut",
+     "address": "0x801CFC60",
+     "bytes": 32,
+     "level": "sony"
+    },
+    {
+     "name": "GsGetTimInfo",
+     "address": "0x801CFC80",
+     "bytes": 240,
+     "level": "sony"
+    }
+   ],
+   "libraries": ""
+  },
+  {
+   "unit": "src/kaj/801CFD70.c",
+   "game": true,
+   "library": "kaj",
+   "bytes": 2400,
+   "functions": [
+    {
+     "name": "func_801CFD70",
+     "address": "0x801CFD70",
+     "bytes": 320,
+     "unk_fields": 6,
+     "m2c_names": 0,
+     "unk_types": 2,
+     "d_globals": 4,
+     "level": "c"
+    },
+    {
+     "name": "func_801CFEB0",
+     "address": "0x801CFEB0",
+     "bytes": 644,
+     "level": "asm"
+    },
+    {
+     "name": "func_801D0134",
+     "address": "0x801D0134",
+     "bytes": 460,
+     "unk_fields": 10,
+     "m2c_names": 0,
+     "unk_types": 2,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801D0300",
+     "address": "0x801D0300",
+     "bytes": 276,
+     "unk_fields": 5,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 4,
+     "level": "c"
+    },
+    {
+     "name": "func_801D0414",
+     "address": "0x801D0414",
+     "bytes": 484,
+     "unk_fields": 6,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801D05F8",
+     "address": "0x801D05F8",
+     "bytes": 84,
+     "unk_fields": 3,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801D064C",
+     "address": "0x801D064C",
+     "bytes": 104,
+     "unk_fields": 1,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801D06B4",
+     "address": "0x801D06B4",
+     "bytes": 16,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801D06C4",
+     "address": "0x801D06C4",
+     "bytes": 12,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    }
+   ]
+  },
+  {
+   "unit": "psyq/801D06D0.s.s",
+   "game": false,
+   "library": "psyq",
+   "bytes": 432,
+   "functions": [
+    {
+     "name": "realloc3",
+     "address": "0x801D06D0",
+     "bytes": 228,
+     "level": "sony"
+    },
+    {
+     "name": "func_801D07B4",
+     "address": "0x801D07B4",
+     "bytes": 84,
+     "level": "sony"
+    },
+    {
+     "name": "func_801D0808",
+     "address": "0x801D0808",
+     "bytes": 120,
+     "level": "sony"
+    }
+   ],
+   "libraries": ""
+  },
+  {
+   "unit": "src/kaj/801D0880.c",
+   "game": true,
+   "library": "kaj",
+   "bytes": 2232,
+   "functions": [
+    {
+     "name": "func_801D0880",
+     "address": "0x801D0880",
+     "bytes": 1496,
+     "level": "asm"
+    },
+    {
+     "name": "func_801D0E58",
+     "address": "0x801D0E58",
+     "bytes": 96,
+     "unk_fields": 5,
+     "m2c_names": 5,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801D0EB8",
+     "address": "0x801D0EB8",
+     "bytes": 76,
+     "unk_fields": 3,
+     "m2c_names": 2,
+     "unk_types": 1,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801D0F04",
+     "address": "0x801D0F04",
+     "bytes": 180,
+     "unk_fields": 4,
+     "m2c_names": 2,
+     "unk_types": 1,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801D0FB8",
+     "address": "0x801D0FB8",
+     "bytes": 140,
+     "unk_fields": 3,
+     "m2c_names": 2,
+     "unk_types": 1,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801D1044",
+     "address": "0x801D1044",
+     "bytes": 68,
+     "unk_fields": 2,
+     "m2c_names": 3,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801D1088",
+     "address": "0x801D1088",
+     "bytes": 176,
+     "unk_fields": 2,
+     "m2c_names": 7,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    }
+   ]
+  },
+  {
+   "unit": "psyq/801D1138.s.s",
+   "game": false,
+   "library": "psyq",
+   "bytes": 368,
+   "functions": [
+    {
+     "name": "TransMatrix",
+     "address": "0x801D1138",
+     "bytes": 48,
+     "level": "sony"
+    },
+    {
+     "name": "ScaleMatrix",
+     "address": "0x801D1168",
+     "bytes": 320,
+     "level": "sony"
+    }
+   ],
+   "libraries": ""
+  },
+  {
+   "unit": "src/kaj/801D12A8.c",
+   "game": true,
+   "library": "kaj",
+   "bytes": 2424,
+   "functions": [
+    {
+     "name": "func_801D12A8",
+     "address": "0x801D12A8",
+     "bytes": 88,
+     "unk_fields": 3,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801D1300",
+     "address": "0x801D1300",
+     "bytes": 124,
+     "unk_fields": 4,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801D137C",
+     "address": "0x801D137C",
+     "bytes": 316,
+     "unk_fields": 8,
+     "m2c_names": 1,
+     "unk_types": 3,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801D14B8",
+     "address": "0x801D14B8",
+     "bytes": 56,
+     "unk_fields": 1,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801D14F0",
+     "address": "0x801D14F0",
+     "bytes": 88,
+     "unk_fields": 3,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801D1548",
+     "address": "0x801D1548",
+     "bytes": 128,
+     "unk_fields": 0,
+     "m2c_names": 2,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801D15C8",
+     "address": "0x801D15C8",
+     "bytes": 132,
+     "unk_fields": 4,
+     "m2c_names": 1,
+     "unk_types": 2,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801D164C",
+     "address": "0x801D164C",
+     "bytes": 224,
+     "unk_fields": 5,
+     "m2c_names": 0,
+     "unk_types": 2,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801D172C",
+     "address": "0x801D172C",
+     "bytes": 72,
+     "unk_fields": 3,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801D1774",
+     "address": "0x801D1774",
+     "bytes": 124,
+     "unk_fields": 4,
+     "m2c_names": 2,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801D17F0",
+     "address": "0x801D17F0",
+     "bytes": 480,
+     "level": "asm"
+    },
+    {
+     "name": "func_801D19D0",
+     "address": "0x801D19D0",
+     "bytes": 92,
+     "unk_fields": 2,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801D1A2C",
+     "address": "0x801D1A2C",
+     "bytes": 44,
+     "unk_fields": 1,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801D1A58",
+     "address": "0x801D1A58",
+     "bytes": 84,
+     "unk_fields": 2,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801D1AAC",
+     "address": "0x801D1AAC",
+     "bytes": 256,
+     "unk_fields": 4,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 4,
+     "level": "c"
+    },
+    {
+     "name": "func_801D1BAC",
+     "address": "0x801D1BAC",
+     "bytes": 40,
+     "unk_fields": 3,
+     "m2c_names": 3,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801D1BD4",
+     "address": "0x801D1BD4",
+     "bytes": 76,
+     "unk_fields": 4,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 0,
+     "level": "c"
+    }
+   ]
+  },
+  {
+   "unit": "psyq/801D1C20.s.s",
+   "game": false,
+   "library": "psyq",
+   "bytes": 592,
+   "functions": [
+    {
+     "name": "SetDefDrawEnv",
+     "address": "0x801D1C20",
+     "bytes": 192,
+     "level": "sony"
+    },
+    {
+     "name": "SetDefDispEnv",
+     "address": "0x801D1CE0",
+     "bytes": 64,
+     "level": "sony"
+    },
+    {
+     "name": "GsInitVcount",
+     "address": "0x801D1D20",
+     "bytes": 64,
+     "level": "sony"
+    },
+    {
+     "name": "GsDefDispBuff",
+     "address": "0x801D1D60",
+     "bytes": 160,
+     "level": "sony"
+    },
+    {
+     "name": "func_801D1E00",
+     "address": "0x801D1E00",
+     "bytes": 32,
+     "level": "sony"
+    },
+    {
+     "name": "func_801D1E20",
+     "address": "0x801D1E20",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "func_801D1E30",
+     "address": "0x801D1E30",
+     "bytes": 16,
+     "level": "sony"
+    },
+    {
+     "name": "SetBackColor",
+     "address": "0x801D1E40",
+     "bytes": 32,
+     "level": "sony"
+    },
+    {
+     "name": "SetGeomScreen",
+     "address": "0x801D1E60",
+     "bytes": 16,
+     "level": "sony"
+    }
+   ],
+   "libraries": ""
+  },
+  {
+   "unit": "src/kaj/801D1E70.c",
+   "game": true,
+   "library": "kaj",
+   "bytes": 21688,
+   "functions": [
+    {
+     "name": "func_801D1E70",
+     "address": "0x801D1E70",
+     "bytes": 256,
+     "unk_fields": 13,
+     "m2c_names": 0,
+     "unk_types": 3,
+     "d_globals": 5,
+     "level": "c"
+    },
+    {
+     "name": "func_801D1F70",
+     "address": "0x801D1F70",
+     "bytes": 672,
+     "level": "asm"
+    },
+    {
+     "name": "func_801D2210",
+     "address": "0x801D2210",
+     "bytes": 492,
+     "level": "asm"
+    },
+    {
+     "name": "func_801D23FC",
+     "address": "0x801D23FC",
+     "bytes": 336,
+     "unk_fields": 7,
+     "m2c_names": 4,
+     "unk_types": 2,
+     "d_globals": 3,
+     "level": "c"
+    },
+    {
+     "name": "func_801D254C",
+     "address": "0x801D254C",
+     "bytes": 884,
+     "level": "asm"
+    },
+    {
+     "name": "func_801D28C0",
+     "address": "0x801D28C0",
+     "bytes": 392,
+     "level": "asm"
+    },
+    {
+     "name": "func_801D2A48",
+     "address": "0x801D2A48",
+     "bytes": 280,
+     "unk_fields": 5,
+     "m2c_names": 4,
+     "unk_types": 2,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801D2B60",
+     "address": "0x801D2B60",
+     "bytes": 744,
+     "level": "asm"
+    },
+    {
+     "name": "func_801D2E48",
+     "address": "0x801D2E48",
+     "bytes": 104,
+     "unk_fields": 1,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 4,
+     "level": "c"
+    },
+    {
+     "name": "func_801D2EB0",
+     "address": "0x801D2EB0",
+     "bytes": 104,
+     "unk_fields": 2,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801D2F18",
+     "address": "0x801D2F18",
+     "bytes": 328,
+     "unk_fields": 8,
+     "m2c_names": 3,
+     "unk_types": 2,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801D3060",
+     "address": "0x801D3060",
+     "bytes": 132,
+     "unk_fields": 6,
+     "m2c_names": 2,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801D30E4",
+     "address": "0x801D30E4",
+     "bytes": 212,
+     "unk_fields": 6,
+     "m2c_names": 3,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801D31B8",
+     "address": "0x801D31B8",
+     "bytes": 16,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801D31C8",
+     "address": "0x801D31C8",
+     "bytes": 116,
+     "unk_fields": 1,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801D323C",
+     "address": "0x801D323C",
+     "bytes": 180,
+     "unk_fields": 1,
+     "m2c_names": 0,
+     "unk_types": 3,
+     "d_globals": 4,
+     "level": "c"
+    },
+    {
+     "name": "func_801D32F0",
+     "address": "0x801D32F0",
+     "bytes": 116,
+     "unk_fields": 1,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801D3364",
+     "address": "0x801D3364",
+     "bytes": 64,
+     "unk_fields": 1,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801D33A4",
+     "address": "0x801D33A4",
+     "bytes": 64,
+     "unk_fields": 1,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801D33E4",
+     "address": "0x801D33E4",
+     "bytes": 132,
+     "unk_fields": 2,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801D3468",
+     "address": "0x801D3468",
+     "bytes": 116,
+     "unk_fields": 2,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801D34DC",
+     "address": "0x801D34DC",
+     "bytes": 60,
+     "unk_fields": 1,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801D3518",
+     "address": "0x801D3518",
+     "bytes": 120,
+     "unk_fields": 1,
+     "m2c_names": 2,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801D3590",
+     "address": "0x801D3590",
+     "bytes": 92,
+     "unk_fields": 3,
+     "m2c_names": 2,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801D35EC",
+     "address": "0x801D35EC",
+     "bytes": 100,
+     "unk_fields": 1,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801D3650",
+     "address": "0x801D3650",
+     "bytes": 116,
+     "unk_fields": 2,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801D36C4",
+     "address": "0x801D36C4",
+     "bytes": 96,
+     "unk_fields": 2,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801D3724",
+     "address": "0x801D3724",
+     "bytes": 12,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801D3730",
+     "address": "0x801D3730",
+     "bytes": 52,
+     "unk_fields": 0,
+     "m2c_names": 2,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801D3764",
+     "address": "0x801D3764",
+     "bytes": 428,
+     "level": "asm"
+    },
+    {
+     "name": "func_801D3910",
+     "address": "0x801D3910",
+     "bytes": 20,
+     "unk_fields": 0,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 3,
+     "level": "c"
+    },
+    {
+     "name": "func_801D3924",
+     "address": "0x801D3924",
+     "bytes": 36,
+     "unk_fields": 7,
+     "m2c_names": 4,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801D3948",
+     "address": "0x801D3948",
+     "bytes": 8,
+     "unk_fields": 1,
+     "m2c_names": 2,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801D3950",
+     "address": "0x801D3950",
+     "bytes": 12,
+     "unk_fields": 1,
+     "m2c_names": 1,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801D395C",
+     "address": "0x801D395C",
+     "bytes": 68,
+     "unk_fields": 4,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801D39A0",
+     "address": "0x801D39A0",
+     "bytes": 116,
+     "unk_fields": 4,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801D3A14",
+     "address": "0x801D3A14",
+     "bytes": 192,
+     "unk_fields": 5,
+     "m2c_names": 2,
+     "unk_types": 1,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801D3AD4",
+     "address": "0x801D3AD4",
+     "bytes": 92,
+     "unk_fields": 4,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801D3B30",
+     "address": "0x801D3B30",
+     "bytes": 76,
+     "unk_fields": 2,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801D3B7C",
+     "address": "0x801D3B7C",
+     "bytes": 212,
+     "unk_fields": 1,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 3,
+     "level": "c"
+    },
+    {
+     "name": "func_801D3C50",
+     "address": "0x801D3C50",
+     "bytes": 460,
+     "unk_fields": 1,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 3,
+     "level": "c"
+    },
+    {
+     "name": "func_801D3E1C",
+     "address": "0x801D3E1C",
+     "bytes": 208,
+     "unk_fields": 2,
+     "m2c_names": 2,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801D3EEC",
+     "address": "0x801D3EEC",
+     "bytes": 520,
+     "level": "asm"
+    },
+    {
+     "name": "func_801D40F4",
+     "address": "0x801D40F4",
+     "bytes": 512,
+     "level": "asm"
+    },
+    {
+     "name": "func_801D42F4",
+     "address": "0x801D42F4",
+     "bytes": 2608,
+     "level": "asm"
+    },
+    {
+     "name": "func_801D4D24",
+     "address": "0x801D4D24",
+     "bytes": 636,
+     "level": "asm"
+    },
+    {
+     "name": "func_801D4FA0",
+     "address": "0x801D4FA0",
+     "bytes": 340,
+     "unk_fields": 0,
+     "m2c_names": 2,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801D50F4",
+     "address": "0x801D50F4",
+     "bytes": 560,
+     "level": "asm"
+    },
+    {
+     "name": "func_801D5324",
+     "address": "0x801D5324",
+     "bytes": 1552,
+     "level": "asm"
+    },
+    {
+     "name": "func_801D5934",
+     "address": "0x801D5934",
+     "bytes": 688,
+     "level": "asm"
+    },
+    {
+     "name": "func_801D5BE4",
+     "address": "0x801D5BE4",
+     "bytes": 376,
+     "unk_fields": 7,
+     "m2c_names": 0,
+     "unk_types": 4,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801D5D5C",
+     "address": "0x801D5D5C",
+     "bytes": 204,
+     "unk_fields": 9,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801D5E28",
+     "address": "0x801D5E28",
+     "bytes": 760,
+     "level": "asm"
+    },
+    {
+     "name": "func_801D6120",
+     "address": "0x801D6120",
+     "bytes": 1068,
+     "level": "asm"
+    },
+    {
+     "name": "func_801D654C",
+     "address": "0x801D654C",
+     "bytes": 296,
+     "unk_fields": 3,
+     "m2c_names": 2,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801D6674",
+     "address": "0x801D6674",
+     "bytes": 364,
+     "unk_fields": 2,
+     "m2c_names": 2,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801D67E0",
+     "address": "0x801D67E0",
+     "bytes": 112,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 4,
+     "level": "c"
+    },
+    {
+     "name": "func_801D6850",
+     "address": "0x801D6850",
+     "bytes": 68,
+     "unk_fields": 1,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801D6894",
+     "address": "0x801D6894",
+     "bytes": 172,
+     "unk_fields": 0,
+     "m2c_names": 2,
+     "unk_types": 1,
+     "d_globals": 5,
+     "level": "c"
+    },
+    {
+     "name": "func_801D6940",
+     "address": "0x801D6940",
+     "bytes": 196,
+     "unk_fields": 6,
+     "m2c_names": 3,
+     "unk_types": 2,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801D6A04",
+     "address": "0x801D6A04",
+     "bytes": 40,
+     "unk_fields": 1,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801D6A2C",
+     "address": "0x801D6A2C",
+     "bytes": 44,
+     "unk_fields": 1,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801D6A58",
+     "address": "0x801D6A58",
+     "bytes": 188,
+     "unk_fields": 8,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801D6B14",
+     "address": "0x801D6B14",
+     "bytes": 68,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801D6B58",
+     "address": "0x801D6B58",
+     "bytes": 68,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801D6B9C",
+     "address": "0x801D6B9C",
+     "bytes": 12,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 1,
+     "level": "c"
+    },
+    {
+     "name": "func_801D6BA8",
+     "address": "0x801D6BA8",
+     "bytes": 256,
+     "unk_fields": 4,
+     "m2c_names": 2,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801D6CA8",
+     "address": "0x801D6CA8",
+     "bytes": 288,
+     "unk_fields": 3,
+     "m2c_names": 4,
+     "unk_types": 1,
+     "d_globals": 3,
+     "level": "c"
+    },
+    {
+     "name": "func_801D6DC8",
+     "address": "0x801D6DC8",
+     "bytes": 16,
+     "unk_fields": 1,
+     "m2c_names": 2,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801D6DD8",
+     "address": "0x801D6DD8",
+     "bytes": 68,
+     "unk_fields": 2,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801D6E1C",
+     "address": "0x801D6E1C",
+     "bytes": 68,
+     "unk_fields": 1,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801D6E60",
+     "address": "0x801D6E60",
+     "bytes": 276,
+     "unk_fields": 3,
+     "m2c_names": 2,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801D6F74",
+     "address": "0x801D6F74",
+     "bytes": 348,
+     "unk_fields": 2,
+     "m2c_names": 2,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801D70D0",
+     "address": "0x801D70D0",
+     "bytes": 152,
+     "unk_fields": 2,
+     "m2c_names": 1,
+     "unk_types": 1,
+     "d_globals": 3,
+     "level": "c"
+    },
+    {
+     "name": "func_801D7168",
+     "address": "0x801D7168",
+     "bytes": 36,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801D718C",
+     "address": "0x801D718C",
+     "bytes": 68,
+     "unk_fields": 2,
+     "m2c_names": 0,
+     "unk_types": 1,
+     "d_globals": 2,
+     "level": "c"
+    },
+    {
+     "name": "func_801D71D0",
+     "address": "0x801D71D0",
+     "bytes": 292,
+     "unk_fields": 9,
+     "m2c_names": 3,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    },
+    {
+     "name": "func_801D72F4",
+     "address": "0x801D72F4",
+     "bytes": 52,
+     "unk_fields": 0,
+     "m2c_names": 3,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "c"
+    }
+   ]
+  }
+ ]
+}

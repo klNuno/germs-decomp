@@ -4,8 +4,9 @@ typedef struct Unk_801D12A8 {
     struct Unk_801D12A8 *unk0;
     u8 unk4[0x1C];
     s16 unk20;
-    u8 unk22[0x16];
-    s32 unk38;
+    s16 unk22;
+    u8 unk24[0x14];
+    void (*unk38)(struct Unk_801D12A8 *);
     void *unk3C;
 } Unk_801D12A8;
 typedef struct {
@@ -75,6 +76,11 @@ void DrawOTag(u32 *ot);
 extern s32 D_801E2D60;
 extern s16 D_801E2D64;
 s32 D_801DFE0C;
+typedef struct { s32 unk0; s32 unk4; s32 unk8; s32 unkC; s32 unk10; } Unk_801CC1E8;
+Unk_801CC1E8 *func_801CC1E8(s32 arg0);
+void func_801CC514(s32 a, s32 b);
+void EnterCriticalSection(void);
+void ExitCriticalSection(void);
 
 void func_801D12A8(Unk_801D12A8 *arg0) {
     Unk_801DFBD0 *p = &D_801DFBD0;
@@ -108,7 +114,47 @@ void func_801D1300(s32 arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801D12A8", func_801D137C);
+s32 func_801D137C(s32 arg0) {
+    Unk_801DFBD0 *p = &D_801DFBD0;
+    Unk_801D12A8 *node = &p->unk4[arg0];
+    Unk_801CC1E8 *e;
+
+    if (node->unk0 == 0 || (node->unk0 >= p->unk4 && node->unk0 < &p->unk4[p->unk0])) {
+        return 0;
+    }
+    func_801CC514(2, arg0 + 1);
+    if (node->unk38 != 0) {
+        node->unk38(node);
+    }
+    EnterCriticalSection();
+    e = func_801CC1E8(0x100);
+    if (e != 0) {
+        e->unk8 = arg0;
+        e->unkC = 1;
+        e->unk10 = node->unk22;
+        {
+            Unk_801DFBD0 *q = &D_801DFBD0;
+
+            if (node->unk3C != node) {
+                free3(node->unk3C);
+            }
+            node->unk3C = 0;
+            node->unk0 = q->unkC;
+            q->unkC = node;
+        }
+    } else {
+        Unk_801DFBD0 *q = &D_801DFBD0;
+
+        if (node->unk3C != node) {
+            free3(node->unk3C);
+        }
+        node->unk3C = 0;
+        node->unk0 = q->unk8;
+        q->unk8 = node;
+    }
+    ExitCriticalSection();
+    return 1;
+}
 
 s32 func_801D14B8(Unk_801D14B8 *arg0) {
     func_801CC3DC(1, arg0->unk20 + 1, 0);

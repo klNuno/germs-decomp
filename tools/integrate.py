@@ -134,6 +134,12 @@ def normalize(unit):
             uniq.append(d)
     # A forward `typedef struct X X;` beside the full `typedef struct X {...} X;` is a
     # redefinition for cc1: the full one stays.
+    # An untagged full one gets the tag, so `struct X` still names it.
+    forward = {forward_typedef(d) for d in uniq} - {None}
+    for i, d in enumerate(uniq):
+        name = type_name(d)
+        if name in forward and re.match(r"\s*typedef\s+struct\s*\{", d):
+            uniq[i] = re.sub(r"typedef\s+struct\s*\{", f"typedef struct {name} {{", d, count=1)
     full = {type_name(d) for d in uniq if re.match(r"\s*typedef\s+struct\s+\w+\s*\{", d)}
     uniq = [d for d in uniq if forward_typedef(d) not in full]
     uniq = order_types(uniq)
@@ -252,11 +258,17 @@ def struct_fields(item):
 def merge_struct(old, new):
     """One struct from two layouts of it, or None when they disagree. Every member of both is
     kept; a finer member replaces a coarser one only when finer ones cover it exactly (an s32
-    split into two s16); at the same offset and size the new member wins; a byte array is cut
+    split into two s16), or partly when the coarser one is an array; at the same offset and size the new member wins; a byte array is cut
     short at the next member; gaps become padding."""
     a, b = struct_fields(old), struct_fields(new)
-    if not a or not b or a[0] != b[0] or a[1] != b[1]:
+    if not a or not b or a[1] != b[1]:
         return None
+    if a[0] != b[0]:  # the same struct, tagged on one side only: keep the tag
+        heads = {re.sub(r"struct\s+\w+\s*\{", "struct {", h) for h in (a[0], b[0])}
+        if len(heads) != 1:
+            return None
+        if "struct {" in a[0].replace("struct  {", "struct {"):
+            a = (b[0],) + tuple(a[1:])
     sizes = {(f[0], f[2]): f[1] for f in a[2] + b[2] if f[1] is not None}
     for f in a[2] + b[2]:
         if f[1] is None:
@@ -277,7 +289,10 @@ def merge_struct(old, new):
         for g in inner:
             covered |= set(range(g[0], g[0] + g[1]))
         if covered != set(range(f[0], f[0] + f[1])):
-            return None
+            if "[" not in f[2]:
+                return None
+            # an array partly split by the other layout: its finer members win, the rest becomes
+            # padding (a use of the dropped array fails to compile and make check refuses it)
     starts = {f[0] for f in keep}
     soft = {}
     for f in a[2] + b[2]:

@@ -4,7 +4,13 @@ typedef struct { s16 unk0; s16 unk2; s16 unk4; s16 unk6; s16 unk8; s16 unkA; s16
 extern Unk_801E1078 D_801E1078[8];
 void SsUtKeyOffV(s16 voice);
 typedef struct { s16 unk0; s16 unk2; s32 unk4; void *unk8; } Unk_801A3B5C;
-typedef struct { u16 unk0; u16 unk2; u16 unk4; u16 unk6; s32 unk8; } Unk_801E02DC;
+typedef struct {
+    s16 unk0;
+    u16 unk2;
+    s16 unk4;
+    s16 unk6;
+    s32 unk8;
+} Unk_801E02DC;
 typedef struct { Unk_801A3B5C *unk0; Unk_801E02DC *unk4[4]; s32 unk14; } Unk_801E02D8;
 extern Unk_801E02D8 D_801E02D8;
 void func_801A2288(void);
@@ -53,10 +59,40 @@ void *func_801D15C8(u32 arg0);
 void func_801D1774(void *arg0, s32 arg1);
 s32 func_801D14B8(void *arg0);
 void func_801A3D74(Unk_801A3D74 *arg0);
-typedef struct { s32 unk0; s32 unk4; u8 unk8[0xC]; u16 unk14; u16 unk16; u16 unk18; u16 unk1A; } Unk_801A217C;
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+    s32 unkC;
+    s32 unk10;
+    u16 unk14;
+    u16 unk16;
+    u16 unk18;
+    u16 unk1A;
+} Unk_801A217C;
 void *func_801CC898(u32 size);
 extern char D_80171770[];
 extern char D_8017178C[];
+void SsVabClose(s16 vabid);
+typedef struct { s32 unk0; s32 unk4; char **unk8; } Unk_801A324C;
+s32 atoi(char *s);
+void func_801A2C60(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6);
+void func_801A3B5C(void);
+typedef struct Unk_801E6DA0 {
+    s32 unk0;
+    s32 unk4;
+    s16 unk8;
+    s16 unkA;
+    s32 unkC;
+    s32 unk10;
+    s32 unk14;
+    s16 unk18;
+} Unk_801E6DA0;
+extern Unk_801E6DA0 D_801E6DA0;
+s16 SsSepOpen(u32 *addr, s16 vab_id, s16 seq_num);
+extern char D_80171708[];
+typedef struct { u16 unk0[0xA]; u16 unk14; u8 unk16[0x7DE]; } Unk_801A37E4;
+void *memset(void *dst, s32 c, u32 n);
 
 INCLUDE_RODATA("asm/nonmatchings/game/801A217C", D_801716EC);
 
@@ -96,9 +132,76 @@ void func_801A217C(Unk_801A217C *arg0) {
     p->unk4[p->unk14++] = se;
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/801A217C", func_801A2288);
+void func_801A2288(void) {
+    Unk_801E02D8 *p = &D_801E02D8;
+    Unk_801E02DC *se;
+    s32 i;
 
-INCLUDE_ASM("asm/nonmatchings/game/801A217C", func_801A23B4);
+    if (p->unk14 != 0) {
+        se = p->unk4[--p->unk14];
+        if (se != NULL) {
+            for (i = 0; i < 8; i++) {
+                if (D_801E1078[i].unkA == se->unk4 && D_801E1078[i].unkC >= 0) {
+                    if (D_801E1078[i].unkE != 0) {
+                        SsUtKeyOffV(D_801E1078[i].unkC);
+                    }
+                    D_801E1078[i].unk2 = -1;
+                    D_801E1078[i].unk4 = -1;
+                    D_801E1078[i].unk6 = -1;
+                    D_801E1078[i].unk8 = -1;
+                    D_801E1078[i].unkA = -1;
+                    D_801E1078[i].unkC = -1;
+                    D_801E1078[i].unkE = 0;
+                    D_801E1078[i].unk12 = 0;
+                    D_801E1078[i].unk10 = 0;
+                }
+            }
+            if (se->unk0 >= 0) {
+                SsVabClose(se->unk0);
+            }
+            free3((void *)se->unk8);
+            free3(se);
+            p->unk4[p->unk14] = NULL;
+        }
+    }
+}
+
+void func_801A23B4(void) {
+    Unk_801E02D8 *p = &D_801E02D8;
+    Unk_801E02DC *se;
+    s32 i;
+
+    if (p->unk14 != 0) {
+        se = p->unk4[p->unk14 - 1];
+        while (se->unk6 > 0) {
+            if (se != NULL) {
+                for (i = 0; i < 8; i++) {
+                    if (D_801E1078[i].unkA == se->unk4 && D_801E1078[i].unkC >= 0) {
+                        if (D_801E1078[i].unkE != 0) {
+                            SsUtKeyOffV(D_801E1078[i].unkC);
+                        }
+                        D_801E1078[i].unk2 = -1;
+                        D_801E1078[i].unk4 = -1;
+                        D_801E1078[i].unk6 = -1;
+                        D_801E1078[i].unk8 = -1;
+                        D_801E1078[i].unkA = -1;
+                        D_801E1078[i].unkC = -1;
+                        D_801E1078[i].unkE = 0;
+                        D_801E1078[i].unk12 = 0;
+                        D_801E1078[i].unk10 = 0;
+                    }
+                }
+                if (se->unk0 >= 0) {
+                    SsVabClose(se->unk0);
+                }
+                free3((void *)se->unk8);
+                free3(se);
+                p->unk4[--p->unk14] = NULL;
+                se = p->unk4[p->unk14 - 1];
+            }
+        }
+    }
+}
 
 void func_801A252C(void) {
     s32 i;
@@ -139,17 +242,92 @@ INCLUDE_ASM("asm/nonmatchings/game/801A217C", func_801A2678);
 
 INCLUDE_ASM("asm/nonmatchings/game/801A217C", func_801A2C60);
 
-INCLUDE_ASM("asm/nonmatchings/game/801A217C", func_801A324C);
+void func_801A324C(Unk_801A324C *arg0) {
+    s32 a, b, c, d, e, f, g, h;
+
+    if (arg0->unk4 >= 5) {
+        a = atoi(arg0->unk8[0]);
+        b = atoi(arg0->unk8[1]);
+        c = atoi(arg0->unk8[2]);
+        d = atoi(arg0->unk8[3]);
+        e = atoi(arg0->unk8[4]);
+        if (arg0->unk4 == 8) {
+            f = atoi(arg0->unk8[5]);
+            g = atoi(arg0->unk8[6]);
+            h = atoi(arg0->unk8[7]);
+        } else if (arg0->unk4 == 7) {
+            f = atoi(arg0->unk8[5]);
+            g = atoi(arg0->unk8[6]);
+            h = 0;
+        } else {
+            f = 0x7F;
+            g = 0x7F;
+            h = 0;
+        }
+        func_801A2C60(a, b, c, d, f, g, h);
+    }
+}
 
 INCLUDE_RODATA("asm/nonmatchings/game/801A217C", D_80171770);
 
 INCLUDE_RODATA("asm/nonmatchings/game/801A217C", D_8017178C);
 
-INCLUDE_ASM("asm/nonmatchings/game/801A217C", func_801A33E8);
+void func_801A33E8(Unk_801A3B5C *arg0) {
+    Unk_801E02D8 *p = &D_801E02D8;
+    Unk_801E02DC *se = NULL;
+    s32 i;
+
+    if (p->unk14 == 0) {
+        func_801CD54C(8, "VAB is not Ready", D_801DFD7C, 0x253);
+    }
+    for (i = 0; i < p->unk14; i++) {
+        se = p->unk4[i];
+        if (se->unk4 == 2) {
+            break;
+        }
+        se = NULL;
+    }
+    if (se == NULL) {
+        func_801CD54C(8, "VAB is not Ready", D_801DFD7C, 0x25C);
+    }
+    arg0->unk4 = *(s32 *)arg0->unk8;
+    if (arg0->unk4 >= 4) {
+        func_801CD54C(8, "Too Many SEQ in This SEP", D_801DFD7C, 0x260);
+    }
+    if (p->unk0 != NULL) {
+        func_801A3B5C();
+    }
+    arg0->unk0 = SsSepOpen((u32 *)arg0->unk8 + 1, se->unk0, arg0->unk4);
+    if (arg0->unk0 < 0) {
+        func_801CD54C(8, "Can not Open Specified SEP", D_801DFD7C, 0x268);
+    }
+    for (i = 0; i < arg0->unk4; i++) {
+        SsSepSetVol(arg0->unk0, i, D_801E6DA0.unk18, D_801E6DA0.unk18);
+    }
+    p->unk0 = arg0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/game/801A217C", func_801A358C);
 
-INCLUDE_ASM("asm/nonmatchings/game/801A217C", func_801A37E4);
+Unk_801A37E4 *func_801A37E4(u16 *arg0, s32 arg1, Unk_801A217C *arg2) {
+    Unk_801E02D8 *p = &D_801E02D8;
+
+    memset(arg2, 0, 0x1C);
+    if (p->unk14 == 4) {
+        func_801CD54C(0xD, D_801716EC, D_801DFD7C, 0x99);
+    }
+    arg2->unk18 = arg0[0];
+    arg2->unk1A = arg0[1];
+    arg0 += 2;
+    arg2->unkC = arg1 - 4;
+    arg2->unk4 = (s32)func_801CC898(arg1 - 4);
+    if (arg2->unk4 == 0) {
+        func_801CD54C(3, D_80171708, D_801DFD7C, 0xA2);
+    }
+    *(Unk_801A37E4 *)arg2->unk4 = *(Unk_801A37E4 *)arg0;
+    arg2->unk16 = ((Unk_801A37E4 *)arg2->unk4)->unk14;
+    return (Unk_801A37E4 *)arg2->unk4 + 1;
+}
 
 void func_801A3970(Unk_801A3970 *arg0) {
     if (D_801E02EC[0] == 4) {

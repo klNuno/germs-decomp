@@ -8,12 +8,17 @@ never shows.
 
 ## Status
 
+[![Progress map: one rectangle per function, sized by its code bytes](docs/progress/treemap.svg)](docs/progress/treemap.svg)
+
 - The executable splits and links back to the retail `SLPS_021.07` (`make check` compares the sha1).
-  Every function is still assembly.
-- 510 game functions (235,900 bytes) and 145 functions of the developer's own library (36,376 bytes) to
-  decompile. Sony's PSY-Q 4.4 libraries (138,048 bytes, 535 of their functions named) stay as Sony shipped them.
-- Compiler: GCC 2.8.1 with ASPSX 2.56 or later, `-O2 -G8`, found by compiling small functions until they
-  matched.
+- 451 of the 655 functions to decompile (510 of the game, 145 of the developer's own library) are matching C:
+  93,000 of 272,276 code bytes (34.2 %). The rest is still assembly. Sony's PSY-Q 4.4 libraries (138,048
+  bytes) stay as Sony shipped them.
+- The map is regenerated after each wave with `tools/progress_map.py` (after `make check`); open it to hover
+  each function, `docs/progress/progress.json` holds the same data. No function is fully named yet: every C
+  body still carries address names.
+- Compiler: GCC 2.8.1 with ASPSX 2.56, `-O2 -G8 -funsigned-char`, found by compiling small functions until
+  they matched.
 
 ## Building
 

@@ -142,7 +142,10 @@ typedef struct {
     s32 unk8;
     u8 unkC;
     u8 unkD;
-    u8 unkE[0xE];
+    s16 unkE;
+    u8 unk10[4];
+    Unk_801D6DC8 *unk14;
+    s32 unk18;
 } Unk_801D6940;
 typedef struct {
     s32 unk0;
@@ -169,6 +172,28 @@ typedef struct {
     u32 unk10;
     s32 unk14;
 } Unk_801D2A48;
+extern s16 D_801E7188[];
+s32 func_801D3E1C(s16 arg0, s16 arg1);
+void func_801D4D24(s32 arg0, s32 arg1, s32 *arg2, s32 *arg3);
+s32 func_801D6120(s16 arg0, s16 arg1);
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+} Unk_801D5BE4;
+typedef struct {
+    s32 unk0;
+    s32 unk4;
+    s32 unk8;
+    s16 unkC;
+    s16 unkE;
+    Unk_801D6940 *unk10;
+    Unk_801D5BE4 *unk14;
+} Unk_801D6B58;
+s32 func_801D36C4(s32 arg0);
+extern char D_80173008[];
+extern char D_80173018[];
+void func_801D5BE4(void);
 
 void func_801D1E70(void) {
     Unk_801DFBE0 *p = D_801DFBE0;
@@ -204,7 +229,41 @@ INCLUDE_ASM("asm/nonmatchings/kaj/801D1E70", func_801D1F70);
 
 INCLUDE_ASM("asm/nonmatchings/kaj/801D1E70", func_801D2210);
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801D1E70", func_801D23FC);
+s32 func_801D23FC(s32 arg0, Unk_801D2A48 *arg1, s32 *arg2, s32 arg3) {
+    Unk_801E71A8 *p;
+    s32 i;
+    s32 j;
+    s32 k;
+
+    if (D_801E71C8[0] != 0) {
+        return 0;
+    }
+    for (i = 0; i < 32; i++) {
+        D_801E7188[i] = ((Unk_801E71C8 *)D_801E71C8)->unk4[i].unk20;
+    }
+    k = 0;
+    for (i = 0; i < arg0; i++, arg1++) {
+        for (j = 0; j < 32; j++) {
+            p = &D_801E71CC[j];
+            if (p->unk0 == arg1->unk0 && p->unk1C == arg3 && p->unk1D == arg1->unk14) {
+                D_801E7188[j]++;
+                *arg2 = j + 1;
+                break;
+            }
+        }
+        if (j == 32) {
+            for (; k < 32; k++) {
+                p = &D_801E71CC[k];
+                if (p->unk18 == 0) {
+                    D_801E7188[k++]++;
+                    break;
+                }
+            }
+        }
+        arg2++;
+    }
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/kaj/801D1E70", func_801D254C);
 
@@ -267,7 +326,48 @@ s32 func_801D2EB0(s32 arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801D1E70", func_801D2F18);
+s32 func_801D2F18(s32 arg0, u32 arg1, char *arg2) {
+    Unk_801D3060 info;
+    struct {
+        u8 unk0[4];
+        u32 unk4;
+        char unk8[16];
+    } file;
+    Unk_801D3060 *f = &info;
+    Unk_801E71A8 *p;
+    s32 *ret;
+    s32 *e;
+    s32 n;
+    s32 i;
+    s32 base;
+
+    while ((u32)((s32)CdSearchFile(&file, arg2) + 1) < 2) {
+    }
+    f->unk0 = CdPosToInt(&file);
+    f->unk4 = 0;
+    f->unk8 = file.unk4;
+    f->unkC = (file.unk4 + 0x7FF) >> 11;
+    f->unk10 = f->unkC << 11;
+    base = info.unk0;
+    n = arg1 >> 3;
+    p = (arg0 >= 1 && arg0 <= 32) ? &D_801E71A8[arg0] : NULL;
+    if (p != NULL && p->unk18 != 0) {
+        if (D_801E71C8[0] == 0 || D_801E71C8[1] != arg0) {
+            ret = (s32 *)p->unk18;
+        } else {
+            ret = NULL;
+        }
+    } else {
+        ret = NULL;
+    }
+    if (ret != NULL) {
+        for (i = 0; i < n; i++) {
+            e = &((s32 *)*ret)[i * 2];
+            *e += base - 150;
+        }
+    }
+    return 0;
+}
 
 s32 func_801D3060(Unk_801D3060 *arg0, char *arg1) {
     struct {
@@ -621,7 +721,51 @@ s32 func_801D3B7C(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801D1E70", func_801D3C50);
+static inline s32 func_801D3C50_inline(char *buf, s32 type) {
+    Unk_801D32F0 **q = NULL;
+    if (D_801DFE38 == 2 && D_801DFE3C > 0) {
+        q = (Unk_801D32F0 **)func_801D32F0(D_801DFE3C);
+    }
+    if (q != NULL) {
+        if (type != 0) {
+            sprintf(buf, D_80173008, D_801DFE44, *q);
+        } else {
+            sprintf(buf, D_80173018, D_801DFE44, *q);
+        }
+        return 1;
+    }
+    return 0;
+}
+
+s32 func_801D3C50(void) {
+    char name[32];
+    Unk_801D3060 file;
+
+    if (D_801DFE38 != 2 || D_801DFE3C == 0 || !(s16)func_801D31C8(D_801DFE3C)) {
+        return 0;
+    }
+    if (D_801DFE40 == 0) {
+        if (func_801D3C50_inline(name, 0) && func_801D3060(&file, name) == 0) {
+            D_801DFE40 = func_801D2210(&file, 0, 0);
+            return 0;
+        }
+    } else {
+        if (D_801DFE40 <= 0) {
+            return 1;
+        }
+        if (!(s16)func_801D31C8(D_801DFE40)) {
+            return 0;
+        }
+        func_801D3C50_inline(name, 0);
+        func_801D3060(&file, name);
+        func_801D3C50_inline(name, 1);
+        if (func_801D2F18(D_801DFE40, file.unk8, name) != 0) {
+            return 0;
+        }
+        func_801D5BE4();
+    }
+    return 1;
+}
 
 s32 func_801D3E1C(s16 arg0, s16 arg1) {
     Unk_801D3E1C **p;
@@ -654,7 +798,38 @@ INCLUDE_ASM("asm/nonmatchings/kaj/801D1E70", func_801D42F4);
 
 INCLUDE_ASM("asm/nonmatchings/kaj/801D1E70", func_801D4D24);
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801D1E70", func_801D4FA0);
+static inline u8 func_801D4FA0_inline(s32 x, s32 y) {
+    Unk_801D32F0 **p;
+    s32 ret = 0;
+    if (D_801DFE38 == 1 && D_801DFE3C > 0) {
+        ret = func_801D32F0(D_801DFE3C);
+    }
+    p = (Unk_801D32F0 **)ret;
+    if (p == NULL) {
+        return 0;
+    }
+    if (!((x >= (*p)->unk4 && x <= (*p)->unkC) || (x <= (*p)->unk4 && x >= (*p)->unkC))) {
+        return 0;
+    }
+    if (!((y >= (*p)->unk8 && y <= (*p)->unk10) || (y <= (*p)->unk8 && y >= (*p)->unk10))) {
+        return 0;
+    }
+    return 1;
+}
+
+s32 func_801D4FA0(s32 arg0, s32 arg1) {
+    s32 x;
+    s32 y;
+
+    if (func_801D4FA0_inline(arg0, arg1)) {
+        func_801D4D24(arg0, arg1, &x, &y);
+        if ((u8)func_801D3E1C(x, y)) {
+            return func_801D6120(x, y);
+        }
+        return 0;
+    }
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/kaj/801D1E70", func_801D50F4);
 
@@ -662,7 +837,37 @@ INCLUDE_ASM("asm/nonmatchings/kaj/801D1E70", func_801D5324);
 
 INCLUDE_ASM("asm/nonmatchings/kaj/801D1E70", func_801D5934);
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801D1E70", func_801D5BE4);
+void func_801D5BE4(void) {
+    s32 ret = 0;
+    Unk_801D6B58 **q;
+    Unk_801D6940 *p;
+    Unk_801D6DC8 *r;
+    Unk_801D5BE4 *e;
+    s32 i;
+    s32 j;
+
+    if (D_801DFE38 == 2 && D_801DFE3C > 0) {
+        ret = func_801D32F0(D_801DFE3C);
+    }
+    q = (Unk_801D6B58 **)ret;
+    if (q != NULL) {
+        (*q)->unk10 = (Unk_801D6940 *)((s32)*q + (s32)(*q)->unk10);
+        p = (*q)->unk10;
+        for (i = 0; i < (*q)->unkC; i++, p++) {
+            r = p->unk14 = (void *)((s32)*q + (s32)p->unk14);
+            for (j = 0; j < p->unkE; j++, r++) {
+                r->unk4 = (s32)*q + r->unk4;
+            }
+            p->unk18 = (s32)*q + p->unk18;
+        }
+        (*q)->unk14 = (void *)((s32)*q + (s32)(*q)->unk14);
+        for (i = 0; i < (*q)->unkE; i++) {
+            e = &(*q)->unk14[i];
+            e->unk4 = (s32)*q + e->unk4;
+            e->unk8 = (s32)*q + e->unk8;
+        }
+    }
+}
 
 void func_801D5D5C(void) {
     Unk_801E7950 *p;
@@ -735,7 +940,35 @@ void func_801D654C(s16 *arg0, s32 *arg1) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801D1E70", func_801D6674);
+void func_801D6674(s16 *arg0, s32 *arg1) {
+    s16 max = *arg0;
+    Unk_801E7950 *p;
+    s16 n;
+    s16 i;
+    s16 j;
+    u8 found;
+
+    *arg0 = 0;
+    n = 0;
+    p = &D_801E7950[D_801DFE49];
+    for (i = 0; i < p->unkC; i++) {
+        found = 0;
+        for (j = 0; j < n; j++) {
+            if (arg1[j] == p->unk10[i]) {
+                found = 1;
+                break;
+            }
+        }
+        if (!found && func_801D36C4(p->unk10[i])) {
+            arg1[n] = p->unk10[i];
+            n++;
+            if (n == max) {
+                break;
+            }
+        }
+    }
+    *arg0 = n;
+}
 
 s32 func_801D67E0(void) {
     Unk_801D3060 file;
@@ -971,7 +1204,37 @@ void func_801D6E60(s16 *arg0, s32 *arg1) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/kaj/801D1E70", func_801D6F74);
+void func_801D6F74(s16 *arg0, s32 *arg1) {
+    s16 max = *arg0;
+    Unk_801E7830 *p;
+    s16 n;
+    s16 i;
+    s16 j;
+    u8 found;
+    s32 v;
+
+    *arg0 = 0;
+    n = 0;
+    p = &D_801E7830[D_801DFE48];
+    for (i = 0; i < p->unkA; i++) {
+        found = 0;
+        v = p->unk10[i];
+        for (j = 0; j < n; j++) {
+            if (arg1[j] == v) {
+                found = 1;
+                break;
+            }
+        }
+        if (!found && func_801D36C4(v)) {
+            arg1[n] = v;
+            n++;
+            if (n == max) {
+                break;
+            }
+        }
+    }
+    *arg0 = n;
+}
 
 void func_801D70D0(s32 arg0) {
     Unk_801E7830 *p = &D_801E7830[D_801DFE48];

@@ -53,6 +53,8 @@ typedef struct Unk_801E6DA0 {
     s32 unk4;
     s16 unk8;
     s16 unkA;
+    u8 unkC[8];
+    s32 unk14;
 } Unk_801E6DA0;
 extern Unk_801E6DA0 D_801E6DA0;
 s16 D_801DFF5C;
@@ -77,6 +79,11 @@ s32 func_801A216C(Unk_801A216C *arg0, Unk_801A216C *arg1);
 void qsort(void *base, s32 nel, s32 width, s32 (*cmp)());
 extern s16 D_801E0712[];
 extern s16 D_801D7A68[];
+typedef struct { s16 unk0; s16 unk2; s32 unk4; void *unk8; } Unk_801A3B5C;
+typedef struct { Unk_801A3B5C *unk0; s32 unk4; s32 unk8; s32 unkC; s32 unk10; s32 unk14; } Unk_801E02D8;
+extern Unk_801E02D8 D_801E02D8[];
+void SsSepSetVol(s16 access_num, s16 seq_num, s16 voll, s16 volr);
+void func_8018C2FC(u16 a, s16 b, s16 c);
 
 INCLUDE_ASM("asm/nonmatchings/game/8019A5D4", func_8019A5D4);
 
@@ -269,7 +276,51 @@ INCLUDE_ASM("asm/nonmatchings/game/8019A5D4", func_801A0978);
 
 INCLUDE_ASM("asm/nonmatchings/game/8019A5D4", func_801A0B48);
 
-INCLUDE_ASM("asm/nonmatchings/game/8019A5D4", func_801A0D58);
+void func_801A0D58(s16 arg0) {
+    Unk_801A3B5C *q = D_801E02D8[0].unk0;
+    Unk_801E1040 *p = &D_801E1040;
+    s32 t;
+    s32 v;
+
+    if (arg0 != 0) {
+        p->unkE = 0x80;
+    } else {
+        p->unk6 = 1;
+        p->unkE = 0x1000;
+    }
+    while (1) {
+        if (arg0 != 0) {
+            p->unkE += D_801E6DA0.unk14 * 0x85;
+            if (p->unkE >= 0x1000) {
+                p->unkE = 0x1000;
+                break;
+            }
+        } else {
+            p->unkE -= D_801E6DA0.unk14 * 0x85;
+            if (p->unkE <= 0x80) {
+                p->unkE = 0x80;
+                break;
+            }
+        }
+        if (q != NULL && q->unk2 >= 0) {
+            t = p->unkE >> 5;
+            if (t < 0x80) {
+                v = (s16)t;
+                if (t < 0) {
+                    v = 0;
+                }
+            } else {
+                v = 0x7F;
+            }
+            SsSepSetVol(q->unk0, q->unk2, v, v);
+        }
+        func_8018C2FC(1, 1, 1);
+    }
+    if (arg0 != 0) {
+        p->unk6 = 0;
+        p->unkE = 0x1000;
+    }
+}
 
 INCLUDE_RODATA("asm/nonmatchings/game/8019A5D4", D_801715C4);
 
