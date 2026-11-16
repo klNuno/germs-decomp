@@ -28,9 +28,9 @@ void kaj_event_queue_grow(void);
 void kaj_timer_add_alarm(s32 arg0, s32 arg1, s32 arg2);
 void kaj_timer_cancel(s32 arg0);
 s32 kaj_event_set_alarm(s32 arg0, s32 arg1, s32 arg2);
-extern Unk_801DFBD0 kaj_tss_table;
-void kaj_tss_free(Unk_801D12A8 *arg0);
-void kaj_tss_finish(Unk_801D12A8 *arg0);
+extern TssTable kaj_tss_table;
+void kaj_tss_free(TssSlot *arg0);
+void kaj_tss_finish(TssSlot *arg0);
 extern s32 D_801E6DB4[];
 
 void kaj_event_queue_grow(void) {
@@ -38,14 +38,14 @@ void kaj_event_queue_grow(void) {
     s32 n;
 
     n = kaj_event_queue.unk10 << 1;
-    q = (u32)kaj_malloc(n * sizeof(Unk_801CC1E8));
+    q = (u32)kaj_malloc(n * sizeof(KajEvent));
     if (q == 0) {
         kaj_abend(3, "Error Reallocating EVENT Queue", D_801DFDB4, 0x27);
     }
     if (kaj_event_queue.unk4 != 0) {
-        memcpy((void *)((kaj_event_queue.unk10 - kaj_event_queue.unk8) * sizeof(Unk_801CC1E8) + q), kaj_event_queue.unk0, kaj_event_queue.unk4 * sizeof(Unk_801CC1E8));
+        memcpy((void *)((kaj_event_queue.unk10 - kaj_event_queue.unk8) * sizeof(KajEvent) + q), kaj_event_queue.unk0, kaj_event_queue.unk4 * sizeof(KajEvent));
     }
-    memcpy((void *)q, (void *)(kaj_event_queue.unk4 * sizeof(Unk_801CC1E8) + (u32)kaj_event_queue.unk0), (kaj_event_queue.unk10 - kaj_event_queue.unk8) * sizeof(Unk_801CC1E8));
+    memcpy((void *)q, (void *)(kaj_event_queue.unk4 * sizeof(KajEvent) + (u32)kaj_event_queue.unk0), (kaj_event_queue.unk10 - kaj_event_queue.unk8) * sizeof(KajEvent));
     kaj_event_queue.unk8 = 0;
     kaj_event_queue.unk4 = kaj_event_queue.unk10;
     free3(kaj_event_queue.unk0);
@@ -55,18 +55,18 @@ void kaj_event_queue_grow(void) {
 
 void kaj_event_run_tss(s32 *arg0) {
     Unk_801DFAD4 *q;
-    Unk_801CC1E8 *e;
-    Unk_801D12A8 *t;
-    Unk_801DFBD0 *p = &kaj_tss_table;
+    KajEvent *e;
+    TssSlot *t;
+    TssTable *p = &kaj_tss_table;
     s32 n = arg0[2];
     s32 i;
     s32 ok;
 
-    if (n > 0 && n < p->unk0 + 1) {
-        t = &p->unk4[n - 1];
-        if ((t->unk28 > 0 && t->unk24 >= t->unk26) || (t->unk28 < 0 && t->unk24 <= t->unk26)) {
-            t->unk24 = t->unk26;
-            t->unk34(t);
+    if (n > 0 && n < p->count + 1) {
+        t = &p->slots[n - 1];
+        if ((t->step > 0 && t->cur >= t->target) || (t->step < 0 && t->cur <= t->target)) {
+            t->cur = t->target;
+            t->on_end(t);
             EnterCriticalSection();
             q = &kaj_event_queue;
             ok = 0;
@@ -76,13 +76,13 @@ void kaj_event_run_tss(s32 *arg0) {
             i = q->unk4;
             q->unkC++;
             q->unk4 = (i + 1) % q->unk10;
-            e = &((Unk_801CC1E8 *)kaj_event_queue.unk0)[i];
-            e->unk0 = 0x100;
-            e->unk4 = kaj_timer_ticks[0];
+            e = &((KajEvent *)kaj_event_queue.unk0)[i];
+            e->type = 0x100;
+            e->ticks = kaj_timer_ticks[0];
             if (e != NULL) {
                 e->unk8 = n - 1;
                 e->unkC = 0;
-                e->unk10 = t->unk22;
+                e->unk10 = t->type;
                 ok = 1;
             }
             ExitCriticalSection();
@@ -92,21 +92,21 @@ void kaj_event_run_tss(s32 *arg0) {
                 kaj_tss_free(t);
             }
         } else {
-            t->unk30(t);
-            if (t->unk2C == 2 && D_801E6DB4[0] < 11) {
-                t->unk24 += t->unk28 * D_801E6DB4[0];
+            t->on_step(t);
+            if (t->delay == 2 && D_801E6DB4[0] < 11) {
+                t->cur += t->step * D_801E6DB4[0];
             } else {
-                t->unk24 += t->unk28;
+                t->cur += t->step;
             }
-            kaj_event_set_alarm(t->unk2C, n, 0);
+            kaj_event_set_alarm(t->delay, n, 0);
         }
         arg0[0] = 0;
     }
 }
 
 s32 kaj_event_pop(s32 *arg0) {
-    Unk_801CC1E8 *e;
-    Unk_801CC1E8 *p;
+    KajEvent *e;
+    KajEvent *p;
     Unk_801DFAD4 *q;
 
     EnterCriticalSection();
@@ -120,8 +120,8 @@ s32 kaj_event_pop(s32 *arg0) {
 loop:
     q = &kaj_event_queue;
     while (q->unkC != 0) {
-        p = (Unk_801CC1E8 *)(q->unk8 * sizeof(Unk_801CC1E8) + (u32)q->unk0);
-        if (p->unk0 != 0) {
+        p = (KajEvent *)(q->unk8 * sizeof(KajEvent) + (u32)q->unk0);
+        if (p->type != 0) {
             e = p;
             goto found;
         }
@@ -131,12 +131,12 @@ loop:
     e = NULL;
 found:
     if (e != NULL) {
-        *(Unk_801CC1E8 *)arg0 = *e;
-        if (e == &((Unk_801CC1E8 *)kaj_event_queue.unk0)[kaj_event_queue.unk8]) {
+        *(KajEvent *)arg0 = *e;
+        if (e == &((KajEvent *)kaj_event_queue.unk0)[kaj_event_queue.unk8]) {
             kaj_event_queue.unk8 = (kaj_event_queue.unk8 + 1) % kaj_event_queue.unk10;
             kaj_event_queue.unkC--;
         } else {
-            e->unk0 = 0;
+            e->type = 0;
         }
         if (arg0[0] == 0) {
             goto loop;
@@ -148,8 +148,8 @@ found:
     return arg0[0];
 }
 
-Unk_801CC1E8 *kaj_event_push(s32 arg0) {
-    Unk_801CC1E8 *e;
+KajEvent *kaj_event_push(s32 arg0) {
+    KajEvent *e;
     s32 i;
 
     if (kaj_event_queue.unk10 == kaj_event_queue.unkC) {
@@ -158,14 +158,14 @@ Unk_801CC1E8 *kaj_event_push(s32 arg0) {
     i = kaj_event_queue.unk4;
     kaj_event_queue.unkC++;
     kaj_event_queue.unk4 = (i + 1) % kaj_event_queue.unk10;
-    e = &((Unk_801CC1E8 *)kaj_event_queue.unk0)[i];
-    e->unk0 = arg0;
-    e->unk4 = kaj_timer_ticks[0];
+    e = &((KajEvent *)kaj_event_queue.unk0)[i];
+    e->type = arg0;
+    e->ticks = kaj_timer_ticks[0];
     return e;
 }
 
-Unk_801CC1E8 *kaj_event_push_front(s32 arg0) {
-    Unk_801CC1E8 *e;
+KajEvent *kaj_event_push_front(s32 arg0) {
+    KajEvent *e;
     s32 i;
 
     if (kaj_event_queue.unk10 == kaj_event_queue.unkC) {
@@ -174,9 +174,9 @@ Unk_801CC1E8 *kaj_event_push_front(s32 arg0) {
     i = (kaj_event_queue.unk8 + kaj_event_queue.unk10 - 1) % kaj_event_queue.unk10;
     kaj_event_queue.unkC++;
     kaj_event_queue.unk8 = i;
-    e = &((Unk_801CC1E8 *)kaj_event_queue.unk0)[i];
-    e->unk0 = arg0;
-    e->unk4 = kaj_timer_ticks[0];
+    e = &((KajEvent *)kaj_event_queue.unk0)[i];
+    e->type = arg0;
+    e->ticks = kaj_timer_ticks[0];
     return e;
 }
 
@@ -195,7 +195,7 @@ s32 kaj_event_get(s32 *arg0) {
 
 s32 kaj_event_set_alarm(s32 arg0, s32 arg1, s32 arg2) {
     Unk_801DFAD4 *q;
-    Unk_801CC1E8 *e;
+    KajEvent *e;
     s32 i;
 
     EnterCriticalSection();
@@ -213,9 +213,9 @@ s32 kaj_event_set_alarm(s32 arg0, s32 arg1, s32 arg2) {
         i = q->unk4;
         q->unkC++;
         q->unk4 = (i + 1) % q->unk10;
-        e = &((Unk_801CC1E8 *)kaj_event_queue.unk0)[i];
-        e->unk0 = 2;
-        e->unk4 = kaj_timer_ticks[0];
+        e = &((KajEvent *)kaj_event_queue.unk0)[i];
+        e->type = 2;
+        e->ticks = kaj_timer_ticks[0];
         if (e != NULL) {
             e->unk8 = arg1;
             e->unkC = arg2;
@@ -243,13 +243,13 @@ void kaj_event_flush(s32 arg0, s32 arg1) {
     EnterCriticalSection();
     i = q->unk8;
     for (; n < q->unkC; n++) {
-        t = ((Unk_801CC1E8 *)q->unk0)[i].unk0;
+        t = ((KajEvent *)q->unk0)[i].type;
         if (t & arg0) {
             if (t == 0x100) {
-                kaj_tss_release(((Unk_801CC1E8 *)q->unk0)[arg1].unk8);
+                kaj_tss_release(((KajEvent *)q->unk0)[arg1].unk8);
             }
-            if (t != 2 || arg1 == 0 || ((Unk_801CC1E8 *)q->unk0)[i].unk8 == arg1) {
-                ((Unk_801CC1E8 *)q->unk0)[i].unk0 = 0;
+            if (t != 2 || arg1 == 0 || ((KajEvent *)q->unk0)[i].unk8 == arg1) {
+                ((KajEvent *)q->unk0)[i].type = 0;
             }
         }
         i = (i + 1) % q->unk10;

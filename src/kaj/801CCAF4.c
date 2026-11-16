@@ -2,9 +2,9 @@
 #include "game/types.h"
 
 typedef struct Unk_801CCAF4 {
-    Unk_801CCB70 *unk0;
-    Unk_801CCB70 *unk4;
-    Unk_801CCB70 *unk8;
+    LlNode *unk0;
+    LlNode *unk4;
+    LlNode *unk8;
     s32 unkC;
 } Unk_801CCAF4;
 void *kaj_malloc(u32 size);
@@ -72,14 +72,14 @@ void kaj_ll_create(Unk_801CCAF4 **arg0) {
 }
 
 void kaj_ll_destroy(Unk_801CCAF4 *arg0) {
-    Unk_801CCB70 *node;
+    LlNode *node;
 
     while (arg0->unk0 != NULL) {
         node = arg0->unk0;
-        arg0->unk0 = node->unk4;
+        arg0->unk0 = node->next;
         if (node != NULL) {
-            if (node->unk8 != NULL) {
-                free3(node->unk8);
+            if (node->data != NULL) {
+                free3(node->data);
             }
             free3(node);
         }
@@ -91,15 +91,15 @@ void kaj_ll_destroy(Unk_801CCAF4 *arg0) {
 }
 
 void kaj_ll_insert_before(Unk_801CCAF4 *arg0, void *arg1) {
-    Unk_801CCB70 *node;
+    LlNode *node;
 
     node = kaj_malloc(0xC);
     if (node == NULL) {
         kaj_abend(3, D_80172BB4, D_801DFDC4, 0x3C);
     }
-    node->unk8 = arg1;
-    node->unk0 = NULL;
-    node->unk4 = NULL;
+    node->data = arg1;
+    node->prev = NULL;
+    node->next = NULL;
     if (arg0->unk0 == NULL) {
         arg0->unk0 = node;
         arg0->unk4 = node;
@@ -107,32 +107,32 @@ void kaj_ll_insert_before(Unk_801CCAF4 *arg0, void *arg1) {
         arg0->unkC = 1;
     } else {
         if (arg0->unk0 == arg0->unk8) {
-            node->unk4 = arg0->unk8;
-            arg0->unk0->unk0 = node;
+            node->next = arg0->unk8;
+            arg0->unk0->prev = node;
             arg0->unk0 = node;
             arg0->unk8 = node;
             arg0->unkC++;
         } else {
-            node->unk4 = arg0->unk8;
-            node->unk0 = arg0->unk8->unk0;
-            arg0->unk8->unk0 = node;
+            node->next = arg0->unk8;
+            node->prev = arg0->unk8->prev;
+            arg0->unk8->prev = node;
             arg0->unk8 = node;
-            node->unk0->unk4 = node;
+            node->prev->next = node;
             arg0->unkC++;
         }
     }
 }
 
 void kaj_ll_insert_after(Unk_801CCAF4 *arg0, void *arg1) {
-    Unk_801CCB70 *node;
+    LlNode *node;
 
     node = kaj_malloc(0xC);
     if (node == NULL) {
         kaj_abend(3, D_80172BB4, D_801DFDC4, 0x61);
     }
-    node->unk8 = arg1;
-    node->unk0 = NULL;
-    node->unk4 = NULL;
+    node->data = arg1;
+    node->prev = NULL;
+    node->next = NULL;
     if (arg0->unk0 == NULL) {
         arg0->unk0 = node;
         arg0->unk4 = node;
@@ -140,24 +140,24 @@ void kaj_ll_insert_after(Unk_801CCAF4 *arg0, void *arg1) {
         arg0->unkC = 1;
     } else {
         if (arg0->unk4 == arg0->unk8) {
-            node->unk0 = arg0->unk8;
-            arg0->unk4->unk4 = node;
+            node->prev = arg0->unk8;
+            arg0->unk4->next = node;
             arg0->unk4 = node;
             arg0->unk8 = node;
             arg0->unkC++;
         } else {
-            node->unk0 = arg0->unk8;
-            node->unk4 = arg0->unk8->unk4;
-            arg0->unk8->unk4 = node;
+            node->prev = arg0->unk8;
+            node->next = arg0->unk8->next;
+            arg0->unk8->next = node;
             arg0->unk8 = node;
-            node->unk4->unk0 = node;
+            node->next->prev = node;
             arg0->unkC++;
         }
     }
 }
 
 void kaj_ll_remove_to_prev(Unk_801CCAF4 *arg0) {
-    Unk_801CCB70 *node;
+    LlNode *node;
 
     node = arg0->unk8;
     if (arg0->unk0 == arg0->unk4) {
@@ -167,20 +167,20 @@ void kaj_ll_remove_to_prev(Unk_801CCAF4 *arg0) {
         arg0->unkC = 0;
     } else {
         if (arg0->unk0 == node) {
-            arg0->unk8 = node->unk4;
-            arg0->unk8->unk0 = NULL;
+            arg0->unk8 = node->next;
+            arg0->unk8->prev = NULL;
         } else {
-            arg0->unk8 = node->unk0;
-            arg0->unk8->unk4 = node->unk4;
-            if (node->unk4 != NULL) {
-                node->unk4->unk0 = node->unk0;
+            arg0->unk8 = node->prev;
+            arg0->unk8->next = node->next;
+            if (node->next != NULL) {
+                node->next->prev = node->prev;
             }
         }
         arg0->unkC--;
     }
-    node->unk0 = NULL;
-    node->unk4 = NULL;
-    node->unk8 = NULL;
+    node->prev = NULL;
+    node->next = NULL;
+    node->data = NULL;
     if (arg0->unk0 == node) {
         arg0->unk0 = arg0->unk8;
     }
@@ -191,7 +191,7 @@ void kaj_ll_remove_to_prev(Unk_801CCAF4 *arg0) {
 }
 
 void kaj_ll_remove_to_next(Unk_801CCAF4 *arg0) {
-    Unk_801CCB70 *node;
+    LlNode *node;
 
     node = arg0->unk8;
     if (arg0->unk0 == arg0->unk4) {
@@ -201,20 +201,20 @@ void kaj_ll_remove_to_next(Unk_801CCAF4 *arg0) {
         arg0->unkC = 0;
     } else {
         if (arg0->unk4 == node) {
-            arg0->unk8 = node->unk0;
-            arg0->unk8->unk4 = NULL;
+            arg0->unk8 = node->prev;
+            arg0->unk8->next = NULL;
         } else {
-            arg0->unk8 = node->unk4;
-            arg0->unk8->unk0 = node->unk0;
-            if (node->unk0 != NULL) {
-                node->unk0->unk4 = node->unk4;
+            arg0->unk8 = node->next;
+            arg0->unk8->prev = node->prev;
+            if (node->prev != NULL) {
+                node->prev->next = node->next;
             }
         }
         arg0->unkC--;
     }
-    node->unk0 = NULL;
-    node->unk4 = NULL;
-    node->unk8 = NULL;
+    node->prev = NULL;
+    node->next = NULL;
+    node->data = NULL;
     if (arg0->unk0 == node) {
         arg0->unk0 = arg0->unk8;
     }

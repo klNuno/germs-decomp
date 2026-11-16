@@ -11,8 +11,9 @@ How it works: it renames the member in the struct's definition, then compiles ev
 src/ with the game's own toolchain (make print-* gives the exact commands) and reads cc1's
 "structure has no member named `OLD'" errors: each one names a file and a line that accesses the
 renamed member, and only that line's `->OLD` / `.OLD` is rewritten. It repeats until no such
-error is left. A line where OLD appears more than once, or an error it cannot place, stops it
-with a report, leaving the tree as it was. Field names never change the code, so after it:
+error is left. A line where OLD appears more than once is searched by subsets of its accesses
+until it compiles, unless NEW is already a member of some struct (then a wrong subset could
+compile, so it stops). An error it cannot place stops it with a report, leaving the tree as it was. Field names never change the code, so after it:
 tools/unit_check.sh on every unit, then make check.
 """
 import argparse
@@ -57,6 +58,27 @@ def struct_block(text, struct):
         if end is not None and tail.match(text, end):
             return m.end(), end
     return None
+
+
+def member_names(names):
+    """Return the subset of names that appear as a word in some struct or union body in src/ or
+    include/ (comments stripped): a member of any declarator form, or a type name used there."""
+    found = set()
+    for path in list((ROOT / "src").rglob("*.[ch]")) + list((ROOT / "include").rglob("*.h")):
+        text = re.sub(r"/\*.*?\*/|//[^\n]*", " ", path.read_text(errors="surrogateescape"), flags=re.S)
+        for m in re.finditer(r"\b(?:struct|union)\b[^;{}()]*\{", text):
+            depth, i = 1, m.end()
+            while i < len(text) and depth:
+                depth += {"{": 1, "}": -1}.get(text[i], 0)
+                i += 1
+            body = text[m.end():i - 1]
+            for n in names - found:
+                # any whole-word use in a struct body counts (plain members, arrays, bit-fields,
+                # function pointers): a false collision only asks for a hand fix, a missed one
+                # would let a wrong rewrite compile
+                if re.search(r"\b" + re.escape(n) + r"\b", body):
+                    found.add(n)
+    return found
 
 
 def compile_errors(units, cmds):
@@ -120,6 +142,11 @@ def main():
         for path in touched:
             shutil.copy2(backup / path, ROOT / path)
 
+    # NEW names that some struct already has (before the renames): a line with several accesses of
+    # OLD cannot be told apart by compiling (a->old + b->old -> a->new + b->new compiles when b's
+    # struct has both), so such a line is refused instead of searched
+    taken = member_names({r[3] for r in rows})
+
     # 1. definitions
     renamed = {}  # old name -> set of new names (to map errors back)
     for f, st, old, new, ev in rows:
@@ -151,14 +178,30 @@ def main():
 
     # 2. accesses, driven by the compiler
     fixed = 0
-    multi = set()
-    for rnd in range(40):
+    multi = {}
+    for rnd in range(200):
         errs = compile_errors(units, cmds)
+        retried = set()
         for file, ln, name in errs:
             rel = str(pathlib.Path(file).resolve().relative_to(ROOT)) if file.startswith("/") else file
-            if any(m[0] == rel and m[1] == ln and m[2] == name for m in multi):
-                restore()
-                sys.exit(f"{rel}:{ln}: several accesses on this line, not all of the renamed struct: fix it by hand")
+            if (rel, ln) in multi and (rel, ln) not in retried and name in multi[(rel, ln)][1:3]:
+                # a line with several accesses: try the next subset of them to rename
+                orig, oname, onew, mask, n = multi[(rel, ln)]
+                if mask <= 1:
+                    restore()
+                    sys.exit(f"{rel}:{ln}: several accesses on this line, no subset compiles: fix it by hand")
+                mask -= 1
+                multi[(rel, ln)] = (orig, oname, onew, mask, n)
+                k = iter(range(n))
+                line = re.sub(r"((?:->|\.)\s*)" + re.escape(oname) + r"\b",
+                              lambda m: m.group(1) + (onew if (mask >> next(k)) & 1 else oname), orig)
+                path = ROOT / rel
+                lines = path.read_text(errors="surrogateescape").split("\n")
+                lines[ln - 1] = line
+                path.write_text("\n".join(lines), errors="surrogateescape")
+                retried.add((rel, ln))
+        if retried:
+            continue
         other = [e for e in errs if e[2].startswith("OTHER")]
         miss = [e for e in errs if not e[2].startswith("OTHER")]
         if other and not miss:
@@ -179,17 +222,21 @@ def main():
             if not hits:
                 restore()
                 sys.exit(f"{rel}:{ln}: no access of {name} found on the line cc1 names:\n  {src.strip()}")
+            if len(hits) > 1 and new in taken:
+                restore()
+                sys.exit(f"{rel}:{ln}: several accesses of {name} on this line and `{new}' is already a member "
+                         f"of another struct, so a wrong subset could compile: fix it by hand\n  {src.strip()}")
             if len(hits) > 1:
-                # all of them are rewritten; if one belonged to another struct, the next round
-                # reports "no member named NEW" on this line and the batch is refused
-                multi.add((rel, ln, new))
+                # all of them are rewritten first; if one belonged to another struct, the next round
+                # reports an error on this line and the next subset is tried
+                multi[(rel, ln)] = (src, name, new, (1 << len(hits)) - 1, len(hits))
             save(rel)
             lines[ln - 1] = re.sub(r"((?:->|\.)\s*)" + re.escape(name) + r"\b", r"\g<1>" + new, src)
             path.write_text("\n".join(lines), errors="surrogateescape")
             fixed += 1
     else:
         restore()
-        sys.exit("still failing after 40 rounds")
+        sys.exit("still failing after 200 rounds")
     print(f"{fixed} accesses rewritten in {len(touched)} files")
     if args.dry_run:
         restore()

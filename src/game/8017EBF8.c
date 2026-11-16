@@ -1,10 +1,10 @@
 #include "common.h"
 #include "game/types.h"
 
-s16 kaj_ll_at_tail(Unk_801DFE5C *arg0);
-Unk_801DFE5C *D_801DFE5C;
-void kaj_ll_insert_before(Unk_801DFE5C *arg0, s32 arg1);
-void kaj_ll_insert_after(Unk_801DFE5C *arg0, s32 arg1);
+s16 kaj_ll_at_tail(BlockList *arg0);
+BlockList *block_list;
+void kaj_ll_insert_before(BlockList *arg0, s32 arg1);
+void kaj_ll_insert_after(BlockList *arg0, s32 arg1);
 void kaj_cdmgr_free_all(void);
 extern s16 D_801E71C8;
 /* Local view of GameVars: this unit reads 0x0-0xBE as one s16 array (lh), the shared type has a u16 array. */
@@ -12,10 +12,10 @@ typedef struct {
     s16 unk0[0x5F];
     s16 unkBE;
     u8 padC0[0x13C];
-    s16 unk1FC;
-    s16 unk1FE;
-    s16 unk200;
-    s16 unk202;
+    s16 drain_count;
+    s16 drain_minute;
+    s16 car_speed_setting;
+    s16 text_speed_setting;
     u8 pad204[0x44];
     s32 unk248;
     u8 pad24C[0x2];
@@ -23,11 +23,11 @@ typedef struct {
     s16 unk250;
     s16 unk252;
     s16 unk254;
-} Unk_801E0368_u8017EBF8;
+} GameVars_u8017EBF8;
 u8 D_801DFC8C;
 u8 D_801DFC8D[1];
 u8 D_801DFC8E;
-extern Unk_801E0368_u8017EBF8 action_vars;
+extern GameVars_u8017EBF8 action_vars;
 s16 block_wake_index;
 void block_create_all(void);
 void block_building_run(void);
@@ -37,13 +37,13 @@ void text_release_cmd(void);
 void sprite_set_visible(s32 arg0, s32 arg1);
 void sprite_set_clut_entry(s32 arg0, s32 arg1, s32 arg2);
 void sound_se_play(s32 arg0);
-Unk_801DFCAC **text_cmd;
+TextCmd **text_cmd;
 s16 text_window_sprite;
-void action_push_front(Unk_801DFCAC **arg0);
+void action_push_front(TextCmd **arg0);
 s16 text_wait;
 extern s32 D_801E6DB4[];
 extern s32 D_801E05B0[];
-extern Player *D_801E076C[];
+extern Player *player_status_player[];
 extern char D_80170250[];
 void *kaj_malloc(u32 size);
 void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
@@ -79,36 +79,36 @@ typedef struct {
 void sprite_fill_clut(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 typedef struct Unk_801A44B8 {
     u8 pad0[0x4];
-    s16 unk4;
+    s16 visible;
     u8 pad6[0x6];
-    s16 unkC;
+    s16 y;
     u8 padE[0x4];
-    s16 unk12;
+    s16 cell_h;
     u8 pad14[0x4];
-    s16 unk18;
-    s16 unk1A;
-    Unk_80184230 *unk1C;
+    s16 cell_col;
+    s16 cell_row;
+    Rect *tim;
 } Unk_801A44B8;
 void sprite_delete(s32 arg0);
 void mail_list_close(void);
 void mail_free(void);
 Unk_801A44B8 *sprite_find(u16 arg0);
-s32 ClearImage2(Unk_80184230 *rect, s32 r, s32 g, s32 b);
+s32 ClearImage2(Rect *rect, s32 r, s32 g, s32 b);
 s16 text_draw_next(s32 arg0, s32 arg1);
 s16 text_row;
 s16 D_801DFCE6;
 s16 text_pos;
 s32 block_model_surface(void *arg0, s32 arg1, s32 arg2, s32 arg3);
-void kaj_ll_remove_to_prev(Unk_801DFE5C *arg0);
+void kaj_ll_remove_to_prev(BlockList *arg0);
 s16 text_cue_fade_done;
 s16 text_cue_bgm_done;
 void sound_bgm_fade_out(s32 arg0);
 void effect_start_fade(s32 arg0, s32 arg1);
-extern Unk_801DFFE8 D_801DFFE8;
+extern EventState event_state;
 extern char D_80170270[];
-extern Unk_8017CCE4 *block_slots[];
+extern Block *block_slots[];
 void npc_update_blocks(void);
-void block_setup(Unk_8017CCE4 *arg0, u16 arg1);
+void block_setup(Block *arg0, u16 arg1);
 void mod_create(void *arg0);
 void kaj_tim_upload_hdr(void *arg0);
 void **kaj_cdmgr_get(s32 arg0);
@@ -141,7 +141,7 @@ typedef struct {
         s32 unk4;
         s32 unk8;
         s32 unkC;
-        Unk_8017B1E8 *unk10;
+        TmdTri *unk10;
         s32 unk14;
     } *unk8;
 } Unk_8017BBB0;
@@ -150,8 +150,8 @@ typedef struct {
     Unk_8017BBB0 *unkBC;
 } Unk_801E032C;
 extern Unk_801E032C *D_801E032C[];
-s32 block_hit_tris(Unk_8017B1E8 *arg0, s32 arg1, s32 arg2, Unk_8017B3E8 *arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7);
-s32 block_hit_quads(Unk_8017B1E8 *arg0, s32 arg1, s32 arg2, Unk_8017B3E8 *arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7);
+s32 block_hit_tris(TmdTri *arg0, s32 arg1, s32 arg2, Vec3 *arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7);
+s32 block_hit_quads(TmdTri *arg0, s32 arg1, s32 arg2, Vec3 *arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7);
 char *strncpy(char *dst, char *src, u32 n);
 extern char D_801DFCBC[];
 extern s16 D_801DFC74;
@@ -159,28 +159,28 @@ s16 text_col;
 s16 text_color;
 s16 text_len;
 s32 strlen(char *s);
-extern Unk_801E0340 D_801E0340;
+extern SceneRequest scene_request;
 void object_load_res(s32 arg0, s32 arg1);
 void mail_list_open(void);
-void menu_list_page(Unk_80181C10 *arg0, s32 arg1, s32 arg2);
-void menu_status_page(Unk_80181C10 *arg0, s32 arg1);
-void menu_options_page(Unk_80181C10 *arg0, s32 arg1, s16 arg2);
+void menu_list_page(PauseMenu *arg0, s32 arg1, s32 arg2);
+void menu_status_page(PauseMenu *arg0, s32 arg1);
+void menu_options_page(PauseMenu *arg0, s32 arg1, s16 arg2);
 void object_load_mail_by_id(s16 arg0);
-void text_narration_step(Unk_80184338 *arg0);
+void text_narration_step(TssSlot *arg0);
 void text_narration_end(void);
 void *kaj_tss_alloc(u32 arg0);
 s32 kaj_tss_start(void *arg0);
-Unk_801DFE80 *D_801DFE80;
-void RotMatrix(Unk_80174FFC *arg0, void *arg1);
-Unk_8017CCE4 *block_find_at(s32 arg0, s32 arg1, s32 arg2);
+DoorList *door_list;
+void RotMatrix(SVector *arg0, void *arg1);
+Block *block_find_at(s32 arg0, s32 arg1, s32 arg2);
 typedef struct {
     Unk_8018519C_0 *unk0;
     s32 unk4;
     char **unk8;
 } Unk_8018519C;
 s32 atoi(char *s);
-void door_start_open(Unk_80184814 *arg0, s16 arg1, s16 arg2, s16 arg3);
-void door_start_close(Unk_80184814 *arg0, s16 arg1, s16 arg2);
+void door_start_open(DoorMove *arg0, s16 arg1, s16 arg2, s16 arg3);
+void door_start_close(DoorMove *arg0, s16 arg1, s16 arg2);
 extern char D_80170290[];
 void menu_card_init_slots(Unk_801802A0 *arg0, s32 arg1);
 void sprite_set_cell(s32 arg0, s32 arg1, s32 arg2);
@@ -210,28 +210,28 @@ void roadmap_draw_frame(u16 a);
 void MemCardStart(void);
 void MemCardStop(void);
 extern s16 menu_list_vars[];
-s32 MoveImage2(Unk_80184230 *rect, s32 x, s32 y);
+s32 MoveImage2(Rect *rect, s32 x, s32 y);
 Unk_801A44B8 *menu_anim_sprite;
 s32 mail_list_move(s16 a, s16 b);
 extern KajSystem kaj_system;
-void menu_confirm(Unk_80181C10 *arg0);
-void menu_back(Unk_80181C10 *arg0);
-void menu_move_cursor(Unk_80181C10 *arg0, s16 arg1);
+void menu_confirm(PauseMenu *arg0);
+void menu_back(PauseMenu *arg0);
+void menu_move_cursor(PauseMenu *arg0, s16 arg1);
 void mail_goto_ofc(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 s32 kaj_pad_read(void);
 void mail_scroll(s32 arg0);
-void menu_handle_input(Unk_80181C10 *arg0);
-void menu_animate(Unk_80181C10 *arg0);
+void menu_handle_input(PauseMenu *arg0);
+void menu_animate(PauseMenu *arg0);
 void event_handle_tick(s16 a);
 void sound_bgm_play(s32 arg0);
 void sound_bgm_stop(void);
 void text_draw_string(s32 arg0, s16 arg1);
 void mail_wait(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 extern s16 D_801DFC80;
-void door_move_x(Unk_80184814 *arg0);
-void door_move_y(Unk_80184814 *arg0);
-void door_move_z(Unk_80184814 *arg0);
-void door_move_angle(Unk_80184814 *arg0);
+void door_move_x(DoorMove *arg0);
+void door_move_y(DoorMove *arg0);
+void door_move_z(DoorMove *arg0);
+void door_move_angle(DoorMove *arg0);
 void menu_card_move_cursor(Unk_801802A0 *arg0, s16 arg1);
 extern s16 D_801E6DAA[];
 u16 *Krom2RawAdd2(u16 sjis);
@@ -322,7 +322,7 @@ int strncmp(const char *a, const char *b, int n);
 extern char D_801DFC90[];
 
 void menu_card_init_slots(Unk_801802A0 *arg0, s32 arg1) {
-    Unk_80184230 rect;
+    Rect rect;
     void *buf;
     Unk_801802A0_14 *p;
     s32 i;
@@ -348,18 +348,18 @@ void menu_card_init_slots(Unk_801802A0 *arg0, s32 arg1) {
         buf = kaj_malloc(0x80);
         if (buf != 0) {
             memset(buf, 0x22, 0x80);
-            rect.unk2 = 0xF;
-            rect.unk4 = 4;
-            rect.unk0 = 0;
-            rect.unk6 = 0x10;
+            rect.y = 0xF;
+            rect.w = 4;
+            rect.x = 0;
+            rect.h = 0x10;
             for (i = 0; i < 4; i++) {
-                rect.unk0 = 0x3E8;
+                rect.x = 0x3E8;
                 LoadImage2(&rect, buf);
-                rect.unk0 = 0x3F1;
+                rect.x = 0x3F1;
                 LoadImage2(&rect, buf);
-                rect.unk0 = 0x3F8;
+                rect.x = 0x3F8;
                 LoadImage2(&rect, buf);
-                rect.unk2 += 0x20;
+                rect.y += 0x20;
             }
             free3(buf);
         }
@@ -486,8 +486,8 @@ s32 menu_card_load(Unk_801802A0 *arg0) {
     Unk_8017EFEC buf;
     u8 sec[0x80];
     PlayerStatus *h = &player_status;
-    Unk_801E0368_u8017EBF8 *g = &action_vars;
-    s16 *c = &g->unk200;
+    GameVars_u8017EBF8 *g = &action_vars;
+    s16 *c = &g->car_speed_setting;
     Inventory *a = h->inventory;
     Unk_801E0710_5C *b = h->player;
     Unk_801802A0_14 *e;
@@ -531,8 +531,8 @@ s32 menu_card_load(Unk_801802A0 *arg0) {
     memcpy(h, buf.unk106, sizeof(buf.unk106));
     memcpy(a, buf.unk154, sizeof(buf.unk154));
     memcpy(b, buf.unk198, sizeof(buf.unk198));
-    g->unk1FC = 0;
-    g->unk1FE = g->unk0[0x3F] % 10;
+    g->drain_count = 0;
+    g->drain_minute = g->unk0[0x3F] % 10;
     if (buf.unk0 != 0) {
         mail_goto_ofc(1, 1, 1, 0);
     } else {
@@ -578,8 +578,8 @@ s32 menu_card_save(Unk_801802A0 *arg0, s32 arg1) {
     char s2[8];
     char s3[8];
     PlayerStatus *h = &player_status;
-    Unk_801E0368_u8017EBF8 *g = &action_vars;
-    s16 *c = &g->unk200;
+    GameVars_u8017EBF8 *g = &action_vars;
+    s16 *c = &g->car_speed_setting;
     Inventory *a = h->inventory;
     Unk_801E0710_5C *b = h->player;
     Unk_801802A0_14 *e;
@@ -806,9 +806,9 @@ s16 menu_card_handle_input(Unk_801802A0 *arg0) {
     s32 ok;
     s32 ret;
     s32 snd;
-    Unk_801E0340 *g;
+    SceneRequest *g;
 
-    g = &D_801E0340;
+    g = &scene_request;
     if (D_801E6DAA[0] != 1 || arg0->unkC == 0x65 || arg0->unkC == 0x6C) {
         return 0;
     }
@@ -902,7 +902,7 @@ s16 menu_card_handle_input(Unk_801802A0 *arg0) {
             } else {
                 sound_se_play(8);
                 mail_wait(3, 0, 0, 1);
-                g->unkA = 1;
+                g->change = 1;
             }
         } else if (!(kaj_system.pad_prev & 0x1000) && (kaj_system.pad_now & 0x1000)) {
             if (arg0->unkC == 0x64) {
@@ -1049,9 +1049,9 @@ s16 menu_card_run(s16 arg0, s16 arg1) {
     return p->unk2;
 }
 
-void menu_list_page(Unk_80181C10 *arg0, s32 arg1, s32 arg2) {
-    Unk_801E0368_u8017EBF8 *g = &action_vars;
-    Unk_80184230 rect;
+void menu_list_page(PauseMenu *arg0, s32 arg1, s32 arg2) {
+    GameVars_u8017EBF8 *g = &action_vars;
+    Rect rect;
 
     switch ((s16)arg1) {
     case 0:
@@ -1061,13 +1061,13 @@ void menu_list_page(Unk_80181C10 *arg0, s32 arg1, s32 arg2) {
     case 1:
         sound_se_play(0x11);
         sprite_set_visible(0x239, 1);
-        rect.unk0 = 0x3C0;
-        rect.unk2 = arg0->unk6 * 0x40;
-        rect.unk4 = 0x2C;
-        rect.unk6 = 0x40;
+        rect.x = 0x3C0;
+        rect.y = arg0->row * 0x40;
+        rect.w = 0x2C;
+        rect.h = 0x40;
         MoveImage2(&rect, 0x300, 0x100);
         sprite_fill_clut(0x239, 2, 5, 0x421);
-        switch (g->unk0[menu_list_vars[arg0->unk6]]) {
+        switch (g->unk0[menu_list_vars[arg0->row]]) {
         case 0:
             break;
         case 10:
@@ -1093,24 +1093,24 @@ void menu_list_page(Unk_80181C10 *arg0, s32 arg1, s32 arg2) {
     case 2:
         sound_se_play(0xF);
         if ((s16)arg2 != 0) {
-            if (--arg0->unk6 < 0) {
-                arg0->unk6 = 7;
+            if (--arg0->row < 0) {
+                arg0->row = 7;
             }
         } else {
-            if (++arg0->unk6 >= 8) {
-                arg0->unk6 = 0;
+            if (++arg0->row >= 8) {
+                arg0->row = 0;
             }
         }
         break;
     }
-    sprite_set_cell(0x238, 0, arg0->unk6);
+    sprite_set_cell(0x238, 0, arg0->row);
     sprite_fill_clut(0x237, 1, 8, 0x10C);
-    sprite_set_clut_entry(0x237, arg0->unk6 + 1, 0x23F);
+    sprite_set_clut_entry(0x237, arg0->row + 1, 0x23F);
 }
 
-void menu_status_page(Unk_80181C10 *arg0, s32 arg1) {
+void menu_status_page(PauseMenu *arg0, s32 arg1) {
     PlayerStatus *g = &player_status;
-    Unk_801E0368_u8017EBF8 *h = &action_vars;
+    GameVars_u8017EBF8 *h = &action_vars;
     Inventory *p = g->inventory;
     Unk_80188FEC *e;
     s32 n;
@@ -1124,8 +1124,8 @@ void menu_status_page(Unk_80181C10 *arg0, s32 arg1) {
 
     if ((s16)arg1 != 0) {
         sound_se_play(0x11);
-        arg0->unk6 = 1 - arg0->unk6;
-        if (arg0->unk6 != 0) {
+        arg0->row = 1 - arg0->row;
+        if (arg0->row != 0) {
             sprite_set_visible(0x23A, 0);
             sprite_set_visible(0x23B, 1);
         } else {
@@ -1188,7 +1188,7 @@ void menu_status_page(Unk_80181C10 *arg0, s32 arg1) {
             sprite_set_clut_entry(0x23A, j + 0x70, (u16)col);
         }
     }
-    n = (g->unk28 << 4) / 100 + 1;
+    n = (g->defense_level << 4) / 100 + 1;
     if (n > 16) {
         n = 16;
     }
@@ -1228,7 +1228,7 @@ void menu_status_page(Unk_80181C10 *arg0, s32 arg1) {
         }
     }
     col = 0x3D40;
-    n = (g->unk14 << 4) / 100 + 1;
+    n = (g->weapon0_level << 4) / 100 + 1;
     if (n > 16) {
         n = 16;
     }
@@ -1237,7 +1237,7 @@ void menu_status_page(Unk_80181C10 *arg0, s32 arg1) {
             sprite_set_clut_entry(0x23B, j + 0x10, (u16)col);
         }
     }
-    n = (g->unk18 << 4) / 100 + 1;
+    n = (g->weapon1_level << 4) / 100 + 1;
     if (n > 16) {
         n = 16;
     }
@@ -1246,7 +1246,7 @@ void menu_status_page(Unk_80181C10 *arg0, s32 arg1) {
             sprite_set_clut_entry(0x23B, j + 0x20, (u16)col);
         }
     }
-    n = (g->unk1C << 4) / 100 + 1;
+    n = (g->weapon2_level << 4) / 100 + 1;
     if (n > 16) {
         n = 16;
     }
@@ -1255,7 +1255,7 @@ void menu_status_page(Unk_80181C10 *arg0, s32 arg1) {
             sprite_set_clut_entry(0x23B, j + 0x30, (u16)col);
         }
     }
-    n = (g->unk20 << 4) / 100 + 1;
+    n = (g->weapon3_level << 4) / 100 + 1;
     if (n > 16) {
         n = 16;
     }
@@ -1264,7 +1264,7 @@ void menu_status_page(Unk_80181C10 *arg0, s32 arg1) {
             sprite_set_clut_entry(0x23B, j + 0x40, (u16)col);
         }
     }
-    n = (g->unk24 << 4) / 100 + 1;
+    n = (g->weapon4_level << 4) / 100 + 1;
     if (n > 16) {
         n = 16;
     }
@@ -1302,8 +1302,8 @@ void menu_status_page(Unk_80181C10 *arg0, s32 arg1) {
     }
 }
 
-void menu_options_page(Unk_80181C10 *arg0, s32 arg1, s16 arg2) {
-    Unk_801E0368_u8017EBF8 *g = &action_vars;
+void menu_options_page(PauseMenu *arg0, s32 arg1, s16 arg2) {
+    GameVars_u8017EBF8 *g = &action_vars;
     s16 s = 1;
 
     switch (arg1) {
@@ -1312,99 +1312,99 @@ void menu_options_page(Unk_80181C10 *arg0, s32 arg1, s16 arg2) {
         sprite_set_visible(0x23D, 1);
         break;
     case 1:
-        arg0->unk6 = 1 - arg0->unk6;
+        arg0->row = 1 - arg0->row;
         break;
     case 2:
-        if (arg0->unk6 != 0) {
+        if (arg0->row != 0) {
             if (arg2 != 0) {
-                g->unk200--;
-                if (g->unk200 < 0) {
-                    g->unk200 = 2;
+                g->car_speed_setting--;
+                if (g->car_speed_setting < 0) {
+                    g->car_speed_setting = 2;
                 }
             } else {
-                g->unk200++;
-                if (g->unk200 >= 3) {
-                    g->unk200 = 0;
+                g->car_speed_setting++;
+                if (g->car_speed_setting >= 3) {
+                    g->car_speed_setting = 0;
                 }
             }
         } else {
             if (arg2 != 0) {
-                g->unk202--;
-                if (g->unk202 < 0) {
-                    g->unk202 = 2;
+                g->text_speed_setting--;
+                if (g->text_speed_setting < 0) {
+                    g->text_speed_setting = 2;
                 }
             } else {
-                g->unk202++;
-                if (g->unk202 >= 3) {
-                    g->unk202 = 0;
+                g->text_speed_setting++;
+                if (g->text_speed_setting >= 3) {
+                    g->text_speed_setting = 0;
                 }
             }
         }
         break;
     }
     sprite_fill_clut(0x23D, 7, 8, 0x4250);
-    sprite_set_clut_entry(0x23D, arg0->unk6 + 7, 0x5140);
+    sprite_set_clut_entry(0x23D, arg0->row + 7, 0x5140);
     sprite_fill_clut(0x23D, 9, 0xE, 0x421);
-    sprite_set_clut_entry(0x23D, g->unk202 + 9, 0x154);
-    sprite_set_clut_entry(0x23D, g->unk200 + 0xC, 0x154);
+    sprite_set_clut_entry(0x23D, g->text_speed_setting + 9, 0x154);
+    sprite_set_clut_entry(0x23D, g->car_speed_setting + 0xC, 0x154);
     if (s != 0) {
         sound_se_play(0xF);
     }
 }
 
-void menu_move_cursor(Unk_80181C10 *arg0, s16 arg1) {
-    Unk_801E0368_u8017EBF8 *g = &action_vars;
+void menu_move_cursor(PauseMenu *arg0, s16 arg1) {
+    GameVars_u8017EBF8 *g = &action_vars;
     Unk_801A44B8 *a;
     Unk_801A44B8 *b;
     Unk_801A44B8 *c;
 
-    switch (arg0->unk2) {
+    switch (arg0->page) {
     case 0:
         if (arg0->unk4 != 0) {
             break;
         }
         if (arg1 != 0) {
-            if (--arg0->unk0 < 0) {
-                arg0->unk0 = 4;
+            if (--arg0->item < 0) {
+                arg0->item = 4;
             }
         } else {
-            if (++arg0->unk0 >= 5) {
-                arg0->unk0 = 0;
+            if (++arg0->item >= 5) {
+                arg0->item = 0;
             }
         }
         a = sprite_find(0x20B);
         b = sprite_find(0x211);
         if (a != 0) {
-            a->unkC = (arg0->unk0 << 4) + 0x48;
+            a->y = (arg0->item << 4) + 0x48;
         }
-        if (b != 0 && b->unk4 != 0) {
-            b->unk4 = 0;
+        if (b != 0 && b->visible != 0) {
+            b->visible = 0;
         }
         if (menu_anim_sprite != 0) {
-            menu_anim_sprite->unk4 = 0;
+            menu_anim_sprite->visible = 0;
         }
-        if (arg0->unk0 == 0) {
+        if (arg0->item == 0) {
             arg0->unk8 = 0;
             arg0->unkC = 0;
             menu_anim_sprite = 0;
         } else {
             arg0->unkC = b;
-            c = sprite_find(arg0->unk0 + 0x20C);
+            c = sprite_find(arg0->item + 0x20C);
             if (c == 0) {
                 arg0->unk8 = 0;
                 if (b != 0) {
-                    if (b->unk4 == 0) {
-                        b->unk4 = 1;
+                    if (b->visible == 0) {
+                        b->visible = 1;
                     }
-                    b->unk18 = 0;
-                    b->unk1A = arg0->unk0 - 1;
+                    b->cell_col = 0;
+                    b->cell_row = arg0->item - 1;
                 }
             } else {
                 arg0->unk8 = c;
-                c->unk18 = 0;
-                c->unk1A = 0;
-                if (c->unk4 == 0) {
-                    c->unk4 = 1;
+                c->cell_col = 0;
+                c->cell_row = 0;
+                if (c->visible == 0) {
+                    c->visible = 1;
                 }
                 arg0->unk4 = 1;
                 menu_anim_sprite = c;
@@ -1413,29 +1413,29 @@ void menu_move_cursor(Unk_80181C10 *arg0, s16 arg1) {
         sound_se_play(0xF);
         break;
     case 1:
-        if (arg0->unk0 == 1) {
+        if (arg0->item == 1) {
             menu_list_page(arg0, 2, arg1);
-        } else if (arg0->unk0 == 2 && g->unkBE != 0) {
-            arg0->unk6 = mail_list_move(arg1, arg0->unk6);
-        } else if (arg0->unk0 == 3) {
+        } else if (arg0->item == 2 && g->unkBE != 0) {
+            arg0->row = mail_list_move(arg1, arg0->row);
+        } else if (arg0->item == 3) {
             menu_options_page(arg0, 1, arg1);
         }
         break;
     }
 }
 
-void menu_confirm(Unk_80181C10 *arg0) {
-    Unk_801E0368_u8017EBF8 *g = &action_vars;
+void menu_confirm(PauseMenu *arg0) {
+    GameVars_u8017EBF8 *g = &action_vars;
 
-    switch (arg0->unk2) {
+    switch (arg0->page) {
     case 0:
-        arg0->unk6 = 0;
-        arg0->unk2 = 1;
+        arg0->row = 0;
+        arg0->page = 1;
         sound_se_play(0x11);
-        if (arg0->unk0 == 1) {
+        if (arg0->item == 1) {
             object_load_res(0xD, -1);
             menu_list_page(arg0, 0, 0);
-        } else if (arg0->unk0 == 2) {
+        } else if (arg0->item == 2) {
             if (g->unkBE != 0) {
                 object_load_res(8, -1);
                 mail_list_open();
@@ -1443,63 +1443,63 @@ void menu_confirm(Unk_80181C10 *arg0) {
             sprite_set_visible(0x20A, 1);
             sprite_set_visible(0x212, 1);
             sprite_set_visible(0x20C, 1);
-        } else if (arg0->unk0 == 3) {
+        } else if (arg0->item == 3) {
             menu_options_page(arg0, 0, 0);
-        } else if (arg0->unk0 == 4) {
+        } else if (arg0->item == 4) {
             object_load_res(0xE, -1);
             menu_status_page(arg0, 0);
         }
         break;
     case 1:
-        if (arg0->unk0 == 1) {
+        if (arg0->item == 1) {
             menu_list_page(arg0, 1, 0);
-            arg0->unk2 = 2;
-        } else if (arg0->unk0 == 2 && g->unkBE != 0) {
+            arg0->page = 2;
+        } else if (arg0->item == 2 && g->unkBE != 0) {
             sound_se_play(0x11);
-            object_load_mail_by_id(arg0->unk6);
-            arg0->unk2 = 2;
-        } else if (arg0->unk0 == 4) {
+            object_load_mail_by_id(arg0->row);
+            arg0->page = 2;
+        } else if (arg0->item == 4) {
             menu_status_page(arg0, 1);
         }
         break;
     }
 }
 
-void menu_back(Unk_80181C10 *arg0) {
+void menu_back(PauseMenu *arg0) {
     sound_se_play(8);
-    switch (arg0->unk2) {
+    switch (arg0->page) {
     case 1:
-        arg0->unk2 = 0;
-        if (arg0->unk0 == 1) {
+        arg0->page = 0;
+        if (arg0->item == 1) {
             sprite_delete(0x237);
             sprite_delete(0x238);
             sprite_delete(0x239);
-        } else if (arg0->unk0 == 2) {
+        } else if (arg0->item == 2) {
             mail_list_close();
             sprite_set_visible(0x20A, 0);
             sprite_set_visible(0x20C, 0);
             sprite_set_visible(0x212, 0);
-        } else if (arg0->unk0 == 3) {
+        } else if (arg0->item == 3) {
             sprite_set_visible(0x23D, 0);
-        } else if (arg0->unk0 == 4) {
+        } else if (arg0->item == 4) {
             sprite_delete(0x23A);
             sprite_delete(0x23B);
             sprite_delete(0x23C);
         }
         break;
     case 2:
-        if (arg0->unk0 == 1) {
-            arg0->unk2 = 1;
+        if (arg0->item == 1) {
+            arg0->page = 1;
             sprite_set_visible(0x239, 0);
-        } else if (arg0->unk0 == 2) {
-            arg0->unk2 = 1;
+        } else if (arg0->item == 2) {
+            arg0->page = 1;
             mail_free();
         }
         break;
     }
 }
 
-void menu_handle_input(Unk_80181C10 *arg0) {
+void menu_handle_input(PauseMenu *arg0) {
     s32 r;
 
     if (kaj_system.pad_mode != 1 || arg0->unk4 != 0) {
@@ -1519,16 +1519,16 @@ void menu_handle_input(Unk_80181C10 *arg0) {
             menu_options_page(arg0, 2, 0);
         }
     } else if (!(kaj_system.pad_prev & 0x40) && (kaj_system.pad_now & 0x40)) {
-        if (arg0->unk2 == 0) {
+        if (arg0->page == 0) {
             sound_se_play(8);
             mail_goto_ofc(1, 1, 0, 0);
             return;
         }
         menu_back(arg0);
-    } else if (!(kaj_system.pad_prev & 0x20) && (kaj_system.pad_now & 0x20) && arg0->unk0 != 0) {
+    } else if (!(kaj_system.pad_prev & 0x20) && (kaj_system.pad_now & 0x20) && arg0->item != 0) {
         menu_confirm(arg0);
     }
-    if (arg0->unk2 == 2 && arg0->unk0 == arg0->unk2) {
+    if (arg0->page == 2 && arg0->item == arg0->page) {
         if (r & 0x1000) {
             mail_scroll(0);
         } else if (r & 0x4000) {
@@ -1537,7 +1537,7 @@ void menu_handle_input(Unk_80181C10 *arg0) {
     }
 }
 
-void menu_animate(Unk_80181C10 *arg0) {
+void menu_animate(PauseMenu *arg0) {
     if (menu_cycle_pos_a >= 0xA0) {
         menu_cycle_pos_a = 0x9F;
         menu_cycle_dir_a = 1 - menu_cycle_dir_a;
@@ -1592,26 +1592,26 @@ void menu_animate(Unk_80181C10 *arg0) {
         menu_cycle_dir_c = 1 - menu_cycle_dir_c;
     }
 
-    if (arg0->unk2 == 0 && arg0->unk8 != NULL && arg0->unk4 != 0) {
-        arg0->unk8->unk1A++;
-        if (arg0->unk8->unk1A >= 4) {
-            arg0->unk8->unk1A = 3;
+    if (arg0->page == 0 && arg0->unk8 != NULL && arg0->unk4 != 0) {
+        arg0->unk8->cell_row++;
+        if (arg0->unk8->cell_row >= 4) {
+            arg0->unk8->cell_row = 3;
             arg0->unk4 = 0;
             if (arg0->unkC != NULL) {
-                if (arg0->unkC->unk4 == 0) {
-                    arg0->unkC->unk4 = 1;
+                if (arg0->unkC->visible == 0) {
+                    arg0->unkC->visible = 1;
                 }
-                arg0->unkC->unk18 = 0;
-                arg0->unkC->unk1A = arg0->unk0 - 1;
-                arg0->unkC->unkC = arg0->unk0 * arg0->unkC->unk12 + 0x48;
+                arg0->unkC->cell_col = 0;
+                arg0->unkC->cell_row = arg0->item - 1;
+                arg0->unkC->y = arg0->item * arg0->unkC->cell_h + 0x48;
             }
         }
     }
 }
 
 void menu_run(void) {
-    Unk_80181C10 st;
-    Unk_80181C10 *p;
+    PauseMenu st;
+    PauseMenu *p;
     s32 buf[6];
     s16 done = 0;
     u16 i;
@@ -1629,10 +1629,10 @@ void menu_run(void) {
     sprite_fill_clut(0x208, 0xA0, 0xAF, 0x4D44);
     sprite_fill_clut(0x208, 0xB0, 0xBF, 0x38A2);
     p = &st;
-    p->unk0 = 0;
-    p->unk2 = 0;
+    p->item = 0;
+    p->page = 0;
     p->unk4 = 0;
-    p->unk6 = 0;
+    p->row = 0;
     p->unk8 = NULL;
     p->unkC = NULL;
     menu_anim_sprite = NULL;
@@ -1720,8 +1720,8 @@ void text_draw_string(s32 arg0, s16 arg1) {
         }
         d = buf;
         w = (s[0] << 8) | s[1];
-        r[0] = p->unk1C->unk0 + col * 4;
-        r[1] = p->unk1C->unk2 + row * 16;
+        r[0] = p->tim->x + col * 4;
+        r[1] = p->tim->y + row * 16;
         f = Krom2RawAdd2(w);
         memset(d, 0, 0x80);
         for (j = 0; j < 15; j++, f++) {
@@ -1809,7 +1809,7 @@ void text_draw_string(s32 arg0, s16 arg1) {
 }
 
 static inline s16 func_80182860_inline(s16 flag) {
-    Unk_801DFFE8 *q = &D_801DFFE8;
+    EventState *q = &event_state;
     if (text_pos >= text_len) {
         if (flag) {
             text_release_cmd();
@@ -1823,8 +1823,8 @@ static inline s16 func_80182860_inline(s16 flag) {
     if (text_row >= 3) {
         text_col = 0;
         if (flag) {
-            q->unk6 = 3;
-            q->unk8 = 8;
+            q->state = 3;
+            q->circle_flags = 8;
             sprite_set_visible(0x40A, 1);
         }
         return 1;
@@ -1954,8 +1954,8 @@ loop:
             *d++ = v;
         }
     }
-    r[0] = p->unk1C->unk0 + text_col * 4;
-    r[1] = p->unk1C->unk2 + text_row * 16;
+    r[0] = p->tim->x + text_col * 4;
+    r[1] = p->tim->y + text_row * 16;
     LoadImage2(r, buf);
     text_col++;
     text_pos += 2;
@@ -2014,8 +2014,8 @@ void text_draw_line(char *arg0, s16 arg1) {
         }
         d = buf;
         w = (s[0] << 8) | s[1];
-        r[0] = p->unk1C->unk0 + col * 4;
-        r[1] = p->unk1C->unk2 + y;
+        r[0] = p->tim->x + col * 4;
+        r[1] = p->tim->y + y;
         f = Krom2RawAdd2(w);
         StoreImage2(r, d);
         for (j = 0; j < 15; j++, f++) {
@@ -2139,14 +2139,14 @@ void text_format_number(u8 *arg0, u16 arg1) {
 }
 
 void text_show_timed(u16 arg0, s16 arg1, s32 arg2, s16 arg3, s32 arg4) {
-    Unk_80184230 rect;
+    Rect rect;
     Unk_801A44B8 *p;
     s16 b;
 
     b = (arg0 == 1 || arg0 == 2);
     if (arg1 != 0) {
-        Unk_801E0368_u8017EBF8 *g = &action_vars;
-        Unk_801DFFE8 *d = &D_801DFFE8;
+        GameVars_u8017EBF8 *g = &action_vars;
+        EventState *d = &event_state;
         s16 m = 3;
 
         if (m == 1) {
@@ -2161,16 +2161,16 @@ void text_show_timed(u16 arg0, s16 arg1, s32 arg2, s16 arg3, s32 arg4) {
             sprite_set_clut_entry(0x404, 3, 0x14BF);
         }
         text_color = 1;
-        d->unk8 = 0;
-        d->unkA = -1;
-        d->unkC = 0;
-        d->unkE = -1;
+        d->circle_flags = 0;
+        d->circle_set = -1;
+        d->cross_flags = 0;
+        d->cross_set = -1;
         p = sprite_find(text_window_sprite);
         if (p != NULL) {
-            rect.unk0 = p->unk1C->unk0;
-            rect.unk2 = p->unk1C->unk2;
-            rect.unk4 = p->unk1C->unk4;
-            rect.unk6 = p->unk1C->unk6;
+            rect.x = p->tim->x;
+            rect.y = p->tim->y;
+            rect.w = p->tim->w;
+            rect.h = p->tim->h;
             ClearImage2(&rect, 0, 0, 0);
         }
         text_draw_string(arg2, m);
@@ -2187,8 +2187,8 @@ void text_show_timed(u16 arg0, s16 arg1, s32 arg2, s16 arg3, s32 arg4) {
             g->unk24E = 1;
         }
     } else {
-        Unk_801E0368_u8017EBF8 *g = &action_vars;
-        Unk_801DFFE8 *d = &D_801DFFE8;
+        GameVars_u8017EBF8 *g = &action_vars;
+        EventState *d = &event_state;
         s16 m = 1;
 
         if (m == 1) {
@@ -2203,16 +2203,16 @@ void text_show_timed(u16 arg0, s16 arg1, s32 arg2, s16 arg3, s32 arg4) {
             sprite_set_clut_entry(0x404, 3, 0x14BF);
         }
         text_color = 1;
-        d->unk8 = 0;
-        d->unkA = -1;
-        d->unkC = 0;
-        d->unkE = -1;
+        d->circle_flags = 0;
+        d->circle_set = -1;
+        d->cross_flags = 0;
+        d->cross_set = -1;
         p = sprite_find(text_window_sprite);
         if (p != NULL) {
-            rect.unk0 = p->unk1C->unk0;
-            rect.unk2 = p->unk1C->unk2;
-            rect.unk4 = p->unk1C->unk4;
-            rect.unk6 = p->unk1C->unk6;
+            rect.x = p->tim->x;
+            rect.y = p->tim->y;
+            rect.w = p->tim->w;
+            rect.h = p->tim->h;
             ClearImage2(&rect, 0, 0, 0);
         }
         text_draw_string(arg2, m);
@@ -2233,8 +2233,8 @@ void text_show_timed(u16 arg0, s16 arg1, s32 arg2, s16 arg3, s32 arg4) {
 }
 
 void text_start_typing(s32 arg0) {
-    Unk_801E0368_u8017EBF8 *g = &action_vars;
-    Unk_80184230 rect;
+    GameVars_u8017EBF8 *g = &action_vars;
+    Rect rect;
     Unk_801A44B8 *p;
 
     text_window_sprite = 0x404;
@@ -2246,10 +2246,10 @@ void text_start_typing(s32 arg0) {
     text_row = 0;
     p = sprite_find(text_window_sprite);
     if (p != NULL) {
-        rect.unk0 = p->unk1C->unk0;
-        rect.unk2 = p->unk1C->unk2;
-        rect.unk4 = p->unk1C->unk4;
-        rect.unk6 = p->unk1C->unk6;
+        rect.x = p->tim->x;
+        rect.y = p->tim->y;
+        rect.w = p->tim->w;
+        rect.h = p->tim->h;
         ClearImage2(&rect, 0, 0, 0);
     }
     text_pos = 0;
@@ -2257,10 +2257,10 @@ void text_start_typing(s32 arg0) {
     if (text_draw_next(arg0, 1) != 0) {
         text_wait -= D_801E6DB4[0];
         if (text_wait > 0) {
-            (*text_cmd)->unk2 = 4;
+            (*text_cmd)->state = 4;
         } else {
             text_wait = 0;
-            (*text_cmd)->unk2 = 3;
+            (*text_cmd)->state = 3;
         }
         action_push_front(text_cmd);
     }
@@ -2270,15 +2270,15 @@ void text_start_typing(s32 arg0) {
 }
 
 void text_show_profile(u16 arg0) {
-    Unk_801E0368_u8017EBF8 *g = &action_vars;
+    GameVars_u8017EBF8 *g = &action_vars;
     char buf[0x20];
-    Unk_80184230 rect;
+    Rect rect;
     u8 a[8];
     u8 b[8];
     Npc *e;
     NpcBody *d;
     Unk_801A44B8 *p;
-    Unk_80184230 *r;
+    Rect *r;
     char *pb;
     s32 i;
 
@@ -2295,13 +2295,13 @@ void text_show_profile(u16 arg0) {
     r = &rect;
     p = sprite_find(0x40D);
     if (p != NULL) {
-        rect.unk0 = 0x300;
-        r->unk2 = 0x100;
-        r->unk4 = 0x40;
-        r->unk6 = 0x10;
+        rect.x = 0x300;
+        r->y = 0x100;
+        r->w = 0x40;
+        r->h = 0x10;
         for (i = 0; i < 8; i++) {
-            rect.unk2 = 0x100 + i * 0x10;
-            MoveImage2(&rect, (s16)p->unk1C->unk0, (s16)p->unk1C->unk2 + text_line_y[i]);
+            rect.y = 0x100 + i * 0x10;
+            MoveImage2(&rect, (s16)p->tim->x, (s16)p->tim->y + text_line_y[i]);
         }
     }
 
@@ -2323,10 +2323,10 @@ void text_show_profile(u16 arg0) {
 }
 
 static inline void func_801837F0_inl(s32 t, s16 m, s16 a, u16 b, s16 c, u16 d, s16 e) {
-    Unk_80184230 rect;
+    Rect rect;
     Unk_801A44B8 *p;
-    Unk_801E0368_u8017EBF8 *g2 = &action_vars;
-    Unk_801DFFE8 *dp = &D_801DFFE8;
+    GameVars_u8017EBF8 *g2 = &action_vars;
+    EventState *dp = &event_state;
     if (m == 1) {
         text_window_sprite = 0x403;
         sprite_set_visible(0x403, 1);
@@ -2339,19 +2339,19 @@ static inline void func_801837F0_inl(s32 t, s16 m, s16 a, u16 b, s16 c, u16 d, s
         sprite_set_clut_entry(0x404, 3, 0x14BF);
     }
     text_color = 1;
-    dp->unk8 = b;
-    dp->unkA = a;
-    dp->unkC = d;
-    dp->unkE = c;
+    dp->circle_flags = b;
+    dp->circle_set = a;
+    dp->cross_flags = d;
+    dp->cross_set = c;
     if (b != 0 || d != 0) {
-        dp->unk6 = 2;
+        dp->state = 2;
     }
     p = sprite_find(text_window_sprite);
     if (p != NULL) {
-        rect.unk0 = p->unk1C->unk0;
-        rect.unk2 = p->unk1C->unk2;
-        rect.unk4 = p->unk1C->unk4;
-        rect.unk6 = p->unk1C->unk6;
+        rect.x = p->tim->x;
+        rect.y = p->tim->y;
+        rect.w = p->tim->w;
+        rect.h = p->tim->h;
         ClearImage2(&rect, 0, 0, 0);
     }
     text_draw_string(t, m);
@@ -2370,8 +2370,8 @@ static inline void func_801837F0_inl(s32 t, s16 m, s16 a, u16 b, s16 c, u16 d, s
 }
 
 void text_exec_command(Unk_8018519C *arg0) {
-    Unk_801E0368_u8017EBF8 *g = &action_vars;
-    Player *q = D_801E076C[0];
+    GameVars_u8017EBF8 *g = &action_vars;
+    Player *q = player_status_player[0];
     u16 state = arg0->unk0->unk2;
     Unk_801A44B8 *p;
     char **s;
@@ -2384,7 +2384,7 @@ void text_exec_command(Unk_8018519C *arg0) {
 
     switch (state) {
     case 0:
-        switch (g->unk202) {
+        switch (g->text_speed_setting) {
         case 2:
             text_wait = 20;
             break;
@@ -2395,7 +2395,7 @@ void text_exec_command(Unk_8018519C *arg0) {
             text_wait = 5;
             break;
         }
-        text_cmd = (Unk_801DFCAC **)arg0;
+        text_cmd = (TextCmd **)arg0;
         text_start_typing((s32)arg0->unk8[0]);
         break;
     case 1:
@@ -2423,7 +2423,7 @@ void text_exec_command(Unk_8018519C *arg0) {
         }
         break;
     case 3:
-        switch (g->unk202) {
+        switch (g->text_speed_setting) {
         case 2:
             text_wait = 20;
             break;
@@ -2439,22 +2439,22 @@ void text_exec_command(Unk_8018519C *arg0) {
             text_row = 0;
             p = sprite_find(text_window_sprite);
             if (p != NULL) {
-                Unk_80184230 rect;
+                Rect rect;
 
-                rect.unk0 = p->unk1C->unk0;
-                rect.unk2 = p->unk1C->unk2;
-                rect.unk4 = p->unk1C->unk4;
-                rect.unk6 = p->unk1C->unk6;
+                rect.x = p->tim->x;
+                rect.y = p->tim->y;
+                rect.w = p->tim->w;
+                rect.h = p->tim->h;
                 ClearImage2(&rect, 0, 0, 0);
             }
         }
         if (text_draw_next(str, 1) != 0) {
             text_wait -= D_801E6DB4[0];
             if (text_wait > 0) {
-                (*text_cmd)->unk2 = 4;
+                (*text_cmd)->state = 4;
             } else {
                 text_wait = 0;
-                (*text_cmd)->unk2 = 3;
+                (*text_cmd)->state = 3;
             }
             action_push_front(text_cmd);
         }
@@ -2462,9 +2462,9 @@ void text_exec_command(Unk_8018519C *arg0) {
     case 4:
         text_wait -= D_801E6DB4[0];
         if (text_wait > 0) {
-            (*text_cmd)->unk2 = 4;
+            (*text_cmd)->state = 4;
         } else {
-            (*text_cmd)->unk2 = 3;
+            (*text_cmd)->state = 3;
             text_wait = 0;
         }
         action_push_front(text_cmd);
@@ -2473,21 +2473,21 @@ void text_exec_command(Unk_8018519C *arg0) {
 }
 
 void text_start_narration(s32 arg0) {
-    Unk_801E0368_u8017EBF8 *g = &action_vars;
-    Player *q = D_801E076C[0];
-    Unk_80184230 rect;
-    Unk_80184338 *e;
+    GameVars_u8017EBF8 *g = &action_vars;
+    Player *q = player_status_player[0];
+    Rect rect;
+    TssSlot *e;
     Unk_801A44B8 *p;
 
     e = kaj_tss_alloc(4);
-    e->unk22 = 8;
-    e->unk24 = 0;
-    e->unk26 = strlen((char *)arg0);
-    e->unk28 = 1;
-    e->unk2C = 0xA;
-    e->unk30 = text_narration_step;
-    e->unk34 = text_narration_end;
-    e->unk38 = text_narration_end;
+    e->type = 8;
+    e->cur = 0;
+    e->target = strlen((char *)arg0);
+    e->step = 1;
+    e->delay = 0xA;
+    e->on_step = text_narration_step;
+    e->on_end = text_narration_end;
+    e->on_kill = text_narration_end;
     sprite_set_visible(0x403, 0);
     sprite_set_visible(0x404, 1);
     sprite_set_clut_entry(0x40A, 3, 0x14BF);
@@ -2499,13 +2499,13 @@ void text_start_narration(s32 arg0) {
     text_len = strlen((char *)arg0);
     p = sprite_find(text_window_sprite);
     if (p != NULL) {
-        rect.unk0 = p->unk1C->unk0;
-        rect.unk2 = p->unk1C->unk2;
-        rect.unk4 = p->unk1C->unk4;
-        rect.unk6 = p->unk1C->unk6;
+        rect.x = p->tim->x;
+        rect.y = p->tim->y;
+        rect.w = p->tim->w;
+        rect.h = p->tim->h;
         ClearImage2(&rect, 0, 0, 0);
     }
-    *e->unk3C = arg0;
+    *(s32 *)e->data = arg0;
     text_draw_next(arg0, 0);
     text_cue_fade_done = 0;
     text_cue_bgm_done = 0;
@@ -2514,9 +2514,9 @@ void text_start_narration(s32 arg0) {
 }
 
 void text_show(s32 arg0, s16 arg1, s16 arg2, u16 arg3, s16 arg4, u16 arg5, s16 arg6) {
-    Unk_801E0368_u8017EBF8 *g = &action_vars;
-    Unk_801DFFE8 *d = &D_801DFFE8;
-    Unk_80184230 rect;
+    GameVars_u8017EBF8 *g = &action_vars;
+    EventState *d = &event_state;
+    Rect rect;
     Unk_801A44B8 *p;
 
     if (arg1 == 1) {
@@ -2531,19 +2531,19 @@ void text_show(s32 arg0, s16 arg1, s16 arg2, u16 arg3, s16 arg4, u16 arg5, s16 a
         sprite_set_clut_entry(0x404, 3, 0x14BF);
     }
     text_color = 1;
-    d->unk8 = arg3;
-    d->unkA = arg2;
-    d->unkC = arg5;
-    d->unkE = arg4;
+    d->circle_flags = arg3;
+    d->circle_set = arg2;
+    d->cross_flags = arg5;
+    d->cross_set = arg4;
     if (arg3 != 0 || arg5 != 0) {
-        d->unk6 = 2;
+        d->state = 2;
     }
     p = sprite_find(text_window_sprite);
     if (p != NULL) {
-        rect.unk0 = p->unk1C->unk0;
-        rect.unk2 = p->unk1C->unk2;
-        rect.unk4 = p->unk1C->unk4;
-        rect.unk6 = p->unk1C->unk6;
+        rect.x = p->tim->x;
+        rect.y = p->tim->y;
+        rect.w = p->tim->w;
+        rect.h = p->tim->h;
         ClearImage2(&rect, 0, 0, 0);
     }
     text_draw_string(arg0, arg1);
@@ -2562,7 +2562,7 @@ void text_show(s32 arg0, s16 arg1, s16 arg2, u16 arg3, s16 arg4, u16 arg5, s16 a
 }
 
 void text_close(void) {
-    Unk_801E0368_u8017EBF8 *p = &action_vars;
+    GameVars_u8017EBF8 *p = &action_vars;
 
     text_release_cmd();
     sprite_set_visible(0x403, 0);
@@ -2585,12 +2585,12 @@ void text_next_page(Unk_80184100 *arg0) {
 }
 
 void text_release_cmd(void) {
-    Unk_801DFCAC *p;
+    TextCmd *p;
 
     if (text_cmd != NULL) {
         p = *text_cmd;
-        if (p->unk0 == 5 && (u16)(p->unk2 - 3) < 2) {
-            p->unk2 = 0;
+        if (p->opcode == 5 && (u16)(p->state - 3) < 2) {
+            p->state = 0;
         }
         text_cmd = NULL;
     }
@@ -2602,43 +2602,43 @@ void text_release_cmd(void) {
 void text_wait_step(void) {
     text_wait -= D_801E6DB4[0];
     if (text_wait > 0) {
-        (*text_cmd)->unk2 = 4;
+        (*text_cmd)->state = 4;
     } else {
         text_wait = 0;
-        (*text_cmd)->unk2 = 3;
+        (*text_cmd)->state = 3;
     }
     action_push_front(text_cmd);
 }
 
 void text_type_step(s32 arg0) {
-    Unk_80184230 rect;
+    Rect rect;
     Unk_801A44B8 *p;
 
     if (text_row == 3) {
         text_row = 0;
         p = sprite_find(text_window_sprite);
         if (p != NULL) {
-            rect.unk0 = p->unk1C->unk0;
-            rect.unk2 = p->unk1C->unk2;
-            rect.unk4 = p->unk1C->unk4;
-            rect.unk6 = p->unk1C->unk6;
+            rect.x = p->tim->x;
+            rect.y = p->tim->y;
+            rect.w = p->tim->w;
+            rect.h = p->tim->h;
             ClearImage2(&rect, 0, 0, 0);
         }
     }
     if (text_draw_next(arg0, 1) != 0) {
         text_wait -= D_801E6DB4[0];
         if (text_wait > 0) {
-            (*text_cmd)->unk2 = 4;
+            (*text_cmd)->state = 4;
         } else {
             text_wait = 0;
-            (*text_cmd)->unk2 = 3;
+            (*text_cmd)->state = 3;
         }
         action_push_front(text_cmd);
     }
 }
 
-void text_narration_step(Unk_80184338 *arg0) {
-    Unk_80184230 rect;
+void text_narration_step(TssSlot *arg0) {
+    Rect rect;
     Unk_801A44B8 *p;
     s32 v;
 
@@ -2646,16 +2646,16 @@ void text_narration_step(Unk_80184338 *arg0) {
         D_801DFCE6 = 0;
         return;
     }
-    v = *arg0->unk3C;
-    arg0->unk24 = text_pos;
+    v = *(s32 *)arg0->data;
+    arg0->cur = text_pos;
     if (text_row == 3) {
         text_row = 0;
         p = sprite_find(text_window_sprite);
         if (p != NULL) {
-            rect.unk0 = p->unk1C->unk0;
-            rect.unk2 = p->unk1C->unk2;
-            rect.unk4 = p->unk1C->unk4;
-            rect.unk6 = p->unk1C->unk6;
+            rect.x = p->tim->x;
+            rect.y = p->tim->y;
+            rect.w = p->tim->w;
+            rect.h = p->tim->h;
             ClearImage2(&rect, 0, 0, 0);
         }
     }
@@ -2665,7 +2665,7 @@ void text_narration_step(Unk_80184338 *arg0) {
 void text_narration_end(void) {
     s32 v = -1;
     text_window_sprite = v;
-    D_801E076C[0]->flags &= 0xFEFF;
+    player_status_player[0]->flags &= 0xFEFF;
     D_801E05B0[0] = v;
 }
 
@@ -2693,285 +2693,285 @@ void text_narration_cues(s16 arg0) {
     }
 }
 
-void door_setup(Unk_801854B8 *arg0) {
-    Player *q = D_801E076C[0];
-    Unk_801844D4 *s = arg0->unk7C;
-    Unk_80174FFC rot;
+void door_setup(Door *arg0) {
+    Player *q = player_status_player[0];
+    Unk_801844D4 *s = arg0->record;
+    SVector rot;
 
-    arg0->unk0 = s->unk0;
-    arg0->unk2 = s->unk2;
+    arg0->id = s->unk0;
+    arg0->axis = s->unk2;
     arg0->unk8 = s->unk4;
-    arg0->unkA = s->unk8;
-    arg0->unk14 = s->unkC * 10;
-    arg0->unk18 = s->unk10 * 10;
-    arg0->unk1C = s->unk14 * 10;
-    arg0->unk20 = s->unk6;
-    kaj_tmd_load(&arg0->unk78, ((Unk_801844D4 *)arg0->unk7C)->unk18, &arg0->unk28);
-    GsInitCoordinate2(NULL, &arg0->unk28);
-    arg0->unk40 = arg0->unk14 - q->cell_x * 12500;
-    arg0->unk44 = arg0->unk18 + q->cell_y * 32000;
-    arg0->unk48 = arg0->unk1C - q->cell_z * 12500;
-    rot.unk0 = 0;
-    rot.unk2 = (arg0->unk20 << 12) / 360;
-    rot.unk4 = 0;
-    RotMatrix(&rot, arg0->unk2C);
-    arg0->unk28 = 0;
-    arg0->unk10 = (s32)block_find_at(arg0->unk14, arg0->unk18, arg0->unk1C);
-    arg0->unk4 = 1;
+    arg0->state = s->unk8;
+    arg0->pos_x = s->unkC * 10;
+    arg0->pos_y = s->unk10 * 10;
+    arg0->pos_z = s->unk14 * 10;
+    arg0->angle = s->unk6;
+    kaj_tmd_load(&arg0->tmd_objects, ((Unk_801844D4 *)arg0->record)->unk18, &arg0->coord_flg);
+    GsInitCoordinate2(NULL, &arg0->coord_flg);
+    arg0->coord_tx = arg0->pos_x - q->cell_x * 12500;
+    arg0->coord_ty = arg0->pos_y + q->cell_y * 32000;
+    arg0->coord_tz = arg0->pos_z - q->cell_z * 12500;
+    rot.vx = 0;
+    rot.vy = (arg0->angle << 12) / 360;
+    rot.vz = 0;
+    RotMatrix(&rot, arg0->coord_m);
+    arg0->coord_flg = 0;
+    arg0->block = (s32)block_find_at(arg0->pos_x, arg0->pos_y, arg0->pos_z);
+    arg0->active = 1;
 }
 
 void door_refresh_all(void) {
-    Unk_801DFE80 *list = D_801DFE80;
-    Player *q = D_801E076C[0];
-    Unk_801854B8 *item;
-    Unk_80174FFC rot;
+    DoorList *list = door_list;
+    Player *q = player_status_player[0];
+    Door *item;
+    SVector rot;
 
-    if (list->unkC == 0) {
+    if (list->count == 0) {
         return;
     }
-    list->unk8 = list->unk0;
+    list->cursor = list->head;
     while (1) {
-        item = list->unk8->unk8;
+        item = list->cursor->data;
         if (item != NULL) {
-            item->unk40 = item->unk14 - q->cell_x * 12500;
-            item->unk44 = item->unk18 + q->cell_y * 32000;
-            item->unk48 = item->unk1C - q->cell_z * 12500;
-            rot.unk0 = 0;
-            rot.unk2 = (item->unk20 << 12) / 360;
-            rot.unk4 = 0;
-            RotMatrix(&rot, item->unk2C);
-            item->unk28 = 0;
-            item->unk10 = (s32)block_find_at(item->unk14, item->unk18, item->unk1C);
+            item->coord_tx = item->pos_x - q->cell_x * 12500;
+            item->coord_ty = item->pos_y + q->cell_y * 32000;
+            item->coord_tz = item->pos_z - q->cell_z * 12500;
+            rot.vx = 0;
+            rot.vy = (item->angle << 12) / 360;
+            rot.vz = 0;
+            RotMatrix(&rot, item->coord_m);
+            item->coord_flg = 0;
+            item->block = (s32)block_find_at(item->pos_x, item->pos_y, item->pos_z);
         }
-        if (kaj_ll_at_tail((Unk_801DFE5C *)list) != 0) {
+        if (kaj_ll_at_tail((BlockList *)list) != 0) {
             break;
         }
-        list->unk8 = list->unk8->unk4;
+        list->cursor = list->cursor->next;
     }
 }
 
-void door_move_x(Unk_80184814 *arg0) {
-    Unk_801DFFE8 *s;
+void door_move_x(DoorMove *arg0) {
+    EventState *s;
 
-    arg0->unk14 += D_801E6DB4[0] * arg0->unk22;
-    if (arg0->unk22 > 0) {
-        if (arg0->unk14 >= arg0->unkE) {
-            s = &D_801DFFE8;
-            if (arg0->unkA == 3) {
-                if (arg0->unk24 != 0) {
-                    arg0->unkA = 0;
-                    arg0->unk24 = 0;
-                    arg0->unkE = arg0->unkC;
-                    arg0->unk14 = arg0->unkC;
+    arg0->pos_x += D_801E6DB4[0] * arg0->speed;
+    if (arg0->speed > 0) {
+        if (arg0->pos_x >= arg0->move_to) {
+            s = &event_state;
+            if (arg0->state == 3) {
+                if (arg0->auto_return != 0) {
+                    arg0->state = 0;
+                    arg0->auto_return = 0;
+                    arg0->move_to = arg0->move_from;
+                    arg0->pos_x = arg0->move_from;
                 } else {
-                    arg0->unkA = 1;
-                    arg0->unk24 = 0;
-                    arg0->unk14 = arg0->unkE;
+                    arg0->state = 1;
+                    arg0->auto_return = 0;
+                    arg0->pos_x = arg0->move_to;
                 }
-            } else if (arg0->unkA == 2) {
-                arg0->unkA = 0;
-                arg0->unk14 = arg0->unkE;
+            } else if (arg0->state == 2) {
+                arg0->state = 0;
+                arg0->pos_x = arg0->move_to;
             }
-            if (s->unk12 & 4) {
-                s->unk12 &= ~4;
-                if (s->unk12 == 0) {
-                    s->unk6 = 1;
+            if (s->wait_flags & 4) {
+                s->wait_flags &= ~4;
+                if (s->wait_flags == 0) {
+                    s->state = 1;
                 }
             }
         }
     } else {
-        if (arg0->unkE >= arg0->unk14) {
-            s = &D_801DFFE8;
-            if (arg0->unkA == 3) {
-                if (arg0->unk24 != 0) {
-                    arg0->unkA = 0;
-                    arg0->unk24 = 0;
-                    arg0->unkE = arg0->unkC;
-                    arg0->unk14 = arg0->unkC;
+        if (arg0->move_to >= arg0->pos_x) {
+            s = &event_state;
+            if (arg0->state == 3) {
+                if (arg0->auto_return != 0) {
+                    arg0->state = 0;
+                    arg0->auto_return = 0;
+                    arg0->move_to = arg0->move_from;
+                    arg0->pos_x = arg0->move_from;
                 } else {
-                    arg0->unkA = 1;
-                    arg0->unk24 = 0;
-                    arg0->unk14 = arg0->unkE;
+                    arg0->state = 1;
+                    arg0->auto_return = 0;
+                    arg0->pos_x = arg0->move_to;
                 }
-            } else if (arg0->unkA == 2) {
-                arg0->unkA = 0;
-                arg0->unk14 = arg0->unkE;
+            } else if (arg0->state == 2) {
+                arg0->state = 0;
+                arg0->pos_x = arg0->move_to;
             }
-            if (s->unk12 & 4) {
-                s->unk12 &= ~4;
-                if (s->unk12 == 0) {
-                    s->unk6 = 1;
-                }
-            }
-        }
-    }
-}
-
-void door_move_y(Unk_80184814 *arg0) {
-    Unk_801DFFE8 *s;
-
-    arg0->unk18 += D_801E6DB4[0] * arg0->unk22;
-    if (arg0->unk22 > 0) {
-        if (arg0->unk18 >= arg0->unkE) {
-            s = &D_801DFFE8;
-            if (arg0->unkA == 3) {
-                if (arg0->unk24 != 0) {
-                    arg0->unkA = 0;
-                    arg0->unk24 = 0;
-                    arg0->unkE = arg0->unkC;
-                    arg0->unk18 = arg0->unkC;
-                } else {
-                    arg0->unkA = 1;
-                    arg0->unk24 = 0;
-                    arg0->unk18 = arg0->unkE;
-                }
-            } else if (arg0->unkA == 2) {
-                arg0->unkA = 0;
-                arg0->unk18 = arg0->unkE;
-            }
-            if (s->unk12 & 4) {
-                s->unk12 &= ~4;
-                if (s->unk12 == 0) {
-                    s->unk6 = 1;
-                }
-            }
-        }
-    } else {
-        if (arg0->unkE >= arg0->unk18) {
-            s = &D_801DFFE8;
-            if (arg0->unkA == 3) {
-                if (arg0->unk24 != 0) {
-                    arg0->unkA = 0;
-                    arg0->unk24 = 0;
-                    arg0->unkE = arg0->unkC;
-                    arg0->unk18 = arg0->unkC;
-                } else {
-                    arg0->unkA = 1;
-                    arg0->unk24 = 0;
-                    arg0->unk18 = arg0->unkE;
-                }
-            } else if (arg0->unkA == 2) {
-                arg0->unkA = 0;
-                arg0->unk18 = arg0->unkE;
-            }
-            if (s->unk12 & 4) {
-                s->unk12 &= ~4;
-                if (s->unk12 == 0) {
-                    s->unk6 = 1;
+            if (s->wait_flags & 4) {
+                s->wait_flags &= ~4;
+                if (s->wait_flags == 0) {
+                    s->state = 1;
                 }
             }
         }
     }
 }
 
-void door_move_z(Unk_80184814 *arg0) {
-    Unk_801DFFE8 *s;
+void door_move_y(DoorMove *arg0) {
+    EventState *s;
 
-    arg0->unk1C += D_801E6DB4[0] * arg0->unk22;
-    if (arg0->unk22 > 0) {
-        if (arg0->unk1C >= arg0->unkE) {
-            s = &D_801DFFE8;
-            if (arg0->unkA == 3) {
-                if (arg0->unk24 != 0) {
-                    arg0->unkA = 0;
-                    arg0->unk24 = 0;
-                    arg0->unkE = arg0->unkC;
-                    arg0->unk1C = arg0->unkC;
+    arg0->pos_y += D_801E6DB4[0] * arg0->speed;
+    if (arg0->speed > 0) {
+        if (arg0->pos_y >= arg0->move_to) {
+            s = &event_state;
+            if (arg0->state == 3) {
+                if (arg0->auto_return != 0) {
+                    arg0->state = 0;
+                    arg0->auto_return = 0;
+                    arg0->move_to = arg0->move_from;
+                    arg0->pos_y = arg0->move_from;
                 } else {
-                    arg0->unkA = 1;
-                    arg0->unk24 = 0;
-                    arg0->unk1C = arg0->unkE;
+                    arg0->state = 1;
+                    arg0->auto_return = 0;
+                    arg0->pos_y = arg0->move_to;
                 }
-            } else if (arg0->unkA == 2) {
-                arg0->unkA = 0;
-                arg0->unk1C = arg0->unkE;
+            } else if (arg0->state == 2) {
+                arg0->state = 0;
+                arg0->pos_y = arg0->move_to;
             }
-            if (s->unk12 & 4) {
-                s->unk12 &= ~4;
-                if (s->unk12 == 0) {
-                    s->unk6 = 1;
+            if (s->wait_flags & 4) {
+                s->wait_flags &= ~4;
+                if (s->wait_flags == 0) {
+                    s->state = 1;
                 }
             }
         }
     } else {
-        if (arg0->unkE >= arg0->unk1C) {
-            s = &D_801DFFE8;
-            if (arg0->unkA == 3) {
-                if (arg0->unk24 != 0) {
-                    arg0->unkA = 0;
-                    arg0->unk24 = 0;
-                    arg0->unkE = arg0->unkC;
-                    arg0->unk1C = arg0->unkC;
+        if (arg0->move_to >= arg0->pos_y) {
+            s = &event_state;
+            if (arg0->state == 3) {
+                if (arg0->auto_return != 0) {
+                    arg0->state = 0;
+                    arg0->auto_return = 0;
+                    arg0->move_to = arg0->move_from;
+                    arg0->pos_y = arg0->move_from;
                 } else {
-                    arg0->unkA = 1;
-                    arg0->unk24 = 0;
-                    arg0->unk1C = arg0->unkE;
+                    arg0->state = 1;
+                    arg0->auto_return = 0;
+                    arg0->pos_y = arg0->move_to;
                 }
-            } else if (arg0->unkA == 2) {
-                arg0->unkA = 0;
-                arg0->unk1C = arg0->unkE;
+            } else if (arg0->state == 2) {
+                arg0->state = 0;
+                arg0->pos_y = arg0->move_to;
             }
-            if (s->unk12 & 4) {
-                s->unk12 &= ~4;
-                if (s->unk12 == 0) {
-                    s->unk6 = 1;
+            if (s->wait_flags & 4) {
+                s->wait_flags &= ~4;
+                if (s->wait_flags == 0) {
+                    s->state = 1;
                 }
             }
         }
     }
 }
 
-void door_move_angle(Unk_80184814 *arg0) {
-    Unk_801DFFE8 *s;
+void door_move_z(DoorMove *arg0) {
+    EventState *s;
 
-    arg0->unk20 += D_801E6DB4[0] * arg0->unk22;
-    if (arg0->unk22 > 0) {
-        if (arg0->unk20 >= arg0->unkE) {
-            s = &D_801DFFE8;
-            if (arg0->unkA == 3) {
-                if (arg0->unk24 != 0) {
-                    arg0->unkA = 0;
-                    arg0->unk24 = 0;
-                    arg0->unkE = arg0->unkC;
-                    *(s32 *)&arg0->unk20 = arg0->unkC;
+    arg0->pos_z += D_801E6DB4[0] * arg0->speed;
+    if (arg0->speed > 0) {
+        if (arg0->pos_z >= arg0->move_to) {
+            s = &event_state;
+            if (arg0->state == 3) {
+                if (arg0->auto_return != 0) {
+                    arg0->state = 0;
+                    arg0->auto_return = 0;
+                    arg0->move_to = arg0->move_from;
+                    arg0->pos_z = arg0->move_from;
                 } else {
-                    arg0->unkA = 1;
-                    arg0->unk24 = 0;
-                    *(s32 *)&arg0->unk20 = arg0->unkE;
+                    arg0->state = 1;
+                    arg0->auto_return = 0;
+                    arg0->pos_z = arg0->move_to;
                 }
-            } else if (arg0->unkA == 2) {
-                arg0->unkA = 0;
-                *(s32 *)&arg0->unk20 = arg0->unkE;
+            } else if (arg0->state == 2) {
+                arg0->state = 0;
+                arg0->pos_z = arg0->move_to;
             }
-            if (s->unk12 & 4) {
-                s->unk12 &= ~4;
-                if (s->unk12 == 0) {
-                    s->unk6 = 1;
+            if (s->wait_flags & 4) {
+                s->wait_flags &= ~4;
+                if (s->wait_flags == 0) {
+                    s->state = 1;
                 }
             }
         }
     } else {
-        if (arg0->unk20 <= arg0->unkE) {
-            s = &D_801DFFE8;
-            if (arg0->unkA == 3) {
-                if (arg0->unk24 != 0) {
-                    arg0->unkA = 0;
-                    arg0->unk24 = 0;
-                    arg0->unkE = arg0->unkC;
-                    *(s32 *)&arg0->unk20 = arg0->unkC;
+        if (arg0->move_to >= arg0->pos_z) {
+            s = &event_state;
+            if (arg0->state == 3) {
+                if (arg0->auto_return != 0) {
+                    arg0->state = 0;
+                    arg0->auto_return = 0;
+                    arg0->move_to = arg0->move_from;
+                    arg0->pos_z = arg0->move_from;
                 } else {
-                    arg0->unkA = 1;
-                    arg0->unk24 = 0;
-                    *(s32 *)&arg0->unk20 = arg0->unkE;
+                    arg0->state = 1;
+                    arg0->auto_return = 0;
+                    arg0->pos_z = arg0->move_to;
                 }
-            } else if (arg0->unkA == 2) {
-                arg0->unkA = 0;
-                *(s32 *)&arg0->unk20 = arg0->unkE;
+            } else if (arg0->state == 2) {
+                arg0->state = 0;
+                arg0->pos_z = arg0->move_to;
             }
-            if (s->unk12 & 4) {
-                s->unk12 &= ~4;
-                if (s->unk12 == 0) {
-                    s->unk6 = 1;
+            if (s->wait_flags & 4) {
+                s->wait_flags &= ~4;
+                if (s->wait_flags == 0) {
+                    s->state = 1;
+                }
+            }
+        }
+    }
+}
+
+void door_move_angle(DoorMove *arg0) {
+    EventState *s;
+
+    arg0->angle += D_801E6DB4[0] * arg0->speed;
+    if (arg0->speed > 0) {
+        if (arg0->angle >= arg0->move_to) {
+            s = &event_state;
+            if (arg0->state == 3) {
+                if (arg0->auto_return != 0) {
+                    arg0->state = 0;
+                    arg0->auto_return = 0;
+                    arg0->move_to = arg0->move_from;
+                    *(s32 *)&arg0->angle = arg0->move_from;
+                } else {
+                    arg0->state = 1;
+                    arg0->auto_return = 0;
+                    *(s32 *)&arg0->angle = arg0->move_to;
+                }
+            } else if (arg0->state == 2) {
+                arg0->state = 0;
+                *(s32 *)&arg0->angle = arg0->move_to;
+            }
+            if (s->wait_flags & 4) {
+                s->wait_flags &= ~4;
+                if (s->wait_flags == 0) {
+                    s->state = 1;
+                }
+            }
+        }
+    } else {
+        if (arg0->angle <= arg0->move_to) {
+            s = &event_state;
+            if (arg0->state == 3) {
+                if (arg0->auto_return != 0) {
+                    arg0->state = 0;
+                    arg0->auto_return = 0;
+                    arg0->move_to = arg0->move_from;
+                    *(s32 *)&arg0->angle = arg0->move_from;
+                } else {
+                    arg0->state = 1;
+                    arg0->auto_return = 0;
+                    *(s32 *)&arg0->angle = arg0->move_to;
+                }
+            } else if (arg0->state == 2) {
+                arg0->state = 0;
+                *(s32 *)&arg0->angle = arg0->move_to;
+            }
+            if (s->wait_flags & 4) {
+                s->wait_flags &= ~4;
+                if (s->wait_flags == 0) {
+                    s->state = 1;
                 }
             }
         }
@@ -2979,20 +2979,20 @@ void door_move_angle(Unk_80184814 *arg0) {
 }
 
 void door_update_all(void) {
-    Unk_801DFE80 *list = D_801DFE80;
-    Player *q = D_801E076C[0];
-    Unk_80184814 *item;
-    Unk_80174FFC rot;
+    DoorList *list = door_list;
+    Player *q = player_status_player[0];
+    DoorMove *item;
+    SVector rot;
 
-    if (list->unkC == 0) {
+    if (list->count == 0) {
         return;
     }
-    list->unk8 = list->unk0;
+    list->cursor = list->head;
     while (1) {
-        item = (Unk_80184814 *)list->unk8->unk8;
-        if (item != NULL && item->unk4 != 0 && item->unk6 != 0
-            && (u16)(item->unkA - 2) < 2) {
-            switch (item->unk2) {
+        item = (DoorMove *)list->cursor->data;
+        if (item != NULL && item->active != 0 && item->visible != 0
+            && (u16)(item->state - 2) < 2) {
+            switch (item->axis) {
             case 1:
                 door_move_x(item);
                 break;
@@ -3006,153 +3006,153 @@ void door_update_all(void) {
                 door_move_angle(item);
                 break;
             }
-            item->unk40 = item->unk14 - q->cell_x * 12500;
-            item->unk44 = item->unk18 + q->cell_y * 32000;
-            item->unk48 = item->unk1C - q->cell_z * 12500;
-            rot.unk0 = 0;
-            rot.unk2 = (item->unk20 << 12) / 360;
-            rot.unk4 = 0;
-            RotMatrix(&rot, item->unk2C);
-            item->unk28 = 0;
+            item->coord_tx = item->pos_x - q->cell_x * 12500;
+            item->coord_ty = item->pos_y + q->cell_y * 32000;
+            item->coord_tz = item->pos_z - q->cell_z * 12500;
+            rot.vx = 0;
+            rot.vy = (item->angle << 12) / 360;
+            rot.vz = 0;
+            RotMatrix(&rot, item->coord_m);
+            item->coord_flg = 0;
         }
-        if (item->unk4 != 0 && item->unk6 != 0 && D_801DFC80 != 0) {
-            item->unk10 = (s32)block_find_at(item->unk14, item->unk18, item->unk1C);
+        if (item->active != 0 && item->visible != 0 && D_801DFC80 != 0) {
+            item->block = (s32)block_find_at(item->pos_x, item->pos_y, item->pos_z);
         }
-        if (kaj_ll_at_tail((Unk_801DFE5C *)list) != 0) {
+        if (kaj_ll_at_tail((BlockList *)list) != 0) {
             break;
         }
-        list->unk8 = list->unk8->unk4;
+        list->cursor = list->cursor->next;
     }
 }
 
-void door_start_open(Unk_80184814 *arg0, s16 arg1, s16 arg2, s16 arg3) {
+void door_start_open(DoorMove *arg0, s16 arg1, s16 arg2, s16 arg3) {
     s16 v = arg2;
     s32 w;
     s16 d;
 
     D_801DFC74 = 1;
-    arg0->unkA = 3;
-    arg0->unk24 = arg3;
-    switch (arg0->unk2) {
+    arg0->state = 3;
+    arg0->auto_return = arg3;
+    switch (arg0->axis) {
     case 1:
         v = arg2 * 10;
-        arg0->unkC = arg0->unk14;
-        arg0->unkE = arg0->unk14 + arg1 * 10;
+        arg0->move_from = arg0->pos_x;
+        arg0->move_to = arg0->pos_x + arg1 * 10;
         break;
     case 2:
         v = arg2 * 10;
-        arg0->unkC = arg0->unk18;
-        arg0->unkE = arg0->unk18 + arg1 * 10;
+        arg0->move_from = arg0->pos_y;
+        arg0->move_to = arg0->pos_y + arg1 * 10;
         break;
     case 3:
         v = arg2 * 10;
-        arg0->unkC = arg0->unk1C;
-        arg0->unkE = arg0->unk1C + arg1 * 10;
+        arg0->move_from = arg0->pos_z;
+        arg0->move_to = arg0->pos_z + arg1 * 10;
         break;
     default:
-        arg0->unkC = arg0->unk20;
-        arg0->unkE = arg0->unk20 + arg1;
+        arg0->move_from = arg0->angle;
+        arg0->move_to = arg0->angle + arg1;
         break;
     }
-    d = arg0->unkE - arg0->unkC;
+    d = arg0->move_to - arg0->move_from;
     w = v;
     if (d >= 0) {
         if (d <= 0) {
-            arg0->unk22 = 0;
+            arg0->speed = 0;
         } else {
-            arg0->unk22 = w;
+            arg0->speed = w;
         }
     } else {
-        arg0->unk22 = -w;
+        arg0->speed = -w;
     }
 }
 
-void door_start_close(Unk_80184814 *arg0, s16 arg1, s16 arg2) {
+void door_start_close(DoorMove *arg0, s16 arg1, s16 arg2) {
     s16 v = arg2;
     s32 w;
     s16 d;
 
     D_801DFC74 = 1;
-    arg0->unkA = 2;
-    arg0->unk24 = 0;
-    switch (arg0->unk2) {
+    arg0->state = 2;
+    arg0->auto_return = 0;
+    switch (arg0->axis) {
     case 1:
         v = arg2 * 10;
-        arg0->unkC = arg0->unk14;
-        arg0->unkE = arg0->unk14 + arg1 * 10;
+        arg0->move_from = arg0->pos_x;
+        arg0->move_to = arg0->pos_x + arg1 * 10;
         break;
     case 2:
         v = arg2 * 10;
-        arg0->unkC = arg0->unk18;
-        arg0->unkE = arg0->unk18 + arg1 * 10;
+        arg0->move_from = arg0->pos_y;
+        arg0->move_to = arg0->pos_y + arg1 * 10;
         break;
     case 3:
         v = arg2 * 10;
-        arg0->unkC = arg0->unk1C;
-        arg0->unkE = arg0->unk1C + arg1 * 10;
+        arg0->move_from = arg0->pos_z;
+        arg0->move_to = arg0->pos_z + arg1 * 10;
         break;
     default:
-        arg0->unkC = arg0->unk20;
-        arg0->unkE = arg0->unk20 + arg1;
+        arg0->move_from = arg0->angle;
+        arg0->move_to = arg0->angle + arg1;
         break;
     }
-    d = arg0->unkE - arg0->unkC;
+    d = arg0->move_to - arg0->move_from;
     w = v;
     if (d >= 0) {
         if (d <= 0) {
-            arg0->unk22 = 0;
+            arg0->speed = 0;
         } else {
-            arg0->unk22 = w;
+            arg0->speed = w;
         }
     } else {
-        arg0->unk22 = -w;
+        arg0->speed = -w;
     }
 }
 
-void door_exec_command(Unk_8018519C *arg0, Unk_801DFFE8 *arg1) {
-    Unk_801DFE80 *list = D_801DFE80;
+void door_exec_command(Unk_8018519C *arg0, EventState *arg1) {
+    DoorList *list = door_list;
     Unk_8018519C_0 *p = arg0->unk0;
-    Unk_80184814 *item;
-    Unk_80184814 *found;
+    DoorMove *item;
+    DoorMove *found;
     u16 a = p->unk4;
     s32 x;
     s32 y;
 
-    if (list->unkC == 0) {
+    if (list->count == 0) {
         found = NULL;
     } else {
-        list->unk8 = list->unk0;
+        list->cursor = list->head;
         while (1) {
-            item = (Unk_80184814 *)list->unk8->unk8;
-            if (item != NULL && item->unk0 == a) {
+            item = (DoorMove *)list->cursor->data;
+            if (item != NULL && item->id == a) {
                 found = item;
                 break;
             }
-            if (kaj_ll_at_tail((Unk_801DFE5C *)list) != 0) {
+            if (kaj_ll_at_tail((BlockList *)list) != 0) {
                 found = NULL;
                 break;
             }
-            list->unk8 = list->unk8->unk4;
+            list->cursor = list->cursor->next;
         }
     }
     if (found != NULL) {
         if (p->unk2 == 0) {
-            if (found->unkA != 1) {
+            if (found->state != 1) {
                 x = (s16)atoi(arg0->unk8[0]);
                 y = (s16)atoi(arg0->unk8[1]);
                 door_start_open(found, x, y, atoi(arg0->unk8[2]));
                 if (atoi(arg0->unk8[3]) == 1) {
-                    arg1->unk6 = 4;
-                    arg1->unk12 |= 4;
+                    arg1->state = 4;
+                    arg1->wait_flags |= 4;
                 }
             }
         } else {
-            if (found->unkA != 0) {
+            if (found->state != 0) {
                 s32 z = (s16)atoi(arg0->unk8[0]);
                 door_start_close(found, z, atoi(arg0->unk8[1]));
                 if (atoi(arg0->unk8[2]) == 1) {
-                    arg1->unk6 = 4;
-                    arg1->unk12 |= 4;
+                    arg1->state = 4;
+                    arg1->wait_flags |= 4;
                 }
             }
         }

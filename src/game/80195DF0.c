@@ -3,8 +3,8 @@
 
 void free3(void *ptr);
 s32 D_801DFF48;
-extern Unk_801E0600 D_801E0600;
-extern Unk_801E0600 D_801E0610;
+extern AreaTrigger object_area_current;
+extern AreaTrigger object_area_previous;
 extern Player player_character;
 s16 effect_item_add(s16 arg0, s16 arg1);
 s16 effect_item_remove(s16 arg0, s16 arg1);
@@ -23,15 +23,15 @@ typedef struct {
     s16 unk7C;
     u16 unk7E;
     u8 unk80[0x34];
-    s16 unkB4[5];
+    s16 limb_damage[5];
     u8 padBE[0x22];
     u8 unkE0[0x16C];
-    s16 unk24C;
-} Unk_801E0368_u80195DF0;
-extern Unk_801E0368_u80195DF0 action_vars;
-Unk_801DFF30 object_room_phone;
+    s16 menu_busy;
+} GameVars_u80195DF0;
+extern GameVars_u80195DF0 action_vars;
+RoomPhone object_room_phone;
 void text_show(char *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
-Unk_801DFF28 object_room_storage;
+RoomStorage object_room_storage;
 u16 D_801DFD58;
 u16 D_801DFD5A;
 extern char D_80170E18[];
@@ -39,8 +39,8 @@ void sprite_set_visible(s32 arg0, s32 arg1);
 void sprite_set_clut_entry(s32 arg0, s32 arg1, s32 arg2);
 void text_close(void);
 void mail_wait(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
-extern Player *D_801E076C[];
-Unk_8018E56C *mod_find(u16 arg0);
+extern Player *player_status_player[];
+Model *mod_find(u16 arg0);
 void mod_set_anim(void *arg0, s16 arg1, s16 arg2);
 void object_room_play_call(s16 arg0);
 void sound_se_stop(s32 arg0);
@@ -51,13 +51,13 @@ void object_room_main(void);
 void menu_run(void);
 void menu_card_run(s32 arg0, s32 arg1);
 void mail_goto_ofc(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
-extern Unk_801DFFE8 D_801DFFE8;
+extern EventState event_state;
 extern void *D_801E0760[];
-Unk_80174B10 *action_find_set(s16 arg0);
-Unk_80174B10 *action_run_set(Unk_80174B10 *arg0, s32 arg1, s32 arg2);
+ActionSet *action_find_set(s16 arg0);
+ActionSet *action_run_set(ActionSet *arg0, s32 arg1, s32 arg2);
 s16 D_801DFF4C;
 void UnDeliverEvent(u32 ev, u32 spec);
-Unk_801CC1E8 *kaj_event_push(s32 arg0);
+KajEvent *kaj_event_push(s32 arg0);
 extern s16 player_part_damage_caps[];
 void event_draw_limb_status(PlayerStatus *arg0);
 void event_set_blink(s16 arg0, s16 arg1);
@@ -72,14 +72,14 @@ s32 CdControl(u8 com, u8 *param, u8 *result);
 void sound_se_play(s32 arg0);
 void player_set_view(Player *arg0, s16 arg1);
 void event_advance_clock(s16 a, s16 b);
-extern Unk_801A3970 D_801E05C0;
+extern VabStream sound_vab_stream;
 s32 CdMode(void);
 void *CdLastPos(void);
 s32 CdRead(s32 sectors, u32 *buf, s32 mode);
 s32 CdReadSync(s32 mode, u8 *result);
 s32 VSync(s32 mode);
-u32 *sound_se_alloc_header(u8 *arg0, s32 arg1, Unk_801A3970 *arg2);
-void sound_vab_open_head(Unk_801A3970 *arg0);
+u32 *sound_se_alloc_header(u8 *arg0, s32 arg1, VabStream *arg2);
+void sound_vab_open_head(VabStream *arg0);
 extern KajSystem kaj_system;
 s32 kaj_pad_read(void);
 s16 object_room_storage_input(void);
@@ -114,7 +114,7 @@ void RotMatrix(s16 *arg0, void *arg1);
 void ApplyMatrixLV(void *arg0, void *arg1, void *arg2);
 void GsSetView2(void *arg0);
 void GsInitCoordinate2(void *super, void *base);
-extern Unk_801E0340 D_801E0340;
+extern SceneRequest scene_request;
 extern s32 player_str_scene_cmn[];
 void mail_goto_building(s32 arg0, s32 *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 extern s16 D_801DFC76;
@@ -143,7 +143,7 @@ typedef struct {
     s32 unk34;
     s32 unk38;
 } Unk_801E032C;
-/* Local view of Unk_801E1158: this unit reads 0x14 as s16 and 0x1C as an s16 array, the shared type has an s32 and a record there. */
+/* Local view of CarState: this unit reads 0x14 as s16 and 0x1C as an s16 array, the shared type has an s32 and a record there. */
 typedef struct {
     u8 unk0[4];
     s16 unk4;
@@ -155,8 +155,8 @@ typedef struct {
     u8 unk16[2];
     s32 unk18;
     s16 unk1C[4];
-    s16 unk24;
-    s16 unk26;
+    s16 look_pitch;
+    s16 look_yaw;
     s16 unk28;
     u8 unk2A[0x22];
     s32 unk4C;
@@ -166,11 +166,11 @@ typedef struct {
     s32 unk5C;
     u8 unk60[4];
     s32 unk64;
-} Unk_801E1158_u80195DF0;
+} CarState_u80195DF0;
 void RotMatrixZXY(s16 *r, void *m);
 void GsSetLsMatrix(void *m);
 void RotTrans(void *v0, s32 *v1, s32 *flag);
-extern Unk_801E1040 D_801E1040;
+extern ScreenLight screen_light;
 void player_wrap_cell(Player *arg0);
 void SetFogNearFar(s32 a, s32 b, s32 h);
 void RotMatrixZYX(s16 *r, void *m);
@@ -224,7 +224,7 @@ typedef struct {
     void *unk38;
     Unk_80198ADC_3C *unk3C;
 } Unk_80198ADC;
-extern Unk_801E1118 D_801E1118;
+extern TrainState vehicle_train_state;
 extern Unk_801E032C *D_801E032C[];
 s16 player_try_slide(s16 arg0, s16 arg1, s32 *arg2, s32 *arg3, s32 arg4, s32 arg5);
 void player_update_view(Player *arg0, s16 *arg1, u16 arg2);
@@ -232,8 +232,8 @@ s32 func_8017BBB0(s32 arg0, s32 arg1, s32 *arg2);
 s16 player_check_ground(Player *arg0, s32 arg1, s16 arg2, s16 arg3);
 s32 rsin(s32 a);
 s32 rcos(s32 a);
-extern Unk_801E1158_u80195DF0 D_801E1158;
-void player_place_in_car(Player *arg0, Unk_801E032C *arg1, Unk_801E1158_u80195DF0 *arg2, s32 arg3, s32 arg4, s16 arg5, s16 arg6);
+extern CarState_u80195DF0 vehicle_car_state;
+void player_place_in_car(Player *arg0, Unk_801E032C *arg1, CarState_u80195DF0 *arg2, s32 arg3, s32 arg4, s16 arg5, s16 arg6);
 s32 block_fit_ground_tilt(s32 *arg0, s32 arg1);
 s32 SquareRoot0(s32 arg0);
 s32 player_pick_hit_part(s16 arg0);
@@ -295,10 +295,10 @@ s16 D_801DFD5E;
 extern s32 D_801E6DB4[];
 s32 mail_exp_for_level(s32 a);
 void effect_weapon_calc_rate(s32 arg0);
-extern Unk_801E07C0 D_801E07C0;
-extern Unk_801D7FB0 D_801D7FB0;
+extern RoadMap roadmap_state;
+extern CarNavi vehicle_navi;
 void effect_start_sprite_slide(s32 arg0, u16 arg1, s32 arg2);
-void player_update_map_cursor(Player *arg0, Unk_801E07C0 *arg1);
+void player_update_map_cursor(Player *arg0, RoadMap *arg1);
 void effect_weapon_calc_rate(s32 a);
 
 INCLUDE_RODATA("asm/nonmatchings/game/80195DF0", D_80170EDC);
@@ -388,7 +388,7 @@ void player_move_in_train(Player *arg0, u16 arg1) {
     Unk_801E032C *m;
     s32 ox;
     s32 oz;
-    Unk_801E1118 *p;
+    TrainState *p;
     s32 dx;
     s32 dz;
     s32 sx;
@@ -406,17 +406,17 @@ void player_move_in_train(Player *arg0, u16 arg1) {
     moved = 0;
     step = 0;
     y = 0;
-    p = &D_801E1118;
+    p = &vehicle_train_state;
     m = D_801E032C[0];
     if (arg0->flags & 0x800) {
         arg0->move_state = 0;
     } else {
         dir[0] = 0;
         dir[2] = 0;
-        cam[0] = (p->unk34 << 12) / 360;
-        cam[1] = (p->unk36 << 12) / 360;
+        cam[0] = (p->view_pitch << 12) / 360;
+        cam[1] = (p->view_yaw << 12) / 360;
         cam[2] = (p->unk38 << 12) / 360;
-        dir[1] = ((p->unk36 + 90) << 12) / 360;
+        dir[1] = ((p->view_yaw + 90) << 12) / 360;
         if (arg0->unk3E != 0) {
             block_update_visibility(arg1);
             col = func_8017BBB0(arg0->pos_x, arg0->pos_z, &y);
@@ -437,11 +437,11 @@ void player_move_in_train(Player *arg0, u16 arg1) {
             dx += sx;
             dz += sz;
             if (dx != 0 || dz != 0) {
-                p->unk2C += dx;
-                p->unk30 += dz;
+                p->carry_vx += dx;
+                p->carry_vz += dz;
             loop:
                 GsSetLsMatrix(m->unk1C);
-                RotTrans(&p->unk2C, v, &flag);
+                RotTrans(&p->carry_vx, v, &flag);
                 arg0->pos_x = v[0];
                 arg0->pos_z = v[2];
                 block_stream_update(arg1);
@@ -454,7 +454,7 @@ void player_move_in_train(Player *arg0, u16 arg1) {
             if (player_check_ground(arg0, col, moved, step) != 0) {
                 arg0->pos_y = y + arg0->unk78;
             } else {
-                step = player_try_slide(2, step, (s32 *)&p->unk2C, (s32 *)&p->unk30, dx, dz);
+                step = player_try_slide(2, step, (s32 *)&p->carry_vx, (s32 *)&p->carry_vz, dx, dz);
                 if (step != -1) {
                     goto loop;
                 }
@@ -468,7 +468,7 @@ void player_move_in_train(Player *arg0, u16 arg1) {
     player_update_view(arg0, rot, 2);
 }
 
-void player_place_in_car(Player *arg0, Unk_801E032C *arg1, Unk_801E1158_u80195DF0 *arg2, s32 arg3, s32 arg4, s16 arg5, s16 arg6) {
+void player_place_in_car(Player *arg0, Unk_801E032C *arg1, CarState_u80195DF0 *arg2, s32 arg3, s32 arg4, s16 arg5, s16 arg6) {
     s32 v[3];
     s16 rot[3];
     s32 flag;
@@ -491,8 +491,8 @@ void player_place_in_car(Player *arg0, Unk_801E032C *arg1, Unk_801E1158_u80195DF
     arg0->pos_x = v[0];
     arg0->pos_y = v[1] - 0x172;
     arg0->pos_z = v[2];
-    arg0->pitch = arg2->unk24;
-    arg0->yaw = arg2->unk26 + arg1->unk12;
+    arg0->pitch = arg2->look_pitch;
+    arg0->yaw = arg2->look_yaw + arg1->unk12;
     arg0->unk70 = arg2->unk28;
     if (arg0->yaw >= 0x168) {
         arg0->yaw -= 0x168;
@@ -511,7 +511,7 @@ void player_place_in_car(Player *arg0, Unk_801E032C *arg1, Unk_801E1158_u80195DF
 void player_move_in_car(Player *arg0, s32 arg1) {
     s16 rot[3];
     s32 y;
-    Unk_801E1158_u80195DF0 *p;
+    CarState_u80195DF0 *p;
     Unk_801E032C *m;
     s32 dx;
     s32 dz;
@@ -523,7 +523,7 @@ void player_move_in_car(Player *arg0, s32 arg1) {
     s16 b;
     s16 ang;
 
-    p = &D_801E1158;
+    p = &vehicle_car_state;
     y = 0;
     m = D_801E032C[0];
     if (arg0->unk3E != 0) {
@@ -748,7 +748,7 @@ void player_init(void) {
     PlayerStatus *p = &player_status;
     Inventory *q = &player_inventory;
     Player *r = &player_character;
-    Unk_801E0368_u80195DF0 *o;
+    GameVars_u80195DF0 *o;
     s16 sv[3];
     s32 i;
 
@@ -757,16 +757,16 @@ void player_init(void) {
     p->level = 1;
     p->next_exp = 0x144;
     p->hours_awake = 2;
-    p->unkC = 1;
-    p->unkE = 1;
-    p->unk10 = 1;
-    p->unk12 = 1;
-    p->unk14 = 1;
-    p->unk18 = 1;
-    p->unk1C = 1;
-    p->unk20 = 1;
-    p->unk24 = 1;
-    p->unk28 = 1;
+    p->stat0 = 1;
+    p->stat1 = 1;
+    p->stat2 = 1;
+    p->stat3 = 1;
+    p->weapon0_level = 1;
+    p->weapon1_level = 1;
+    p->weapon2_level = 1;
+    p->weapon3_level = 1;
+    p->weapon4_level = 1;
+    p->defense_level = 1;
     p->drain_pending = 1;
     p->limb_redraw = 1;
     p->weapon_redraw = 1;
@@ -803,8 +803,8 @@ void player_init(void) {
 
 void player_place_for_scene(u16 arg0) {
     PlayerStatus *p = &player_status;
-    Unk_801E1040 *f = &D_801E1040;
-    Unk_801E0340 *q = &D_801E0340;
+    ScreenLight *f = &screen_light;
+    SceneRequest *q = &scene_request;
     Player *r;
     s16 rot[3];
     s32 v;
@@ -812,13 +812,13 @@ void player_place_for_scene(u16 arg0) {
     p->target_npc = NULL;
     p->infected = 0;
     f->unk0[2] = 0;
-    q->unkA = 0;
-    D_801E0610.unk4 = 0;
-    D_801E0600.unk4 = 0;
-    D_801E0600.unk0 = 0xFFFFFF;
-    D_801E0610.unk0 = 0xFFFFFF;
-    D_801E0610.unk8 = 0;
-    D_801E0600.unk8 = 0;
+    q->change = 0;
+    object_area_previous.trigger_type = 0;
+    object_area_current.trigger_type = 0;
+    object_area_current.trigger = 0xFFFFFF;
+    object_area_previous.trigger = 0xFFFFFF;
+    object_area_previous.scene_trigger = 0;
+    object_area_current.scene_trigger = 0;
     r = &player_character;
     r->flags &= ~4;
     r->unk3E = 1;
@@ -832,7 +832,7 @@ void player_place_for_scene(u16 arg0) {
     r->flags = 0;
     switch (arg0) {
     case 0:
-        if (q->unk12 != 0) {
+        if (q->yaw != 0) {
             r->pos_x = 0xCE4;
             r->pos_y = -0x384;
             r->pos_z = 0x1AF4;
@@ -859,7 +859,7 @@ void player_place_for_scene(u16 arg0) {
         r->pitch = 0;
         r->unk70 = 0;
         r->pos_y += r->unk78;
-        r->yaw = (u32)q->unk18 >> 16;
+        r->yaw = (u32)q->pos_y >> 16;
         break;
     case 2:
         f->unk0[2] = 1;
@@ -867,10 +867,10 @@ void player_place_for_scene(u16 arg0) {
         r->unk78 = -0xAA;
         r->pitch = 0;
         r->unk70 = 0;
-        r->pos_x = q->unk14;
-        r->pos_y = q->unk18 + r->unk78;
-        r->pos_z = q->unk1C;
-        r->yaw = q->unk12;
+        r->pos_x = q->pos_x;
+        r->pos_y = q->pos_y + r->unk78;
+        r->pos_z = q->pos_z;
+        r->yaw = q->yaw;
         switch (r->vehicle_mode) {
         case 0:
             r->pitch = 0xC;
@@ -879,7 +879,7 @@ void player_place_for_scene(u16 arg0) {
         case 3:
             v = -0x2A8;
             r->unk78 = v;
-            r->pos_y = q->unk18 + v;
+            r->pos_y = q->pos_y + v;
             break;
         }
         break;
@@ -908,8 +908,8 @@ void player_place_for_scene(u16 arg0) {
 
 void player_finish_death(void) {
     PlayerStatus *p = &player_status;
-    Unk_801E0340 *q = &D_801E0340;
-    Unk_801E0368_u80195DF0 *o = &action_vars;
+    SceneRequest *q = &scene_request;
+    GameVars_u80195DF0 *o = &action_vars;
     s32 i;
     s16 v;
 
@@ -921,16 +921,16 @@ void player_finish_death(void) {
             p->mutant = 1;
             o->unk0[6] = 1;
             o->unk62[0] = p->level;
-            o->unk62[1] = p->unkC;
-            o->unk62[2] = p->unkE;
-            o->unk62[3] = p->unk10;
-            o->unk62[4] = p->unk12;
-            o->unk62[5] = p->unk14;
-            o->unk62[6] = p->unk18;
-            o->unk62[7] = p->unk1C;
-            o->unk62[8] = p->unk20;
-            o->unk62[9] = p->unk24;
-            o->unk62[10] = p->unk28;
+            o->unk62[1] = p->stat0;
+            o->unk62[2] = p->stat1;
+            o->unk62[3] = p->stat2;
+            o->unk62[4] = p->stat3;
+            o->unk62[5] = p->weapon0_level;
+            o->unk62[6] = p->weapon1_level;
+            o->unk62[7] = p->weapon2_level;
+            o->unk62[8] = p->weapon3_level;
+            o->unk62[9] = p->weapon4_level;
+            o->unk62[10] = p->defense_level;
             for (i = 9; i < 0x1C; i++) {
                 v = o->unk0[i];
                 o->unk0[i] = 2000;
@@ -938,34 +938,34 @@ void player_finish_death(void) {
             }
         }
         p->level = 100;
-        p->unkC = 100;
-        p->unkE = 100;
-        p->unk10 = 100;
-        p->unk12 = 100;
-        p->unk14 = 100;
-        p->unk18 = 100;
-        p->unk1C = 100;
-        p->unk20 = 100;
-        p->unk24 = 100;
-        p->unk28 = 100;
+        p->stat0 = 100;
+        p->stat1 = 100;
+        p->stat2 = 100;
+        p->stat3 = 100;
+        p->weapon0_level = 100;
+        p->weapon1_level = 100;
+        p->weapon2_level = 100;
+        p->weapon3_level = 100;
+        p->weapon4_level = 100;
+        p->defense_level = 100;
         for (i = 0; i < 5; i++) {
             p->limb_state[i] = 0;
-            o->unkB4[i] = 0;
+            o->limb_damage[i] = 0;
         }
         mail_goto_building(1, player_str_scene_cmn, 0x18, 0x41, 7, 0xB4, 0x15, 0x500F07, 1);
         event_draw_gauge(p);
         event_draw_limb_status(p);
     } else {
         q->unk0[4] = 1;
-        q->unkA = 1;
+        q->change = 1;
     }
 }
 
 void player_start_death(u16 arg0, PlayerStatus *arg1, Player *arg2) {
-    Unk_801E0368_u80195DF0 *o = &action_vars;
+    GameVars_u80195DF0 *o = &action_vars;
     s32 v;
 
-    if (D_801E1046[0] == 0 && o->unk24C == 0 && roadmap_get_state() == 0
+    if (D_801E1046[0] == 0 && o->menu_busy == 0 && roadmap_get_state() == 0
         && arg2->vehicle_mode != 1 && !(arg2->flags & 0x8000) && !(arg2->flags & 0x4802)) {
         arg2->flags |= 0x800;
         if (arg2->vehicle_mode != 0) {
@@ -1053,28 +1053,28 @@ void player_add_skill_exp(s16 arg0, s16 arg1) {
 
     switch (arg0) {
     case 0:
-        a = p->unk14;
-        b = p->unk16;
+        a = p->weapon0_level;
+        b = p->weapon0_exp;
         break;
     case 1:
-        a = p->unk18;
-        b = p->unk1A;
+        a = p->weapon1_level;
+        b = p->weapon1_exp;
         break;
     case 2:
-        a = p->unk1C;
-        b = p->unk1E;
+        a = p->weapon2_level;
+        b = p->weapon2_exp;
         break;
     case 3:
-        a = p->unk20;
-        b = p->unk22;
+        a = p->weapon3_level;
+        b = p->weapon3_exp;
         break;
     case 4:
-        a = p->unk24;
-        b = p->unk26;
+        a = p->weapon4_level;
+        b = p->weapon4_exp;
         break;
     case 5:
-        a = p->unk28;
-        b = p->unk2A;
+        a = p->defense_level;
+        b = p->defense_exp;
         break;
     }
     if (a == 100) {
@@ -1093,28 +1093,28 @@ void player_add_skill_exp(s16 arg0, s16 arg1) {
     }
     switch (arg0) {
     case 0:
-        p->unk14 = a;
-        p->unk16 = b;
+        p->weapon0_level = a;
+        p->weapon0_exp = b;
         break;
     case 1:
-        p->unk18 = a;
-        p->unk1A = b;
+        p->weapon1_level = a;
+        p->weapon1_exp = b;
         break;
     case 2:
-        p->unk1C = a;
-        p->unk1E = b;
+        p->weapon2_level = a;
+        p->weapon2_exp = b;
         break;
     case 3:
-        p->unk20 = a;
-        p->unk22 = b;
+        p->weapon3_level = a;
+        p->weapon3_exp = b;
         break;
     case 4:
-        p->unk24 = a;
-        p->unk26 = b;
+        p->weapon4_level = a;
+        p->weapon4_exp = b;
         break;
     case 5:
-        p->unk28 = a;
-        p->unk2A = b;
+        p->defense_level = a;
+        p->defense_exp = b;
         break;
     }
     if (flag && arg0 != 5) {
@@ -1140,21 +1140,21 @@ loop:
     if (p->level < 100) {
         p->next_exp = mail_exp_for_level(p->level);
     }
-    p->unkC += rand() % 3;
-    if ((u16)p->unkC > 100) {
-        p->unkC = 100;
+    p->stat0 += rand() % 3;
+    if ((u16)p->stat0 > 100) {
+        p->stat0 = 100;
     }
-    p->unkE += rand() % 3;
-    if ((u16)p->unkE > 100) {
-        p->unkE = 100;
+    p->stat1 += rand() % 3;
+    if ((u16)p->stat1 > 100) {
+        p->stat1 = 100;
     }
-    p->unk10 += rand() % 3;
-    if ((u16)p->unk10 > 100) {
-        p->unk10 = 100;
+    p->stat2 += rand() % 3;
+    if ((u16)p->stat2 > 100) {
+        p->stat2 = 100;
     }
-    p->unk12 += rand() % 3;
-    if ((u16)p->unk12 > 100) {
-        p->unk12 = 100;
+    p->stat3 += rand() % 3;
+    if ((u16)p->stat3 > 100) {
+        p->stat3 = 100;
     }
     for (i = 0; i < 2; i++) {
         effect_weapon_calc_rate(i);
@@ -1209,7 +1209,7 @@ s32 player_pick_hit_part(s16 arg0) {
 void player_take_hit(Npc *arg0, s32 arg1, s32 arg2) {
     PlayerStatus *p;
     Player *q;
-    Unk_801E0368_u80195DF0 *r;
+    GameVars_u80195DF0 *r;
     s32 n;
     s32 t;
     s32 div;
@@ -1221,7 +1221,7 @@ void player_take_hit(Npc *arg0, s32 arg1, s32 arg2) {
     r = &action_vars;
     if (p->energy > 0) {
         div = 1;
-        n = rand() % (u16)p->unk12;
+        n = rand() % (u16)p->stat3;
         dir = mail_angle_to_dir8(q->yaw - arg0->unk3A);
         switch (dir) {
         case 6:
@@ -1231,13 +1231,13 @@ void player_take_hit(Npc *arg0, s32 arg1, s32 arg2) {
             k = player_pick_hit_part(dir);
             break;
         default:
-            n += rand() % (u16)p->unk28;
+            n += rand() % (u16)p->defense_level;
             switch (arg1) {
             case 0:
             case 1:
                 div = 5;
-                n += rand() % (u16)p->unkC;
-                t = rand() % (u16)p->unkE;
+                n += rand() % (u16)p->stat0;
+                t = rand() % (u16)p->stat1;
                 switch (p->limb_state[4]) {
                 case 2:
                     t = t * 2 / 3;
@@ -1247,16 +1247,16 @@ void player_take_hit(Npc *arg0, s32 arg1, s32 arg2) {
                     break;
                 }
                 n += t;
-                n += rand() % (u16)p->unk10;
+                n += rand() % (u16)p->stat2;
                 break;
             case 2:
             case 3:
                 div = 3;
-                n += rand() % (u16)p->unkE;
+                n += rand() % (u16)p->stat1;
                 break;
             case 4:
                 div = 3;
-                n += rand() % (u16)p->unk10;
+                n += rand() % (u16)p->stat2;
                 break;
             }
             k = player_pick_hit_part(dir);
@@ -1266,7 +1266,7 @@ void player_take_hit(Npc *arg0, s32 arg1, s32 arg2) {
         player_add_skill_exp(5, n * 10);
         arg2 -= n * 2;
         if (arg2 > 0) {
-            *(r->unkB4 + k) += arg2;
+            *(r->limb_damage + k) += arg2;
             if (k == 0) {
                 p->energy -= arg2;
                 if ((u16)arg0->unk2 != 0) {
@@ -1593,7 +1593,7 @@ void player_exec_command(Unk_80199034 *arg0, Npc *arg1) {
 
 void player_recover(s32 arg0, s32 arg1, s32 arg2, s16 arg3) {
     PlayerStatus *p = &player_status;
-    Unk_801E0368_u80195DF0 *o = &action_vars;
+    GameVars_u80195DF0 *o = &action_vars;
     Player *e = p->player;
     s16 r;
     s32 i;
@@ -1602,16 +1602,16 @@ void player_recover(s32 arg0, s32 arg1, s32 arg2, s16 arg3) {
         p->mutant = 0;
         o->unk0[6] = 0;
         p->level = o->unk62[0];
-        p->unkC = o->unk62[1];
-        p->unkE = o->unk62[2];
-        p->unk10 = o->unk62[3];
-        p->unk12 = o->unk62[4];
-        p->unk14 = o->unk62[5];
-        p->unk18 = o->unk62[6];
-        p->unk1C = o->unk62[7];
-        p->unk20 = o->unk62[8];
-        p->unk24 = o->unk62[9];
-        p->unk28 = o->unk62[10];
+        p->stat0 = o->unk62[1];
+        p->stat1 = o->unk62[2];
+        p->stat2 = o->unk62[3];
+        p->stat3 = o->unk62[4];
+        p->weapon0_level = o->unk62[5];
+        p->weapon1_level = o->unk62[6];
+        p->weapon2_level = o->unk62[7];
+        p->weapon3_level = o->unk62[8];
+        p->weapon4_level = o->unk62[9];
+        p->defense_level = o->unk62[10];
         for (i = 9; i < 0x1C; i++) {
             o->unk0[i] = o->unk28[i];
         }
@@ -1630,7 +1630,7 @@ void player_recover(s32 arg0, s32 arg1, s32 arg2, s16 arg3) {
     }
     for (i = 0; i < 5; i++) {
         p->limb_state[i] = 0;
-        o->unkB4[i] = 0;
+        o->limb_damage[i] = 0;
     }
     if (arg3 == 0) {
         event_advance_clock(0x3C, 1);
@@ -1645,21 +1645,21 @@ void player_recover(s32 arg0, s32 arg1, s32 arg2, s16 arg3) {
 
 void player_handle_pad(PlayerStatus *arg0, s32 arg1, s32 arg2) {
     Player *p;
-    Unk_801E1118 *q;
+    TrainState *q;
 
     p = arg0->player;
-    q = &D_801E1118;
+    q = &vehicle_train_state;
     if (arg2 & 0x1000) {
         p->unk3C = 1;
         if (p->vehicle_mode) {
-            q->unk34 += D_801E6DB4[0];
+            q->view_pitch += D_801E6DB4[0];
         } else {
             p->pitch += D_801E6DB4[0];
         }
     } else if (arg2 & 0x4000) {
         p->unk3C = 1;
         if (p->vehicle_mode) {
-            q->unk34 -= D_801E6DB4[0];
+            q->view_pitch -= D_801E6DB4[0];
         } else {
             p->pitch -= D_801E6DB4[0];
         }
@@ -1667,14 +1667,14 @@ void player_handle_pad(PlayerStatus *arg0, s32 arg1, s32 arg2) {
     if (arg2 & 0x8000) {
         p->unk3C = 1;
         if (p->vehicle_mode) {
-            q->unk36 -= D_801E6DB4[0];
+            q->view_yaw -= D_801E6DB4[0];
         } else {
             p->yaw -= D_801E6DB4[0];
         }
     } else if (arg2 & 0x2000) {
         p->unk3C = 1;
         if (p->vehicle_mode) {
-            q->unk36 += D_801E6DB4[0];
+            q->view_yaw += D_801E6DB4[0];
         } else {
             p->yaw += D_801E6DB4[0];
         }
@@ -1859,12 +1859,12 @@ void player_weapon_sound(s16 arg0, s16 arg1) {
 
 void player_reset_triggers(s16 arg0) {
     D_801DFF48 = 0xFFFFFF;
-    D_801E0610.unk4 = 0;
-    D_801E0600.unk4 = 0;
-    D_801E0610.unk0 = 0xFFFFFF;
-    D_801E0600.unk0 = 0xFFFFFF;
-    D_801E0610.unk8 = 0;
-    D_801E0600.unk8 = 0;
+    object_area_previous.trigger_type = 0;
+    object_area_current.trigger_type = 0;
+    object_area_previous.trigger = 0xFFFFFF;
+    object_area_current.trigger = 0xFFFFFF;
+    object_area_previous.scene_trigger = 0;
+    object_area_current.scene_trigger = 0;
     player_character.unk3E = arg0;
     player_character.unk3C = 1;
     player_character.flags &= ~4;
@@ -1894,9 +1894,9 @@ s32 player_set_weapon(s16 arg0, s16 arg1, s16 arg2) {
 }
 
 void player_heal_part(s16 arg0, s16 arg1, s16 arg2) {
-    Unk_801E0368_u80195DF0 *p = &action_vars;
+    GameVars_u80195DF0 *p = &action_vars;
     PlayerStatus *q = &player_status;
-    s16 v = p->unkB4[arg0];
+    s16 v = p->limb_damage[arg0];
 
     v -= arg2;
     if (arg2 < 0) {
@@ -1908,7 +1908,7 @@ void player_heal_part(s16 arg0, s16 arg1, s16 arg2) {
     } else if (v < 0) {
         v = 0;
     }
-    *(p->unkB4 + arg0) = v;
+    *(p->limb_damage + arg0) = v;
     event_draw_limb_status(q);
     event_set_blink(2, 1);
 }
@@ -1940,7 +1940,7 @@ void player_add_hp(s16 arg0, s16 arg1) {
 void player_rest(s16 arg0, s32 arg1, s32 arg2, s32 arg3) {
     PlayerStatus *p = &player_status;
     Player *o = p->player;
-    Unk_801E0368_u80195DF0 *q = &action_vars;
+    GameVars_u80195DF0 *q = &action_vars;
     s16 v;
 
     if (arg0 == 0) {
@@ -1969,7 +1969,7 @@ s32 player_is_injured(void) {
     s32 i;
 
     for (i = 0; i < 5; i++) {
-        if (action_vars.unkB4[i] > 0) {
+        if (action_vars.limb_damage[i] > 0) {
             return 1;
         }
     }
@@ -1978,18 +1978,18 @@ s32 player_is_injured(void) {
 
 s32 player_leave_trigger(void) {
     Player *p = &player_character;
-    Unk_801CC1E8 *o;
+    KajEvent *o;
 
     UnDeliverEvent(0xF3000001, 2);
     o = kaj_event_push(0x20);
     if (o != NULL) {
-        o->unkC = D_801E0600.unk0;
-        o->unk8 = D_801E0600.unk4;
-        o->unk10 = D_801E0600.unk8;
+        o->unkC = object_area_current.trigger;
+        o->unk8 = object_area_current.trigger_type;
+        o->unk10 = object_area_current.scene_trigger;
     }
-    D_801E0610.unk4 = D_801E0600.unk4;
-    D_801E0610.unk0 = D_801E0600.unk0;
-    D_801E0610.unk8 = D_801E0600.unk8;
+    object_area_previous.trigger_type = object_area_current.trigger_type;
+    object_area_previous.trigger = object_area_current.trigger;
+    object_area_previous.scene_trigger = object_area_current.scene_trigger;
     p->flags &= ~4;
     return 0;
 }
@@ -1997,7 +1997,7 @@ s32 player_leave_trigger(void) {
 void player_move_to_done(Unk_8019A07C *arg0) {
     Unk_8019A07C_3C *e = arg0->unk3C;
     Player *p = &player_character;
-    Unk_801DFFE8 *s = &D_801DFFE8;
+    EventState *s = &event_state;
 
     p->pos_x = e->unk14;
     p->pos_y = e->unk18;
@@ -2018,10 +2018,10 @@ void player_move_to_done(Unk_8019A07C *arg0) {
         p->flags &= ~e->unk2;
         break;
     }
-    if (s->unk12 & 0x20) {
-        s->unk12 &= ~0x20;
-        if (s->unk12 == 0) {
-            s->unk6 = 1;
+    if (s->wait_flags & 0x20) {
+        s->wait_flags &= ~0x20;
+        if (s->wait_flags == 0) {
+            s->state = 1;
         }
     }
     p->unk48 = -1;
@@ -2030,101 +2030,101 @@ void player_move_to_done(Unk_8019A07C *arg0) {
     }
 }
 
-void player_update_map_cursor(Player *arg0, Unk_801E07C0 *arg1) {
+void player_update_map_cursor(Player *arg0, RoadMap *arg1) {
     s32 dir;
 
     if (arg1->unk2 != 0) {
         if (arg0->unk60 < -625 || arg0->unk60 >= 1176 || arg0->unk68 < -425 || arg0->unk68 >= 926) {
-            if (arg1->unk8[2] != 0) {
-                arg1->unk8[2] = 0;
+            if (arg1->part1[2] != 0) {
+                arg1->part1[2] = 0;
             }
         } else {
-            if (arg1->unk8[2] == 0) {
-                arg1->unk8[2] = 1;
+            if (arg1->part1[2] == 0) {
+                arg1->part1[2] = 1;
             }
             dir = (arg0->yaw + 23) / 45;
             if (dir >= 8) {
                 dir = 0;
             }
-            arg1->unk8[12] = dir % 4;
-            arg1->unk8[13] = dir / 4;
-            arg1->unk8[5] = arg0->unk60 / 10 + 116;
-            arg1->unk8[6] = 152 - arg0->unk68 / 10;
+            arg1->part1[12] = dir % 4;
+            arg1->part1[13] = dir / 4;
+            arg1->part1[5] = arg0->unk60 / 10 + 116;
+            arg1->part1[6] = 152 - arg0->unk68 / 10;
         }
     } else {
         if (arg0->unk60 < -2425 || arg0->unk60 >= 2976 || arg0->unk68 < -2225 || arg0->unk68 >= 3176) {
-            if (arg1->unk8[2] != 0) {
-                arg1->unk8[2] = 0;
+            if (arg1->part1[2] != 0) {
+                arg1->part1[2] = 0;
             }
         } else {
-            if (arg1->unk8[2] == 0) {
-                arg1->unk8[2] = 1;
+            if (arg1->part1[2] == 0) {
+                arg1->part1[2] = 1;
             }
             dir = (arg0->yaw + 23) / 45;
             if (dir >= 8) {
                 dir = 0;
             }
-            arg1->unk8[12] = dir % 4;
-            arg1->unk8[13] = dir / 4;
-            arg1->unk8[5] = arg0->unk60 / 40 + 137;
-            arg1->unk8[6] = 135 - arg0->unk68 / 40;
+            arg1->part1[12] = dir % 4;
+            arg1->part1[13] = dir / 4;
+            arg1->part1[5] = arg0->unk60 / 40 + 137;
+            arg1->part1[6] = 135 - arg0->unk68 / 40;
         }
     }
 }
 
 s32 player_update_map(PlayerStatus *arg0) {
-    Unk_801E0368_u80195DF0 *o = &action_vars;
+    GameVars_u80195DF0 *o = &action_vars;
     Player *e = arg0->player;
-    Unk_801E07C0 *p = &D_801E07C0;
-    Unk_801D7FB0 *q;
+    RoadMap *p = &roadmap_state;
+    CarNavi *q;
 
     if (e->vehicle_mode >= 2) {
         return 0;
     }
-    if (p->unk0 != 2) {
+    if (p->mode != 2) {
         if (!(kaj_system.pad_prev & 0x100) && (kaj_system.pad_now & 0x100)) {
-            if (p->unk0 == 1) {
+            if (p->mode == 1) {
                 if (p->unk2 == 0) {
-                    q = &D_801D7FB0;
+                    q = &vehicle_navi;
                     sound_se_play(0x13);
-                    if (q->unk0 != 0) {
+                    if (q->active != 0) {
                         if (q->unk10 != NULL) {
-                            q->unk10->unk4 = 0;
+                            q->unk10->visible = 0;
                         }
-                        if (q->unkC != NULL) {
-                            q->unkC->unk4 = 0;
+                        if (q->dest_sprite != NULL) {
+                            q->dest_sprite->visible = 0;
                         }
                     }
                     p->unk2 = 1;
-                    if (p->unkC[2] == 0) {
-                        p->unkC[2] = !p->unkC[2];
+                    if (p->part2[2] == 0) {
+                        p->part2[2] = !p->part2[2];
                     }
                 } else {
                     sound_se_play(0x13);
-                    p->unk0 = 2;
+                    p->mode = 2;
                     p->unk2 = 0;
-                    p->unk8[2] = 0;
-                    p->unkC[2] = 0;
+                    p->part1[2] = 0;
+                    p->part2[2] = 0;
                     effect_start_sprite_slide(3, 0x405, 1);
                 }
-            } else if (p->unk0 == 0 && o->unk24C == 0) {
-                q = &D_801D7FB0;
+            } else if (p->mode == 0 && o->menu_busy == 0) {
+                q = &vehicle_navi;
                 sound_se_play(0x13);
-                if (q->unk0 != 0) {
+                if (q->active != 0) {
                     if (q->unk10 != NULL) {
-                        q->unk10->unk4 = 0;
+                        q->unk10->visible = 0;
                     }
-                    if (q->unkC != NULL) {
-                        q->unkC->unk4 = 0;
+                    if (q->dest_sprite != NULL) {
+                        q->dest_sprite->visible = 0;
                     }
                 }
                 text_close();
-                p->unk0 = 2;
+                p->mode = 2;
                 p->unk2 = 0;
                 effect_start_sprite_slide(2, 0x405, 1);
             }
         }
-        if (p->unk0 != 1) {
+        if (p->mode != 1) {
             return 0;
         }
         player_update_map_cursor(e, p);

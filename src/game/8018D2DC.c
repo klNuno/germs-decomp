@@ -1,9 +1,9 @@
 #include "common.h"
 #include "game/types.h"
 
-void kaj_ll_insert_before(Unk_801DFE5C *arg0, s32 arg1);
-void kaj_ll_insert_after(Unk_801DFE5C *arg0, s32 arg1);
-Unk_801DFE5C *mod_list;
+void kaj_ll_insert_before(ModelList *arg0, s32 arg1);
+void kaj_ll_insert_after(ModelList *arg0, s32 arg1);
+ModelList *mod_list;
 extern SceneTables object_scene_tables;
 void free3(void *ptr);
 typedef struct {
@@ -14,17 +14,17 @@ typedef struct {
     u8 unk12[0x4];
     s16 unk16;
 } Unk_801DFF08;
-extern Unk_801DFFE8 D_801DFFE8;
+extern EventState event_state;
 Unk_801DFF08 *mod_finished;
 void UnDeliverEvent(u32 ev, u32 spec);
-Unk_801CC1E8 *kaj_event_push(s32 arg0);
+KajEvent *kaj_event_push(s32 arg0);
 void mod_set_anim(void *arg0, s16 arg1, s16 arg2);
-extern Unk_8018F590 *mod_npcrec_table[];
+extern NpcRecord *mod_npcrec_table[];
 extern s16 action_vars[];
-Unk_8018E56C *mod_find(u16 arg0);
-void mod_setup(Unk_8018E56C *arg0, s32 arg1, s32 arg2, s32 arg3);
-void mod_place_npcrec(Unk_8018F590 *arg0, Unk_8018E56C *arg1);
-void mod_draw(s32 arg0, Unk_8018E56C *arg1, u16 arg2);
+Model *mod_find(u16 arg0);
+void mod_setup(Model *arg0, s32 arg1, s32 arg2, s32 arg3);
+void mod_place_npcrec(NpcRecord *arg0, Model *arg1);
+void mod_draw(s32 arg0, Model *arg1, u16 arg2);
 typedef struct {
     s32 unk0;
     s32 unk4;
@@ -50,7 +50,7 @@ typedef struct {
     s16 unk42;
     s16 unk44;
     u8 unk46[0x2];
-    Unk_8018F590 *unk48;
+    NpcRecord *unk48;
 } Unk_8018F958_3C;
 typedef struct {
     u8 unk0[0x22];
@@ -65,11 +65,11 @@ typedef struct {
     void *unk38;
     Unk_8018F958_3C *unk3C;
 } Unk_8018F958;
-s16 kaj_ll_at_tail(Unk_801DFE5C *arg0);
+s16 kaj_ll_at_tail(ModelList *arg0);
 Npc *npc_find(s16 arg0, u16 arg1);
-Unk_8018F590 *mod_npcrec_find(u16 arg0);
+NpcRecord *mod_npcrec_find(u16 arg0);
 void mod_free_by_id(u16 arg0);
-void kaj_ll_remove_to_prev(Unk_801DFE5C *arg0);
+void kaj_ll_remove_to_prev(ModelList *arg0);
 void mod_npcrec_reset_all(void);
 extern char D_80170A80[];
 void *kaj_malloc(u32 size);
@@ -81,7 +81,7 @@ void kaj_tmd_unmap(s32 arg0, s32 arg1);
 extern s32 D_801E6DB4[];
 void *kaj_tod_set_packet(void *arg0, void *arg1, s32 *arg2, void *arg3, s32 arg4, s32 arg5);
 void effect_weapon_check_fire_frame(s32 arg0);
-void *kaj_tod_set_frame(u32 arg0, Unk_801D1088 *arg1, void *arg2, s32 *arg3, void *arg4, s32 arg5, s32 arg6);
+void *kaj_tod_set_frame(u32 arg0, TodFrame *arg1, void *arg2, s32 *arg3, void *arg4, s32 arg5, s32 arg6);
 void EnterCriticalSection(void);
 void ExitCriticalSection(void);
 void DeliverEvent(u32 ev, u32 spec);
@@ -91,7 +91,7 @@ typedef struct {
     s16 unk4;
     s16 unk6;
 } Unk_8018E8B8;
-extern Player *D_801E076C[];
+extern Player *player_status_player[];
 void RotMatrix(Unk_8018E8B8 *arg0, void *arg1);
 void GsSetLsMatrix(void *m);
 s16 block_point_on_model(void *arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4);
@@ -126,13 +126,13 @@ typedef struct {
 } Unk_8018EED4;
 s32 atoi(char *s);
 void mod_set_anim_by_id(u16 arg0, s16 arg1, s16 arg2);
-void mod_npcrec_move_to(Unk_8018F590 *arg0, s32 arg1, s32 arg2, s32 arg3, s16 arg4, s16 arg5, s16 arg6, s32 arg7);
+void mod_npcrec_move_to(NpcRecord *arg0, s32 arg1, s32 arg2, s32 arg3, s16 arg4, s16 arg5, s16 arg6, s32 arg7);
 
 INCLUDE_RODATA("asm/nonmatchings/game/8018D2DC", D_80170A80);
 
 INCLUDE_RODATA("asm/nonmatchings/game/8018D2DC", D_80170AA0);
 
-void mod_setup(Unk_8018E56C *arg0, s32 arg1, s32 arg2, s32 arg3) {
+void mod_setup(Model *arg0, s32 arg1, s32 arg2, s32 arg3) {
     Unk_8018D2DC *h;
     s32 n;
     s32 i;
@@ -145,62 +145,62 @@ void mod_setup(Unk_8018E56C *arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 *q;
     Unk_8018E8B8 rot;
 
-    if (arg0->unk4 == 0) {
-        h = (Unk_8018D2DC *)arg0->unk90;
-        arg0->unk2 = (u8)arg2;
-        arg0->unk10 = 0;
-        arg0->unk0 = h->unk0;
-        arg0->unk14 = h->unk2;
-        arg0->unk1C = (s32)arg0->unk90 + h->unk8;
-        arg0->unk20 = (s32)arg0->unk90 + h->unkC;
-        arg0->unk30 = NULL;
+    if (arg0->ready == 0) {
+        h = (Unk_8018D2DC *)arg0->data;
+        arg0->kind = (u8)arg2;
+        arg0->loop = 0;
+        arg0->id = h->unk0;
+        arg0->anim_count = h->unk2;
+        arg0->tmd_ids = (s32)arg0->data + h->unk8;
+        arg0->tmd = (s32)arg0->data + h->unkC;
+        arg0->tmd_objects = NULL;
         n = h->unk4;
-        kaj_tmd_map((void *)arg0->unk20);
+        kaj_tmd_map((void *)arg0->tmd);
         if (h->unk10 != 0) {
-            kaj_tmd_load(&arg0->unk30, (u8 *)arg0->unk90 + h->unk10, &arg0->unk3C);
+            kaj_tmd_load(&arg0->tmd_objects, (u8 *)arg0->data + h->unk10, &arg0->coord_flg);
         }
-        arg0->unk28 = kaj_malloc(0xC);
-        if (arg0->unk28 == NULL) {
+        arg0->obj_table = kaj_malloc(0xC);
+        if (arg0->obj_table == NULL) {
             kaj_abend(3, "Error Allocating GsOBJTABLE2", mod_str_file, 0x8E);
         }
-        arg0->unk2C = kaj_malloc(n * 16);
-        if (arg0->unk2C == NULL) {
+        arg0->dobj_table = kaj_malloc(n * 16);
+        if (arg0->dobj_table == NULL) {
             kaj_abend(3, "Error Allocating GsDOBJ2 Table", mod_str_file, 0x92);
         }
-        arg0->unk38 = kaj_malloc(n * 80);
-        if (arg0->unk38 == NULL) {
+        arg0->coord_table = kaj_malloc(n * 80);
+        if (arg0->coord_table == NULL) {
             kaj_abend(3, "Error Allocating GsCOORDINATE2", mod_str_file, 0x97);
         }
-        arg0->unk8C = kaj_malloc(n * 40);
-        if (arg0->unk8C == NULL) {
+        arg0->coord_params = kaj_malloc(n * 40);
+        if (arg0->coord_params == NULL) {
             kaj_abend(3, "Error Allocating GsCOORD2PARAM", mod_str_file, 0x9C);
         }
-        arg0->unk24 = kaj_malloc(arg0->unk14 * 4);
-        if (arg0->unk24 == NULL) {
+        arg0->tod_table = kaj_malloc(arg0->anim_count * 4);
+        if (arg0->tod_table == NULL) {
             kaj_abend(3, "Error Allocating TOD Table", mod_str_file, 0xA0);
         }
-        p = (s32 *)((u8 *)arg0->unk90 + h->unk14);
-        for (i = 0; i < arg0->unk14; i++) {
+        p = (s32 *)((u8 *)arg0->data + h->unk14);
+        for (i = 0; i < arg0->anim_count; i++) {
             len = *p++;
-            ((s32 **)arg0->unk24)[i] = p;
+            ((s32 **)arg0->tod_table)[i] = p;
             p += len >> 2;
         }
-        kaj_tod_init_table(arg0->unk28, arg0->unk2C, arg0->unk38, arg0->unk8C, n);
-        arg0->unk54 = 0;
-        arg0->unk58 = 0;
-        arg0->unk5C = 0;
+        kaj_tod_init_table(arg0->obj_table, arg0->dobj_table, arg0->coord_table, arg0->coord_params, n);
+        arg0->coord_tx = 0;
+        arg0->coord_ty = 0;
+        arg0->coord_tz = 0;
         if (arg1 == 0) {
-            arg0->unk34 = (s32)&arg0->unk3C;
-            GsInitCoordinate2(NULL, &arg0->unk3C);
+            arg0->parent_coord = (s32)&arg0->coord_flg;
+            GsInitCoordinate2(NULL, &arg0->coord_flg);
         } else {
-            arg0->unk34 = arg1;
-            GsInitCoordinate2((void *)arg1, &arg0->unk3C);
+            arg0->parent_coord = arg1;
+            GsInitCoordinate2((void *)arg1, &arg0->coord_flg);
         }
         rot.unk0 = 0;
         rot.unk2 = 0;
         rot.unk4 = 0;
-        RotMatrix(&rot, &arg0->unk40);
-        q = ((s32 **)arg0->unk24)[(u16)arg3];
+        RotMatrix(&rot, &arg0->coord_m);
+        q = ((s32 **)arg0->tod_table)[(u16)arg3];
         q++;
         end = *q++;
         j = q[1];
@@ -208,19 +208,19 @@ void mod_setup(Unk_8018E56C *arg0, s32 arg1, s32 arg2, s32 arg3) {
             cnt = ((u16 *)q)[1];
             q += 2;
             for (k = 0; k < cnt; k++) {
-                q = kaj_tod_set_packet(q, arg0->unk28, (s32 *)arg0->unk1C, (void *)arg0->unk20, 0, arg0->unk34);
+                q = kaj_tod_set_packet(q, arg0->obj_table, (s32 *)arg0->tmd_ids, (void *)arg0->tmd, 0, arg0->parent_coord);
             }
         }
-        arg0->unk16 = arg3;
-        arg0->unk18 = (s32)q;
-        arg0->unk4 = 1;
-        arg0->unk3C = 0;
+        arg0->anim = arg3;
+        arg0->tod_ptr = (s32)q;
+        arg0->ready = 1;
+        arg0->coord_flg = 0;
     }
 }
 
 void mod_create(s16 *arg0) {
-    Unk_8018E56C *mod;
-    Unk_8018E56C **pp = &mod;
+    Model *mod;
+    Model **pp = &mod;
     Npc *e;
     u16 id;
 
@@ -228,15 +228,15 @@ void mod_create(s16 *arg0) {
     if (*pp == NULL) {
         kaj_abend(3, D_80170A80, mod_str_file, 0x56);
     }
-    (*pp)->unk2 = 3;
-    (*pp)->unk10 = 0;
-    (*pp)->unk4 = 0;
-    (*pp)->unk6 = 0;
-    (*pp)->unk8 = 0;
+    (*pp)->kind = 3;
+    (*pp)->loop = 0;
+    (*pp)->ready = 0;
+    (*pp)->owns_data = 0;
+    (*pp)->playing = 0;
     (*pp)->unkA = 0;
-    (*pp)->unkC = -1;
-    (*pp)->unkE = -1;
-    mod->unk90 = arg0;
+    (*pp)->frame = -1;
+    (*pp)->end_frame = -1;
+    mod->data = arg0;
     id = *arg0;
     if (id < 0x440) {
         e = npc_find(1, id);
@@ -250,20 +250,20 @@ void mod_create(s16 *arg0) {
 }
 
 void mod_relocate(s32 *arg0, s32 *arg1) {
-    Unk_801DFE5C *list = mod_list;
-    Unk_8018E56C *item;
-    Unk_8018E56C *t;
+    ModelList *list = mod_list;
+    Model *item;
+    Model *t;
     s32 n;
     s32 i;
     s32 *p;
 
-    if (list->unkC == 0) {
+    if (list->count == 0) {
         item = NULL;
     } else {
-        list->unk8 = list->unk0;
+        list->cursor = list->head;
         while (1) {
-            t = list->unk8->unk8;
-            if (t != NULL && (s32 *)t->unk90 == arg0) {
+            t = list->cursor->data;
+            if (t != NULL && (s32 *)t->data == arg0) {
                 item = t;
                 break;
             }
@@ -271,74 +271,74 @@ void mod_relocate(s32 *arg0, s32 *arg1) {
                 item = NULL;
                 break;
             }
-            list->unk8 = list->unk8->unk4;
+            list->cursor = list->cursor->next;
         }
     }
     if (item != NULL) {
         n = arg0 - arg1;
-        if (item->unk18 != 0) {
-            item->unk18 -= n * 4;
+        if (item->tod_ptr != 0) {
+            item->tod_ptr -= n * 4;
         }
-        item->unk1C -= n * 4;
-        item->unk20 -= n * 4;
-        kaj_tmd_unmap(item->unk20, n);
-        for (i = 0; i < item->unk14; i++) {
-            ((s32 *)item->unk24)[i] -= n * 4;
+        item->tmd_ids -= n * 4;
+        item->tmd -= n * 4;
+        kaj_tmd_unmap(item->tmd, n);
+        for (i = 0; i < item->anim_count; i++) {
+            ((s32 *)item->tod_table)[i] -= n * 4;
         }
-        *(void **)item->unk28 = item->unk2C;
-        p = (s32 *)item->unk2C;
-        for (i = 0; i < ((s32 *)item->unk28)[1]; i++, p += 4) {
+        *(void **)item->obj_table = item->dobj_table;
+        p = (s32 *)item->dobj_table;
+        for (i = 0; i < ((s32 *)item->obj_table)[1]; i++, p += 4) {
             if (p[2] != 0) {
                 p[2] -= n * 4;
             }
         }
-        if (item->unk30 != NULL) {
-            ((s32 *)item->unk30)[2] -= n * 4;
+        if (item->tmd_objects != NULL) {
+            ((s32 *)item->tmd_objects)[2] -= n * 4;
             kaj_tmd_unmap((s32)arg1 + arg1[4], n);
         }
-        item->unk90 = (s16 *)arg1;
+        item->data = (s16 *)arg1;
     }
 }
 
 void mod_free_pooled(void) {
-    Unk_801DFE5C *list = mod_list;
-    Unk_8018E56C *mod;
+    ModelList *list = mod_list;
+    Model *mod;
     Npc *e;
-    Unk_8018F590 *f;
+    NpcRecord *f;
     u16 id;
 
-    if (list->unkC == 0) {
+    if (list->count == 0) {
         return;
     }
-    list->unk8 = list->unk0;
+    list->cursor = list->head;
     while (1) {
-        mod = list->unk8->unk8;
-        if (mod != NULL && mod->unk6 == 0) {
-            id = mod->unk0;
+        mod = list->cursor->data;
+        if (mod != NULL && mod->owns_data == 0) {
+            id = mod->id;
             if (id >= 0x440) {
                 f = mod_npcrec_find(id - 0x440);
                 if (f != NULL) {
-                    f->unk1B = 1;
+                    f->shown = 1;
                 }
             } else {
-                e = npc_find(1, mod->unk0);
+                e = npc_find(1, mod->id);
                 if (e != NULL) {
                     e->unk4 = 0;
                 }
             }
             if (mod != NULL) {
-                if (mod->unk4 != 0) {
-                    free3(mod->unk28);
-                    free3(mod->unk2C);
-                    free3(mod->unk38);
-                    free3(mod->unk8C);
-                    free3(mod->unk24);
+                if (mod->ready != 0) {
+                    free3(mod->obj_table);
+                    free3(mod->dobj_table);
+                    free3(mod->coord_table);
+                    free3(mod->coord_params);
+                    free3(mod->tod_table);
                 }
-                if (mod->unk30 != NULL) {
-                    free3(mod->unk30);
+                if (mod->tmd_objects != NULL) {
+                    free3(mod->tmd_objects);
                 }
-                if (mod->unk6 != 0) {
-                    free3(mod->unk90);
+                if (mod->owns_data != 0) {
+                    free3(mod->data);
                 }
                 free3(mod);
             }
@@ -347,7 +347,7 @@ void mod_free_pooled(void) {
         if (kaj_ll_at_tail(list) != 0) {
             break;
         }
-        list->unk8 = list->unk8->unk4;
+        list->cursor = list->cursor->next;
     }
 }
 
@@ -356,37 +356,37 @@ void mod_set_anim(void *arg0, s16 arg1, s16 arg2) {
     s32 i;
     s32 n;
 
-    if (((Unk_8018E56C *)arg0) != NULL && ((Unk_8018E56C *)arg0)->unk4 != 0) {
-        ((Unk_8018E56C *)arg0)->unk16 = arg1;
-        p = ((u16 **)((Unk_8018E56C *)arg0)->unk24)[arg1];
+    if (((Model *)arg0) != NULL && ((Model *)arg0)->ready != 0) {
+        ((Model *)arg0)->anim = arg1;
+        p = ((u16 **)((Model *)arg0)->tod_table)[arg1];
         p += 2;
-        ((Unk_8018E56C *)arg0)->unkE = p[0];
+        ((Model *)arg0)->end_frame = p[0];
         p += 2;
-        ((Unk_8018E56C *)arg0)->unkC = p[2];
+        ((Model *)arg0)->frame = p[2];
         n = p[1];
         p += 4;
         for (i = 0; i < n; i++) {
-            p = kaj_tod_set_packet(p, ((Unk_8018E56C *)arg0)->unk28, (s32 *)((Unk_8018E56C *)arg0)->unk1C, (void *)((Unk_8018E56C *)arg0)->unk20, 2, ((Unk_8018E56C *)arg0)->unk34);
+            p = kaj_tod_set_packet(p, ((Model *)arg0)->obj_table, (s32 *)((Model *)arg0)->tmd_ids, (void *)((Model *)arg0)->tmd, 2, ((Model *)arg0)->parent_coord);
         }
-        ((Unk_8018E56C *)arg0)->unk18 = (s32)p;
-        ((Unk_8018E56C *)arg0)->unkA = 2;
-        if (((Unk_8018E56C *)arg0)->unkE >= 2) {
+        ((Model *)arg0)->tod_ptr = (s32)p;
+        ((Model *)arg0)->unkA = 2;
+        if (((Model *)arg0)->end_frame >= 2) {
             if (arg2 == 0) {
-                ((Unk_8018E56C *)arg0)->unk10 = 0;
-                ((Unk_8018E56C *)arg0)->unkE = ((Unk_8018E56C *)arg0)->unkC + ((Unk_8018E56C *)arg0)->unkE - 1;
+                ((Model *)arg0)->loop = 0;
+                ((Model *)arg0)->end_frame = ((Model *)arg0)->frame + ((Model *)arg0)->end_frame - 1;
             } else if (arg2 < 0) {
-                ((Unk_8018E56C *)arg0)->unk10 = 1;
-                ((Unk_8018E56C *)arg0)->unkE = ((Unk_8018E56C *)arg0)->unkC + ((Unk_8018E56C *)arg0)->unkE - 1;
+                ((Model *)arg0)->loop = 1;
+                ((Model *)arg0)->end_frame = ((Model *)arg0)->frame + ((Model *)arg0)->end_frame - 1;
             } else {
-                ((Unk_8018E56C *)arg0)->unk10 = 0;
-                ((Unk_8018E56C *)arg0)->unkE = ((Unk_8018E56C *)arg0)->unkC + arg2 - 1;
+                ((Model *)arg0)->loop = 0;
+                ((Model *)arg0)->end_frame = ((Model *)arg0)->frame + arg2 - 1;
             }
-            ((Unk_8018E56C *)arg0)->unk8 = 1;
-            ((Unk_8018E56C *)arg0)->unk12 = 1;
+            ((Model *)arg0)->playing = 1;
+            ((Model *)arg0)->frame_step = 1;
             if (D_801E6DB4[0] == 4 || D_801E6DB4[0] == 5) {
-                ((Unk_8018E56C *)arg0)->unk12 = 2;
+                ((Model *)arg0)->frame_step = 2;
             } else if (D_801E6DB4[0] >= 6) {
-                ((Unk_8018E56C *)arg0)->unk12 = 3;
+                ((Model *)arg0)->frame_step = 3;
             }
         }
     }
@@ -395,38 +395,38 @@ void mod_set_anim(void *arg0, s16 arg1, s16 arg2) {
 INCLUDE_ASM("asm/nonmatchings/game/8018D2DC", mod_draw_player);
 
 void mod_update_all(void) {
-    Unk_801DFE5C *list = mod_list;
-    Unk_8018E56C *mod;
+    ModelList *list = mod_list;
+    Model *mod;
     s16 cnt;
     s32 k;
 
-    if (list->unkC == 0) {
+    if (list->count == 0) {
         return;
     }
-    list->unk8 = list->unk0;
+    list->cursor = list->head;
     while (1) {
-        mod = list->unk8->unk8;
-        if (mod != NULL && mod->unk4 != 0 && mod->unk8 != 0) {
-            cnt = mod->unk12;
+        mod = list->cursor->data;
+        if (mod != NULL && mod->ready != 0 && mod->playing != 0) {
+            cnt = mod->frame_step;
             {
 again:
-                if (mod->unkC < mod->unkE) {
-                    if ((u16)mod->unk2 == 1 && (u16)mod->unk16 == 2) {
-                        effect_weapon_check_fire_frame(mod->unkC);
+                if (mod->frame < mod->end_frame) {
+                    if ((u16)mod->kind == 1 && (u16)mod->anim == 2) {
+                        effect_weapon_check_fire_frame(mod->frame);
                     }
-                    mod->unkC++;
-                    mod->unk18 = (s32)kaj_tod_set_frame(mod->unkC, (Unk_801D1088 *)mod->unk18, mod->unk28, (s32 *)mod->unk1C, (void *)mod->unk20, (u16)mod->unkA, mod->unk34);
+                    mod->frame++;
+                    mod->tod_ptr = (s32)kaj_tod_set_frame(mod->frame, (TodFrame *)mod->tod_ptr, mod->obj_table, (s32 *)mod->tmd_ids, (void *)mod->tmd, (u16)mod->unkA, mod->parent_coord);
                     cnt--;
                     if (cnt > 0) {
                         goto again;
                     }
                 } else {
-                    mod->unk18 = (s32)kaj_tod_set_frame(mod->unkE, (Unk_801D1088 *)mod->unk18, mod->unk28, (s32 *)mod->unk1C, (void *)mod->unk20, (u16)mod->unkA, mod->unk34);
-                    k = (u16)mod->unk2;
-                    mod->unk8 = 0;
-                    mod->unkC = -1;
-                    mod->unkE = -1;
-                    if (k != 0 && (k != 1 || (u16)mod->unk16 != 5)) {
+                    mod->tod_ptr = (s32)kaj_tod_set_frame(mod->end_frame, (TodFrame *)mod->tod_ptr, mod->obj_table, (s32 *)mod->tmd_ids, (void *)mod->tmd, (u16)mod->unkA, mod->parent_coord);
+                    k = (u16)mod->kind;
+                    mod->playing = 0;
+                    mod->frame = -1;
+                    mod->end_frame = -1;
+                    if (k != 0 && (k != 1 || (u16)mod->anim != 5)) {
                         EnterCriticalSection();
                         mod_finished = (Unk_801DFF08 *)mod;
                         DeliverEvent(0xF3000002, 2);
@@ -438,66 +438,66 @@ again:
         if (kaj_ll_at_tail(list) != 0) {
             break;
         }
-        list->unk8 = list->unk8->unk4;
+        list->cursor = list->cursor->next;
     }
 }
 
-void mod_alloc(Unk_8018E56C **arg0, u32 arg1) {
+void mod_alloc(Model **arg0, u32 arg1) {
     *arg0 = kaj_malloc(0x94);
     if (*arg0 == NULL) {
         kaj_abend(3, D_80170A80, mod_str_file, 0x56);
     }
-    (*arg0)->unk2 = 3;
-    (*arg0)->unk10 = 0;
-    (*arg0)->unk4 = 0;
-    (*arg0)->unk6 = 0;
-    (*arg0)->unk8 = 0;
+    (*arg0)->kind = 3;
+    (*arg0)->loop = 0;
+    (*arg0)->ready = 0;
+    (*arg0)->owns_data = 0;
+    (*arg0)->playing = 0;
     (*arg0)->unkA = 0;
-    (*arg0)->unkC = -1;
-    (*arg0)->unkE = -1;
+    (*arg0)->frame = -1;
+    (*arg0)->end_frame = -1;
     if (arg1 != 0) {
-        (*arg0)->unk90 = kaj_malloc(arg1);
-        if ((*arg0)->unk90 == NULL) {
+        (*arg0)->data = kaj_malloc(arg1);
+        if ((*arg0)->data == NULL) {
             kaj_abend(3, D_80170AA0, mod_str_file, 0x64);
         }
-        (*arg0)->unk6 = 1;
+        (*arg0)->owns_data = 1;
     }
 }
 
-void mod_free(Unk_8018E56C *arg0) {
+void mod_free(Model *arg0) {
     if (arg0 != NULL) {
-        if (arg0->unk4 != 0) {
-            free3(arg0->unk28);
-            free3(arg0->unk2C);
-            free3(arg0->unk38);
-            free3(arg0->unk8C);
-            free3(arg0->unk24);
+        if (arg0->ready != 0) {
+            free3(arg0->obj_table);
+            free3(arg0->dobj_table);
+            free3(arg0->coord_table);
+            free3(arg0->coord_params);
+            free3(arg0->tod_table);
         }
-        if (arg0->unk30 != NULL) {
-            free3(arg0->unk30);
+        if (arg0->tmd_objects != NULL) {
+            free3(arg0->tmd_objects);
         }
-        if (arg0->unk6 != 0) {
-            free3(arg0->unk90);
+        if (arg0->owns_data != 0) {
+            free3(arg0->data);
         }
         free3(arg0);
     }
 }
 
 void mod_on_data_free(s16 *arg0) {
-    Unk_801DFE5C *list = mod_list;
-    Unk_8018E56C *item;
-    Unk_8018E56C *t;
+    ModelList *list = mod_list;
+    Model *item;
+    Model *t;
     Npc *e;
-    Unk_8018F590 *f;
+    NpcRecord *f;
     s16 id;
 
-    if (list->unkC == 0) {
+    if (list->count == 0) {
         item = NULL;
     } else {
-        list->unk8 = list->unk0;
+        list->cursor = list->head;
         while (1) {
-            t = list->unk8->unk8;
-            if (t != NULL && t->unk90 == arg0) {
+            t = list->cursor->data;
+            if (t != NULL && t->data == arg0) {
                 item = t;
                 break;
             }
@@ -505,16 +505,16 @@ void mod_on_data_free(s16 *arg0) {
                 item = NULL;
                 break;
             }
-            list->unk8 = list->unk8->unk4;
+            list->cursor = list->cursor->next;
         }
     }
     if (item != NULL) {
-        id = *item->unk90;
+        id = *item->data;
         mod_free_by_id(id);
         if (id >= 0x440) {
             f = mod_npcrec_find(id - 0x440);
             if (f != NULL) {
-                f->unk1B = 1;
+                f->shown = 1;
             }
         } else {
             e = npc_find(1, id);
@@ -526,41 +526,41 @@ void mod_on_data_free(s16 *arg0) {
 }
 
 void mod_list_add(s32 arg0) {
-    if (mod_list->unkC == 0) {
+    if (mod_list->count == 0) {
         kaj_ll_insert_before(mod_list, arg0);
     } else {
-        mod_list->unk8 = mod_list->unk4;
+        mod_list->cursor = mod_list->tail;
         kaj_ll_insert_after(mod_list, arg0);
     }
 }
 
 void mod_free_by_id(u16 arg0) {
-    Unk_801DFE5C *list = mod_list;
-    Unk_8018E56C *mod;
+    ModelList *list = mod_list;
+    Model *mod;
 
-    if (list->unkC == 0) {
+    if (list->count == 0) {
         return;
     }
     mod = mod_find(arg0);
     if (mod == NULL) {
         return;
     }
-    list->unk8 = list->unk0;
+    list->cursor = list->head;
     while (1) {
-        if (mod == list->unk8->unk8) {
+        if (mod == list->cursor->data) {
             if (mod != NULL) {
-                if (mod->unk4 != 0) {
-                    free3(mod->unk28);
-                    free3(mod->unk2C);
-                    free3(mod->unk38);
-                    free3(mod->unk8C);
-                    free3(mod->unk24);
+                if (mod->ready != 0) {
+                    free3(mod->obj_table);
+                    free3(mod->dobj_table);
+                    free3(mod->coord_table);
+                    free3(mod->coord_params);
+                    free3(mod->tod_table);
                 }
-                if (mod->unk30 != NULL) {
-                    free3(mod->unk30);
+                if (mod->tmd_objects != NULL) {
+                    free3(mod->tmd_objects);
                 }
-                if (mod->unk6 != 0) {
-                    free3(mod->unk90);
+                if (mod->owns_data != 0) {
+                    free3(mod->data);
                 }
                 free3(mod);
             }
@@ -570,32 +570,32 @@ void mod_free_by_id(u16 arg0) {
         if (kaj_ll_at_tail(list) != 0) {
             break;
         }
-        list->unk8 = list->unk8->unk4;
+        list->cursor = list->cursor->next;
     }
 }
 
 void mod_free_all(void) {
-    Unk_801DFE5C *list = mod_list;
-    Unk_8018E56C *mod;
+    ModelList *list = mod_list;
+    Model *mod;
 
     while (1) {
-        if (list->unkC == 0) {
+        if (list->count == 0) {
             break;
         }
-        mod = list->unk8->unk8;
+        mod = list->cursor->data;
         if (mod != NULL) {
-            if (mod->unk4 != 0) {
-                free3(mod->unk28);
-                free3(mod->unk2C);
-                free3(mod->unk38);
-                free3(mod->unk8C);
-                free3(mod->unk24);
+            if (mod->ready != 0) {
+                free3(mod->obj_table);
+                free3(mod->dobj_table);
+                free3(mod->coord_table);
+                free3(mod->coord_params);
+                free3(mod->tod_table);
             }
-            if (mod->unk30 != NULL) {
-                free3(mod->unk30);
+            if (mod->tmd_objects != NULL) {
+                free3(mod->tmd_objects);
             }
-            if (mod->unk6 != 0) {
-                free3(mod->unk90);
+            if (mod->owns_data != 0) {
+                free3(mod->data);
             }
             free3(mod);
         }
@@ -604,45 +604,45 @@ void mod_free_all(void) {
     mod_npcrec_reset_all();
 }
 
-Unk_8018E56C *mod_find(u16 arg0) {
-    Unk_801DFE5C *list = mod_list;
-    Unk_8018E56C *item;
+Model *mod_find(u16 arg0) {
+    ModelList *list = mod_list;
+    Model *item;
 
-    if (list->unkC == 0) {
+    if (list->count == 0) {
         return NULL;
     }
-    list->unk8 = list->unk0;
+    list->cursor = list->head;
     while (1) {
-        item = list->unk8->unk8;
-        if (item != NULL && *item->unk90 == arg0) {
+        item = list->cursor->data;
+        if (item != NULL && *item->data == arg0) {
             return item;
         }
         if (kaj_ll_at_tail(list) != 0) {
             break;
         }
-        list->unk8 = list->unk8->unk4;
+        list->cursor = list->cursor->next;
     }
     return NULL;
 }
 
 void mod_set_anim_by_id(u16 arg0, s16 arg1, s16 arg2) {
-    Unk_801DFE5C *list = mod_list;
-    Unk_8018E56C *item;
+    ModelList *list = mod_list;
+    Model *item;
 
-    if (list->unkC == 0) {
+    if (list->count == 0) {
         item = NULL;
     } else {
-        list->unk8 = list->unk0;
+        list->cursor = list->head;
         while (1) {
-            item = list->unk8->unk8;
-            if (item != NULL && *item->unk90 == arg0) {
+            item = list->cursor->data;
+            if (item != NULL && *item->data == arg0) {
                 break;
             }
             if (kaj_ll_at_tail(list) != 0) {
                 item = NULL;
                 break;
             }
-            list->unk8 = list->unk8->unk4;
+            list->cursor = list->cursor->next;
         }
     }
     mod_set_anim(item, arg1, arg2);
@@ -651,8 +651,8 @@ void mod_set_anim_by_id(u16 arg0, s16 arg1, s16 arg2) {
 INCLUDE_ASM("asm/nonmatchings/game/8018D2DC", mod_draw);
 
 s32 mod_finish_handler(void) {
-    Unk_801DFFE8 *s = &D_801DFFE8;
-    Unk_801CC1E8 *e;
+    EventState *s = &event_state;
+    KajEvent *e;
 
     UnDeliverEvent(0xF3000002, 2);
     e = kaj_event_push(0x200);
@@ -661,10 +661,10 @@ s32 mod_finish_handler(void) {
         e->unkC = mod_finished->unk2;
     }
     if (mod_finished->unk2 == 2) {
-        if (s->unk12 & 8) {
-            s->unk12 &= ~8;
-            if (s->unk12 == 0) {
-                s->unk6 = 1;
+        if (s->wait_flags & 8) {
+            s->wait_flags &= ~8;
+            if (s->wait_flags == 0) {
+                s->state = 1;
             }
         }
     }
@@ -675,38 +675,38 @@ s32 mod_finish_handler(void) {
     return 0;
 }
 
-void mod_place_npcrec(Unk_8018F590 *arg0, Unk_8018E56C *arg1) {
-    Player *g = D_801E076C[0];
+void mod_place_npcrec(NpcRecord *arg0, Model *arg1) {
+    Player *g = player_status_player[0];
     Unk_8018E8B8 rot;
 
-    arg1->unk54 = arg0->unk8 - g->cell_x * 12500;
-    arg1->unk58 = arg0->unkC + g->cell_y * 32000;
-    arg1->unk5C = arg0->unk10 - g->cell_z * 12500;
-    rot.unk0 = (arg0->unk14 << 12) / 360;
-    rot.unk2 = (arg0->unk16 << 12) / 360;
-    rot.unk4 = (arg0->unk18 << 12) / 360;
-    RotMatrix(&rot, arg1->unk40);
-    arg1->unk3C = 0;
+    arg1->coord_tx = arg0->pos_x - g->cell_x * 12500;
+    arg1->coord_ty = arg0->pos_y + g->cell_y * 32000;
+    arg1->coord_tz = arg0->pos_z - g->cell_z * 12500;
+    rot.unk0 = (arg0->rot_x << 12) / 360;
+    rot.unk2 = (arg0->rot_y << 12) / 360;
+    rot.unk4 = (arg0->rot_z << 12) / 360;
+    RotMatrix(&rot, arg1->coord_m);
+    arg1->coord_flg = 0;
 }
 
 void mod_npcrec_move_step(Unk_8018F958 *arg0) {
     Unk_8018F958_3C *p = arg0->unk3C;
-    Unk_8018F590 *e = p->unk48;
-    Unk_8018E56C *item;
+    NpcRecord *e = p->unk48;
+    Model *item;
 
-    e->unk8 = p->unk0 + p->unk20 * arg0->unk24 / arg0->unk26;
-    e->unkC = p->unk4 + p->unk24 * arg0->unk24 / arg0->unk26;
-    e->unk10 = p->unk8 + p->unk28 * arg0->unk24 / arg0->unk26;
-    e->unk14 = p->unk30 + p->unk40 * arg0->unk24 / arg0->unk26;
-    e->unk16 = p->unk32 + p->unk42 * arg0->unk24 / arg0->unk26;
-    e->unk18 = p->unk34 + p->unk44 * arg0->unk24 / arg0->unk26;
-    item = mod_find(e->unk6);
+    e->pos_x = p->unk0 + p->unk20 * arg0->unk24 / arg0->unk26;
+    e->pos_y = p->unk4 + p->unk24 * arg0->unk24 / arg0->unk26;
+    e->pos_z = p->unk8 + p->unk28 * arg0->unk24 / arg0->unk26;
+    e->rot_x = p->unk30 + p->unk40 * arg0->unk24 / arg0->unk26;
+    e->rot_y = p->unk32 + p->unk42 * arg0->unk24 / arg0->unk26;
+    e->rot_z = p->unk34 + p->unk44 * arg0->unk24 / arg0->unk26;
+    item = mod_find(e->model);
     if (item != NULL) {
         mod_place_npcrec(e, item);
     }
 }
 
-void mod_npcrec_move_to(Unk_8018F590 *arg0, s32 arg1, s32 arg2, s32 arg3, s16 arg4, s16 arg5, s16 arg6, s32 arg7) {
+void mod_npcrec_move_to(NpcRecord *arg0, s32 arg1, s32 arg2, s32 arg3, s16 arg4, s16 arg5, s16 arg6, s32 arg7) {
     Unk_8018F958 *t;
     Unk_8018F958_3C *p;
 
@@ -719,31 +719,31 @@ void mod_npcrec_move_to(Unk_8018F590 *arg0, s32 arg1, s32 arg2, s32 arg3, s16 ar
     t->unk34 = mod_npcrec_move_end;
     t->unk38 = mod_npcrec_move_end;
     t->unk26 = arg7 * 30;
-    if (arg0->unk8 == arg1 && arg0->unkC == arg2 && arg0->unk10 == arg3 &&
-        arg0->unk14 == arg4 && arg0->unk16 == arg5 && arg0->unk18 == arg6) {
+    if (arg0->pos_x == arg1 && arg0->pos_y == arg2 && arg0->pos_z == arg3 &&
+        arg0->rot_x == arg4 && arg0->rot_y == arg5 && arg0->rot_z == arg6) {
         t->unk26 = 0;
     }
     p = t->unk3C;
     p->unk48 = arg0;
-    p->unk0 = arg0->unk8;
-    p->unk4 = arg0->unkC;
-    p->unk8 = arg0->unk10;
-    p->unk30 = arg0->unk14;
-    p->unk32 = arg0->unk16;
-    p->unk34 = arg0->unk18;
+    p->unk0 = arg0->pos_x;
+    p->unk4 = arg0->pos_y;
+    p->unk8 = arg0->pos_z;
+    p->unk30 = arg0->rot_x;
+    p->unk32 = arg0->rot_y;
+    p->unk34 = arg0->rot_z;
     p->unk10 = arg1;
     p->unk14 = arg2;
     p->unk18 = arg3;
     p->unk38 = arg4;
     p->unk3A = arg5;
     p->unk3C = arg6;
-    p->unk20 = arg1 - arg0->unk8;
-    p->unk24 = arg2 - arg0->unkC;
-    p->unk28 = arg3 - arg0->unk10;
+    p->unk20 = arg1 - arg0->pos_x;
+    p->unk24 = arg2 - arg0->pos_y;
+    p->unk28 = arg3 - arg0->pos_z;
 loop:
-    p->unk40 = arg4 - arg0->unk14;
-    p->unk42 = arg5 - arg0->unk16;
-    p->unk44 = arg6 - arg0->unk18;
+    p->unk40 = arg4 - arg0->rot_x;
+    p->unk42 = arg5 - arg0->rot_y;
+    p->unk44 = arg6 - arg0->rot_z;
     if (p->unk40 > 180) {
         arg4 -= 360;
         goto loop;
@@ -768,20 +768,20 @@ loop:
         arg6 += 360;
         goto loop;
     }
-    arg0->unk1C = kaj_tss_start(t);
-    arg0->unk1E = 1;
+    arg0->move_task = kaj_tss_start(t);
+    arg0->moving = 1;
 }
 
-void mod_cmd_npcrec(Unk_8018EED4 *arg0, Unk_8018E56C *arg1) {
+void mod_cmd_npcrec(Unk_8018EED4 *arg0, Model *arg1) {
     SceneTables *p = &object_scene_tables;
-    Unk_8018F590 *e = p->unk50;
+    NpcRecord *e = p->unk50;
     Unk_8018EED4_0 *cmd = arg0->unk0;
     u16 id = cmd->unk4;
-    Unk_8018F590 *found;
-    Unk_8018F590 *t;
-    Unk_8018E56C *obj;
+    NpcRecord *found;
+    NpcRecord *t;
+    Model *obj;
     s32 i;
-    Unk_8018F590 *tb;
+    NpcRecord *tb;
     s16 *f;
     s32 x, y, z;
     s32 a, b;
@@ -790,7 +790,7 @@ void mod_cmd_npcrec(Unk_8018EED4 *arg0, Unk_8018E56C *arg1) {
         found = NULL;
     } else {
         for (i = 0; i < p->unk20; i++, e++) {
-            if (e->unk0 == id) {
+            if (e->id == id) {
                 found = e;
                 goto done;
             }
@@ -803,34 +803,34 @@ done:
     }
     switch (cmd->unk2) {
     case 0:
-        found->unk2 = atoi(arg0->unk8[0]);
+        found->enabled = atoi(arg0->unk8[0]);
         break;
     case 1:
-        found->unk6 = atoi(arg0->unk8[0]);
+        found->model = atoi(arg0->unk8[0]);
         tb = mod_npcrec_table[0];
         f = action_vars;
         t = tb + cmd->unk4;
         if (f[cmd->unk4] == 0) {
             break;
         }
-        if (t->unk1A == 0) {
-            t->unk1A = 1;
-            t->unk8 *= 10;
-            t->unkC *= 10;
-            t->unk10 *= 10;
+        if (t->scaled == 0) {
+            t->scaled = 1;
+            t->pos_x *= 10;
+            t->pos_y *= 10;
+            t->pos_z *= 10;
         }
-        t->unk1B = 1;
-        t->unk1C = -1;
-        t->unk1E = 0;
-        obj = mod_find(t->unk6);
+        t->shown = 1;
+        t->move_task = -1;
+        t->moving = 0;
+        obj = mod_find(t->model);
         if (obj == NULL) {
             break;
         }
-        if (obj->unk4 == 0) {
+        if (obj->ready == 0) {
             mod_setup(obj, 0, 2, 0);
         }
         mod_place_npcrec(t, obj);
-        t->unk1B = 2;
+        t->shown = 2;
         break;
     case 3:
         x = atoi(arg0->unk8[0]) * 10;
@@ -839,48 +839,48 @@ done:
         a = atoi(arg0->unk8[3]);
         b = atoi(arg0->unk8[4]);
         if (atoi(arg0->unk8[5]) == 1) {
-            arg1->unk6 = 4;
-            arg1->unk12 |= 0x10;
+            arg1->owns_data = 4;
+            arg1->frame_step |= 0x10;
         }
         mod_npcrec_move_to(found, x, y, z, 0, a, 0, b);
         break;
     case 4:
         if (atoi(arg0->unk8[1]) == 1) {
-            arg1->unk6 = 4;
-            arg1->unk12 |= 8;
+            arg1->owns_data = 4;
+            arg1->frame_step |= 8;
         }
-        ((void (*)())mod_set_anim_by_id)((s16)found->unk6, (s16)atoi(arg0->unk8[0]), (s16)atoi(arg0->unk8[2]));
+        ((void (*)())mod_set_anim_by_id)((s16)found->model, (s16)atoi(arg0->unk8[0]), (s16)atoi(arg0->unk8[2]));
         break;
     }
 }
 
 void mod_npcrec_update_all(void) {
-    Unk_8018F590 *p;
+    NpcRecord *p;
     Player *cam;
-    Unk_8018E56C *mod;
-    Unk_8018E56C *mod2;
+    Model *mod;
+    Model *mod2;
     SceneTables *g;
     s32 i;
 
     g = &object_scene_tables;
     p = g->unk50;
-    cam = D_801E076C[0];
+    cam = player_status_player[0];
     if (g->unk20 != 0) {
         for (i = 0; i < g->unk20; i++, p++) {
-            if (p->unk1A != 0 && p->unk1B != 0) {
-                if (p->unk1B == 1) {
-                    mod = mod_find(p->unk6);
+            if (p->scaled != 0 && p->shown != 0) {
+                if (p->shown == 1) {
+                    mod = mod_find(p->model);
                     if (mod != NULL) {
-                        if (mod->unk4 == 0) {
+                        if (mod->ready == 0) {
                             mod_setup(mod, 0, 2, 0);
                         }
                         mod_place_npcrec(p, mod);
-                        p->unk1B = 2;
+                        p->shown = 2;
                     }
-                } else if (p->unk2 != 0 && p->unk1E == 0 && p->unk0 != 0) {
-                    p->unk16 = mail_wrap_angle((ratan2(cam->pos_x + cam->cell_x * 12500 - p->unk8,
-                                                     cam->pos_z + cam->cell_z * 12500 - p->unk10) * 360 >> 12) - 180);
-                    mod2 = mod_find(p->unk6);
+                } else if (p->enabled != 0 && p->moving == 0 && p->id != 0) {
+                    p->rot_y = mail_wrap_angle((ratan2(cam->pos_x + cam->cell_x * 12500 - p->pos_x,
+                                                     cam->pos_z + cam->cell_z * 12500 - p->pos_z) * 360 >> 12) - 180);
+                    mod2 = mod_find(p->model);
                     if (mod2 != NULL) {
                         mod_place_npcrec(p, mod2);
                     }
@@ -891,31 +891,31 @@ void mod_npcrec_update_all(void) {
 }
 
 void mod_npcrec_show(u16 arg0, s16 arg1) {
-    Unk_8018F590 *e;
+    NpcRecord *e;
     s16 *f;
-    Unk_8018F590 *b;
-    Unk_8018E56C *mod;
+    NpcRecord *b;
+    Model *mod;
 
     b = mod_npcrec_table[0];
     f = action_vars;
     e = b + arg0;
     if (f[arg0] != 0 || arg1 != 0) {
-        if (e->unk1A == 0) {
-            e->unk1A = 1;
-            e->unk8 *= 10;
-            e->unkC *= 10;
-            e->unk10 *= 10;
+        if (e->scaled == 0) {
+            e->scaled = 1;
+            e->pos_x *= 10;
+            e->pos_y *= 10;
+            e->pos_z *= 10;
         }
-        e->unk1B = 1;
-        e->unk1C = -1;
-        e->unk1E = 0;
-        mod = mod_find(e->unk6);
+        e->shown = 1;
+        e->move_task = -1;
+        e->moving = 0;
+        mod = mod_find(e->model);
         if (mod != NULL) {
-            if (mod->unk4 == 0) {
+            if (mod->ready == 0) {
                 mod_setup(mod, 0, 2, 0);
             }
             mod_place_npcrec(e, mod);
-            e->unk1B = 2;
+            e->shown = 2;
         }
     }
 }
@@ -931,17 +931,17 @@ void mod_npcrec_free_table(void) {
     }
 }
 
-Unk_8018F590 *mod_npcrec_find(u16 arg0) {
+NpcRecord *mod_npcrec_find(u16 arg0) {
     SceneTables *p = &object_scene_tables;
     s32 n = p->unk20;
-    Unk_8018F590 *e = p->unk50;
+    NpcRecord *e = p->unk50;
     s32 i;
 
     if (n == 0) {
         return NULL;
     }
     for (i = 0; i < n; i++, e++) {
-        if (e->unk0 == arg0) {
+        if (e->id == arg0) {
             return e;
         }
     }
@@ -950,21 +950,21 @@ Unk_8018F590 *mod_npcrec_find(u16 arg0) {
 
 void mod_npcrec_rebase_all(s32 arg0, s32 arg1, s32 arg2) {
     SceneTables *p = &object_scene_tables;
-    Unk_8018F590 *e = p->unk50;
-    Unk_8018E56C *mod;
+    NpcRecord *e = p->unk50;
+    Model *mod;
     s32 i;
 
     if (p->unk20 == 0) {
         return;
     }
     for (i = 0; i < p->unk20; i++, e++) {
-        if (e->unk1A != 0 && e->unk2 != 0 && e->unk1B == 2) {
-            mod = mod_find(e->unk6);
+        if (e->scaled != 0 && e->enabled != 0 && e->shown == 2) {
+            mod = mod_find(e->model);
             if (mod != NULL) {
-                mod->unk54 = e->unk8 - arg0;
-                mod->unk58 = e->unkC - arg1;
-                mod->unk5C = e->unk10 - arg2;
-                mod->unk3C = 0;
+                mod->coord_tx = e->pos_x - arg0;
+                mod->coord_ty = e->pos_y - arg1;
+                mod->coord_tz = e->pos_z - arg2;
+                mod->coord_flg = 0;
             }
         }
     }
@@ -972,17 +972,17 @@ void mod_npcrec_rebase_all(s32 arg0, s32 arg1, s32 arg2) {
 
 void mod_npcrec_draw_all(s32 arg0) {
     SceneTables *p = &object_scene_tables;
-    Unk_8018F590 *e = p->unk50;
-    Unk_8018E56C *mod;
+    NpcRecord *e = p->unk50;
+    Model *mod;
     s32 i;
 
     if (p->unk20 == 0) {
         return;
     }
     for (i = 0; i < p->unk20; i++, e++) {
-        if (e != NULL && e->unk1A != 0 && e->unk2 != 0 && e->unk1B == 2) {
-            mod = mod_find(e->unk6);
-            if (mod != NULL && mod->unk4 != 0) {
+        if (e != NULL && e->scaled != 0 && e->enabled != 0 && e->shown == 2) {
+            mod = mod_find(e->model);
+            if (mod != NULL && mod->ready != 0) {
                 mod_draw(arg0, mod, e->unk4);
             }
         }
@@ -991,20 +991,20 @@ void mod_npcrec_draw_all(s32 arg0) {
 
 s16 mod_npcrec_find_at_point(s32 arg0, s32 arg1, s32 arg2) {
     SceneTables *p = &object_scene_tables;
-    Unk_8018F590 *e = p->unk50;
-    Unk_8018E56C *mod;
+    NpcRecord *e = p->unk50;
+    Model *mod;
     s32 i;
 
     if (p->unk20 == 0) {
         return -2;
     }
     for (i = 0; i < p->unk20; i++, e++) {
-        if (e->unk1A != 0 && e->unk2 != 0 && e->unk1B == 2) {
-            mod = mod_find(e->unk6);
-            if (mod != NULL && mod->unk4 != 0 && mod->unk30 != NULL) {
-                GsSetLsMatrix(mod->unk40);
-                if (block_point_on_model(mod->unk30, arg0, arg1, arg2, 1) != 0) {
-                    return e->unk0;
+        if (e->scaled != 0 && e->enabled != 0 && e->shown == 2) {
+            mod = mod_find(e->model);
+            if (mod != NULL && mod->ready != 0 && mod->tmd_objects != NULL) {
+                GsSetLsMatrix(mod->coord_m);
+                if (block_point_on_model(mod->tmd_objects, arg0, arg1, arg2, 1) != 0) {
+                    return e->id;
                 }
             }
         }
@@ -1014,36 +1014,36 @@ s16 mod_npcrec_find_at_point(s32 arg0, s32 arg1, s32 arg2) {
 
 void mod_npcrec_reset_all(void) {
     SceneTables *p = &object_scene_tables;
-    Unk_8018F590 *e = p->unk50;
+    NpcRecord *e = p->unk50;
     s32 i;
 
     for (i = 0; i < p->unk20; i++, e++) {
-        e->unk1B = 0;
+        e->shown = 0;
     }
 }
 
 void mod_npcrec_move_end(Unk_8018F958 *arg0) {
-    Unk_801DFFE8 *s = &D_801DFFE8;
+    EventState *s = &event_state;
     Unk_8018F958_3C *p = arg0->unk3C;
-    Unk_8018F590 *e = p->unk48;
-    Unk_8018E56C *item;
+    NpcRecord *e = p->unk48;
+    Model *item;
 
-    e->unk8 = p->unk10;
-    e->unkC = p->unk14;
-    e->unk10 = p->unk18;
-    e->unk14 = p->unk38;
-    e->unk16 = p->unk3A;
-    e->unk18 = p->unk3C;
-    e->unk1E = 0;
-    item = mod_find(e->unk6);
+    e->pos_x = p->unk10;
+    e->pos_y = p->unk14;
+    e->pos_z = p->unk18;
+    e->rot_x = p->unk38;
+    e->rot_y = p->unk3A;
+    e->rot_z = p->unk3C;
+    e->moving = 0;
+    item = mod_find(e->model);
     if (item != NULL) {
         mod_place_npcrec(e, item);
     }
-    if (s->unk12 & 0x10) {
-        s->unk12 &= ~0x10;
-        if (s->unk12 == 0) {
-            s->unk6 = 1;
+    if (s->wait_flags & 0x10) {
+        s->wait_flags &= ~0x10;
+        if (s->wait_flags == 0) {
+            s->state = 1;
         }
     }
-    e->unk1C = -1;
+    e->move_task = -1;
 }

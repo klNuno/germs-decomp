@@ -2,96 +2,96 @@
 #include "game/types.h"
 
 void free3(void *ptr);
-void kaj_ll_insert_before(Unk_801DFE80 *arg0, void *arg1);
-void kaj_ll_insert_after(Unk_801DFE80 *arg0, void *arg1);
-Unk_801DFE80 *D_801DFE80;
-void kaj_ll_remove_to_prev(Unk_801DFE80 *arg0);
-s16 kaj_ll_at_tail(Unk_801DFE80 *arg0);
+void kaj_ll_insert_before(DoorList *arg0, void *arg1);
+void kaj_ll_insert_after(DoorList *arg0, void *arg1);
+DoorList *door_list;
+void kaj_ll_remove_to_prev(DoorList *arg0);
+s16 kaj_ll_at_tail(DoorList *arg0);
 void *kaj_malloc(u32 size);
 void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
 extern char D_801DFCE8[];
 extern SceneTables object_scene_tables[];
-extern Unk_801E1040 D_801E1040;
+extern ScreenLight screen_light;
 void SsSepSetVol(s16 access_num, s16 seq_num, s16 voll, s16 volr);
 
-void door_create(Unk_801854B8 **arg0, u32 arg1) {
+void door_create(Door **arg0, u32 arg1) {
     *arg0 = kaj_malloc(0x80);
     if (*arg0 == NULL) {
         kaj_abend(3, "Error Allocating DOOR Pointer", D_801DFCE8, 0x23);
     }
-    (*arg0)->unk4 = 0;
-    (*arg0)->unk2 = 0;
-    (*arg0)->unk6 = 1;
-    (*arg0)->unk22 = 0;
+    (*arg0)->active = 0;
+    (*arg0)->axis = 0;
+    (*arg0)->visible = 1;
+    (*arg0)->speed = 0;
     (*arg0)->unk8 = 2;
-    (*arg0)->unkA = 0;
-    (*arg0)->unkC = 0;
-    (*arg0)->unkE = 0;
-    (*arg0)->unk22 = 0;
-    (*arg0)->unk24 = 0;
-    (*arg0)->unk10 = 0;
-    (*arg0)->unk78 = NULL;
-    (*arg0)->unk7C = NULL;
+    (*arg0)->state = 0;
+    (*arg0)->move_from = 0;
+    (*arg0)->move_to = 0;
+    (*arg0)->speed = 0;
+    (*arg0)->auto_return = 0;
+    (*arg0)->block = 0;
+    (*arg0)->tmd_objects = NULL;
+    (*arg0)->record = NULL;
     if (arg1 != 0) {
-        (*arg0)->unk7C = kaj_malloc(arg1);
-        if ((*arg0)->unk7C == NULL) {
+        (*arg0)->record = kaj_malloc(arg1);
+        if ((*arg0)->record == NULL) {
             kaj_abend(3, "Error Allocating DOOR Buffer", D_801DFCE8, 0x36);
         }
     }
 }
 
-void door_free(Unk_801854B8 *arg0) {
+void door_free(Door *arg0) {
     if (arg0 != NULL) {
-        free3(arg0->unk78);
-        free3(arg0->unk7C);
+        free3(arg0->tmd_objects);
+        free3(arg0->record);
         free3(arg0);
     }
 }
 
 void door_add(void *arg0) {
-    if (D_801DFE80->unkC == 0) {
-        kaj_ll_insert_before(D_801DFE80, arg0);
+    if (door_list->count == 0) {
+        kaj_ll_insert_before(door_list, arg0);
     } else {
-        D_801DFE80->unk8 = D_801DFE80->unk4;
-        kaj_ll_insert_after(D_801DFE80, arg0);
+        door_list->cursor = door_list->tail;
+        kaj_ll_insert_after(door_list, arg0);
     }
 }
 
 void door_free_all(void) {
-    Unk_801DFE80 *list = D_801DFE80;
-    Unk_801854B8 *item;
+    DoorList *list = door_list;
+    Door *item;
 
     while (1) {
-        if (list->unkC == 0) {
+        if (list->count == 0) {
             break;
         }
-        item = list->unk8->unk8;
+        item = list->cursor->data;
         if (item != NULL) {
-            free3(item->unk78);
-            free3(item->unk7C);
+            free3(item->tmd_objects);
+            free3(item->record);
             free3(item);
         }
         kaj_ll_remove_to_prev(list);
     }
 }
 
-Unk_801854B8 *door_find(u16 arg0) {
-    Unk_801DFE80 *list = D_801DFE80;
-    Unk_801854B8 *item;
+Door *door_find(u16 arg0) {
+    DoorList *list = door_list;
+    Door *item;
 
-    if (list->unkC == 0) {
+    if (list->count == 0) {
         return NULL;
     }
-    list->unk8 = list->unk0;
+    list->cursor = list->head;
     while (1) {
-        item = list->unk8->unk8;
-        if (item != NULL && item->unk0 == arg0) {
+        item = list->cursor->data;
+        if (item != NULL && item->id == arg0) {
             return item;
         }
         if (kaj_ll_at_tail(list) != 0) {
             break;
         }
-        list->unk8 = list->unk8->unk4;
+        list->cursor = list->cursor->next;
     }
     return NULL;
 }
@@ -99,40 +99,40 @@ Unk_801854B8 *door_find(u16 arg0) {
 INCLUDE_ASM("asm/nonmatchings/game/80185380", door_draw_all);
 
 void door_rebase_all(s32 arg0, s32 arg1, s32 arg2) {
-    Unk_801DFE80 *list = D_801DFE80;
-    Unk_801854B8 *item;
+    DoorList *list = door_list;
+    Door *item;
 
-    if (list->unkC == 0) {
+    if (list->count == 0) {
         return;
     }
-    list->unk8 = list->unk0;
+    list->cursor = list->head;
     while (1) {
-        item = list->unk8->unk8;
+        item = list->cursor->data;
         if (item != NULL) {
-            item->unk28 = 0;
-            item->unk40 = item->unk14 - arg0;
-            item->unk44 = item->unk18 - arg1;
-            item->unk48 = item->unk1C - arg2;
+            item->coord_flg = 0;
+            item->coord_tx = item->pos_x - arg0;
+            item->coord_ty = item->pos_y - arg1;
+            item->coord_tz = item->pos_z - arg2;
         }
         if (kaj_ll_at_tail(list) != 0) {
             break;
         }
-        list->unk8 = list->unk8->unk4;
+        list->cursor = list->cursor->next;
     }
 }
 
 void door_set_visible(u16 arg0, s16 arg1) {
-    Unk_801DFE80 *list = D_801DFE80;
-    Unk_801854B8 *item;
-    Unk_801854B8 *found;
+    DoorList *list = door_list;
+    Door *item;
+    Door *found;
 
-    if (list->unkC == 0) {
+    if (list->count == 0) {
         found = NULL;
     } else {
-        list->unk8 = list->unk0;
+        list->cursor = list->head;
         while (1) {
-            item = list->unk8->unk8;
-            if (item != NULL && item->unk0 == arg0) {
+            item = list->cursor->data;
+            if (item != NULL && item->id == arg0) {
                 found = item;
                 break;
             }
@@ -140,35 +140,35 @@ void door_set_visible(u16 arg0, s16 arg1) {
                 found = NULL;
                 break;
             }
-            list->unk8 = list->unk8->unk4;
+            list->cursor = list->cursor->next;
         }
     }
-    if (found != NULL && found->unk6 != arg1) {
-        found->unk6 = arg1;
+    if (found != NULL && found->visible != arg1) {
+        found->visible = arg1;
     }
 }
 
-void door_fade_step(Unk_801854B8 *arg0) {
-    Unk_801E1040 *p = &D_801E1040;
-    Unk_801A3B5C *q = object_scene_tables[0].unk0;
+void door_fade_step(Door *arg0) {
+    ScreenLight *p = &screen_light;
+    BgmSep *q = object_scene_tables[0].unk0;
     s32 v;
     s32 t;
 
-    p->unkE = arg0->unk24;
-    if (arg0->unk22 < 2) {
-        if (p->unkE < 0) {
-            p->unkE = 0;
+    p->fade_level = arg0->auto_return;
+    if (arg0->speed < 2) {
+        if (p->fade_level < 0) {
+            p->fade_level = 0;
         }
-    } else if (p->unkE < 0x80) {
-        p->unkE = 0x80;
+    } else if (p->fade_level < 0x80) {
+        p->fade_level = 0x80;
     }
-    if (p->unkE > 0x1000) {
-        p->unkE = 0x1000;
+    if (p->fade_level > 0x1000) {
+        p->fade_level = 0x1000;
     }
-    if (((s16)arg0->unk28 > 0 && arg0->unk24 >= arg0->unk26) ||
-        ((s16)arg0->unk28 < 0 && arg0->unk24 <= arg0->unk26)) {
-        if (arg0->unk22 != 0 && q != NULL && q->unk2 >= 0) {
-            t = arg0->unk24 >> 5;
+    if (((s16)arg0->coord_flg > 0 && arg0->auto_return >= arg0->unk26) ||
+        ((s16)arg0->coord_flg < 0 && arg0->auto_return <= arg0->unk26)) {
+        if (arg0->speed != 0 && q != NULL && q->seq >= 0) {
+            t = arg0->auto_return >> 5;
             v = 0x7F;
             if (t < 0x80) {
                 v = (s16)t;
@@ -176,10 +176,10 @@ void door_fade_step(Unk_801854B8 *arg0) {
                     v = 0;
                 }
             }
-            SsSepSetVol(q->unk0, q->unk2, v, v);
+            SsSepSetVol(q->sep, q->seq, v, v);
         }
-        if (arg0->unk22 != 10) {
-            p->unk6 = 0;
+        if (arg0->speed != 10) {
+            p->fade_active = 0;
         }
     }
 }

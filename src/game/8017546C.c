@@ -1,27 +1,27 @@
 #include "common.h"
 #include "game/types.h"
 
-Unk_801DFE54 *action_queue;
-void kaj_ll_insert_before(Unk_801DFE54 *a0, s32 a1);
+LlList *action_queue;
+void kaj_ll_insert_before(LlList *a0, s32 a1);
 extern SceneTables object_scene_tables;
 void free3(void *ptr);
 s32 block_find_at(s32 a0, s32 a1, s32 a2);
 NpcBody *npc_find_body(s16 arg0);
-extern Inventory *D_801E0768[];
-Unk_8018E56C *mod_find(u16 arg0);
-void mod_draw(s32 arg0, Unk_8018E56C *arg1, u16 arg2);
-void kaj_ll_remove_to_prev(Unk_801DFE54 *arg0);
-s16 kaj_ll_at_tail(Unk_801DFE54 *arg0);
-Unk_801DFE54 *action_set_list;
-Unk_80174B10 *action_run_set(Unk_80174B10 *arg0, s32 arg1, s32 arg2);
-extern Unk_801DFFE8 D_801DFFE8;
+extern Inventory *player_status_inventory[];
+Model *mod_find(u16 arg0);
+void mod_draw(s32 arg0, Model *arg1, u16 arg2);
+void kaj_ll_remove_to_prev(LlList *arg0);
+s16 kaj_ll_at_tail(LlList *arg0);
+LlList *action_set_list;
+ActionSet *action_run_set(ActionSet *arg0, s32 arg1, s32 arg2);
+extern EventState event_state;
 void text_release_cmd(void);
 void *memset(void *dst, s32 c, u32 n);
-extern Player *D_801E076C[];
-void mod_setup(Unk_8018E56C *arg0, s32 arg1, s32 arg2, s32 arg3);
-void RotMatrix(Unk_80174FFC *arg0, void *arg1);
-void action_place_npc(Npc *arg0, Unk_8018E56C *arg1);
-Unk_80174B10 *action_find_set(s16 arg0);
+extern Player *player_status_player[];
+void mod_setup(Model *arg0, s32 arg1, s32 arg2, s32 arg3);
+void RotMatrix(SVector *arg0, void *arg1);
+void action_place_npc(Npc *arg0, Model *arg1);
+ActionSet *action_find_set(s16 arg0);
 void text_close(void);
 void GsSetLsMatrix(void *m);
 s16 block_point_on_model(void *arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4);
@@ -35,25 +35,25 @@ s32 rcos(s32 a);
 s16 ai_check_line(Npc *arg0, SceneTrigger *arg1, s32 arg2);
 s16 ai_try_move(Npc *arg0, SceneTrigger *arg1, s16 arg2);
 extern s32 D_801E6DB4[];
-extern Unk_8018E56C *ai_cur_model;
+extern Model *ai_cur_model;
 NpcStats *npc_find_stats(s16 arg0);
 s16 ai_find_target(Npc *arg0, s16 arg1);
 s16 ai_decide_fire(Npc *arg0);
 void ai_face_player(Npc *arg0);
-extern NpcStats D_801D7328;
+extern NpcStats ai_default_stats;
 extern NpcBody ai_default_body;
-extern Unk_801DFC60 *ai_cur_block;
+extern Block *ai_cur_block;
 extern s32 ai_cur_grid;
 extern NpcStats *ai_cur_stats;
 extern NpcBody *ai_cur_body;
-/* Local view of Unk_80173250: this unit reads 0x4 as u16, the shared type has an s32 there. */
+/* Local view of ActionCmd: this unit reads 0x4 as u16, the shared type has an s32 there. */
 typedef struct {
     u16 unk0;
     u16 unk2;
-    u16 unk4;
-} Unk_80173250_u8017546C;
+    u16 target;
+} ActionCmd_u8017546C;
 typedef struct {
-    Unk_80173250_u8017546C *unk0;
+    ActionCmd_u8017546C *unk0;
     s32 unk4;
     char **unk8;
 } Unk_80173054;
@@ -99,7 +99,7 @@ s16 D_801DFC5C;
 s16 npc_update_anim(Npc *arg0, s16 arg1) {
     PlayerStatus *g = &player_status;
     Inventory *s = g->inventory;
-    Unk_8018E56C *o;
+    Model *o;
     NpcStats *k;
     u16 lo;
     u16 hi;
@@ -117,12 +117,12 @@ s16 npc_update_anim(Npc *arg0, s16 arg1) {
             s->armed = 1;
         }
         if (arg0->unkE == 1) {
-            if (o->unk16 != 3) {
+            if (o->anim != 3) {
                 mod_set_anim(o, 3, 0);
                 break;
             }
         } else {
-            if (o->unk16 != 0) {
+            if (o->anim != 0) {
                 mod_set_anim(o, 0, 0);
                 break;
             }
@@ -133,18 +133,18 @@ s16 npc_update_anim(Npc *arg0, s16 arg1) {
             s->armed = 1;
         }
         if (arg0->unkE == 1) {
-            if (o->unk16 != 4) {
+            if (o->anim != 4) {
                 mod_set_anim(o, 4, 0);
                 break;
-            } else if (o->unk8 == 0) {
+            } else if (o->playing == 0) {
                 mod_set_anim(o, 4, 0);
                 break;
             }
         } else {
-            if (o->unk16 != 2) {
+            if (o->anim != 2) {
                 mod_set_anim(o, 2, 0);
                 break;
-            } else if (o->unk8 == 0) {
+            } else if (o->playing == 0) {
                 mod_set_anim(o, 2, 0);
                 break;
             }
@@ -154,10 +154,10 @@ s16 npc_update_anim(Npc *arg0, s16 arg1) {
         if (arg0 == g->target_npc) {
             s->armed = 0;
         }
-        if (o->unk16 != 1) {
+        if (o->anim != 1) {
             mod_set_anim(o, 1, 0);
             break;
-        } else if (o->unk8 == 0) {
+        } else if (o->playing == 0) {
             mod_set_anim(o, 1, 0);
             break;
         }
@@ -166,14 +166,14 @@ s16 npc_update_anim(Npc *arg0, s16 arg1) {
         if (arg0 == g->target_npc) {
             s->armed = 1;
         }
-        if (o->unk16 != 9) {
+        if (o->anim != 9) {
             if (arg0->unk12 & 0x400) {
                 arg0->unk12 &= ~0x1000;
             } else {
                 mod_set_anim(o, 9, 0);
                 break;
             }
-        } else if (o->unk8 == 0) {
+        } else if (o->playing == 0) {
             arg0->unk12 &= ~0x1000;
         }
         break;
@@ -181,14 +181,14 @@ s16 npc_update_anim(Npc *arg0, s16 arg1) {
         if (arg0 == g->target_npc) {
             s->armed = 1;
         }
-        if (o->unk16 != 7) {
+        if (o->anim != 7) {
             if (arg0->unk12 & 0x400) {
                 arg0->unk12 &= ~0x400;
                 arg0->unk46 = 0;
             }
             mod_set_anim(o, 7, 5);
             break;
-        } else if (o->unk8 == 0) {
+        } else if (o->playing == 0) {
             arg0->unk12 &= ~0x800;
         }
         break;
@@ -200,7 +200,7 @@ s16 npc_update_anim(Npc *arg0, s16 arg1) {
         if (k == NULL) {
             return 0;
         }
-        switch (o->unk16) {
+        switch (o->anim) {
         case 1:
             if (arg0->unk12 & 0x200) {
                 arg0->unk12 &= ~0x200;
@@ -210,14 +210,14 @@ s16 npc_update_anim(Npc *arg0, s16 arg1) {
             mod_set_anim(o, 5, 0);
             break;
         case 5:
-            if (o->unk8 == 0) {
+            if (o->playing == 0) {
                 if (arg0->unk46 != 0) {
                     arg0->unk46 -= D_801E6DB4[0];
                     if (arg0->unk46 <= 0) {
                         arg0->unk46 = 0;
                         mod_set_anim(o, 6, 0);
-                        if ((u16)k->unk16 < 0x100 && (u16)k->unk16 >= o->unkE) {
-                            k->unk16 = o->unkE - 1;
+                        if ((u16)k->unk16 < 0x100 && (u16)k->unk16 >= o->end_frame) {
+                            k->unk16 = o->end_frame - 1;
                         }
                     }
                 } else if (k == NULL) {
@@ -231,16 +231,16 @@ s16 npc_update_anim(Npc *arg0, s16 arg1) {
             }
             break;
         case 6:
-            if (o->unk8 == 0) {
+            if (o->playing == 0) {
                 arg0->unk12 &= ~0x400;
                 if ((u16)k->weapon_kind == 4) {
                     sound_se_stop(0x27);
                 }
             } else {
-                d = o->unk12;
+                d = o->frame_step;
                 n = (u16)k->unk16;
                 lo = n / d;
-                t = o->unkC / d;
+                t = o->frame / d;
                 hi = 0xFFFF;
                 if ((u16)n > 0x100) {
                     lo = (n & 0xFF) / d;
@@ -259,8 +259,8 @@ s16 npc_update_anim(Npc *arg0, s16 arg1) {
 
 void npc_update_all(void) {
     Npc *p;
-    Unk_8018E56C *q;
-    Unk_80174B10 *r;
+    Model *q;
+    ActionSet *r;
     s32 i;
     u16 flags;
     SceneTables *g = &object_scene_tables;
@@ -291,7 +291,7 @@ void npc_update_all(void) {
                 flags = p->unk12;
                 if (flags < 0x100) {
                     if (p->unkE == 2) {
-                        Unk_801DFFE8 *d = &D_801DFFE8;
+                        EventState *d = &event_state;
                         s32 k = 6;
 
                         if (p->unkF != k) {
@@ -306,8 +306,8 @@ void npc_update_all(void) {
                                 do {
                                     r = action_run_set(r, 0, 0);
                                 } while (r != NULL);
-                                if (d->unk6 == 0) {
-                                    d->unk6 = 1;
+                                if (d->state == 0) {
+                                    d->state = 1;
                                 }
                             }
                             sound_se_stop(0x27);
@@ -354,8 +354,8 @@ void npc_update_all(void) {
 void npc_exec_command(Unk_80173054 *arg0) {
     SceneTables *p = &object_scene_tables;
     Npc *e = p->npcs;
-    Unk_80173250_u8017546C *cmd = arg0->unk0;
-    u16 id = cmd->unk4;
+    ActionCmd_u8017546C *cmd = arg0->unk0;
+    u16 id = cmd->target;
     Npc *t;
     s32 i;
 
@@ -578,7 +578,7 @@ void npc_draw_all(s32 arg0) {
     SceneTables *p = &object_scene_tables;
     Npc *e = p->npcs;
     Unk_80176370 *x;
-    Unk_8018E56C *o;
+    Model *o;
     s32 i;
 
     if (p->npc_count == 0) {
@@ -588,7 +588,7 @@ void npc_draw_all(s32 arg0) {
         x = (Unk_80176370 *)e->unk48;
         if (e != NULL && e->unk4 != 0 && e->unk6 != 0 && x != NULL && x->unk4 != 0) {
             o = mod_find(e->unk16);
-            if (o != NULL && o->unk4 != 0) {
+            if (o != NULL && o->ready != 0) {
                 mod_draw(arg0, o, e->unkA);
             }
         }
@@ -598,7 +598,7 @@ void npc_draw_all(s32 arg0) {
 s16 npc_find_at_point(s16 arg0, s32 arg1, s32 arg2, s32 arg3) {
     SceneTables *p = &object_scene_tables;
     Npc *e = p->npcs;
-    Unk_8018E56C *o;
+    Model *o;
     s32 i;
 
     if (p->npc_count == 0) {
@@ -607,9 +607,9 @@ s16 npc_find_at_point(s16 arg0, s32 arg1, s32 arg2, s32 arg3) {
     for (i = 0; i < p->npc_count; i++, e++) {
         if (e->unk4 != 0 && e->unk6 != 0) {
             o = mod_find(e->unk16);
-            if (arg0 != e->unk0 && o != NULL && o->unk4 != 0 && o->unk30 != NULL) {
-                GsSetLsMatrix(o->unk40);
-                if (block_point_on_model(o->unk30, arg1, arg2, arg3, 1) != 0) {
+            if (arg0 != e->unk0 && o != NULL && o->ready != 0 && o->tmd_objects != NULL) {
+                GsSetLsMatrix(o->coord_m);
+                if (block_point_on_model(o->tmd_objects, arg1, arg2, arg3, 1) != 0) {
                     return e->unk0;
                 }
             }
@@ -632,7 +632,7 @@ void npc_update_blocks(void) {
 void npc_rebase_all(s32 arg0, s32 arg1, s32 arg2) {
     SceneTables *p = &object_scene_tables;
     Npc *e = p->npcs;
-    Unk_8018E56C *o;
+    Model *o;
     s32 i;
 
     if (p->npc_count == 0) {
@@ -642,10 +642,10 @@ void npc_rebase_all(s32 arg0, s32 arg1, s32 arg2) {
         if (e->unk4 != 0) {
             o = mod_find(e->unk16);
             if (o != NULL) {
-                o->unk54 = e->unk20 - arg0;
-                o->unk58 = e->unk24 - arg1;
-                o->unk5C = e->unk28 - arg2;
-                o->unk3C = 0;
+                o->coord_tx = e->unk20 - arg0;
+                o->coord_ty = e->unk24 - arg1;
+                o->coord_tz = e->unk28 - arg2;
+                o->coord_flg = 0;
             }
         }
     }

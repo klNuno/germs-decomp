@@ -1,30 +1,30 @@
 #include "common.h"
 #include "game/types.h"
 
-Unk_801DFE54 *action_queue;
-void kaj_ll_insert_before(Unk_801DFE54 *a0, s32 a1);
+LlList *action_queue;
+void kaj_ll_insert_before(LlList *a0, s32 a1);
 /* local view of SceneTrigger: see n2a-report */
 /* Local view of SceneTrigger: this unit reads 0x4 and 0x8 as s32, the shared type has s16 there. */
-typedef struct Unk_80174F54_u801768F8 { s32 unk0; s32 unk4; s32 unk8; } Unk_80174F54_u801768F8;
+typedef struct SceneTrigger_u801768F8 { s32 unk0; s32 unk4; s32 unk8; } SceneTrigger_u801768F8;
 extern SceneTables object_scene_tables;
 void free3(void *ptr);
 s32 block_find_at(s32 a0, s32 a1, s32 a2);
 NpcBody *npc_find_body(s16 arg0);
-extern Inventory *D_801E0768[];
-Unk_8018E56C *mod_find(u16 arg0);
-void mod_draw(s32 arg0, Unk_8018E56C *arg1, u16 arg2);
-void kaj_ll_remove_to_prev(Unk_801DFE54 *arg0);
-s16 kaj_ll_at_tail(Unk_801DFE54 *arg0);
-Unk_801DFE54 *action_set_list;
-Unk_80174B10 *action_run_set(Unk_80174B10 *arg0, s32 arg1, s32 arg2);
-extern Unk_801DFFE8 D_801DFFE8;
+extern Inventory *player_status_inventory[];
+Model *mod_find(u16 arg0);
+void mod_draw(s32 arg0, Model *arg1, u16 arg2);
+void kaj_ll_remove_to_prev(LlList *arg0);
+s16 kaj_ll_at_tail(LlList *arg0);
+LlList *action_set_list;
+ActionSet *action_run_set(ActionSet *arg0, s32 arg1, s32 arg2);
+extern EventState event_state;
 void text_release_cmd(void);
 void *memset(void *dst, s32 c, u32 n);
-extern Player *D_801E076C[];
-void mod_setup(Unk_8018E56C *arg0, s32 arg1, s32 arg2, s32 arg3);
-void RotMatrix(Unk_80174FFC *arg0, void *arg1);
-void action_place_npc(Npc *arg0, Unk_8018E56C *arg1);
-Unk_80174B10 *action_find_set(s16 arg0);
+extern Player *player_status_player[];
+void mod_setup(Model *arg0, s32 arg1, s32 arg2, s32 arg3);
+void RotMatrix(SVector *arg0, void *arg1);
+void action_place_npc(Npc *arg0, Model *arg1);
+ActionSet *action_find_set(s16 arg0);
 void text_close(void);
 void GsSetLsMatrix(void *m);
 s16 block_point_on_model(void *arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4);
@@ -35,22 +35,22 @@ s32 mail_angle_to_dir4(s16 a);
 extern s16 ai_probe_angle[];
 s32 rsin(s32 a);
 s32 rcos(s32 a);
-s16 ai_check_line(Npc *arg0, Unk_80174F54_u801768F8 *arg1, s32 arg2);
-s16 ai_try_move(Npc *arg0, Unk_80174F54_u801768F8 *arg1, s16 arg2);
+s16 ai_check_line(Npc *arg0, SceneTrigger_u801768F8 *arg1, s32 arg2);
+s16 ai_try_move(Npc *arg0, SceneTrigger_u801768F8 *arg1, s16 arg2);
 extern s32 D_801E6DB4[];
-Unk_8018E56C *ai_cur_model;
+Model *ai_cur_model;
 NpcStats *npc_find_stats(s16 arg0);
 s16 ai_find_target(Npc *arg0, s16 arg1);
 s16 ai_decide_fire(Npc *arg0);
 void ai_face_player(Npc *arg0);
-extern NpcStats D_801D7328;
+extern NpcStats ai_default_stats;
 extern NpcBody ai_default_body;
-Unk_801DFC60 *ai_cur_block;
+Block *ai_cur_block;
 s32 ai_cur_grid;
 NpcStats *ai_cur_stats;
 NpcBody *ai_cur_body;
 typedef struct {
-    Unk_80173250 *unk0;
+    ActionCmd *unk0;
     s32 unk4;
     char **unk8;
 } Unk_80173054;
@@ -86,14 +86,14 @@ s16 npc_find_at_point(s16 arg0, s32 arg1, s32 arg2, s32 arg3);
 s32 block_model_surface(void *arg0, s32 arg1, s32 arg2, s32 arg3);
 
 static inline s32 cvx(s32 x) {
-    s32 d = x - ai_cur_block->unk10;
+    s32 d = x - ai_cur_block->pos_x;
     s32 t = d >> 8;
     s32 o = ((Unk_801DFC64 *)ai_cur_grid)->unk0;
     return (d & 0xFF) ? t + 1 + o : t + o;
 }
 
 static inline s32 cvz(s32 z) {
-    s32 d = z - ai_cur_block->unk18;
+    s32 d = z - ai_cur_block->pos_z;
     s32 t = d >> 8;
     s32 o = ((Unk_801DFC64 *)ai_cur_grid)->unk2;
     return (d & 0xFF) ? t + 1 + o : t + o;
@@ -130,7 +130,7 @@ static inline s16 pass(s32 v, s32 mode) {
     return 1;
 }
 
-s16 ai_check_line(Npc *arg0, Unk_80174F54_u801768F8 *arg1, s32 arg2) {
+s16 ai_check_line(Npc *arg0, SceneTrigger_u801768F8 *arg1, s32 arg2) {
     Player *p;
     s32 mode;
     s32 d;
@@ -151,7 +151,7 @@ s16 ai_check_line(Npc *arg0, Unk_80174F54_u801768F8 *arg1, s32 arg2) {
     if (ai_cur_block == NULL || ai_cur_grid == 0) {
         return 0;
     }
-    if ((arg2 & 1) && ai_cur_block->unk8 == 0) {
+    if ((arg2 & 1) && ai_cur_block->in_arena == 0) {
         return 0;
     }
     mode = 0;
@@ -223,7 +223,7 @@ s16 ai_check_line(Npc *arg0, Unk_80174F54_u801768F8 *arg1, s32 arg2) {
         d = arg1->unk8 - arg0->unk28;
         arg0->unk40 = SquareRoot0(x1 * x1 + d * d);
         if (arg2 & 8) {
-            p = D_801E076C[0];
+            p = player_status_player[0];
             a = (ratan2(arg1->unk4 - arg0->unk24, (u16)arg0->unk40) * 0x1680) >> 16;
             arg0->unk45 = abs(a);
             b = abs(p->pitch - a);
@@ -238,7 +238,7 @@ s16 ai_check_line(Npc *arg0, Unk_80174F54_u801768F8 *arg1, s32 arg2) {
 }
 
 void ai_turn_step(Npc *arg0) {
-    Unk_80174FFC sv;
+    SVector sv;
     s16 d;
     s16 diff;
     s16 step;
@@ -266,18 +266,18 @@ void ai_turn_step(Npc *arg0) {
             }
         }
         arg0->unk3A = mail_wrap_angle(arg0->unk3A + d);
-        if (ai_cur_model != NULL && ai_cur_model->unk4 != 0) {
-            sv.unk0 = (arg0->unk38 << 12) / 360;
-            sv.unk2 = (arg0->unk3A << 12) / 360;
-            sv.unk4 = (arg0->unk3C << 12) / 360;
-            RotMatrix(&sv, ai_cur_model->unk40);
-            ai_cur_model->unk3C = 0;
+        if (ai_cur_model != NULL && ai_cur_model->ready != 0) {
+            sv.vx = (arg0->unk38 << 12) / 360;
+            sv.vy = (arg0->unk3A << 12) / 360;
+            sv.vz = (arg0->unk3C << 12) / 360;
+            RotMatrix(&sv, ai_cur_model->coord_m);
+            ai_cur_model->coord_flg = 0;
         }
     }
 }
 
 s16 ai_heading_to(Npc *arg0, s16 arg1) {
-    Player *p = D_801E076C[0];
+    Player *p = player_status_player[0];
     Npc *t;
     s32 dx;
     s32 dz;
@@ -303,7 +303,7 @@ s16 ai_heading_to(Npc *arg0, s16 arg1) {
 }
 
 s32 ai_player_in_front(Npc *arg0) {
-    Player *p = D_801E076C[0];
+    Player *p = player_status_player[0];
     s32 dx;
     s32 dz;
 
@@ -338,7 +338,7 @@ s32 ai_player_in_front(Npc *arg0) {
 }
 
 s16 ai_find_target(Npc *arg0, s16 arg1) {
-    Unk_80174F54_u801768F8 v;
+    SceneTrigger_u801768F8 v;
     s16 found;
     u16 min;
     u16 saved;
@@ -356,14 +356,14 @@ s16 ai_find_target(Npc *arg0, s16 arg1) {
     saved = 0;
     found = 0;
     e = g->npcs;
-    cam = D_801E076C[0];
+    cam = player_status_player[0];
     arg0->unk10 = -2;
     best = -2;
     b = -1;
     arg0->unk40 = 0;
     arg0->unk12 &= ~6;
     a = b;
-    if (ai_cur_block->unk8 != 0
+    if (ai_cur_block->in_arena != 0
         && (D_801DFC74 != 0 || D_801DFC76 != 0 || (s16)ai_player_in_front(arg0) != 0)) {
         v.unk0 = cam->pos_x + cam->cell_x * 12500;
         v.unk4 = cam->pos_y - cam->cell_y * 32000 + 1600;
@@ -422,9 +422,9 @@ s16 ai_find_target(Npc *arg0, s16 arg1) {
     return 1;
 }
 
-s16 ai_try_move(Npc *arg0, Unk_80174F54_u801768F8 *arg1, s16 arg2) {
-    Player *cam = D_801E076C[0];
-    Unk_80174FFC sv;
+s16 ai_try_move(Npc *arg0, SceneTrigger_u801768F8 *arg1, s16 arg2) {
+    Player *cam = player_status_player[0];
+    SVector sv;
     s32 y;
     s32 r;
     s32 x;
@@ -439,7 +439,7 @@ s16 ai_try_move(Npc *arg0, Unk_80174F54_u801768F8 *arg1, s16 arg2) {
     if (ai_cur_block == NULL) {
         return 0;
     }
-    if (!(ai_cur_block->unkE & 1)) {
+    if (!(ai_cur_block->model_flags & 1)) {
         return 0;
     }
     arg0->unk12 &= ~0x10;
@@ -462,23 +462,23 @@ s16 ai_try_move(Npc *arg0, Unk_80174F54_u801768F8 *arg1, s16 arg2) {
         arg0->unk12 |= 0x10;
         return arg0->unkE == 1;
     }
-    if (block_model_surface(ai_cur_block->unk84, x, z, (s32)&y) == 0) {
+    if (block_model_surface(ai_cur_block->floor_model, x, z, (s32)&y) == 0) {
         return 0;
     }
     arg0->unk20 += arg1->unk0;
     arg0->unk24 = y - cam->cell_y * 32000;
     arg0->unk28 += arg1->unk8;
-    if (ai_cur_model == NULL || ai_cur_model->unk4 == 0) {
+    if (ai_cur_model == NULL || ai_cur_model->ready == 0) {
         return 0;
     }
-    ai_cur_model->unk54 = arg0->unk20 - cam->cell_x * 12500;
-    ai_cur_model->unk58 = arg0->unk24 + cam->cell_y * 32000;
-    ai_cur_model->unk5C = arg0->unk28 - cam->cell_z * 12500;
-    sv.unk0 = (arg0->unk38 << 12) / 360;
-    sv.unk2 = (arg0->unk3A << 12) / 360;
-    sv.unk4 = (arg0->unk3C << 12) / 360;
-    RotMatrix(&sv, ai_cur_model->unk40);
-    ai_cur_model->unk3C = 0;
+    ai_cur_model->coord_tx = arg0->unk20 - cam->cell_x * 12500;
+    ai_cur_model->coord_ty = arg0->unk24 + cam->cell_y * 32000;
+    ai_cur_model->coord_tz = arg0->unk28 - cam->cell_z * 12500;
+    sv.vx = (arg0->unk38 << 12) / 360;
+    sv.vy = (arg0->unk3A << 12) / 360;
+    sv.vz = (arg0->unk3C << 12) / 360;
+    RotMatrix(&sv, ai_cur_model->coord_m);
+    ai_cur_model->coord_flg = 0;
     t = block_find_at(arg0->unk20, arg0->unk24, arg0->unk28);
     if (arg0->unk48 != t) {
         arg0->unk48 = t;
@@ -487,7 +487,7 @@ s16 ai_try_move(Npc *arg0, Unk_80174F54_u801768F8 *arg1, s16 arg2) {
 }
 
 static inline s32 func_801779B8_inline(Npc *arg0, s16 n, s32 arg2, s16 arg3) {
-    Unk_80174F54_u801768F8 v;
+    SceneTrigger_u801768F8 v;
     s16 a;
     arg0->unk3E = ai_dir_angle[n];
     ai_turn_step(arg0);
@@ -503,7 +503,7 @@ static inline s32 func_801779B8_inline(Npc *arg0, s16 n, s32 arg2, s16 arg3) {
 
 void ai_move_toward(Npc *arg0, s16 arg1, s32 arg2, s32 arg3) {
     s16 f = arg3;
-    Player *p = D_801E076C[0];
+    Player *p = player_status_player[0];
     s16 d[2];
     s16 cur;
     s16 back;
@@ -612,7 +612,7 @@ fallback:
 }
 
 void ai_walk(Npc *arg0, s16 arg1, s32 arg2) {
-    Unk_80174F54_u801768F8 v;
+    SceneTrigger_u801768F8 v;
     s32 f;
     s16 d;
     s16 a;
@@ -654,7 +654,7 @@ void ai_walk(Npc *arg0, s16 arg1, s32 arg2) {
 }
 
 s32 ai_step_back(Npc *arg0, s32 arg1) {
-    Unk_80174F54_u801768F8 v;
+    SceneTrigger_u801768F8 v;
     s32 i;
     s32 n;
     s16 a;
@@ -680,7 +680,7 @@ s32 ai_step_back(Npc *arg0, s32 arg1) {
 }
 
 s32 ai_sidestep(Npc *arg0, s32 arg1) {
-    Unk_80174F54_u801768F8 v;
+    SceneTrigger_u801768F8 v;
     s32 i;
     s16 a;
     s16 r;
@@ -703,7 +703,7 @@ s32 ai_sidestep(Npc *arg0, s32 arg1) {
 }
 
 s16 ai_decide_fire(Npc *arg0) {
-    Player *p = D_801E076C[0];
+    Player *p = player_status_player[0];
     s32 c;
     s32 *pc;
     s32 t;
@@ -768,16 +768,16 @@ s16 ai_decide_fire(Npc *arg0) {
 }
 
 void ai_face_player(Npc *arg0) {
-    Player *p = D_801E076C[0];
-    Unk_80174FFC sv;
+    Player *p = player_status_player[0];
+    SVector sv;
 
-    if (ai_cur_model != 0 && ai_cur_model->unk4 != 0) {
+    if (ai_cur_model != 0 && ai_cur_model->ready != 0) {
         arg0->unk3A = mail_wrap_angle((ratan2(p->pos_x + p->cell_x * 12500 - arg0->unk20, p->pos_z + p->cell_z * 12500 - arg0->unk28) * 360 >> 12) - 180);
-        sv.unk0 = (arg0->unk38 << 12) / 360;
-        sv.unk2 = (arg0->unk3A << 12) / 360;
-        sv.unk4 = (arg0->unk3C << 12) / 360;
-        RotMatrix(&sv, ai_cur_model->unk40);
-        ai_cur_model->unk3C = 0;
+        sv.vx = (arg0->unk38 << 12) / 360;
+        sv.vy = (arg0->unk3A << 12) / 360;
+        sv.vz = (arg0->unk3C << 12) / 360;
+        RotMatrix(&sv, ai_cur_model->coord_m);
+        ai_cur_model->coord_flg = 0;
     }
 }
 
@@ -787,11 +787,11 @@ void ai_update_stand(Npc *arg0) {
     ai_cur_grid = 0;
     ai_cur_stats = 0;
     ai_cur_body = 0;
-    ai_cur_block = (Unk_801DFC60 *)arg0->unk48;
+    ai_cur_block = (Block *)arg0->unk48;
     ai_cur_model = mod_find(arg0->unk16);
     ai_cur_stats = npc_find_stats(arg0->unk18);
     if (ai_cur_stats == 0) {
-        ai_cur_stats = &D_801D7328;
+        ai_cur_stats = &ai_default_stats;
     }
     ai_cur_body = npc_find_body(arg0->unk14);
     if (ai_cur_body == 0) {
@@ -800,10 +800,10 @@ void ai_update_stand(Npc *arg0) {
     f = 0;
     if (ai_cur_block != 0) {
         f = 1;
-        if (ai_cur_block->unk88 == 0) {
+        if (ai_cur_block->arena == 0) {
             f = 0;
         } else {
-            ai_cur_grid = ai_cur_block->unk88;
+            ai_cur_grid = (s32)ai_cur_block->arena;
         }
     }
     if (arg0->unk12 & 1) {
@@ -830,20 +830,20 @@ void ai_update_move(Npc *arg0, s16 arg1) {
     ai_cur_grid = 0;
     ai_cur_stats = 0;
     ai_cur_body = 0;
-    ai_cur_block = (Unk_801DFC60 *)arg0->unk48;
+    ai_cur_block = (Block *)arg0->unk48;
     ai_cur_model = mod_find(arg0->unk16);
     ai_cur_stats = npc_find_stats(arg0->unk18);
     if (ai_cur_stats == 0) {
-        ai_cur_stats = &D_801D7328;
+        ai_cur_stats = &ai_default_stats;
     }
     ai_cur_body = npc_find_body(arg0->unk14);
     if (ai_cur_body == 0) {
         ai_cur_body = &ai_default_body;
     }
-    if (ai_cur_block == 0 || ai_cur_block->unk88 == 0) {
+    if (ai_cur_block == 0 || ai_cur_block->arena == 0) {
         f = 0;
     } else {
-        ai_cur_grid = ai_cur_block->unk88;
+        ai_cur_grid = (s32)ai_cur_block->arena;
         f = 1;
     }
     if (f == 0 || (arg0->unk12 & 0x20)) {
@@ -894,20 +894,20 @@ void ai_update_move(Npc *arg0, s16 arg1) {
     ai_cur_grid = 0;
     ai_cur_stats = 0;
     ai_cur_body = 0;
-    ai_cur_block = (Unk_801DFC60 *)arg0->unk48;
+    ai_cur_block = (Block *)arg0->unk48;
     ai_cur_model = mod_find(arg0->unk16);
     ai_cur_stats = npc_find_stats(arg0->unk18);
     if (ai_cur_stats == 0) {
-        ai_cur_stats = &D_801D7328;
+        ai_cur_stats = &ai_default_stats;
     }
     ai_cur_body = npc_find_body(arg0->unk14);
     if (ai_cur_body == 0) {
         ai_cur_body = &ai_default_body;
     }
-    if (ai_cur_block == 0 || ai_cur_block->unk88 == 0) {
+    if (ai_cur_block == 0 || ai_cur_block->arena == 0) {
         f = 0;
     } else {
-        ai_cur_grid = ai_cur_block->unk88;
+        ai_cur_grid = (s32)ai_cur_block->arena;
         f = 1;
     }
     if (f != 0) {
@@ -940,21 +940,21 @@ void ai_fire(Npc *arg0) {
     ai_cur_grid = 0;
     ai_cur_stats = 0;
     ai_cur_body = 0;
-    ai_cur_block = (Unk_801DFC60 *)arg0->unk48;
-    p = D_801E076C[0];
+    ai_cur_block = (Block *)arg0->unk48;
+    p = player_status_player[0];
     ai_cur_model = mod_find(arg0->unk16);
     ai_cur_stats = npc_find_stats(arg0->unk18);
     if (ai_cur_stats == 0) {
-        ai_cur_stats = &D_801D7328;
+        ai_cur_stats = &ai_default_stats;
     }
     ai_cur_body = npc_find_body(arg0->unk14);
     if (ai_cur_body == 0) {
         ai_cur_body = &ai_default_body;
     }
-    if (ai_cur_block == 0 || ai_cur_block->unk88 == 0) {
+    if (ai_cur_block == 0 || ai_cur_block->arena == 0) {
         f = 0;
     } else {
-        ai_cur_grid = ai_cur_block->unk88;
+        ai_cur_grid = (s32)ai_cur_block->arena;
         f = 1;
     }
     if (f == 0) {
@@ -1091,7 +1091,7 @@ void ai_fire(Npc *arg0) {
 }
 
 s16 ai_in_aim_cone(Npc *arg0, s16 arg1, s16 arg2) {
-    Player *p = D_801E076C[0];
+    Player *p = player_status_player[0];
     s32 dx;
     s32 dz;
     s16 lim;

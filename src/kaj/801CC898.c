@@ -11,7 +11,7 @@ void InitHeap3(void *head, u32 size);
 s32 VSync(s32 mode);
 void SetDispMask(s32 mask);
 void ResetGraph(s32 mode);
-s32 ClearImage(Unk_801D1BD4 *rect, s32 r, s32 g, s32 b);
+s32 ClearImage(Rect *rect, s32 r, s32 g, s32 b);
 s32 DrawSync(s32 mode);
 void PadInit(s32 mode);
 s32 CdInit(void);
@@ -37,17 +37,17 @@ void *kaj_malloc(u32 size) {
 }
 
 void kaj_init(void) {
-    Unk_801D1BD4 rect;
+    Rect rect;
 
     ResetCallback();
     InitHeap3((void *)0x80010000, 0x160000);
     VSync(0);
     SetDispMask(0);
     ResetGraph(0);
-    rect.unk4 = 0x280;
-    rect.unk0 = 0;
-    rect.unk2 = 0;
-    rect.unk6 = 0x1FF;
+    rect.w = 0x280;
+    rect.x = 0;
+    rect.y = 0;
+    rect.h = 0x1FF;
     VSync(0);
     ClearImage(&rect, 0, 0, 0);
     DrawSync(0);

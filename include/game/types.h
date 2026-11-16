@@ -132,59 +132,59 @@ typedef struct Npc {
     s32 unk48;
 } Npc;
 
-typedef struct Unk_8018E56C {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
+typedef struct Model {
+    s16 id;
+    s16 kind;
+    s16 ready;
+    s16 owns_data;
+    s16 playing;
     s16 unkA;
-    s16 unkC;
-    s16 unkE;
-    s16 unk10;
-    s16 unk12;
-    u16 unk14;
-    u16 unk16;
-    s32 unk18;
-    s32 unk1C;
-    s32 unk20;
-    void *unk24;
-    void *unk28;
-    void *unk2C;
-    void *unk30;
-    s32 unk34;
-    void *unk38;
-    s32 unk3C;
-    u8 unk40[0x14];
-    s32 unk54;
-    s32 unk58;
-    s32 unk5C;
+    s16 frame;
+    s16 end_frame;
+    s16 loop;
+    s16 frame_step;
+    u16 anim_count;
+    u16 anim;
+    s32 tod_ptr;
+    s32 tmd_ids;
+    s32 tmd;
+    void *tod_table;
+    void *obj_table;
+    void *dobj_table;
+    void *tmd_objects;
+    s32 parent_coord;
+    void *coord_table;
+    s32 coord_flg;
+    u8 coord_m[0x14];
+    s32 coord_tx;
+    s32 coord_ty;
+    s32 coord_tz;
     u8 unk60[0x2C];
-    void *unk8C;
-    s16 *unk90;
-} Unk_8018E56C;
+    void *coord_params;
+    s16 *data;
+} Model;
 
 typedef struct PlayerStatus {
     s16 energy;
     s16 level;
     u32 exp;
     u32 next_exp;
-    u16 unkC;
-    u16 unkE;
-    u16 unk10;
-    u16 unk12;
-    u16 unk14;
-    s16 unk16;
-    u16 unk18;
-    s16 unk1A;
-    u16 unk1C;
-    s16 unk1E;
-    u16 unk20;
-    s16 unk22;
-    u16 unk24;
-    s16 unk26;
-    u16 unk28;
-    s16 unk2A;
+    u16 stat0;
+    u16 stat1;
+    u16 stat2;
+    u16 stat3;
+    u16 weapon0_level;
+    s16 weapon0_exp;
+    u16 weapon1_level;
+    s16 weapon1_exp;
+    u16 weapon2_level;
+    s16 weapon2_exp;
+    u16 weapon3_level;
+    s16 weapon3_exp;
+    u16 weapon4_level;
+    s16 weapon4_exp;
+    u16 defense_level;
+    s16 defense_exp;
     s16 mutant;
     s16 unk2E;
     s16 unk30;
@@ -198,125 +198,125 @@ typedef struct PlayerStatus {
     s16 weapon_redraw;
     s16 infected;
     Npc *target_npc;
-    Unk_8018E56C *model;
-    struct Unk_801AC55C *vehicle;
+    Model *model;
+    struct VehicleSprite *vehicle;
     Inventory *inventory;
     Player *player;
 } PlayerStatus;
 
-typedef struct Unk_801854B8 {
-    u16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
+typedef struct Door {
+    u16 id;
+    s16 axis;
+    s16 active;
+    s16 visible;
     s16 unk8;
-    s16 unkA;
-    s16 unkC;
-    s16 unkE;
-    s32 unk10;
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    s16 unk20;
-    s16 unk22;
-    s16 unk24;
+    s16 state;
+    s16 move_from;
+    s16 move_to;
+    s32 block;
+    s32 pos_x;
+    s32 pos_y;
+    s32 pos_z;
+    s16 angle;
+    s16 speed;
+    s16 auto_return;
     s16 unk26;
-    s32 unk28;
-    u8 unk2C[0x14];
-    s32 unk40;
-    s32 unk44;
-    s32 unk48;
+    s32 coord_flg;
+    u8 coord_m[0x14];
+    s32 coord_tx;
+    s32 coord_ty;
+    s32 coord_tz;
     u8 unk4C[0x2C];
-    void *unk78;
-    void *unk7C;
-} Unk_801854B8;
+    void *tmd_objects;
+    void *record;
+} Door;
 
-typedef struct Unk_801CCB70 {
-    struct Unk_801CCB70 *unk0;
-    struct Unk_801CCB70 *unk4;
-    struct Unk_80174B10 *unk8;
-} Unk_801CCB70;
+typedef struct LlNode {
+    struct LlNode *prev;
+    struct LlNode *next;
+    struct ActionSet *data;
+} LlNode;
 
-typedef struct Unk_801A7AFC {
-    u16 unk0;
-    u16 unk2;
-    s16 unk4;
-    s16 unk6;
+typedef struct Thing {
+    u16 id;
+    u16 type;
+    s16 active;
+    s16 animate;
     s16 unk8;
     s16 unkA;
     s16 unkC;
     s16 unkE;
-    s16 unk10;
+    s16 block_fixed;
     u8 unk12[0x2];
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    s32 unk20;
-    s16 unk24;
-    s16 unk26;
-    s16 unk28;
+    s32 block;
+    s32 pos_x;
+    s32 pos_y;
+    s32 pos_z;
+    s16 rot_x;
+    s16 rot_y;
+    s16 rot_z;
     u8 unk2A[0x2];
-    s32 unk2C;
-    u8 unk30[0x14];
-    s32 unk44;
-    s32 unk48;
-    s32 unk4C;
+    s32 coord_flg;
+    u8 coord_m[0x14];
+    s32 coord_tx;
+    s32 coord_ty;
+    s32 coord_tz;
     u8 unk50[0x2C];
-    void *unk7C;
-    void *unk80;
-    void *unk84;
-} Unk_801A7AFC;
+    void *tmd_objects;
+    void *hit_model;
+    void *record;
+} Thing;
 
-typedef struct Unk_8017CCE4 {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
+typedef struct Block {
+    s16 active;
+    s16 owns_data;
+    s16 visible;
+    s16 player_inside;
+    s16 in_arena;
     u8 unkA[0x2];
-    s16 unkC;
-    u16 unkE;
-    s32 unk10;
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    s32 unk20;
-    s32 unk24;
-    s32 unk28;
+    s16 far;
+    u16 model_flags;
+    s32 pos_x;
+    s32 pos_y;
+    s32 pos_z;
+    s32 size_x;
+    s32 size_y;
+    s32 size_z;
+    s32 coord_flg;
     u8 unk2C[0x14];
-    s32 unk40;
-    s32 unk44;
-    s32 unk48;
+    s32 coord_tx;
+    s32 coord_ty;
+    s32 coord_tz;
     u8 unk4C[0x2C];
-    void *unk78;
-    void *unk7C;
-    void *unk80;
-    void *unk84;
-    struct Unk_8017C9F8 *unk88;
-    void *unk8C;
-} Unk_8017CCE4;
+    void *model3;
+    void *model2;
+    void *model1;
+    void *floor_model;
+    struct Arena *arena;
+    void *data;
+} Block;
 
-typedef struct Unk_80192F20 {
-    s32 unk0;
-    s32 unk4;
-    struct Unk_80192E18 *unk8;
-    void *unkC;
-} Unk_80192F20;
+typedef struct IffContext {
+    s32 size;
+    s32 pos;
+    struct IffEntry *header;
+    void *chunk;
+} IffContext;
 
-typedef struct Unk_801DFFE8 {
-    s32 unk0;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
-    s16 unkE;
-    u16 unk10;
-    u16 unk12;
-} Unk_801DFFE8;
+typedef struct EventState {
+    s32 trigger;
+    s16 trigger_type;
+    s16 state;
+    s16 circle_flags;
+    s16 circle_set;
+    s16 cross_flags;
+    s16 cross_set;
+    u16 wait_timer;
+    u16 wait_flags;
+} EventState;
 
 typedef struct SceneTables {
-    struct Unk_801A3B5C *unk0;
+    struct BgmSep *unk0;
     struct Unk_801E02DC *unk4[4];
     s32 unk14;
     s32 trigger_count;
@@ -333,34 +333,34 @@ typedef struct SceneTables {
     struct NpcStats *npc_stats;
     void *unk48;
     struct Unk_8018BC50 *unk4C;
-    struct Unk_8018F590 *unk50;
-    struct Unk_801AC278 *unk54;
+    struct NpcRecord *unk50;
+    struct Vehicle *unk54;
     struct Unk_80188FEC *unk58;
     void *unk5C[1];
 } SceneTables;
 
-typedef struct Unk_801E056C {
-    s32 unk0;
-    s16 unk4;
-} Unk_801E056C;
+typedef struct EffectAlarm {
+    s32 alarm;
+    s16 active;
+} EffectAlarm;
 
-typedef struct Unk_801E058C {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    u16 unkA;
-    s16 unkC;
-    s16 unkE;
-    u16 unk10;
-    s16 unk12;
-    s16 unk14;
-    s16 unk16;
-    s16 unk18;
-    s16 unk1A;
-    s16 *unk1C;
-} Unk_801E058C;
+typedef struct MailMenu {
+    s16 state;
+    s16 index;
+    s16 cursor_entry;
+    s16 scroll;
+    s16 first_entry;
+    u16 sprite;
+    s16 icon_sprite;
+    s16 icon_rows;
+    u16 color;
+    s16 cursor_color;
+    s16 wrap;
+    s16 draw_rows;
+    s16 rows;
+    s16 count;
+    s16 *list;
+} MailMenu;
 
 typedef struct GameVars {
     u16 vars[0x5A];
@@ -371,13 +371,13 @@ typedef struct GameVars {
     u8 unkE0[0x11C];
     s16 drain_count;
     s16 drain_minute;
-    u16 unk200;
-    u16 unk202;
-    Unk_801E056C unk204[4];
-    Unk_801E058C unk224;
+    u16 car_speed_setting;
+    u16 text_speed_setting;
+    EffectAlarm alarms[4];
+    MailMenu mail_menu;
     s32 unk244;
     u8 unk248[0x4];
-    s16 unk24C;
+    s16 menu_busy;
     u8 unk24E[0x2];
     s16 unk250;
     s16 unk252;
@@ -397,27 +397,27 @@ typedef struct NpcBody {
     u8 unk6C[0x60];
 } NpcBody;
 
-typedef struct Unk_801CC1E8 {
-    s32 unk0;
-    u32 unk4;
+typedef struct KajEvent {
+    s32 type;
+    u32 ticks;
     s32 unk8;
     s32 unkC;
     s32 unk10;
-} Unk_801CC1E8;
+} KajEvent;
 
-typedef struct Unk_80174B10 {
-    struct Unk_80174A14 *unk0;
-    s32 unk4;
-    struct Unk_80174CB8 *unk8;
-} Unk_80174B10;
+typedef struct ActionSet {
+    struct ActionSetHeader *header;
+    s32 count;
+    struct Action *actions;
+} ActionSet;
 
-typedef struct Unk_801E1040 {
+typedef struct ScreenLight {
     s16 unk0[3];
-    s16 unk6;
+    s16 fade_active;
     s16 unk8[3];
-    s16 unkE;
-    s16 unk10;
-} Unk_801E1040;
+    s16 fade_level;
+    s16 dark;
+} ScreenLight;
 
 typedef struct NpcStats {
     u16 unk0;
@@ -437,74 +437,74 @@ typedef struct NpcStats {
     s32 unk20;
 } NpcStats;
 
-typedef struct Unk_801A3B5C {
-    s16 unk0;
-    s16 unk2;
-    s32 unk4;
-    void *unk8;
-} Unk_801A3B5C;
+typedef struct BgmSep {
+    s16 sep;
+    s16 seq;
+    s32 seq_count;
+    void *data;
+} BgmSep;
 
-typedef struct Unk_80174FFC {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
+typedef struct SVector {
+    s16 vx;
+    s16 vy;
+    s16 vz;
     u8 unk6[0x2];
-} Unk_80174FFC;
+} SVector;
 
-typedef struct Unk_801E1118 {
-    s32 unk0;
-    s32 unk4;
-    s16 unk8;
+typedef struct TrainState {
+    s32 door_task;
+    s32 trigger;
+    s16 direction;
     s16 unkA;
     s16 unkC;
-    u16 unkE;
-    u16 unk10;
-    u16 unk12;
-    s16 unk14;
-    s16 unk16;
+    u16 door_state;
+    u16 station;
+    u16 motion;
+    s16 speed;
+    s16 stop_timer;
     s16 unk18;
     s16 unk1A;
-    s32 unk1C;
-    s32 unk20;
-    s32 unk24;
-    s32 unk28;
-    s16 unk2C;
-    s16 unk2E;
-    s16 unk30;
+    s32 mark_start;
+    s32 mark_cruise;
+    s32 mark_brake;
+    s32 mark_stop;
+    s16 carry_vx;
+    s16 carry_vy;
+    s16 carry_vz;
     u8 unk32[0x2];
-    s16 unk34;
-    s16 unk36;
+    s16 view_pitch;
+    s16 view_yaw;
     s16 unk38;
-} Unk_801E1118;
+} TrainState;
 
-typedef struct Unk_801A3970 {
+typedef struct VabStream {
     u8 unk0[0x4];
-    u8 *unk4;
-    u8 *unk8;
+    u8 *head;
+    u8 *body_buf;
     u8 unkC[0x4];
-    s32 unk10;
-    s16 unk14;
-} Unk_801A3970;
+    s32 body_len;
+    s16 vab_id;
+} VabStream;
 
-typedef struct Unk_801DFE68 {
-    u16 unk0;
+typedef struct BuildingState {
+    u16 building;
     u16 unk2;
-} Unk_801DFE68;
+} BuildingState;
 
-typedef struct Unk_80184230 {
-    u16 unk0;
-    u16 unk2;
-    u16 unk4;
-    u16 unk6;
-} Unk_80184230;
+typedef struct Rect {
+    u16 x;
+    u16 y;
+    u16 w;
+    u16 h;
+} Rect;
 
-typedef struct Unk_801E07C0 {
-    u16 unk0;
+typedef struct RoadMap {
+    u16 mode;
     s16 unk2;
-    s16 *unk4;
-    s16 *unk8;
-    s16 *unkC;
-} Unk_801E07C0;
+    s16 *part0;
+    s16 *part1;
+    s16 *part2;
+} RoadMap;
 
 typedef struct Unk_8017CAC8 {
     u16 unk0;
@@ -513,120 +513,114 @@ typedef struct Unk_8017CAC8 {
     u16 unk6;
 } Unk_8017CAC8;
 
-typedef struct Unk_8017C9F8 {
+typedef struct Arena {
     u16 unk0;
     u16 unk2;
     u16 unk4;
     u16 unk6;
-    void *unk8;
-    Unk_8017CAC8 *unkC;
-} Unk_8017C9F8;
+    void *data;
+    Unk_8017CAC8 *cells;
+} Arena;
 
-typedef struct Unk_801855C8 {
+typedef struct DoorListNode {
     u8 unk0[0x4];
-    struct Unk_801855C8 *unk4;
-    Unk_801854B8 *unk8;
-} Unk_801855C8;
+    struct DoorListNode *next;
+    Door *data;
+} DoorListNode;
 
-typedef struct Unk_801DFE80 {
-    Unk_801855C8 *unk0;
-    Unk_801855C8 *unk4;
-    Unk_801855C8 *unk8;
-    s32 unkC;
-} Unk_801DFE80;
+typedef struct DoorList {
+    DoorListNode *head;
+    DoorListNode *tail;
+    DoorListNode *cursor;
+    s32 count;
+} DoorList;
 
-typedef struct Unk_80173954 {
-    s16 unk0;
-    s16 unk2;
-    u16 unk4;
+typedef struct ActionCond {
+    s16 used;
+    s16 invert;
+    u16 index;
     s16 unk6;
-    s16 unk8;
-    s16 unkA;
-} Unk_80173954;
+    s16 low;
+    s16 high;
+} ActionCond;
 
-typedef struct Unk_80174A14 {
+typedef struct ActionSetHeader {
     u16 unk0;
     u16 unk2;
-    u16 unk4;
-    u16 unk6;
-    Unk_80173954 unk8;
-    Unk_80173954 unk14;
-    Unk_80173954 unk20;
-    Unk_80173954 unk2C;
-} Unk_80174A14;
+    u16 next_set;
+    u16 next_mode;
+    ActionCond cond_var_a;
+    ActionCond cond_var_b;
+    ActionCond cond_status;
+    ActionCond cond_inventory;
+} ActionSetHeader;
 
-typedef struct Unk_80174BC8 {
+typedef struct ActionArgs {
     void *unk0;
-} Unk_80174BC8;
+} ActionArgs;
 
-typedef struct Unk_80174CB8 {
-    void *unk0;
-    s32 unk4;
-    Unk_80174BC8 *unk8;
-} Unk_80174CB8;
+typedef struct Action {
+    void *cmd;
+    s32 argc;
+    ActionArgs *args;
+} Action;
 
-typedef struct Unk_801DFE54 {
-    Unk_801CCB70 *unk0;
-    Unk_801CCB70 *unk4;
-    Unk_801CCB70 *unk8;
-    s32 unkC;
-} Unk_801DFE54;
+typedef struct LlList {
+    LlNode *head;
+    LlNode *tail;
+    LlNode *cursor;
+    s32 count;
+} LlList;
 
 typedef struct Unk_80176370 {
     u8 unk0[0x4];
     s16 unk4;
 } Unk_80176370;
 
-typedef struct Unk_80174D6C {
+typedef struct BlockListNode {
     u8 unk0[0x4];
-    s16 unk4;
-    s16 unk6;
-    u8 unk8[0x2];
-    s16 unkA;
-} Unk_80174D6C;
+    struct BlockListNode *next;
+    Block *data;
+} BlockListNode;
 
-typedef struct Unk_801DFC60 {
-    u8 unk0[0x8];
-    s16 unk8;
-    u8 unkA[0x4];
-    u16 unkE;
-    s32 unk10;
-    u8 unk14[0x4];
-    s32 unk18;
-    u8 unk1C[0x68];
-    void *unk84;
-    s32 unk88;
-} Unk_801DFC60;
+typedef struct BlockList {
+    BlockListNode *head;
+    BlockListNode *tail;
+    BlockListNode *cursor;
+    s32 count;
+} BlockList;
 
-typedef struct Unk_8017D0E0 {
+/* kaj ll list of models (mod_list): same handle and node layout as BlockList, but the nodes hold
+   the Model * that mod_list_add inserts (mod_alloc result) and mod_find walks. */
+typedef struct ModelListNode {
     u8 unk0[0x4];
-    struct Unk_8017D0E0 *unk4;
-    Unk_8017CCE4 *unk8;
-} Unk_8017D0E0;
+    struct ModelListNode *next;
+    Model *data;
+} ModelListNode;
 
-typedef struct Unk_801DFE5C {
-    Unk_8017D0E0 *unk0;
-    Unk_8017D0E0 *unk4;
-    Unk_8017D0E0 *unk8;
-    s32 unkC;
-} Unk_801DFE5C;
+typedef struct ModelList {
+    ModelListNode *head;
+    ModelListNode *tail;
+    ModelListNode *cursor;
+    s32 count;
+} ModelList;
 
-typedef struct Unk_8018F590 {
-    u16 unk0;
-    s16 unk2;
+typedef struct NpcRecord {
+    u16 id;
+    s16 enabled;
     u16 unk4;
-    u16 unk6;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-    s16 unk14;
-    s16 unk16;
-    s16 unk18;
-    u8 unk1A;
-    u8 unk1B;
-    s16 unk1C;
-    s16 unk1E;
-} Unk_8018F590;
+    u16 model;
+    s32 pos_x;
+    s32 pos_y;
+    s32 pos_z;
+    s16 rot_x;
+    s16 rot_y;
+    s16 rot_z;
+    u8 scaled;
+    u8 shown;
+    s16 move_task;
+    s16 moving;
+} NpcRecord;
 
 typedef struct Unk_801A217C {
     u8 unk0[0x4];
@@ -640,62 +634,62 @@ typedef struct Unk_801A217C {
     u16 unk1A;
 } Unk_801A217C;
 
-typedef struct Unk_801A4370 {
-    u16 unk0;
-    u16 unk2;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
-    s16 unkE;
-    s16 unk10;
-    u16 unk12;
-    s16 unk14;
-    s16 unk16;
-    s16 unk18;
-    s16 unk1A;
-    s32 unk1C;
-} Unk_801A4370;
+typedef struct Sprite {
+    u16 id;
+    u16 mode;
+    s16 visible;
+    s16 clut_dirty;
+    s16 color;
+    s16 x;
+    s16 y;
+    s16 depth;
+    s16 cell_w;
+    u16 cell_h;
+    s16 columns;
+    s16 rows;
+    s16 cell_col;
+    s16 cell_row;
+    s32 tim;
+} Sprite;
 
-typedef struct Unk_801A3DD4 {
-    u16 unk0;
-    u16 unk2;
-    u16 unk4;
-    u16 unk6;
-    u16 unk8;
+typedef struct SpriteRecord {
+    u16 id;
+    u16 mode;
+    u16 x;
+    u16 y;
+    u16 depth;
     u8 unkA[0x2];
-    u16 unkC;
-    u16 unkE;
+    u16 columns;
+    u16 rows;
     u8 unk10[0x2];
     s16 unk12;
     u8 unk14[4];
-} Unk_801A3DD4;
+} SpriteRecord;
 
-typedef struct Unk_801AC278 {
+typedef struct Vehicle {
     u16 unk0;
     u8 unk2[0xB6];
-    void *unkB8;
-    void *unkBC;
-    void *unkC0;
-} Unk_801AC278;
+    void *model0;
+    void *model1;
+    void *data;
+} Vehicle;
 
-typedef struct Unk_80192E18 {
-    s32 unk0;
-    s32 unk4;
+typedef struct IffEntry {
+    s32 offset;
+    s32 size;
     s32 unk8;
     s32 unkC;
     s32 unk10;
     s32 unk14;
-} Unk_80192E18;
+} IffEntry;
 
-typedef struct Unk_801E0600 {
-    s32 unk0;
-    u16 unk4;
+typedef struct AreaTrigger {
+    s32 trigger;
+    u16 trigger_type;
     u8 unk6[0x2];
-    s32 unk8;
+    s32 scene_trigger;
     u8 unkC[0x4];
-} Unk_801E0600;
+} AreaTrigger;
 
 typedef struct Unk_80192F60 {
     u8 unk0[0x8];
@@ -703,18 +697,18 @@ typedef struct Unk_80192F60 {
     s32 unkC;
 } Unk_80192F60;
 
-typedef struct Unk_801DFF30 {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-} Unk_801DFF30;
+typedef struct RoomPhone {
+    s16 ringing;
+    s16 state;
+    s16 message;
+} RoomPhone;
 
-typedef struct Unk_801DFF28 {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
+typedef struct RoomStorage {
+    s16 open;
+    s16 choice;
+    s16 stage;
     s16 unk6;
-} Unk_801DFF28;
+} RoomStorage;
 
 typedef struct Unk_8019A07C_3C {
     u16 unk0;
@@ -734,127 +728,85 @@ typedef struct Unk_8019A07C {
     Unk_8019A07C_3C *unk3C;
 } Unk_8019A07C;
 
-typedef struct Unk_801D1BD4 {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-} Unk_801D1BD4;
+typedef struct TimerAlarm {
+    s32 due;
+    void *id;
+    s32 data;
+    s32 wrap;
+} TimerAlarm;
 
-typedef struct Unk_801D05F8 {
-    s32 unk0;
-    void *unk4;
-    s32 unk8;
-    s32 unkC;
-} Unk_801D05F8;
-
-typedef struct Unk_801DFBB8 {
-    Unk_801D05F8 *unk0;
-    s32 unk4;
-    s32 unk8;
-    s16 unkC;
+typedef struct TimerHeap {
+    TimerAlarm *entries;
+    s32 capacity;
+    s32 count;
+    s16 full;
     u8 unkE[0x2];
-    s32 unk10;
-    s32 unk14;
-} Unk_801DFBB8;
+    s32 popped_id;
+    s32 popped_data;
+} TimerHeap;
 
-typedef struct Unk_801D1088 {
+typedef struct TodFrame {
     u8 unk0[0x2];
-    u16 unk2;
-    u32 unk4;
-} Unk_801D1088;
+    u16 packet_count;
+    u32 frame;
+} TodFrame;
 
-typedef struct Unk_801D12A8 {
-    struct Unk_801D12A8 *unk0;
+typedef struct TssSlot {
+    struct TssSlot *next;
     u8 unk4[0x1C];
-    s16 unk20;
-    s16 unk22;
-    s16 unk24;
-    s16 unk26;
-    s16 unk28;
+    s16 index;
+    s16 type;
+    s16 cur;
+    s16 target;
+    s16 step;
     u8 unk2A[0x2];
-    s32 unk2C;
-    void (*unk30)(struct Unk_801D12A8 *);
-    void (*unk34)(struct Unk_801D12A8 *);
-    void (*unk38)(struct Unk_801D12A8 *);
-    void *unk3C;
-} Unk_801D12A8;
+    s32 delay;
+    void (*on_step)(struct TssSlot *);
+    void (*on_end)(struct TssSlot *);
+    void (*on_kill)(struct TssSlot *);
+    void *data;
+} TssSlot;
 
-typedef struct Unk_801DFBD0 {
-    s32 unk0;
-    Unk_801D12A8 *unk4;
-    Unk_801D12A8 *unk8;
-    Unk_801D12A8 *unkC;
-} Unk_801DFBD0;
+typedef struct TssTable {
+    s32 count;
+    TssSlot *slots;
+    TssSlot *free_list;
+    TssSlot *done_list;
+} TssTable;
 
-typedef struct Unk_801E6FF0 {
+typedef struct ViewBuffer {
     u8 unk0[0x17];
-    u8 unk17;
-    u8 unk18;
-    u8 unk19;
-    u8 unk1A;
-    u8 unk1B;
+    u8 dfe;
+    u8 isbg;
+    u8 bg_r;
+    u8 bg_g;
+    u8 bg_b;
     u8 unk1C[0x40];
-    u8 unk5C[0x14];
-    s32 unk70;
-    u32 *unk74;
-    s32 unk78;
-    s32 unk7C;
-    u32 *unk80;
-    u32 *unk84;
-    s32 unk88;
-} Unk_801E6FF0;
+    u8 disp_env[0x14];
+    s32 ot_length;
+    u32 *ot_org;
+    s32 ot_offset;
+    s32 ot_point;
+    u32 *ot_tag;
+    u32 *ot_tags;
+    s32 packets;
+} ViewBuffer;
 
-typedef struct Unk_801A7C3C {
+typedef struct VehicleSprite {
     u8 unk0[0x4];
-    s16 unk4;
-    s16 unk6;
-    u8 unk8[0x8];
-    s16 unk10;
-    u8 unk12[0x2];
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    s32 unk20;
-    s16 unk24;
-    s16 unk26;
-    s16 unk28;
-    u8 unk2A[0x2];
-    s32 unk2C;
-    u8 unk30[0x14];
-    s32 unk44;
-    s32 unk48;
-    s32 unk4C;
-} Unk_801A7C3C;
-
-typedef struct Unk_801A742C_10 {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    u8 unk6[0x2];
-} Unk_801A742C_10;
-
-typedef struct Unk_801AC55C {
-    u8 unk0[0x4];
-    s16 unk4;
+    s16 visible;
     u8 unk6[0x4];
-    s16 unkA;
-    s16 unkC;
+    s16 x;
+    s16 y;
     u8 unkE[0x2];
-    s16 unk10;
-    u16 unk12;
-    u16 unk14;
-    u16 unk16;
-    s16 unk18;
-    s16 unk1A;
-    struct Unk_801AC55C_1C *unk1C;
-} Unk_801AC55C;
-
-typedef struct Unk_8017E504 {
-    u8 unk0[0xC];
-    s32 unkC;
-    s32 unk10;
-} Unk_8017E504;
+    s16 cell_w;
+    u16 cell_h;
+    u16 columns;
+    u16 rows;
+    s16 cell_col;
+    s16 cell_row;
+    struct Unk_801AC55C_1C *tim;
+} VehicleSprite;
 
 typedef struct Unk_80184100 {
     u8 unk0[0x6];
@@ -862,77 +814,63 @@ typedef struct Unk_80184100 {
     u16 unk8;
 } Unk_80184100;
 
-typedef struct Unk_801DFCAC {
-    u16 unk0;
-    u16 unk2;
-} Unk_801DFCAC;
+typedef struct TextCmd {
+    u16 opcode;
+    u16 state;
+} TextCmd;
 
-typedef struct Unk_80181C10 {
-    s16 unk0;
-    s16 unk2;
+typedef struct PauseMenu {
+    s16 item;
+    s16 page;
     s16 unk4;
-    s16 unk6;
+    s16 row;
     struct Unk_801A44B8 *unk8;
     struct Unk_801A44B8 *unkC;
-} Unk_80181C10;
+} PauseMenu;
 
-typedef struct Unk_80184338 {
-    u8 unk0[0x22];
-    s16 unk22;
-    u16 unk24;
-    s16 unk26;
-    s16 unk28;
-    u8 unk2A[0x2];
-    s32 unk2C;
-    void (*unk30)(struct Unk_80184338 *arg0);
-    void (*unk34)(void);
-    void (*unk38)(void);
-    s32 *unk3C;
-} Unk_80184338;
-
-typedef struct Unk_80184814 {
-    u16 unk0;
-    u16 unk2;
-    s16 unk4;
-    s16 unk6;
+typedef struct DoorMove {
+    u16 id;
+    u16 axis;
+    s16 active;
+    s16 visible;
     u8 unk8[0x2];
-    u16 unkA;
-    s16 unkC;
-    s16 unkE;
-    s32 unk10;
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    s16 unk20;
-    s16 unk22;
-    s16 unk24;
+    u16 state;
+    s16 move_from;
+    s16 move_to;
+    s32 block;
+    s32 pos_x;
+    s32 pos_y;
+    s32 pos_z;
+    s16 angle;
+    s16 speed;
+    s16 auto_return;
     u8 unk26[0x2];
-    s32 unk28;
-    u8 unk2C[0x14];
-    s32 unk40;
-    s32 unk44;
-    s32 unk48;
-} Unk_80184814;
+    s32 coord_flg;
+    u8 coord_m[0x14];
+    s32 coord_tx;
+    s32 coord_ty;
+    s32 coord_tz;
+} DoorMove;
 
-typedef struct Unk_8017B1E8 {
+typedef struct TmdTri {
     u16 unk0;
     u8 unk2[0x1];
-    u8 unk3;
-    u8 unk4;
-    u8 unk5;
-    u8 unk6;
+    u8 mode;
+    u8 code_r;
+    u8 code_g;
+    u8 code_b;
     u8 unk7[0x1];
-    u16 unk8;
-    u16 unkA;
-    u16 unkC;
-    u16 unkE;
-} Unk_8017B1E8;
+    u16 normal;
+    u16 vert0;
+    u16 vert1;
+    u16 vert2;
+} TmdTri;
 
-typedef struct Unk_8017B3E8 {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-} Unk_8017B3E8;
+typedef struct Vec3 {
+    s32 x;
+    s32 y;
+    s32 z;
+} Vec3;
 
 typedef struct Unk_8018519C_0 {
     u8 unk0[0x2];
@@ -940,9 +878,9 @@ typedef struct Unk_8018519C_0 {
     u16 unk4;
 } Unk_8018519C_0;
 
-typedef struct Unk_8018FA18 {
+typedef struct IffChunkBody {
     u8 unk0[0x7F8];
-} Unk_8018FA18;
+} IffChunkBody;
 
 typedef struct Unk_8019120C {
     u8 unk0[0x7F4];
@@ -955,15 +893,15 @@ typedef struct Unk_80193068 {
     s32 unk10;
 } Unk_80193068;
 
-typedef struct Unk_801DFF20 {
+typedef struct CdLoc {
     u8 unk0[0x4];
-} Unk_801DFF20;
+} CdLoc;
 
-typedef struct Unk_80191AB0_C {
-    s32 unk0;
-    s32 unk4;
+typedef struct IffChunk {
+    s32 tag;
+    s32 size;
     s16 unk8;
-} Unk_80191AB0_C;
+} IffChunk;
 
 typedef struct Unk_80191AB0 {
     s16 unk0;
@@ -983,22 +921,22 @@ typedef struct Unk_801DFC64 {
     u8 *unk8;
 } Unk_801DFC64;
 
-typedef struct Unk_801E1158 {
-    s16 unk0;
+typedef struct CarState {
+    s16 stopped;
     s16 unk2;
-    s16 unk4;
-    s16 unk6;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
+    s16 steer;
+    s16 gear;
+    s32 brake;
+    s32 throttle;
+    s32 speed;
     s32 unk14;
     s32 unk18;
-    Unk_801A742C_10 unk1C;
-    s16 unk24;
-    s16 unk26;
+    SVector unk1C;
+    s16 look_pitch;
+    s16 look_yaw;
     s16 unk28;
     u8 unk2A[0x2];
-    Unk_801A742C_10 unk2C[4];
+    SVector corners[4];
     s32 unk4C;
     s32 unk50;
     s32 unk54;
@@ -1006,48 +944,48 @@ typedef struct Unk_801E1158 {
     s32 unk5C;
     s32 unk60;
     s32 unk64;
-} Unk_801E1158;
+} CarState;
 
-typedef struct Unk_801E0340 {
+typedef struct SceneRequest {
     s16 unk0[5];
-    s16 unkA;
-    char *unkC;
+    s16 change;
+    char *path;
     s16 unk10;
-    s16 unk12;
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-} Unk_801E0340;
+    s16 yaw;
+    s32 pos_x;
+    s32 pos_y;
+    s32 pos_z;
+} SceneRequest;
 
-typedef struct Unk_801D7FB0 {
-    s16 unk0;
+typedef struct CarNavi {
+    s16 active;
     s16 unk2;
-    s16 unk4;
+    s16 dest;
     u8 unk6[0x2];
-    u32 unk8;
-    Unk_801AC55C *unkC;
-    Unk_801AC55C *unk10;
-} Unk_801D7FB0;
+    u32 start_dist;
+    VehicleSprite *dest_sprite;
+    VehicleSprite *unk10;
+} CarNavi;
 
-typedef struct Unk_801891A4 {
-    u16 unk0;
-    u16 unk2;
-    char unk4[0x22];
-    s16 unk26;
-} Unk_801891A4;
+typedef struct ItemRecord {
+    u16 id;
+    u16 kind;
+    char name[0x22];
+    s16 value;
+} ItemRecord;
 
 typedef struct SceneTrigger {
     s32 id;
-    s16 unk4;
-    s16 unk6;
+    s16 enter_set;
+    s16 leave_set;
     s16 unk8;
-    s16 unkA;
+    s16 enabled;
 } SceneTrigger;
 
-typedef struct Unk_80173250 {
+typedef struct ActionCmd {
     u16 unk0;
-    u16 unk2;
-    s32 unk4;
-} Unk_80173250;
+    u16 sub;
+    s32 target;
+} ActionCmd;
 
 #endif

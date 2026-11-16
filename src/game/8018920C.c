@@ -24,7 +24,7 @@ s16 event_blink1_timer;
 s16 event_blink2_timer;
 void sprite_fill_clut(s32 a, s32 b, s32 c, s32 d);
 extern GameVars action_vars;
-extern Unk_801E1040 D_801E1040;
+extern ScreenLight screen_light;
 void event_draw_clock_digits(s32 a, s16 b);
 void event_update_daylight(s32 a);
 void SetFarColor(s32 r, s32 g, s32 b);
@@ -50,7 +50,7 @@ void kaj_abend(s32 a, char *b, char *c, s32 d);
 s32 object_deliver_area_events(void);
 s32 player_leave_trigger(void);
 s32 mod_finish_handler(void);
-extern Unk_801DFFE8 D_801DFFE8;
+extern EventState event_state;
 typedef struct { s32 unk0; s32 unk4; s32 unk8; s32 unkC; void *unk10; } Unk_801895E0;
 s16 (*D_801DFEE0)(Unk_801895E0 *a);
 void action_reset(s16 arg0);
@@ -58,13 +58,13 @@ void text_close(void);
 s16 action_run_npc_event(u16 arg0, s16 arg1);
 s16 thing_run_script(s32 a, s32 b, s32 c);
 s16 action_run_trigger_leave(void *arg0);
-extern Player *D_801E076C[];
+extern Player *player_status_player[];
 typedef struct { s32 unk0; s32 unk4; s32 unk8; s32 unkC; s32 unk10; } Unk_8018970C;
 s16 (*D_801DFED4)(Unk_8018970C *a);
 void kaj_tss_release(s32 arg0);
 void kaj_pad_reset(s32 a);
 void kaj_view_clear_vram(void);
-void mail_menu_clear_rows(Unk_801E058C *p);
+void mail_menu_clear_rows(MailMenu *p);
 void effect_item_use_selected(void);
 void sound_bgm_stop(void);
 void event_draw_gauge(PlayerStatus *a);
@@ -102,18 +102,18 @@ void event_open(void) {
 }
 
 void event_handle_enter(Unk_801895E0 *a) {
-    Player *q = D_801E076C[0];
-    Unk_801DFFE8 *p = &D_801DFFE8;
+    Player *q = player_status_player[0];
+    EventState *p = &event_state;
     GameVars *g = &action_vars;
     s32 hi;
     s32 lo;
 
-    p->unk0 = a->unkC;
-    p->unk4 = a->unk8;
-    p->unkC = 0;
-    p->unk8 = 0;
-    p->unkE = -1;
-    p->unkA = -1;
+    p->trigger = a->unkC;
+    p->trigger_type = a->unk8;
+    p->cross_flags = 0;
+    p->circle_flags = 0;
+    p->cross_set = -1;
+    p->circle_set = -1;
     if (D_801DFEE4 != NULL && D_801DFEE4(a) != 0) {
         return;
     }
@@ -123,7 +123,7 @@ void event_handle_enter(Unk_801895E0 *a) {
             q->flags &= 0xFFFB;
             action_reset(0);
         } else {
-            p->unk6 = 1;
+            p->state = 1;
         }
         break;
     case 0xFD:
@@ -138,7 +138,7 @@ void event_handle_enter(Unk_801895E0 *a) {
                 action_reset(0);
             }
         } else {
-            p->unk6 = 1;
+            p->state = 1;
         }
         break;
     case 0xFE:
@@ -180,17 +180,17 @@ void event_handle_enter(Unk_801895E0 *a) {
             break;
         }
     case 0xF7:
-        p->unk6 = 1;
+        p->state = 1;
         break;
     }
 }
 
 void event_handle_leave(Unk_801895E0 *a) {
-    Unk_801DFFE8 *p = &D_801DFFE8;
+    EventState *p = &event_state;
 
-    p->unk0 = a->unkC;
-    p->unk4 = a->unk8;
-    if (p->unk4 != 0x40) {
+    p->trigger = a->unkC;
+    p->trigger_type = a->unk8;
+    if (p->trigger_type != 0x40) {
         action_reset(0);
         text_close();
     }
@@ -202,14 +202,14 @@ void event_handle_leave(Unk_801895E0 *a) {
         if (action_run_npc_event(a->unkC, 0) == 0) {
             action_reset(0);
         } else {
-            p->unk6 = 1;
+            p->state = 1;
         }
         break;
     case 0xFD:
         if (thing_run_script(((u8 *)&a->unkC)[1] >> 4, (u16)a->unkC & 0xFFF, 0) == 0) {
             action_reset(0);
         } else {
-            p->unk6 = 1;
+            p->state = 1;
         }
         break;
     default:
@@ -218,15 +218,15 @@ void event_handle_leave(Unk_801895E0 *a) {
             break;
         }
     case 0xF7:
-        p->unk6 = 1;
+        p->state = 1;
         break;
     }
 }
 
 s16 event_handle_effect_done(Unk_8018970C *a) {
     GameVars *g = &action_vars;
-    Player *q = D_801E076C[0];
-    Unk_801E058C *p = &g->unk224;
+    Player *q = player_status_player[0];
+    MailMenu *p = &g->mail_menu;
     s16 r = 0;
 
     kaj_tss_release(a->unk8);
@@ -248,15 +248,15 @@ s16 event_handle_effect_done(Unk_8018970C *a) {
         if (a->unkC == 0) {
             g->unk244 = -1;
         }
-        p->unk0 = 1;
+        p->state = 1;
         break;
     case 12:
         if (a->unkC == 0) {
             g->unk244 = -1;
         }
-        p->unk0 = 0;
-        g->unk24C = 0;
-        if (p->unkC == -2) {
+        p->state = 0;
+        g->menu_busy = 0;
+        if (p->icon_sprite == -2) {
             mail_menu_clear_rows(p);
         }
         if (q->flags & 0x4000) {
@@ -560,7 +560,7 @@ void event_draw_hud(void) {
 }
 
 void event_update_daylight(s32 a) {
-    Unk_801E1040 *c = &D_801E1040;
+    ScreenLight *c = &screen_light;
     GameVars *g = &action_vars;
     s16 m = g->vars[0x3E];
     s16 n;
@@ -568,7 +568,7 @@ void event_update_daylight(s32 a) {
 
     if (m == 5) {
         if ((s16)g->vars[0x3F] == 0 || (s16)a != 0) {
-            c->unk10 = 1;
+            c->dark = 1;
         }
         c->unk8[0] = g->vars[0x3F] + 1;
         if (c->unk0[0] != 0) {
@@ -579,7 +579,7 @@ void event_update_daylight(s32 a) {
         }
     } else if (m >= 6 && m < 0x12) {
         if ((m == 6 && (s16)g->vars[0x3F] == 0) || (s16)a != 0) {
-            c->unk10 = 0;
+            c->dark = 0;
             c->unk8[0] = 0;
             if (c->unk0[0] != 0) {
                 SetFarColor(0x7A, 0x7A, 0x7A);
@@ -587,7 +587,7 @@ void event_update_daylight(s32 a) {
         }
     } else if (m == 0x12) {
         if ((s16)g->vars[0x3F] == 0 || (s16)a != 0) {
-            c->unk10 = 1;
+            c->dark = 1;
         }
         c->unk8[0] = 0x3C - g->vars[0x3F];
         if (c->unk0[0] != 0) {
@@ -597,7 +597,7 @@ void event_update_daylight(s32 a) {
             SetFarColor(v, v, v);
         }
     } else if ((m == 0x13 && (s16)g->vars[0x3F] == 0) || (s16)a != 0) {
-        c->unk10 = 1;
+        c->dark = 1;
         c->unk8[0] = 0;
         if (c->unk0[0] != 0) {
             SetFarColor(0x2D, 0x2D, 0x2D);
@@ -732,7 +732,7 @@ void event_show_clock(s16 a) {
     event_draw_clock_digits(0, p->vars[0x3D] + 1);
     event_draw_clock_digits(1, p->vars[0x3E]);
     event_draw_clock_digits(2, p->vars[0x3F]);
-    D_801E1040.unk0[0] = a;
+    screen_light.unk0[0] = a;
     SetFarColor(0, 0, 0);
     if (a != 0) {
         event_update_daylight(1);

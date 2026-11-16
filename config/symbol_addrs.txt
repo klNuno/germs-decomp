@@ -1933,3 +1933,35 @@ player_character = 0x801E0620;
 action_vars = 0x801E0368;
 // SceneTables: trigger, NPC, NPC body and NPC stats tables filled by the object loader and freed by the scene unload
 object_scene_tables = 0x801E02D8;
+// EventState: script event state (trigger, prompt answers, wait bits) written by event_handle_enter/leave, text_show, action_update, block_on_action
+event_state = 0x801DFFE8;
+// SceneRequest: scene change request (mail_goto_twn path and position, change flag read by the main loop, player_place_for_scene)
+scene_request = 0x801E0340;
+// ScreenLight: daylight switch and dark flag (event_update_daylight), fade level and flag (effect_start_fade, door_fade_step)
+screen_light = 0x801E1040;
+// TrainState: train motion, station, stop marks and doors (thing_train_update, vehicle_train_set_doors)
+vehicle_train_state = 0x801E1118;
+// RoadMap: road map mode and the "Road Map Parts" sprites (roadmap_init, player_update_map)
+roadmap_state = 0x801E07C0;
+// BuildingState: building id of the building scene (block_building_load)
+block_building_state = 0x801DFE68;
+// VabStream: VAB header and body stream buffer (sound_vab_open_head, object_load_vabb "vab_trans_buffer")
+sound_vab_stream = 0x801E05C0;
+// DoorList: kaj ll list of doors (door_add, door_refresh_all, door_update_all)
+door_list = 0x801DFE80;
+// CarState: car drive state reset by thing_car_init (vehicle_car_input, vehicle_car_drive, block_fit_ground_tilt)
+vehicle_car_state = 0x801E1158;
+// AreaTrigger: area the player is in, pushed as the ENTER event by object_deliver_area_events
+object_area_current = 0x801E0600;
+// AreaTrigger: previous area, pushed as the LEAVE event by object_deliver_area_events, then set to the current one
+object_area_previous = 0x801E0610;
+// BlockList: kaj ll list of blocks walked by block_find_at, block_draw_all, block_update_visibility
+block_list = 0x801DFE5C;
+// CarNavi: car navi state (vehicle_navi_show, vehicle_navi_update)
+vehicle_navi = 0x801D7FB0;
+// NpcStats used by the ai when npc_find_stats finds no record (ai_cur_stats = &D_801D7328)
+ai_default_stats = 0x801D7328;
+// player_status + 0x5C (PlayerStatus.player): the Player pointer read as D_801E076C[0] in 15 units
+player_status_player = 0x801E076C;
+// player_status + 0x58 (PlayerStatus.inventory): the Inventory pointer read as D_801E0768[0] (action_test_inventory weapon and item slots)
+player_status_inventory = 0x801E0768;

@@ -1,10 +1,10 @@
 #include "common.h"
 #include "game/types.h"
 
-extern Unk_801E1040 D_801E1040;
+extern ScreenLight screen_light;
 extern GameVars action_vars;
 void kaj_event_flush(s32 a, s32 b);
-extern Unk_801E056C effect_alarms[4];
+extern EffectAlarm effect_alarms[4];
 s32 kaj_event_set_alarm(s32 a, s32 b, s32 c);
 void free3(void *ptr);
 void *effect_flame_small_bufs;
@@ -59,8 +59,8 @@ typedef struct {
     s16 unk6;
 } Unk_801DFEB8;
 Unk_801DFEB8 effect_elevator;
-extern Unk_801DFE68 D_801DFE68;
-extern Inventory *D_801E0768[];
+extern BuildingState block_building_state;
+extern Inventory *player_status_inventory[];
 typedef struct Unk_80188FEC {
     u16 unk0;
     u16 unk2;
@@ -131,7 +131,7 @@ void mail_step_frame(s32 a, s32 b, s32 c);
 s32 kaj_event_get(s32 *arg0);
 void kaj_event_done(s32 *arg0);
 void kaj_timer_disable(void);
-extern Unk_801E0340 D_801E0340[];
+extern SceneRequest scene_request[];
 extern PlayerStatus player_status;
 extern s16 effect_item_menu_list[];
 s16 effect_item_sel;
@@ -145,7 +145,7 @@ void thing_set_animate(s32 a, s32 b, s32 c);
 void thing_set_flag10(s32 a, s32 b, s32 c);
 Unk_80188FEC *effect_weapon_find(s16 arg0);
 void player_weapon_sound(s16 a, s32 b);
-extern Player *D_801E076C[];
+extern Player *player_status_player[];
 s32 effect_elevator_on_task_end(s32 *arg0);
 void sprite_fill_clut(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 void sprite_set_clut_entry(s32 arg0, s32 arg1, s32 arg2);
@@ -165,7 +165,7 @@ typedef struct {
 void effect_sprite_slide_step(Unk_801867E8 *arg0);
 void effect_sprite_slide_end(Unk_80186838 *arg0);
 extern u8 effect_flame_small_cluts[][0x20];
-Unk_801854B8 *door_find(u16 arg0);
+Door *door_find(u16 arg0);
 extern char D_80170590[];
 void text_show(char *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
 void sprite_set_visible(s32 arg0, s32 arg1);
@@ -181,8 +181,8 @@ s32 mail_menu_close(void);
 void sound_se_play(s32 arg0);
 typedef struct { u16 unk0; u16 unk2; u16 unk4; } Unk_801DFE6A;
 extern Unk_801DFE6A D_801DFE6A;
-void door_start_open(Unk_801854B8 *arg0, s16 arg1, s16 arg2, s16 arg3);
-void door_start_close(Unk_801854B8 *arg0, s16 arg1, s16 arg2);
+void door_start_open(Door *arg0, s16 arg1, s16 arg2, s16 arg3);
+void door_start_close(Door *arg0, s16 arg1, s16 arg2);
 void *memset(void *dst, s32 c, u32 n);
 char *strncpy(char *dst, char *src, u32 n);
 extern char effect_str_scene_idc[];
@@ -378,7 +378,7 @@ void effect_flame_large_update(void) {
 
 void effect_start_fade(s32 arg0, s32 arg1) {
     GameVars *g = &action_vars;
-    Unk_801E1040 *h = &D_801E1040;
+    ScreenLight *h = &screen_light;
     Unk_80185918 *node;
 
     node = kaj_tss_alloc(4);
@@ -396,8 +396,8 @@ void effect_start_fade(s32 arg0, s32 arg1) {
         node->unk26 = 0;
         break;
     }
-    h->unkE = node->unk24;
-    h->unk6 = 1;
+    h->fade_level = node->unk24;
+    h->fade_active = 1;
     kaj_tss_set_steps(node, arg1);
     node->unk30 = door_fade_step;
     node->unk34 = door_fade_step;
@@ -406,26 +406,26 @@ void effect_start_fade(s32 arg0, s32 arg1) {
 }
 
 void effect_fade_reset(void) {
-    Unk_801E1040 *p = &D_801E1040;
-    if (p->unk6 != 0) {
-        p->unkE = 0x1000;
-        p->unk6 = 0;
+    ScreenLight *p = &screen_light;
+    if (p->fade_active != 0) {
+        p->fade_level = 0x1000;
+        p->fade_active = 0;
     }
 }
 
 void effect_fade_set_black(void) {
-    Unk_801E1040 *p = &D_801E1040;
-    if (p->unk6 == 0) {
-        p->unkE = 0;
-        p->unk6 = 1;
+    ScreenLight *p = &screen_light;
+    if (p->fade_active == 0) {
+        p->fade_level = 0;
+        p->fade_active = 1;
     }
 }
 
 void effect_fade_set_dim(void) {
-    Unk_801E1040 *p = &D_801E1040;
-    if (p->unk6 == 0) {
-        p->unkE = 0x400;
-        p->unk6 = 1;
+    ScreenLight *p = &screen_light;
+    if (p->fade_active == 0) {
+        p->fade_level = 0x400;
+        p->fade_active = 1;
     }
 }
 
@@ -458,19 +458,19 @@ void effect_clear_alarms(void) {
     s32 i;
 
     for (i = 0; i < 4; i++) {
-        action_vars.unk204[i].unk4 = 0;
-        action_vars.unk204[i].unk0 = -1;
+        action_vars.alarms[i].active = 0;
+        action_vars.alarms[i].alarm = -1;
         kaj_event_flush(2, i + 0x64);
     }
 }
 
 void effect_start_alarm(s32 arg0, s32 arg1, s32 arg2) {
-    Unk_801E056C *p = &effect_alarms[arg0];
+    EffectAlarm *p = &effect_alarms[arg0];
 
-    if (p->unk4 == 0) {
-        p->unk0 = kaj_event_set_alarm(arg2 * 60, arg0 + 0x64, arg1);
-        if (p->unk0 >= 0) {
-            p->unk4 = 1;
+    if (p->active == 0) {
+        p->alarm = kaj_event_set_alarm(arg2 * 60, arg0 + 0x64, arg1);
+        if (p->alarm >= 0) {
+            p->active = 1;
         }
     }
 }
@@ -615,9 +615,9 @@ void effect_sprite_anim_step(Unk_80186884 *arg0) {
 }
 
 s32 effect_elevator_on_task_end(s32 *arg0) {
-    Player *p = D_801E076C[0];
+    Player *p = player_status_player[0];
     Unk_801DFEB8 *q = &effect_elevator;
-    Unk_801854B8 *e;
+    Door *e;
     s32 i;
 
     if (arg0[4] != 4) {
@@ -632,29 +632,29 @@ s32 effect_elevator_on_task_end(s32 *arg0) {
     for (i = 0; i < 2; i++) {
         e = door_find(((u16)q->unk2 - 1) * 2 + i);
         if (e != NULL) {
-            e->unkA = 0;
-            switch ((u16)e->unk2) {
+            e->state = 0;
+            switch ((u16)e->axis) {
             case 1:
-                e->unk14 = e->unkC;
+                e->pos_x = e->move_from;
                 break;
             case 2:
-                e->unk18 = e->unkC;
+                e->pos_y = e->move_from;
                 break;
             case 3:
-                e->unk1C = e->unkC;
+                e->pos_z = e->move_from;
                 break;
             }
-            e->unk40 = e->unk14 - p->cell_x * 0x30D4;
-            e->unk44 = e->unk18 + p->cell_y * 0x7D00;
-            e->unk48 = e->unk1C - p->cell_z * 0x30D4;
-            e->unk28 = 0;
+            e->coord_tx = e->pos_x - p->cell_x * 0x30D4;
+            e->coord_ty = e->pos_y + p->cell_y * 0x7D00;
+            e->coord_tz = e->pos_z - p->cell_z * 0x30D4;
+            e->coord_flg = 0;
         }
     }
     return 1;
 }
 
 void effect_elevator_exit(void) {
-    Player *p = D_801E076C[0];
+    Player *p = player_status_player[0];
     s32 x;
     s32 z;
 
@@ -668,8 +668,8 @@ void effect_elevator_exit(void) {
 }
 
 void effect_elevator_move_doors(Unk_801DFEB8 *arg0, s16 arg1) {
-    Unk_801E0340 *p = D_801E0340;
-    Unk_801854B8 *e;
+    SceneRequest *p = scene_request;
+    Door *e;
     s16 v;
     s32 i;
 
@@ -680,7 +680,7 @@ void effect_elevator_move_doors(Unk_801DFEB8 *arg0, s16 arg1) {
             continue;
         }
         if (arg1 != 0) {
-            if (D_801DFE68.unk0 == 0) {
+            if (block_building_state.building == 0) {
                 switch (D_801DFE6A.unk0) {
                 case 28:
                     v = i * 0x140 - 0xA0;
@@ -697,24 +697,24 @@ void effect_elevator_move_doors(Unk_801DFEB8 *arg0, s16 arg1) {
             arg0->unk6 = 2;
         } else {
             memset(&p[1], 0, 4);
-            ((s16 *)&p->unk14)[1] = 0x41;
-            ((s16 *)&p->unk18)[0] = arg0->unk0;
-            if (D_801DFE68.unk0 == 0) {
+            ((s16 *)&p->pos_x)[1] = 0x41;
+            ((s16 *)&p->pos_y)[0] = arg0->unk0;
+            if (block_building_state.building == 0) {
                 switch (D_801DFE6A.unk0) {
                 case 28:
                     strncpy((char *)&p[1], effect_str_scene_idc, 3);
-                    ((s16 *)&p->unk18)[1] = 0xB4;
-                    v = (e->unkC - e->unk14) / 10;
+                    ((s16 *)&p->pos_y)[1] = 0xB4;
+                    v = (e->move_from - e->pos_x) / 10;
                     break;
                 case 7:
                     strncpy((char *)&p[1], effect_str_scene_htl, 3);
-                    ((s16 *)&p->unk18)[1] = 0x5A;
-                    v = (e->unkC - e->unk1C) / 10;
+                    ((s16 *)&p->pos_y)[1] = 0x5A;
+                    v = (e->move_from - e->pos_z) / 10;
                     break;
                 case 15:
                     strncpy((char *)&p[1], effect_str_scene_cmn, 3);
-                    ((s16 *)&p->unk18)[1] = 0xB4;
-                    v = (e->unkC - e->unk14) / 10;
+                    ((s16 *)&p->pos_y)[1] = 0xB4;
+                    v = (e->move_from - e->pos_x) / 10;
                     break;
                 }
             }
@@ -782,7 +782,7 @@ void effect_elevator_enter(void) {
     s32 z;
 
     D_801DFED4 = (s32)effect_elevator_on_task_end;
-    p = D_801E076C[0];
+    p = player_status_player[0];
     sprite_fill_clut(2, 1, 8, 0x421);
     q = &effect_elevator;
     if ((u16)q->unk2 == (u16)effect_elevator.unk0) {
@@ -799,15 +799,15 @@ void effect_elevator_enter(void) {
 }
 
 static inline u16 func_801872D4_inl(s32 a) {
-    Unk_801854B8 *e = door_find(((a - 1) * 2) | 1);
+    Door *e = door_find(((a - 1) * 2) | 1);
     if (e == NULL) {
         return 5;
     }
-    return e->unkA;
+    return e->state;
 }
 
 void effect_elevator_update(void) {
-    Player *p = D_801E076C[0];
+    Player *p = player_status_player[0];
     Unk_801DFEB8 *q = &effect_elevator;
     u16 v;
 
@@ -876,13 +876,13 @@ void effect_elevator_run(void) {
 
 void effect_elevator_init(s16 arg0) {
     Unk_801DFEB8 *p = &effect_elevator;
-    Unk_801DFE68 *q;
+    BuildingState *q;
 
     p->unk0 = arg0;
     p->unk2 = arg0;
     p->unk6 = 0;
-    if (D_801DFE68.unk0 == 0) {
-        q = &D_801DFE68;
+    if (block_building_state.building == 0) {
+        q = &block_building_state;
         switch (q->unk2) {
         case 28:
             p->unk4 = 3;
@@ -938,7 +938,7 @@ INCLUDE_RODATA("asm/nonmatchings/game/80185A60", D_8017056C);
 INCLUDE_RODATA("asm/nonmatchings/game/80185A60", D_80170590);
 
 void effect_weapon_draw_panel(s16 arg0, s16 arg1) {
-    Inventory *p = D_801E0768[0];
+    Inventory *p = player_status_inventory[0];
     Unk_80188FEC *e;
     s16 id;
     s16 v;
@@ -1031,16 +1031,16 @@ void effect_weapon_calc_rate(s32 arg0) {
     if (e->unk34 != 0) {
         switch (e->unk38) {
         case 0:
-            val = g->unkC;
+            val = g->stat0;
             break;
         case 1:
-            val = g->unkE;
+            val = g->stat1;
             break;
         case 2:
-            val = g->unk10;
+            val = g->stat2;
             break;
         case 3:
-            val = g->unk12;
+            val = g->stat3;
             break;
         }
         if (val < e->unk3C) {
@@ -1051,19 +1051,19 @@ void effect_weapon_calc_rate(s32 arg0) {
     if (e->unk40 != 0) {
         switch (e->unk2) {
         case 0:
-            val = g->unk14;
+            val = g->weapon0_level;
             break;
         case 1:
-            val = g->unk18;
+            val = g->weapon1_level;
             break;
         case 2:
-            val = g->unk1C;
+            val = g->weapon2_level;
             break;
         case 3:
-            val = g->unk20;
+            val = g->weapon3_level;
             break;
         case 4:
-            val = g->unk24;
+            val = g->weapon4_level;
             break;
         }
         if (val < e->unk48) {
@@ -1077,7 +1077,7 @@ void effect_weapon_calc_rate(s32 arg0) {
 }
 
 void effect_weapon_swap_stock(s16 arg0, s16 arg1) {
-    Inventory *p = D_801E0768[0];
+    Inventory *p = player_status_inventory[0];
     PlayerStatus *g;
     Inventory *e;
     Player *q;
@@ -1115,7 +1115,7 @@ void effect_weapon_swap_stock(s16 arg0, s16 arg1) {
 }
 
 s32 effect_inventory_has_room(s16 arg0) {
-    Inventory *p = D_801E0768[0];
+    Inventory *p = player_status_inventory[0];
     s32 i;
     s16 n;
 
@@ -1161,7 +1161,7 @@ static inline void func_80187E38_inl(s32 d) {
     s32 k;
     void *r;
     s32 id;
-    g = D_801E0768[0];
+    g = player_status_inventory[0];
     if (g->unk0 != 2) {
         return;
     }
@@ -1221,7 +1221,7 @@ s32 effect_weapon_input(PlayerStatus *arg0) {
         a->weapon_state = 0;
     }
     if (!(kaj_system.pad_prev & 0x100) && (kaj_system.pad_now & 0x100)) {
-        if (*(s32 *)&q->unk24C != 0) { /* this unit reads one word at 0x24C */
+        if (*(s32 *)&q->menu_busy != 0) { /* this unit reads one word at 0x24C */
             return 0;
         }
         if ((u16)a->weapon_state == 0) {
@@ -1255,8 +1255,8 @@ s16 effect_item_use(PlayerStatus *a, s16 b, s16 c, s16 d, s16 e) {
     char buf[0x80];
     SceneTables *p = &object_scene_tables;
     GameVars *q = &action_vars;
-    Unk_801891A4 *ent;
-    Unk_801891A4 *e2;
+    ItemRecord *ent;
+    ItemRecord *e2;
     s32 n;
     s32 i;
     s32 j;
@@ -1267,14 +1267,14 @@ s16 effect_item_use(PlayerStatus *a, s16 b, s16 c, s16 d, s16 e) {
     s32 r;
 
     n = p->unk2C;
-    e2 = (Unk_801891A4 *)p->unk48;
+    e2 = (ItemRecord *)p->unk48;
     if (n != 0) {
         if (c < 0) {
             ent = NULL;
             goto done;
         }
         for (j = 0; j < n; j++, e2++) {
-            if (e2->unk0 == c) {
+            if (e2->id == c) {
                 ent = e2;
                 goto done;
             }
@@ -1292,35 +1292,35 @@ done:
     if ((u16)(c - 0x27) < 4 || (u16)(c - 0x2F) < 4) {
         flag = 1;
     }
-    switch (ent->unk2) {
+    switch (ent->kind) {
     case 0:
-        v = ent->unk26;
+        v = ent->value;
         if (v < 0) {
             if (a->mutant != 0) {
                 player_add_hp(-v, 0);
                 if (flag) {
                     /* " 8%s, 1を飲んで、8Ｖｉｔａｌｉｔｙ1が, 回復した" */
-                    sprintf(buf, D_80170618, ent->unk4);
+                    sprintf(buf, D_80170618, ent->name);
                 } else {
                     /* " 8%s, 1を食べて、8Ｖｉｔａｌｉｔｙ1が, 回復した" */
-                    sprintf(buf, D_80170648, ent->unk4);
+                    sprintf(buf, D_80170648, ent->name);
                 }
             } else {
                 kind = 4;
                 player_add_hp(v, 0);
-                player_heal_part(3, 2, ent->unk26);
+                player_heal_part(3, 2, ent->value);
                 if (flag) {
                     /* " 8%s, 1を飲んで、8Ｖｉｔａｌｉｔｙ1が, 減少し猛烈な腹痛が襲ってきた" */
-                    sprintf(buf, D_80170678, ent->unk4);
+                    sprintf(buf, D_80170678, ent->name);
                 } else {
                     /* " 8%s, 1を食べて、8Ｖｉｔａｌｉｔｙ1が, 減少し猛烈な腹痛が襲ってきた" */
-                    sprintf(buf, D_801706BC, ent->unk4);
+                    sprintf(buf, D_801706BC, ent->name);
                 }
             }
         } else if (d != 0) {
             kind = 4;
             player_add_hp(-(v / 2), 0);
-            player_heal_part(3, 2, -ent->unk26);
+            player_heal_part(3, 2, -ent->value);
             if (flag) {
                 /* " 1飲み過ぎ、ハラをこわして, 8Ｖｉｔａｌｉｔｙ1が減少した" */
                 strncpy(buf, D_80170700, 0x38);
@@ -1332,10 +1332,10 @@ done:
             player_add_hp(v, 0);
             if (flag) {
                 /* " 8%s, 1を飲んで、8Ｖｉｔａｌｉｔｙ1が, 回復した" */
-                sprintf(buf, D_80170618, ent->unk4);
+                sprintf(buf, D_80170618, ent->name);
             } else {
                 /* " 8%s, 1を食べて、8Ｖｉｔａｌｉｔｙ1が, 回復した" */
-                sprintf(buf, D_80170648, ent->unk4);
+                sprintf(buf, D_80170648, ent->name);
             }
             if (a->energy == 0xFF && d == 0) {
                 ret = 1;
@@ -1351,7 +1351,7 @@ done:
         r = player_is_injured();
         if ((s16)r != 0) {
             for (i = 0; i < 5; i++) {
-                (q->vars + 0x5A)[i] -= ent->unk26;
+                (q->vars + 0x5A)[i] -= ent->value;
                 if ((s16)(q->vars + 0x5A)[i] < 0) {
                     (q->vars + 0x5A)[i] = 0;
                 }
@@ -1359,7 +1359,7 @@ done:
             event_draw_limb_status(a);
         }
         memset(buf, 0, 0x80);
-        switch (ent->unk26) {
+        switch (ent->value) {
         case 60:
             if ((s16)r != 0) {
                 /* " 傷が多少回復した" */
@@ -1388,7 +1388,7 @@ done:
             }
             break;
         }
-        event_advance_clock(ent->unk26, 1);
+        event_advance_clock(ent->value, 1);
         text_show(buf, 1, -1, 0, -1, 0, kind);
         break;
     case 1:
@@ -1411,7 +1411,7 @@ void effect_item_use_selected(void) {
 
     if (effect_item_sel >= 0) {
         id = effect_item_menu_list[effect_item_sel];
-        r = effect_item_use(g, D_801E0340[0].unk0[0], id, effect_item_full, 1);
+        r = effect_item_use(g, scene_request[0].unk0[0], id, effect_item_full, 1);
         if (r >= 0) {
             if (r != 0) {
                 effect_item_full = 1;
@@ -1496,7 +1496,7 @@ s16 effect_item_input(PlayerStatus *arg0, s16 arg1) {
         return 0;
     }
     if (!(kaj_system.pad_prev & 0x800) && (kaj_system.pad_now & 0x800)) {
-        if (*(s32 *)&g->unk24C != 0) {
+        if (*(s32 *)&g->menu_busy != 0) {
             return 0;
         }
         if (effect_item_menu_show(arg0, n, 1) != 0) {
@@ -1565,7 +1565,7 @@ void effect_weapon_load_models(void) {
 }
 
 void effect_weapon_reset(void) {
-    Inventory *p = D_801E0768[0];
+    Inventory *p = player_status_inventory[0];
 
     p->weapon_shown = 0;
     p->weapon_state = 0;
@@ -1591,7 +1591,7 @@ void effect_weapon_check_fire_frame(s32 arg0) {
 }
 
 s32 effect_weapon_list(s16 arg0, s16 *arg1, s16 *arg2) {
-    Inventory *p = D_801E0768[0];
+    Inventory *p = player_status_inventory[0];
     s32 i;
     s32 n;
     s32 m;
@@ -1654,7 +1654,7 @@ Unk_80188FEC *effect_weapon_find(s16 arg0) {
 }
 
 s32 effect_item_add(s16 arg0, s16 arg1) {
-    Inventory *p = D_801E0768[0];
+    Inventory *p = player_status_inventory[0];
     s32 i;
 
     if (arg1 == 2) {
@@ -1672,7 +1672,7 @@ s32 effect_item_add(s16 arg0, s16 arg1) {
 }
 
 s32 effect_item_remove(s16 arg0, s16 arg1) {
-    Inventory *p = D_801E0768[0];
+    Inventory *p = player_status_inventory[0];
     s32 i;
 
     if (arg1 == 2) {
@@ -1703,16 +1703,16 @@ void effect_item_free_records(void) {
     }
 }
 
-Unk_801891A4 *effect_item_find(s16 arg0) {
+ItemRecord *effect_item_find(s16 arg0) {
     SceneTables *p = &object_scene_tables;
     s32 n = p->unk2C;
-    Unk_801891A4 *e = (Unk_801891A4 *)p->unk48;
+    ItemRecord *e = (ItemRecord *)p->unk48;
     s32 i;
     if (n == 0 || arg0 < 0) {
         return NULL;
     }
     for (i = 0; i < p->unk2C; i++, e++) {
-        if (e->unk0 == arg0) {
+        if (e->id == arg0) {
             return e;
         }
     }

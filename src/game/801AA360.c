@@ -1,7 +1,7 @@
 #include "common.h"
 #include "game/types.h"
 
-extern Player *D_801E076C[];
+extern Player *player_status_player[];
 void object_load_res(s32 arg0, s32 arg1);
 typedef struct {
     s32 unk0;
@@ -27,51 +27,51 @@ extern Unk_801E032C *D_801E032C[];
 void thing_car_init(Unk_801E032C *arg0, Player *arg1);
 void thing_train_init(Unk_801E032C *arg0, Player *arg1);
 extern SceneTables object_scene_tables;
-void thing_car_get_out(Unk_801AC278 *arg0);
+void thing_car_get_out(Vehicle *arg0);
 void free3(void *ptr);
 void sound_se_pop(void);
 void vehicle_car_drive(Player *arg0);
 void thing_train_update(Player *arg0);
 typedef struct Unk_801AC55C_1C { u16 unk0; u16 unk2; u8 pad4[0x10]; s16 unk14; } Unk_801AC55C_1C;
 extern PlayerStatus player_status;
-extern s16 D_801D7FB0[];
+extern s16 vehicle_navi[];
 void sound_se_play(s32 arg0);
 s32 mail_menu_close(void);
-extern Unk_801E1118 D_801E1118;
-Unk_801A7C3C *thing_find(s32 arg0, s32 arg1);
+extern TrainState vehicle_train_state;
+Thing *thing_find(s32 arg0, s32 arg1);
 extern char vehicle_str_file[];
 void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
-void vehicle_car_follow_player(Unk_801A7C3C *arg0, s32 arg1);
+void vehicle_car_follow_player(Thing *arg0, s32 arg1);
 s32 mail_menu_open(s16 a, s16 b, s16 c, s16 d, s16 e, s16 *f, s16 g, s16 h, s16 i);
 extern char D_80171A78[];
 extern char D_80171AA8[];
 void *kaj_malloc(u32 size);
 typedef struct { s16 unk0; s16 unk2; s16 unk4; s16 unk6; } Unk_801AA8DC_10;
 void RotMatrix(Unk_801AA8DC_10 *arg0, void *arg1);
-extern Unk_801DFFE8 D_801DFFE8;
+extern EventState event_state;
 void text_show(char *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
 void text_close(void);
 void action_reset(s16 arg0);
 extern s32 vehicle_str_sb1[];
 extern s32 vehicle_str_rw1[];
 void mail_goto_building(s32 arg0, s32 *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
-extern Unk_801E0340 D_801E0340;
+extern SceneRequest scene_request;
 extern KajSystem kaj_system;
-extern Unk_801E07C0 D_801E07C0;
+extern RoadMap roadmap_state;
 s16 mail_menu_get_state(void);
 s16 mail_menu_move(s16 a);
 void vehicle_navi_open_menu(void);
 extern s16 vehicle_navi_dest_xz[];
 typedef struct { u8 pad0[0x60]; s32 unk60; s32 unk64; s32 unk68; } Unk_801AC578;
-Unk_801AC55C *sprite_find(u16 arg0);
+VehicleSprite *sprite_find(u16 arg0);
 s32 SquareRoot0(s32 arg0);
-typedef struct { u8 pad0[0x22]; s16 unk22; s16 unk24; s16 unk26; s16 unk28; u8 pad2A[0x2]; s32 unk2C; void *unk30; void *unk34; void *unk38; Unk_801AC55C **unk3C; } Unk_801AC70C;
+typedef struct { u8 pad0[0x22]; s16 unk22; s16 unk24; s16 unk26; s16 unk28; u8 pad2A[0x2]; s32 unk2C; void *unk30; void *unk34; void *unk38; VehicleSprite **unk3C; } Unk_801AC70C;
 void thing_set_animate(s32 a, s32 b, s32 c);
 void *kaj_tss_alloc(u32 arg0);
 s32 kaj_tss_start(void *arg0);
 void vehicle_train_door_frame(Unk_801AC70C *arg0);
 void vehicle_train_door_last(Unk_801AC70C *arg0);
-s32 MoveImage(Unk_80184230 *rect, s32 x, s32 y);
+s32 MoveImage(Rect *rect, s32 x, s32 y);
 void RotMatrixZXY(Unk_801AA8DC_10 *arg0, void *arg1);
 s32 block_find_surface(s32 arg0, s32 arg1, s32 *arg2, s32 arg3);
 s32 block_find_at(s32 a0, s32 a1, s32 a2);
@@ -81,7 +81,7 @@ void sprite_fill_clut(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 s16 mail_wrap_angle(s16 a);
 s32 ratan2(s32 y, s32 x);
 extern s32 D_801E6DB4[];
-extern Unk_801E1158 D_801E1158;
+extern CarState vehicle_car_state;
 s16 vehicle_car_stopped_input(void);
 s32 player_update_map(PlayerStatus *arg0);
 void vehicle_navi_update(Player *arg0, Unk_801AC578 *arg1);
@@ -104,7 +104,7 @@ void vehicle_car_drive(Player *arg0) {
     Unk_801AA8DC_10 sv;
     s32 flag;
     Unk_801E032C *p = D_801E032C[0];
-    Unk_801E1158 *q = &D_801E1158;
+    CarState *q = &vehicle_car_state;
     s32 k;
     s32 v;
     s32 s;
@@ -115,36 +115,36 @@ void vehicle_car_drive(Player *arg0) {
     s32 t;
     s32 ang;
 
-    q->unk0 = 0;
+    q->stopped = 0;
     vehicle_navi_update((Player *)p, (Unk_801AC578 *)arg0);
     sv.unk0 = 0;
     sv.unk2 = 0;
-    sv.unk4 = (q->unk4 << 12) / 360;
+    sv.unk4 = (q->steer << 12) / 360;
     RotMatrix(&sv, p->unk6C);
     p->unk68 = 0;
     k = thing_car_speed_div;
     if (q->unk2 != 0) {
         k = thing_car_speed_div * 3;
     }
-    if (q->unk6 == 1) {
-        v = q->unk8 * 30 + 800;
+    if (q->gear == 1) {
+        v = q->brake * 30 + 800;
         if (v > 6500) {
             v = 6500;
         }
-        if (q->unkC != 0) {
-            v -= q->unkC * 45;
+        if (q->throttle != 0) {
+            v -= q->throttle * 45;
         }
         if (v < 800) {
             v = 800;
         }
         s = (v - 800) * 347436 / (k * 55086);
-    } else if (q->unk6 == -1) {
-        v = q->unkC * 30 + 800;
+    } else if (q->gear == -1) {
+        v = q->throttle * 30 + 800;
         if (v > 6500) {
             v = 6500;
         }
-        if (q->unk8 != 0) {
-            v -= q->unk8 * 45;
+        if (q->brake != 0) {
+            v -= q->brake * 45;
         }
         if (v < 800) {
             v = 800;
@@ -155,15 +155,15 @@ void vehicle_car_drive(Player *arg0) {
     }
     s = ((s << 12) / 4) >> 12;
     sgn = 0;
-    q->unk10 = s * D_801E6DB4[0];
-    if (q->unk4 != 0) {
-        if (q->unk4 > 0) {
+    q->speed = s * D_801E6DB4[0];
+    if (q->steer != 0) {
+        if (q->steer > 0) {
             sgn = 1;
         } else {
             sgn = -1;
         }
     }
-    a = q->unk4 < 0 ? -q->unk4 : q->unk4;
+    a = q->steer < 0 ? -q->steer : q->steer;
     ang = (a << 12) / 360;
     sn = rsin(ang);
     cs = rcos(ang);
@@ -173,8 +173,8 @@ void vehicle_car_drive(Player *arg0) {
     } else {
         q->unk18 = 0xFE000 / t;
     }
-    if (q->unk10 == 0) {
-        q->unk0 = 1;
+    if (q->speed == 0) {
+        q->stopped = 1;
         q->unk18 = 0;
         q->unk14 = 0;
         vehicle_car_turn_sfx_on = 0;
@@ -204,7 +204,7 @@ void vehicle_car_drive(Player *arg0) {
             vehicle_car_turn_sfx_on = 0;
         }
     }
-    if (q->unk0 != 0) {
+    if (q->stopped != 0) {
         if (roadmap_get_state() != 0 || mail_menu_get_state() != 0) {
             if (thing_car_exit_prompt_on != 0) {
                 thing_car_exit_prompt_on = 0;
@@ -222,111 +222,111 @@ void vehicle_car_drive(Player *arg0) {
 
 void vehicle_train_place(void) {
     Unk_801AA8DC_10 sv;
-    Player *q = D_801E076C[0];
-    Unk_801E1118 *g = &D_801E1118;
-    Unk_801A7C3C *p = thing_find(2, 0);
+    Player *q = player_status_player[0];
+    TrainState *g = &vehicle_train_state;
+    Thing *p = thing_find(2, 0);
 
     if (p != NULL) {
-        p->unk4 = 1;
-        p->unk18 = 0xF0A;
-        p->unk6 = 0;
-        p->unk1C = 0;
-        p->unk20 = 0x3E80;
-        p->unk24 = 0;
-        p->unk26 = 0;
-        p->unk28 = 0;
-        if (g->unk8 == 0) {
-            p->unk18 = -0xF0A;
-            p->unk26 = 180;
+        p->active = 1;
+        p->pos_x = 0xF0A;
+        p->animate = 0;
+        p->pos_y = 0;
+        p->pos_z = 0x3E80;
+        p->rot_x = 0;
+        p->rot_y = 0;
+        p->rot_z = 0;
+        if (g->direction == 0) {
+            p->pos_x = -0xF0A;
+            p->rot_y = 180;
         }
-        p->unk44 = p->unk18 - q->cell_x * 12500;
-        p->unk48 = p->unk1C + q->cell_y * 32000;
-        p->unk4C = p->unk20 - q->cell_z * 12500;
-        sv.unk0 = (p->unk24 << 12) / 360;
-        sv.unk2 = (p->unk26 << 12) / 360;
-        sv.unk4 = (p->unk28 << 12) / 360;
-        RotMatrix(&sv, p->unk30);
-        p->unk2C = 0;
+        p->coord_tx = p->pos_x - q->cell_x * 12500;
+        p->coord_ty = p->pos_y + q->cell_y * 32000;
+        p->coord_tz = p->pos_z - q->cell_z * 12500;
+        sv.unk0 = (p->rot_x << 12) / 360;
+        sv.unk2 = (p->rot_y << 12) / 360;
+        sv.unk4 = (p->rot_z << 12) / 360;
+        RotMatrix(&sv, p->coord_m);
+        p->coord_flg = 0;
     }
     g->unkA = 1;
-    g->unk12 = 0;
-    g->unkE = 1;
+    g->motion = 0;
+    g->door_state = 1;
 }
 
 void vehicle_train_arrive(s16 arg0, s16 arg1) {
     Unk_801AA8DC_10 sv;
-    Unk_80184230 rect;
-    Player *q = D_801E076C[0];
-    Unk_801E1118 *g = &D_801E1118;
-    Unk_801A7C3C *p = thing_find(2, 0);
-    Unk_801AC55C *a;
+    Rect rect;
+    Player *q = player_status_player[0];
+    TrainState *g = &vehicle_train_state;
+    Thing *p = thing_find(2, 0);
+    VehicleSprite *a;
     Unk_801AC55C_1C *r;
     s16 w;
     u16 h;
 
-    if (p != NULL && p->unk4 == 0) {
-        p->unk6 = 1;
-        p->unk4 = 1;
-        p->unk18 = 0xF0A;
-        p->unk20 = -0x3E80;
-        p->unk1C = 0;
-        p->unk24 = 0;
-        p->unk26 = 0;
-        p->unk28 = 0;
+    if (p != NULL && p->active == 0) {
+        p->animate = 1;
+        p->active = 1;
+        p->pos_x = 0xF0A;
+        p->pos_z = -0x3E80;
+        p->pos_y = 0;
+        p->rot_x = 0;
+        p->rot_y = 0;
+        p->rot_z = 0;
         if (arg0 == 0) {
-            p->unk18 = -0xF0A;
-            p->unk20 = 0xBB80;
-            p->unk26 = 180;
+            p->pos_x = -0xF0A;
+            p->pos_z = 0xBB80;
+            p->rot_y = 180;
         }
-        p->unk44 = p->unk18 - q->cell_x * 12500;
-        p->unk48 = p->unk1C + q->cell_y * 32000;
-        p->unk4C = p->unk20 - q->cell_z * 12500;
-        sv.unk0 = (p->unk24 << 12) / 360;
-        sv.unk2 = (p->unk26 << 12) / 360;
-        sv.unk4 = (p->unk28 << 12) / 360;
-        RotMatrix(&sv, p->unk30);
-        p->unk2C = 0;
-        g->unk12 = 3;
-        g->unk8 = arg0;
-        g->unkE = 0;
-        g->unk10 = arg1;
-        g->unk14 = 0;
-        g->unk16 = -1;
+        p->coord_tx = p->pos_x - q->cell_x * 12500;
+        p->coord_ty = p->pos_y + q->cell_y * 32000;
+        p->coord_tz = p->pos_z - q->cell_z * 12500;
+        sv.unk0 = (p->rot_x << 12) / 360;
+        sv.unk2 = (p->rot_y << 12) / 360;
+        sv.unk4 = (p->rot_z << 12) / 360;
+        RotMatrix(&sv, p->coord_m);
+        p->coord_flg = 0;
+        g->motion = 3;
+        g->direction = arg0;
+        g->door_state = 0;
+        g->station = arg1;
+        g->speed = 0;
+        g->stop_timer = -1;
     }
     a = sprite_find(0x408);
     if (a != NULL) {
-        r = a->unk1C;
-        w = a->unk10 >> r->unk14;
-        h = a->unk12;
-        rect.unk0 = r->unk0;
-        rect.unk2 = a->unk1C->unk2;
-        rect.unk4 = w;
-        rect.unk6 = h;
+        r = a->tim;
+        w = a->cell_w >> r->unk14;
+        h = a->cell_h;
+        rect.x = r->unk0;
+        rect.y = a->tim->unk2;
+        rect.w = w;
+        rect.h = h;
         MoveImage(&rect, 0x2F0, 0x20);
     }
     sound_se_play(0x1E);
 }
 
-void vehicle_train_update(Unk_801A7C3C *arg0) {
-    Player *q = D_801E076C[0];
-    Unk_801E1118 *g = &D_801E1118;
-    Unk_801AC55C *p;
+void vehicle_train_update(Thing *arg0) {
+    Player *q = player_status_player[0];
+    TrainState *g = &vehicle_train_state;
+    VehicleSprite *p;
     u16 m;
     s32 d;
 
-    if (g->unk8 != 0) {
-        m = g->unk12;
+    if (g->direction != 0) {
+        m = g->motion;
         if (m == 3) {
-            d = (16000 - arg0->unk20) / 100 + 5;
-            arg0->unk20 += d * D_801E6DB4[0];
-            if (arg0->unk20 >= 16000) {
-                arg0->unk6 = 0;
-                arg0->unk20 = 16000;
-                g->unk12 = 0;
-                g->unk16 = 2;
+            d = (16000 - arg0->pos_z) / 100 + 5;
+            arg0->pos_z += d * D_801E6DB4[0];
+            if (arg0->pos_z >= 16000) {
+                arg0->animate = 0;
+                arg0->pos_z = 16000;
+                g->motion = 0;
+                g->stop_timer = 2;
                 p = sprite_find(0x408);
                 if (p == NULL) {
-                    g->unkE = 1;
+                    g->door_state = 1;
                 } else {
                     Unk_801AC70C *e;
                     s32 n;
@@ -334,41 +334,41 @@ void vehicle_train_update(Unk_801A7C3C *arg0) {
                     e = kaj_tss_alloc(4);
                     e->unk22 = 7;
                     e->unk24 = 0;
-                    n = p->unk14 * p->unk16;
+                    n = p->columns * p->rows;
                     e->unk28 = 1;
                     e->unk26 = n - 1;
-                    g->unkE = 3;
+                    g->door_state = 3;
                     e->unk2C = 0x19;
                     e->unk30 = vehicle_train_door_frame;
                     e->unk34 = vehicle_train_door_last;
                     e->unk38 = vehicle_train_door_last;
                     *e->unk3C = p;
-                    g->unk0 = kaj_tss_start(e);
+                    g->door_task = kaj_tss_start(e);
                     sound_se_play(0xB);
                 }
             }
         } else if (m == 1) {
-            d = (arg0->unk20 - 16000) / 100 + 5;
-            arg0->unk20 += d * D_801E6DB4[0];
-            if (arg0->unk20 > 47999) {
-                arg0->unk6 = 0;
-                arg0->unk4 = 0;
-                g->unk12 = 2;
+            d = (arg0->pos_z - 16000) / 100 + 5;
+            arg0->pos_z += d * D_801E6DB4[0];
+            if (arg0->pos_z > 47999) {
+                arg0->animate = 0;
+                arg0->active = 0;
+                g->motion = 2;
             }
         }
     } else {
-        m = g->unk12;
+        m = g->motion;
         if (m == 3) {
-            d = (arg0->unk20 - 16000) / 100 + 5;
-            arg0->unk20 -= d * D_801E6DB4[0];
-            if (arg0->unk20 <= 16000) {
-                arg0->unk20 = 16000;
-                arg0->unk6 = 0;
-                g->unk12 = 0;
-                g->unk16 = 2;
+            d = (arg0->pos_z - 16000) / 100 + 5;
+            arg0->pos_z -= d * D_801E6DB4[0];
+            if (arg0->pos_z <= 16000) {
+                arg0->pos_z = 16000;
+                arg0->animate = 0;
+                g->motion = 0;
+                g->stop_timer = 2;
                 p = sprite_find(0x408);
                 if (p == NULL) {
-                    g->unkE = 1;
+                    g->door_state = 1;
                 } else {
                     Unk_801AC70C *e;
                     s32 n;
@@ -376,48 +376,48 @@ void vehicle_train_update(Unk_801A7C3C *arg0) {
                     e = kaj_tss_alloc(4);
                     e->unk22 = 7;
                     e->unk24 = 0;
-                    n = p->unk14 * p->unk16;
+                    n = p->columns * p->rows;
                     e->unk28 = 1;
                     e->unk26 = n - 1;
-                    g->unkE = 3;
+                    g->door_state = 3;
                     e->unk2C = 0x19;
                     e->unk30 = vehicle_train_door_frame;
                     e->unk34 = vehicle_train_door_last;
                     e->unk38 = vehicle_train_door_last;
                     *e->unk3C = p;
-                    g->unk0 = kaj_tss_start(e);
+                    g->door_task = kaj_tss_start(e);
                     sound_se_play(0xB);
                 }
             }
         } else if (m == 1) {
-            d = (16000 - arg0->unk20) / 100 + 5;
-            arg0->unk20 -= d * D_801E6DB4[0];
-            if (arg0->unk20 < -15999) {
-                arg0->unk6 = 0;
-                arg0->unk4 = 0;
-                g->unk12 = 2;
+            d = (16000 - arg0->pos_z) / 100 + 5;
+            arg0->pos_z -= d * D_801E6DB4[0];
+            if (arg0->pos_z < -15999) {
+                arg0->animate = 0;
+                arg0->active = 0;
+                g->motion = 2;
             }
         }
     }
-    arg0->unk44 = arg0->unk18 - q->cell_x * 12500;
-    arg0->unk48 = arg0->unk1C + q->cell_y * 32000;
-    arg0->unk4C = arg0->unk20 - q->cell_z * 12500;
-    arg0->unk2C = 0;
+    arg0->coord_tx = arg0->pos_x - q->cell_x * 12500;
+    arg0->coord_ty = arg0->pos_y + q->cell_y * 32000;
+    arg0->coord_tz = arg0->pos_z - q->cell_z * 12500;
+    arg0->coord_flg = 0;
 }
 
 void vehicle_train_exit_prompt(s16 arg0) {
-    Player *q = D_801E076C[0];
-    Unk_801DFFE8 *d = &D_801DFFE8;
-    Unk_801E1118 *p = &D_801E1118;
+    Player *q = player_status_player[0];
+    EventState *d = &event_state;
+    TrainState *p = &vehicle_train_state;
 
     if (arg0 != 0) {
         if (p->unkC == 0) {
-            if ((p->unk8 != 0 && p->unk4 == 0x200010) || (p->unk8 == 0 && p->unk4 == 0x200020)) {
+            if ((p->direction != 0 && p->trigger == 0x200010) || (p->direction == 0 && p->trigger == 0x200020)) {
                 p->unkC = 1;
-                d->unk0 = p->unk4;
-                d->unk4 = (u8)(p->unk4 >> 16);
-                if (d->unk6 != 2) {
-                    d->unk6 = 2;
+                d->trigger = p->trigger;
+                d->trigger_type = (u8)(p->trigger >> 16);
+                if (d->state != 2) {
+                    d->state = 2;
                 }
                 if (!(q->flags & 4)) {
                     q->flags |= 4;
@@ -442,68 +442,68 @@ void vehicle_train_exit_prompt(s16 arg0) {
 }
 
 s16 vehicle_train_get_off(s16 arg0) {
-    Unk_801E1118 *p;
-    u16 v = D_801E076C[0]->vehicle_mode;
+    TrainState *p;
+    u16 v = player_status_player[0]->vehicle_mode;
 
-    p = &D_801E1118;
+    p = &vehicle_train_state;
 
     if (v == 3) {
         arg0 = 0;
-        if (p->unk8 != 0) {
-            mail_goto_building(1, vehicle_str_sb1, 9, 0x41, 1, 0x5A, 6, p->unk10 + 0xF90000, 0);
+        if (p->direction != 0) {
+            mail_goto_building(1, vehicle_str_sb1, 9, 0x41, 1, 0x5A, 6, p->station + 0xF90000, 0);
         } else {
-            mail_goto_building(1, vehicle_str_sb1, 9, 0x41, 2, -0x5A, 6, p->unk10 + 0xF90000, 0);
+            mail_goto_building(1, vehicle_str_sb1, 9, 0x41, 2, -0x5A, 6, p->station + 0xF90000, 0);
         }
     } else if (v == 2) {
         arg0 = 0;
-        if (p->unk8 != 0) {
-            mail_goto_building(1, vehicle_str_rw1, 9, 0x41, (s16)(p->unk10 * 2 - 1), 0x5A, 0x11, p->unk10 + 0xF60000, 0);
+        if (p->direction != 0) {
+            mail_goto_building(1, vehicle_str_rw1, 9, 0x41, (s16)(p->station * 2 - 1), 0x5A, 0x11, p->station + 0xF60000, 0);
         } else {
-            mail_goto_building(1, vehicle_str_rw1, 9, 0x41, (s16)(p->unk10 * 2), -0x5A, 0x11, p->unk10 + 0xF60000, 0);
+            mail_goto_building(1, vehicle_str_rw1, 9, 0x41, (s16)(p->station * 2), -0x5A, 0x11, p->station + 0xF60000, 0);
         }
     }
     return arg0;
 }
 
 s16 vehicle_train_end_of_line(s16 arg0) {
-    Unk_801E0340 *r = &D_801E0340;
-    Unk_801E1118 *p;
-    u16 v = D_801E076C[0]->vehicle_mode;
+    SceneRequest *r = &scene_request;
+    TrainState *p;
+    u16 v = player_status_player[0]->vehicle_mode;
 
-    p = &D_801E1118;
+    p = &vehicle_train_state;
     if (v == 3) {
-        if (p->unk8 != 0) {
-            if (p->unk10 == 6) {
-                mail_goto_building(1, vehicle_str_sb1, 9, 0x41, 1, 0x5A, 6, p->unk10 + 0xF90000, 0);
+        if (p->direction != 0) {
+            if (p->station == 6) {
+                mail_goto_building(1, vehicle_str_sb1, 9, 0x41, 1, 0x5A, 6, p->station + 0xF90000, 0);
                 arg0 = 0;
-                r->unkA = 1;
+                r->change = 1;
             }
         } else {
-            if (p->unk10 == 1) {
-                mail_goto_building(1, vehicle_str_sb1, 9, 0x41, 2, -0x5A, 6, p->unk10 + 0xF90000, 0);
+            if (p->station == 1) {
+                mail_goto_building(1, vehicle_str_sb1, 9, 0x41, 2, -0x5A, 6, p->station + 0xF90000, 0);
                 arg0 = 0;
-                r->unkA = 1;
+                r->change = 1;
             }
         }
     } else if (v == 2) {
-        if (p->unk8 != 0) {
-            if (p->unk10 == 3) {
-                mail_goto_building(1, vehicle_str_rw1, 9, 0x41, 5, 0x5A, 0x11, p->unk10 + 0xF60000, 0);
+        if (p->direction != 0) {
+            if (p->station == 3) {
+                mail_goto_building(1, vehicle_str_rw1, 9, 0x41, 5, 0x5A, 0x11, p->station + 0xF60000, 0);
                 arg0 = 0;
-                r->unkA = 1;
+                r->change = 1;
             }
         } else {
-            if (p->unk10 == 1) {
-                mail_goto_building(1, vehicle_str_rw1, 9, 0x41, 2, -0x5A, 0x11, p->unk10 + 0xF60000, 0);
+            if (p->station == 1) {
+                mail_goto_building(1, vehicle_str_rw1, 9, 0x41, 2, -0x5A, 0x11, p->station + 0xF60000, 0);
                 arg0 = 0;
-                r->unkA = 1;
+                r->change = 1;
             }
         }
     }
     return arg0;
 }
 
-void vehicle_car_follow_player(Unk_801A7C3C *arg0, s32 arg1) {
+void vehicle_car_follow_player(Thing *arg0, s32 arg1) {
     Unk_801AA8DC_10 sv;
     s32 y;
     s16 found = 0;
@@ -520,39 +520,39 @@ void vehicle_car_follow_player(Unk_801A7C3C *arg0, s32 arg1) {
         }
     }
     if (found || f != 0) {
-        arg0->unk18 = q->unk0;
-        arg0->unk1C = q->unk4;
-        arg0->unk20 = q->unk8;
-        arg0->unk24 = q->unk10;
-        arg0->unk26 = q->unk12;
-        arg0->unk28 = q->unk14;
-        arg0->unk44 = arg0->unk18 - q->cell_x * 12500;
-        arg0->unk48 = arg0->unk1C + q->cell_y * 32000;
-        arg0->unk4C = arg0->unk20 - q->cell_z * 12500;
-        sv.unk0 = (arg0->unk24 << 12) / 360;
-        sv.unk2 = (arg0->unk26 << 12) / 360;
-        sv.unk4 = (arg0->unk28 << 12) / 360;
-        RotMatrixZXY(&sv, arg0->unk30);
-        arg0->unk2C = 0;
+        arg0->pos_x = q->unk0;
+        arg0->pos_y = q->unk4;
+        arg0->pos_z = q->unk8;
+        arg0->rot_x = q->unk10;
+        arg0->rot_y = q->unk12;
+        arg0->rot_z = q->unk14;
+        arg0->coord_tx = arg0->pos_x - q->cell_x * 12500;
+        arg0->coord_ty = arg0->pos_y + q->cell_y * 32000;
+        arg0->coord_tz = arg0->pos_z - q->cell_z * 12500;
+        sv.unk0 = (arg0->rot_x << 12) / 360;
+        sv.unk2 = (arg0->rot_y << 12) / 360;
+        sv.unk4 = (arg0->rot_z << 12) / 360;
+        RotMatrixZXY(&sv, arg0->coord_m);
+        arg0->coord_flg = 0;
         if (f != 0) {
-            arg0->unk4 = 1;
-            arg0->unk14 = block_find_at(arg0->unk18, arg0->unk1C, arg0->unk20);
-            g->vehicle = (Unk_801AC55C *)arg0;
+            arg0->active = 1;
+            arg0->block = block_find_at(arg0->pos_x, arg0->pos_y, arg0->pos_z);
+            g->vehicle = (VehicleSprite *)arg0;
         }
     }
 }
 
 void vehicle_navi_update(Player *arg0, Unk_801AC578 *arg1) {
-    Unk_801D7FB0 *p = (Unk_801D7FB0 *)D_801D7FB0;
+    CarNavi *p = (CarNavi *)vehicle_navi;
     s32 dx;
     s32 dz;
     s32 d;
     s16 a;
     s32 n;
 
-    if (mail_menu_get_state() == 0 && p->unk0 != 0 && p->unkC != NULL && p->unk10 != NULL) {
-        dx = vehicle_navi_dest_xz[p->unk4 * 2] - arg1->unk60;
-        dz = vehicle_navi_dest_xz[p->unk4 * 2 + 1] - arg1->unk68;
+    if (mail_menu_get_state() == 0 && p->active != 0 && p->dest_sprite != NULL && p->unk10 != NULL) {
+        dx = vehicle_navi_dest_xz[p->dest * 2] - arg1->unk60;
+        dz = vehicle_navi_dest_xz[p->dest * 2 + 1] - arg1->unk68;
         d = SquareRoot0(dx * dx + dz * dz);
         if (d < 25) {
             if (vehicle_navi_blink != 0) {
@@ -564,10 +564,10 @@ void vehicle_navi_update(Player *arg0, Unk_801AC578 *arg1) {
         } else if (vehicle_navi_blink != 0) {
             sprite_set_clut_entry(4, 0xE, 0x14F);
         }
-        if (d >= p->unk8) {
+        if (d >= p->start_dist) {
             d = 12;
         } else {
-            d = ((u32)(d * 0xB000) / p->unk8 + 1) >> 12;
+            d = ((u32)(d * 0xB000) / p->start_dist + 1) >> 12;
         }
         sprite_fill_clut(4, 1, 12, 0);
         sprite_fill_clut(4, 1, d, 0x1F);
@@ -576,22 +576,22 @@ void vehicle_navi_update(Player *arg0, Unk_801AC578 *arg1) {
         if (n >= 8) {
             n = 0;
         }
-        p->unk10->unk18 = n % 4;
-        p->unk10->unk1A = n / 4;
+        p->unk10->cell_col = n % 4;
+        p->unk10->cell_row = n / 4;
     }
 }
 
 void vehicle_navi_open_menu(void) {
-    Unk_801D7FB0 *p = (Unk_801D7FB0 *)D_801D7FB0;
+    CarNavi *p = (CarNavi *)vehicle_navi;
 
     sound_se_play(0x13);
     if (p->unk10 != NULL) {
-        p->unk10->unk4 = 0;
+        p->unk10->visible = 0;
         p->unk10 = NULL;
     }
-    if (p->unkC != NULL) {
-        p->unkC->unk4 = 0;
-        p->unkC = NULL;
+    if (p->dest_sprite != NULL) {
+        p->dest_sprite->visible = 0;
+        p->dest_sprite = NULL;
     }
     mail_menu_open(p->unk2, 0x40B, 0x40C, 0xF, 6, NULL, 4, 0x2969, 0x2BFF);
     if (p->unk2 != 0) {
@@ -600,23 +600,23 @@ void vehicle_navi_open_menu(void) {
 }
 
 s16 vehicle_car_stopped_input(void) {
-    Unk_801E07C0 *q = &D_801E07C0;
-    Unk_801D7FB0 *p = (Unk_801D7FB0 *)D_801D7FB0;
+    RoadMap *q = &roadmap_state;
+    CarNavi *p = (CarNavi *)vehicle_navi;
     s16 r = mail_menu_get_state();
 
     if (r == 1) {
         if (!(kaj_system.pad_prev & 0x20) && (kaj_system.pad_now & 0x20)) {
-            D_801D7FB0[0] = 1;
+            vehicle_navi[0] = 1;
             sound_se_play(0x11);
             mail_menu_close();
         } else if (!(kaj_system.pad_prev & 0x40) && (kaj_system.pad_now & 0x40)) {
-            D_801D7FB0[0] = 0;
+            vehicle_navi[0] = 0;
             sound_se_play(8);
             mail_menu_close();
         } else if (!(kaj_system.pad_prev & 0x1000) && (kaj_system.pad_now & 0x1000)) {
-            p->unk4 = mail_menu_move(1);
+            p->dest = mail_menu_move(1);
         } else if (!(kaj_system.pad_prev & 0x4000) && (kaj_system.pad_now & 0x4000)) {
-            p->unk4 = mail_menu_move(0);
+            p->dest = mail_menu_move(0);
         }
         return 0;
     }
@@ -625,7 +625,7 @@ s16 vehicle_car_stopped_input(void) {
             sound_se_play(0x11);
             return 1;
         }
-        if (q->unk0 == 0 && !(kaj_system.pad_prev & 0x800) && (kaj_system.pad_now & 0x800)) {
+        if (q->mode == 0 && !(kaj_system.pad_prev & 0x800) && (kaj_system.pad_now & 0x800)) {
             text_close();
             vehicle_navi_open_menu();
         }
@@ -635,7 +635,7 @@ s16 vehicle_car_stopped_input(void) {
 }
 
 s16 vehicle_car_input(PlayerStatus *arg0, s32 arg1) {
-    Unk_801E1158 *q = &D_801E1158;
+    CarState *q = &vehicle_car_state;
     Player *o = arg0->player;
     s16 r;
     s16 f0;
@@ -643,7 +643,7 @@ s16 vehicle_car_input(PlayerStatus *arg0, s32 arg1) {
     s16 f2;
     s16 f3;
 
-    if (D_801E1158.unk0 != 0) {
+    if (vehicle_car_state.stopped != 0) {
         if ((s16)player_update_map(arg0) != 0) {
             return 0;
         }
@@ -657,35 +657,35 @@ s16 vehicle_car_input(PlayerStatus *arg0, s32 arg1) {
     f3 = 0;
     f2 = 0;
     if (arg1 & 0x1000) {
-        if (q->unk24 < 20) {
+        if (q->look_pitch < 20) {
             o->unk3C = 1;
-            q->unk24 += D_801E6DB4[0];
-            if (q->unk24 > 20) {
-                q->unk24 = 20;
+            q->look_pitch += D_801E6DB4[0];
+            if (q->look_pitch > 20) {
+                q->look_pitch = 20;
             }
         }
     } else if (arg1 & 0x4000) {
-        if (q->unk24 > -20) {
+        if (q->look_pitch > -20) {
             o->unk3C = 1;
-            q->unk24 -= D_801E6DB4[0];
-            if (q->unk24 < -20) {
-                q->unk24 = -20;
+            q->look_pitch -= D_801E6DB4[0];
+            if (q->look_pitch < -20) {
+                q->look_pitch = -20;
             }
         }
     } else if (arg1 & 0x8000) {
-        if (q->unk26 > -65) {
+        if (q->look_yaw > -65) {
             o->unk3C = 1;
-            q->unk26 -= D_801E6DB4[0];
-            if (q->unk26 < -65) {
-                q->unk26 = -65;
+            q->look_yaw -= D_801E6DB4[0];
+            if (q->look_yaw < -65) {
+                q->look_yaw = -65;
             }
         }
     } else if (arg1 & 0x2000) {
-        if (q->unk26 < 65) {
+        if (q->look_yaw < 65) {
             o->unk3C = 1;
-            q->unk26 += D_801E6DB4[0];
-            if (q->unk26 > 65) {
-                q->unk26 = 65;
+            q->look_yaw += D_801E6DB4[0];
+            if (q->look_yaw > 65) {
+                q->look_yaw = 65;
             }
         }
     }
@@ -696,76 +696,76 @@ s16 vehicle_car_input(PlayerStatus *arg0, s32 arg1) {
     }
     if (arg1 & 0x10) {
         f2 = 1;
-        if (q->unk10 == 0 && q->unk6 != 1) {
-            q->unk6 = 1;
-            q->unk8 = 0;
-            q->unkC = 0;
+        if (q->speed == 0 && q->gear != 1) {
+            q->gear = 1;
+            q->brake = 0;
+            q->throttle = 0;
         }
     } else if (arg1 & 0x40) {
         f3 = 1;
-        if (q->unk10 == 0 && q->unk6 != -1) {
-            q->unk6 = -1;
-            q->unk8 = 0;
-            q->unkC = 0;
+        if (q->speed == 0 && q->gear != -1) {
+            q->gear = -1;
+            q->brake = 0;
+            q->throttle = 0;
         }
     }
     if (f1) {
-        if (q->unk4 > -45) {
-            q->unk4 -= D_801E6DB4[0];
-            if (q->unk4 < -45) {
-                q->unk4 = -45;
+        if (q->steer > -45) {
+            q->steer -= D_801E6DB4[0];
+            if (q->steer < -45) {
+                q->steer = -45;
             }
         }
-    } else if (!f0 && q->unk10 != 0 && q->unk4 < 0) {
-        q->unk4 += D_801E6DB4[0];
-        if (q->unk4 > 0) {
-            q->unk4 = 0;
+    } else if (!f0 && q->speed != 0 && q->steer < 0) {
+        q->steer += D_801E6DB4[0];
+        if (q->steer > 0) {
+            q->steer = 0;
         }
     }
     if (f0) {
-        if (q->unk4 < 45) {
-            q->unk4 += D_801E6DB4[0];
-            if (q->unk4 > 45) {
-                q->unk4 = 45;
+        if (q->steer < 45) {
+            q->steer += D_801E6DB4[0];
+            if (q->steer > 45) {
+                q->steer = 45;
             }
         }
-    } else if (!f1 && q->unk10 != 0 && q->unk4 > 0) {
-        q->unk4 -= D_801E6DB4[0];
-        if (q->unk4 < 0) {
-            q->unk4 = 0;
+    } else if (!f1 && q->speed != 0 && q->steer > 0) {
+        q->steer -= D_801E6DB4[0];
+        if (q->steer < 0) {
+            q->steer = 0;
         }
     }
     if (f2) {
-        if (q->unk8 < 256) {
-            q->unk8 += D_801E6DB4[0];
-            if (q->unk8 > 256) {
-                q->unk8 = 256;
+        if (q->brake < 256) {
+            q->brake += D_801E6DB4[0];
+            if (q->brake > 256) {
+                q->brake = 256;
             }
         }
-    } else if (q->unk8 > 0) {
-        q->unk8 -= D_801E6DB4[0];
-        if (q->unk8 < 0) {
-            q->unk8 = 0;
+    } else if (q->brake > 0) {
+        q->brake -= D_801E6DB4[0];
+        if (q->brake < 0) {
+            q->brake = 0;
         }
     }
     if (f3) {
-        if (q->unkC < 256) {
-            q->unkC += D_801E6DB4[0];
-            if (q->unkC > 256) {
-                q->unkC = 256;
+        if (q->throttle < 256) {
+            q->throttle += D_801E6DB4[0];
+            if (q->throttle > 256) {
+                q->throttle = 256;
             }
         }
-    } else if (q->unkC > 0) {
-        q->unkC -= D_801E6DB4[0];
-        if (q->unkC < 0) {
-            q->unkC = 0;
+    } else if (q->throttle > 0) {
+        q->throttle -= D_801E6DB4[0];
+        if (q->throttle < 0) {
+            q->throttle = 0;
         }
     }
     return 0;
 }
 
 void vehicle_load_data(void) {
-    switch (D_801E076C[0]->vehicle_mode) {
+    switch (player_status_player[0]->vehicle_mode) {
     case 1:
         object_load_res(3, -1);
         break;
@@ -778,28 +778,28 @@ void vehicle_load_data(void) {
     }
 }
 
-void vehicle_create(Unk_801AC278 **arg0, u32 arg1) {
+void vehicle_create(Vehicle **arg0, u32 arg1) {
     *arg0 = kaj_malloc(0xC4);
     if (*arg0 == NULL) {
         kaj_abend(3, D_80171A78, vehicle_str_file, 0x64);
     }
-    (*arg0)->unkB8 = NULL;
-    (*arg0)->unkBC = NULL;
-    (*arg0)->unkC0 = NULL;
-    (*arg0)->unkC0 = kaj_malloc(arg1);
-    if ((*arg0)->unkC0 == NULL) {
+    (*arg0)->model0 = NULL;
+    (*arg0)->model1 = NULL;
+    (*arg0)->data = NULL;
+    (*arg0)->data = kaj_malloc(arg1);
+    if ((*arg0)->data == NULL) {
         kaj_abend(3, D_80171AA8, vehicle_str_file, 0x6C);
     }
 }
 
 void vehicle_init(Unk_801E032C *arg0) {
-    switch (D_801E076C[0]->vehicle_mode) {
+    switch (player_status_player[0]->vehicle_mode) {
     case 1:
-        thing_car_init(arg0, D_801E076C[0]);
+        thing_car_init(arg0, player_status_player[0]);
         break;
     case 2:
     case 3:
-        thing_train_init(arg0, D_801E076C[0]);
+        thing_train_init(arg0, player_status_player[0]);
         break;
     }
     D_801E032C[0] = arg0;
@@ -807,16 +807,16 @@ void vehicle_init(Unk_801E032C *arg0) {
 
 void vehicle_free(void) {
     SceneTables *p = &object_scene_tables;
-    Unk_801AC278 *e = p->unk54;
+    Vehicle *e = p->unk54;
     if (e != NULL) {
         if (e->unk0 == 1) {
             thing_car_get_out(e);
         }
-        free3(e->unkB8);
-        if (e->unkBC != NULL) {
-            free3(e->unkBC);
+        free3(e->model0);
+        if (e->model1 != NULL) {
+            free3(e->model1);
         }
-        free3(e->unkC0);
+        free3(e->data);
         free3(e);
         p->unk54 = NULL;
         sound_se_pop();
@@ -836,18 +836,18 @@ void vehicle_set_origin(s32 arg0, s32 arg1, s32 arg2) {
 }
 
 void vehicle_update(void) {
-    s32 v = D_801E076C[0]->vehicle_mode;
+    s32 v = player_status_player[0]->vehicle_mode;
     if (v == 1) {
-        vehicle_car_drive(D_801E076C[0]);
+        vehicle_car_drive(player_status_player[0]);
     } else if (v >= 2) {
         if (v < 4) {
-            thing_train_update(D_801E076C[0]);
+            thing_train_update(player_status_player[0]);
         }
     }
 }
 
 void vehicle_car_place(void) {
-    Unk_801A7C3C *p = thing_find(0, 0);
+    Thing *p = thing_find(0, 0);
     if (p == NULL) {
         kaj_abend(5, "My Car Object not Found", vehicle_str_file, 0x421);
     }
@@ -856,47 +856,47 @@ void vehicle_car_place(void) {
 
 void vehicle_car_release(void) {
     PlayerStatus *p = &player_status;
-    p->vehicle->unk4 = 0;
+    p->vehicle->visible = 0;
     p->vehicle = NULL;
 }
 
 void vehicle_navi_show(Unk_801AC578 *arg0, s16 arg1, s16 arg2) {
-    Unk_801D7FB0 *p = (Unk_801D7FB0 *)D_801D7FB0;
+    CarNavi *p = (CarNavi *)vehicle_navi;
     s32 dx;
     s32 dz;
 
     if (arg1 != 0) {
-        p->unkC = sprite_find(4);
+        p->dest_sprite = sprite_find(4);
         p->unk10 = sprite_find(0x406);
         if (p->unk10 != NULL) {
-            p->unk10->unkA = 0x90;
-            p->unk10->unkC = 0x68;
-            p->unk10->unk4 = 1;
+            p->unk10->x = 0x90;
+            p->unk10->y = 0x68;
+            p->unk10->visible = 1;
         }
-        if (p->unkC != NULL) {
-            p->unkC->unk4 = 1;
-            p->unkC->unk18 = 0;
-            p->unkC->unk1A = p->unk4;
+        if (p->dest_sprite != NULL) {
+            p->dest_sprite->visible = 1;
+            p->dest_sprite->cell_col = 0;
+            p->dest_sprite->cell_row = p->dest;
         }
-        dx = vehicle_navi_dest_xz[p->unk4 * 2] - arg0->unk60;
-        dz = vehicle_navi_dest_xz[p->unk4 * 2 + 1] - arg0->unk68;
+        dx = vehicle_navi_dest_xz[p->dest * 2] - arg0->unk60;
+        dz = vehicle_navi_dest_xz[p->dest * 2 + 1] - arg0->unk68;
         if (arg2 != 0) {
-            p->unk8 = SquareRoot0(dx * dx + dz * dz);
+            p->start_dist = SquareRoot0(dx * dx + dz * dz);
         }
     } else {
         if (p->unk10 != NULL) {
-            p->unk10->unk4 = 0;
+            p->unk10->visible = 0;
             p->unk10 = NULL;
         }
-        if (p->unkC != NULL) {
-            p->unkC->unk4 = 0;
-            p->unkC = NULL;
+        if (p->dest_sprite != NULL) {
+            p->dest_sprite->visible = 0;
+            p->dest_sprite = NULL;
         }
     }
 }
 
 void vehicle_navi_set_enabled(s16 arg0) {
-    D_801D7FB0[0] = arg0;
+    vehicle_navi[0] = arg0;
     if (arg0 != 0) {
         sound_se_play(0x11);
     } else {
@@ -906,18 +906,18 @@ void vehicle_navi_set_enabled(s16 arg0) {
 }
 
 void vehicle_train_set_doors(s16 arg0) {
-    Unk_801E1118 *g = &D_801E1118;
-    Unk_801AC55C *p;
+    TrainState *g = &vehicle_train_state;
+    VehicleSprite *p;
     Unk_801AC70C *e;
     s32 n;
 
     p = sprite_find(0x408);
     if (p == NULL) {
         if (arg0 != 0) {
-            g->unkE = 1;
+            g->door_state = 1;
         } else {
-            g->unkE = 0;
-            g->unk12 = 1;
+            g->door_state = 0;
+            g->motion = 1;
             thing_set_animate(2, 0, 1);
         }
         return;
@@ -926,39 +926,39 @@ void vehicle_train_set_doors(s16 arg0) {
     e->unk22 = 7;
     if (arg0 != 0) {
         e->unk24 = 0;
-        n = p->unk14 * p->unk16;
+        n = p->columns * p->rows;
         e->unk28 = 1;
         e->unk26 = n - 1;
-        g->unkE = 3;
+        g->door_state = 3;
     } else {
-        n = p->unk14 * p->unk16;
+        n = p->columns * p->rows;
         e->unk26 = 0;
         e->unk28 = -1;
         e->unk24 = n - 1;
-        g->unkE = 2;
+        g->door_state = 2;
     }
     e->unk2C = 0x19;
     e->unk30 = vehicle_train_door_frame;
     e->unk34 = vehicle_train_door_last;
     e->unk38 = vehicle_train_door_last;
     *e->unk3C = p;
-    g->unk0 = kaj_tss_start(e);
+    g->door_task = kaj_tss_start(e);
     sound_se_play(0xB);
 }
 
 void vehicle_train_hide(void) {
-    Unk_801E1118 *q = &D_801E1118;
-    Unk_801A7C3C *p = thing_find(2, 0);
+    TrainState *q = &vehicle_train_state;
+    Thing *p = thing_find(2, 0);
     if (p != NULL) {
-        p->unk6 = 0;
-        p->unk4 = 0;
+        p->animate = 0;
+        p->active = 0;
     }
-    q->unk16 = -1;
+    q->stop_timer = -1;
 }
 
 void vehicle_train_door_frame(Unk_801AC70C *arg0) {
-    Unk_80184230 rect;
-    Unk_801AC55C *a;
+    Rect rect;
+    VehicleSprite *a;
     s32 n;
     Unk_801AC55C_1C *b;
     s32 w;
@@ -966,39 +966,39 @@ void vehicle_train_door_frame(Unk_801AC70C *arg0) {
     s16 x;
     s16 y;
     a = *arg0->unk3C;
-    b = a->unk1C;
-    w = a->unk10 >> b->unk14;
-    h = a->unk12;
+    b = a->tim;
+    w = a->cell_w >> b->unk14;
+    h = a->cell_h;
     n = arg0->unk24;
     x = b->unk0 + w * (n / 4);
     y = b->unk2 + h * (n % 4);
-    rect.unk0 = x;
-    rect.unk2 = y;
-    rect.unk4 = w;
-    rect.unk6 = h;
+    rect.x = x;
+    rect.y = y;
+    rect.w = w;
+    rect.h = h;
     MoveImage(&rect, 0x2F0, 0x20);
 }
 
 void vehicle_train_door_last(Unk_801AC70C *arg0) {
-    Unk_801E1118 *p = &D_801E1118;
-    Unk_80184230 rect;
-    Unk_801AC55C *a = *arg0->unk3C;
+    TrainState *p = &vehicle_train_state;
+    Rect rect;
+    VehicleSprite *a = *arg0->unk3C;
     s32 n = arg0->unk24;
-    Unk_801AC55C_1C *b = a->unk1C;
-    s32 w = a->unk10 >> b->unk14;
-    s32 h = a->unk12;
+    Unk_801AC55C_1C *b = a->tim;
+    s32 w = a->cell_w >> b->unk14;
+    s32 h = a->cell_h;
     s16 x = b->unk0 + w * (n / 4);
     s16 y = b->unk2 + h * (n % 4);
-    rect.unk0 = x;
-    rect.unk2 = y;
-    rect.unk4 = w;
-    rect.unk6 = h;
+    rect.x = x;
+    rect.y = y;
+    rect.w = w;
+    rect.h = h;
     MoveImage(&rect, 0x2F0, 0x20);
-    p->unk0 = -1;
+    p->door_task = -1;
 }
 
 void vehicle_train_init_state(void) {
-    Unk_801E1118 *p = &D_801E1118;
+    TrainState *p = &vehicle_train_state;
     p->unk18 = 2;
     p->unk1A = 7;
 }

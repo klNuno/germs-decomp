@@ -3,8 +3,8 @@
 
 void free3(void *ptr);
 s32 D_801DFF48;
-extern Unk_801E0600 D_801E0600;
-extern Unk_801E0600 D_801E0610;
+extern AreaTrigger object_area_current;
+extern AreaTrigger object_area_previous;
 extern Player player_character;
 s16 effect_item_add(s16 arg0, s16 arg1);
 s16 effect_item_remove(s16 arg0, s16 arg1);
@@ -22,14 +22,14 @@ typedef struct {
     s16 unk98;
     u8 unk9A[0x18];
     u16 unkB2;
-    s16 unkB4[5];
+    s16 limb_damage[5];
     u8 unkBE[0x186];
     s32 unk244;
-} Unk_801E0368_u8018FA18;
-extern Unk_801E0368_u8018FA18 action_vars;
-Unk_801DFF30 object_room_phone;
+} GameVars_u8018FA18;
+extern GameVars_u8018FA18 action_vars;
+RoomPhone object_room_phone;
 void text_show(char *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
-Unk_801DFF28 object_room_storage;
+RoomStorage object_room_storage;
 u16 D_801DFD58;
 u16 D_801DFD5A;
 extern char D_80170E18[];
@@ -37,8 +37,8 @@ void sprite_set_visible(s32 arg0, s32 arg1);
 void sprite_set_clut_entry(s32 arg0, s32 arg1, s32 arg2);
 void text_close(void);
 void mail_wait(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
-extern Player *D_801E076C[];
-Unk_8018E56C *mod_find(u16 arg0);
+extern Player *player_status_player[];
+Model *mod_find(u16 arg0);
 void mod_set_anim(void *arg0, s16 arg1, s16 arg2);
 void object_room_play_call(s16 arg0);
 void sound_se_stop(s32 arg0);
@@ -49,13 +49,13 @@ void object_room_main(void);
 void menu_run(void);
 void menu_card_run(s32 arg0, s32 arg1);
 void mail_goto_ofc(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
-extern Unk_801DFFE8 D_801DFFE8;
+extern EventState event_state;
 extern void *D_801E0760[];
-Unk_80174B10 *action_find_set(s16 arg0);
-Unk_80174B10 *action_run_set(Unk_80174B10 *arg0, s32 arg1, s32 arg2);
+ActionSet *action_find_set(s16 arg0);
+ActionSet *action_run_set(ActionSet *arg0, s32 arg1, s32 arg2);
 s16 D_801DFF4C;
 void UnDeliverEvent(u32 ev, u32 spec);
-Unk_801CC1E8 *kaj_event_push(s32 arg0);
+KajEvent *kaj_event_push(s32 arg0);
 extern s16 player_part_damage_caps[];
 void event_draw_limb_status(PlayerStatus *arg0);
 void event_set_blink(s16 arg0, s16 arg1);
@@ -70,14 +70,14 @@ s32 CdControl(u8 com, u8 *param, u8 *result);
 void sound_se_play(s32 arg0);
 void player_set_view(Player *arg0, s16 arg1);
 void event_advance_clock(s16 a, s16 b);
-extern Unk_801A3970 D_801E05C0;
+extern VabStream sound_vab_stream;
 s32 CdMode(void);
 void *CdLastPos(void);
 s32 CdRead(s32 sectors, u32 *buf, s32 mode);
 s32 CdReadSync(s32 mode, u8 *result);
 s32 VSync(s32 mode);
-u32 *sound_se_alloc_header(u8 *arg0, s32 arg1, Unk_801A3970 *arg2);
-void sound_vab_open_head(Unk_801A3970 *arg0);
+u32 *sound_se_alloc_header(u8 *arg0, s32 arg1, VabStream *arg2);
+void sound_vab_open_head(VabStream *arg0);
 extern KajSystem kaj_system;
 s32 kaj_pad_read(void);
 s16 object_room_storage_input(void);
@@ -110,30 +110,30 @@ void *kaj_malloc(u32 size);
 void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
 void *action_load_set(void *arg0);
 extern char D_80170B7C[];
-void block_create(Unk_8017CCE4 **arg0, s32 arg1);
-void block_setup(Unk_8017CCE4 *arg0, u16 arg1);
+void block_create(Block **arg0, s32 arg1);
+void block_setup(Block *arg0, u16 arg1);
 void block_list_add(s32 arg0);
-void door_create(Unk_801854B8 **arg0, u32 arg1);
-void door_setup(Unk_8017CCE4 *arg0);
+void door_create(Door **arg0, u32 arg1);
+void door_setup(Block *arg0);
 void door_add(void *arg0);
 void mail_create(s32 *arg0, void *arg1, s16 arg2);
 extern s32 D_801E0324[];
-void sound_bgm_create(Unk_801A3B5C **arg0, u32 arg1);
-void sound_bgm_open(Unk_801A3B5C *arg0);
-void mod_alloc(Unk_8018E56C **arg0, u32 arg1);
+void sound_bgm_create(BgmSep **arg0, u32 arg1);
+void sound_bgm_open(BgmSep *arg0);
+void mod_alloc(Model **arg0, u32 arg1);
 void mod_list_add(s32 arg0);
-void sprite_create(Unk_801A4370 **arg0, Unk_801A3DD4 *arg1);
+void sprite_create(Sprite **arg0, SpriteRecord *arg1);
 void sprite_add(s32 arg0);
 void kaj_tim_upload_hdr(void *arg0);
-void thing_create(Unk_801A7AFC **arg0, u32 arg1);
-void sprite_thing_init(Unk_801A7AFC *arg0);
+void thing_create(Thing **arg0, u32 arg1);
+void sprite_thing_init(Thing *arg0);
 void thing_list_add(s32 arg0);
 void kaj_tim_upload(u32 *arg0, s16 arg1);
 extern u8 *D_801E05C8[];
-void sound_vab_transfer(Unk_801A3970 *arg0);
+void sound_vab_transfer(VabStream *arg0);
 void sound_se_push(Unk_801A217C *arg0);
 typedef struct { s32 unk0; s32 unk4; s32 unk8; s32 unkC; s32 unk10; s32 unk14; s32 unk18; s32 unk1C; s32 unk20; s32 unk24; s32 unk28; s32 unk2C; s32 unk30; s32 unk34; s32 unk38; } Unk_801E032C;
-void vehicle_create(Unk_801AC278 **arg0, u32 arg1);
+void vehicle_create(Vehicle **arg0, u32 arg1);
 void vehicle_init(Unk_801E032C *arg0);
 void object_room_storage_open(s16 arg0, char *arg1);
 void effect_start_fade(s32 arg0, s32 arg1);
@@ -142,7 +142,7 @@ void player_rest(s16 arg0, s32 arg1, s32 arg2, s32 arg3);
 void sound_bgm_play(s16 arg0);
 s16 D_801DFD56;
 extern u16 D_801E0356[];
-extern Unk_801E0340 D_801E0340;
+extern SceneRequest scene_request;
 s32 object_room_on_enter(Unk_80192F60 *arg0);
 s32 object_room_on_effect_done(Unk_80193068 *arg0);
 void object_room_pick_desk_action(s32 *arg0);
@@ -155,7 +155,7 @@ void thing_set_active(s32 arg0, s32 arg1, s32 arg2);
 void thing_set_animate(s32 arg0, s32 arg1, s32 arg2);
 void thing_set_flag10(s32 arg0, s32 arg1, s32 arg2);
 void effect_weapon_calc_rate(s32 arg0);
-void mod_setup(Unk_8018E56C *arg0, s32 arg1, s32 arg2, s32 arg3);
+void mod_setup(Model *arg0, s32 arg1, s32 arg2, s32 arg3);
 void event_show_clock(s32 arg0);
 void object_room_update_input(void);
 void object_room_quit(void);
@@ -188,33 +188,33 @@ void RotMatrix(s16 *r, void *m);
 void ApplyMatrixLV(void *arg0, void *arg1, void *arg2);
 void GsSetView2(void *arg0);
 void RotMatrixZYX(s16 *r, void *m);
-void object_iff_open(Unk_80192F20 **arg0, s32 arg1, s32 arg2);
-void object_read_chunks(Unk_80192F20 *arg0, s32 arg1, s32 arg2, s32 arg3);
+void object_iff_open(IffContext **arg0, s32 arg1, s32 arg2);
+void object_read_chunks(IffContext *arg0, s32 arg1, s32 arg2, s32 arg3);
 void action_init_npcs(void);
 void *CdSearchFile(void *fp, char *name);
 extern s32 object_res_offsets[];
 extern s32 object_sce_offsets[];
-void text_next_page(Unk_801DFFE8 *arg0);
-extern Inventory *D_801E0768[];
+void text_next_page(EventState *arg0);
+extern Inventory *player_status_inventory[];
 s32 object_load_chunk_count;
 s32 object_load_bar_step;
 void roadmap_draw_sprite_frame(s32 arg0);
 void effect_clut_rotate(void);
 s16 mail_list_get_id(s16 i);
-void object_load_aset(Unk_80192F20 *arg0, s32 arg1);
-void object_load_blck(Unk_80192F20 *arg0, u16 arg1, s32 arg2);
-void object_load_door(Unk_80192F20 *arg0, s32 arg1);
-void object_load_mail(Unk_80192F20 *arg0, s32 arg1, s32 arg2);
-void object_load_midi(Unk_80192F20 *arg0, s32 arg1);
-void object_load_mod(Unk_80192F20 *arg0, s32 arg1);
-void object_load_other(Unk_80192F20 *arg0, s32 arg1, s32 arg2);
-void object_load_sprt(Unk_80192F20 *arg0, s32 arg1);
-void object_load_text(Unk_80192F20 *arg0, s32 arg1);
-void object_load_thng(Unk_80192F20 *arg0, s32 arg1);
-void object_load_tim(Unk_80192F20 *arg0, s32 arg1);
-void object_load_vabh(Unk_80192F20 *arg0, s32 arg1);
-void object_load_vabb(Unk_80192F20 *arg0, s32 arg1);
-void object_load_vecl(Unk_80192F20 *arg0, s32 arg1);
+void object_load_aset(IffContext *arg0, s32 arg1);
+void object_load_blck(IffContext *arg0, u16 arg1, s32 arg2);
+void object_load_door(IffContext *arg0, s32 arg1);
+void object_load_mail(IffContext *arg0, s32 arg1, s32 arg2);
+void object_load_midi(IffContext *arg0, s32 arg1);
+void object_load_mod(IffContext *arg0, s32 arg1);
+void object_load_other(IffContext *arg0, s32 arg1, s32 arg2);
+void object_load_sprt(IffContext *arg0, s32 arg1);
+void object_load_text(IffContext *arg0, s32 arg1);
+void object_load_thng(IffContext *arg0, s32 arg1);
+void object_load_tim(IffContext *arg0, s32 arg1);
+void object_load_vabh(IffContext *arg0, s32 arg1);
+void object_load_vabb(IffContext *arg0, s32 arg1);
+void object_load_vecl(IffContext *arg0, s32 arg1);
 s32 mail_is_read(s16 a);
 extern s16 D_801E05E0[];
 void effect_weapon_swap_stock(s16 arg0, s16 arg1);
@@ -224,7 +224,7 @@ s32 mail_menu_open(s16 a, s16 b, s16 c, s16 d, s16 e, s16 *f, s16 g, s16 h, s16 
 s32 mail_menu_close(void);
 s16 mail_menu_get_state(void);
 
-void object_load_aset(Unk_80192F20 *arg0, s32 arg1) {
+void object_load_aset(IffContext *arg0, s32 arg1) {
     u8 sp10;
     void *buf;
     void *o;
@@ -237,7 +237,7 @@ void object_load_aset(Unk_80192F20 *arg0, s32 arg1) {
     if (buf == NULL) {
         kaj_abend(3, "Error Allocating IFF_ID_ASET Buffer", D_80170B7C, 0x8D);
     }
-    *(Unk_8018FA18 *)buf = *(Unk_8018FA18 *)((u8 *)arg0->unkC + 8);
+    *(IffChunkBody *)buf = *(IffChunkBody *)((u8 *)arg0->chunk + 8);
     if (arg1 > 0x7F8) {
         dst = (u32 *)((u8 *)buf + 0x7F8);
         n = arg1 - 0x7F8;
@@ -261,7 +261,7 @@ void object_load_aset(Unk_80192F20 *arg0, s32 arg1) {
         p = CdIntToPos(CdPosToInt(p) + (n >> 11), p);
         while (CdControl(2, p, NULL) == 0) {
         }
-        arg0->unk4 += arg1 - 0x7F8;
+        arg0->pos += arg1 - 0x7F8;
     }
     o = buf;
     for (i = 0; i < object_aset_count; i++) {
@@ -270,8 +270,8 @@ void object_load_aset(Unk_80192F20 *arg0, s32 arg1) {
     free3(buf);
 }
 
-void object_load_blck(Unk_80192F20 *arg0, u16 arg1, s32 arg2) {
-    Unk_8017CCE4 *o;
+void object_load_blck(IffContext *arg0, u16 arg1, s32 arg2) {
+    Block *o;
     u8 sp14;
     s32 n;
     u32 *dst;
@@ -279,9 +279,9 @@ void object_load_blck(Unk_80192F20 *arg0, u16 arg1, s32 arg2) {
 
     o = NULL;
     block_create(&o, arg2);
-    *(Unk_8018FA18 *)o->unk8C = *(Unk_8018FA18 *)((u8 *)arg0->unkC + 8);
+    *(IffChunkBody *)o->data = *(IffChunkBody *)((u8 *)arg0->chunk + 8);
     if (arg2 > 0x7F8) {
-        dst = (u32 *)((u8 *)o->unk8C + 0x7F8);
+        dst = (u32 *)((u8 *)o->data + 0x7F8);
         n = arg2 - 0x7F8;
         while (1) {
             sp14 = CdMode();
@@ -304,14 +304,14 @@ void object_load_blck(Unk_80192F20 *arg0, u16 arg1, s32 arg2) {
         p = CdIntToPos(CdPosToInt(p) + (n >> 11), p);
         while (CdControl(2, p, NULL) == 0) {
         }
-        arg0->unk4 += arg2 - 0x7F8;
+        arg0->pos += arg2 - 0x7F8;
     }
     block_setup(o, arg1);
     block_list_add((s32)o);
 }
 
-void object_load_door(Unk_80192F20 *arg0, s32 arg1) {
-    Unk_801854B8 *o;
+void object_load_door(IffContext *arg0, s32 arg1) {
+    Door *o;
     u8 sp14;
     s32 n;
     u32 *dst;
@@ -319,9 +319,9 @@ void object_load_door(Unk_80192F20 *arg0, s32 arg1) {
 
     o = NULL;
     door_create(&o, arg1);
-    *(Unk_8018FA18 *)o->unk7C = *(Unk_8018FA18 *)((u8 *)arg0->unkC + 8);
+    *(IffChunkBody *)o->record = *(IffChunkBody *)((u8 *)arg0->chunk + 8);
     if (arg1 > 0x7F8) {
-        dst = (u32 *)((u8 *)o->unk7C + 0x7F8);
+        dst = (u32 *)((u8 *)o->record + 0x7F8);
         n = arg1 - 0x7F8;
         while (1) {
             sp14 = CdMode();
@@ -344,15 +344,15 @@ void object_load_door(Unk_80192F20 *arg0, s32 arg1) {
         p = CdIntToPos(CdPosToInt(p) + (n >> 11), p);
         while (CdControl(2, p, NULL) == 0) {
         }
-        arg0->unk4 += arg1 - 0x7F8;
+        arg0->pos += arg1 - 0x7F8;
     }
-    door_setup((Unk_8017CCE4 *)o);
+    door_setup((Block *)o);
     door_add(o);
 }
 
 INCLUDE_RODATA("asm/nonmatchings/game/8018FA18", D_80170B7C);
 
-void object_load_mail(Unk_80192F20 *arg0, s32 arg1, s32 arg2) {
+void object_load_mail(IffContext *arg0, s32 arg1, s32 arg2) {
     u8 sp10;
     s32 sp14;
     void *buf;
@@ -364,7 +364,7 @@ void object_load_mail(Unk_80192F20 *arg0, s32 arg1, s32 arg2) {
     if (buf == NULL) {
         kaj_abend(3, "Error Allocating IFF_ID_MAIL Buffer", D_80170B7C, 0xC6);
     }
-    *(Unk_8018FA18 *)buf = *(Unk_8018FA18 *)((u8 *)arg0->unkC + 8);
+    *(IffChunkBody *)buf = *(IffChunkBody *)((u8 *)arg0->chunk + 8);
     if (arg1 > 0x7F8) {
         dst = (u32 *)((u8 *)buf + 0x7F8);
         n = arg1 - 0x7F8;
@@ -388,15 +388,15 @@ void object_load_mail(Unk_80192F20 *arg0, s32 arg1, s32 arg2) {
         p = CdIntToPos(CdPosToInt(p) + (n >> 11), p);
         while (CdControl(2, p, NULL) == 0) {
         }
-        arg0->unk4 += arg1 - 0x7F8;
+        arg0->pos += arg1 - 0x7F8;
     }
     mail_create(&sp14, buf, arg2);
     free3(buf);
     D_801E0324[0] = sp14;
 }
 
-void object_load_midi(Unk_80192F20 *arg0, s32 arg1) {
-    Unk_801A3B5C *o;
+void object_load_midi(IffContext *arg0, s32 arg1) {
+    BgmSep *o;
     u8 sp14;
     s32 n;
     u32 *dst;
@@ -404,10 +404,10 @@ void object_load_midi(Unk_80192F20 *arg0, s32 arg1) {
 
     o = NULL;
     sound_bgm_create(&o, arg1);
-    *(Unk_8018FA18 *)o->unk8 = *(Unk_8018FA18 *)((u8 *)arg0->unkC + 8);
+    *(IffChunkBody *)o->data = *(IffChunkBody *)((u8 *)arg0->chunk + 8);
     if (arg1 > 0x7F8) {
         n = arg1 - 0x7F8;
-        dst = (u32 *)((u8 *)o->unk8 + 0x7F8);
+        dst = (u32 *)((u8 *)o->data + 0x7F8);
         while (1) {
             sp14 = CdMode();
             if (!(sp14 & 0x80)) {
@@ -429,13 +429,13 @@ void object_load_midi(Unk_80192F20 *arg0, s32 arg1) {
         p = CdIntToPos(CdPosToInt(p) + (n >> 11), p);
         while (CdControl(2, p, NULL) == 0) {
         }
-        arg0->unk4 += arg1 - 0x7F8;
+        arg0->pos += arg1 - 0x7F8;
     }
     sound_bgm_open(o);
 }
 
-void object_load_mod(Unk_80192F20 *arg0, s32 arg1) {
-    Unk_8018E56C *o;
+void object_load_mod(IffContext *arg0, s32 arg1) {
+    Model *o;
     u8 sp14;
     s32 n;
     u32 *dst;
@@ -443,10 +443,10 @@ void object_load_mod(Unk_80192F20 *arg0, s32 arg1) {
 
     o = NULL;
     mod_alloc(&o, arg1);
-    *(Unk_8018FA18 *)o->unk90 = *(Unk_8018FA18 *)((u8 *)arg0->unkC + 8);
+    *(IffChunkBody *)o->data = *(IffChunkBody *)((u8 *)arg0->chunk + 8);
     if (arg1 > 0x7F8) {
         n = arg1 - 0x7F8;
-        dst = (u32 *)((u8 *)o->unk90 + 0x7F8);
+        dst = (u32 *)((u8 *)o->data + 0x7F8);
         while (1) {
             sp14 = CdMode();
             if (!(sp14 & 0x80)) {
@@ -468,12 +468,12 @@ void object_load_mod(Unk_80192F20 *arg0, s32 arg1) {
         p = CdIntToPos(CdPosToInt(p) + (n >> 11), p);
         while (CdControl(2, p, NULL) == 0) {
         }
-        arg0->unk4 += arg1 - 0x7F8;
+        arg0->pos += arg1 - 0x7F8;
     }
     mod_list_add((s32)o);
 }
 
-void object_load_other(Unk_80192F20 *arg0, s32 arg1, s32 arg2) {
+void object_load_other(IffContext *arg0, s32 arg1, s32 arg2) {
     u8 sp10;
     void *buf;
     s32 n;
@@ -486,7 +486,7 @@ void object_load_other(Unk_80192F20 *arg0, s32 arg1, s32 arg2) {
     if (buf == NULL) {
         kaj_abend(3, "Error Allocating IFF_ID_OTHER Buffer", D_80170B7C, 0xFD);
     }
-    *(Unk_8018FA18 *)buf = *(Unk_8018FA18 *)((u8 *)arg0->unkC + 8);
+    *(IffChunkBody *)buf = *(IffChunkBody *)((u8 *)arg0->chunk + 8);
     if (arg2 > 0x7F8) {
         dst = (u32 *)((u8 *)buf + 0x7F8);
         n = arg2 - 0x7F8;
@@ -510,7 +510,7 @@ void object_load_other(Unk_80192F20 *arg0, s32 arg1, s32 arg2) {
         p = CdIntToPos(CdPosToInt(p) + (n >> 11), p);
         while (CdControl(2, p, NULL) == 0) {
         }
-        arg0->unk4 += arg2 - 0x7F8;
+        arg0->pos += arg2 - 0x7F8;
     }
     switch (arg1) {
     case 0x41455241:
@@ -542,10 +542,10 @@ void object_load_other(Unk_80192F20 *arg0, s32 arg1, s32 arg2) {
     }
 }
 
-void object_load_sprt(Unk_80192F20 *arg0, s32 arg1) {
-    Unk_801A4370 *o;
+void object_load_sprt(IffContext *arg0, s32 arg1) {
+    Sprite *o;
     u8 sp10;
-    Unk_801A3DD4 *buf;
+    SpriteRecord *buf;
     s32 n;
     u32 *dst;
     u8 *p;
@@ -555,7 +555,7 @@ void object_load_sprt(Unk_80192F20 *arg0, s32 arg1) {
     if (buf == NULL) {
         kaj_abend(3, "Error Allocating IFF_ID_SPRT Buffer", D_80170B7C, 0x12B);
     }
-    *(Unk_8018FA18 *)buf = *(Unk_8018FA18 *)((u8 *)arg0->unkC + 8);
+    *(IffChunkBody *)buf = *(IffChunkBody *)((u8 *)arg0->chunk + 8);
     if (arg1 > 0x7F8) {
         dst = (u32 *)((u8 *)buf + 0x7F8);
         n = arg1 - 0x7F8;
@@ -579,14 +579,14 @@ void object_load_sprt(Unk_80192F20 *arg0, s32 arg1) {
         p = CdIntToPos(CdPosToInt(p) + (n >> 11), p);
         while (CdControl(2, p, NULL) == 0) {
         }
-        arg0->unk4 += arg1 - 0x7F8;
+        arg0->pos += arg1 - 0x7F8;
     }
     sprite_create(&o, buf);
     sprite_add((s32)o);
     free3(buf);
 }
 
-void object_load_text(Unk_80192F20 *arg0, s32 arg1) {
+void object_load_text(IffContext *arg0, s32 arg1) {
     u8 sp10;
     void *buf;
     s32 n;
@@ -597,7 +597,7 @@ void object_load_text(Unk_80192F20 *arg0, s32 arg1) {
     if (buf == NULL) {
         kaj_abend(3, "Error Allocating IFF_ID_TEXT Buffer", D_80170B7C, 0x140);
     }
-    *(Unk_8018FA18 *)buf = *(Unk_8018FA18 *)((u8 *)arg0->unkC + 8);
+    *(IffChunkBody *)buf = *(IffChunkBody *)((u8 *)arg0->chunk + 8);
     if (arg1 > 0x7F8) {
         dst = (u32 *)((u8 *)buf + 0x7F8);
         n = arg1 - 0x7F8;
@@ -621,14 +621,14 @@ void object_load_text(Unk_80192F20 *arg0, s32 arg1) {
         p = CdIntToPos(CdPosToInt(p) + (n >> 11), p);
         while (CdControl(2, p, NULL) == 0) {
         }
-        arg0->unk4 += arg1 - 0x7F8;
+        arg0->pos += arg1 - 0x7F8;
     }
     kaj_tim_upload_hdr(buf);
     free3(buf);
 }
 
-void object_load_thng(Unk_80192F20 *arg0, s32 arg1) {
-    Unk_801A7AFC *sp10;
+void object_load_thng(IffContext *arg0, s32 arg1) {
+    Thing *sp10;
     u8 sp14;
     s32 n;
     u32 *dst;
@@ -636,9 +636,9 @@ void object_load_thng(Unk_80192F20 *arg0, s32 arg1) {
 
     sp10 = NULL;
     thing_create(&sp10, arg1);
-    *(Unk_8018FA18 *)sp10->unk84 = *(Unk_8018FA18 *)((u8 *)arg0->unkC + 8);
+    *(IffChunkBody *)sp10->record = *(IffChunkBody *)((u8 *)arg0->chunk + 8);
     if (arg1 > 0x7F8) {
-        dst = (u32 *)((u8 *)sp10->unk84 + 0x7F8);
+        dst = (u32 *)((u8 *)sp10->record + 0x7F8);
         n = arg1 - 0x7F8;
         while (1) {
             sp14 = CdMode();
@@ -661,13 +661,13 @@ void object_load_thng(Unk_80192F20 *arg0, s32 arg1) {
         p = CdIntToPos(CdPosToInt(p) + (n >> 11), p);
         while (CdControl(2, p, NULL) == 0) {
         }
-        arg0->unk4 += arg1 - 0x7F8;
+        arg0->pos += arg1 - 0x7F8;
     }
     sprite_thing_init(sp10);
     thing_list_add((s32)sp10);
 }
 
-void object_load_tim(Unk_80192F20 *arg0, s32 arg1) {
+void object_load_tim(IffContext *arg0, s32 arg1) {
     u8 sp10;
     void *buf;
     s32 n;
@@ -678,7 +678,7 @@ void object_load_tim(Unk_80192F20 *arg0, s32 arg1) {
     if (buf == NULL) {
         kaj_abend(3, "Error Allocating IFF_ID_TIM Buffer", D_80170B7C, 0x165);
     }
-    *(Unk_8019120C *)buf = *(Unk_8019120C *)((u8 *)arg0->unkC + 0xC);
+    *(Unk_8019120C *)buf = *(Unk_8019120C *)((u8 *)arg0->chunk + 0xC);
     if (arg1 > 0x7F8) {
         dst = (u32 *)((u8 *)buf + 0x7F4);
         n = arg1 - 0x7F8;
@@ -702,19 +702,19 @@ void object_load_tim(Unk_80192F20 *arg0, s32 arg1) {
         p = CdIntToPos(CdPosToInt(p) + (n >> 11), p);
         while (CdControl(2, p, NULL) == 0) {
         }
-        arg0->unk4 += arg1 - 0x7F8;
+        arg0->pos += arg1 - 0x7F8;
     }
     kaj_tim_upload(buf, 0);
     free3(buf);
 }
 
-void object_load_vabh(Unk_80192F20 *arg0, s32 arg1) {
+void object_load_vabh(IffContext *arg0, s32 arg1) {
     u8 sp10;
     s32 n;
     u32 *buf;
     u8 *p;
 
-    buf = sound_se_alloc_header((u8 *)arg0->unkC + 8, arg1, &D_801E05C0);
+    buf = sound_se_alloc_header((u8 *)arg0->chunk + 8, arg1, &sound_vab_stream);
     n = arg1 - 0x7F8;
     while (1) {
         sp10 = CdMode();
@@ -737,11 +737,11 @@ void object_load_vabh(Unk_80192F20 *arg0, s32 arg1) {
     p = CdIntToPos(CdPosToInt(p) + (n >> 11), p);
     while (CdControl(2, p, NULL) == 0) {
     }
-    arg0->unk4 += n;
-    sound_vab_open_head(&D_801E05C0);
+    arg0->pos += n;
+    sound_vab_open_head(&sound_vab_stream);
 }
 
-void object_load_vabb(Unk_80192F20 *arg0, s32 arg1) {
+void object_load_vabb(IffContext *arg0, s32 arg1) {
     u8 sp10;
     u8 sp11;
     u8 *buf;
@@ -749,18 +749,18 @@ void object_load_vabb(Unk_80192F20 *arg0, s32 arg1) {
     u8 *buf2;
     u8 *p;
 
-    D_801E05C0.unk8 = (u8 *)arg0->unkC + 8;
-    D_801E05C0.unk10 = 0x7F8;
-    sound_vab_transfer(&D_801E05C0);
-    arg1 -= D_801E05C0.unk10;
-    D_801E05C0.unk10 = 0x2000;
-    D_801E05C0.unk8 = kaj_malloc(0x2000);
-    if (D_801E05C0.unk8 == NULL) {
+    sound_vab_stream.body_buf = (u8 *)arg0->chunk + 8;
+    sound_vab_stream.body_len = 0x7F8;
+    sound_vab_transfer(&sound_vab_stream);
+    arg1 -= sound_vab_stream.body_len;
+    sound_vab_stream.body_len = 0x2000;
+    sound_vab_stream.body_buf = kaj_malloc(0x2000);
+    if (sound_vab_stream.body_buf == NULL) {
         kaj_abend(3, "Error Allocating vab_trans_buffer", D_80170B7C, 0x191);
     }
-    while (D_801E05C0.unk10 < arg1) {
-        buf = D_801E05C0.unk8;
-        n = D_801E05C0.unk10;
+    while (sound_vab_stream.body_len < arg1) {
+        buf = sound_vab_stream.body_buf;
+        n = sound_vab_stream.body_len;
     retry:
         sp10 = CdMode();
         if (!(sp10 & 0x80)) {
@@ -781,9 +781,9 @@ void object_load_vabb(Unk_80192F20 *arg0, s32 arg1) {
         p = CdIntToPos(CdPosToInt(p) + (n >> 11), p);
         while (CdControl(2, p, NULL) == 0) {
         }
-        arg0->unk4 += D_801E05C0.unk10;
-        sound_vab_transfer(&D_801E05C0);
-        arg1 -= D_801E05C0.unk10;
+        arg0->pos += sound_vab_stream.body_len;
+        sound_vab_transfer(&sound_vab_stream);
+        arg1 -= sound_vab_stream.body_len;
     }
     buf2 = D_801E05C8[0];
 retry2:
@@ -806,15 +806,15 @@ retry2:
     p = CdIntToPos(CdPosToInt(p) + (arg1 >> 11), p);
     while (CdControl(2, p, NULL) == 0) {
     }
-    arg0->unk4 += arg1;
-    D_801E05C0.unk10 = arg1;
-    sound_vab_transfer(&D_801E05C0);
-    sound_se_push((Unk_801A217C *)&D_801E05C0);
-    free3(D_801E05C0.unk8);
+    arg0->pos += arg1;
+    sound_vab_stream.body_len = arg1;
+    sound_vab_transfer(&sound_vab_stream);
+    sound_se_push((Unk_801A217C *)&sound_vab_stream);
+    free3(sound_vab_stream.body_buf);
 }
 
-void object_load_vecl(Unk_80192F20 *arg0, s32 arg1) {
-    Unk_801AC278 *sp10;
+void object_load_vecl(IffContext *arg0, s32 arg1) {
+    Vehicle *sp10;
     u8 sp14;
     s32 n;
     u32 *dst;
@@ -822,9 +822,9 @@ void object_load_vecl(Unk_80192F20 *arg0, s32 arg1) {
 
     sp10 = NULL;
     vehicle_create(&sp10, arg1);
-    *(Unk_8018FA18 *)sp10->unkC0 = *(Unk_8018FA18 *)((u8 *)arg0->unkC + 8);
+    *(IffChunkBody *)sp10->data = *(IffChunkBody *)((u8 *)arg0->chunk + 8);
     if (arg1 > 0x7F8) {
-        dst = (u32 *)((u8 *)sp10->unkC0 + 0x7F8);
+        dst = (u32 *)((u8 *)sp10->data + 0x7F8);
         n = arg1 - 0x7F8;
         while (1) {
             sp14 = CdMode();
@@ -847,12 +847,12 @@ void object_load_vecl(Unk_80192F20 *arg0, s32 arg1) {
         p = CdIntToPos(CdPosToInt(p) + (n >> 11), p);
         while (CdControl(2, p, NULL) == 0) {
         }
-        arg0->unk4 += arg1 - 0x7F8;
+        arg0->pos += arg1 - 0x7F8;
     }
     vehicle_init((Unk_801E032C *)sp10);
 }
 
-void object_read_chunks(Unk_80192F20 *arg0, s32 arg1, s32 arg2, s32 arg3) {
+void object_read_chunks(IffContext *arg0, s32 arg1, s32 arg2, s32 arg3) {
     Inventory *m;
     u32 *buf;
     s32 size;
@@ -875,8 +875,8 @@ void object_read_chunks(Unk_80192F20 *arg0, s32 arg1, s32 arg2, s32 arg3) {
             arg2 = -1;
         }
     }
-    while (arg0->unk4 < arg0->unk0) {
-        buf = arg0->unkC;
+    while (arg0->pos < arg0->size) {
+        buf = arg0->chunk;
         for (;;) {
             sp10 = CdMode();
             if (!(sp10 & 0x80)) {
@@ -898,9 +898,9 @@ void object_read_chunks(Unk_80192F20 *arg0, s32 arg1, s32 arg2, s32 arg3) {
         p = CdIntToPos(CdPosToInt(p) + 1, p);
         while (CdControl(2, p, NULL) == 0) {
         }
-        arg0->unk4 += 0x800;
-        size = ((Unk_80191AB0_C *)arg0->unkC)->unk4;
-        tag = ((Unk_80191AB0_C *)arg0->unkC)->unk0;
+        arg0->pos += 0x800;
+        size = ((IffChunk *)arg0->chunk)->size;
+        tag = ((IffChunk *)arg0->chunk)->tag;
         switch (tag) {
         case 0x54455341:
             object_load_aset(arg0, size);
@@ -914,7 +914,7 @@ void object_read_chunks(Unk_80192F20 *arg0, s32 arg1, s32 arg2, s32 arg3) {
                 p = CdIntToPos(CdPosToInt(p) + (size >> 11), p);
                 while (CdControl(2, p, NULL) == 0) {
                 }
-                arg0->unk4 += size;
+                arg0->pos += size;
             } else {
                 object_load_blck(arg0, ((Unk_80191AB0 *)arg1)->unk0, size);
             }
@@ -923,7 +923,7 @@ void object_read_chunks(Unk_80192F20 *arg0, s32 arg1, s32 arg2, s32 arg3) {
             object_load_door(arg0, size);
             break;
         case 0x4C49414D:
-            id2 = ((Unk_80191AB0_C *)arg0->unkC)->unk8;
+            id2 = ((IffChunk *)arg0->chunk)->unk8;
             if (id2 == mail_list_get_id(arg3)) {
                 object_load_mail(arg0, size, arg3);
                 return;
@@ -933,7 +933,7 @@ void object_read_chunks(Unk_80192F20 *arg0, s32 arg1, s32 arg2, s32 arg3) {
             p = CdIntToPos(CdPosToInt(p) + (size >> 11), p);
             while (CdControl(2, p, NULL) == 0) {
             }
-            arg0->unk4 += size;
+            arg0->pos += size;
             break;
         case 0x4944494D:
             object_load_midi(arg0, size);
@@ -942,9 +942,9 @@ void object_read_chunks(Unk_80192F20 *arg0, s32 arg1, s32 arg2, s32 arg3) {
         case 0x20454F4D:
             if (arg3 == 0x400) {
                 found = 0;
-                m = D_801E0768[0];
+                m = player_status_inventory[0];
                 for (i = 0; i < 2; i++) {
-                    if (((Unk_80191AB0_C *)arg0->unkC)->unk8 == m->weapon_ids[i] + 0x400) {
+                    if (((IffChunk *)arg0->chunk)->unk8 == m->weapon_ids[i] + 0x400) {
                         found = 1;
                         break;
                     }
@@ -958,14 +958,14 @@ void object_read_chunks(Unk_80192F20 *arg0, s32 arg1, s32 arg2, s32 arg3) {
                     p = CdIntToPos(CdPosToInt(p) + (size >> 11), p);
                     while (CdControl(2, p, NULL) == 0) {
                     }
-                    arg0->unk4 += size;
+                    arg0->pos += size;
                 }
             } else {
                 object_load_mod(arg0, size);
             }
             break;
         case 0x54525053:
-            id = ((Unk_80191AB0_C *)arg0->unkC)->unk8;
+            id = ((IffChunk *)arg0->chunk)->unk8;
             object_load_sprt(arg0, size);
             if (id == 0x40F) {
                 sprite_set_visible(0x40F, 1);
@@ -974,7 +974,7 @@ void object_read_chunks(Unk_80192F20 *arg0, s32 arg1, s32 arg2, s32 arg3) {
             }
             break;
         case 0x204D4954:
-            if (((Unk_80191AB0_C *)arg0->unkC)->unk8 == arg3) {
+            if (((IffChunk *)arg0->chunk)->unk8 == arg3) {
                 object_load_tim(arg0, size);
             } else {
                 size -= 0x7F8;
@@ -982,7 +982,7 @@ void object_read_chunks(Unk_80192F20 *arg0, s32 arg1, s32 arg2, s32 arg3) {
                 p = CdIntToPos(CdPosToInt(p) + (size >> 11), p);
                 while (CdControl(2, p, NULL) == 0) {
                 }
-                arg0->unk4 += size;
+                arg0->pos += size;
             }
             break;
         case 0x54584554:
@@ -998,7 +998,7 @@ void object_read_chunks(Unk_80192F20 *arg0, s32 arg1, s32 arg2, s32 arg3) {
                 p = CdIntToPos(CdPosToInt(p) + (size >> 11), p);
                 while (CdControl(2, p, NULL) == 0) {
                 }
-                arg0->unk4 += size;
+                arg0->pos += size;
             } else {
                 object_load_vabb(arg0, size);
             }
@@ -1010,7 +1010,7 @@ void object_read_chunks(Unk_80192F20 *arg0, s32 arg1, s32 arg2, s32 arg3) {
                 p = CdIntToPos(CdPosToInt(p) + (size >> 11), p);
                 while (CdControl(2, p, NULL) == 0) {
                 }
-                arg0->unk4 += size;
+                arg0->pos += size;
             } else {
                 object_load_vabh(arg0, size);
             }
@@ -1034,7 +1034,7 @@ void object_read_chunks(Unk_80192F20 *arg0, s32 arg1, s32 arg2, s32 arg3) {
             p = CdIntToPos(CdPosToInt(p) + (size >> 11), p);
             while (CdControl(2, p, NULL) == 0) {
             }
-            arg0->unk4 += size;
+            arg0->pos += size;
             break;
         }
         switch (arg2) {
@@ -1065,9 +1065,9 @@ void object_read_chunks(Unk_80192F20 *arg0, s32 arg1, s32 arg2, s32 arg3) {
     }
 }
 
-void object_iff_open(Unk_80192F20 **arg0, s32 arg1, s32 arg2) {
+void object_iff_open(IffContext **arg0, s32 arg1, s32 arg2) {
     struct {
-        Unk_801DFF20 unk0;
+        CdLoc unk0;
         u32 unk4;
         char unk8[16];
     } file;
@@ -1084,14 +1084,14 @@ void object_iff_open(Unk_80192F20 **arg0, s32 arg1, s32 arg2) {
     if (*arg0 == NULL) {
         kaj_abend(3, "Error Allocation IFF Context", D_80170B7C, 0x2AA);
     }
-    (*arg0)->unk0 = 0;
-    (*arg0)->unk4 = 0;
-    (*arg0)->unk8 = kaj_malloc(0x800);
-    if ((*arg0)->unk8 == NULL) {
+    (*arg0)->size = 0;
+    (*arg0)->pos = 0;
+    (*arg0)->header = kaj_malloc(0x800);
+    if ((*arg0)->header == NULL) {
         kaj_abend(3, "Error Allocating IFF Header", D_80170B7C, 0x2B1);
     }
-    (*arg0)->unkC = kaj_malloc(0x800);
-    if ((*arg0)->unkC == NULL) {
+    (*arg0)->chunk = kaj_malloc(0x800);
+    if ((*arg0)->chunk == NULL) {
         kaj_abend(3, "Error Allocating IFF Chunk Header", D_80170B7C, 0x2B5);
     }
 retry0:
@@ -1103,7 +1103,7 @@ retry0:
     if ((u32)((s32)r + 1) < 2) {
         goto retry0;
     }
-    *(Unk_801DFF20 *)object_iff_file_pos = file.unk0;
+    *(CdLoc *)object_iff_file_pos = file.unk0;
     while (CdControl(2, (u8 *)&file, NULL) == 0) {
     }
     if (arg2 > 0) {
@@ -1122,9 +1122,9 @@ retry0:
             while (CdControl(2, p, NULL) == 0) {
             }
         }
-        *(Unk_801DFF20 *)object_iff_file_pos = *(Unk_801DFF20 *)CdLastPos();
+        *(CdLoc *)object_iff_file_pos = *(CdLoc *)CdLastPos();
     }
-    dst = (u32 *)(*arg0)->unk8;
+    dst = (u32 *)(*arg0)->header;
     while (1) {
         sp28 = CdMode();
         if (!(sp28 & 0x80)) {
@@ -1149,30 +1149,30 @@ retry0:
 }
 
 void object_load_scene(void) {
-    Unk_80192F20 *sp10;
-    Unk_80192F20 *q;
-    Unk_80192F20 *q2;
-    Unk_80192F20 *q3;
-    Unk_80192E18 *e;
+    IffContext *sp10;
+    IffContext *q;
+    IffContext *q2;
+    IffContext *q3;
+    IffEntry *e;
     SceneTables *g;
-    Unk_801E0340 *s;
+    SceneRequest *s;
     s32 pos;
     s32 a, b, c, d;
     u16 idx;
     u8 *p;
     u8 *loc;
-    Unk_80192E18 *e2;
+    IffEntry *e2;
     s32 pos2;
     u8 *p2;
     u8 *loc2;
 
-    s = &D_801E0340;
+    s = &scene_request;
     object_iff_open(&sp10, 0, s->unk0[2]);
     q = sp10;
-    q->unk4 = 0;
-    e = q->unk8;
-    pos = e->unk0;
-    q->unk0 = e->unk4;
+    q->pos = 0;
+    e = q->header;
+    pos = e->offset;
+    q->size = e->size;
     g = &object_scene_tables;
     a = e->unk8;
     b = e->unkC;
@@ -1190,7 +1190,7 @@ void object_load_scene(void) {
     if (d != 0) {
         g->unk2C = d;
     }
-    if (q->unk0 == 0) {
+    if (q->size == 0) {
         D_801DFF18 = 0;
     } else {
         loc = object_iff_file_pos;
@@ -1198,15 +1198,15 @@ void object_load_scene(void) {
         while (CdControl(2, p, NULL) == 0) {
         }
     }
-    if (sp10->unk0 > 0) {
+    if (sp10->size > 0) {
         object_read_chunks(sp10, (s32)s, 2, 0);
     }
     q2 = sp10;
     idx = s->unk0[3];
-    q2->unk4 = 0;
-    e2 = q2->unk8 + idx + 1;
-    pos2 = q2->unk8[idx + 1].unk0;
-    q2->unk0 = e2->unk4;
+    q2->pos = 0;
+    e2 = q2->header + idx + 1;
+    pos2 = q2->header[idx + 1].offset;
+    q2->size = e2->size;
     object_scene_tables.npc_count = e2->unk8;
     object_scene_tables.trigger_count = e2->unkC;
     object_aset_count = e2->unk10;
@@ -1222,20 +1222,20 @@ void object_load_scene(void) {
         while (CdControl(2, p2, NULL) == 0) {
         }
     }
-    if (sp10->unk0 > 0) {
+    if (sp10->size > 0) {
         object_read_chunks(sp10, (s32)s, 2, 0);
     }
     q3 = sp10;
-    free3(q3->unk8);
-    free3(q3->unkC);
+    free3(q3->header);
+    free3(q3->chunk);
     free3(q3);
 }
 
 void object_load_weapon_mods(void) {
-    Unk_80192F20 *sp10;
-    Unk_80192F20 *q;
-    Unk_80192F20 *r;
-    Unk_80192E18 *e;
+    IffContext *sp10;
+    IffContext *q;
+    IffContext *r;
+    IffEntry *e;
     SceneTables *g;
     s32 pos;
     s32 a, b, c, d;
@@ -1244,10 +1244,10 @@ void object_load_weapon_mods(void) {
 
     object_iff_open(&sp10, 1, 2);
     q = sp10;
-    q->unk4 = 0;
-    e = q->unk8;
-    pos = e->unk0;
-    q->unk0 = e->unk4;
+    q->pos = 0;
+    e = q->header;
+    pos = e->offset;
+    q->size = e->size;
     g = &object_scene_tables;
     a = e->unk8;
     b = e->unkC;
@@ -1265,7 +1265,7 @@ void object_load_weapon_mods(void) {
     if (d != 0) {
         g->unk2C = d;
     }
-    if (q->unk0 == 0) {
+    if (q->size == 0) {
         D_801DFF18 = 0;
     } else {
         loc = object_iff_file_pos;
@@ -1273,20 +1273,20 @@ void object_load_weapon_mods(void) {
         while (CdControl(2, p, NULL) == 0) {
         }
     }
-    if (sp10->unk0 > 0) {
+    if (sp10->size > 0) {
         object_read_chunks(sp10, 0, 2, 0x400);
     }
     r = sp10;
-    free3(r->unk8);
-    free3(r->unkC);
+    free3(r->header);
+    free3(r->chunk);
     free3(r);
 }
 
 void object_load_mail_by_id(s16 arg0) {
-    Unk_80192F20 *sp10;
-    Unk_80192F20 *q;
-    Unk_80192F20 *r;
-    Unk_80192E18 *e;
+    IffContext *sp10;
+    IffContext *q;
+    IffContext *r;
+    IffEntry *e;
     SceneTables *g;
     s32 pos;
     s32 a, b, c, d;
@@ -1295,10 +1295,10 @@ void object_load_mail_by_id(s16 arg0) {
 
     object_iff_open(&sp10, 1, 7);
     q = sp10;
-    q->unk4 = 0;
-    e = q->unk8;
-    pos = e->unk0;
-    q->unk0 = e->unk4;
+    q->pos = 0;
+    e = q->header;
+    pos = e->offset;
+    q->size = e->size;
     g = &object_scene_tables;
     a = e->unk8;
     b = e->unkC;
@@ -1316,7 +1316,7 @@ void object_load_mail_by_id(s16 arg0) {
     if (d != 0) {
         g->unk2C = d;
     }
-    if (q->unk0 == 0) {
+    if (q->size == 0) {
         D_801DFF18 = 0;
     } else {
         loc = object_iff_file_pos;
@@ -1324,20 +1324,20 @@ void object_load_mail_by_id(s16 arg0) {
         while (CdControl(2, p, NULL) == 0) {
         }
     }
-    if (sp10->unk0 > 0) {
+    if (sp10->size > 0) {
         object_read_chunks(sp10, 0, -1, arg0);
     }
     r = sp10;
-    free3(r->unk8);
-    free3(r->unkC);
+    free3(r->header);
+    free3(r->chunk);
     free3(r);
 }
 
 void object_load_res(s32 arg0, s32 arg1) {
-    Unk_80192F20 *sp10;
-    Unk_80192F20 *q;
-    Unk_80192F20 *r;
-    Unk_80192E18 *e;
+    IffContext *sp10;
+    IffContext *q;
+    IffContext *r;
+    IffEntry *e;
     SceneTables *g;
     s32 pos;
     s32 a, b, c, d;
@@ -1346,10 +1346,10 @@ void object_load_res(s32 arg0, s32 arg1) {
 
     object_iff_open(&sp10, 1, arg0);
     q = sp10;
-    q->unk4 = 0;
-    e = q->unk8;
-    pos = e->unk0;
-    q->unk0 = e->unk4;
+    q->pos = 0;
+    e = q->header;
+    pos = e->offset;
+    q->size = e->size;
     g = &object_scene_tables;
     a = e->unk8;
     b = e->unkC;
@@ -1367,7 +1367,7 @@ void object_load_res(s32 arg0, s32 arg1) {
     if (d != 0) {
         g->unk2C = d;
     }
-    if (q->unk0 == 0) {
+    if (q->size == 0) {
         D_801DFF18 = 0;
     } else {
         loc = object_iff_file_pos;
@@ -1375,20 +1375,20 @@ void object_load_res(s32 arg0, s32 arg1) {
         while (CdControl(2, p, NULL) == 0) {
         }
     }
-    if (sp10->unk0 > 0) {
+    if (sp10->size > 0) {
         object_read_chunks(sp10, 0, arg1, 0);
     }
     r = sp10;
-    free3(r->unk8);
-    free3(r->unkC);
+    free3(r->header);
+    free3(r->chunk);
     free3(r);
 }
 
 void object_load_res12_by_id(s16 arg0) {
-    Unk_80192F20 *sp10;
-    Unk_80192F20 *q;
-    Unk_80192F20 *r;
-    Unk_80192E18 *e;
+    IffContext *sp10;
+    IffContext *q;
+    IffContext *r;
+    IffEntry *e;
     SceneTables *g;
     s32 pos;
     s32 a, b, c, d;
@@ -1397,10 +1397,10 @@ void object_load_res12_by_id(s16 arg0) {
 
     object_iff_open(&sp10, 1, 0xC);
     q = sp10;
-    q->unk4 = 0;
-    e = q->unk8;
-    pos = e->unk0;
-    q->unk0 = e->unk4;
+    q->pos = 0;
+    e = q->header;
+    pos = e->offset;
+    q->size = e->size;
     g = &object_scene_tables;
     a = e->unk8;
     b = e->unkC;
@@ -1418,7 +1418,7 @@ void object_load_res12_by_id(s16 arg0) {
     if (d != 0) {
         g->unk2C = d;
     }
-    if (q->unk0 == 0) {
+    if (q->size == 0) {
         D_801DFF18 = 0;
     } else {
         loc = object_iff_file_pos;
@@ -1426,25 +1426,25 @@ void object_load_res12_by_id(s16 arg0) {
         while (CdControl(2, p, NULL) == 0) {
         }
     }
-    if (sp10->unk0 > 0) {
+    if (sp10->size > 0) {
         object_read_chunks(sp10, 0, 2, arg0);
     }
     r = sp10;
-    free3(r->unk8);
-    free3(r->unkC);
+    free3(r->header);
+    free3(r->chunk);
     free3(r);
 }
 
-void object_iff_seek_entry(Unk_80192F20 *arg0, u16 arg1) {
-    Unk_80192E18 *e;
+void object_iff_seek_entry(IffContext *arg0, u16 arg1) {
+    IffEntry *e;
     s32 pos;
     u8 *p;
     u8 *loc;
 
-    arg0->unk4 = 0;
-    e = arg0->unk8 + arg1 + 1;
-    pos = arg0->unk8[arg1 + 1].unk0;
-    arg0->unk0 = e->unk4;
+    arg0->pos = 0;
+    e = arg0->header + arg1 + 1;
+    pos = arg0->header[arg1 + 1].offset;
+    arg0->size = e->size;
     object_scene_tables.npc_count = e->unk8;
     object_scene_tables.trigger_count = e->unkC;
     object_aset_count = e->unk10;
@@ -1462,14 +1462,14 @@ void object_iff_seek_entry(Unk_80192F20 *arg0, u16 arg1) {
     }
 }
 
-void object_iff_close(Unk_80192F20 *arg0) {
-    free3(arg0->unk8);
-    free3(arg0->unkC);
+void object_iff_close(IffContext *arg0) {
+    free3(arg0->header);
+    free3(arg0->chunk);
     free3(arg0);
 }
 
 s32 object_room_on_enter(Unk_80192F60 *arg0) {
-    Unk_801DFF30 *p = &object_room_phone;
+    RoomPhone *p = &object_room_phone;
 
     switch (arg0->unkC) {
     case 0xFA0000:
@@ -1485,10 +1485,10 @@ s32 object_room_on_enter(Unk_80192F60 *arg0) {
         text_show(" 8\223\372\213L1\202\360\202\302\202\257\202\351       3\201\233", 1, -1, 8, -1, 0, 1);
         break;
     case 0xFA0003:
-        if (p->unk2 == 1) {
+        if (p->state == 1) {
             /* " 8電話1をとる        3○" */
             text_show(" 8\223d\230b1\202\360\202\306\202\351        3\201\233", 1, -1, 8, -1, 0, 1);
-        } else if (p->unk2 == 2) {
+        } else if (p->state == 2) {
             /* " 8電話1をかける       3○" */
             text_show(" 8\223d\230b1\202\360\202\251\202\257\202\351       3\201\233", 1, -1, 8, -1, 0, 1);
         }
@@ -1500,15 +1500,15 @@ s32 object_room_on_enter(Unk_80192F60 *arg0) {
 }
 
 s32 object_room_on_effect_done(Unk_80193068 *arg0) {
-    Unk_801E0368_u8018FA18 *g;
+    GameVars_u8018FA18 *g;
     Player *o;
     u16 v;
     s32 t;
-    Unk_801DFF28 *f;
+    RoomStorage *f;
 
     g = &action_vars;
     f = &object_room_storage;
-    o = D_801E076C[0];
+    o = player_status_player[0];
     t = arg0->unk10;
     v = D_801E0356[0];
     if (t == 4) {
@@ -1543,7 +1543,7 @@ s32 object_room_on_effect_done(Unk_80193068 *arg0) {
         }
     } else if (t == 11) {
         if (!(o->flags & 0x4000)) {
-            if (f->unk2 != 0) {
+            if (f->choice != 0) {
                 /* " 1預ける8武器1を方向キー上下で, 選んで下さい,      決定 3○ 1戻る 4×" */
                 text_show(" 1\227a\202\257\202\3518\225\220\212\3551\202\360\225\373\214\374\203L\201[\217\343\211\272\202\305, \221I\202\361\202\305\211\272\202\263\202\242,      \214\210\222\350 3\201\233 1\226\337\202\351 4\201~", 3, -1, 0, -1, 0, 1);
             } else {
@@ -1570,24 +1570,24 @@ s32 object_room_on_effect_done(Unk_80193068 *arg0) {
 
 void object_room_check_calls(void) {
     Player *o;
-    Unk_8018E56C *p;
+    Model *p;
     u16 flags;
     s16 t;
-    Unk_801DFF30 *f;
-    Unk_801E0368_u8018FA18 *g;
+    RoomPhone *f;
+    GameVars_u8018FA18 *g;
     PlayerStatus *h;
-    Unk_801DFFE8 *e;
+    EventState *e;
 
     h = &player_status;
-    e = &D_801DFFE8;
+    e = &event_state;
     f = &object_room_phone;
     g = &action_vars;
 
     o = h->player;
     p = h->model;
     flags = g->unkB2;
-    if (f->unk0 != 0) {
-        if ((o->flags & 0x40) && f->unk2 == 4 && e->unk6 == 0 && p->unk8 == 0 && p->unk16 == 1) {
+    if (f->ringing != 0) {
+        if ((o->flags & 0x40) && f->state == 4 && e->state == 0 && p->playing == 0 && p->anim == 1) {
             mod_set_anim(p, 2, 0);
         }
         return;
@@ -1597,71 +1597,71 @@ void object_room_check_calls(void) {
     }
     t = g->unk7C + g->unk7A * 24;
     if (!(flags & 1) && (s16)mail_is_read(1) != 0 && g->unk0[0xD] == 100 && g->unk0[0xB] != 0) {
-        f->unk0 = 1;
-        f->unk2 = 2;
-        f->unk4 = 0x65;
+        f->ringing = 1;
+        f->state = 2;
+        f->message = 0x65;
         return;
     } else if (!(flags & 2) && g->unk0[0xD] == 90) {
-        f->unk0 = 1;
-        f->unk2 = 1;
-        f->unk4 = 0x66;
+        f->ringing = 1;
+        f->state = 1;
+        f->message = 0x66;
     } else if (!(flags & 4) && g->unk0[0xD] == 80 && g->unk0[0xF] > 10) {
-        f->unk0 = 1;
-        f->unk2 = 1;
-        f->unk4 = 0x67;
+        f->ringing = 1;
+        f->state = 1;
+        f->message = 0x67;
     } else if (!(flags & 8) && (s16)mail_is_read(0x13) != 0 && t < 58) {
-        f->unk0 = 1;
-        f->unk2 = 1;
-        f->unk4 = 0x68;
+        f->ringing = 1;
+        f->state = 1;
+        f->message = 0x68;
     } else if (!(flags & 0x10) && g->unk98 == 0 && g->unk7A == 1 && g->unk7C >= 14 && g->unk7C < 20) {
-        f->unk0 = 1;
-        f->unk2 = 1;
-        f->unk4 = 0x69;
+        f->ringing = 1;
+        f->state = 1;
+        f->message = 0x69;
     } else if (!(flags & 0x20) && g->unk98 >= 3 && t < 51) {
-        f->unk0 = 1;
-        f->unk2 = 2;
-        f->unk4 = 0x6A;
+        f->ringing = 1;
+        f->state = 2;
+        f->message = 0x6A;
         return;
     } else if (!(flags & 0x40) && g->unk98 >= 3 && g->unk0[0x12] > 10 && g->unk0[0x12] <= 100) {
-        f->unk0 = 1;
-        f->unk2 = 1;
-        f->unk4 = 0x6B;
+        f->ringing = 1;
+        f->state = 1;
+        f->message = 0x6B;
     } else if (!(flags & 0x80) && g->unk98 >= 3 && g->unk0[0x17] > 10 && g->unk0[0x17] <= 100) {
-        f->unk0 = 1;
-        f->unk2 = 1;
-        f->unk4 = 0x6C;
+        f->ringing = 1;
+        f->state = 1;
+        f->message = 0x6C;
     } else if (!(flags & 0x100) && g->unk98 < 3 && g->unk0[0x17] > 10 && g->unk0[0x17] <= 100) {
-        f->unk0 = 1;
-        f->unk2 = 1;
-        f->unk4 = 0x6D;
+        f->ringing = 1;
+        f->state = 1;
+        f->message = 0x6D;
     } else if (!(flags & 0x200) && t >= 82 && g->unk0[0xE] > 10 && g->unk0[0xE] <= 100) {
-        f->unk0 = 1;
-        f->unk2 = 1;
-        f->unk4 = 0x6E;
+        f->ringing = 1;
+        f->state = 1;
+        f->message = 0x6E;
     } else if (!(flags & 0x400) && t >= 36 && g->unk0[0x1A] > 90 && g->unk0[0x18] != 10) {
-        f->unk0 = 1;
-        f->unk2 = 1;
-        f->unk4 = 0x6F;
+        f->ringing = 1;
+        f->state = 1;
+        f->message = 0x6F;
     } else if (!(flags & 0x800) && g->unk0[0x1A] > 70 && g->unk0[0x18] == 10) {
-        f->unk0 = 1;
-        f->unk2 = 1;
-        f->unk4 = 0x70;
+        f->ringing = 1;
+        f->state = 1;
+        f->message = 0x70;
     } else if (!(flags & 0x1000) && t >= 58) {
-        f->unk0 = 1;
-        f->unk2 = 1;
-        f->unk4 = 0x71;
+        f->ringing = 1;
+        f->state = 1;
+        f->message = 0x71;
     } else if (!(flags & 0x2000) && h->unk32 > 0 && h->unk30 == 0) {
-        f->unk0 = 1;
-        f->unk2 = 1;
-        f->unk4 = 0x72;
+        f->ringing = 1;
+        f->state = 1;
+        f->message = 0x72;
     } else if (!(flags & 0x4000) && h->unk30 == 1) {
-        f->unk0 = 1;
-        f->unk2 = 1;
-        f->unk4 = 0x73;
+        f->ringing = 1;
+        f->state = 1;
+        f->message = 0x73;
     } else if (!(flags & 0x8000) && h->mutant != 0) {
-        f->unk0 = 1;
-        f->unk2 = 1;
-        f->unk4 = 0x74;
+        f->ringing = 1;
+        f->state = 1;
+        f->message = 0x74;
     } else {
         return;
     }
@@ -1675,26 +1675,26 @@ void object_room_check_calls(void) {
 INCLUDE_RODATA("asm/nonmatchings/game/8018FA18", D_80170E18);
 
 s16 object_room_storage_input(void) {
-    Unk_801DFF28 *p;
+    RoomStorage *p;
     s16 t;
     s16 r;
     s16 n;
 
     p = &object_room_storage;
-    if (object_room_storage.unk0 == 0) {
+    if (object_room_storage.open == 0) {
         return 0;
     }
     t = mail_menu_get_state();
-    if (p->unk4 == 0 && t == 0) {
+    if (p->stage == 0 && t == 0) {
         if (!(kaj_system.pad_prev & 0x20) && (kaj_system.pad_now & 0x20)) {
-            r = effect_weapon_list(p->unk2, &n, D_801E05E0);
-            if (p->unk2 != 0) {
-                p->unk4 = 1;
+            r = effect_weapon_list(p->choice, &n, D_801E05E0);
+            if (p->choice != 0) {
+                p->stage = 1;
                 if (r != 0) {
                     goto ok;
                 }
                 {
-                    Unk_801DFF28 *q;
+                    RoomStorage *q;
                     char *s;
 
                     /* " 8武器2を持っていないと危険です" */
@@ -1704,9 +1704,9 @@ s16 object_room_storage_input(void) {
                     if (s != NULL) {
                         text_show(s, 1, -1, 0, -1, 0, 4);
                     } else {
-                        q->unk0 = 0;
-                        q->unk4 = 0;
-                        q->unk2 = 1;
+                        q->open = 0;
+                        q->stage = 0;
+                        q->choice = 1;
                         text_close();
                     }
                     if (s == NULL) {
@@ -1714,22 +1714,22 @@ s16 object_room_storage_input(void) {
                         return 1;
                     }
                     mail_wait(0, 0, 0, 3);
-                    q->unk0 = 1;
-                    q->unk4 = 0;
-                    q->unk2 = 1;
+                    q->open = 1;
+                    q->stage = 0;
+                    q->choice = 1;
                     sprite_set_visible(0, 1);
                     sprite_set_clut_entry(0, 4, D_801DFD5A);
                     sprite_set_clut_entry(0, 5, D_801DFD58);
                     text_show(D_80170E18, 3, -1, 0, -1, 0, 1);
                 }
             } else {
-                p->unk4 = 2;
+                p->stage = 2;
                 if (r != 0) {
                     goto ok;
                 }
                 if (n == 0) {
                     {
-                        Unk_801DFF28 *q;
+                        RoomStorage *q;
                         char *s;
 
                         /* " 2預かっている8武器2はありません" */
@@ -1739,9 +1739,9 @@ s16 object_room_storage_input(void) {
                         if (s != NULL) {
                             text_show(s, 1, -1, 0, -1, 0, 4);
                         } else {
-                            q->unk0 = 0;
-                            q->unk4 = 0;
-                            q->unk2 = 1;
+                            q->open = 0;
+                            q->stage = 0;
+                            q->choice = 1;
                             text_close();
                         }
                         if (s == NULL) {
@@ -1749,9 +1749,9 @@ s16 object_room_storage_input(void) {
                             return 1;
                         }
                         mail_wait(0, 0, 0, 3);
-                        q->unk0 = 1;
-                        q->unk4 = 0;
-                        q->unk2 = 1;
+                        q->open = 1;
+                        q->stage = 0;
+                        q->choice = 1;
                         sprite_set_visible(0, 1);
                         sprite_set_clut_entry(0, 4, D_801DFD5A);
                         sprite_set_clut_entry(0, 5, D_801DFD58);
@@ -1759,7 +1759,7 @@ s16 object_room_storage_input(void) {
                     }
                 } else {
                     {
-                        Unk_801DFF28 *q;
+                        RoomStorage *q;
                         char *s;
 
                         /* " 2もう、持てないようですよ" */
@@ -1769,9 +1769,9 @@ s16 object_room_storage_input(void) {
                         if (s != NULL) {
                             text_show(s, 1, -1, 0, -1, 0, 4);
                         } else {
-                            q->unk0 = 0;
-                            q->unk4 = 0;
-                            q->unk2 = 1;
+                            q->open = 0;
+                            q->stage = 0;
+                            q->choice = 1;
                             text_close();
                         }
                         if (s == NULL) {
@@ -1779,9 +1779,9 @@ s16 object_room_storage_input(void) {
                             return 1;
                         }
                         mail_wait(0, 0, 0, 3);
-                        q->unk0 = 1;
-                        q->unk4 = 0;
-                        q->unk2 = 1;
+                        q->open = 1;
+                        q->stage = 0;
+                        q->choice = 1;
                         sprite_set_visible(0, 1);
                         sprite_set_clut_entry(0, 4, D_801DFD5A);
                         sprite_set_clut_entry(0, 5, D_801DFD58);
@@ -1798,14 +1798,14 @@ s16 object_room_storage_input(void) {
             return 1;
         }
         if (!(kaj_system.pad_prev & 0x40) && (kaj_system.pad_now & 0x40)) {
-            Unk_801DFF28 *q;
+            RoomStorage *q;
 
             sound_se_play(8);
             q = &object_room_storage;
             sprite_set_visible(0, 0);
-            q->unk0 = 0;
-            q->unk4 = 0;
-            q->unk2 = 1;
+            q->open = 0;
+            q->stage = 0;
+            q->choice = 1;
             text_close();
             mail_wait(0, 0, 0, 1);
             return 1;
@@ -1813,17 +1813,17 @@ s16 object_room_storage_input(void) {
         if ((!(kaj_system.pad_prev & 0x1000) && (kaj_system.pad_now & 0x1000)) ||
             (!(kaj_system.pad_prev & 0x4000) && (kaj_system.pad_now & 0x4000))) {
             sound_se_play(0xF);
-            p->unk2 = p->unk2 == 0;
-            sprite_set_clut_entry(0, 4, (&D_801DFD58)[p->unk2]);
-            sprite_set_clut_entry(0, 5, (&D_801DFD58)[1 - p->unk2]);
+            p->choice = p->choice == 0;
+            sprite_set_clut_entry(0, 4, (&D_801DFD58)[p->choice]);
+            sprite_set_clut_entry(0, 5, (&D_801DFD58)[1 - p->choice]);
         }
         return 1;
     }
-    if (p->unk4 == 1 || p->unk4 == 2) {
+    if (p->stage == 1 || p->stage == 2) {
         if (t == 1) {
             if (!(kaj_system.pad_prev & 0x20) && (kaj_system.pad_now & 0x20)) {
                 sound_se_play(0x11);
-                effect_weapon_swap_stock(p->unk2, D_801E05E0[p->unk6]);
+                effect_weapon_swap_stock(p->choice, D_801E05E0[p->unk6]);
                 mail_menu_close();
                 return 1;
             }
@@ -1843,47 +1843,47 @@ s16 object_room_storage_input(void) {
 }
 
 void object_room_do_action(PlayerStatus *arg0) {
-    Unk_801E0340 *s;
-    Unk_801DFFE8 *e;
-    Unk_801DFF30 *q;
-    Unk_801E0368_u8018FA18 *g;
+    SceneRequest *s;
+    EventState *e;
+    RoomPhone *q;
+    GameVars_u8018FA18 *g;
     Player *o;
-    Unk_80174B10 *t;
-    Unk_801DFF28 *r;
+    ActionSet *t;
+    RoomStorage *r;
     s32 k;
     s16 mode;
 
-    s = &D_801E0340;
-    e = &D_801DFFE8;
+    s = &scene_request;
+    e = &event_state;
     q = &object_room_phone;
     g = &action_vars;
-    mode = e->unk6;
+    mode = e->state;
     o = arg0->player;
 
     if (mode == 3) {
         text_next_page(e);
-    } else if (mode == 2 && (e->unk8 & 8)) {
+    } else if (mode == 2 && (e->circle_flags & 8)) {
         text_close();
-        sound_se_play(D_801DFFE8.unk0 == 0xFA0000 ? 0xE : 0x11);
-        switch ((u32)D_801DFFE8.unk0) {
+        sound_se_play(event_state.trigger == 0xFA0000 ? 0xE : 0x11);
+        switch ((u32)event_state.trigger) {
         case 0xFA0000:
             player_start_move_to(2, 1, 0x76C, 0, 0x19C8, 0, 0xB4, 0, mode);
             break;
         case 0xFA0001:
             player_start_move_to(0, 0, 0xDF6, 0x244, 0x1888, 6, 0x8E, 0, mode);
             object_room_exit_action = 1;
-            s->unkA = 1;
+            s->change = 1;
             break;
         case 0xFA0002:
             player_start_move_to(0, 0, 0xC12, 0x208, 0x18CE, -0x5A, 0xBF, 0, mode);
             object_room_exit_action = 2;
             D_801DFD56 = 1;
-            s->unkA = 1;
+            s->change = 1;
             break;
         case 0xFA0003:
-            if (q->unk2 == 1 || q->unk2 == 2) {
+            if (q->state == 1 || q->state == 2) {
                 o->flags |= 0x40;
-                g->unkB2 |= 1 << (q->unk4 - 0x65);
+                g->unkB2 |= 1 << (q->message - 0x65);
                 mod_set_anim(arg0->model, 1, 0);
             }
             break;
@@ -1892,9 +1892,9 @@ void object_room_do_action(PlayerStatus *arg0) {
         case 0xF0FF1E:
             k = 1;
             r = &object_room_storage;
-            r->unk0 = k;
-            r->unk4 = 0;
-            r->unk2 = k;
+            r->open = k;
+            r->stage = 0;
+            r->choice = k;
             sprite_set_visible(0, k);
             sprite_set_clut_entry(0, 4, D_801DFD5A);
             sprite_set_clut_entry(0, 5, D_801DFD58);
@@ -1908,14 +1908,14 @@ void object_room_do_action(PlayerStatus *arg0) {
             }
             arg0->unk34++;
         default:
-            t = action_find_set(e->unkA);
+            t = action_find_set(e->circle_set);
             while (t != NULL) {
                 t = action_run_set(t, 0, 0);
             }
             break;
         }
-        e->unk6 = 1;
-        e->unk8 &= ~8;
+        e->state = 1;
+        e->circle_flags &= ~8;
     }
 }
 
@@ -1944,14 +1944,14 @@ void object_room_update_input(void) {
             return;
         }
         if (!(kaj_system.pad_prev & 0x40) && (kaj_system.pad_now & 0x40)) {
-            Unk_801DFFE8 *q = &D_801DFFE8;
+            EventState *q = &event_state;
             if (!(p->player->flags & 0x40)) {
-                s16 t = q->unk6;
+                s16 t = q->state;
                 if (t == 2 && (p->player->flags & 1)) {
                     text_close();
                     sound_se_play(0xE);
                     player_start_move_to(2, 1, 0x76C, 0, 0x19C8, 0, 0xB4, 0, t);
-                    q->unk6 = 0;
+                    q->state = 0;
                 }
             }
             return;
@@ -1965,15 +1965,15 @@ void object_room_update_input(void) {
 void object_room_init(void) {
     PlayerStatus *p;
     Player *o;
-    Unk_801DFF30 *q;
-    Unk_801E0340 *r;
-    Unk_8018E56C *m;
-    Unk_801E0368_u8018FA18 *g;
+    RoomPhone *q;
+    SceneRequest *r;
+    Model *m;
+    GameVars_u8018FA18 *g;
     s32 i;
     s32 k;
 
     p = &player_status;
-    r = &D_801E0340;
+    r = &scene_request;
     o = p->player;
     D_801DFD56 = 0;
     sprite_set_visible(0x410, 1);
@@ -1991,24 +1991,24 @@ void object_room_init(void) {
     p->model = m;
     if (m != NULL) {
         mod_setup(m, 0, 3, 0);
-        p->model->unk54 = 0xDAC - o->cell_x * 12500;
-        p->model->unk58 = 0;
-        p->model->unk5C = 0x1A2C - o->cell_z * 12500;
-        p->model->unk3C = 0;
+        p->model->coord_tx = 0xDAC - o->cell_x * 12500;
+        p->model->coord_ty = 0;
+        p->model->coord_tz = 0x1A2C - o->cell_z * 12500;
+        p->model->coord_flg = 0;
     }
     D_801DFF50 = (s32)object_room_pick_desk_action;
     D_801DFED8 = (s32)object_room_on_alarm;
     D_801DFEE4 = (s32)object_room_on_enter;
     D_801DFED4 = (s32)object_room_on_effect_done;
     D_801DFEE8 = (s32)object_room_on_mod_finish;
-    q->unk0 = 0;
-    q->unk2 = 0;
-    q->unk4 = -1;
+    q->ringing = 0;
+    q->state = 0;
+    q->message = -1;
     D_801DFD54 = 0;
     if (r->unk0[3] == 1) {
         D_801DFD54 = 1;
     }
-    k = ((s16 *)&r->unk14)[1];
+    k = ((s16 *)&r->pos_x)[1];
     if (k == 2) {
         g = &action_vars;
         player_status.energy = 0xC9;
@@ -2020,7 +2020,7 @@ void object_room_init(void) {
         }
         for (i = 0; i < 5; i++) {
             p->limb_state[i] = 0;
-            g->unkB4[i] = 0;
+            g->limb_damage[i] = 0;
         }
         if (g->unk7C >= 5) {
             g->unk7A++;
@@ -2151,16 +2151,16 @@ void object_room_main(void) {
 }
 
 void object_room_storage_open(s16 arg0, char *arg1) {
-    Unk_801DFF28 *p = &object_room_storage;
+    RoomStorage *p = &object_room_storage;
 
     if (arg0 == 0) {
         sprite_set_visible(0, 0);
         if (arg1 != NULL) {
             text_show(arg1, 1, -1, 0, -1, 0, 4);
         } else {
-            p->unk0 = 0;
-            p->unk4 = 0;
-            p->unk2 = 1;
+            p->open = 0;
+            p->stage = 0;
+            p->choice = 1;
             text_close();
         }
         if (arg1 == NULL) {
@@ -2169,9 +2169,9 @@ void object_room_storage_open(s16 arg0, char *arg1) {
         }
         mail_wait(0, 0, 0, 3);
     }
-    p->unk0 = 1;
-    p->unk4 = 0;
-    p->unk2 = 1;
+    p->open = 1;
+    p->stage = 0;
+    p->choice = 1;
     sprite_set_visible(0, 1);
     sprite_set_clut_entry(0, 4, D_801DFD5A);
     sprite_set_clut_entry(0, 5, D_801DFD58);
@@ -2179,8 +2179,8 @@ void object_room_storage_open(s16 arg0, char *arg1) {
 }
 
 void object_room_pick_desk_action(s32 *arg0) {
-    Player *p = D_801E076C[0];
-    Unk_801DFF30 *q = &object_room_phone;
+    Player *p = player_status_player[0];
+    RoomPhone *q = &object_room_phone;
     s16 v;
 
     if ((*(u32 *)&p->unk40 & 0x1010000) == 0x10000) {
@@ -2192,7 +2192,7 @@ void object_room_pick_desk_action(s32 *arg0) {
             } else if (v >= 180 && v < 220) {
                 *arg0 = 0xFA0002;
             } else if (v >= 220 && v <= 250) {
-                if (q->unk0 != 0 && q->unk2 != 3) {
+                if (q->ringing != 0 && q->state != 3) {
                     *arg0 = 0xFA0003;
                 }
             }
@@ -2201,22 +2201,22 @@ void object_room_pick_desk_action(s32 *arg0) {
 }
 
 void object_room_on_alarm(Unk_80192F60 *arg0) {
-    Player *p = D_801E076C[0];
-    Unk_801DFF30 *q = &object_room_phone;
-    Unk_8018E56C *o;
+    Player *p = player_status_player[0];
+    RoomPhone *q = &object_room_phone;
+    Model *o;
 
     if (arg0->unkC == 0x400) {
         o = mod_find(0x440);
-        if (o != NULL && o->unk16 == 0) {
+        if (o != NULL && o->anim == 0) {
             mod_set_anim(o, 1, 0);
         }
     } else if (arg0->unkC == 0x401) {
-        q->unk2 = 4;
-        object_room_play_call(q->unk4);
+        q->state = 4;
+        object_room_play_call(q->message);
         sound_se_stop(0x33);
     } else if (arg0->unkC == 0x402) {
-        if (!(p->flags & 0x40) && q->unk2 != 4) {
-            q->unk2 = 3;
+        if (!(p->flags & 0x40) && q->state != 4) {
+            q->state = 3;
             sound_se_stop(0x33);
             effect_start_alarm(3, 0x403, 10);
             if (p->flags & 1) {
@@ -2224,10 +2224,10 @@ void object_room_on_alarm(Unk_80192F60 *arg0) {
             }
         }
     } else if (arg0->unkC == 0x403) {
-        if (q->unk2 == 3) {
-            q->unk0 = 0;
-            q->unk2 = 0;
-            q->unk4 = -1;
+        if (q->state == 3) {
+            q->ringing = 0;
+            q->state = 0;
+            q->message = -1;
         }
     }
 }
@@ -2235,25 +2235,25 @@ void object_room_on_alarm(Unk_80192F60 *arg0) {
 void object_room_on_mod_finish(Unk_80192F60 *arg0) {
     PlayerStatus *r = &player_status;
     Player *p = r->player;
-    Unk_8018E56C *o = r->model;
-    Unk_801DFF30 *q = &object_room_phone;
+    Model *o = r->model;
+    RoomPhone *q = &object_room_phone;
 
     if (arg0->unkC == 3 && arg0->unk8 == 0x40) {
-        if (o->unk16 == 1) {
-            if (q->unk2 == 2) {
+        if (o->anim == 1) {
+            if (q->state == 2) {
                 sound_se_play(0x33);
                 effect_start_alarm(1, 0x401, 5);
-            } else if (q->unk2 == 1) {
-                q->unk2 = 4;
-                object_room_play_call(q->unk4);
+            } else if (q->state == 1) {
+                q->state = 4;
+                object_room_play_call(q->message);
                 sound_se_stop(0x33);
             }
-        } else if (o->unk16 == 2) {
+        } else if (o->anim == 2) {
             text_close();
             p->flags &= ~0x40;
-            q->unk0 = 0;
-            q->unk2 = 0;
-            q->unk4 = -1;
+            q->ringing = 0;
+            q->state = 0;
+            q->message = -1;
             if (p->flags & 1) {
                 player_reset_triggers(0);
             }
@@ -2287,18 +2287,18 @@ void object_room_run(void) {
 
 void object_room_play_call(s16 arg0) {
     void *o = D_801E0760[0];
-    Unk_801DFFE8 *p = &D_801DFFE8;
-    Unk_80174B10 *item;
+    EventState *p = &event_state;
+    ActionSet *item;
 
     item = action_find_set(arg0);
     if (item != NULL) {
-        p->unk0 = 0;
-        p->unkA = -1;
-        p->unkE = -1;
-        p->unk4 = 0;
-        p->unk8 = 0;
-        p->unkC = 0;
-        p->unk6 = 1;
+        p->trigger = 0;
+        p->circle_set = -1;
+        p->cross_set = -1;
+        p->trigger_type = 0;
+        p->circle_flags = 0;
+        p->cross_flags = 0;
+        p->state = 1;
         while ((item = action_run_set(item, 0, 0)) != NULL) {
         }
     } else {
@@ -2308,27 +2308,27 @@ void object_room_play_call(s16 arg0) {
 
 s32 object_deliver_area_events(void) {
     Player *p = &player_character;
-    Unk_801CC1E8 *o;
+    KajEvent *o;
 
     UnDeliverEvent(0xF3000000, 2);
     if (D_801DFF4C != 0) {
         D_801DFF4C = 0;
         o = kaj_event_push(0x20);
         if (o != NULL) {
-            o->unkC = D_801E0610.unk0;
-            o->unk8 = D_801E0610.unk4;
-            o->unk10 = D_801E0610.unk8;
+            o->unkC = object_area_previous.trigger;
+            o->unk8 = object_area_previous.trigger_type;
+            o->unk10 = object_area_previous.scene_trigger;
         }
     }
     o = kaj_event_push(0x10);
     if (o != NULL) {
-        o->unkC = D_801E0600.unk0;
-        o->unk8 = D_801E0600.unk4;
-        o->unk10 = D_801E0600.unk8;
+        o->unkC = object_area_current.trigger;
+        o->unk8 = object_area_current.trigger_type;
+        o->unk10 = object_area_current.scene_trigger;
     }
-    D_801E0610.unk4 = D_801E0600.unk4;
-    D_801E0610.unk0 = D_801E0600.unk0;
-    D_801E0610.unk8 = D_801E0600.unk8;
+    object_area_previous.trigger_type = object_area_current.trigger_type;
+    object_area_previous.trigger = object_area_current.trigger;
+    object_area_previous.scene_trigger = object_area_current.scene_trigger;
     p->flags |= 4;
     return 0;
 }
