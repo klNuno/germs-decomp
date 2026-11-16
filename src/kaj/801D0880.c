@@ -36,7 +36,7 @@ typedef struct {
     u16 unk2;
     u32 unk4;
 } Unk_801D1088;
-void *func_801D0880(void *arg0, void *arg1, s32 *arg2, void *arg3, s32 arg4, s32 arg5);
+void *kaj_tod_set_packet(void *arg0, void *arg1, s32 *arg2, void *arg3, s32 arg4, s32 arg5);
 typedef struct {
     s32 unk0;
     s32 unk4;
@@ -137,7 +137,7 @@ static inline s32 *func_801D1044_inl(Unk_801D1044 *arg0, s32 *arg1, s32 arg2) {
     return p;
 }
 
-void *func_801D0880(void *arg0, void *arg1, s32 *arg2, void *arg3, s32 arg4, s32 arg5) {
+void *kaj_tod_set_packet(void *arg0, void *arg1, s32 *arg2, void *arg3, s32 arg4, s32 arg5) {
     s32 unused[6];
     Unk_801D05F8 tmp;
     Unk_801D0880_38 mtx;
@@ -263,7 +263,7 @@ void *func_801D0880(void *arg0, void *arg1, s32 *arg2, void *arg3, s32 arg4, s32
     return (s32 *)arg0 + len;
 }
 
-void func_801D0E58(Unk_801DFBB8 *arg0, Unk_801D05F8 *arg1, Unk_801D0E58 *arg2, u8 *arg3, s32 arg4) {
+void kaj_tod_init_table(Unk_801DFBB8 *arg0, Unk_801D05F8 *arg1, Unk_801D0E58 *arg2, u8 *arg3, s32 arg4) {
     s32 i;
 
     arg0->unk4 = 0;
@@ -282,7 +282,7 @@ void func_801D0E58(Unk_801DFBB8 *arg0, Unk_801D05F8 *arg1, Unk_801D0E58 *arg2, u
     }
 }
 
-Unk_801D05F8 *func_801D0EB8(Unk_801DFBB8 *arg0, s32 arg1) {
+Unk_801D05F8 *kaj_tod_find_obj(Unk_801DFBB8 *arg0, s32 arg1) {
     Unk_801D05F8 *p;
     s32 i;
 
@@ -298,7 +298,7 @@ Unk_801D05F8 *func_801D0EB8(Unk_801DFBB8 *arg0, s32 arg1) {
     return p;
 }
 
-Unk_801D05F8 *func_801D0F04(Unk_801DFBB8 *arg0, s32 arg1) {
+Unk_801D05F8 *kaj_tod_create_obj(Unk_801DFBB8 *arg0, s32 arg1) {
     Unk_801D05F8 *p;
     s32 i;
 
@@ -326,7 +326,7 @@ Unk_801D05F8 *func_801D0F04(Unk_801DFBB8 *arg0, s32 arg1) {
     return NULL;
 }
 
-Unk_801D05F8 *func_801D0FB8(Unk_801DFBB8 *arg0, s32 arg1) {
+Unk_801D05F8 *kaj_tod_remove_obj(Unk_801DFBB8 *arg0, s32 arg1) {
     Unk_801D05F8 *p;
     s32 i;
 
@@ -349,7 +349,7 @@ Unk_801D05F8 *func_801D0FB8(Unk_801DFBB8 *arg0, s32 arg1) {
     return NULL;
 }
 
-s32 *func_801D1044(Unk_801D1044 *arg0, s32 *arg1, s32 arg2) {
+s32 *kaj_tod_find_tmd(Unk_801D1044 *arg0, s32 *arg1, s32 arg2) {
     s32 *p;
     s32 n;
 
@@ -367,7 +367,7 @@ s32 *func_801D1044(Unk_801D1044 *arg0, s32 *arg1, s32 arg2) {
     return p;
 }
 
-void *func_801D1088(u32 arg0, Unk_801D1088 *arg1, void *arg2, s32 *arg3, void *arg4, s32 arg5, s32 arg6) {
+void *kaj_tod_set_frame(u32 arg0, Unk_801D1088 *arg1, void *arg2, s32 *arg3, void *arg4, s32 arg5, s32 arg6) {
     void *p;
     u32 n;
     u32 i;
@@ -379,7 +379,7 @@ void *func_801D1088(u32 arg0, Unk_801D1088 *arg1, void *arg2, s32 *arg3, void *a
     }
     p = arg1 + 1;
     for (i = 0; i < n; i++) {
-        p = func_801D0880(p, arg2, arg3, arg4, arg5, arg6);
+        p = kaj_tod_set_packet(p, arg2, arg3, arg4, arg5, arg6);
     }
     return p;
 }

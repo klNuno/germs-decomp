@@ -53,11 +53,11 @@ typedef struct {
     Unk_8017D0E0 *unk8;
     s32 unkC;
 } Unk_801DFE5C;
-s16 func_801CD000(Unk_801DFE5C *arg0);
+s16 kaj_ll_at_tail(Unk_801DFE5C *arg0);
 Unk_801DFE5C *D_801DFE5C;
-void func_801CCBF4(Unk_801DFE5C *arg0, s32 arg1);
-void func_801CCCF4(Unk_801DFE5C *arg0, s32 arg1);
-void func_801D3650(void);
+void kaj_ll_insert_before(Unk_801DFE5C *arg0, s32 arg1);
+void kaj_ll_insert_after(Unk_801DFE5C *arg0, s32 arg1);
+void kaj_cdmgr_free_all(void);
 s16 D_801DFC80;
 extern s16 D_801E71C8;
 typedef struct {
@@ -84,28 +84,28 @@ typedef struct {
     s32 unkC;
     s32 unk10;
 } Unk_8017E504;
-s16 D_801DFE64;
-void func_8017A3E4(void);
-void func_8017E25C(void);
-void func_8018748C(void);
+s16 block_wake_index;
+void block_create_all(void);
+void block_building_run(void);
+void effect_elevator_run(void);
 u16 D_801DFE60;
-void func_80184160(void);
-void func_801A4A68(s32 arg0, s32 arg1);
+void text_release_cmd(void);
+void sprite_set_visible(s32 arg0, s32 arg1);
 typedef struct {
     u8 pad0[0x6];
     s16 unk6;
     u16 unk8;
 } Unk_80184100;
-void func_801A461C(s32 arg0, s32 arg1, s32 arg2);
-void func_801A2678(s32 arg0);
+void sprite_set_clut_entry(s32 arg0, s32 arg1, s32 arg2);
+void sound_se_play(s32 arg0);
 typedef struct {
     u16 unk0;
     u16 unk2;
 } Unk_801DFCAC;
-Unk_801DFCAC **D_801DFCAC;
-s16 D_801DFCB0;
-void func_801749E8(Unk_801DFCAC **arg0);
-s16 D_801DFE7A;
+Unk_801DFCAC **text_cmd;
+s16 text_window_sprite;
+void action_push_front(Unk_801DFCAC **arg0);
+s16 text_wait;
 extern s32 D_801E6DB4[];
 typedef struct {
     s32 unk0;
@@ -139,8 +139,8 @@ typedef struct {
 extern s32 D_801E05B0[];
 extern Unk_801E076C *D_801E076C[];
 extern char D_80170250[];
-void *func_801CC898(u32 size);
-void func_801CD54C(s32 arg0, char *arg1, char *arg2, s32 arg3);
+void *kaj_malloc(u32 size);
+void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
 void *memset(void *dst, s32 c, u32 n);
 extern char D_801DFC84[];
 void free3(void *ptr);
@@ -154,16 +154,16 @@ typedef struct {
         u8 pad2[0x96];
     } unk14[4];
 } Unk_801802A0;
-void func_801A4824(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+void sprite_fill_clut(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 typedef struct {
     s16 unk0;
     s16 unk2;
     s16 unk4;
     s16 unk6;
 } Unk_80181C10;
-void func_801A43F4(s32 arg0);
-void func_8018B924(void);
-void func_8018BC50(void);
+void sprite_delete(s32 arg0);
+void mail_list_close(void);
+void mail_free(void);
 typedef struct {
     u16 unk0;
     u16 unk2;
@@ -174,10 +174,10 @@ typedef struct {
     u8 pad0[0x1C];
     Unk_80184230 *unk1C;
 } Unk_801A44B8;
-Unk_801A44B8 *func_801A44B8(u16 arg0);
+Unk_801A44B8 *sprite_find(u16 arg0);
 s32 ClearImage2(Unk_80184230 *rect, s32 r, s32 g, s32 b);
-s16 func_80182860(s32 arg0, s32 arg1);
-s16 D_801DFE72;
+s16 text_draw_next(s32 arg0, s32 arg1);
+s16 text_row;
 typedef struct Unk_80184338 {
     u8 pad0[0x22];
     s16 unk22;
@@ -192,13 +192,13 @@ typedef struct Unk_80184338 {
     s32 *unk3C;
 } Unk_80184338;
 s16 D_801DFCE6;
-s16 D_801DFE78;
-s32 func_8017D414(void *arg0, s32 arg1, s32 arg2, s32 arg3);
-void func_801CCDF8(Unk_801DFE5C *arg0);
-s16 D_801DFE7C;
-s16 D_801DFE7E;
-void func_801A3CC0(s32 arg0);
-void func_80186128(s32 arg0, s32 arg1);
+s16 text_pos;
+s32 block_model_surface(void *arg0, s32 arg1, s32 arg2, s32 arg3);
+void kaj_ll_remove_to_prev(Unk_801DFE5C *arg0);
+s16 text_cue_fade_done;
+s16 text_cue_bgm_done;
+void sound_bgm_fade_out(s32 arg0);
+void effect_start_fade(s32 arg0, s32 arg1);
 typedef struct {
     s32 unk0;
     s16 unk4;
@@ -233,28 +233,28 @@ typedef struct {
 } Unk_80184814;
 extern Unk_801DFFE8 D_801DFFE8;
 extern char D_80170270[];
-extern Unk_8017CCE4 *D_801E0000[];
-void func_801765BC(void);
-void func_80179848(Unk_8017CCE4 *arg0, u16 arg1);
-void func_8018D5F8(void *arg0);
-void func_801CFBB4(void *arg0);
-void **func_801D32F0(s32 arg0);
-s32 func_801D3364(s32 arg0);
-s32 func_801D33E4(s32 arg0);
-void func_801D3468(s32 arg0);
-void func_801D654C(s16 *arg0, s32 *arg1);
-void func_801D6E60(s16 *arg0, s32 *arg1);
-void func_801D70D0(s32 arg0);
-u16 D_801DFE58;
-void func_8017A534(u16 arg0);
-void func_8017A6E8(s32 arg0, s32 arg1);
-s32 func_801D1F70(void);
-s32 func_801D4FA0(s32 arg0, s32 arg1);
-s32 func_801D5934(u16 arg0, u8 *arg1);
-void func_801D6674(s16 *arg0, s32 *arg1);
-void func_801D6A04(void);
-void func_801D6A2C(void);
-void func_801D6F74(s16 *arg0, s32 *arg1);
+extern Unk_8017CCE4 *block_slots[];
+void npc_update_blocks(void);
+void block_setup(Unk_8017CCE4 *arg0, u16 arg1);
+void mod_create(void *arg0);
+void kaj_tim_upload_hdr(void *arg0);
+void **kaj_cdmgr_get(s32 arg0);
+s32 kaj_cdmgr_get_type(s32 arg0);
+s32 kaj_cdmgr_is_fresh(s32 arg0);
+void kaj_cdmgr_mark_used(s32 arg0);
+void kaj_map_cell_slots(s16 *arg0, s32 *arg1);
+void kaj_map_room_slots(s16 *arg0, s32 *arg1);
+void kaj_map_room_release(s32 arg0);
+u16 block_building_id;
+void block_load_all(u16 arg0);
+void block_set_zone_flags(s32 arg0, s32 arg1);
+s32 kaj_cdmgr_poll(void);
+s32 kaj_map_update_city(s32 arg0, s32 arg1);
+s32 kaj_map_update_place(u16 arg0, u8 *arg1);
+void kaj_map_cell_loaded_slots(s16 *arg0, s32 *arg1);
+void kaj_map_set_cell_ready(void);
+void kaj_map_set_room_ready(void);
+void kaj_map_room_loaded_slots(s16 *arg0, s32 *arg1);
 typedef struct {
     u16 unk0;
     u8 unk2;
@@ -301,14 +301,14 @@ typedef struct {
     Unk_8017BBB0 *unkBC;
 } Unk_801E032C;
 extern Unk_801E032C *D_801E032C[];
-s32 func_8017B1E8(Unk_8017B1E8 *arg0, s32 arg1, s32 arg2, Unk_8017B3E8 *arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7);
-s32 func_8017B3E8(Unk_8017B1E8 *arg0, s32 arg1, s32 arg2, Unk_8017B3E8 *arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7);
+s32 block_hit_tris(Unk_8017B1E8 *arg0, s32 arg1, s32 arg2, Unk_8017B3E8 *arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7);
+s32 block_hit_quads(Unk_8017B1E8 *arg0, s32 arg1, s32 arg2, Unk_8017B3E8 *arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7);
 char *strncpy(char *dst, char *src, u32 n);
 extern char D_801DFCBC[];
 extern s16 D_801DFC74;
-s16 D_801DFE70;
-s16 D_801DFE74;
-s16 D_801DFE76;
+s16 text_col;
+s16 text_color;
+s16 text_len;
 s32 strlen(char *s);
 typedef struct {
     s16 unk0[5];
@@ -324,16 +324,16 @@ typedef struct {
     u8 unk20[0x10];
 } Unk_801E0340;
 extern Unk_801E0340 D_801E0340;
-void func_80192B8C(s32 arg0, s32 arg1);
-void func_8018B810(void);
-void func_80180B04(Unk_80181C10 *arg0, s32 arg1, s32 arg2);
-void func_80180D8C(Unk_80181C10 *arg0, s32 arg1);
-void func_8018164C(Unk_80181C10 *arg0, s32 arg1, s16 arg2);
-void func_80192A44(s16 arg0);
-void func_80184338(Unk_80184338 *arg0);
-void func_80184408(void);
-void *func_801D15C8(u32 arg0);
-s32 func_801D14B8(void *arg0);
+void object_load_res(s32 arg0, s32 arg1);
+void mail_list_open(void);
+void menu_list_page(Unk_80181C10 *arg0, s32 arg1, s32 arg2);
+void menu_status_page(Unk_80181C10 *arg0, s32 arg1);
+void menu_options_page(Unk_80181C10 *arg0, s32 arg1, s16 arg2);
+void object_load_mail_by_id(s16 arg0);
+void text_narration_step(Unk_80184338 *arg0);
+void text_narration_end(void);
+void *kaj_tss_alloc(u32 arg0);
+s32 kaj_tss_start(void *arg0);
 typedef struct Unk_801854B8 {
     u16 unk0;
     s16 unk2;
@@ -379,7 +379,7 @@ typedef struct {
     s16 unk6;
 } Unk_80174FFC;
 void RotMatrix(Unk_80174FFC *arg0, void *arg1);
-Unk_8017CCE4 *func_8017CDA4(s32 arg0, s32 arg1, s32 arg2);
+Unk_8017CCE4 *block_find_at(s32 arg0, s32 arg1, s32 arg2);
 typedef struct {
     u16 unk0;
     u16 unk2;
@@ -391,8 +391,8 @@ typedef struct {
     char **unk8;
 } Unk_8018519C;
 s32 atoi(char *s);
-void func_80184ECC(Unk_80184814 *arg0, s16 arg1, s16 arg2, s16 arg3);
-void func_80185034(Unk_80184814 *arg0, s16 arg1, s16 arg2);
+void door_start_open(Unk_80184814 *arg0, s16 arg1, s16 arg2, s16 arg3);
+void door_start_close(Unk_80184814 *arg0, s16 arg1, s16 arg2);
 extern char D_80170290[];
 s32 func_801BDC30(double arg0, double arg1);
 typedef struct {
@@ -401,8 +401,8 @@ typedef struct {
     s16 unk4;
     s16 unk6;
 } Unk_8017AF18;
-s16 func_8017AC88(Unk_8017AC88 *arg0, s32 arg1, s32 arg2, s32 arg3);
-s32 func_8017AF18(Unk_8017AC88 *arg0, Unk_8017AF18 *arg1, s32 arg2, s32 arg3, s32 arg4);
+s16 block_point_in_poly(Unk_8017AC88 *arg0, s32 arg1, s32 arg2, s32 arg3);
+s32 block_poly_height(Unk_8017AC88 *arg0, Unk_8017AF18 *arg1, s32 arg2, s32 arg3, s32 arg4);
 s32 abs(s32 x);
 typedef struct {
     u8 pad0[0x36];
@@ -415,17 +415,17 @@ typedef struct {
     u16 unk2;
 } Unk_801DFE68;
 Unk_801DFE68 D_801DFE68;
-void func_80184100(Unk_80184100 *arg0);
-void func_80184094(void);
-void func_80183618(s16 arg0);
-void func_801A5B10(s16 arg0);
-void func_80187560(s16 arg0);
-void func_801A5CD4(void);
-void func_801A1FD4(s16 arg0, s16 arg1);
-void func_801A1AB8(s16 arg0, s32 arg1);
-void func_80183E88(char *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
-void *func_80174CB8(s16 arg0);
-void *func_80173DE0(void *arg0, s32 arg1, s32 arg2);
+void text_next_page(Unk_80184100 *arg0);
+void text_close(void);
+void text_show_profile(s16 arg0);
+void sprite_station_board_train(s16 arg0);
+void effect_elevator_init(s16 arg0);
+void sprite_station_exit_to_town(void);
+void roadmap_shop_exit_to_town(s16 arg0, s16 arg1);
+void roadmap_shop_open_menu(s16 arg0, s32 arg1);
+void text_show(char *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
+void *action_find_set(s16 arg0);
+void *action_run_set(void *arg0, s32 arg1, s32 arg2);
 extern Unk_801E0710 D_801E0710;
 typedef struct {
     s32 unk0;
@@ -443,84 +443,84 @@ typedef struct {
     char **unk1C;
 } Unk_801E1058;
 extern Unk_801E1058 D_801E1058[];
-s32 func_801CD6B4(void);
-s16 func_8018898C(Unk_801E0710 *arg0, s16 arg1);
-s16 func_801A14A0(Unk_801E0710 *arg0);
-s16 func_80187E38(Unk_801E0710 *arg0);
-void func_8017DAE8(Unk_801E0710 *arg0);
-void func_80199548(Unk_801E0710 *arg0, s32 arg1, s32 arg2);
-s16 D_801DFE62;
+s32 kaj_pad_read(void);
+s16 effect_item_input(Unk_801E0710 *arg0, s16 arg1);
+s16 roadmap_shop_update_input(Unk_801E0710 *arg0);
+s16 effect_weapon_input(Unk_801E0710 *arg0);
+void block_on_action(Unk_801E0710 *arg0);
+void player_handle_pad(Unk_801E0710 *arg0, s32 arg1, s32 arg2);
+s16 block_scene_daylight;
 extern s32 (*D_801DFED4)(Unk_8017E504 *arg0);
 extern s32 (*D_801DFEE4)(Unk_8017E504 *arg0);
-s32 func_8017D604(Unk_8017E504 *arg0);
-s32 func_8017E504(Unk_8017E504 *arg0);
-void func_80174840(s16 arg0);
-void func_8017A86C(u16 arg0);
+s32 block_on_effect_done(Unk_8017E504 *arg0);
+s32 block_on_enter(Unk_8017E504 *arg0);
+void action_reset(s16 arg0);
+void block_set_mode(u16 arg0);
 int sprintf(char *buf, const char *fmt, ...);
-void func_801926B4(void);
-void func_80188CE4(void);
-void func_801A8000(s32 arg0, s32 arg1, s16 arg2);
-void func_801A80CC(s32 arg0, s32 arg1, s16 arg2);
-void func_8018F428(u16 arg0, s16 arg1);
-void func_8018647C(s16 arg0);
-void func_80186680(void);
-void func_801A5C34(void);
-void func_801A1EC0(s16 arg0);
-void func_8018AABC(s16 arg0);
+void object_load_scene(void);
+void effect_weapon_load_models(void);
+void thing_set_active(s32 arg0, s32 arg1, s16 arg2);
+void thing_set_animate(s32 arg0, s32 arg1, s16 arg2);
+void mod_npcrec_show(u16 arg0, s16 arg1);
+void effect_flame_small_init(s16 arg0);
+void effect_flame_large_init(void);
+void sprite_station_init(void);
+void roadmap_shop_init(s16 arg0);
+void event_show_clock(s16 arg0);
 extern void (*D_801DFEDC)(void);
 extern s32 (*D_801DFEE0)();
-void func_8017DFA4(void);
-void func_8017DD70(void);
-void func_801D06B4(void);
-void func_801D06C4(void);
-void func_801CD688(s32 arg0);
-s32 func_801CC378(s32 *arg0);
-void func_801CC734(s32 *arg0);
-void func_80189350(s32 *arg0);
-void func_801A20A8(void);
-void func_801895E0(s32 *arg0);
-void func_80189970(s16 arg0);
-void func_801899AC(s32 *arg0);
-s16 func_8018C170(void);
-s16 func_8018970C(s32 *arg0);
-void func_8018C2FC(u16 arg0, s16 arg1, s16 arg2);
-void func_8017D3F0(void);
-void func_801A3C58(void);
-void func_801A252C(void);
-void func_8018655C(void);
-void func_80186718(void);
-void func_80174FA8(void);
-void func_801762A0(void);
-void func_80176780(void);
-void func_8017683C(void);
-void func_80188DE8(void);
-void func_80174BC8(void);
-void func_8017D1BC(void);
-void func_80185548(void);
-void func_8018E47C(void);
-void func_801A7BA4(void);
-void func_801A3B5C(void);
-void func_801A23B4(void);
-void func_8017E594(s16 arg0, s16 arg1, s16 *arg2);
-void func_80189970(s16 a);
-void func_8018ABE8(s16 a, s16 b);
-void func_8018C1B0(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
-void func_801A0418(u16 a);
+void block_building_load(void);
+void block_update_input(void);
+void kaj_timer_enable(void);
+void kaj_timer_disable(void);
+void kaj_pad_reset(s32 arg0);
+s32 kaj_event_get(s32 *arg0);
+void kaj_event_done(s32 *arg0);
+void event_handle_enter(s32 *arg0);
+void roadmap_shop_close_topic(void);
+void event_handle_leave(s32 *arg0);
+void event_handle_tick(s16 arg0);
+void event_handle_mod_finish(s32 *arg0);
+s16 mail_take_scene_change(void);
+s16 event_handle_effect_done(s32 *arg0);
+void mail_step_frame(u16 arg0, s16 arg1, s16 arg2);
+void block_stream_stop(void);
+void sound_bgm_stop(void);
+void sound_se_stop_all(void);
+void effect_flame_small_free(void);
+void effect_flame_large_free(void);
+void action_free_triggers(void);
+void npc_free_all(void);
+void npc_free_bodies(void);
+void npc_free_stats(void);
+void effect_weapon_reset(void);
+void action_free_all_sets(void);
+void block_free_all(void);
+void door_free_all(void);
+void mod_free_all(void);
+void thing_free_all(void);
+void sound_bgm_close(void);
+void sound_se_pop_scene(void);
+void block_elevator_input(s16 arg0, s16 arg1, s16 *arg2);
+void event_handle_tick(s16 a);
+void event_advance_clock(s16 a, s16 b);
+void mail_wait(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+void roadmap_draw_frame(u16 a);
 extern char D_801702B0[];
 extern char D_801702C8[];
-s32 func_801D67E0(void);
-s16 func_801D3B7C(void);
-s16 func_801D6850(void);
-s32 func_801D6894(s16 arg0, void *arg1);
-s16 func_801D3C50(void);
-void func_801D6940(u16 arg0, s32 *arg1, u8 *arg2);
-void func_80197370(s32 arg0);
-s32 func_801D6E1C(void);
-void func_80184698(void);
-void func_801A6EB4(void);
+s32 kaj_map_open_city(void);
+s16 kaj_map_load_city_dir(void);
+s16 kaj_map_city_ready(void);
+s32 kaj_map_open_place(s16 arg0, void *arg1);
+s16 kaj_map_load_place_dir(void);
+void kaj_map_get_entry(u16 arg0, s32 *arg1, u8 *arg2);
+void player_place_for_scene(s32 arg0);
+s32 kaj_map_place_ready(void);
+void door_refresh_all(void);
+void sprite_thing_refresh_all(void);
 void RotTrans(void *v0, s32 *v1, s32 *flag);
-void func_8018C50C(s32 a, s32 b, s32 c, s16 d, s16 e);
-extern s32 D_801D74B0[];
+void mail_goto_twn(s32 a, s32 b, s32 c, s16 d, s16 e);
+extern s32 block_elevator_stops[];
 typedef struct {
     s32 unk0;
     s32 unk4;
@@ -544,7 +544,7 @@ typedef struct {
     Unk_80179848_14 unk14[1];
 } Unk_80179848;
 void GsInitCoordinate2(void *super, void *base);
-void func_801CD028(void *arg0, void *arg1, void *arg2);
+void kaj_tmd_load(void *arg0, void *arg1, void *arg2);
 typedef struct {
     s32 unk0;
     s32 unk4;
@@ -557,13 +557,13 @@ typedef struct {
 } Unk_801E1118;
 extern Unk_801E1118 D_801E1118;
 extern s16 D_801DFF78;
-extern s32 D_801D7450[];
-void func_801A3BCC(s32 arg0);
-void func_801A2C60(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6);
-void func_801A5650(s16 arg0);
-s16 func_801A0EDC(s16 arg0);
-void func_80199EB4(s16 arg0, s32 arg1, s32 arg2, s32 arg3);
-void func_80199370(s32 arg0, s32 arg1, s32 arg2, s16 arg3);
+extern s32 block_wake_positions[];
+void sound_bgm_play(s32 arg0);
+void sound_se_play_note(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6);
+void sprite_station_show_prompt(s16 arg0);
+s16 roadmap_shop_finish(s16 arg0);
+void player_rest(s16 arg0, s32 arg1, s32 arg2, s32 arg3);
+void player_recover(s32 arg0, s32 arg1, s32 arg2, s16 arg3);
 s32 SquareRoot0(s32 arg0);
 typedef struct {
     s16 unk0;
@@ -582,14 +582,14 @@ typedef struct {
     Unk_8017AF18 unk2C[4];
 } Unk_801E1158;
 extern Unk_801E1158 D_801E1158;
-s32 func_80179E50(Unk_801E076C *arg0, u16 arg1, Unk_8017CCE4 *arg2, s32 *arg3, s32 *arg4);
+s32 block_test_player_inside(Unk_801E076C *arg0, u16 arg1, Unk_8017CCE4 *arg2, s32 *arg3, s32 *arg4);
 void GsSetLsMatrix(void *m);
-s32 func_8018C0A0(s16 a);
+s32 mail_angle_to_dir8(s16 a);
 s32 rsin(s32 a);
 s32 rcos(s32 a);
 s32 ratan2(s32 y, s32 x);
 
-void func_80179848(Unk_8017CCE4 *arg0, u16 arg1) {
+void block_setup(Unk_8017CCE4 *arg0, u16 arg1) {
     s32 sp10[5];
     Unk_801E076C *m;
     Unk_80179848 *d;
@@ -628,28 +628,28 @@ void func_80179848(Unk_8017CCE4 *arg0, u16 arg1) {
     }
     arg0->unkE = 0;
     if (sp10[0] != 0) {
-        func_801CD028(&arg0->unk84, (u8 *)arg0->unk8C + sp10[0], &arg0->unk28);
+        kaj_tmd_load(&arg0->unk84, (u8 *)arg0->unk8C + sp10[0], &arg0->unk28);
         arg0->unkE |= 1;
     }
     if (sp10[1] != 0) {
-        func_801CD028(&arg0->unk80, (u8 *)arg0->unk8C + sp10[1], &arg0->unk28);
+        kaj_tmd_load(&arg0->unk80, (u8 *)arg0->unk8C + sp10[1], &arg0->unk28);
         arg0->unkE |= 2;
     }
     if (sp10[2] != 0) {
-        func_801CD028(&arg0->unk7C, (u8 *)arg0->unk8C + sp10[2], &arg0->unk28);
+        kaj_tmd_load(&arg0->unk7C, (u8 *)arg0->unk8C + sp10[2], &arg0->unk28);
         arg0->unkE |= 4;
     }
     if (sp10[3] != 0) {
-        func_801CD028(&arg0->unk78, (u8 *)arg0->unk8C + sp10[3], &arg0->unk28);
+        kaj_tmd_load(&arg0->unk78, (u8 *)arg0->unk8C + sp10[3], &arg0->unk28);
         arg0->unkE |= 8;
     }
     if (sp10[4] != 0) {
         p = &arg0->unk88;
         s = (Unk_8017CAC8 *)((u8 *)arg0->unk8C + sp10[4]);
         if (*p == NULL) {
-            *p = func_801CC898(0x10);
+            *p = kaj_malloc(0x10);
             if (*p == NULL) {
-                func_801CD54C(3, "Error Allocating Arena Buffer", D_801DFC84, 0x49);
+                kaj_abend(3, "Error Allocating Arena Buffer", D_801DFC84, 0x49);
             }
         } else {
             memset(*p, 0, 0x10);
@@ -670,9 +670,9 @@ void func_80179848(Unk_8017CCE4 *arg0, u16 arg1) {
     arg0->unk0 = 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/80179848", func_80179C50);
+INCLUDE_ASM("asm/nonmatchings/game/80179848", block_draw_all);
 
-s32 func_80179E50(Unk_801E076C *arg0, u16 arg1, Unk_8017CCE4 *arg2, s32 *arg3, s32 *arg4) {
+s32 block_test_player_inside(Unk_801E076C *arg0, u16 arg1, Unk_8017CCE4 *arg2, s32 *arg3, s32 *arg4) {
     s32 a;
     s32 sp10[2];
     s32 b;
@@ -801,7 +801,7 @@ static inline s16 func_8017A108_2(s32 dir, s32 *lo, s32 *hi) {
     return 1;
 }
 
-void func_8017A108(u16 arg0) {
+void block_update_visibility(u16 arg0) {
     Unk_801DFE5C *list = D_801DFE5C;
     Unk_801E076C *o = D_801E076C[0];
     Unk_8017CCE4 *e;
@@ -816,7 +816,7 @@ void func_8017A108(u16 arg0) {
         e = list->unk8->unk8;
         if (e != NULL && e->unk0 != 0) {
             e->unk8 = 0;
-            e->unk6 = func_80179E50(o, arg0, e, sp18, sp28);
+            e->unk6 = block_test_player_inside(o, arg0, e, sp18, sp28);
             if (e->unk6 != 0) {
                 e->unk4 = 1;
             } else if (arg0 == 2) {
@@ -824,54 +824,54 @@ void func_8017A108(u16 arg0) {
                     e->unk6 = 1;
                     e->unk4 = 1;
                 } else {
-                    e->unk4 = func_8017A108_2((s16)func_8018C0A0(o->unk6E), sp18, sp28);
+                    e->unk4 = func_8017A108_2((s16)mail_angle_to_dir8(o->unk6E), sp18, sp28);
                 }
             }
         }
-        if (func_801CD000(list) != 0) {
+        if (kaj_ll_at_tail(list) != 0) {
             return;
         }
         list->unk8 = list->unk8->unk4;
     }
 }
 
-void func_8017A3E4(void) {
+void block_create_all(void) {
     s32 i;
 
     for (i = 0; i < 12; i++) {
-        D_801E0000[i] = func_801CC898(0x90);
-        if (D_801E0000[i] == NULL) {
-            func_801CD54C(3, D_80170270, D_801DFC84, 0x5D);
+        block_slots[i] = kaj_malloc(0x90);
+        if (block_slots[i] == NULL) {
+            kaj_abend(3, D_80170270, D_801DFC84, 0x5D);
         }
-        D_801E0000[i]->unk0 = 0;
-        D_801E0000[i]->unk2 = 0;
-        D_801E0000[i]->unk4 = 0;
-        D_801E0000[i]->unk6 = 0;
-        D_801E0000[i]->unk8 = 0;
-        D_801E0000[i]->unkC = 1;
-        D_801E0000[i]->unkE = 0;
-        D_801E0000[i]->unk78 = NULL;
-        D_801E0000[i]->unk7C = NULL;
-        D_801E0000[i]->unk80 = NULL;
-        D_801E0000[i]->unk84 = NULL;
-        D_801E0000[i]->unk88 = NULL;
-        D_801E0000[i]->unk8C = NULL;
-        D_801E0000[i]->unk0 = 0;
-        D_801E0000[i]->unkE = 0;
+        block_slots[i]->unk0 = 0;
+        block_slots[i]->unk2 = 0;
+        block_slots[i]->unk4 = 0;
+        block_slots[i]->unk6 = 0;
+        block_slots[i]->unk8 = 0;
+        block_slots[i]->unkC = 1;
+        block_slots[i]->unkE = 0;
+        block_slots[i]->unk78 = NULL;
+        block_slots[i]->unk7C = NULL;
+        block_slots[i]->unk80 = NULL;
+        block_slots[i]->unk84 = NULL;
+        block_slots[i]->unk88 = NULL;
+        block_slots[i]->unk8C = NULL;
+        block_slots[i]->unk0 = 0;
+        block_slots[i]->unkE = 0;
         {
-            Unk_8017CCE4 *e = D_801E0000[i];
+            Unk_8017CCE4 *e = block_slots[i];
 
             if (D_801DFE5C->unkC == 0) {
-                func_801CCBF4(D_801DFE5C, (s32)e);
+                kaj_ll_insert_before(D_801DFE5C, (s32)e);
             } else {
                 D_801DFE5C->unk8 = D_801DFE5C->unk4;
-                func_801CCCF4(D_801DFE5C, (s32)e);
+                kaj_ll_insert_after(D_801DFE5C, (s32)e);
             }
         }
     }
 }
 
-void func_8017A534(u16 arg0) {
+void block_load_all(u16 arg0) {
     s32 sp10[12];
     s16 sp40;
     s32 i;
@@ -883,43 +883,43 @@ void func_8017A534(u16 arg0) {
     D_801DFC80 = 1;
     sp40 = 12;
     if (arg0 == 2) {
-        func_801D654C(&sp40, sp10);
+        kaj_map_cell_slots(&sp40, sp10);
     } else {
-        func_801D6E60(&sp40, sp10);
+        kaj_map_room_slots(&sp40, sp10);
     }
     for (i = 0; i < 12; i++) {
-        e = D_801E0000[i];
+        e = block_slots[i];
         e->unk0 = 0;
         e->unk8C = NULL;
         if (i < sp40) {
-            r = (s16)func_801D33E4(sp10[i]);
-            t = func_801D3364(sp10[i]);
-            p = func_801D32F0(sp10[i]);
+            r = (s16)kaj_cdmgr_is_fresh(sp10[i]);
+            t = kaj_cdmgr_get_type(sp10[i]);
+            p = kaj_cdmgr_get(sp10[i]);
             if (t == 5) {
                 if (p != NULL && r != 0) {
-                    func_8018D5F8(*p);
-                    func_801D3468(sp10[i]);
+                    mod_create(*p);
+                    kaj_cdmgr_mark_used(sp10[i]);
                     continue;
                 }
             } else if (t == 6) {
                 if (p != NULL && r != 0) {
-                    func_801CFBB4(*p);
-                    func_801D3468(sp10[i]);
-                    func_801D70D0(sp10[i]);
+                    kaj_tim_upload_hdr(*p);
+                    kaj_cdmgr_mark_used(sp10[i]);
+                    kaj_map_room_release(sp10[i]);
                     continue;
                 }
             } else if (p != NULL) {
                 e->unk8C = *p;
-                func_80179848(e, arg0);
+                block_setup(e, arg0);
             }
         }
     }
     if (arg0 == 1) {
-        func_801765BC();
+        npc_update_blocks();
     }
 }
 
-void func_8017A6E8(s32 arg0, s32 arg1) {
+void block_set_zone_flags(s32 arg0, s32 arg1) {
     Unk_801E0368 *p = &D_801E0368;
 
     p->unk252 = 0;
@@ -945,35 +945,35 @@ void func_8017A6E8(s32 arg0, s32 arg1) {
     }
 }
 
-void func_8017A86C(u16 arg0) {
+void block_set_mode(u16 arg0) {
     s32 sp10[4];
     Unk_801E0340 *g = &D_801E0340;
     Unk_801E076C *o = D_801E076C[0];
     Unk_801E0368 *p;
 
     if (arg0 == 2) {
-        if (func_801D67E0() != 0) {
-            func_801CD54C(4, D_801702B0, D_801DFC84, 0x2EC);
+        if (kaj_map_open_city() != 0) {
+            kaj_abend(4, D_801702B0, D_801DFC84, 0x2EC);
         }
-        while (func_801D3B7C() == 0) {
-            func_801D1F70();
+        while (kaj_map_load_city_dir() == 0) {
+            kaj_cdmgr_poll();
         }
-        while (func_801D6850() == 0) {
-            func_801D4FA0(o->unk68, o->unk60);
-            if (func_801D1F70() != 0) {
-                func_801D6A04();
+        while (kaj_map_city_ready() == 0) {
+            kaj_map_update_city(o->unk68, o->unk60);
+            if (kaj_cdmgr_poll() != 0) {
+                kaj_map_set_cell_ready();
             }
         }
-        func_8017A6E8(o->unk60, o->unk68);
+        block_set_zone_flags(o->unk60, o->unk68);
     } else {
-        if (func_801D6894(g->unk16, g->unk20) != 0) {
-            func_801CD54C(4, D_801702C8, D_801DFC84, 0x2F8);
+        if (kaj_map_open_place(g->unk16, g->unk20) != 0) {
+            kaj_abend(4, D_801702C8, D_801DFC84, 0x2F8);
         }
-        while (func_801D3C50() == 0) {
-            func_801D1F70();
+        while (kaj_map_load_place_dir() == 0) {
+            kaj_cdmgr_poll();
         }
-        D_801DFE58 = g->unk18;
-        func_801D6940(D_801DFE58, sp10, &D_801DFC8C);
+        block_building_id = g->unk18;
+        kaj_map_get_entry(block_building_id, sp10, &D_801DFC8C);
         p = &D_801E0368;
         p->unk252 = 0;
         p->unk250 = 0;
@@ -992,21 +992,21 @@ void func_8017A86C(u16 arg0) {
         o->unk54 = sp10[0];
         o->unk58 = sp10[1];
         o->unk5C = sp10[2];
-        func_80197370(1);
-        while (func_801D6E1C() == 0) {
-            func_801D5934(D_801DFE58, &D_801DFC8C);
-            if (func_801D1F70() != 0) {
-                func_801D6A2C();
+        player_place_for_scene(1);
+        while (kaj_map_place_ready() == 0) {
+            kaj_map_update_place(block_building_id, &D_801DFC8C);
+            if (kaj_cdmgr_poll() != 0) {
+                kaj_map_set_room_ready();
             }
         }
     }
-    func_8017A534(arg0);
-    func_80184698();
-    func_801A6EB4();
+    block_load_all(arg0);
+    door_refresh_all();
+    sprite_thing_refresh_all();
     D_801DFC80 = 0;
 }
 
-void func_8017AAB4(u16 arg0) {
+void block_stream_update(u16 arg0) {
     s32 sp10[12];
     s16 sp40;
     Unk_801E076C *o = D_801E076C[0];
@@ -1017,49 +1017,49 @@ void func_8017AAB4(u16 arg0) {
 
     D_801DFC80 = 0;
     if (arg0 == 2) {
-        r = func_801D4FA0(o->unk68, o->unk60);
-        func_8017A6E8(o->unk60, o->unk68);
+        r = kaj_map_update_city(o->unk68, o->unk60);
+        block_set_zone_flags(o->unk60, o->unk68);
     } else {
-        r = func_801D5934(D_801DFE58, &D_801DFC8C);
+        r = kaj_map_update_place(block_building_id, &D_801DFC8C);
     }
     if (r == 3) {
         D_801DFC80 = 1;
         sp40 = 12;
         if (arg0 == 2) {
-            func_801D6674(&sp40, sp10);
+            kaj_map_cell_loaded_slots(&sp40, sp10);
         } else {
-            func_801D6F74(&sp40, sp10);
+            kaj_map_room_loaded_slots(&sp40, sp10);
         }
         for (i = 0; i < 12; i++) {
-            e = D_801E0000[i];
+            e = block_slots[i];
             e->unk0 = 0;
             e->unk8C = NULL;
             if (i < sp40) {
-                s32 t = func_801D3364(sp10[i]);
+                s32 t = kaj_cdmgr_get_type(sp10[i]);
                 if (t != 5 && t != 6) {
-                    p = func_801D32F0(sp10[i]);
+                    p = kaj_cdmgr_get(sp10[i]);
                     if (p != NULL) {
                         e->unk8C = *p;
-                        func_80179848(e, arg0);
+                        block_setup(e, arg0);
                     }
                 }
             }
         }
         if (arg0 == 1) {
-            func_801765BC();
+            npc_update_blocks();
         }
-        func_801D1F70();
-    } else if (r == 1 || func_801D1F70() != 0) {
+        kaj_cdmgr_poll();
+    } else if (r == 1 || kaj_cdmgr_poll() != 0) {
         if (arg0 == 2) {
-            func_801D6A04();
+            kaj_map_set_cell_ready();
         } else {
-            func_801D6A2C();
+            kaj_map_set_room_ready();
         }
-        func_8017A534(arg0);
+        block_load_all(arg0);
     }
 }
 
-s16 func_8017AC88(Unk_8017AC88 *arg0, s32 arg1, s32 arg2, s32 arg3) {
+s16 block_point_in_poly(Unk_8017AC88 *arg0, s32 arg1, s32 arg2, s32 arg3) {
     double sp10[2];
     double x0;
     double z0;
@@ -1099,7 +1099,7 @@ s16 func_8017AC88(Unk_8017AC88 *arg0, s32 arg1, s32 arg2, s32 arg3) {
     return n % 2;
 }
 
-s32 func_8017AF18(Unk_8017AC88 *arg0, Unk_8017AF18 *arg1, s32 arg2, s32 arg3, s32 arg4) {
+s32 block_poly_height(Unk_8017AC88 *arg0, Unk_8017AF18 *arg1, s32 arg2, s32 arg3, s32 arg4) {
     s32 maxx;
     s32 minx;
     s32 maxz;
@@ -1169,7 +1169,7 @@ s32 func_8017AF18(Unk_8017AC88 *arg0, Unk_8017AF18 *arg1, s32 arg2, s32 arg3, s3
     if (arg3 < minx || maxx < arg3 || arg4 < minz || maxz < arg4) {
         return 99999999;
     }
-    if (func_8017AC88(arg0, arg2, arg3, arg4) == 0) {
+    if (block_point_in_poly(arg0, arg2, arg3, arg4) == 0) {
         return 99999999;
     }
     if (arg1->unk2 == 0) {
@@ -1179,7 +1179,7 @@ s32 func_8017AF18(Unk_8017AC88 *arg0, Unk_8017AF18 *arg1, s32 arg2, s32 arg3, s3
             - (arg1->unk0 * arg3 + arg1->unk4 * arg4)) / arg1->unk2;
 }
 
-s32 func_8017B1E8(Unk_8017B1E8 *arg0, s32 arg1, s32 arg2, Unk_8017B3E8 *arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7) {
+s32 block_hit_tris(Unk_8017B1E8 *arg0, s32 arg1, s32 arg2, Unk_8017B3E8 *arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7) {
     Unk_8017AC88 sp18[3];
     s32 i;
     Unk_8017B1E8 *e;
@@ -1196,7 +1196,7 @@ s32 func_8017B1E8(Unk_8017B1E8 *arg0, s32 arg1, s32 arg2, Unk_8017B3E8 *arg3, s3
         sp18[2].unk0 = ((Unk_8017AF18 *)arg1)[e->unkE].unk0 + arg3->unk0;
         sp18[2].unk4 = ((Unk_8017AF18 *)arg1)[e->unkE].unk2 + arg3->unk4;
         sp18[2].unk8 = ((Unk_8017AF18 *)arg1)[e->unkE].unk4 + arg3->unk8;
-        r = func_8017AF18(sp18, (Unk_8017AF18 *)arg2 + e->unk8, 3, arg5, arg6);
+        r = block_poly_height(sp18, (Unk_8017AF18 *)arg2 + e->unk8, 3, arg5, arg6);
         *(s32 *)arg7 = r;
         if (r != 99999999) {
             return (e->unk4 << 16) | (e->unk5 << 8) | e->unk6;
@@ -1205,7 +1205,7 @@ s32 func_8017B1E8(Unk_8017B1E8 *arg0, s32 arg1, s32 arg2, Unk_8017B3E8 *arg3, s3
     return 0;
 }
 
-s32 func_8017B3E8(Unk_8017B1E8 *arg0, s32 arg1, s32 arg2, Unk_8017B3E8 *arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7) {
+s32 block_hit_quads(Unk_8017B1E8 *arg0, s32 arg1, s32 arg2, Unk_8017B3E8 *arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7) {
     Unk_8017AC88 sp18[4];
     struct {
         u16 unk0;
@@ -1246,7 +1246,7 @@ s32 func_8017B3E8(Unk_8017B1E8 *arg0, s32 arg1, s32 arg2, Unk_8017B3E8 *arg3, s3
         sp18[2].unk0 = ((Unk_8017AF18 *)arg1)[e->unk10].unk0 + arg3->unk0;
         sp18[2].unk4 = ((Unk_8017AF18 *)arg1)[e->unk10].unk2 + arg3->unk4;
         sp18[2].unk8 = ((Unk_8017AF18 *)arg1)[e->unk10].unk4 + arg3->unk8;
-        r = func_8017AF18(sp18, (Unk_8017AF18 *)arg2 + e->unk8, 4, arg5, arg6);
+        r = block_poly_height(sp18, (Unk_8017AF18 *)arg2 + e->unk8, 4, arg5, arg6);
         *(s32 *)arg7 = r;
         if (r != 99999999) {
             ret = (e->unk4 << 16) | (e->unk5 << 8) | e->unk6;
@@ -1296,7 +1296,7 @@ s32 func_8017B3E8(Unk_8017B1E8 *arg0, s32 arg1, s32 arg2, Unk_8017B3E8 *arg3, s3
     return 0;
 }
 
-s16 func_8017B7CC(void *arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
+s16 block_point_on_model(void *arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
     Unk_8017AC88 sp18[4];
     s32 flag;
     Unk_8017BBB0 *q;
@@ -1346,7 +1346,7 @@ s16 func_8017B7CC(void *arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
                 if (flag < 0) {
                     return 0;
                 }
-                if (func_8017AF18(sp18, &b[e->unk8], 3, arg1, arg3) != 99999999) {
+                if (block_poly_height(sp18, &b[e->unk8], 3, arg1, arg3) != 99999999) {
                     if (arg4 != 1) {
                         return 1;
                     }
@@ -1390,7 +1390,7 @@ s16 func_8017B7CC(void *arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
                 if (flag < 0) {
                     return 0;
                 }
-                if (func_8017AF18(sp18, &b[e->unk8], 4, arg1, arg3) != 99999999) {
+                if (block_poly_height(sp18, &b[e->unk8], 4, arg1, arg3) != 99999999) {
                     if (arg4 != 1) {
                         return 1;
                     }
@@ -1451,7 +1451,7 @@ s32 func_8017BBB0(s32 arg0, s32 arg1, s32 arg2) {
         cnt = e->unk0;
         switch (e->unk3 & 0xFD) {
         case 0x20:
-            t = func_8017B1E8(e, a, b, &sp20, cnt, arg0, arg1, arg2);
+            t = block_hit_tris(e, a, b, &sp20, cnt, arg0, arg1, arg2);
             if (t != 0) {
                 r = t;
                 goto end;
@@ -1460,7 +1460,7 @@ s32 func_8017BBB0(s32 arg0, s32 arg1, s32 arg2) {
             e = (Unk_8017B1E8 *)((u8 *)e + cnt * 0x10);
             break;
         case 0x28:
-            t = func_8017B3E8(e, a, b, &sp20, cnt, arg0, arg1, arg2);
+            t = block_hit_quads(e, a, b, &sp20, cnt, arg0, arg1, arg2);
             if (t != 0) {
                 r = t;
                 goto end;
@@ -1481,7 +1481,7 @@ end:
     return 0;
 }
 
-s32 func_8017BD24(s32 arg0, s32 arg1, s32 *arg2, s16 arg3) {
+s32 block_find_surface(s32 arg0, s32 arg1, s32 *arg2, s16 arg3) {
     Unk_801DFE5C *p = D_801DFE5C;
     Unk_8017B3E8 sp20;
     Unk_8017B1E8 *e;
@@ -1515,7 +1515,7 @@ s32 func_8017BD24(s32 arg0, s32 arg1, s32 *arg2, s16 arg3) {
                 cnt = e->unk0;
                 switch (e->unk3 & 0xFD) {
                 case 0x20:
-                    t = func_8017B1E8(e, a, b, &sp20, cnt, arg0, arg1, (s32)arg2);
+                    t = block_hit_tris(e, a, b, &sp20, cnt, arg0, arg1, (s32)arg2);
                     if (t != 0) {
                         r = t;
                         goto found;
@@ -1524,7 +1524,7 @@ s32 func_8017BD24(s32 arg0, s32 arg1, s32 *arg2, s16 arg3) {
                     e = (Unk_8017B1E8 *)((u8 *)e + cnt * 0x10);
                     break;
                 case 0x28:
-                    t = func_8017B3E8(e, a, b, &sp20, cnt, arg0, arg1, (s32)arg2);
+                    t = block_hit_quads(e, a, b, &sp20, cnt, arg0, arg1, (s32)arg2);
                     if (t != 0) {
                         r = t;
                         goto found;
@@ -1543,14 +1543,14 @@ s32 func_8017BD24(s32 arg0, s32 arg1, s32 *arg2, s16 arg3) {
                 return r;
             }
         }
-        if (func_801CD000(p) != 0) {
+        if (kaj_ll_at_tail(p) != 0) {
             return 0;
         }
         p->unk8 = p->unk8->unk4;
     }
 }
 
-s32 func_8017BF50(s32 arg0, s32 arg1, s32 arg2, s32 *arg3) {
+s32 block_find_surface_nearest(s32 arg0, s32 arg1, s32 arg2, s32 *arg3) {
     Unk_801DFE5C *p = D_801DFE5C;
     Unk_8017B3E8 hits[12];
     Unk_8017B3E8 sp20;
@@ -1590,7 +1590,7 @@ s32 func_8017BF50(s32 arg0, s32 arg1, s32 arg2, s32 *arg3) {
                 cnt = e->unk0;
                 switch (e->unk3 & 0xFD) {
                 case 0x20:
-                    t = func_8017B1E8(e, a, b, &sp20, cnt, arg0, arg2, (s32)hp);
+                    t = block_hit_tris(e, a, b, &sp20, cnt, arg0, arg2, (s32)hp);
                     if (t != 0) {
                         r = t;
                         goto found;
@@ -1599,7 +1599,7 @@ s32 func_8017BF50(s32 arg0, s32 arg1, s32 arg2, s32 *arg3) {
                     e = (Unk_8017B1E8 *)((u8 *)e + cnt * 0x10);
                     break;
                 case 0x28:
-                    t = func_8017B3E8(e, a, b, &sp20, cnt, arg0, arg2, (s32)hp);
+                    t = block_hit_quads(e, a, b, &sp20, cnt, arg0, arg2, (s32)hp);
                     if (t != 0) {
                         r = t;
                         goto found;
@@ -1621,7 +1621,7 @@ s32 func_8017BF50(s32 arg0, s32 arg1, s32 arg2, s32 *arg3) {
                 k++;
             }
         }
-        if (func_801CD000(p) != 0) {
+        if (kaj_ll_at_tail(p) != 0) {
             break;
         }
         p->unk8 = p->unk8->unk4;
@@ -1665,7 +1665,7 @@ static inline s32 func_8017C234_inl(Unk_8017BBB0 *q, Unk_8017B3E8 *sp, s32 x, s3
         cnt = e->unk0;
         switch (e->unk3 & 0xFD) {
         case 0x20:
-            t = func_8017B1E8(e, a, b, sp, cnt, x, z, w);
+            t = block_hit_tris(e, a, b, sp, cnt, x, z, w);
             if (t != 0) {
                 return t;
             }
@@ -1673,7 +1673,7 @@ static inline s32 func_8017C234_inl(Unk_8017BBB0 *q, Unk_8017B3E8 *sp, s32 x, s3
             e = (Unk_8017B1E8 *)((u8 *)e + cnt * 0x10);
             break;
         case 0x28:
-            t = func_8017B3E8(e, a, b, sp, cnt, x, z, w);
+            t = block_hit_quads(e, a, b, sp, cnt, x, z, w);
             if (t != 0) {
                 return t;
             }
@@ -1687,7 +1687,7 @@ static inline s32 func_8017C234_inl(Unk_8017BBB0 *q, Unk_8017B3E8 *sp, s32 x, s3
     return 0;
 }
 
-s32 func_8017C234(s32 *arg0, s16 arg1) {
+s32 block_fit_ground_tilt(s32 *arg0, s16 arg1) {
     Unk_8017AC88 sp20[4];
     Unk_8017AC88 sp60;
     Unk_8017AF18 sp70;
@@ -1728,7 +1728,7 @@ s32 func_8017C234(s32 *arg0, s16 arg1) {
                         break;
                     }
                 }
-                if (func_801CD000(p) != 0) {
+                if (kaj_ll_at_tail(p) != 0) {
                     break;
                 }
                 p->unk8 = p->unk8->unk4;
@@ -1809,7 +1809,7 @@ s32 func_8017C234(s32 *arg0, s16 arg1) {
                 return res[4];
             }
         }
-        if (func_801CD000(p) != 0) {
+        if (kaj_ll_at_tail(p) != 0) {
             break;
         }
         p->unk8 = p->unk8->unk4;
@@ -1817,7 +1817,7 @@ s32 func_8017C234(s32 *arg0, s16 arg1) {
     return 0;
 }
 
-void func_8017C9F8(Unk_8017CAC8 *arg0, Unk_8017CAC8 *arg1) {
+void block_replace_arena(Unk_8017CAC8 *arg0, Unk_8017CAC8 *arg1) {
     Unk_801DFE5C *p = D_801DFE5C;
     Unk_8017C9F8 *q;
 
@@ -1831,7 +1831,7 @@ void func_8017C9F8(Unk_8017CAC8 *arg0, Unk_8017CAC8 *arg1) {
                     break;
                 }
             }
-            if (func_801CD000(p) != 0) {
+            if (kaj_ll_at_tail(p) != 0) {
                 q = NULL;
                 break;
             }
@@ -1846,11 +1846,11 @@ void func_8017C9F8(Unk_8017CAC8 *arg0, Unk_8017CAC8 *arg1) {
     }
 }
 
-void func_8017CAC8(Unk_8017C9F8 **arg0, Unk_8017CAC8 *arg1) {
+void block_arena_init(Unk_8017C9F8 **arg0, Unk_8017CAC8 *arg1) {
     if (*arg0 == NULL) {
-        *arg0 = func_801CC898(0x10);
+        *arg0 = kaj_malloc(0x10);
         if (*arg0 == NULL) {
-            func_801CD54C(3, "Error Allocating Arena Buffer", D_801DFC84, 0x49);
+            kaj_abend(3, "Error Allocating Arena Buffer", D_801DFC84, 0x49);
         }
     } else {
         memset(*arg0, 0, 0x10);
@@ -1863,10 +1863,10 @@ void func_8017CAC8(Unk_8017C9F8 **arg0, Unk_8017CAC8 *arg1) {
     (*arg0)->unkC = arg1;
 }
 
-void func_8017CB98(Unk_8017CCE4 **arg0, s32 arg1) {
-    *arg0 = func_801CC898(0x90);
+void block_create(Unk_8017CCE4 **arg0, s32 arg1) {
+    *arg0 = kaj_malloc(0x90);
     if (*arg0 == NULL) {
-        func_801CD54C(3, D_80170270, D_801DFC84, 0x5D);
+        kaj_abend(3, D_80170270, D_801DFC84, 0x5D);
     }
     (*arg0)->unk0 = 0;
     (*arg0)->unk2 = 0;
@@ -1882,15 +1882,15 @@ void func_8017CB98(Unk_8017CCE4 **arg0, s32 arg1) {
     (*arg0)->unk88 = NULL;
     (*arg0)->unk8C = NULL;
     if (arg1 != 0) {
-        (*arg0)->unk8C = func_801CC898(arg1);
+        (*arg0)->unk8C = kaj_malloc(arg1);
         if ((*arg0)->unk8C == NULL) {
-            func_801CD54C(3, D_80170290, D_801DFC84, 0x70);
+            kaj_abend(3, D_80170290, D_801DFC84, 0x70);
         }
         (*arg0)->unk2 = 1;
     }
 }
 
-void func_8017CCE4(Unk_8017CCE4 *arg0) {
+void block_free(Unk_8017CCE4 *arg0) {
     if (arg0 != NULL) {
         if (arg0->unk78 != NULL) {
             free3(arg0->unk78);
@@ -1914,7 +1914,7 @@ void func_8017CCE4(Unk_8017CCE4 *arg0) {
     }
 }
 
-Unk_8017CCE4 *func_8017CDA4(s32 arg0, s32 arg1, s32 arg2) {
+Unk_8017CCE4 *block_find_at(s32 arg0, s32 arg1, s32 arg2) {
     Unk_801DFE5C *p = D_801DFE5C;
     Unk_801E0340 *g = &D_801E0340;
 
@@ -1936,14 +1936,14 @@ Unk_8017CCE4 *func_8017CDA4(s32 arg0, s32 arg1, s32 arg2) {
                 return e;
             }
         }
-        if (func_801CD000(p) != 0) {
+        if (kaj_ll_at_tail(p) != 0) {
             return NULL;
         }
         p->unk8 = p->unk8->unk4;
     }
 }
 
-void func_8017CF10(s32 arg0, s32 arg1, s32 arg2) {
+void block_set_origin(s32 arg0, s32 arg1, s32 arg2) {
     Unk_801DFE5C *p = D_801DFE5C;
 
     if (p->unkC != 0) {
@@ -1956,7 +1956,7 @@ void func_8017CF10(s32 arg0, s32 arg1, s32 arg2) {
                 e->unk44 = e->unk14 - arg1;
                 e->unk48 = e->unk18 - arg2;
             }
-            if (func_801CD000(p) != 0) {
+            if (kaj_ll_at_tail(p) != 0) {
                 break;
             }
             p->unk8 = p->unk8->unk4;
@@ -1976,13 +1976,13 @@ s32 func_8017CFE4(s32 arg0, s32 arg1, s32 arg2) {
     while (1) {
         Unk_8017CCE4 *e = p->unk8->unk8;
         if (e != NULL && e->unk0 != 0 && (e->unkE & 1)) {
-            r = func_8017D414(e->unk84, arg0, arg2, arg1);
+            r = block_model_surface(e->unk84, arg0, arg2, arg1);
             if (r != 0 && r != 0xC8 && (r & 0xFF0000) != 0xFF0000) {
                 ret = 1;
                 break;
             }
         }
-        if (func_801CD000(p) != 0) {
+        if (kaj_ll_at_tail(p) != 0) {
             ret = 0;
             break;
         }
@@ -1991,7 +1991,7 @@ s32 func_8017CFE4(s32 arg0, s32 arg1, s32 arg2) {
     return ret;
 }
 
-void func_8017D0E0(void) {
+void block_hide_all(void) {
     Unk_801DFE5C *p = D_801DFE5C;
 
     if (p->unkC != 0) {
@@ -2000,7 +2000,7 @@ void func_8017D0E0(void) {
             if (p->unk8->unk8 != NULL && p->unk8->unk8->unk0 != 0) {
                 p->unk8->unk8->unk4 = 0;
             }
-            if (func_801CD000(p) != 0) {
+            if (kaj_ll_at_tail(p) != 0) {
                 break;
             }
             p->unk8 = p->unk8->unk4;
@@ -2008,16 +2008,16 @@ void func_8017D0E0(void) {
     }
 }
 
-void func_8017D170(s32 arg0) {
+void block_list_add(s32 arg0) {
     if (D_801DFE5C->unkC == 0) {
-        func_801CCBF4(D_801DFE5C, arg0);
+        kaj_ll_insert_before(D_801DFE5C, arg0);
     } else {
         D_801DFE5C->unk8 = D_801DFE5C->unk4;
-        func_801CCCF4(D_801DFE5C, arg0);
+        kaj_ll_insert_after(D_801DFE5C, arg0);
     }
 }
 
-void func_8017D1BC(void) {
+void block_free_all(void) {
     Unk_801DFE5C *p = D_801DFE5C;
     Unk_8017CCE4 *e;
 
@@ -2047,11 +2047,11 @@ void func_8017D1BC(void) {
             }
             free3(e);
         }
-        func_801CCDF8(p);
+        kaj_ll_remove_to_prev(p);
     }
 }
 
-void func_8017D2B8(void) {
+void block_free_owned(void) {
     Unk_801DFE5C *p = D_801DFE5C;
 
     if (p->unkC != 0) {
@@ -2078,9 +2078,9 @@ void func_8017D2B8(void) {
                     free3(e->unk8C);
                 }
                 free3(e);
-                func_801CCDF8(p);
+                kaj_ll_remove_to_prev(p);
             }
-            if (func_801CD000(p) != 0) {
+            if (kaj_ll_at_tail(p) != 0) {
                 break;
             }
             p->unk8 = p->unk8->unk4;
@@ -2088,12 +2088,12 @@ void func_8017D2B8(void) {
     }
 }
 
-void func_8017D3F0(void) {
+void block_stream_stop(void) {
     D_801DFC80 = 0;
-    func_801D3650();
+    kaj_cdmgr_free_all();
 }
 
-s32 func_8017D414(void *arg0, s32 arg1, s32 arg2, s32 arg3) {
+s32 block_model_surface(void *arg0, s32 arg1, s32 arg2, s32 arg3) {
     Unk_8017B3E8 sp20;
     Unk_8017B1E8 *e;
     s32 n;
@@ -2114,7 +2114,7 @@ s32 func_8017D414(void *arg0, s32 arg1, s32 arg2, s32 arg3) {
         cnt = e->unk0;
         switch (e->unk3 & 0xFD) {
         case 0x20:
-            t = func_8017B1E8(e, a, b, &sp20, cnt, arg1, arg2, arg3);
+            t = block_hit_tris(e, a, b, &sp20, cnt, arg1, arg2, arg3);
             if (t != 0) {
                 return t;
             }
@@ -2122,7 +2122,7 @@ s32 func_8017D414(void *arg0, s32 arg1, s32 arg2, s32 arg3) {
             e = (Unk_8017B1E8 *)((u8 *)e + cnt * 0x10);
             break;
         case 0x28:
-            t = func_8017B3E8(e, a, b, &sp20, cnt, arg1, arg2, arg3);
+            t = block_hit_quads(e, a, b, &sp20, cnt, arg1, arg2, arg3);
             if (t != 0) {
                 return t;
             }
@@ -2140,7 +2140,7 @@ s32 func_8017D564(void) {
     return D_801E71C8 == 0;
 }
 
-void func_8017D574(u32 arg0) {
+void block_enter_area(u32 arg0) {
     s32 t = (arg0 >> 16) & 0xFF;
 
     D_801DFC8C = t;
@@ -2165,7 +2165,7 @@ void func_8017D574(u32 arg0) {
     }
 }
 
-s32 func_8017D604(Unk_8017E504 *arg0) {
+s32 block_on_effect_done(Unk_8017E504 *arg0) {
     Unk_801E0368 *a = &D_801E0368;
     Unk_801E0340 *b = &D_801E0340;
     Unk_801E076C *m = D_801E076C[0];
@@ -2182,16 +2182,16 @@ s32 func_8017D604(Unk_8017E504 *arg0) {
         case 7:
             break;
         case 5:
-            func_801A3BCC(0);
+            sound_bgm_play(0);
             break;
         default:
-            func_801A3BCC(1);
+            sound_bgm_play(1);
             break;
         }
         if (D_801DFE68.unk0 == 1 || D_801DFE68.unk0 == 2) {
-            func_801A2678(0x1D);
+            sound_se_play(0x1D);
         } else {
-            func_801A2C60(10, 0x29, 0, 0x3C, 0x7F, 0x7F, 1);
+            sound_se_play_note(10, 0x29, 0, 0x3C, 0x7F, 0x7F, 1);
         }
     } else if (k == 7) {
         if (arg0->unkC == 0) {
@@ -2199,22 +2199,22 @@ s32 func_8017D604(Unk_8017E504 *arg0) {
         }
         if (c->unkE == 3) {
             c->unkE = 1;
-            func_801A5650(1);
+            sprite_station_show_prompt(1);
         } else if (c->unkE == 2) {
             c->unkE = 0;
             c->unk12 = 1;
-            func_801A80CC(2, 0, 1);
+            thing_set_animate(2, 0, 1);
         }
     } else if (k == 11) {
         if (!(m->unk42 & 0x4000)) {
-            func_80183E88(*d->unk1C, 3, -1, 0, -1, 0, 1);
+            text_show(*d->unk1C, 3, -1, 0, -1, 0, 1);
         }
     } else if (k == 12) {
         if (!(m->unk42 & 0x4000)) {
-            r = func_801A0EDC(D_801DFE68.unk0);
+            r = roadmap_shop_finish(D_801DFE68.unk0);
             if (D_801DFE68.unk0 == 8 && D_801DFF78 >= 0) {
                 if (r >= 0) {
-                    p = func_80174CB8(r);
+                    p = action_find_set(r);
                     if (p != NULL) {
                         e->unk4 = 0;
                         e->unk0 = 0;
@@ -2224,11 +2224,11 @@ s32 func_8017D604(Unk_8017E504 *arg0) {
                         e->unk8 = 0;
                         e->unk6 = 1;
                         do {
-                            p = func_80173DE0(p, 0, 0);
+                            p = action_run_set(p, 0, 0);
                         } while (p != NULL);
                     }
                 } else {
-                    func_801A1AB8(D_801DFE68.unk0, 0);
+                    roadmap_shop_open_menu(D_801DFE68.unk0, 0);
                 }
             }
         }
@@ -2239,19 +2239,19 @@ s32 func_8017D604(Unk_8017E504 *arg0) {
             b->unkA = 1;
         } else if (f & 0x20) {
             /*  横になると、深い眠りについた */
-            func_80183E88(" \211\241\202\311\202\310\202\351\202\306\201\101\220\133\202\242\226\260\202\350\202\311\202\302\202\242\202\275", 1, -1, 0, -1, 0, 0);
-            func_80186128(10, 3);
+            text_show(" \211\241\202\311\202\310\202\351\202\306\201\101\220\133\202\242\226\260\202\350\202\311\202\302\202\242\202\275", 1, -1, 0, -1, 0, 0);
+            effect_start_fade(10, 3);
         } else if (f & 8) {
             if (D_801DFE68.unk0 == 9) {
                 /*  6目を閉じて・・・ */
-                func_80183E88(" 6\226\332\202\360\225\302\202\266\202\304\201\105\201\105\201\105", 1, -1, 0, -1, 0, 0);
+                text_show(" 6\226\332\202\360\225\302\202\266\202\304\201\105\201\105\201\105", 1, -1, 0, -1, 0, 0);
             } else {
                 /*  意識が遠ざかっていく */
-                func_80183E88(" \210\323\216\257\202\252\211\223\202\264\202\251\202\301\202\304\202\242\202\255", 1, -1, 0, -1, 0, 0);
+                text_show(" \210\323\216\257\202\252\211\223\202\264\202\251\202\301\202\304\202\242\202\255", 1, -1, 0, -1, 0, 0);
             }
-            func_80186128(10, 3);
+            effect_start_fade(10, 3);
         } else if ((D_801DFE68.unk0 == 3 || D_801DFE68.unk0 == 6) && d->unk8 != 0) {
-            func_801A1AB8(D_801DFE68.unk0, 0);
+            roadmap_shop_open_menu(D_801DFE68.unk0, 0);
         }
     } else if (k == 10) {
         if (arg0->unkC == 0) {
@@ -2259,17 +2259,17 @@ s32 func_8017D604(Unk_8017E504 *arg0) {
         }
         f = m->unk42;
         if (f & 0x20) {
-            func_80199EB4(1, D_801D7450[D_801DFE64 * 3], D_801D7450[D_801DFE64 * 3 + 1], D_801D7450[D_801DFE64 * 3 + 2]);
-            func_80184094();
+            player_rest(1, block_wake_positions[block_wake_index * 3], block_wake_positions[block_wake_index * 3 + 1], block_wake_positions[block_wake_index * 3 + 2]);
+            text_close();
         } else if (f & 8) {
             if (D_801DFE68.unk0 == 9) {
-                func_80199370(500, 0, 0x3390, 0);
+                player_recover(500, 0, 0x3390, 0);
             } else {
-                func_80199370(D_801D7450[D_801DFE64 * 3], D_801D7450[D_801DFE64 * 3 + 1], D_801D7450[D_801DFE64 * 3 + 2], 1);
+                player_recover(block_wake_positions[block_wake_index * 3], block_wake_positions[block_wake_index * 3 + 1], block_wake_positions[block_wake_index * 3 + 2], 1);
             }
         }
-        func_8018C1B0(1, 1, 1, 4);
-        func_80186128(9, 3);
+        mail_wait(1, 1, 1, 4);
+        effect_start_fade(9, 3);
     } else if (k == 9) {
         if (arg0->unkC == 0) {
             a->unk244 = -1;
@@ -2282,20 +2282,20 @@ s32 func_8017D604(Unk_8017E504 *arg0) {
         }
     } else if (k == 13) {
         if (D_801DFE68.unk0 == 0) {
-            func_801A3BCC(1);
+            sound_bgm_play(1);
         }
     }
     return 0;
 }
 
-void func_8017DAE8(Unk_801E0710 *arg0) {
+void block_on_action(Unk_801E0710 *arg0) {
     Unk_801DFFE8 *q = &D_801DFFE8;
     Unk_801DFE68 *r;
     void *item;
     s16 m = q->unk6;
 
     if (m == 3) {
-        func_80184100((Unk_80184100 *)q);
+        text_next_page((Unk_80184100 *)q);
         return;
     }
     if (m != 2) {
@@ -2305,24 +2305,24 @@ void func_8017DAE8(Unk_801E0710 *arg0) {
     if (!(q->unk8 & 8)) {
         return;
     }
-    func_801A2678(0x11);
-    func_80184094();
+    sound_se_play(0x11);
+    text_close();
     switch (q->unk4) {
     case 0xFC:
-        func_80183618(D_801DFFE8.unk0);
+        text_show_profile(D_801DFFE8.unk0);
         break;
     case 0x10:
         switch (D_801DFFE8.unk0) {
         case 0x100010:
-            func_801A5B10(1);
+            sprite_station_board_train(1);
             break;
         case 0x100020:
-            func_801A5B10(0);
+            sprite_station_board_train(0);
             break;
         default:
             if ((q->unk0 & 0xFFFF00) == 0x104000) {
                 D_801DFE60 = 1;
-                func_80187560((u8)q->unk0);
+                effect_elevator_init((u8)q->unk0);
                 goto loop;
             }
             break;
@@ -2330,31 +2330,31 @@ void func_8017DAE8(Unk_801E0710 *arg0) {
         break;
     case 0x60:
         if (D_801DFE68.unk0 == 2) {
-            func_801A5CD4();
+            sprite_station_exit_to_town();
         } else if (D_801DFE68.unk0 >= 3 && D_801DFE68.unk0 < 8) {
             r = &D_801DFE68;
-            func_801A1FD4(D_801DFE68.unk0, r->unk2);
+            roadmap_shop_exit_to_town(D_801DFE68.unk0, r->unk2);
         } else {
             goto loop;
         }
         break;
     case 0x30:
         if (D_801DFE68.unk0 != 3 && D_801DFE68.unk0 != 6) {
-            func_801A1AB8(D_801DFE68.unk0, D_801DFFE8.unk0);
+            roadmap_shop_open_menu(D_801DFE68.unk0, D_801DFFE8.unk0);
             break;
         }
     default:
         if (q->unk0 >= 0xF02150 && q->unk0 < 0xF02155) {
             if (arg0->unk36 < 6) {
-                func_80183E88(" \202\275\202\301\202\325\202\350\202\306\201A\220\207\226\260\202\315\202\306\202\352\202\304\202\242\202\351", 1, -1, 0, -1, 0, 4);
+                text_show(" \202\275\202\301\202\325\202\350\202\306\201A\220\207\226\260\202\315\202\306\202\352\202\304\202\242\202\351", 1, -1, 0, -1, 0, 4);
                 break;
             }
-            D_801DFE64 = q->unk0 & 0xF;
+            block_wake_index = q->unk0 & 0xF;
         }
     loop:
-        item = func_80174CB8(q->unkA);
+        item = action_find_set(q->unkA);
         if (item != NULL) {
-            while ((item = func_80173DE0(item, 0, 0)) != NULL) {
+            while ((item = action_run_set(item, 0, 0)) != NULL) {
             }
         }
         break;
@@ -2363,7 +2363,7 @@ void func_8017DAE8(Unk_801E0710 *arg0) {
     q->unk8 &= ~8;
 }
 
-void func_8017DD70(void) {
+void block_update_input(void) {
     Unk_801E0710 *p = &D_801E0710;
     Unk_801E076C *o = p->unk5C;
     s32 t;
@@ -2374,19 +2374,19 @@ void func_8017DD70(void) {
     if (*(u32 *)&o->unk40 & 0x2A0000) {
         return;
     }
-    t = func_801CD6B4();
-    if (D_801DFE68.unk0 < 3 && func_8018898C(p, 1) != 0) {
+    t = kaj_pad_read();
+    if (D_801DFE68.unk0 < 3 && effect_item_input(p, 1) != 0) {
         return;
     }
-    if (func_801A14A0(p) != 0) {
+    if (roadmap_shop_update_input(p) != 0) {
         return;
     }
-    if (func_80187E38(p) != 0) {
+    if (effect_weapon_input(p) != 0) {
         return;
     }
     if (o->unk42 & 4) {
         if (!(D_801E6DA0.unk4 & 0x20) && (D_801E6DA0.unk0 & 0x20)) {
-            func_8017DAE8(p);
+            block_on_action(p);
             return;
         }
         if (!(D_801E6DA0.unk4 & 0x40) && (D_801E6DA0.unk0 & 0x40)) {
@@ -2395,21 +2395,21 @@ void func_8017DD70(void) {
             void *item;
 
             if (q->unk6 == 2 && (q->unkC & 2)) {
-                func_801A2678(8);
-                func_80184094();
+                sound_se_play(8);
+                text_close();
                 if (q->unk4 == 0x30) {
                     switch (D_801DFE68.unk0) {
                     case 4:
                     case 5:
                         r->unk4 = 1;
-                        func_801A1AB8(D_801DFE68.unk0, D_801DFFE8.unk0);
+                        roadmap_shop_open_menu(D_801DFE68.unk0, D_801DFFE8.unk0);
                         break;
                     }
                 } else {
-                    item = func_80174CB8(q->unkE);
+                    item = action_find_set(q->unkE);
                     if (item != NULL) {
-                        func_801A2678(8);
-                        while ((item = func_80173DE0(item, 0, 0)) != NULL) {
+                        sound_se_play(8);
+                        while ((item = action_run_set(item, 0, 0)) != NULL) {
                         }
                     }
                 }
@@ -2419,201 +2419,201 @@ void func_8017DD70(void) {
             return;
         }
     }
-    func_80199548(p, 1, t);
+    player_handle_pad(p, 1, t);
 }
 
-void func_8017DFA4(void) {
+void block_building_load(void) {
     char sp10[16];
     Unk_801E0340 *g = &D_801E0340;
     Unk_801DFE68 *p;
 
-    func_80174840(1);
-    D_801DFED4 = func_8017D604;
+    action_reset(1);
+    D_801DFED4 = block_on_effect_done;
     p = &D_801DFE68;
     p->unk2 = g->unk12;
-    D_801DFE62 = 0;
+    block_scene_daylight = 0;
     D_801DFE68.unk0 = g->unk10;
     if (D_801DFE60 == 1) {
         return;
     }
-    func_801A4A68(0x410, 1);
-    func_8017A86C(1);
+    sprite_set_visible(0x410, 1);
+    block_set_mode(1);
     memset(sp10, 0, 0x10);
     sprintf(sp10, "\\S\\%s.S;1", g->unk20);
     g->unkC = sp10;
-    func_801926B4();
-    func_80188CE4();
+    object_load_scene();
+    effect_weapon_load_models();
     switch (D_801DFE68.unk0) {
     case 0:
         switch (p->unk2) {
         case 4:
-            func_801A8000(3, 8, 1);
-            func_801A80CC(3, 8, 1);
-            func_801A8000(3, 9, 1);
-            func_801A80CC(3, 9, 1);
+            thing_set_active(3, 8, 1);
+            thing_set_animate(3, 8, 1);
+            thing_set_active(3, 9, 1);
+            thing_set_animate(3, 9, 1);
             break;
         case 22:
-            func_8018F428(5, 1);
-            func_801A8000(3, 6, 1);
-            func_801A80CC(3, 6, 1);
+            mod_npcrec_show(5, 1);
+            thing_set_active(3, 6, 1);
+            thing_set_animate(3, 6, 1);
             break;
         case 23:
-            func_8018F428(2, 0);
-            D_801DFEE4 = func_8017E504;
+            mod_npcrec_show(2, 0);
+            D_801DFEE4 = block_on_enter;
             break;
         case 28:
-            func_801A8000(3, 5, 1);
-            func_801A80CC(3, 5, 1);
+            thing_set_active(3, 5, 1);
+            thing_set_animate(3, 5, 1);
             break;
         case 30:
-            func_8018F428(1, 1);
-            func_8018647C(0);
+            mod_npcrec_show(1, 1);
+            effect_flame_small_init(0);
             break;
         case 7:
-            func_8018F428(2, 0);
+            mod_npcrec_show(2, 0);
         case 9:
-            func_8018647C(1);
-            func_80186680();
+            effect_flame_small_init(1);
+            effect_flame_large_init();
             break;
         case 33:
-            func_801A8000(0, 1, 1);
-            func_8018647C(0);
+            thing_set_active(0, 1, 1);
+            effect_flame_small_init(0);
         case 31:
         case 32:
         case 34:
-            func_8018F428(1, 1);
+            mod_npcrec_show(1, 1);
             break;
         case 39:
-            func_8018F428(3, 0);
+            mod_npcrec_show(3, 0);
         case 1:
         case 15:
-            func_8018F428(2, 0);
+            mod_npcrec_show(2, 0);
             break;
         }
         break;
     case 1:
-        D_801DFE62 = D_801DFE68.unk0;
+        block_scene_daylight = D_801DFE68.unk0;
     case 2:
-        func_801A5C34();
+        sprite_station_init();
         break;
     default:
-        func_801A1EC0(p->unk0);
+        roadmap_shop_init(p->unk0);
         break;
     }
     if (g->unk14 != 0) {
-        func_801A2678(0x21);
+        sound_se_play(0x21);
     }
-    func_8018AABC(D_801DFE62);
-    func_801A4A68(0x410, 0);
+    event_show_clock(block_scene_daylight);
+    sprite_set_visible(0x410, 0);
 }
 
-void func_8017E25C(void) {
+void block_building_run(void) {
     s32 sp10[6];
     s16 done;
 
-    func_8017DFA4();
+    block_building_load();
     done = 0;
-    func_801D06B4();
+    kaj_timer_enable();
     if (D_801DFE60 == 0) {
-        func_80186128(0, 3);
+        effect_start_fade(0, 3);
     } else {
         D_801DFE60 = 0;
-        func_801CD688(1);
+        kaj_pad_reset(1);
     }
     while (done == 0) {
-        switch (func_801CC378(sp10)) {
+        switch (kaj_event_get(sp10)) {
         case 0x10:
-            func_80189350(sp10);
+            event_handle_enter(sp10);
             continue;
         case 0x400:
-            func_801A20A8();
+            roadmap_shop_close_topic();
             continue;
         case 0x20:
-            func_801895E0(sp10);
+            event_handle_leave(sp10);
             continue;
         case 0x4:
-            func_80189970(D_801DFE62);
+            event_handle_tick(block_scene_daylight);
             continue;
         case 0x200:
-            func_801899AC(sp10);
+            event_handle_mod_finish(sp10);
             continue;
         case 0x0:
-            func_8017DD70();
-            if (func_8018C170() != 0) {
+            block_update_input();
+            if (mail_take_scene_change() != 0) {
                 if (D_801DFE60 == 0) {
-                    func_80186128(1, 3);
+                    effect_start_fade(1, 3);
                 } else {
-                    func_801CD688(0);
+                    kaj_pad_reset(0);
                     done = 1;
                 }
             }
             break;
         case 0x100:
-            done = func_8018970C(sp10);
+            done = event_handle_effect_done(sp10);
             continue;
         default:
-            func_801CC734(sp10);
+            kaj_event_done(sp10);
             continue;
         }
-        func_8018C2FC(1, 1, 1);
+        mail_step_frame(1, 1, 1);
     }
-    func_801D06C4();
+    kaj_timer_disable();
     D_801DFEE4 = 0;
     D_801DFEE0 = 0;
     D_801DFED4 = 0;
     D_801DFEDC = 0;
-    func_80174840(1);
-    func_80184094();
+    action_reset(1);
+    text_close();
     if (D_801DFE60 != 1) {
-        func_8017D3F0();
-        func_801A3C58();
-        func_801A252C();
-        func_8018655C();
-        func_80186718();
-        func_80174FA8();
-        func_801762A0();
-        func_80176780();
-        func_8017683C();
-        func_80188DE8();
-        func_80174BC8();
-        func_8017D1BC();
-        func_80185548();
-        func_8018E47C();
-        func_801A7BA4();
-        func_801A3B5C();
-        func_801A23B4();
-        func_801A43F4(2);
-        func_801A43F4(3);
-        func_801A43F4(4);
+        block_stream_stop();
+        sound_bgm_stop();
+        sound_se_stop_all();
+        effect_flame_small_free();
+        effect_flame_large_free();
+        action_free_triggers();
+        npc_free_all();
+        npc_free_bodies();
+        npc_free_stats();
+        effect_weapon_reset();
+        action_free_all_sets();
+        block_free_all();
+        door_free_all();
+        mod_free_all();
+        thing_free_all();
+        sound_bgm_close();
+        sound_se_pop_scene();
+        sprite_delete(2);
+        sprite_delete(3);
+        sprite_delete(4);
     }
 }
 
-s32 func_8017E504(Unk_8017E504 *arg0) {
+s32 block_on_enter(Unk_8017E504 *arg0) {
     s32 v = arg0->unkC;
 
     if (v == 0xF0233C) {
-        D_801DFE64 = 5;
+        block_wake_index = 5;
     } else if (v == 0xF02350) {
-        D_801DFE64 = 6;
+        block_wake_index = 6;
     } else if (v == 0xF0235A) {
-        D_801DFE64 = 7;
+        block_wake_index = 7;
     }
     return 0;
 }
 
-void func_8017E544(void) {
+void block_building_main(void) {
     D_801DFE60 = 0;
-    func_8017A3E4();
+    block_create_all();
     while (1) {
-        func_8017E25C();
+        block_building_run();
         if (D_801DFE60 != 1) {
             break;
         }
-        func_8018748C();
+        effect_elevator_run();
     }
 }
 
-void func_8017E594(s16 arg0, s16 arg1, s16 *arg2) {
+void block_elevator_input(s16 arg0, s16 arg1, s16 *arg2) {
     s32 snd;
     s16 played;
     s32 i;
@@ -2621,7 +2621,7 @@ void func_8017E594(s16 arg0, s16 arg1, s16 *arg2) {
 
     if (D_801E6DA0.unkA == 1) {
         played = 0;
-        func_801CD6B4();
+        kaj_pad_read();
         if (!(D_801E6DA0.unk4 & 0x20) && (D_801E6DA0.unk0 & 0x20)) {
             played = 1;
             snd = 0x18;
@@ -2629,13 +2629,13 @@ void func_8017E594(s16 arg0, s16 arg1, s16 *arg2) {
                 snd = 0x11;
             }
             idx = (arg0 * 11 + *arg2 - 12) * 3;
-            func_8018C50C(D_801D74B0[idx] * 10, 0, D_801D74B0[idx + 1] * 10, D_801D74B0[idx + 2], 0);
+            mail_goto_twn(block_elevator_stops[idx] * 10, 0, block_elevator_stops[idx + 1] * 10, block_elevator_stops[idx + 2], 0);
         } else if (!(D_801E6DA0.unk4 & 0x40) && (D_801E6DA0.unk0 & 0x40)) {
             played = 1;
             snd = 8;
             *arg2 = arg1;
             idx = (arg0 * 11 + arg1 - 12) * 3;
-            func_8018C50C(D_801D74B0[idx] * 10, 0, D_801D74B0[idx + 1] * 10, D_801D74B0[idx + 2], 0);
+            mail_goto_twn(block_elevator_stops[idx] * 10, 0, block_elevator_stops[idx + 1] * 10, block_elevator_stops[idx + 2], 0);
         } else if (!(D_801E6DA0.unk4 & 0x1000) && (D_801E6DA0.unk0 & 0x1000)) {
             played = 1;
             snd = 0xF;
@@ -2656,11 +2656,11 @@ void func_8017E594(s16 arg0, s16 arg1, s16 *arg2) {
                 }
             }
             for (i = 1; i < 12; i++) {
-                func_801A461C(0, (arg0 << 4) + i, 0x5BBD);
-                func_801A461C(0, i, 0x1D40);
+                sprite_set_clut_entry(0, (arg0 << 4) + i, 0x5BBD);
+                sprite_set_clut_entry(0, i, 0x1D40);
             }
-            func_801A461C(0, (arg0 << 4) + *arg2, 0x29F);
-            func_801A461C(0, *arg2, 0x1D5F);
+            sprite_set_clut_entry(0, (arg0 << 4) + *arg2, 0x29F);
+            sprite_set_clut_entry(0, *arg2, 0x1D5F);
         } else if (!(D_801E6DA0.unk4 & 0x4000) && (D_801E6DA0.unk0 & 0x4000)) {
             played = 1;
             snd = 0xF;
@@ -2681,19 +2681,19 @@ void func_8017E594(s16 arg0, s16 arg1, s16 *arg2) {
                 }
             }
             for (i = 1; i < 12; i++) {
-                func_801A461C(0, (arg0 << 4) + i, 0x5BBD);
-                func_801A461C(0, i, 0x1D40);
+                sprite_set_clut_entry(0, (arg0 << 4) + i, 0x5BBD);
+                sprite_set_clut_entry(0, i, 0x1D40);
             }
-            func_801A461C(0, (arg0 << 4) + *arg2, 0x29F);
-            func_801A461C(0, *arg2, 0x1D5F);
+            sprite_set_clut_entry(0, (arg0 << 4) + *arg2, 0x29F);
+            sprite_set_clut_entry(0, *arg2, 0x1D5F);
         }
         if (played) {
-            func_801A2678(snd);
+            sound_se_play(snd);
         }
     }
 }
 
-void func_8017E99C(s16 arg0, s16 arg1) {
+void block_elevator_run(s16 arg0, s16 arg1) {
     s32 sp10[6];
     s16 sp28;
     s16 done;
@@ -2704,47 +2704,47 @@ void func_8017E99C(s16 arg0, s16 arg1) {
     done = 0;
     sp28 = arg1;
     D_801DFED4 = 0;
-    func_801A4A68(0x400, 0);
-    func_801A4A68(0x409, 0);
-    func_801A4A68(0x40E, 0);
-    func_801A4A68(0, 1);
-    func_801A4A68((u16)arg0, 1);
-    func_801A461C(0, (arg0 << 4) + arg1, 0x29F);
-    func_801A461C(0, arg1, 0x1D5F);
-    func_8018C1B0(3, 0, 0, 2);
-    func_801CD688(1);
-    func_801D06B4();
+    sprite_set_visible(0x400, 0);
+    sprite_set_visible(0x409, 0);
+    sprite_set_visible(0x40E, 0);
+    sprite_set_visible(0, 1);
+    sprite_set_visible((u16)arg0, 1);
+    sprite_set_clut_entry(0, (arg0 << 4) + arg1, 0x29F);
+    sprite_set_clut_entry(0, arg1, 0x1D5F);
+    mail_wait(3, 0, 0, 2);
+    kaj_pad_reset(1);
+    kaj_timer_enable();
     do {
-        switch (func_801CC378(sp10)) {
+        switch (kaj_event_get(sp10)) {
         case 0x4:
-            func_80189970(1);
+            event_handle_tick(1);
             continue;
         case 0x0:
-            func_8017E594(arg0, arg1, &sp28);
-            if (func_8018C170() != 0) {
-                func_80186128(1, 3);
+            block_elevator_input(arg0, arg1, &sp28);
+            if (mail_take_scene_change() != 0) {
+                effect_start_fade(1, 3);
             }
             break;
         case 0x100:
-            done = func_8018970C(sp10);
+            done = event_handle_effect_done(sp10);
             continue;
         default:
-            func_801CC734(sp10);
+            kaj_event_done(sp10);
             continue;
         }
-        func_801A0418(2);
+        roadmap_draw_frame(2);
     } while (done == 0);
-    func_801D06C4();
+    kaj_timer_disable();
     v = sp28;
     for (i = 1; i < 12; i++) {
-        func_801A461C(0, (arg0 << 4) + i, 0x5BBD);
-        func_801A461C(0, i, 0x1D40);
+        sprite_set_clut_entry(0, (arg0 << 4) + i, 0x5BBD);
+        sprite_set_clut_entry(0, i, 0x1D40);
     }
-    func_801A4A68(0x400, 1);
-    func_801A4A68(0x409, 1);
-    func_801A4A68(0x40E, 1);
-    func_801A4A68(0, 0);
-    func_801A4A68((u16)arg0, 0);
+    sprite_set_visible(0x400, 1);
+    sprite_set_visible(0x409, 1);
+    sprite_set_visible(0x40E, 1);
+    sprite_set_visible(0, 0);
+    sprite_set_visible((u16)arg0, 0);
     d = v - arg1;
-    func_8018ABE8((d < 0 ? -d : d) * 5, 0);
+    event_advance_clock((d < 0 ? -d : d) * 5, 0);
 }

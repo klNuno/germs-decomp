@@ -16,8 +16,11 @@ never shows.
   the stack to the scratchpad or drive the GTE in ways plain C cannot express. Sony's PSY-Q 4.4 libraries (138,048
   bytes) stay as Sony shipped them.
 - The map is regenerated after each wave with `tools/progress_map.py` (after `make check`); open it to hover
-  each function, `docs/progress/progress.json` holds the same data. No function is fully named yet: every C
-  body still carries address names.
+  each function, `docs/progress/progress.json` holds the same data.
+- Names: 650 of the 655 functions, 95 of Sony's 109 unnamed internals and 215 globals carry names, each
+  with its evidence in `config/symbol_addrs.txt` (`tools/xref.py` builds the cross-references, `tools/rename.py`
+  applies a batch and rechecks the sha1). 23 functions are fully read: no address name, `unk` field or `Unk`
+  type left in their body; struct types and fields are the next pass.
 - Compiler: GCC 2.8.1 with ASPSX 2.56, `-O2 -G8 -funsigned-char`, found by compiling small functions until
   they matched.
 

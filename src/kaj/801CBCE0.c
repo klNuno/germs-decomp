@@ -1,7 +1,7 @@
 #include "common.h"
 
-s32 func_801CC02C(s32 *arg0);
-void func_801CBDF0(s32 *arg0);
+s32 kaj_event_pop(s32 *arg0);
+void kaj_event_run_tss(s32 *arg0);
 typedef struct Unk_801DFAD4 {
     void *unk0;
     s32 unk4;
@@ -10,13 +10,13 @@ typedef struct Unk_801DFAD4 {
     s32 unk10;
 } Unk_801DFAD4;
 void *calloc3(s32 n, s32 size);
-void func_801CD54C(s32 arg0, char *arg1, char *arg2, s32 arg3);
-extern Unk_801DFAD4 D_801DFAD4;
+void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
+extern Unk_801DFAD4 kaj_event_queue;
 extern char D_801DFDB4[];
-s32 D_801DFFC0;
-s32 D_801DFFC4;
+s32 kaj_event_alarm_id;
+s32 kaj_event_pending;
 void free3(void *ptr);
-void func_801D1300(s32 arg0);
+void kaj_tss_release(s32 arg0);
 typedef struct Unk_801CC1E8 {
     s32 unk0;
     u32 unk4;
@@ -24,16 +24,16 @@ typedef struct Unk_801CC1E8 {
     s32 unkC;
     s32 unk10;
 } Unk_801CC1E8;
-void *func_801CC898(u32 size);
+void *kaj_malloc(u32 size);
 void *memcpy(void *dst, void *src, u32 n);
-s32 D_801DFFC8;
+s32 kaj_event_pending_data;
 void EnterCriticalSection(void);
 void ExitCriticalSection(void);
-extern u32 D_801E6DAC[];
-void func_801CBCE0(void);
-void func_801CFEB0(s32 arg0, s32 arg1, s32 arg2);
-void func_801D0414(s32 arg0);
-s32 func_801CC3DC(s32 arg0, s32 arg1, s32 arg2);
+extern u32 kaj_timer_ticks[];
+void kaj_event_queue_grow(void);
+void kaj_timer_add_alarm(s32 arg0, s32 arg1, s32 arg2);
+void kaj_timer_cancel(s32 arg0);
+s32 kaj_event_set_alarm(s32 arg0, s32 arg1, s32 arg2);
 typedef struct Unk_801D12A8 {
     struct Unk_801D12A8 *unk0;
     u8 unk4[0x1C];
@@ -55,36 +55,36 @@ typedef struct {
     Unk_801D12A8 *unk8;
     Unk_801D12A8 *unkC;
 } Unk_801DFBD0;
-extern Unk_801DFBD0 D_801DFBD0;
-void func_801D12A8(Unk_801D12A8 *arg0);
-void func_801D14F0(Unk_801D12A8 *arg0);
+extern Unk_801DFBD0 kaj_tss_table;
+void kaj_tss_free(Unk_801D12A8 *arg0);
+void kaj_tss_finish(Unk_801D12A8 *arg0);
 extern s32 D_801E6DB4[];
 
-void func_801CBCE0(void) {
+void kaj_event_queue_grow(void) {
     u32 q;
     s32 n;
 
-    n = D_801DFAD4.unk10 << 1;
-    q = (u32)func_801CC898(n * sizeof(Unk_801CC1E8));
+    n = kaj_event_queue.unk10 << 1;
+    q = (u32)kaj_malloc(n * sizeof(Unk_801CC1E8));
     if (q == 0) {
-        func_801CD54C(3, "Error Reallocating EVENT Queue", D_801DFDB4, 0x27);
+        kaj_abend(3, "Error Reallocating EVENT Queue", D_801DFDB4, 0x27);
     }
-    if (D_801DFAD4.unk4 != 0) {
-        memcpy((void *)((D_801DFAD4.unk10 - D_801DFAD4.unk8) * sizeof(Unk_801CC1E8) + q), D_801DFAD4.unk0, D_801DFAD4.unk4 * sizeof(Unk_801CC1E8));
+    if (kaj_event_queue.unk4 != 0) {
+        memcpy((void *)((kaj_event_queue.unk10 - kaj_event_queue.unk8) * sizeof(Unk_801CC1E8) + q), kaj_event_queue.unk0, kaj_event_queue.unk4 * sizeof(Unk_801CC1E8));
     }
-    memcpy((void *)q, (void *)(D_801DFAD4.unk4 * sizeof(Unk_801CC1E8) + (u32)D_801DFAD4.unk0), (D_801DFAD4.unk10 - D_801DFAD4.unk8) * sizeof(Unk_801CC1E8));
-    D_801DFAD4.unk8 = 0;
-    D_801DFAD4.unk4 = D_801DFAD4.unk10;
-    free3(D_801DFAD4.unk0);
-    D_801DFAD4.unk0 = (void *)q;
-    D_801DFAD4.unk10 = n;
+    memcpy((void *)q, (void *)(kaj_event_queue.unk4 * sizeof(Unk_801CC1E8) + (u32)kaj_event_queue.unk0), (kaj_event_queue.unk10 - kaj_event_queue.unk8) * sizeof(Unk_801CC1E8));
+    kaj_event_queue.unk8 = 0;
+    kaj_event_queue.unk4 = kaj_event_queue.unk10;
+    free3(kaj_event_queue.unk0);
+    kaj_event_queue.unk0 = (void *)q;
+    kaj_event_queue.unk10 = n;
 }
 
-void func_801CBDF0(s32 *arg0) {
+void kaj_event_run_tss(s32 *arg0) {
     Unk_801DFAD4 *q;
     Unk_801CC1E8 *e;
     Unk_801D12A8 *t;
-    Unk_801DFBD0 *p = &D_801DFBD0;
+    Unk_801DFBD0 *p = &kaj_tss_table;
     s32 n = arg0[2];
     s32 i;
     s32 ok;
@@ -95,17 +95,17 @@ void func_801CBDF0(s32 *arg0) {
             t->unk24 = t->unk26;
             t->unk34(t);
             EnterCriticalSection();
-            q = &D_801DFAD4;
+            q = &kaj_event_queue;
             ok = 0;
             if (q->unk10 == q->unkC) {
-                func_801CBCE0();
+                kaj_event_queue_grow();
             }
             i = q->unk4;
             q->unkC++;
             q->unk4 = (i + 1) % q->unk10;
-            e = &((Unk_801CC1E8 *)D_801DFAD4.unk0)[i];
+            e = &((Unk_801CC1E8 *)kaj_event_queue.unk0)[i];
             e->unk0 = 0x100;
-            e->unk4 = D_801E6DAC[0];
+            e->unk4 = kaj_timer_ticks[0];
             if (e != NULL) {
                 e->unk8 = n - 1;
                 e->unkC = 0;
@@ -114,9 +114,9 @@ void func_801CBDF0(s32 *arg0) {
             }
             ExitCriticalSection();
             if (ok) {
-                func_801D14F0(t);
+                kaj_tss_finish(t);
             } else {
-                func_801D12A8(t);
+                kaj_tss_free(t);
             }
         } else {
             t->unk30(t);
@@ -125,27 +125,27 @@ void func_801CBDF0(s32 *arg0) {
             } else {
                 t->unk24 += t->unk28;
             }
-            func_801CC3DC(t->unk2C, n, 0);
+            kaj_event_set_alarm(t->unk2C, n, 0);
         }
         arg0[0] = 0;
     }
 }
 
-s32 func_801CC02C(s32 *arg0) {
+s32 kaj_event_pop(s32 *arg0) {
     Unk_801CC1E8 *e;
     Unk_801CC1E8 *p;
     Unk_801DFAD4 *q;
 
     EnterCriticalSection();
-    if (D_801DFFC4 == 1) {
-        arg0[1] = D_801DFFC8;
-        arg0[0] = D_801DFFC4;
-        D_801DFFC4 = 0;
+    if (kaj_event_pending == 1) {
+        arg0[1] = kaj_event_pending_data;
+        arg0[0] = kaj_event_pending;
+        kaj_event_pending = 0;
         ExitCriticalSection();
         return 1;
     }
 loop:
-    q = &D_801DFAD4;
+    q = &kaj_event_queue;
     while (q->unkC != 0) {
         p = (Unk_801CC1E8 *)(q->unk8 * sizeof(Unk_801CC1E8) + (u32)q->unk0);
         if (p->unk0 != 0) {
@@ -159,9 +159,9 @@ loop:
 found:
     if (e != NULL) {
         *(Unk_801CC1E8 *)arg0 = *e;
-        if (e == &((Unk_801CC1E8 *)D_801DFAD4.unk0)[D_801DFAD4.unk8]) {
-            D_801DFAD4.unk8 = (D_801DFAD4.unk8 + 1) % D_801DFAD4.unk10;
-            D_801DFAD4.unkC--;
+        if (e == &((Unk_801CC1E8 *)kaj_event_queue.unk0)[kaj_event_queue.unk8]) {
+            kaj_event_queue.unk8 = (kaj_event_queue.unk8 + 1) % kaj_event_queue.unk10;
+            kaj_event_queue.unkC--;
         } else {
             e->unk0 = 0;
         }
@@ -175,74 +175,74 @@ found:
     return arg0[0];
 }
 
-Unk_801CC1E8 *func_801CC1E8(s32 arg0) {
+Unk_801CC1E8 *kaj_event_push(s32 arg0) {
     Unk_801CC1E8 *e;
     s32 i;
 
-    if (D_801DFAD4.unk10 == D_801DFAD4.unkC) {
-        func_801CBCE0();
+    if (kaj_event_queue.unk10 == kaj_event_queue.unkC) {
+        kaj_event_queue_grow();
     }
-    i = D_801DFAD4.unk4;
-    D_801DFAD4.unkC++;
-    D_801DFAD4.unk4 = (i + 1) % D_801DFAD4.unk10;
-    e = &((Unk_801CC1E8 *)D_801DFAD4.unk0)[i];
+    i = kaj_event_queue.unk4;
+    kaj_event_queue.unkC++;
+    kaj_event_queue.unk4 = (i + 1) % kaj_event_queue.unk10;
+    e = &((Unk_801CC1E8 *)kaj_event_queue.unk0)[i];
     e->unk0 = arg0;
-    e->unk4 = D_801E6DAC[0];
+    e->unk4 = kaj_timer_ticks[0];
     return e;
 }
 
-Unk_801CC1E8 *func_801CC2AC(s32 arg0) {
+Unk_801CC1E8 *kaj_event_push_front(s32 arg0) {
     Unk_801CC1E8 *e;
     s32 i;
 
-    if (D_801DFAD4.unk10 == D_801DFAD4.unkC) {
-        func_801CBCE0();
+    if (kaj_event_queue.unk10 == kaj_event_queue.unkC) {
+        kaj_event_queue_grow();
     }
-    i = (D_801DFAD4.unk8 + D_801DFAD4.unk10 - 1) % D_801DFAD4.unk10;
-    D_801DFAD4.unkC++;
-    D_801DFAD4.unk8 = i;
-    e = &((Unk_801CC1E8 *)D_801DFAD4.unk0)[i];
+    i = (kaj_event_queue.unk8 + kaj_event_queue.unk10 - 1) % kaj_event_queue.unk10;
+    kaj_event_queue.unkC++;
+    kaj_event_queue.unk8 = i;
+    e = &((Unk_801CC1E8 *)kaj_event_queue.unk0)[i];
     e->unk0 = arg0;
-    e->unk4 = D_801E6DAC[0];
+    e->unk4 = kaj_timer_ticks[0];
     return e;
 }
 
-s32 func_801CC378(s32 *arg0) {
-    if (func_801CC02C(arg0) == 0) {
+s32 kaj_event_get(s32 *arg0) {
+    if (kaj_event_pop(arg0) == 0) {
         return 0;
     }
     if (*arg0 == 2) {
-        func_801CBDF0(arg0);
+        kaj_event_run_tss(arg0);
         if (*arg0 == 0) {
-            return func_801CC378(arg0);
+            return kaj_event_get(arg0);
         }
     }
     return *arg0;
 }
 
-s32 func_801CC3DC(s32 arg0, s32 arg1, s32 arg2) {
+s32 kaj_event_set_alarm(s32 arg0, s32 arg1, s32 arg2) {
     Unk_801DFAD4 *q;
     Unk_801CC1E8 *e;
     s32 i;
 
     EnterCriticalSection();
     if (arg1 == 0) {
-        arg1 = D_801DFFC0--;
-        if (D_801DFFC0 < 0) {
-            D_801DFFC0 = 0x3E9;
+        arg1 = kaj_event_alarm_id--;
+        if (kaj_event_alarm_id < 0) {
+            kaj_event_alarm_id = 0x3E9;
         }
     }
     if (arg0 == 0) {
-        q = &D_801DFAD4;
+        q = &kaj_event_queue;
         if (q->unk10 == q->unkC) {
-            func_801CBCE0();
+            kaj_event_queue_grow();
         }
         i = q->unk4;
         q->unkC++;
         q->unk4 = (i + 1) % q->unk10;
-        e = &((Unk_801CC1E8 *)D_801DFAD4.unk0)[i];
+        e = &((Unk_801CC1E8 *)kaj_event_queue.unk0)[i];
         e->unk0 = 2;
-        e->unk4 = D_801E6DAC[0];
+        e->unk4 = kaj_timer_ticks[0];
         if (e != NULL) {
             e->unk8 = arg1;
             e->unkC = arg2;
@@ -250,21 +250,21 @@ s32 func_801CC3DC(s32 arg0, s32 arg1, s32 arg2) {
             arg1 = -1;
         }
     } else {
-        func_801CFEB0(arg0, arg1, arg2);
+        kaj_timer_add_alarm(arg0, arg1, arg2);
     }
     ExitCriticalSection();
     return arg1;
 }
 
-void func_801CC514(s32 arg0, s32 arg1) {
+void kaj_event_flush(s32 arg0, s32 arg1) {
     Unk_801DFAD4 *q;
     s32 n;
     s32 i;
     s32 t;
 
-    q = &D_801DFAD4;
+    q = &kaj_event_queue;
     if (arg0 & 1) {
-        D_801DFFC4 = 0;
+        kaj_event_pending = 0;
     }
     n = 0;
     EnterCriticalSection();
@@ -273,7 +273,7 @@ void func_801CC514(s32 arg0, s32 arg1) {
         t = ((Unk_801CC1E8 *)q->unk0)[i].unk0;
         if (t & arg0) {
             if (t == 0x100) {
-                func_801D1300(((Unk_801CC1E8 *)q->unk0)[arg1].unk8);
+                kaj_tss_release(((Unk_801CC1E8 *)q->unk0)[arg1].unk8);
             }
             if (t != 2 || arg1 == 0 || ((Unk_801CC1E8 *)q->unk0)[i].unk8 == arg1) {
                 ((Unk_801CC1E8 *)q->unk0)[i].unk0 = 0;
@@ -283,31 +283,31 @@ void func_801CC514(s32 arg0, s32 arg1) {
     }
     ExitCriticalSection();
     if (arg0 & 2) {
-        func_801D0414(arg1);
+        kaj_timer_cancel(arg1);
     }
 }
 
-void func_801CC68C(void) {
-    D_801DFAD4.unk10 = 0x40;
-    D_801DFAD4.unk0 = calloc3(0x40, 0x14);
-    if (D_801DFAD4.unk0 == NULL) {
-        func_801CD54C(3, "Error Allocating EVENT Queue", D_801DFDB4, 0xED);
+void kaj_event_init(void) {
+    kaj_event_queue.unk10 = 0x40;
+    kaj_event_queue.unk0 = calloc3(0x40, 0x14);
+    if (kaj_event_queue.unk0 == NULL) {
+        kaj_abend(3, "Error Allocating EVENT Queue", D_801DFDB4, 0xED);
     }
-    D_801DFAD4.unk4 = 0;
-    D_801DFAD4.unk8 = 0;
-    D_801DFAD4.unkC = 0;
-    D_801DFFC0 = 0x3E9;
-    D_801DFFC4 = 0;
+    kaj_event_queue.unk4 = 0;
+    kaj_event_queue.unk8 = 0;
+    kaj_event_queue.unkC = 0;
+    kaj_event_alarm_id = 0x3E9;
+    kaj_event_pending = 0;
 }
 
-void func_801CC708(void) {
-    if (D_801DFAD4.unk0 != NULL) {
-        free3(D_801DFAD4.unk0);
+void kaj_event_quit(void) {
+    if (kaj_event_queue.unk0 != NULL) {
+        free3(kaj_event_queue.unk0);
     }
 }
 
-void func_801CC734(s32 *arg0) {
+void kaj_event_done(s32 *arg0) {
     if (arg0[0] == 0x100) {
-        func_801D1300(arg0[2]);
+        kaj_tss_release(arg0[2]);
     }
 }

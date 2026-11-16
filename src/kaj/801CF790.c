@@ -37,8 +37,8 @@ s32 LoadImage(void *rect, u32 *p);
 s32 StoreImage(void *rect, u32 *p);
 u16 GetTPage(s32 tp, s32 abr, s32 x, s32 y);
 u16 GetClut(s32 x, s32 y);
-void *func_801CC898(u32 size);
-void func_801CD54C(s32 arg0, char *arg1, char *arg2, s32 arg3);
+void *kaj_malloc(u32 size);
+void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
 extern char D_801DFDE4[];
 
 static inline void func_801CF790_inline(Unk_801CFB4C *tim, void **buf) {
@@ -52,25 +52,25 @@ static inline void func_801CF790_inline(Unk_801CFB4C *tim, void **buf) {
             size = 0x200;
             break;
         default:
-            func_801CD54C(9, "No CLUT in this TIM", D_801DFDE4, 28);
+            kaj_abend(9, "No CLUT in this TIM", D_801DFDE4, 28);
             break;
         }
-        *buf = func_801CC898(size);
+        *buf = kaj_malloc(size);
         if (*buf == NULL) {
-            func_801CD54C(3, "Error Allocating CLUT Buffer", D_801DFDE4, 33);
+            kaj_abend(3, "Error Allocating CLUT Buffer", D_801DFDE4, 33);
         }
         StoreImage(&tim->unk10, *buf);
     }
 }
 
-void func_801CF790(Unk_801CFAE8 **arg0, u32 *arg1, u16 arg2, s16 arg3) {
+void kaj_tim_load(Unk_801CFAE8 **arg0, u32 *arg1, u16 arg2, s16 arg3) {
     Unk_801CFB4C tim;
     s16 x;
     s16 y;
 
-    *arg0 = func_801CC898(0x24);
+    *arg0 = kaj_malloc(0x24);
     if (*arg0 == NULL) {
-        func_801CD54C(3, "Error Allocating TIM Handle", D_801DFDE4, 47);
+        kaj_abend(3, "Error Allocating TIM Handle", D_801DFDE4, 47);
     }
     (*arg0)->unk1C = NULL;
     (*arg0)->unk20 = NULL;
@@ -113,7 +113,7 @@ void func_801CF790(Unk_801CFAE8 **arg0, u32 *arg1, u16 arg2, s16 arg3) {
     }
 }
 
-void func_801CFAE8(Unk_801CFAE8 *arg0) {
+void kaj_tim_free(Unk_801CFAE8 *arg0) {
     if (arg0 != NULL) {
         if (arg0->unk1C != NULL) {
             free3(arg0->unk1C);
@@ -127,7 +127,7 @@ void func_801CFAE8(Unk_801CFAE8 *arg0) {
     }
 }
 
-void func_801CFB4C(u32 *arg0, s16 arg1) {
+void kaj_tim_upload(u32 *arg0, s16 arg1) {
     Unk_801CFB4C tim;
 
     GsGetTimInfo(arg0 + 1, &tim);
@@ -137,7 +137,7 @@ void func_801CFB4C(u32 *arg0, s16 arg1) {
     }
 }
 
-void func_801CFBB4(u16 *arg0) {
+void kaj_tim_upload_hdr(u16 *arg0) {
     Unk_801CFB4C tim;
     s16 v = arg0[1];
 

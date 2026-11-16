@@ -38,13 +38,13 @@ typedef struct Unk_801DFE80 {
     Unk_801855C8 *unk8;
     s32 unkC;
 } Unk_801DFE80;
-void func_801CCBF4(Unk_801DFE80 *arg0, void *arg1);
-void func_801CCCF4(Unk_801DFE80 *arg0, void *arg1);
+void kaj_ll_insert_before(Unk_801DFE80 *arg0, void *arg1);
+void kaj_ll_insert_after(Unk_801DFE80 *arg0, void *arg1);
 Unk_801DFE80 *D_801DFE80;
-void func_801CCDF8(Unk_801DFE80 *arg0);
-s16 func_801CD000(Unk_801DFE80 *arg0);
-void *func_801CC898(u32 size);
-void func_801CD54C(s32 arg0, char *arg1, char *arg2, s32 arg3);
+void kaj_ll_remove_to_prev(Unk_801DFE80 *arg0);
+s16 kaj_ll_at_tail(Unk_801DFE80 *arg0);
+void *kaj_malloc(u32 size);
+void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
 extern char D_801DFCE8[];
 typedef struct { s16 unk0; s16 unk2; s32 unk4; void *unk8; } Unk_801A3B5C;
 typedef struct { Unk_801A3B5C *unk0; s32 unk4; s32 unk8; s32 unkC; s32 unk10; s32 unk14; } Unk_801E02D8;
@@ -53,10 +53,10 @@ typedef struct { s16 unk0[3]; s16 unk6; s16 unk8[3]; s16 unkE; } Unk_801E1040;
 extern Unk_801E1040 D_801E1040;
 void SsSepSetVol(s16 access_num, s16 seq_num, s16 voll, s16 volr);
 
-void func_80185380(Unk_801854B8 **arg0, u32 arg1) {
-    *arg0 = func_801CC898(0x80);
+void door_create(Unk_801854B8 **arg0, u32 arg1) {
+    *arg0 = kaj_malloc(0x80);
     if (*arg0 == NULL) {
-        func_801CD54C(3, "Error Allocating DOOR Pointer", D_801DFCE8, 0x23);
+        kaj_abend(3, "Error Allocating DOOR Pointer", D_801DFCE8, 0x23);
     }
     (*arg0)->unk4 = 0;
     (*arg0)->unk2 = 0;
@@ -72,14 +72,14 @@ void func_80185380(Unk_801854B8 **arg0, u32 arg1) {
     (*arg0)->unk78 = NULL;
     (*arg0)->unk7C = NULL;
     if (arg1 != 0) {
-        (*arg0)->unk7C = func_801CC898(arg1);
+        (*arg0)->unk7C = kaj_malloc(arg1);
         if ((*arg0)->unk7C == NULL) {
-            func_801CD54C(3, "Error Allocating DOOR Buffer", D_801DFCE8, 0x36);
+            kaj_abend(3, "Error Allocating DOOR Buffer", D_801DFCE8, 0x36);
         }
     }
 }
 
-void func_801854B8(Unk_801854B8 *arg0) {
+void door_free(Unk_801854B8 *arg0) {
     if (arg0 != NULL) {
         free3(arg0->unk78);
         free3(arg0->unk7C);
@@ -87,16 +87,16 @@ void func_801854B8(Unk_801854B8 *arg0) {
     }
 }
 
-void func_801854FC(void *arg0) {
+void door_add(void *arg0) {
     if (D_801DFE80->unkC == 0) {
-        func_801CCBF4(D_801DFE80, arg0);
+        kaj_ll_insert_before(D_801DFE80, arg0);
     } else {
         D_801DFE80->unk8 = D_801DFE80->unk4;
-        func_801CCCF4(D_801DFE80, arg0);
+        kaj_ll_insert_after(D_801DFE80, arg0);
     }
 }
 
-void func_80185548(void) {
+void door_free_all(void) {
     Unk_801DFE80 *list = D_801DFE80;
     Unk_801854B8 *item;
 
@@ -110,11 +110,11 @@ void func_80185548(void) {
             free3(item->unk7C);
             free3(item);
         }
-        func_801CCDF8(list);
+        kaj_ll_remove_to_prev(list);
     }
 }
 
-Unk_801854B8 *func_801855C8(u16 arg0) {
+Unk_801854B8 *door_find(u16 arg0) {
     Unk_801DFE80 *list = D_801DFE80;
     Unk_801854B8 *item;
 
@@ -127,7 +127,7 @@ Unk_801854B8 *func_801855C8(u16 arg0) {
         if (item != NULL && item->unk0 == arg0) {
             return item;
         }
-        if (func_801CD000(list) != 0) {
+        if (kaj_ll_at_tail(list) != 0) {
             break;
         }
         list->unk8 = list->unk8->unk4;
@@ -135,9 +135,9 @@ Unk_801854B8 *func_801855C8(u16 arg0) {
     return NULL;
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/80185380", func_80185664);
+INCLUDE_ASM("asm/nonmatchings/game/80185380", door_draw_all);
 
-void func_80185794(s32 arg0, s32 arg1, s32 arg2) {
+void door_rebase_all(s32 arg0, s32 arg1, s32 arg2) {
     Unk_801DFE80 *list = D_801DFE80;
     Unk_801854B8 *item;
 
@@ -153,14 +153,14 @@ void func_80185794(s32 arg0, s32 arg1, s32 arg2) {
             item->unk44 = item->unk18 - arg1;
             item->unk48 = item->unk1C - arg2;
         }
-        if (func_801CD000(list) != 0) {
+        if (kaj_ll_at_tail(list) != 0) {
             break;
         }
         list->unk8 = list->unk8->unk4;
     }
 }
 
-void func_80185858(u16 arg0, s16 arg1) {
+void door_set_visible(u16 arg0, s16 arg1) {
     Unk_801DFE80 *list = D_801DFE80;
     Unk_801854B8 *item;
     Unk_801854B8 *found;
@@ -175,7 +175,7 @@ void func_80185858(u16 arg0, s16 arg1) {
                 found = item;
                 break;
             }
-            if (func_801CD000(list) != 0) {
+            if (kaj_ll_at_tail(list) != 0) {
                 found = NULL;
                 break;
             }
@@ -187,7 +187,7 @@ void func_80185858(u16 arg0, s16 arg1) {
     }
 }
 
-void func_80185918(Unk_801854B8 *arg0) {
+void door_fade_step(Unk_801854B8 *arg0) {
     Unk_801E1040 *p = &D_801E1040;
     Unk_801A3B5C *q = D_801E02D8[0].unk0;
     s32 v;

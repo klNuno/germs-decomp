@@ -53,11 +53,11 @@ typedef struct {
     Unk_8017D0E0 *unk8;
     s32 unkC;
 } Unk_801DFE5C;
-s16 func_801CD000(Unk_801DFE5C *arg0);
+s16 kaj_ll_at_tail(Unk_801DFE5C *arg0);
 Unk_801DFE5C *D_801DFE5C;
-void func_801CCBF4(Unk_801DFE5C *arg0, s32 arg1);
-void func_801CCCF4(Unk_801DFE5C *arg0, s32 arg1);
-void func_801D3650(void);
+void kaj_ll_insert_before(Unk_801DFE5C *arg0, s32 arg1);
+void kaj_ll_insert_after(Unk_801DFE5C *arg0, s32 arg1);
+void kaj_cdmgr_free_all(void);
 extern s16 D_801E71C8;
 typedef struct {
     s16 unk0[0x5F];
@@ -83,28 +83,28 @@ typedef struct {
     u8 pad0[0xC];
     s32 unkC;
 } Unk_8017E504;
-s16 D_801DFE64;
-void func_8017A3E4(void);
-void func_8017E25C(void);
-void func_8018748C(void);
+s16 block_wake_index;
+void block_create_all(void);
+void block_building_run(void);
+void effect_elevator_run(void);
 u16 D_801DFE60;
-void func_80184160(void);
-void func_801A4A68(s32 arg0, s32 arg1);
+void text_release_cmd(void);
+void sprite_set_visible(s32 arg0, s32 arg1);
 typedef struct {
     u8 pad0[0x6];
     s16 unk6;
     u16 unk8;
 } Unk_80184100;
-void func_801A461C(s32 arg0, s32 arg1, s32 arg2);
-void func_801A2678(s32 arg0);
+void sprite_set_clut_entry(s32 arg0, s32 arg1, s32 arg2);
+void sound_se_play(s32 arg0);
 typedef struct {
     u16 unk0;
     u16 unk2;
 } Unk_801DFCAC;
-Unk_801DFCAC **D_801DFCAC;
-s16 D_801DFCB0;
-void func_801749E8(Unk_801DFCAC **arg0);
-s16 D_801DFE7A;
+Unk_801DFCAC **text_cmd;
+s16 text_window_sprite;
+void action_push_front(Unk_801DFCAC **arg0);
+s16 text_wait;
 extern s32 D_801E6DB4[];
 typedef struct {
     u8 pad0[0x42];
@@ -121,8 +121,8 @@ typedef struct {
 extern s32 D_801E05B0[];
 extern Unk_801E076C *D_801E076C[];
 extern char D_80170250[];
-void *func_801CC898(u32 size);
-void func_801CD54C(s32 arg0, char *arg1, char *arg2, s32 arg3);
+void *kaj_malloc(u32 size);
+void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
 void *memset(void *dst, s32 c, u32 n);
 extern char D_801DFC84[];
 void free3(void *ptr);
@@ -152,7 +152,7 @@ typedef struct {
     u32 unk10;
     Unk_801802A0_14 unk14[4];
 } Unk_801802A0;
-void func_801A4824(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+void sprite_fill_clut(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 typedef struct {
     u16 unk0;
     u16 unk2;
@@ -179,13 +179,13 @@ typedef struct {
     Unk_801A44B8 *unk8;
     Unk_801A44B8 *unkC;
 } Unk_80181C10;
-void func_801A43F4(s32 arg0);
-void func_8018B924(void);
-void func_8018BC50(void);
-Unk_801A44B8 *func_801A44B8(u16 arg0);
+void sprite_delete(s32 arg0);
+void mail_list_close(void);
+void mail_free(void);
+Unk_801A44B8 *sprite_find(u16 arg0);
 s32 ClearImage2(Unk_80184230 *rect, s32 r, s32 g, s32 b);
-s16 func_80182860(s32 arg0, s32 arg1);
-s16 D_801DFE72;
+s16 text_draw_next(s32 arg0, s32 arg1);
+s16 text_row;
 typedef struct Unk_80184338 {
     u8 pad0[0x22];
     s16 unk22;
@@ -200,13 +200,13 @@ typedef struct Unk_80184338 {
     s32 *unk3C;
 } Unk_80184338;
 s16 D_801DFCE6;
-s16 D_801DFE78;
-s32 func_8017D414(void *arg0, s32 arg1, s32 arg2, s32 arg3);
-void func_801CCDF8(Unk_801DFE5C *arg0);
-s16 D_801DFE7C;
-s16 D_801DFE7E;
-void func_801A3CC0(s32 arg0);
-void func_80186128(s32 arg0, s32 arg1);
+s16 text_pos;
+s32 block_model_surface(void *arg0, s32 arg1, s32 arg2, s32 arg3);
+void kaj_ll_remove_to_prev(Unk_801DFE5C *arg0);
+s16 text_cue_fade_done;
+s16 text_cue_bgm_done;
+void sound_bgm_fade_out(s32 arg0);
+void effect_start_fade(s32 arg0, s32 arg1);
 typedef struct {
     u8 pad0[0x6];
     s16 unk6;
@@ -242,28 +242,28 @@ typedef struct {
 } Unk_80184814;
 extern Unk_801DFFE8 D_801DFFE8;
 extern char D_80170270[];
-extern Unk_8017CCE4 *D_801E0000[];
-void func_801765BC(void);
-void func_80179848(Unk_8017CCE4 *arg0, u16 arg1);
-void func_8018D5F8(void *arg0);
-void func_801CFBB4(void *arg0);
-void **func_801D32F0(s32 arg0);
-s32 func_801D3364(s32 arg0);
-s32 func_801D33E4(s32 arg0);
-void func_801D3468(s32 arg0);
-void func_801D654C(s16 *arg0, s32 *arg1);
-void func_801D6E60(s16 *arg0, s32 *arg1);
-void func_801D70D0(s32 arg0);
-u16 D_801DFE58;
-void func_8017A534(u16 arg0);
-void func_8017A6E8(s32 arg0, s32 arg1);
-s32 func_801D1F70(void);
-s32 func_801D4FA0(s32 arg0, s32 arg1);
-s32 func_801D5934(u16 arg0, u8 *arg1);
-void func_801D6674(s16 *arg0, s32 *arg1);
-void func_801D6A04(void);
-void func_801D6A2C(void);
-void func_801D6F74(s16 *arg0, s32 *arg1);
+extern Unk_8017CCE4 *block_slots[];
+void npc_update_blocks(void);
+void block_setup(Unk_8017CCE4 *arg0, u16 arg1);
+void mod_create(void *arg0);
+void kaj_tim_upload_hdr(void *arg0);
+void **kaj_cdmgr_get(s32 arg0);
+s32 kaj_cdmgr_get_type(s32 arg0);
+s32 kaj_cdmgr_is_fresh(s32 arg0);
+void kaj_cdmgr_mark_used(s32 arg0);
+void kaj_map_cell_slots(s16 *arg0, s32 *arg1);
+void kaj_map_room_slots(s16 *arg0, s32 *arg1);
+void kaj_map_room_release(s32 arg0);
+u16 block_building_id;
+void block_load_all(u16 arg0);
+void block_set_zone_flags(s32 arg0, s32 arg1);
+s32 kaj_cdmgr_poll(void);
+s32 kaj_map_update_city(s32 arg0, s32 arg1);
+s32 kaj_map_update_place(u16 arg0, u8 *arg1);
+void kaj_map_cell_loaded_slots(s16 *arg0, s32 *arg1);
+void kaj_map_set_cell_ready(void);
+void kaj_map_set_room_ready(void);
+void kaj_map_room_loaded_slots(s16 *arg0, s32 *arg1);
 typedef struct {
     u16 unk0;
     u8 unk2;
@@ -296,27 +296,27 @@ typedef struct {
     Unk_8017BBB0 *unkBC;
 } Unk_801E032C;
 extern Unk_801E032C *D_801E032C[];
-s32 func_8017B1E8(Unk_8017B1E8 *arg0, s32 arg1, s32 arg2, Unk_8017B3E8 *arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7);
-s32 func_8017B3E8(Unk_8017B1E8 *arg0, s32 arg1, s32 arg2, Unk_8017B3E8 *arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7);
+s32 block_hit_tris(Unk_8017B1E8 *arg0, s32 arg1, s32 arg2, Unk_8017B3E8 *arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7);
+s32 block_hit_quads(Unk_8017B1E8 *arg0, s32 arg1, s32 arg2, Unk_8017B3E8 *arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7);
 char *strncpy(char *dst, char *src, u32 n);
 extern char D_801DFCBC[];
 extern s16 D_801DFC74;
-s16 D_801DFE70;
-s16 D_801DFE74;
-s16 D_801DFE76;
+s16 text_col;
+s16 text_color;
+s16 text_len;
 s32 strlen(char *s);
 typedef struct { s16 unk0[5]; s16 unkA; char *unkC; s16 unk10; s16 unk12; s32 unk14; s32 unk18; s32 unk1C; } Unk_801E0340;
 extern Unk_801E0340 D_801E0340;
-void func_80192B8C(s32 arg0, s32 arg1);
-void func_8018B810(void);
-void func_80180B04(Unk_80181C10 *arg0, s32 arg1, s32 arg2);
-void func_80180D8C(Unk_80181C10 *arg0, s32 arg1);
-void func_8018164C(Unk_80181C10 *arg0, s32 arg1, s16 arg2);
-void func_80192A44(s16 arg0);
-void func_80184338(Unk_80184338 *arg0);
-void func_80184408(void);
-void *func_801D15C8(u32 arg0);
-s32 func_801D14B8(void *arg0);
+void object_load_res(s32 arg0, s32 arg1);
+void mail_list_open(void);
+void menu_list_page(Unk_80181C10 *arg0, s32 arg1, s32 arg2);
+void menu_status_page(Unk_80181C10 *arg0, s32 arg1);
+void menu_options_page(Unk_80181C10 *arg0, s32 arg1, s16 arg2);
+void object_load_mail_by_id(s16 arg0);
+void text_narration_step(Unk_80184338 *arg0);
+void text_narration_end(void);
+void *kaj_tss_alloc(u32 arg0);
+s32 kaj_tss_start(void *arg0);
 typedef struct Unk_801854B8 {
     u16 unk0;
     s16 unk2;
@@ -362,7 +362,7 @@ typedef struct {
     s16 unk6;
 } Unk_80174FFC;
 void RotMatrix(Unk_80174FFC *arg0, void *arg1);
-Unk_8017CCE4 *func_8017CDA4(s32 arg0, s32 arg1, s32 arg2);
+Unk_8017CCE4 *block_find_at(s32 arg0, s32 arg1, s32 arg2);
 typedef struct {
     u16 unk0;
     u16 unk2;
@@ -374,40 +374,40 @@ typedef struct {
     char **unk8;
 } Unk_8018519C;
 s32 atoi(char *s);
-void func_80184ECC(Unk_80184814 *arg0, s16 arg1, s16 arg2, s16 arg3);
-void func_80185034(Unk_80184814 *arg0, s16 arg1, s16 arg2);
+void door_start_open(Unk_80184814 *arg0, s16 arg1, s16 arg2, s16 arg3);
+void door_start_close(Unk_80184814 *arg0, s16 arg1, s16 arg2);
 extern char D_80170290[];
-void func_8017EBF8(Unk_801802A0 *arg0, s32 arg1);
-void func_801A4BC8(s32 arg0, s32 arg1, s32 arg2);
+void menu_card_init_slots(Unk_801802A0 *arg0, s32 arg1);
+void sprite_set_cell(s32 arg0, s32 arg1, s32 arg2);
 s32 MemCardSync(s32 arg0, s32 *arg1, s32 *arg2);
 void MemCardExist(s32 arg0);
 s32 MemCardFormat(s32 arg0);
 void MemCardAccept(s32 arg0);
-void func_8017EE2C(Unk_801802A0 *arg0, s32 arg1);
-s32 func_8017EFEC(Unk_801802A0 *arg0);
-s32 func_8017F6F4(Unk_801802A0 *arg0, s32 arg1);
-s32 func_8017FF0C(Unk_801802A0 *arg0);
-extern Unk_801D75F4 D_801D75F4;
+void menu_card_set_message(Unk_801802A0 *arg0, s32 arg1);
+s32 menu_card_load(Unk_801802A0 *arg0);
+s32 menu_card_save(Unk_801802A0 *arg0, s32 arg1);
+s32 menu_card_scan(Unk_801802A0 *arg0);
+extern Unk_801D75F4 menu_card_icon_clut;
 s32 LoadImage2(void *rect, void *p);
 int sprintf(char *buf, const char *fmt, ...);
-extern Unk_801802A0 D_801E0030;
-void func_8018073C(Unk_801802A0 *arg0);
-s16 func_801803BC(Unk_801802A0 *arg0);
-s32 func_8018C170(void);
-s16 func_8018970C(s32 *arg0);
-s32 func_801CC378(s32 *arg0);
-void func_801CC734(s32 *arg0);
-void func_801CD688(s32 a);
-void func_801D06B4(void);
-void func_801D06C4(void);
-void func_801A7560(void);
-void func_801A0418(u16 a);
+extern Unk_801802A0 menu_card_state;
+void menu_card_process(Unk_801802A0 *arg0);
+s16 menu_card_handle_input(Unk_801802A0 *arg0);
+s32 mail_take_scene_change(void);
+s16 event_handle_effect_done(s32 *arg0);
+s32 kaj_event_get(s32 *arg0);
+void kaj_event_done(s32 *arg0);
+void kaj_pad_reset(s32 a);
+void kaj_timer_enable(void);
+void kaj_timer_disable(void);
+void thing_update_all(void);
+void roadmap_draw_frame(u16 a);
 void MemCardStart(void);
 void MemCardStop(void);
-extern s16 D_801D7694[];
+extern s16 menu_list_vars[];
 s32 MoveImage2(Unk_80184230 *rect, s32 x, s32 y);
-Unk_801A44B8 *D_801DFC94;
-s32 func_8018B69C(s16 a, s16 b);
+Unk_801A44B8 *menu_anim_sprite;
+s32 mail_list_move(s16 a, s16 b);
 typedef struct Unk_801E6DA0 {
     s32 unk0;
     s32 unk4;
@@ -415,30 +415,30 @@ typedef struct Unk_801E6DA0 {
     s16 unkA;
 } Unk_801E6DA0;
 extern Unk_801E6DA0 D_801E6DA0;
-void func_80181A64(Unk_80181C10 *arg0);
-void func_80181C10(Unk_80181C10 *arg0);
-void func_80181818(Unk_80181C10 *arg0, s16 arg1);
-void func_8018C414(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
-s32 func_801CD6B4(void);
-void func_8018B11C(s32 arg0);
-void func_80181D2C(Unk_80181C10 *arg0);
-void func_80181F9C(Unk_80181C10 *arg0);
-void func_80189970(s16 a);
-void func_801A3BCC(s32 arg0);
-void func_801A3C58(void);
-void func_80182518(s32 arg0, s16 arg1);
-void func_8018C1B0(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+void menu_confirm(Unk_80181C10 *arg0);
+void menu_back(Unk_80181C10 *arg0);
+void menu_move_cursor(Unk_80181C10 *arg0, s16 arg1);
+void mail_goto_ofc(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+s32 kaj_pad_read(void);
+void mail_scroll(s32 arg0);
+void menu_handle_input(Unk_80181C10 *arg0);
+void menu_animate(Unk_80181C10 *arg0);
+void event_handle_tick(s16 a);
+void sound_bgm_play(s32 arg0);
+void sound_bgm_stop(void);
+void text_draw_string(s32 arg0, s16 arg1);
+void mail_wait(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 extern s16 D_801DFC80;
-void func_80184814(Unk_80184814 *arg0);
-void func_80184928(Unk_80184814 *arg0);
-void func_80184A3C(Unk_80184814 *arg0);
-void func_80184B50(Unk_80184814 *arg0);
-void func_801802A0(Unk_801802A0 *arg0, s16 arg1);
+void door_move_x(Unk_80184814 *arg0);
+void door_move_y(Unk_80184814 *arg0);
+void door_move_z(Unk_80184814 *arg0);
+void door_move_angle(Unk_80184814 *arg0);
+void menu_card_move_cursor(Unk_801802A0 *arg0, s16 arg1);
 extern s16 D_801E6DAA[];
 u16 *Krom2RawAdd2(u16 sjis);
 s32 StoreImage2(void *rect, void *p);
-extern s32 D_801D76A4[];
-void func_80182D34(char *arg0, s16 arg1);
+extern s32 text_line_y[];
+void text_draw_line(char *arg0, s16 arg1);
 typedef struct {
     s16 unk0;
     s16 unk2;
@@ -487,24 +487,24 @@ typedef struct {
     u16 unk50;
 } Unk_80188FEC;
 extern Unk_801E0710 D_801E0710;
-void func_801A3F90(s32 a, s32 b, s32 c, s32 d, s32 e, s32 f);
-Unk_80188FEC *func_80188FEC(s16 arg0);
+void sprite_copy_cell(s32 a, s32 b, s32 c, s32 d, s32 e, s32 f);
+Unk_80188FEC *effect_weapon_find(s16 arg0);
 s32 rand(void);
-s32 D_801DFC98;
-s32 D_801DFC9C;
-s32 D_801DFCA0;
-s16 D_801DFCA4;
-s16 D_801DFCA6;
-s16 D_801DFCA8;
+s32 menu_cycle_pos_a;
+s32 menu_cycle_pos_b;
+s32 menu_cycle_pos_c;
+s16 menu_cycle_dir_a;
+s16 menu_cycle_dir_b;
+s16 menu_cycle_dir_c;
 typedef struct { u16 unk0; s16 unk2; s16 unk4; s16 unk6; s32 unk8; s32 unkC; s32 unk10; s16 unk14; s16 unk16; s32 unk18; s32 unk1C; s32 unk20; s32 unk24; s32 unk28; s32 unk2C; s32 unk30; s32 unk34; s32 unk38; s32 unk3C; s32 unk40; s32 unk44; s32 unk48; } Unk_801762F4;
 typedef struct { u16 unk0; u16 unk2; u16 unk4; u16 unk6; u16 unk8; u16 unkA; char unkC[0x20]; char unk2C[0x20]; char unk4C[0x20]; u8 unk6C[0x60]; } Unk_801767D4;
-void func_801830A0(u8 *arg0, u16 arg1);
-Unk_801762F4 *func_801762F4(s16 arg0, u16 arg1);
-Unk_801767D4 *func_801767D4(s16 arg0);
-extern char *D_801D76C4[];
-extern char *D_801D76D0[];
-void func_801831EC(u16 arg0, s16 arg1, s32 arg2, s16 arg3, s32 arg4);
-void func_801834AC(s32 arg0);
+void text_format_number(u8 *arg0, u16 arg1);
+Unk_801762F4 *npc_find(s16 arg0, u16 arg1);
+Unk_801767D4 *npc_find_body(s16 arg0);
+extern char *text_sex_names[];
+extern char *text_blood_types[];
+void text_show_timed(u16 arg0, s16 arg1, s32 arg2, s16 arg3, s32 arg4);
+void text_start_typing(s32 arg0);
 extern s16 D_801DFC5C;
 typedef struct {
     u16 unk0;
@@ -519,7 +519,7 @@ typedef struct {
     u8 unk18[0x4];
 } Unk_801844D4;
 void GsInitCoordinate2(void *super, void *base);
-void func_801CD028(void *arg0, void *arg1, void *arg2);
+void kaj_tmd_load(void *arg0, void *arg1, void *arg2);
 typedef struct {
     s16 unk0;
     s16 unk2[0x80];
@@ -529,14 +529,14 @@ typedef struct {
     s32 unk198[0xE];
     u8 pad1D0[0x2C];
 } Unk_8017EFEC;
-void func_8018C50C(s32 a, s32 b, s32 c, s16 d, s16 e);
+void mail_goto_twn(s32 a, s32 b, s32 c, s16 d, s16 e);
 s32 MemCardOpen(s32 chan, char *file, s32 flag);
 void MemCardClose(void);
 s32 MemCardReadData(void *adrs, s32 ofs, s32 bytes);
 void *memcpy(void *dst, const void *src, unsigned int n);
-extern char D_80170430[];
+extern char menu_str_save_title[];
 extern s16 D_801E0568[];
-extern u8 D_801D7614[];
+extern u8 menu_card_icon_image[];
 extern s16 D_801E034A[];
 s32 MemCardCreateFile(s32 chan, char *file, s32 blocks);
 void MemCardDeleteFile(s32 chan, char *file);
@@ -554,7 +554,7 @@ s32 MemCardReadFile(s32 arg0, char *arg1, void *arg2, s32 arg3, s32 arg4);
 int strncmp(const char *a, const char *b, int n);
 extern char D_801DFC90[];
 
-void func_8017EBF8(Unk_801802A0 *arg0, s32 arg1) {
+void menu_card_init_slots(Unk_801802A0 *arg0, s32 arg1) {
     Unk_80184230 rect;
     void *buf;
     Unk_801802A0_14 *p;
@@ -573,12 +573,12 @@ void func_8017EBF8(Unk_801802A0 *arg0, s32 arg1) {
         p->unk1B = 1;
         memset(p->unk1C, 0, 0x40);
         memset(p->unk5C, 0, 0x1C);
-        p->unk78 = D_801D75F4;
+        p->unk78 = menu_card_icon_clut;
     }
-    func_801A4824(0x200, 4, 7, 0xC252);
-    func_801A4824(0x200, 9, 0xC, 0xC252);
+    sprite_fill_clut(0x200, 4, 7, 0xC252);
+    sprite_fill_clut(0x200, 9, 0xC, 0xC252);
     if ((s16)arg1 != 0) {
-        buf = func_801CC898(0x80);
+        buf = kaj_malloc(0x80);
         if (buf != 0) {
             memset(buf, 0x22, 0x80);
             rect.unk2 = 0xF;
@@ -599,9 +599,9 @@ void func_8017EBF8(Unk_801802A0 *arg0, s32 arg1) {
     }
 }
 
-INCLUDE_RODATA("asm/nonmatchings/game/8017EBF8", D_80170430);
+INCLUDE_RODATA("asm/nonmatchings/game/8017EBF8", menu_str_save_title);
 
-void func_8017EE2C(Unk_801802A0 *arg0, s32 arg1) {
+void menu_card_set_message(Unk_801802A0 *arg0, s32 arg1) {
     s32 s;
 
     if (arg1 < 0x64) {
@@ -609,11 +609,11 @@ void func_8017EE2C(Unk_801802A0 *arg0, s32 arg1) {
         case 0:
             return;
         case 1:
-            func_8017EBF8(arg0, 1);
+            menu_card_init_slots(arg0, 1);
             arg0->unkC = 0x66;
             break;
         case 2:
-            func_8017EBF8(arg0, 1);
+            menu_card_init_slots(arg0, 1);
             arg0->unkC = 0x67;
             break;
         case 3:
@@ -657,26 +657,26 @@ void func_8017EE2C(Unk_801802A0 *arg0, s32 arg1) {
     case 0x68:
     case 0x6A:
         s = 2;
-        func_801A2678(0xE);
+        sound_se_play(0xE);
         break;
     case 0x69:
         s = 3;
         if (arg0->unk0 == 0) {
             s = 1;
         }
-        func_801A2678(0xE);
+        sound_se_play(0xE);
         break;
     case 0x6B:
         s = 1;
-        func_801A2678(0xE);
+        sound_se_play(0xE);
         break;
     default:
         return;
     }
-    func_801A4A68(0x202, 1);
-    func_801A4A68(0x203, 1);
-    func_801A4BC8(0x202, (s16)((arg0->unkC - 0x64) / 4), (s16)((arg0->unkC - 0x64) % 4));
-    func_801A4BC8(0x203, 0, s);
+    sprite_set_visible(0x202, 1);
+    sprite_set_visible(0x203, 1);
+    sprite_set_cell(0x202, (s16)((arg0->unkC - 0x64) / 4), (s16)((arg0->unkC - 0x64) % 4));
+    sprite_set_cell(0x203, 0, s);
 }
 
 static inline s32 func_8017EFEC_inline(u8 *sec, s32 block) {
@@ -715,7 +715,7 @@ static inline s16 func_8017EFEC_inline2(u8 *sec) {
     return 1;
 }
 
-s32 func_8017EFEC(Unk_801802A0 *arg0) {
+s32 menu_card_load(Unk_801802A0 *arg0) {
     Unk_8017EFEC buf;
     u8 sec[0x80];
     Unk_801E0710 *h = &D_801E0710;
@@ -728,8 +728,8 @@ s32 func_8017EFEC(Unk_801802A0 *arg0) {
     s32 i;
 
     e = &arg0->unk14[arg0->unk8];
-    func_8017EE2C(arg0, 0x65);
-    func_801A0418(3);
+    menu_card_set_message(arg0, 0x65);
+    roadmap_draw_frame(3);
     ret = MemCardOpen(0, e->unk4, 1);
     if (ret != 0) {
         return ret;
@@ -767,9 +767,9 @@ s32 func_8017EFEC(Unk_801802A0 *arg0) {
     g->unk1FC = 0;
     g->unk1FE = g->unk0[0x3F] % 10;
     if (buf.unk0 != 0) {
-        func_8018C414(1, 1, 1, 0);
+        mail_goto_ofc(1, 1, 1, 0);
     } else {
-        func_8018C50C(b->unk1C, b->unk20, b->unk24, b->unk38, 0);
+        mail_goto_twn(b->unk1C, b->unk20, b->unk24, b->unk38, 0);
     }
     return 0x6C;
 error:
@@ -803,7 +803,7 @@ static inline void func_8017F6F4_digits(char *s, s32 n) {
     s[4] = 0;
 }
 
-s32 func_8017F6F4(Unk_801802A0 *arg0, s32 arg1) {
+s32 menu_card_save(Unk_801802A0 *arg0, s32 arg1) {
     Unk_8017EFEC buf;
     u8 sec[0x80];
     char s0[8];
@@ -835,8 +835,8 @@ s32 func_8017F6F4(Unk_801802A0 *arg0, s32 arg1) {
             return ret;
         }
     }
-    func_8017EE2C(arg0, 0x65);
-    func_801A0418(3);
+    menu_card_set_message(arg0, 0x65);
+    roadmap_draw_frame(3);
     ret = MemCardOpen(0, e->unk4, 2);
     if (ret != 0) {
         return ret;
@@ -847,7 +847,7 @@ s32 func_8017F6F4(Unk_801802A0 *arg0, s32 arg1) {
     func_8017F6F4_digits(s3, arg0->unk8 + 1);
     memset(hdr + 4, 0, 0x40);
     /* ジャーム／第%s日／%s時%s分／記録%s */
-    sprintf(hdr + 4, D_80170430, s0, s1, s2, s3);
+    sprintf(hdr + 4, menu_str_save_title, s0, s1, s2, s3);
     memset(&buf, 0, sizeof(buf));
     memcpy(buf.unk2, g, sizeof(buf.unk2));
     memcpy(buf.unk102, c, sizeof(buf.unk102));
@@ -858,7 +858,7 @@ s32 func_8017F6F4(Unk_801802A0 *arg0, s32 arg1) {
     if (func_8017F6F4_inline(hdr, 0) != 0) {
         goto error;
     }
-    if (func_8017F6F4_inline(D_801D7614, 1) != 0) {
+    if (func_8017F6F4_inline(menu_card_icon_image, 1) != 0) {
         goto error;
     }
     for (i = 0; i < 4; i++) {
@@ -888,7 +888,7 @@ error:
     return 0x68;
 }
 
-s32 func_8017FF0C(Unk_801802A0 *arg0) {
+s32 menu_card_scan(Unk_801802A0 *arg0) {
     Unk_8017FF0C dir[15];
     s32 count;
     s32 cmd;
@@ -949,7 +949,7 @@ s32 func_8017FF0C(Unk_801802A0 *arg0) {
     } else if (found == 0 && blocks == 15) {
         return 0x6A;
     }
-    func_801A4824(0x200, 4, 7, 0xC252);
+    sprite_fill_clut(0x200, 4, 7, 0xC252);
     p = arg0->unk14;
     for (i = 0; i < 4; i++, p++) {
         q = &p->unk18;
@@ -969,29 +969,29 @@ s32 func_8017FF0C(Unk_801802A0 *arg0) {
                 }
                 break;
             }
-            func_801A461C(0x200, i + 4, 0x3FF);
+            sprite_set_clut_entry(0x200, i + 4, 0x3FF);
             t = q + 4;
             y = i * 32 + 0xF;
             for (m = 0; m < 2; m++) {
                 rr = (u8 *)(m * 2 + (s32)t);
                 rr += 0xD;
-                func_801A3F90(0x204, (u16)(*rr - 0x4F), 0, 0x200, (u16)(m * 8 + 0x21), (u16)y);
+                sprite_copy_cell(0x204, (u16)(*rr - 0x4F), 0, 0x200, (u16)(m * 8 + 0x21), (u16)y);
                 r2 = (u8 *)(m * 2 + (s32)t);
                 r2 += 0x15;
-                func_801A3F90(0x204, (u16)(*r2 - 0x4F), 0, 0x200, (u16)(m * 8 + 0x44), (u16)y);
+                sprite_copy_cell(0x204, (u16)(*r2 - 0x4F), 0, 0x200, (u16)(m * 8 + 0x44), (u16)y);
                 r3 = (u8 *)(m * 2 + (s32)t);
                 r3 += 0x1B;
-                func_801A3F90(0x204, (u16)(*r3 - 0x4F), 0, 0x200, (u16)(m * 8 + 0x62), (u16)y);
+                sprite_copy_cell(0x204, (u16)(*r3 - 0x4F), 0, 0x200, (u16)(m * 8 + 0x62), (u16)y);
             }
         }
     }
     arg0->unk8 = first;
-    func_801A4824(0x200, 9, 0xC, 0xC252);
-    func_801A461C(0x200, first + 9, 0x3FF);
+    sprite_fill_clut(0x200, 9, 0xC, 0xC252);
+    sprite_set_clut_entry(0x200, first + 9, 0x3FF);
     return 0x64;
 }
 
-void func_801802A0(Unk_801802A0 *arg0, s16 arg1) {
+void menu_card_move_cursor(Unk_801802A0 *arg0, s16 arg1) {
     s32 i;
     s32 a;
 
@@ -1024,16 +1024,16 @@ loop:
         }
     }
     arg0->unk8 = i;
-    func_801A4824(0x200, 9, 0xC, 0xC252);
-    func_801A461C(0x200, i + 9, 0x3FF);
+    sprite_fill_clut(0x200, 9, 0xC, 0xC252);
+    sprite_set_clut_entry(0x200, i + 9, 0x3FF);
     a = 1;
     if (arg0->unk0 == 0) {
         a = 0xF;
     }
-    func_801A2678(a);
+    sound_se_play(a);
 }
 
-s16 func_801803BC(Unk_801802A0 *arg0) {
+s16 menu_card_handle_input(Unk_801802A0 *arg0) {
     s32 cmd;
     s32 result;
     s32 ok;
@@ -1071,7 +1071,7 @@ s16 func_801803BC(Unk_801802A0 *arg0) {
                     arg0->unk10 = 0;
                 case 1:
                 case 2:
-                    func_8017EE2C(arg0, result);
+                    menu_card_set_message(arg0, result);
                     ok = 0;
                     break;
                 default:
@@ -1086,7 +1086,7 @@ s16 func_801803BC(Unk_801802A0 *arg0) {
     }
     if (ok != 0) {
         ret = 0;
-        func_801CD6B4();
+        kaj_pad_read();
         if (!(D_801E6DA0.unk4 & 0x20) && (D_801E6DA0.unk0 & 0x20)) {
             ret = 1;
             snd = 0x11;
@@ -1131,30 +1131,30 @@ s16 func_801803BC(Unk_801802A0 *arg0) {
             if (arg0->unkC == 0x6B || (arg0->unk0 == 0 && arg0->unkC == 0x6A)) {
                 ret = 1;
                 snd = 8;
-                func_8017EE2C(arg0, 0x64);
+                menu_card_set_message(arg0, 0x64);
             } else {
-                func_801A2678(8);
-                func_8018C1B0(3, 0, 0, 1);
+                sound_se_play(8);
+                mail_wait(3, 0, 0, 1);
                 g->unkA = 1;
             }
         } else if (!(D_801E6DA0.unk4 & 0x1000) && (D_801E6DA0.unk0 & 0x1000)) {
             if (arg0->unkC == 0x64) {
-                func_801802A0(arg0, 1);
+                menu_card_move_cursor(arg0, 1);
             }
         } else if (!(D_801E6DA0.unk4 & 0x4000) && (D_801E6DA0.unk0 & 0x4000)) {
             if (arg0->unkC == 0x64) {
-                func_801802A0(arg0, 0);
+                menu_card_move_cursor(arg0, 0);
             }
         }
         ok = ret;
     }
     if (ok) {
-        func_801A2678(snd);
+        sound_se_play(snd);
     }
     return 0;
 }
 
-void func_8018073C(Unk_801802A0 *arg0) {
+void menu_card_process(Unk_801802A0 *arg0) {
     s32 sp10;
     s32 sp14;
     s32 r;
@@ -1174,20 +1174,20 @@ void func_8018073C(Unk_801802A0 *arg0) {
                 arg0->unk10 = 0xB;
                 arg0->unkC = -1;
             } else {
-                func_8017EE2C(arg0, r);
+                menu_card_set_message(arg0, r);
             }
             break;
         case 11:
-            func_8017EE2C(arg0, func_8017FF0C(arg0));
+            menu_card_set_message(arg0, menu_card_scan(arg0));
             break;
         case 12:
-            func_8017EE2C(arg0, func_8017EFEC(arg0));
+            menu_card_set_message(arg0, menu_card_load(arg0));
             break;
         case 13:
-            func_8017EE2C(arg0, func_8017F6F4(arg0, 0));
+            menu_card_set_message(arg0, menu_card_save(arg0, 0));
             break;
         case 14:
-            func_8017EE2C(arg0, func_8017F6F4(arg0, 1));
+            menu_card_set_message(arg0, menu_card_save(arg0, 1));
             break;
         }
         break;
@@ -1203,7 +1203,7 @@ void func_8018073C(Unk_801802A0 *arg0) {
                 arg0->unk6 = a;
                 MemCardAccept(0);
             } else {
-                func_8017EE2C(arg0, sp14);
+                menu_card_set_message(arg0, sp14);
             }
             break;
         case 2:
@@ -1211,7 +1211,7 @@ void func_8018073C(Unk_801802A0 *arg0) {
                 arg0->unk10 = 0xB;
                 arg0->unkC = -1;
             } else {
-                func_8017EE2C(arg0, sp14);
+                menu_card_set_message(arg0, sp14);
             }
             break;
         }
@@ -1219,112 +1219,112 @@ void func_8018073C(Unk_801802A0 *arg0) {
     }
 }
 
-s16 func_801808F0(s16 arg0, s16 arg1) {
+s16 menu_card_run(s16 arg0, s16 arg1) {
     s32 buf[6];
     Unk_801802A0 *p;
     s16 done = 0;
     s16 r;
     s32 i;
 
-    p = &D_801E0030;
+    p = &menu_card_state;
     if (arg0 != 0) {
-        func_80192B8C(4, -1);
+        object_load_res(4, -1);
     } else {
-        func_80192B8C(5, -1);
+        object_load_res(5, -1);
     }
-    func_801A4A68(0x200, 1);
-    func_801A4A68(0x202, 1);
-    func_801A4A68(0x203, 1);
+    sprite_set_visible(0x200, 1);
+    sprite_set_visible(0x202, 1);
+    sprite_set_visible(0x203, 1);
     p->unk0 = arg0;
     p->unk2 = 0;
     p->unk4 = arg1;
     p->unkC = -1;
     p->unk10 = 0;
-    func_8017EBF8(p, 0);
+    menu_card_init_slots(p, 0);
     MemCardStart();
-    func_801D06B4();
-    func_801CD688(1);
+    kaj_timer_enable();
+    kaj_pad_reset(1);
     while (done == 0) {
-        switch (func_801CC378(buf)) {
+        switch (kaj_event_get(buf)) {
         case 0:
-            r = func_801803BC(p);
-            if ((s16)func_8018C170() != 0) {
+            r = menu_card_handle_input(p);
+            if ((s16)mail_take_scene_change() != 0) {
                 if (arg1 != 0 || (p->unk2 != 0 && arg0 != 0)) {
-                    func_80186128(1, 3);
+                    effect_start_fade(1, 3);
                 } else {
-                    func_801CD688(0);
+                    kaj_pad_reset(0);
                     done = 1;
                 }
             }
             break;
         case 0x100:
-            done = func_8018970C(buf);
+            done = event_handle_effect_done(buf);
             continue;
         default:
-            func_801CC734(buf);
+            kaj_event_done(buf);
             continue;
         }
         if (r != 0) {
-            func_8018073C(p);
+            menu_card_process(p);
         }
-        func_801A7560();
-        func_801A0418(3);
+        thing_update_all();
+        roadmap_draw_frame(3);
     }
-    func_801D06C4();
+    kaj_timer_disable();
     MemCardSync(0, 0, 0);
     MemCardStop();
-    func_801A4A68(0x200, 0);
-    func_801A4A68(0x202, 0);
-    func_801A4A68(0x203, 0);
+    sprite_set_visible(0x200, 0);
+    sprite_set_visible(0x202, 0);
+    sprite_set_visible(0x203, 0);
     for (i = 0x200; i < 0x205; i++) {
-        func_801A43F4((u16)i);
+        sprite_delete((u16)i);
     }
     return p->unk2;
 }
 
-void func_80180B04(Unk_80181C10 *arg0, s32 arg1, s32 arg2) {
+void menu_list_page(Unk_80181C10 *arg0, s32 arg1, s32 arg2) {
     Unk_801E0368 *g = &D_801E0368;
     Unk_80184230 rect;
 
     switch ((s16)arg1) {
     case 0:
-        func_801A4A68(0x237, 1);
-        func_801A4A68(0x238, 1);
+        sprite_set_visible(0x237, 1);
+        sprite_set_visible(0x238, 1);
         break;
     case 1:
-        func_801A2678(0x11);
-        func_801A4A68(0x239, 1);
+        sound_se_play(0x11);
+        sprite_set_visible(0x239, 1);
         rect.unk0 = 0x3C0;
         rect.unk2 = arg0->unk6 * 0x40;
         rect.unk4 = 0x2C;
         rect.unk6 = 0x40;
         MoveImage2(&rect, 0x300, 0x100);
-        func_801A4824(0x239, 2, 5, 0x421);
-        switch (g->unk0[D_801D7694[arg0->unk6]]) {
+        sprite_fill_clut(0x239, 2, 5, 0x421);
+        switch (g->unk0[menu_list_vars[arg0->unk6]]) {
         case 0:
             break;
         case 10:
-            func_801A461C(0x239, 2, 0xB4);
-            func_801A461C(0x239, 3, 0x28A);
+            sprite_set_clut_entry(0x239, 2, 0xB4);
+            sprite_set_clut_entry(0x239, 3, 0x28A);
             break;
         case 1000:
-            func_801A461C(0x239, 2, 0xB4);
-            func_801A461C(0x239, 3, 0x28A);
-            func_801A461C(0x239, 4, 0x2A85);
+            sprite_set_clut_entry(0x239, 2, 0xB4);
+            sprite_set_clut_entry(0x239, 3, 0x28A);
+            sprite_set_clut_entry(0x239, 4, 0x2A85);
             break;
         case 2000:
-            func_801A461C(0x239, 2, 0xB4);
-            func_801A461C(0x239, 3, 0x28A);
-            func_801A461C(0x239, 4, 0x2A85);
-            func_801A461C(0x239, 5, 0x3CAF);
+            sprite_set_clut_entry(0x239, 2, 0xB4);
+            sprite_set_clut_entry(0x239, 3, 0x28A);
+            sprite_set_clut_entry(0x239, 4, 0x2A85);
+            sprite_set_clut_entry(0x239, 5, 0x3CAF);
             break;
         default:
-            func_801A461C(0x239, 2, 0xB4);
+            sprite_set_clut_entry(0x239, 2, 0xB4);
             break;
         }
         return;
     case 2:
-        func_801A2678(0xF);
+        sound_se_play(0xF);
         if ((s16)arg2 != 0) {
             if (--arg0->unk6 < 0) {
                 arg0->unk6 = 7;
@@ -1336,12 +1336,12 @@ void func_80180B04(Unk_80181C10 *arg0, s32 arg1, s32 arg2) {
         }
         break;
     }
-    func_801A4BC8(0x238, 0, arg0->unk6);
-    func_801A4824(0x237, 1, 8, 0x10C);
-    func_801A461C(0x237, arg0->unk6 + 1, 0x23F);
+    sprite_set_cell(0x238, 0, arg0->unk6);
+    sprite_fill_clut(0x237, 1, 8, 0x10C);
+    sprite_set_clut_entry(0x237, arg0->unk6 + 1, 0x23F);
 }
 
-void func_80180D8C(Unk_80181C10 *arg0, s32 arg1) {
+void menu_status_page(Unk_80181C10 *arg0, s32 arg1) {
     Unk_801E0710 *g = &D_801E0710;
     Unk_801E0368 *h = &D_801E0368;
     Unk_801E0710_58 *p = g->unk58;
@@ -1356,23 +1356,23 @@ void func_80180D8C(Unk_80181C10 *arg0, s32 arg1) {
     s32 c;
 
     if ((s16)arg1 != 0) {
-        func_801A2678(0x11);
+        sound_se_play(0x11);
         arg0->unk6 = 1 - arg0->unk6;
         if (arg0->unk6 != 0) {
-            func_801A4A68(0x23A, 0);
-            func_801A4A68(0x23B, 1);
+            sprite_set_visible(0x23A, 0);
+            sprite_set_visible(0x23B, 1);
         } else {
-            func_801A4A68(0x23A, 1);
-            func_801A4A68(0x23B, 0);
+            sprite_set_visible(0x23A, 1);
+            sprite_set_visible(0x23B, 0);
         }
         return;
     }
-    func_801A4A68(0x23A, 1);
-    func_801A4A68(0x23B, 0);
-    func_801A4824(0x23A, 0x10, 0xEF, 0x421);
-    func_801A4824(0x23B, 0x10, 0xDF, 0x421);
-    func_801A4824(0x23B, 0x60, 0x64, 0x14C6);
-    func_801A4824(0x23B, 0x70, 0x74, 0x14C6);
+    sprite_set_visible(0x23A, 1);
+    sprite_set_visible(0x23B, 0);
+    sprite_fill_clut(0x23A, 0x10, 0xEF, 0x421);
+    sprite_fill_clut(0x23B, 0x10, 0xDF, 0x421);
+    sprite_fill_clut(0x23B, 0x60, 0x64, 0x14C6);
+    sprite_fill_clut(0x23B, 0x70, 0x74, 0x14C6);
     col = 0x3D40;
     n = g->unk4 / 6329;
     if (n == 0 && g->unk4 != 0) {
@@ -1383,7 +1383,7 @@ void func_80180D8C(Unk_80181C10 *arg0, s32 arg1) {
     }
     if (n != 0) {
         for (j = 0; j < n; j++) {
-            func_801A461C(0x23A, j + 0x10, (u16)col);
+            sprite_set_clut_entry(0x23A, j + 0x10, (u16)col);
         }
     }
     n = (g->unk2 << 5) / 50 + 1;
@@ -1392,7 +1392,7 @@ void func_80180D8C(Unk_80181C10 *arg0, s32 arg1) {
     }
     if (n != 0) {
         for (j = 0; j < n; j++) {
-            func_801A461C(0x23A, j + 0x30, (u16)col);
+            sprite_set_clut_entry(0x23A, j + 0x30, (u16)col);
         }
     }
     n = (g->unk4 << 4) / g->unk8;
@@ -1404,21 +1404,21 @@ void func_80180D8C(Unk_80181C10 *arg0, s32 arg1) {
     }
     if (n != 0) {
         for (j = 0; j < n; j++) {
-            func_801A461C(0x23A, j + 0x50, (u16)col);
+            sprite_set_clut_entry(0x23A, j + 0x50, (u16)col);
         }
     }
     col = 0xB4;
     n = g->unk32 > 16 ? 16 : g->unk32;
     if (n != 0) {
         for (j = 0; j < n; j++) {
-            func_801A461C(0x23A, j + 0x60, (u16)col);
+            sprite_set_clut_entry(0x23A, j + 0x60, (u16)col);
         }
     }
     col = 0x3D40;
     n = g->unk36 > 32 ? 32 : g->unk36;
     if (n != 0) {
         for (j = 0; j < n; j++) {
-            func_801A461C(0x23A, j + 0x70, (u16)col);
+            sprite_set_clut_entry(0x23A, j + 0x70, (u16)col);
         }
     }
     n = (g->unk28 << 4) / 100 + 1;
@@ -1427,37 +1427,37 @@ void func_80180D8C(Unk_80181C10 *arg0, s32 arg1) {
     }
     if (n != 0) {
         for (j = 0; j < n; j++) {
-            func_801A461C(0x23A, j + 0x90, (u16)col);
+            sprite_set_clut_entry(0x23A, j + 0x90, (u16)col);
         }
     }
     n = (h->unk0[0x5A] + 15) / 16;
     if (n != 0) {
         for (j = 0; j < n; j++) {
-            func_801A461C(0x23A, j + 0xA0, (u16)col);
+            sprite_set_clut_entry(0x23A, j + 0xA0, (u16)col);
         }
     }
     n = (h->unk0[0x5D] + 15) / 16;
     if (n != 0) {
         for (j = 0; j < n; j++) {
-            func_801A461C(0x23A, j + 0xB0, (u16)col);
+            sprite_set_clut_entry(0x23A, j + 0xB0, (u16)col);
         }
     }
     n = (h->unk0[0x5B] + 15) / 16;
     if (n != 0) {
         for (j = 0; j < n; j++) {
-            func_801A461C(0x23A, j + 0xC0, (u16)col);
+            sprite_set_clut_entry(0x23A, j + 0xC0, (u16)col);
         }
     }
     n = (h->unk0[0x5C] + 15) / 16;
     if (n != 0) {
         for (j = 0; j < n; j++) {
-            func_801A461C(0x23A, j + 0xD0, (u16)col);
+            sprite_set_clut_entry(0x23A, j + 0xD0, (u16)col);
         }
     }
     c = (h->unk0[0x5E] + 15) / 16;
     if (c != 0) {
         for (j = 0; j < c; j++) {
-            func_801A461C(0x23A, j + 0xE0, (u16)col);
+            sprite_set_clut_entry(0x23A, j + 0xE0, (u16)col);
         }
     }
     col = 0x3D40;
@@ -1467,7 +1467,7 @@ void func_80180D8C(Unk_80181C10 *arg0, s32 arg1) {
     }
     if (n != 0) {
         for (j = 0; j < n; j++) {
-            func_801A461C(0x23B, j + 0x10, (u16)col);
+            sprite_set_clut_entry(0x23B, j + 0x10, (u16)col);
         }
     }
     n = (g->unk18 << 4) / 100 + 1;
@@ -1476,7 +1476,7 @@ void func_80180D8C(Unk_80181C10 *arg0, s32 arg1) {
     }
     if (n != 0) {
         for (j = 0; j < n; j++) {
-            func_801A461C(0x23B, j + 0x20, (u16)col);
+            sprite_set_clut_entry(0x23B, j + 0x20, (u16)col);
         }
     }
     n = (g->unk1C << 4) / 100 + 1;
@@ -1485,7 +1485,7 @@ void func_80180D8C(Unk_80181C10 *arg0, s32 arg1) {
     }
     if (n != 0) {
         for (j = 0; j < n; j++) {
-            func_801A461C(0x23B, j + 0x30, (u16)col);
+            sprite_set_clut_entry(0x23B, j + 0x30, (u16)col);
         }
     }
     n = (g->unk20 << 4) / 100 + 1;
@@ -1494,7 +1494,7 @@ void func_80180D8C(Unk_80181C10 *arg0, s32 arg1) {
     }
     if (n != 0) {
         for (j = 0; j < n; j++) {
-            func_801A461C(0x23B, j + 0x40, (u16)col);
+            sprite_set_clut_entry(0x23B, j + 0x40, (u16)col);
         }
     }
     n = (g->unk24 << 4) / 100 + 1;
@@ -1503,15 +1503,15 @@ void func_80180D8C(Unk_80181C10 *arg0, s32 arg1) {
     }
     if (n != 0) {
         for (j = 0; j < n; j++) {
-            func_801A461C(0x23B, j + 0x50, (u16)col);
+            sprite_set_clut_entry(0x23B, j + 0x50, (u16)col);
         }
     }
     for (i = 0; i < 2; i++) {
         id = p->unk4[i];
         if (id >= 0) {
-            e = func_80188FEC(id);
+            e = effect_weapon_find(id);
             if (e != NULL) {
-                func_801A461C(0x23B, (i * 16 + 0x60) + e->unk2, 0x154);
+                sprite_set_clut_entry(0x23B, (i * 16 + 0x60) + e->unk2, 0x154);
                 n = (e->unk30 << 5) / 50 + 1;
                 if (n > 32) {
                     n = 32;
@@ -1519,30 +1519,30 @@ void func_80180D8C(Unk_80181C10 *arg0, s32 arg1) {
                 k = i * 32 + 0x80;
                 if (n != 0) {
                     for (j = 0; j < n; j++) {
-                        func_801A461C(0x23B, k + j, (u16)col);
+                        sprite_set_clut_entry(0x23B, k + j, (u16)col);
                     }
                 }
                 n = (e->unk50 << 12) / 25600;
                 m = i * 16 + 0xC0;
                 if (n != 0) {
                     for (j = 0; j < n; j++) {
-                        func_801A461C(0x23B, m + j, (u16)col);
+                        sprite_set_clut_entry(0x23B, m + j, (u16)col);
                     }
                 }
-                func_801A3F90(0x23C, (u16)(id / 9), (u16)(id % 9), 0x23B, 0x21, (u16)(i * 42 + 0x53));
+                sprite_copy_cell(0x23C, (u16)(id / 9), (u16)(id % 9), 0x23B, 0x21, (u16)(i * 42 + 0x53));
             }
         }
     }
 }
 
-void func_8018164C(Unk_80181C10 *arg0, s32 arg1, s16 arg2) {
+void menu_options_page(Unk_80181C10 *arg0, s32 arg1, s16 arg2) {
     Unk_801E0368 *g = &D_801E0368;
     s16 s = 1;
 
     switch (arg1) {
     case 0:
         s = 0;
-        func_801A4A68(0x23D, 1);
+        sprite_set_visible(0x23D, 1);
         break;
     case 1:
         arg0->unk6 = 1 - arg0->unk6;
@@ -1575,17 +1575,17 @@ void func_8018164C(Unk_80181C10 *arg0, s32 arg1, s16 arg2) {
         }
         break;
     }
-    func_801A4824(0x23D, 7, 8, 0x4250);
-    func_801A461C(0x23D, arg0->unk6 + 7, 0x5140);
-    func_801A4824(0x23D, 9, 0xE, 0x421);
-    func_801A461C(0x23D, g->unk202 + 9, 0x154);
-    func_801A461C(0x23D, g->unk200 + 0xC, 0x154);
+    sprite_fill_clut(0x23D, 7, 8, 0x4250);
+    sprite_set_clut_entry(0x23D, arg0->unk6 + 7, 0x5140);
+    sprite_fill_clut(0x23D, 9, 0xE, 0x421);
+    sprite_set_clut_entry(0x23D, g->unk202 + 9, 0x154);
+    sprite_set_clut_entry(0x23D, g->unk200 + 0xC, 0x154);
     if (s != 0) {
-        func_801A2678(0xF);
+        sound_se_play(0xF);
     }
 }
 
-void func_80181818(Unk_80181C10 *arg0, s16 arg1) {
+void menu_move_cursor(Unk_80181C10 *arg0, s16 arg1) {
     Unk_801E0368 *g = &D_801E0368;
     Unk_801A44B8 *a;
     Unk_801A44B8 *b;
@@ -1605,24 +1605,24 @@ void func_80181818(Unk_80181C10 *arg0, s16 arg1) {
                 arg0->unk0 = 0;
             }
         }
-        a = func_801A44B8(0x20B);
-        b = func_801A44B8(0x211);
+        a = sprite_find(0x20B);
+        b = sprite_find(0x211);
         if (a != 0) {
             a->unkC = (arg0->unk0 << 4) + 0x48;
         }
         if (b != 0 && b->unk4 != 0) {
             b->unk4 = 0;
         }
-        if (D_801DFC94 != 0) {
-            D_801DFC94->unk4 = 0;
+        if (menu_anim_sprite != 0) {
+            menu_anim_sprite->unk4 = 0;
         }
         if (arg0->unk0 == 0) {
             arg0->unk8 = 0;
             arg0->unkC = 0;
-            D_801DFC94 = 0;
+            menu_anim_sprite = 0;
         } else {
             arg0->unkC = b;
-            c = func_801A44B8(arg0->unk0 + 0x20C);
+            c = sprite_find(arg0->unk0 + 0x20C);
             if (c == 0) {
                 arg0->unk8 = 0;
                 if (b != 0) {
@@ -1640,189 +1640,189 @@ void func_80181818(Unk_80181C10 *arg0, s16 arg1) {
                     c->unk4 = 1;
                 }
                 arg0->unk4 = 1;
-                D_801DFC94 = c;
+                menu_anim_sprite = c;
             }
         }
-        func_801A2678(0xF);
+        sound_se_play(0xF);
         break;
     case 1:
         if (arg0->unk0 == 1) {
-            func_80180B04(arg0, 2, arg1);
+            menu_list_page(arg0, 2, arg1);
         } else if (arg0->unk0 == 2 && g->unkBE != 0) {
-            arg0->unk6 = func_8018B69C(arg1, arg0->unk6);
+            arg0->unk6 = mail_list_move(arg1, arg0->unk6);
         } else if (arg0->unk0 == 3) {
-            func_8018164C(arg0, 1, arg1);
+            menu_options_page(arg0, 1, arg1);
         }
         break;
     }
 }
 
-void func_80181A64(Unk_80181C10 *arg0) {
+void menu_confirm(Unk_80181C10 *arg0) {
     Unk_801E0368 *g = &D_801E0368;
 
     switch (arg0->unk2) {
     case 0:
         arg0->unk6 = 0;
         arg0->unk2 = 1;
-        func_801A2678(0x11);
+        sound_se_play(0x11);
         if (arg0->unk0 == 1) {
-            func_80192B8C(0xD, -1);
-            func_80180B04(arg0, 0, 0);
+            object_load_res(0xD, -1);
+            menu_list_page(arg0, 0, 0);
         } else if (arg0->unk0 == 2) {
             if (g->unkBE != 0) {
-                func_80192B8C(8, -1);
-                func_8018B810();
+                object_load_res(8, -1);
+                mail_list_open();
             }
-            func_801A4A68(0x20A, 1);
-            func_801A4A68(0x212, 1);
-            func_801A4A68(0x20C, 1);
+            sprite_set_visible(0x20A, 1);
+            sprite_set_visible(0x212, 1);
+            sprite_set_visible(0x20C, 1);
         } else if (arg0->unk0 == 3) {
-            func_8018164C(arg0, 0, 0);
+            menu_options_page(arg0, 0, 0);
         } else if (arg0->unk0 == 4) {
-            func_80192B8C(0xE, -1);
-            func_80180D8C(arg0, 0);
+            object_load_res(0xE, -1);
+            menu_status_page(arg0, 0);
         }
         break;
     case 1:
         if (arg0->unk0 == 1) {
-            func_80180B04(arg0, 1, 0);
+            menu_list_page(arg0, 1, 0);
             arg0->unk2 = 2;
         } else if (arg0->unk0 == 2 && g->unkBE != 0) {
-            func_801A2678(0x11);
-            func_80192A44(arg0->unk6);
+            sound_se_play(0x11);
+            object_load_mail_by_id(arg0->unk6);
             arg0->unk2 = 2;
         } else if (arg0->unk0 == 4) {
-            func_80180D8C(arg0, 1);
+            menu_status_page(arg0, 1);
         }
         break;
     }
 }
 
-void func_80181C10(Unk_80181C10 *arg0) {
-    func_801A2678(8);
+void menu_back(Unk_80181C10 *arg0) {
+    sound_se_play(8);
     switch (arg0->unk2) {
     case 1:
         arg0->unk2 = 0;
         if (arg0->unk0 == 1) {
-            func_801A43F4(0x237);
-            func_801A43F4(0x238);
-            func_801A43F4(0x239);
+            sprite_delete(0x237);
+            sprite_delete(0x238);
+            sprite_delete(0x239);
         } else if (arg0->unk0 == 2) {
-            func_8018B924();
-            func_801A4A68(0x20A, 0);
-            func_801A4A68(0x20C, 0);
-            func_801A4A68(0x212, 0);
+            mail_list_close();
+            sprite_set_visible(0x20A, 0);
+            sprite_set_visible(0x20C, 0);
+            sprite_set_visible(0x212, 0);
         } else if (arg0->unk0 == 3) {
-            func_801A4A68(0x23D, 0);
+            sprite_set_visible(0x23D, 0);
         } else if (arg0->unk0 == 4) {
-            func_801A43F4(0x23A);
-            func_801A43F4(0x23B);
-            func_801A43F4(0x23C);
+            sprite_delete(0x23A);
+            sprite_delete(0x23B);
+            sprite_delete(0x23C);
         }
         break;
     case 2:
         if (arg0->unk0 == 1) {
             arg0->unk2 = 1;
-            func_801A4A68(0x239, 0);
+            sprite_set_visible(0x239, 0);
         } else if (arg0->unk0 == 2) {
             arg0->unk2 = 1;
-            func_8018BC50();
+            mail_free();
         }
         break;
     }
 }
 
-void func_80181D2C(Unk_80181C10 *arg0) {
+void menu_handle_input(Unk_80181C10 *arg0) {
     s32 r;
 
     if (D_801E6DA0.unkA != 1 || arg0->unk4 != 0) {
         return;
     }
-    r = func_801CD6B4();
+    r = kaj_pad_read();
     if (!(D_801E6DA0.unk4 & 0x1000) && (D_801E6DA0.unk0 & 0x1000)) {
-        func_80181818(arg0, 1);
+        menu_move_cursor(arg0, 1);
     } else if (!(D_801E6DA0.unk4 & 0x4000) && (D_801E6DA0.unk0 & 0x4000)) {
-        func_80181818(arg0, 0);
+        menu_move_cursor(arg0, 0);
     } else if (!(D_801E6DA0.unk4 & 0x8000) && (D_801E6DA0.unk0 & 0x8000)) {
         if (*(s32 *)arg0 == 0x10003) {
-            func_8018164C(arg0, 2, 1);
+            menu_options_page(arg0, 2, 1);
         }
     } else if (!(D_801E6DA0.unk4 & 0x2000) && (D_801E6DA0.unk0 & 0x2000)) {
         if (*(s32 *)arg0 == 0x10003) {
-            func_8018164C(arg0, 2, 0);
+            menu_options_page(arg0, 2, 0);
         }
     } else if (!(D_801E6DA0.unk4 & 0x40) && (D_801E6DA0.unk0 & 0x40)) {
         if (arg0->unk2 == 0) {
-            func_801A2678(8);
-            func_8018C414(1, 1, 0, 0);
+            sound_se_play(8);
+            mail_goto_ofc(1, 1, 0, 0);
             return;
         }
-        func_80181C10(arg0);
+        menu_back(arg0);
     } else if (!(D_801E6DA0.unk4 & 0x20) && (D_801E6DA0.unk0 & 0x20) && arg0->unk0 != 0) {
-        func_80181A64(arg0);
+        menu_confirm(arg0);
     }
     if (arg0->unk2 == 2 && arg0->unk0 == arg0->unk2) {
         if (r & 0x1000) {
-            func_8018B11C(0);
+            mail_scroll(0);
         } else if (r & 0x4000) {
-            func_8018B11C(1);
+            mail_scroll(1);
         }
     }
 }
 
-void func_80181F9C(Unk_80181C10 *arg0) {
-    if (D_801DFC98 >= 0xA0) {
-        D_801DFC98 = 0x9F;
-        D_801DFCA4 = 1 - D_801DFCA4;
-    } else if (D_801DFC98 < 0x90) {
-        D_801DFC98 = 0x90;
-        D_801DFCA4 = 1 - D_801DFCA4;
+void menu_animate(Unk_80181C10 *arg0) {
+    if (menu_cycle_pos_a >= 0xA0) {
+        menu_cycle_pos_a = 0x9F;
+        menu_cycle_dir_a = 1 - menu_cycle_dir_a;
+    } else if (menu_cycle_pos_a < 0x90) {
+        menu_cycle_pos_a = 0x90;
+        menu_cycle_dir_a = 1 - menu_cycle_dir_a;
     }
-    if (D_801DFCA4 != 0) {
-        func_801A461C(0x208, D_801DFC98, 0x67B5);
-        D_801DFC98++;
+    if (menu_cycle_dir_a != 0) {
+        sprite_set_clut_entry(0x208, menu_cycle_pos_a, 0x67B5);
+        menu_cycle_pos_a++;
     } else {
-        func_801A461C(0x208, D_801DFC98, 0x38A2);
-        D_801DFC98--;
+        sprite_set_clut_entry(0x208, menu_cycle_pos_a, 0x38A2);
+        menu_cycle_pos_a--;
     }
     if (rand() % 100 < 10) {
-        D_801DFCA4 = 1 - D_801DFCA4;
+        menu_cycle_dir_a = 1 - menu_cycle_dir_a;
     }
 
-    if (D_801DFC9C >= 0xB0) {
-        D_801DFC9C = 0xAF;
-        D_801DFCA6 = 1 - D_801DFCA6;
-    } else if (D_801DFC9C < 0xA0) {
-        D_801DFC9C = 0xA0;
-        D_801DFCA6 = 1 - D_801DFCA6;
+    if (menu_cycle_pos_b >= 0xB0) {
+        menu_cycle_pos_b = 0xAF;
+        menu_cycle_dir_b = 1 - menu_cycle_dir_b;
+    } else if (menu_cycle_pos_b < 0xA0) {
+        menu_cycle_pos_b = 0xA0;
+        menu_cycle_dir_b = 1 - menu_cycle_dir_b;
     }
-    if (D_801DFCA6 != 0) {
-        func_801A461C(0x208, D_801DFC9C, 0x2533);
-        D_801DFC9C++;
+    if (menu_cycle_dir_b != 0) {
+        sprite_set_clut_entry(0x208, menu_cycle_pos_b, 0x2533);
+        menu_cycle_pos_b++;
     } else {
-        func_801A461C(0x208, D_801DFC9C, 0x4D44);
-        D_801DFC9C--;
+        sprite_set_clut_entry(0x208, menu_cycle_pos_b, 0x4D44);
+        menu_cycle_pos_b--;
     }
     if (rand() % 100 < 5) {
-        D_801DFCA6 = 1 - D_801DFCA6;
+        menu_cycle_dir_b = 1 - menu_cycle_dir_b;
     }
 
-    if (D_801DFCA0 >= 0xC0) {
-        D_801DFCA0 = 0xBF;
-        D_801DFCA8 = 1 - D_801DFCA8;
-    } else if (D_801DFCA0 < 0xB0) {
-        D_801DFCA0 = 0xB0;
-        D_801DFCA8 = 1 - D_801DFCA8;
+    if (menu_cycle_pos_c >= 0xC0) {
+        menu_cycle_pos_c = 0xBF;
+        menu_cycle_dir_c = 1 - menu_cycle_dir_c;
+    } else if (menu_cycle_pos_c < 0xB0) {
+        menu_cycle_pos_c = 0xB0;
+        menu_cycle_dir_c = 1 - menu_cycle_dir_c;
     }
-    if (D_801DFCA8 != 0) {
-        func_801A461C(0x208, D_801DFCA0, 0x67B5);
-        D_801DFCA0++;
+    if (menu_cycle_dir_c != 0) {
+        sprite_set_clut_entry(0x208, menu_cycle_pos_c, 0x67B5);
+        menu_cycle_pos_c++;
     } else {
-        func_801A461C(0x208, D_801DFCA0, 0x38A2);
-        D_801DFCA0--;
+        sprite_set_clut_entry(0x208, menu_cycle_pos_c, 0x38A2);
+        menu_cycle_pos_c--;
     }
     if (rand() % 100 < 15) {
-        D_801DFCA8 = 1 - D_801DFCA8;
+        menu_cycle_dir_c = 1 - menu_cycle_dir_c;
     }
 
     if (arg0->unk2 == 0 && arg0->unk8 != NULL && arg0->unk4 != 0) {
@@ -1842,25 +1842,25 @@ void func_80181F9C(Unk_80181C10 *arg0) {
     }
 }
 
-void func_80182300(void) {
+void menu_run(void) {
     Unk_80181C10 st;
     Unk_80181C10 *p;
     s32 buf[6];
     s16 done = 0;
     u16 i;
 
-    func_801A4A68(0x400, 0);
-    func_801A4A68(0x409, 0);
-    func_801A4A68(0x207, 1);
-    func_801A4824(0x207, 0xF0, 0xFE, 0);
-    func_80192B8C(6, 1);
-    func_801A4A68(0x207, 0);
-    func_801A4A68(0x208, 1);
-    func_801A4A68(0x209, 1);
-    func_801A4A68(0x20B, 1);
-    func_801A4824(0x208, 0x90, 0x9F, 0x38A2);
-    func_801A4824(0x208, 0xA0, 0xAF, 0x4D44);
-    func_801A4824(0x208, 0xB0, 0xBF, 0x38A2);
+    sprite_set_visible(0x400, 0);
+    sprite_set_visible(0x409, 0);
+    sprite_set_visible(0x207, 1);
+    sprite_fill_clut(0x207, 0xF0, 0xFE, 0);
+    object_load_res(6, 1);
+    sprite_set_visible(0x207, 0);
+    sprite_set_visible(0x208, 1);
+    sprite_set_visible(0x209, 1);
+    sprite_set_visible(0x20B, 1);
+    sprite_fill_clut(0x208, 0x90, 0x9F, 0x38A2);
+    sprite_fill_clut(0x208, 0xA0, 0xAF, 0x4D44);
+    sprite_fill_clut(0x208, 0xB0, 0xBF, 0x38A2);
     p = &st;
     p->unk0 = 0;
     p->unk2 = 0;
@@ -1868,42 +1868,42 @@ void func_80182300(void) {
     p->unk6 = 0;
     p->unk8 = NULL;
     p->unkC = NULL;
-    D_801DFC94 = NULL;
-    func_801D06B4();
-    func_80186128(0, 3);
-    func_801A3BCC(2);
+    menu_anim_sprite = NULL;
+    kaj_timer_enable();
+    effect_start_fade(0, 3);
+    sound_bgm_play(2);
     do {
-        switch (func_801CC378(buf)) {
+        switch (kaj_event_get(buf)) {
         case 4:
-            func_80189970(0);
+            event_handle_tick(0);
             continue;
         case 0:
-            func_80181D2C(&st);
-            if ((s16)func_8018C170() != 0) {
-                func_80186128(1, 3);
+            menu_handle_input(&st);
+            if ((s16)mail_take_scene_change() != 0) {
+                effect_start_fade(1, 3);
             }
             break;
         case 0x100:
-            done = func_8018970C(buf);
+            done = event_handle_effect_done(buf);
             continue;
         default:
-            func_801CC734(buf);
+            kaj_event_done(buf);
             continue;
         }
-        func_80181F9C(&st);
-        func_801A0418(3);
+        menu_animate(&st);
+        roadmap_draw_frame(3);
     } while (done == 0);
-    func_801D06C4();
-    func_801A3C58();
-    func_801A4A68(0x400, 1);
-    func_801A4A68(0x409, 1);
+    kaj_timer_disable();
+    sound_bgm_stop();
+    sprite_set_visible(0x400, 1);
+    sprite_set_visible(0x409, 1);
     for (i = 0x207; i < 0x23E; i++) {
-        func_801A43F4(i);
+        sprite_delete(i);
     }
-    D_801DFC94 = NULL;
+    menu_anim_sprite = NULL;
 }
 
-void func_80182518(s32 arg0, s16 arg1) {
+void text_draw_string(s32 arg0, s16 arg1) {
     s16 r[4];
     u16 buf[0x40];
     Unk_801A44B8 *p;
@@ -1918,7 +1918,7 @@ void func_80182518(s32 arg0, s16 arg1) {
     s32 n;
     s32 j;
 
-    p = func_801A44B8(D_801DFCB0);
+    p = sprite_find(text_window_sprite);
     if (p == NULL) {
         return;
     }
@@ -1946,7 +1946,7 @@ void func_80182518(s32 arg0, s16 arg1) {
                 row++;
                 break;
             default:
-                D_801DFE74 = c - '0';
+                text_color = c - '0';
                 break;
             }
             continue;
@@ -1970,7 +1970,7 @@ void func_80182518(s32 arg0, s16 arg1) {
                 for (k = 7, sh = 0; k >= m; k--, sh += 4) {
                     c = (d[0] & (0xF << sh)) >> sh;
                     if ((*f >> k) & 1) {
-                        c = D_801DFE74;
+                        c = text_color;
                     }
                     v |= c << sh;
                 }
@@ -1988,7 +1988,7 @@ void func_80182518(s32 arg0, s16 arg1) {
                 for (k = 3, sh = 0; k >= m; k--, sh += 4) {
                     c = (d[0] & (0xF << sh)) >> sh;
                     if ((*f >> k) & 1) {
-                        c = D_801DFE74;
+                        c = text_color;
                     }
                     v |= c << sh;
                 }
@@ -2006,7 +2006,7 @@ void func_80182518(s32 arg0, s16 arg1) {
                 for (k = 15, sh = 0; k >= m; k--, sh += 4) {
                     c = (d[0] & (0xF << sh)) >> sh;
                     if ((*f >> k) & 1) {
-                        c = D_801DFE74;
+                        c = text_color;
                     }
                     v |= c << sh;
                 }
@@ -2024,7 +2024,7 @@ void func_80182518(s32 arg0, s16 arg1) {
                 for (k = 11, sh = 0; k >= m; k--, sh += 4) {
                     c = (d[0] & (0xF << sh)) >> sh;
                     if ((*f >> k) & 1) {
-                        c = D_801DFE74;
+                        c = text_color;
                     }
                     v |= c << sh;
                 }
@@ -2043,29 +2043,29 @@ void func_80182518(s32 arg0, s16 arg1) {
 
 static inline s16 func_80182860_inline(s16 flag) {
     Unk_801DFFE8 *q = &D_801DFFE8;
-    if (D_801DFE78 >= D_801DFE76) {
+    if (text_pos >= text_len) {
         if (flag) {
-            func_80184160();
+            text_release_cmd();
         }
         return -1;
     }
-    if (D_801DFE70 >= 16) {
-        D_801DFE70 = 0;
-        D_801DFE72++;
+    if (text_col >= 16) {
+        text_col = 0;
+        text_row++;
     }
-    if (D_801DFE72 >= 3) {
-        D_801DFE70 = 0;
+    if (text_row >= 3) {
+        text_col = 0;
         if (flag) {
             q->unk6 = 3;
             q->unk8 = 8;
-            func_801A4A68(0x40A, 1);
+            sprite_set_visible(0x40A, 1);
         }
         return 1;
     }
     return 0;
 }
 
-s16 func_80182860(s32 arg0, s32 arg1) {
+s16 text_draw_next(s32 arg0, s32 arg1) {
     s16 r[4];
     u16 buf[0x40];
     Unk_801A44B8 *p;
@@ -2076,7 +2076,7 @@ s16 func_80182860(s32 arg0, s32 arg1) {
     s16 st;
     s32 j;
 
-    p = func_801A44B8(D_801DFCB0);
+    p = sprite_find(text_window_sprite);
     if (p == NULL) {
         return 0;
     }
@@ -2092,20 +2092,20 @@ loop:
     if (st == 1) {
         return 1;
     }
-    s = (u8 *)arg0 + D_801DFE78;
+    s = (u8 *)arg0 + text_pos;
     c = s[0];
     if ((s8)s[0] >= 0) {
-        D_801DFE78++;
+        text_pos++;
         switch (c) {
         case ' ':
-            D_801DFE70++;
+            text_col++;
             break;
         case ',':
-            D_801DFE70 = 0;
-            D_801DFE72++;
+            text_col = 0;
+            text_row++;
             break;
         default:
-            D_801DFE74 = c - '0';
+            text_color = c - '0';
             break;
         }
         goto loop;
@@ -2126,7 +2126,7 @@ loop:
             for (k = 7, sh = 0; k >= m; k--, sh += 4) {
                 c = (d[0] & (0xF << sh)) >> sh;
                 if ((*f >> k) & 1) {
-                    c = D_801DFE74;
+                    c = text_color;
                 }
                 v |= c << sh;
             }
@@ -2144,7 +2144,7 @@ loop:
             for (k = 3, sh = 0; k >= m; k--, sh += 4) {
                 c = (d[0] & (0xF << sh)) >> sh;
                 if ((*f >> k) & 1) {
-                    c = D_801DFE74;
+                    c = text_color;
                 }
                 v |= c << sh;
             }
@@ -2162,7 +2162,7 @@ loop:
             for (k = 15, sh = 0; k >= m; k--, sh += 4) {
                 c = (d[0] & (0xF << sh)) >> sh;
                 if ((*f >> k) & 1) {
-                    c = D_801DFE74;
+                    c = text_color;
                 }
                 v |= c << sh;
             }
@@ -2180,18 +2180,18 @@ loop:
             for (k = 11, sh = 0; k >= m; k--, sh += 4) {
                 c = (d[0] & (0xF << sh)) >> sh;
                 if ((*f >> k) & 1) {
-                    c = D_801DFE74;
+                    c = text_color;
                 }
                 v |= c << sh;
             }
             *d++ = v;
         }
     }
-    r[0] = p->unk1C->unk0 + D_801DFE70 * 4;
-    r[1] = p->unk1C->unk2 + D_801DFE72 * 16;
+    r[0] = p->unk1C->unk0 + text_col * 4;
+    r[1] = p->unk1C->unk2 + text_row * 16;
     LoadImage2(r, buf);
-    D_801DFE70++;
-    D_801DFE78 += 2;
+    text_col++;
+    text_pos += 2;
     if ((s16)arg1) {
         if (func_80182860_inline(1) < 0) {
             return 0;
@@ -2204,7 +2204,7 @@ loop:
     return 1;
 }
 
-void func_80182D34(char *arg0, s16 arg1) {
+void text_draw_line(char *arg0, s16 arg1) {
     s16 r[4];
     u16 buf[0x40];
     Unk_801A44B8 *p;
@@ -2220,12 +2220,12 @@ void func_80182D34(char *arg0, s16 arg1) {
     s32 j;
 
     line = arg1;
-    p = func_801A44B8(D_801DFCB0);
+    p = sprite_find(text_window_sprite);
     if (p == NULL) {
         return;
     }
     n = strlen(arg0);
-    y = D_801D76A4[arg1];
+    y = text_line_y[arg1];
     if (arg1 < 2) {
         col = (32 - n) / 4;
     } else {
@@ -2264,7 +2264,7 @@ void func_80182D34(char *arg0, s16 arg1) {
                 for (k = 7, sh = 0; k >= m; k--, sh += 4) {
                     c = (d[0] & (0xF << sh)) >> sh;
                     if ((*f >> k) & 1) {
-                        c = D_801DFE74;
+                        c = text_color;
                     }
                     v |= c << sh;
                 }
@@ -2282,7 +2282,7 @@ void func_80182D34(char *arg0, s16 arg1) {
                 for (k = 3, sh = 0; k >= m; k--, sh += 4) {
                     c = (d[0] & (0xF << sh)) >> sh;
                     if ((*f >> k) & 1) {
-                        c = D_801DFE74;
+                        c = text_color;
                     }
                     v |= c << sh;
                 }
@@ -2300,7 +2300,7 @@ void func_80182D34(char *arg0, s16 arg1) {
                 for (k = 15, sh = 0; k >= m; k--, sh += 4) {
                     c = (d[0] & (0xF << sh)) >> sh;
                     if ((*f >> k) & 1) {
-                        c = D_801DFE74;
+                        c = text_color;
                     }
                     v |= c << sh;
                 }
@@ -2318,7 +2318,7 @@ void func_80182D34(char *arg0, s16 arg1) {
                 for (k = 11, sh = 0; k >= m; k--, sh += 4) {
                     c = (d[0] & (0xF << sh)) >> sh;
                     if ((*f >> k) & 1) {
-                        c = D_801DFE74;
+                        c = text_color;
                     }
                     v |= c << sh;
                 }
@@ -2330,13 +2330,13 @@ void func_80182D34(char *arg0, s16 arg1) {
         if (line >= 3 && col >= 15) {
             col = 1;
             line++;
-            y = D_801D76A4[line];
+            y = text_line_y[line];
         }
         i += 2;
     }
 }
 
-void func_801830A0(u8 *arg0, u16 arg1) {
+void text_format_number(u8 *arg0, u16 arg1) {
     u16 a;
     u16 b;
     u16 c;
@@ -2371,7 +2371,7 @@ void func_801830A0(u8 *arg0, u16 arg1) {
     }
 }
 
-void func_801831EC(u16 arg0, s16 arg1, s32 arg2, s16 arg3, s32 arg4) {
+void text_show_timed(u16 arg0, s16 arg1, s32 arg2, s16 arg3, s32 arg4) {
     Unk_80184230 rect;
     Unk_801A44B8 *p;
     s16 b;
@@ -2383,22 +2383,22 @@ void func_801831EC(u16 arg0, s16 arg1, s32 arg2, s16 arg3, s32 arg4) {
         s16 m = 3;
 
         if (m == 1) {
-            D_801DFCB0 = 0x403;
-            func_801A4A68(0x403, 1);
-            func_801A4A68(0x404, 0);
-            func_801A461C(0x403, 3, 0x14BF);
+            text_window_sprite = 0x403;
+            sprite_set_visible(0x403, 1);
+            sprite_set_visible(0x404, 0);
+            sprite_set_clut_entry(0x403, 3, 0x14BF);
         } else if (m == 3) {
-            D_801DFCB0 = 0x404;
-            func_801A4A68(0x403, 0);
-            func_801A4A68(0x404, 1);
-            func_801A461C(0x404, 3, 0x14BF);
+            text_window_sprite = 0x404;
+            sprite_set_visible(0x403, 0);
+            sprite_set_visible(0x404, 1);
+            sprite_set_clut_entry(0x404, 3, 0x14BF);
         }
-        D_801DFE74 = 1;
+        text_color = 1;
         d->unk8 = 0;
         d->unkA = -1;
         d->unkC = 0;
         d->unkE = -1;
-        p = func_801A44B8(D_801DFCB0);
+        p = sprite_find(text_window_sprite);
         if (p != NULL) {
             rect.unk0 = p->unk1C->unk0;
             rect.unk2 = p->unk1C->unk2;
@@ -2406,15 +2406,15 @@ void func_801831EC(u16 arg0, s16 arg1, s32 arg2, s16 arg3, s32 arg4) {
             rect.unk6 = p->unk1C->unk6;
             ClearImage2(&rect, 0, 0, 0);
         }
-        func_80182518(arg2, m);
+        text_draw_string(arg2, m);
         if (arg3 == 1) {
-            func_801A2678(0xF);
+            sound_se_play(0xF);
         } else if (arg3 == 2) {
-            func_801A2678(6);
+            sound_se_play(6);
         } else if (arg3 == 3) {
-            func_801A2678(5);
+            sound_se_play(5);
         } else if (arg3 == 4) {
-            func_801A2678(0xE);
+            sound_se_play(0xE);
         }
         if (g->unk24E == 0) {
             g->unk24E = 1;
@@ -2425,22 +2425,22 @@ void func_801831EC(u16 arg0, s16 arg1, s32 arg2, s16 arg3, s32 arg4) {
         s16 m = 1;
 
         if (m == 1) {
-            D_801DFCB0 = 0x403;
-            func_801A4A68(0x403, 1);
-            func_801A4A68(0x404, 0);
-            func_801A461C(0x403, 3, 0x14BF);
+            text_window_sprite = 0x403;
+            sprite_set_visible(0x403, 1);
+            sprite_set_visible(0x404, 0);
+            sprite_set_clut_entry(0x403, 3, 0x14BF);
         } else if (m == 3) {
-            D_801DFCB0 = 0x404;
-            func_801A4A68(0x403, 0);
-            func_801A4A68(0x404, 1);
-            func_801A461C(0x404, 3, 0x14BF);
+            text_window_sprite = 0x404;
+            sprite_set_visible(0x403, 0);
+            sprite_set_visible(0x404, 1);
+            sprite_set_clut_entry(0x404, 3, 0x14BF);
         }
-        D_801DFE74 = 1;
+        text_color = 1;
         d->unk8 = 0;
         d->unkA = -1;
         d->unkC = 0;
         d->unkE = -1;
-        p = func_801A44B8(D_801DFCB0);
+        p = sprite_find(text_window_sprite);
         if (p != NULL) {
             rect.unk0 = p->unk1C->unk0;
             rect.unk2 = p->unk1C->unk2;
@@ -2448,36 +2448,36 @@ void func_801831EC(u16 arg0, s16 arg1, s32 arg2, s16 arg3, s32 arg4) {
             rect.unk6 = p->unk1C->unk6;
             ClearImage2(&rect, 0, 0, 0);
         }
-        func_80182518(arg2, m);
+        text_draw_string(arg2, m);
         if (arg3 == 1) {
-            func_801A2678(0xF);
+            sound_se_play(0xF);
         } else if (arg3 == 2) {
-            func_801A2678(6);
+            sound_se_play(6);
         } else if (arg3 == 3) {
-            func_801A2678(5);
+            sound_se_play(5);
         } else if (arg3 == 4) {
-            func_801A2678(0xE);
+            sound_se_play(0xE);
         }
         if (g->unk24E == 0) {
             g->unk24E = 1;
         }
     }
-    func_8018C1B0(arg0, b, b, arg4);
+    mail_wait(arg0, b, b, arg4);
 }
 
-void func_801834AC(s32 arg0) {
+void text_start_typing(s32 arg0) {
     Unk_801E0368 *g = &D_801E0368;
     Unk_80184230 rect;
     Unk_801A44B8 *p;
 
-    D_801DFCB0 = 0x404;
-    func_801A4A68(0x403, 0);
-    func_801A4A68(0x404, 1);
-    func_801A461C(0x40A, 3, 0x14BF);
-    D_801DFE74 = 2;
-    D_801DFE70 = 0;
-    D_801DFE72 = 0;
-    p = func_801A44B8(D_801DFCB0);
+    text_window_sprite = 0x404;
+    sprite_set_visible(0x403, 0);
+    sprite_set_visible(0x404, 1);
+    sprite_set_clut_entry(0x40A, 3, 0x14BF);
+    text_color = 2;
+    text_col = 0;
+    text_row = 0;
+    p = sprite_find(text_window_sprite);
     if (p != NULL) {
         rect.unk0 = p->unk1C->unk0;
         rect.unk2 = p->unk1C->unk2;
@@ -2485,24 +2485,24 @@ void func_801834AC(s32 arg0) {
         rect.unk6 = p->unk1C->unk6;
         ClearImage2(&rect, 0, 0, 0);
     }
-    D_801DFE78 = 0;
-    D_801DFE76 = strlen((char *)arg0);
-    if (func_80182860(arg0, 1) != 0) {
-        D_801DFE7A -= D_801E6DB4[0];
-        if (D_801DFE7A > 0) {
-            (*D_801DFCAC)->unk2 = 4;
+    text_pos = 0;
+    text_len = strlen((char *)arg0);
+    if (text_draw_next(arg0, 1) != 0) {
+        text_wait -= D_801E6DB4[0];
+        if (text_wait > 0) {
+            (*text_cmd)->unk2 = 4;
         } else {
-            D_801DFE7A = 0;
-            (*D_801DFCAC)->unk2 = 3;
+            text_wait = 0;
+            (*text_cmd)->unk2 = 3;
         }
-        func_801749E8(D_801DFCAC);
+        action_push_front(text_cmd);
     }
     if (g->unk24E == 0) {
         g->unk24E = 1;
     }
 }
 
-void func_80183618(u16 arg0) {
+void text_show_profile(u16 arg0) {
     Unk_801E0368 *g = &D_801E0368;
     char buf[0x20];
     Unk_80184230 rect;
@@ -2515,18 +2515,18 @@ void func_80183618(u16 arg0) {
     char *pb;
     s32 i;
 
-    e = func_801762F4(0, arg0);
+    e = npc_find(0, arg0);
     if (e == NULL) {
         return;
     }
-    d = func_801767D4(e->unk14);
+    d = npc_find_body(e->unk14);
     if (d == NULL) {
         return;
     }
-    D_801DFE74 = 9;
-    D_801DFCB0 = 0x40D;
+    text_color = 9;
+    text_window_sprite = 0x40D;
     r = &rect;
-    p = func_801A44B8(0x40D);
+    p = sprite_find(0x40D);
     if (p != NULL) {
         rect.unk0 = 0x300;
         r->unk2 = 0x100;
@@ -2534,22 +2534,22 @@ void func_80183618(u16 arg0) {
         r->unk6 = 0x10;
         for (i = 0; i < 8; i++) {
             rect.unk2 = 0x100 + i * 0x10;
-            MoveImage2(&rect, (s16)p->unk1C->unk0, (s16)p->unk1C->unk2 + D_801D76A4[i]);
+            MoveImage2(&rect, (s16)p->unk1C->unk0, (s16)p->unk1C->unk2 + text_line_y[i]);
         }
     }
 
-    func_801830A0(a, d->unk2);
+    text_format_number(a, d->unk2);
     pb = (char *)b;
-    func_801830A0((u8 *)pb, d->unk6);
+    text_format_number((u8 *)pb, d->unk6);
     pb = buf;
     memset(pb, 0, 0x20);
     /* "%s才 %s %sｃｍ %s" */
-    sprintf(pb, "%s\215\313 %s %s\202\203\202\215 %s", b, D_801D76C4[d->unk4], a, D_801D76D0[d->unk8]);
-    func_80182D34(d->unkC, 0);
-    func_80182D34(d->unk2C, 1);
-    func_80182D34(pb, 2);
-    func_80182D34(d->unk4C, 3);
-    func_801A4A68(0x40D, 1);
+    sprintf(pb, "%s\215\313 %s %s\202\203\202\215 %s", b, text_sex_names[d->unk4], a, text_blood_types[d->unk8]);
+    text_draw_line(d->unkC, 0);
+    text_draw_line(d->unk2C, 1);
+    text_draw_line(pb, 2);
+    text_draw_line(d->unk4C, 3);
+    sprite_set_visible(0x40D, 1);
     if (g->unk24E == 0) {
         g->unk24E = 1;
     }
@@ -2561,17 +2561,17 @@ static inline void func_801837F0_inl(s32 t, s16 m, s16 a, u16 b, s16 c, u16 d, s
     Unk_801E0368 *g2 = &D_801E0368;
     Unk_801DFFE8 *dp = &D_801DFFE8;
     if (m == 1) {
-        D_801DFCB0 = 0x403;
-        func_801A4A68(0x403, 1);
-        func_801A4A68(0x404, 0);
-        func_801A461C(0x403, 3, 0x14BF);
+        text_window_sprite = 0x403;
+        sprite_set_visible(0x403, 1);
+        sprite_set_visible(0x404, 0);
+        sprite_set_clut_entry(0x403, 3, 0x14BF);
     } else if (m == 3) {
-        D_801DFCB0 = 0x404;
-        func_801A4A68(0x403, 0);
-        func_801A4A68(0x404, 1);
-        func_801A461C(0x404, 3, 0x14BF);
+        text_window_sprite = 0x404;
+        sprite_set_visible(0x403, 0);
+        sprite_set_visible(0x404, 1);
+        sprite_set_clut_entry(0x404, 3, 0x14BF);
     }
-    D_801DFE74 = 1;
+    text_color = 1;
     dp->unk8 = b;
     dp->unkA = a;
     dp->unkC = d;
@@ -2579,7 +2579,7 @@ static inline void func_801837F0_inl(s32 t, s16 m, s16 a, u16 b, s16 c, u16 d, s
     if (b != 0 || d != 0) {
         dp->unk6 = 2;
     }
-    p = func_801A44B8(D_801DFCB0);
+    p = sprite_find(text_window_sprite);
     if (p != NULL) {
         rect.unk0 = p->unk1C->unk0;
         rect.unk2 = p->unk1C->unk2;
@@ -2587,22 +2587,22 @@ static inline void func_801837F0_inl(s32 t, s16 m, s16 a, u16 b, s16 c, u16 d, s
         rect.unk6 = p->unk1C->unk6;
         ClearImage2(&rect, 0, 0, 0);
     }
-    func_80182518(t, m);
+    text_draw_string(t, m);
     if (e == 1) {
-        func_801A2678(0xF);
+        sound_se_play(0xF);
     } else if (e == 2) {
-        func_801A2678(6);
+        sound_se_play(6);
     } else if (e == 3) {
-        func_801A2678(5);
+        sound_se_play(5);
     } else if (e == 4) {
-        func_801A2678(0xE);
+        sound_se_play(0xE);
     }
     if (g2->unk24E == 0) {
         g2->unk24E = 1;
     }
 }
 
-void func_801837F0(Unk_8018519C *arg0) {
+void text_exec_command(Unk_8018519C *arg0) {
     Unk_801E0368 *g = &D_801E0368;
     Unk_801E076C *q = D_801E076C[0];
     u16 state = arg0->unk0->unk2;
@@ -2619,29 +2619,29 @@ void func_801837F0(Unk_8018519C *arg0) {
     case 0:
         switch (g->unk202) {
         case 2:
-            D_801DFE7A = 20;
+            text_wait = 20;
             break;
         case 1:
-            D_801DFE7A = 10;
+            text_wait = 10;
             break;
         case 0:
-            D_801DFE7A = 5;
+            text_wait = 5;
             break;
         }
-        D_801DFCAC = (Unk_801DFCAC **)arg0;
-        func_801834AC((s32)arg0->unk8[0]);
+        text_cmd = (Unk_801DFCAC **)arg0;
+        text_start_typing((s32)arg0->unk8[0]);
         break;
     case 1:
         if (D_801DFC5C != 0) {
             q->unk42 |= 0x100;
             D_801DFC5C = 0;
-            func_801831EC(1, 0, (s32)arg0->unk8[0], atoi(arg0->unk8[5]), 2);
+            text_show_timed(1, 0, (s32)arg0->unk8[0], atoi(arg0->unk8[5]), 2);
             q->unk42 &= 0xFEFF;
-            func_80184160();
-            func_801A4A68(0x403, 0);
-            func_801A4A68(0x404, 0);
-            func_801A4A68(0x40A, 0);
-            func_801A4A68(0x40D, 0);
+            text_release_cmd();
+            sprite_set_visible(0x403, 0);
+            sprite_set_visible(0x404, 0);
+            sprite_set_visible(0x40A, 0);
+            sprite_set_visible(0x40D, 0);
             if (g->unk24E != 0) {
                 g->unk24E = 0;
             }
@@ -2658,19 +2658,19 @@ void func_801837F0(Unk_8018519C *arg0) {
     case 3:
         switch (g->unk202) {
         case 2:
-            D_801DFE7A = 20;
+            text_wait = 20;
             break;
         case 1:
-            D_801DFE7A = 10;
+            text_wait = 10;
             break;
         case 0:
-            D_801DFE7A = 5;
+            text_wait = 5;
             break;
         }
         str = (s32)arg0->unk8[0];
-        if (D_801DFE72 == 3) {
-            D_801DFE72 = 0;
-            p = func_801A44B8(D_801DFCB0);
+        if (text_row == 3) {
+            text_row = 0;
+            p = sprite_find(text_window_sprite);
             if (p != NULL) {
                 Unk_80184230 rect;
 
@@ -2681,56 +2681,56 @@ void func_801837F0(Unk_8018519C *arg0) {
                 ClearImage2(&rect, 0, 0, 0);
             }
         }
-        if (func_80182860(str, 1) != 0) {
-            D_801DFE7A -= D_801E6DB4[0];
-            if (D_801DFE7A > 0) {
-                (*D_801DFCAC)->unk2 = 4;
+        if (text_draw_next(str, 1) != 0) {
+            text_wait -= D_801E6DB4[0];
+            if (text_wait > 0) {
+                (*text_cmd)->unk2 = 4;
             } else {
-                D_801DFE7A = 0;
-                (*D_801DFCAC)->unk2 = 3;
+                text_wait = 0;
+                (*text_cmd)->unk2 = 3;
             }
-            func_801749E8(D_801DFCAC);
+            action_push_front(text_cmd);
         }
         break;
     case 4:
-        D_801DFE7A -= D_801E6DB4[0];
-        if (D_801DFE7A > 0) {
-            (*D_801DFCAC)->unk2 = 4;
+        text_wait -= D_801E6DB4[0];
+        if (text_wait > 0) {
+            (*text_cmd)->unk2 = 4;
         } else {
-            (*D_801DFCAC)->unk2 = 3;
-            D_801DFE7A = 0;
+            (*text_cmd)->unk2 = 3;
+            text_wait = 0;
         }
-        func_801749E8(D_801DFCAC);
+        action_push_front(text_cmd);
         break;
     }
 }
 
-void func_80183CFC(s32 arg0) {
+void text_start_narration(s32 arg0) {
     Unk_801E0368 *g = &D_801E0368;
     Unk_801E076C *q = D_801E076C[0];
     Unk_80184230 rect;
     Unk_80184338 *e;
     Unk_801A44B8 *p;
 
-    e = func_801D15C8(4);
+    e = kaj_tss_alloc(4);
     e->unk22 = 8;
     e->unk24 = 0;
     e->unk26 = strlen((char *)arg0);
     e->unk28 = 1;
     e->unk2C = 0xA;
-    e->unk30 = func_80184338;
-    e->unk34 = func_80184408;
-    e->unk38 = func_80184408;
-    func_801A4A68(0x403, 0);
-    func_801A4A68(0x404, 1);
-    func_801A461C(0x40A, 3, 0x14BF);
-    D_801DFCB0 = 0x404;
-    D_801DFE74 = 1;
-    D_801DFE70 = 0;
-    D_801DFE72 = 0;
-    D_801DFE78 = 0;
-    D_801DFE76 = strlen((char *)arg0);
-    p = func_801A44B8(D_801DFCB0);
+    e->unk30 = text_narration_step;
+    e->unk34 = text_narration_end;
+    e->unk38 = text_narration_end;
+    sprite_set_visible(0x403, 0);
+    sprite_set_visible(0x404, 1);
+    sprite_set_clut_entry(0x40A, 3, 0x14BF);
+    text_window_sprite = 0x404;
+    text_color = 1;
+    text_col = 0;
+    text_row = 0;
+    text_pos = 0;
+    text_len = strlen((char *)arg0);
+    p = sprite_find(text_window_sprite);
     if (p != NULL) {
         rect.unk0 = p->unk1C->unk0;
         rect.unk2 = p->unk1C->unk2;
@@ -2739,31 +2739,31 @@ void func_80183CFC(s32 arg0) {
         ClearImage2(&rect, 0, 0, 0);
     }
     *e->unk3C = arg0;
-    func_80182860(arg0, 0);
-    D_801DFE7C = 0;
-    D_801DFE7E = 0;
+    text_draw_next(arg0, 0);
+    text_cue_fade_done = 0;
+    text_cue_bgm_done = 0;
     q->unk42 |= 0x100;
-    g->unk248 = func_801D14B8(e);
+    g->unk248 = kaj_tss_start(e);
 }
 
-void func_80183E88(s32 arg0, s16 arg1, s16 arg2, u16 arg3, s16 arg4, u16 arg5, s16 arg6) {
+void text_show(s32 arg0, s16 arg1, s16 arg2, u16 arg3, s16 arg4, u16 arg5, s16 arg6) {
     Unk_801E0368 *g = &D_801E0368;
     Unk_801DFFE8 *d = &D_801DFFE8;
     Unk_80184230 rect;
     Unk_801A44B8 *p;
 
     if (arg1 == 1) {
-        D_801DFCB0 = 0x403;
-        func_801A4A68(0x403, 1);
-        func_801A4A68(0x404, 0);
-        func_801A461C(0x403, 3, 0x14BF);
+        text_window_sprite = 0x403;
+        sprite_set_visible(0x403, 1);
+        sprite_set_visible(0x404, 0);
+        sprite_set_clut_entry(0x403, 3, 0x14BF);
     } else if (arg1 == 3) {
-        D_801DFCB0 = 0x404;
-        func_801A4A68(0x403, 0);
-        func_801A4A68(0x404, 1);
-        func_801A461C(0x404, 3, 0x14BF);
+        text_window_sprite = 0x404;
+        sprite_set_visible(0x403, 0);
+        sprite_set_visible(0x404, 1);
+        sprite_set_clut_entry(0x404, 3, 0x14BF);
     }
-    D_801DFE74 = 1;
+    text_color = 1;
     d->unk8 = arg3;
     d->unkA = arg2;
     d->unkC = arg5;
@@ -2771,7 +2771,7 @@ void func_80183E88(s32 arg0, s16 arg1, s16 arg2, u16 arg3, s16 arg4, u16 arg5, s
     if (arg3 != 0 || arg5 != 0) {
         d->unk6 = 2;
     }
-    p = func_801A44B8(D_801DFCB0);
+    p = sprite_find(text_window_sprite);
     if (p != NULL) {
         rect.unk0 = p->unk1C->unk0;
         rect.unk2 = p->unk1C->unk2;
@@ -2779,77 +2779,77 @@ void func_80183E88(s32 arg0, s16 arg1, s16 arg2, u16 arg3, s16 arg4, u16 arg5, s
         rect.unk6 = p->unk1C->unk6;
         ClearImage2(&rect, 0, 0, 0);
     }
-    func_80182518(arg0, arg1);
+    text_draw_string(arg0, arg1);
     if (arg6 == 1) {
-        func_801A2678(0xF);
+        sound_se_play(0xF);
     } else if (arg6 == 2) {
-        func_801A2678(6);
+        sound_se_play(6);
     } else if (arg6 == 3) {
-        func_801A2678(5);
+        sound_se_play(5);
     } else if (arg6 == 4) {
-        func_801A2678(0xE);
+        sound_se_play(0xE);
     }
     if (g->unk24E == 0) {
         g->unk24E = 1;
     }
 }
 
-void func_80184094(void) {
+void text_close(void) {
     Unk_801E0368 *p = &D_801E0368;
 
-    func_80184160();
-    func_801A4A68(0x403, 0);
-    func_801A4A68(0x404, 0);
-    func_801A4A68(0x40A, 0);
-    func_801A4A68(0x40D, 0);
+    text_release_cmd();
+    sprite_set_visible(0x403, 0);
+    sprite_set_visible(0x404, 0);
+    sprite_set_visible(0x40A, 0);
+    sprite_set_visible(0x40D, 0);
     if (p->unk24E != 0) {
         p->unk24E = 0;
     }
 }
 
-void func_80184100(Unk_80184100 *arg0) {
+void text_next_page(Unk_80184100 *arg0) {
     if (arg0->unk8 & 8) {
         arg0->unk8 &= ~8;
         arg0->unk6 = 1;
-        func_801A4A68(0x40A, 0);
-        func_801A461C(0x40A, 3, 0x14BF);
-        func_801A2678(0x11);
+        sprite_set_visible(0x40A, 0);
+        sprite_set_clut_entry(0x40A, 3, 0x14BF);
+        sound_se_play(0x11);
     }
 }
 
-void func_80184160(void) {
+void text_release_cmd(void) {
     Unk_801DFCAC *p;
 
-    if (D_801DFCAC != NULL) {
-        p = *D_801DFCAC;
+    if (text_cmd != NULL) {
+        p = *text_cmd;
         if (p->unk0 == 5 && (u16)(p->unk2 - 3) < 2) {
             p->unk2 = 0;
         }
-        D_801DFCAC = NULL;
+        text_cmd = NULL;
     }
-    if (D_801DFCB0 >= 0) {
-        D_801DFCB0 = -1;
+    if (text_window_sprite >= 0) {
+        text_window_sprite = -1;
     }
 }
 
-void func_801841C4(void) {
-    D_801DFE7A -= D_801E6DB4[0];
-    if (D_801DFE7A > 0) {
-        (*D_801DFCAC)->unk2 = 4;
+void text_wait_step(void) {
+    text_wait -= D_801E6DB4[0];
+    if (text_wait > 0) {
+        (*text_cmd)->unk2 = 4;
     } else {
-        D_801DFE7A = 0;
-        (*D_801DFCAC)->unk2 = 3;
+        text_wait = 0;
+        (*text_cmd)->unk2 = 3;
     }
-    func_801749E8(D_801DFCAC);
+    action_push_front(text_cmd);
 }
 
-void func_80184230(s32 arg0) {
+void text_type_step(s32 arg0) {
     Unk_80184230 rect;
     Unk_801A44B8 *p;
 
-    if (D_801DFE72 == 3) {
-        D_801DFE72 = 0;
-        p = func_801A44B8(D_801DFCB0);
+    if (text_row == 3) {
+        text_row = 0;
+        p = sprite_find(text_window_sprite);
         if (p != NULL) {
             rect.unk0 = p->unk1C->unk0;
             rect.unk2 = p->unk1C->unk2;
@@ -2858,19 +2858,19 @@ void func_80184230(s32 arg0) {
             ClearImage2(&rect, 0, 0, 0);
         }
     }
-    if (func_80182860(arg0, 1) != 0) {
-        D_801DFE7A -= D_801E6DB4[0];
-        if (D_801DFE7A > 0) {
-            (*D_801DFCAC)->unk2 = 4;
+    if (text_draw_next(arg0, 1) != 0) {
+        text_wait -= D_801E6DB4[0];
+        if (text_wait > 0) {
+            (*text_cmd)->unk2 = 4;
         } else {
-            D_801DFE7A = 0;
-            (*D_801DFCAC)->unk2 = 3;
+            text_wait = 0;
+            (*text_cmd)->unk2 = 3;
         }
-        func_801749E8(D_801DFCAC);
+        action_push_front(text_cmd);
     }
 }
 
-void func_80184338(Unk_80184338 *arg0) {
+void text_narration_step(Unk_80184338 *arg0) {
     Unk_80184230 rect;
     Unk_801A44B8 *p;
     s32 v;
@@ -2880,10 +2880,10 @@ void func_80184338(Unk_80184338 *arg0) {
         return;
     }
     v = *arg0->unk3C;
-    arg0->unk24 = D_801DFE78;
-    if (D_801DFE72 == 3) {
-        D_801DFE72 = 0;
-        p = func_801A44B8(D_801DFCB0);
+    arg0->unk24 = text_pos;
+    if (text_row == 3) {
+        text_row = 0;
+        p = sprite_find(text_window_sprite);
         if (p != NULL) {
             rect.unk0 = p->unk1C->unk0;
             rect.unk2 = p->unk1C->unk2;
@@ -2892,41 +2892,41 @@ void func_80184338(Unk_80184338 *arg0) {
             ClearImage2(&rect, 0, 0, 0);
         }
     }
-    D_801DFCE6 = func_80182860(v, 0);
+    D_801DFCE6 = text_draw_next(v, 0);
 }
 
-void func_80184408(void) {
+void text_narration_end(void) {
     s32 v = -1;
-    D_801DFCB0 = v;
+    text_window_sprite = v;
     D_801E076C[0]->unk42 &= 0xFEFF;
     D_801E05B0[0] = v;
 }
 
-void func_80184434(s16 arg0) {
+void text_narration_cues(s16 arg0) {
     if (D_801E05B0[0] < 0) {
         return;
     }
     if (arg0 == 0) {
-        if (D_801DFE78 != 0x1AA) {
-            if (D_801DFE78 != 0x21A) {
+        if (text_pos != 0x1AA) {
+            if (text_pos != 0x21A) {
                 return;
             }
-            if (D_801DFE7E == 0) {
-                func_801A3CC0(3);
-                D_801DFE7E = 1;
+            if (text_cue_bgm_done == 0) {
+                sound_bgm_fade_out(3);
+                text_cue_bgm_done = 1;
             }
             return;
         }
-    } else if (D_801DFE78 != 0x182) {
+    } else if (text_pos != 0x182) {
         return;
     }
-    if (D_801DFE7C == 0) {
-        func_80186128(0, 3);
-        D_801DFE7C = 1;
+    if (text_cue_fade_done == 0) {
+        effect_start_fade(0, 3);
+        text_cue_fade_done = 1;
     }
 }
 
-void func_801844D4(Unk_801854B8 *arg0) {
+void door_setup(Unk_801854B8 *arg0) {
     Unk_801E076C *q = D_801E076C[0];
     Unk_801844D4 *s = arg0->unk7C;
     Unk_80174FFC rot;
@@ -2939,7 +2939,7 @@ void func_801844D4(Unk_801854B8 *arg0) {
     arg0->unk18 = s->unk10 * 10;
     arg0->unk1C = s->unk14 * 10;
     arg0->unk20 = s->unk6;
-    func_801CD028(&arg0->unk78, ((Unk_801844D4 *)arg0->unk7C)->unk18, &arg0->unk28);
+    kaj_tmd_load(&arg0->unk78, ((Unk_801844D4 *)arg0->unk7C)->unk18, &arg0->unk28);
     GsInitCoordinate2(NULL, &arg0->unk28);
     arg0->unk40 = arg0->unk14 - q->unk72 * 12500;
     arg0->unk44 = arg0->unk18 + q->unk74 * 32000;
@@ -2949,11 +2949,11 @@ void func_801844D4(Unk_801854B8 *arg0) {
     rot.unk4 = 0;
     RotMatrix(&rot, arg0->unk2C);
     arg0->unk28 = 0;
-    arg0->unk10 = (s32)func_8017CDA4(arg0->unk14, arg0->unk18, arg0->unk1C);
+    arg0->unk10 = (s32)block_find_at(arg0->unk14, arg0->unk18, arg0->unk1C);
     arg0->unk4 = 1;
 }
 
-void func_80184698(void) {
+void door_refresh_all(void) {
     Unk_801DFE80 *list = D_801DFE80;
     Unk_801E076C *q = D_801E076C[0];
     Unk_801854B8 *item;
@@ -2974,16 +2974,16 @@ void func_80184698(void) {
             rot.unk4 = 0;
             RotMatrix(&rot, item->unk2C);
             item->unk28 = 0;
-            item->unk10 = (s32)func_8017CDA4(item->unk14, item->unk18, item->unk1C);
+            item->unk10 = (s32)block_find_at(item->unk14, item->unk18, item->unk1C);
         }
-        if (func_801CD000((Unk_801DFE5C *)list) != 0) {
+        if (kaj_ll_at_tail((Unk_801DFE5C *)list) != 0) {
             break;
         }
         list->unk8 = list->unk8->unk4;
     }
 }
 
-void func_80184814(Unk_80184814 *arg0) {
+void door_move_x(Unk_80184814 *arg0) {
     Unk_801DFFE8 *s;
 
     arg0->unk14 += D_801E6DB4[0] * arg0->unk22;
@@ -3040,7 +3040,7 @@ void func_80184814(Unk_80184814 *arg0) {
     }
 }
 
-void func_80184928(Unk_80184814 *arg0) {
+void door_move_y(Unk_80184814 *arg0) {
     Unk_801DFFE8 *s;
 
     arg0->unk18 += D_801E6DB4[0] * arg0->unk22;
@@ -3097,7 +3097,7 @@ void func_80184928(Unk_80184814 *arg0) {
     }
 }
 
-void func_80184A3C(Unk_80184814 *arg0) {
+void door_move_z(Unk_80184814 *arg0) {
     Unk_801DFFE8 *s;
 
     arg0->unk1C += D_801E6DB4[0] * arg0->unk22;
@@ -3154,7 +3154,7 @@ void func_80184A3C(Unk_80184814 *arg0) {
     }
 }
 
-void func_80184B50(Unk_80184814 *arg0) {
+void door_move_angle(Unk_80184814 *arg0) {
     Unk_801DFFE8 *s;
 
     arg0->unk20 += D_801E6DB4[0] * arg0->unk22;
@@ -3211,7 +3211,7 @@ void func_80184B50(Unk_80184814 *arg0) {
     }
 }
 
-void func_80184C6C(void) {
+void door_update_all(void) {
     Unk_801DFE80 *list = D_801DFE80;
     Unk_801E076C *q = D_801E076C[0];
     Unk_80184814 *item;
@@ -3227,16 +3227,16 @@ void func_80184C6C(void) {
             && (u16)(item->unkA - 2) < 2) {
             switch (item->unk2) {
             case 1:
-                func_80184814(item);
+                door_move_x(item);
                 break;
             case 2:
-                func_80184928(item);
+                door_move_y(item);
                 break;
             case 3:
-                func_80184A3C(item);
+                door_move_z(item);
                 break;
             default:
-                func_80184B50(item);
+                door_move_angle(item);
                 break;
             }
             item->unk40 = item->unk14 - q->unk72 * 12500;
@@ -3249,16 +3249,16 @@ void func_80184C6C(void) {
             item->unk28 = 0;
         }
         if (item->unk4 != 0 && item->unk6 != 0 && D_801DFC80 != 0) {
-            item->unk10 = (s32)func_8017CDA4(item->unk14, item->unk18, item->unk1C);
+            item->unk10 = (s32)block_find_at(item->unk14, item->unk18, item->unk1C);
         }
-        if (func_801CD000((Unk_801DFE5C *)list) != 0) {
+        if (kaj_ll_at_tail((Unk_801DFE5C *)list) != 0) {
             break;
         }
         list->unk8 = list->unk8->unk4;
     }
 }
 
-void func_80184ECC(Unk_80184814 *arg0, s16 arg1, s16 arg2, s16 arg3) {
+void door_start_open(Unk_80184814 *arg0, s16 arg1, s16 arg2, s16 arg3) {
     s16 v = arg2;
     s32 w;
     s16 d;
@@ -3300,7 +3300,7 @@ void func_80184ECC(Unk_80184814 *arg0, s16 arg1, s16 arg2, s16 arg3) {
     }
 }
 
-void func_80185034(Unk_80184814 *arg0, s16 arg1, s16 arg2) {
+void door_start_close(Unk_80184814 *arg0, s16 arg1, s16 arg2) {
     s16 v = arg2;
     s32 w;
     s16 d;
@@ -3342,7 +3342,7 @@ void func_80185034(Unk_80184814 *arg0, s16 arg1, s16 arg2) {
     }
 }
 
-void func_8018519C(Unk_8018519C *arg0, Unk_801DFFE8 *arg1) {
+void door_exec_command(Unk_8018519C *arg0, Unk_801DFFE8 *arg1) {
     Unk_801DFE80 *list = D_801DFE80;
     Unk_8018519C_0 *p = arg0->unk0;
     Unk_80184814 *item;
@@ -3361,7 +3361,7 @@ void func_8018519C(Unk_8018519C *arg0, Unk_801DFFE8 *arg1) {
                 found = item;
                 break;
             }
-            if (func_801CD000((Unk_801DFE5C *)list) != 0) {
+            if (kaj_ll_at_tail((Unk_801DFE5C *)list) != 0) {
                 found = NULL;
                 break;
             }
@@ -3373,7 +3373,7 @@ void func_8018519C(Unk_8018519C *arg0, Unk_801DFFE8 *arg1) {
             if (found->unkA != 1) {
                 x = (s16)atoi(arg0->unk8[0]);
                 y = (s16)atoi(arg0->unk8[1]);
-                func_80184ECC(found, x, y, atoi(arg0->unk8[2]));
+                door_start_open(found, x, y, atoi(arg0->unk8[2]));
                 if (atoi(arg0->unk8[3]) == 1) {
                     arg1->unk6 = 4;
                     arg1->unk12 |= 4;
@@ -3382,7 +3382,7 @@ void func_8018519C(Unk_8018519C *arg0, Unk_801DFFE8 *arg1) {
         } else {
             if (found->unkA != 0) {
                 s32 z = (s16)atoi(arg0->unk8[0]);
-                func_80185034(found, z, atoi(arg0->unk8[1]));
+                door_start_close(found, z, atoi(arg0->unk8[1]));
                 if (atoi(arg0->unk8[2]) == 1) {
                     arg1->unk6 = 4;
                     arg1->unk12 |= 4;

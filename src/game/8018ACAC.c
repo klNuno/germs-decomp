@@ -1,13 +1,13 @@
 #include "common.h"
 
 typedef struct { s16 unk0, unk2, unk4, unk6; } Unk_801DFD30;
-Unk_801DFD30 *D_801DFD30;
+Unk_801DFD30 *mail_list;
 typedef struct { s16 unk0[5]; s16 unkA; char *unkC; s16 unk10; s16 unk12; s32 unk14; s32 unk18; s32 unk1C; } Unk_801E0340;
 extern Unk_801E0340 D_801E0340;
-void func_801CD688(s32 a);
+void kaj_pad_reset(s32 a);
 typedef struct { s16 unk0; s16 unk2; u16 unk4; } Unk_8018BD60_0;
 typedef struct { Unk_8018BD60_0 *unk0; } Unk_8018BD60;
-void func_8018BA48(u16 a);
+void mail_receive(u16 a);
 typedef struct { s32 unk0; s16 unk4; s16 unk6; } Unk_801E056C;
 typedef struct { s16 unk0; s16 unk2; s16 unk4; s16 unk6; s16 unk8; u16 unkA; s16 unkC; s16 unkE; u16 unk10; s16 unk12; s16 unk14; s16 unk16; s16 unk18; s16 unk1A; s16 *unk1C; } Unk_801E058C;
 typedef struct {
@@ -30,19 +30,19 @@ typedef struct {
     s16 unk254;
 } Unk_801E0368;
 extern Unk_801E0368 D_801E0368;
-extern Unk_801E058C D_801E058C;
-void func_80185A60(s32 a, u16 b, s32 c);
-void func_801A4A68(s32 arg0, s32 arg1);
-void func_8018CB70(Unk_801E058C *p, s32 b);
-u16 *D_801DFD34;
-s16 D_801DFF04;
-s16 D_801DFF06;
-extern char D_801DFD38[];
-u16 *func_801A44B8(u16 arg0);
-void *func_801CC898(u32 size);
-void func_801CD54C(s32 arg0, char *arg1, char *arg2, s32 arg3);
-void func_8018B564(Unk_801E0368 *a, s16 b);
-void func_801A43F4(s32 arg0);
+extern Unk_801E058C mail_menu;
+void effect_start_sprite_slide(s32 a, u16 b, s32 c);
+void sprite_set_visible(s32 arg0, s32 arg1);
+void mail_menu_draw(Unk_801E058C *p, s32 b);
+u16 *mail_scrollbar;
+s16 mail_list_top;
+s16 mail_list_row;
+extern char mail_str_file[];
+u16 *sprite_find(u16 arg0);
+void *kaj_malloc(u32 size);
+void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
+void mail_list_refresh(Unk_801E0368 *a, s16 b);
+void sprite_delete(s32 arg0);
 void free3(void *ptr);
 typedef struct { s32 unk0; s32 unk4; s32 unk8; } Unk_80174F54;
 typedef struct { u16 unk0; s16 unk2; s16 unk4; s16 unk6; s32 unk8; s32 unkC; s32 unk10; s16 unk14; s16 unk16; s32 unk18; s32 unk1C; s32 unk20; s32 unk24; s32 unk28; s32 unk2C; s32 unk30; s32 unk34; s32 unk38; s32 unk3C; s32 unk40; s32 unk44; s32 unk48; } Unk_801762F4;
@@ -59,25 +59,25 @@ typedef struct {
     s32 unk48; Unk_8018BC50 *unk4C; Unk_8018F590 *unk50; s32 unk54; Unk_80188FEC *unk58;
 } Unk_801E02D8;
 extern Unk_801E02D8 D_801E02D8;
-u16 D_801DFF00;
-u16 D_801DFF02;
-void func_801A461C(s32 a, s32 b, s32 c);
+u16 mail_entry_saved_y;
+u16 mail_scrollbar_saved_y;
+void sprite_set_clut_entry(s32 a, s32 b, s32 c);
 typedef struct { s16 unk0; u8 unk2[0x2A]; s16 unk2C; s16 unk2E; s16 unk30; u8 unk32[6]; s16 unk38; u8 unk3A[0xA]; s16 unk44; u8 unk46[4]; s16 unk4A; } Unk_801E0710;
 extern Unk_801E0710 D_801E0710;
-void func_8017345C(void);
-void func_801759B0(void);
-void func_80184C6C(void);
-void func_8018F234(void);
-void func_801AC4A8(void);
-void func_8018DE58(void);
-void func_801A7560(void);
-void func_801979B4(u16 a, s16 b, s16 c);
-void func_80185E38(void);
-void func_801865C0(void);
-void func_80186010(void);
-void func_801A0418(u16 a);
-void func_8018CD4C(Unk_801E058C *p);
-void func_801A2678(s32 a);
+void action_update(void);
+void npc_update_all(void);
+void door_update_all(void);
+void mod_npcrec_update_all(void);
+void vehicle_update(void);
+void mod_update_all(void);
+void thing_update_all(void);
+void player_update(u16 a, s16 b, s16 c);
+void effect_flame_small_update(void);
+void effect_clut_cycle_update(void);
+void effect_flame_large_update(void);
+void roadmap_draw_frame(u16 a);
+void mail_menu_clear_rows(Unk_801E058C *p);
+void sound_se_play(s32 a);
 typedef struct Unk_801E6DA0 {
     s32 unk0;
     s32 unk4;
@@ -87,25 +87,25 @@ typedef struct Unk_801E6DA0 {
     s32 unk14;
 } Unk_801E6DA0;
 extern Unk_801E6DA0 D_801E6DA0;
-s32 func_801CC378(s32 *arg0);
-void func_801CC734(s32 *arg0);
+s32 kaj_event_get(s32 *arg0);
+void kaj_event_done(s32 *arg0);
 void func_80189928(s32 *a);
-void func_80189970(s16 a);
-void func_801899AC(s32 *a);
-s16 func_8018970C(s32 *arg0);
-void func_8018C2FC(u16 a, s16 b, s16 c);
-void func_801A4824(s32 a, s32 b, s32 c, s32 d);
-void func_801A3F90(s32 a, s32 b, s32 c, s32 d, s32 e, s32 f);
-void func_8018C864(s32 a, s32 b, s32 c);
+void event_handle_tick(s16 a);
+void event_handle_mod_finish(s32 *a);
+s16 event_handle_effect_done(s32 *arg0);
+void mail_step_frame(u16 a, s16 b, s16 c);
+void sprite_fill_clut(s32 a, s32 b, s32 c, s32 d);
+void sprite_copy_cell(s32 a, s32 b, s32 c, s32 d, s32 e, s32 f);
+void mail_menu_draw_item_name(s32 a, s32 b, s32 c);
 typedef struct { u16 unk0; u16 unk2; u8 unk4[0x10]; s16 unk14; } Unk_8018CD4C_1C;
 typedef struct { u8 unk0[0x10]; s16 unk10; u16 unk12; s16 unk14; u16 unk16; s32 unk18; Unk_8018CD4C_1C *unk1C; } Unk_8018CD4C;
 void *memset(void *dst, s32 c, u32 n);
 s32 LoadImage2(void *rect, void *p);
-void func_801A2678(s32 arg0);
+void sound_se_play(s32 arg0);
 typedef struct { s16 unk0; s16 unk2; } Unk_8018C864_1C;
 typedef struct { u8 unk0[0x1C]; Unk_8018C864_1C *unk1C; } Unk_8018C864;
 typedef struct { u16 unk0; u8 unk2[2]; u8 unk4[0x24]; } Unk_801891A4;
-Unk_801891A4 *func_801891A4(s16 arg0);
+Unk_801891A4 *effect_item_find(s16 arg0);
 s32 strlen(char *s);
 u16 *Krom2RawAdd2(u16 sjis);
 typedef struct {
@@ -158,14 +158,14 @@ typedef struct {
     Unk_801E0324_10 *unk1C;
 } Unk_801E0324;
 extern Unk_801E0324 *D_801E0324[];
-s16 D_801DFEF0;
-s16 D_801DFEF2;
-s16 D_801DFEF4;
-s16 D_801DFEF6;
-s16 D_801DFEF8;
-s16 D_801DFEFA;
-s16 D_801DFEFC;
-s16 D_801DFEFE;
+s16 mail_page_tex_v_0;
+s16 mail_page_tex_v_1;
+s16 mail_page_tex_v_2;
+s16 mail_page_tex_v_3;
+s16 mail_page_height_0;
+s16 mail_page_height_1;
+s16 mail_page_height_2;
+s16 mail_page_height_3;
 typedef struct {
     u16 unk0;
     u16 unk2;
@@ -174,102 +174,101 @@ typedef struct {
     s32 unkC;
     s32 unk10;
 } Unk_8018ACAC;
-void func_801A3DD4(Unk_801E0324_10 **arg0, void *arg1);
-void func_801A43A8(s32 arg0);
-s16 D_801DFD48;
+void sprite_create(Unk_801E0324_10 **arg0, void *arg1);
+void sprite_add(s32 arg0);
+s16 mail_main_restarted;
 extern s32 D_801DFED4;
 extern s32 D_801DFED8;
 extern s32 D_801DFEDC;
 extern s32 D_801DFEE0;
 extern s32 D_801DFEE4;
 extern s32 D_801DFEE8;
-extern void *D_801DFE50;
-extern void *D_801DFE54;
+extern void *action_set_list;
+extern void *action_queue;
 extern void *D_801DFE5C;
 extern void *D_801DFE80;
-extern void *D_801DFF0C;
-extern void *D_801DFF80;
+extern void *mod_list;
+extern void *sprite_list;
 extern void *D_801DFFA0;
-void __main(void);
-void func_801CC8F0(void);
-void func_801CCAF4(void *arg0);
-void func_8018920C(void);
-void func_801A02C8(void);
-void func_80192B8C(s32 arg0, s32 arg1);
-void func_801971D4(void);
-void func_801863B4(void);
-void func_801AC9B4(void);
-void func_801A5254(s32 arg0);
-void func_801CD808(void);
-void func_8018A24C(void);
-void func_8017E544(void);
-void func_80194E5C(void);
-void func_801A9070(void);
+void kaj_init(void);
+void kaj_ll_create(void *arg0);
+void event_open(void);
+void roadmap_init_draw(void);
+void object_load_res(s32 arg0, s32 arg1);
+void player_init(void);
+void effect_clear_alarms(void);
+void vehicle_train_init_state(void);
+void sprite_title_run(s32 arg0);
+void kaj_srand_ticks(void);
+void event_draw_hud(void);
+void block_building_main(void);
+void object_room_run(void);
+void thing_game_loop(void);
 
-void func_8018ACAC(Unk_801E0324 **arg0, Unk_8018ACAC *arg1, s16 arg2) {
-    *arg0 = func_801CC898(0x20);
+void mail_create(Unk_801E0324 **arg0, Unk_8018ACAC *arg1, s16 arg2) {
+    *arg0 = kaj_malloc(0x20);
     if (*arg0 == NULL) {
-        func_801CD54C(3, "Error Allocating MAIL Handler", D_801DFD38, 0x3B);
+        kaj_abend(3, "Error Allocating MAIL Handler", mail_str_file, 0x3B);
     }
     (*arg0)->unk0 = arg1->unk0;
     (*arg0)->unk2 = arg2;
     (*arg0)->unk4 = arg1->unk2;
     (*arg0)->unk6 = 0;
 
-    func_801A3DD4(&(*arg0)->unk10, (u8 *)arg1 + arg1->unk4);
-    func_801A43A8((s32)(*arg0)->unk10);
+    sprite_create(&(*arg0)->unk10, (u8 *)arg1 + arg1->unk4);
+    sprite_add((s32)(*arg0)->unk10);
     (*arg0)->unk10->unk4 = 1;
     (*arg0)->unk10->unkC = 0x43;
     (*arg0)->unk10->unkE = 1;
-    D_801DFEF0 = (*arg0)->unk10->unk1C->unk12;
-    D_801DFEF8 = (*arg0)->unk10->unk12;
+    mail_page_tex_v_0 = (*arg0)->unk10->unk1C->unk12;
+    mail_page_height_0 = (*arg0)->unk10->unk12;
 
     if ((*arg0)->unk4 >= 2) {
-        func_801A3DD4(&(*arg0)->unk14, (u8 *)arg1 + arg1->unk8);
-        func_801A43A8((s32)(*arg0)->unk14);
+        sprite_create(&(*arg0)->unk14, (u8 *)arg1 + arg1->unk8);
+        sprite_add((s32)(*arg0)->unk14);
         (*arg0)->unk14->unk4 = 0;
         (*arg0)->unk14->unkC = 0x43;
         (*arg0)->unk14->unkE = 1;
-        D_801DFEF2 = (*arg0)->unk14->unk1C->unk12;
-        D_801DFEFA = (*arg0)->unk14->unk12;
+        mail_page_tex_v_1 = (*arg0)->unk14->unk1C->unk12;
+        mail_page_height_1 = (*arg0)->unk14->unk12;
     }
     if ((*arg0)->unk4 >= 3) {
-        func_801A3DD4(&(*arg0)->unk18, (u8 *)arg1 + arg1->unkC);
-        func_801A43A8((s32)(*arg0)->unk18);
+        sprite_create(&(*arg0)->unk18, (u8 *)arg1 + arg1->unkC);
+        sprite_add((s32)(*arg0)->unk18);
         (*arg0)->unk18->unk4 = 0;
         (*arg0)->unk18->unkC = 0x43;
         (*arg0)->unk18->unkE = 1;
-        D_801DFEF4 = (*arg0)->unk18->unk1C->unk12;
-        D_801DFEFC = (*arg0)->unk18->unk12;
+        mail_page_tex_v_2 = (*arg0)->unk18->unk1C->unk12;
+        mail_page_height_2 = (*arg0)->unk18->unk12;
     }
     if ((*arg0)->unk4 >= 4) {
-        func_801A3DD4(&(*arg0)->unk1C, (u8 *)arg1 + arg1->unk10);
-        func_801A43A8((s32)(*arg0)->unk1C);
+        sprite_create(&(*arg0)->unk1C, (u8 *)arg1 + arg1->unk10);
+        sprite_add((s32)(*arg0)->unk1C);
         (*arg0)->unk1C->unk4 = 0;
         (*arg0)->unk1C->unkC = 0x43;
         (*arg0)->unk1C->unkE = 1;
-        D_801DFEF6 = (*arg0)->unk1C->unk1C->unk12;
-        D_801DFEFE = (*arg0)->unk1C->unk12;
+        mail_page_tex_v_3 = (*arg0)->unk1C->unk1C->unk12;
+        mail_page_height_3 = (*arg0)->unk1C->unk12;
     }
 
-    (*arg0)->unk8 = func_801A44B8((*arg0)->unk0 + 0x217);
+    (*arg0)->unk8 = sprite_find((*arg0)->unk0 + 0x217);
     if ((*arg0)->unk8 != NULL) {
-        func_801A461C((u16)((*arg0)->unk0 + 0x217), 7, 0x4D44);
-        func_801A461C((u16)((*arg0)->unk0 + 0x217), 9, 0x6358);
-        D_801DFF00 = (*arg0)->unk8[6];
+        sprite_set_clut_entry((u16)((*arg0)->unk0 + 0x217), 7, 0x4D44);
+        sprite_set_clut_entry((u16)((*arg0)->unk0 + 0x217), 9, 0x6358);
+        mail_entry_saved_y = (*arg0)->unk8[6];
         (*arg0)->unk8[6] = 0x33;
         (*arg0)->unk8[7] = 1;
     }
-    (*arg0)->unkC = func_801A44B8(0x20C);
-    if (D_801DFD34 != NULL) {
-        D_801DFF02 = D_801DFD34[6];
+    (*arg0)->unkC = sprite_find(0x20C);
+    if (mail_scrollbar != NULL) {
+        mail_scrollbar_saved_y = mail_scrollbar[6];
     }
     if ((*arg0)->unkC != NULL) {
         (*arg0)->unkC[6] = 0x29;
     }
 }
 
-void func_8018B11C(s16 arg0) {
+void mail_scroll(s16 arg0) {
     Unk_801E0324 *p = D_801E0324[0];
     s32 v;
     s32 n;
@@ -298,8 +297,8 @@ void func_8018B11C(s16 arg0) {
     if (v == 0) {
         p->unk10->unk4 = 1;
         p->unk10->unkC = 0x43;
-        p->unk10->unk12 = D_801DFEF8;
-        p->unk10->unk1C->unk12 = D_801DFEF0;
+        p->unk10->unk12 = mail_page_height_0;
+        p->unk10->unk1C->unk12 = mail_page_tex_v_0;
         p->unk14->unk4 = 0;
         if (p->unk18 != NULL) {
             p->unk18->unk4 = 0;
@@ -309,8 +308,8 @@ void func_8018B11C(s16 arg0) {
         }
     } else if (v > 0 && v < 128) {
         p->unk10->unk4 = 1;
-        p->unk10->unk12 = D_801DFEF8 - v;
-        p->unk10->unk1C->unk12 = D_801DFEF0 + v;
+        p->unk10->unk12 = mail_page_height_0 - v;
+        p->unk10->unk1C->unk12 = mail_page_tex_v_0 + v;
         p->unk14->unk4 = 1;
         p->unk14->unkC = p->unk10->unkC + p->unk10->unk12 - 1;
         p->unk14->unk12 = v;
@@ -324,8 +323,8 @@ void func_8018B11C(s16 arg0) {
         p->unk10->unk4 = 0;
         p->unk14->unk4 = 1;
         p->unk14->unkC = 0x43;
-        p->unk14->unk12 = D_801DFEFA;
-        p->unk14->unk1C->unk12 = D_801DFEF2;
+        p->unk14->unk12 = mail_page_height_1;
+        p->unk14->unk1C->unk12 = mail_page_tex_v_1;
         if (p->unk18 != NULL) {
             p->unk18->unk4 = 0;
         }
@@ -335,8 +334,8 @@ void func_8018B11C(s16 arg0) {
     } else if (v > 128 && v < 256) {
         p->unk10->unk4 = 0;
         p->unk14->unk4 = 1;
-        p->unk14->unk12 = D_801DFEFA + 128 - v;
-        p->unk14->unk1C->unk12 = D_801DFEF2 - 128 + v;
+        p->unk14->unk12 = mail_page_height_1 + 128 - v;
+        p->unk14->unk1C->unk12 = mail_page_tex_v_1 - 128 + v;
         p->unk18->unk4 = 1;
         p->unk18->unkC = p->unk14->unkC + p->unk14->unk12 - 1;
         p->unk18->unk12 = v - 128;
@@ -348,14 +347,14 @@ void func_8018B11C(s16 arg0) {
         p->unk14->unk4 = 0;
         p->unk18->unk4 = 1;
         p->unk18->unkC = 0x43;
-        p->unk18->unk12 = D_801DFEFC;
-        p->unk18->unk1C->unk12 = D_801DFEF4;
+        p->unk18->unk12 = mail_page_height_2;
+        p->unk18->unk1C->unk12 = mail_page_tex_v_2;
     } else if (v > 256 && v < 384) {
         p->unk10->unk4 = 0;
         p->unk14->unk4 = 0;
         p->unk18->unk4 = 1;
-        p->unk18->unk12 = D_801DFEFC + 256 - v;
-        p->unk18->unk1C->unk12 = D_801DFEF4 - 256 + v;
+        p->unk18->unk12 = mail_page_height_2 + 256 - v;
+        p->unk18->unk1C->unk12 = mail_page_tex_v_2 - 256 + v;
         p->unk1C->unk4 = 1;
         p->unk1C->unkC = p->unk18->unkC + p->unk18->unk12 - 1;
         p->unk1C->unk12 = v - 256;
@@ -365,37 +364,37 @@ void func_8018B11C(s16 arg0) {
         p->unk18->unk4 = 0;
         p->unk1C->unk4 = 1;
         p->unk1C->unkC = 0x43;
-        p->unk1C->unk12 = D_801DFEFE;
-        p->unk1C->unk1C->unk12 = D_801DFEF6;
+        p->unk1C->unk12 = mail_page_height_3;
+        p->unk1C->unk1C->unk12 = mail_page_tex_v_3;
     }
     p->unk6 = v;
 }
 
-void func_8018B564(Unk_801E0368 *a, s16 b) {
+void mail_list_refresh(Unk_801E0368 *a, s16 b) {
     s32 i;
     s32 n;
     u16 *q;
     Unk_801DFD30 *e;
 
     n = 0;
-    e = D_801DFD30;
+    e = mail_list;
     for (i = 0; i < (s16)a->unk0[0x5F]; i++, e++) {
-        q = func_801A44B8(e->unk0 + 0x217);
+        q = sprite_find(e->unk0 + 0x217);
         if (q != NULL) {
-            if (i >= D_801DFF04 && i < D_801DFF04 + 9) {
+            if (i >= mail_list_top && i < mail_list_top + 9) {
                 q[2] = 1;
                 q[5] = 0x30;
                 q[6] = n * 16 + 0x33;
                 n++;
                 if (i == b) {
-                    func_801A461C((u16)(e->unk0 + 0x217), 9, 0x1F);
+                    sprite_set_clut_entry((u16)(e->unk0 + 0x217), 9, 0x1F);
                 } else {
-                    func_801A461C((u16)(e->unk0 + 0x217), 9, 0x6358);
+                    sprite_set_clut_entry((u16)(e->unk0 + 0x217), 9, 0x6358);
                 }
                 if (e->unk4 != 0) {
-                    func_801A461C((u16)(e->unk0 + 0x217), 7, 0x2C1F);
+                    sprite_set_clut_entry((u16)(e->unk0 + 0x217), 7, 0x2C1F);
                 } else {
-                    func_801A461C((u16)(e->unk0 + 0x217), 7, 0x4D44);
+                    sprite_set_clut_entry((u16)(e->unk0 + 0x217), 7, 0x4D44);
                 }
             } else {
                 q[2] = 0;
@@ -404,7 +403,7 @@ void func_8018B564(Unk_801E0368 *a, s16 b) {
     }
 }
 
-s32 func_8018B69C(s16 a, s16 b) {
+s32 mail_list_move(s16 a, s16 b) {
     Unk_801E0368 *p = &D_801E0368;
     if ((s16)p->unk0[0x5F] == 0) {
         return -1;
@@ -414,11 +413,11 @@ s32 func_8018B69C(s16 a, s16 b) {
         if (b < 0) {
             return 0;
         }
-        D_801DFF06--;
-        if (D_801DFF06 < 0) {
-            D_801DFF06 = 0;
-            if (D_801DFF04 > 0) {
-                D_801DFF04--;
+        mail_list_row--;
+        if (mail_list_row < 0) {
+            mail_list_row = 0;
+            if (mail_list_top > 0) {
+                mail_list_top--;
             }
         }
     } else {
@@ -426,38 +425,38 @@ s32 func_8018B69C(s16 a, s16 b) {
         if (b >= (s16)p->unk0[0x5F]) {
             return (s16)(p->unk0[0x5F] - 1);
         }
-        D_801DFF06++;
-        if (D_801DFF06 >= 9) {
-            D_801DFF06 = 8;
-            if (D_801DFF04 != b - 8) {
-                D_801DFF04 = b - 8;
+        mail_list_row++;
+        if (mail_list_row >= 9) {
+            mail_list_row = 8;
+            if (mail_list_top != b - 8) {
+                mail_list_top = b - 8;
             }
         }
     }
-    func_8018B564(p, b);
-    if (D_801DFD34 != NULL) {
-        D_801DFD34[6] = b * 114 / ((s16)p->unk0[0x5F] - 1) + 0x29;
+    mail_list_refresh(p, b);
+    if (mail_scrollbar != NULL) {
+        mail_scrollbar[6] = b * 114 / ((s16)p->unk0[0x5F] - 1) + 0x29;
     }
-    func_801A2678(0xF);
+    sound_se_play(0xF);
     return b;
 }
 
-void func_8018B810(void) {
+void mail_list_open(void) {
     s32 i;
     s32 j;
     u16 v;
     Unk_801DFD30 *e;
     Unk_801E0368 *p = &D_801E0368;
     if ((s16)p->unk0[0x5F] != 0) {
-        D_801DFF06 = 0;
-        D_801DFF04 = 0;
-        D_801DFD34 = func_801A44B8(0x20C);
-        if (D_801DFD34 != NULL) {
-            D_801DFD34[6] = 0x29;
+        mail_list_row = 0;
+        mail_list_top = 0;
+        mail_scrollbar = sprite_find(0x20C);
+        if (mail_scrollbar != NULL) {
+            mail_scrollbar[6] = 0x29;
         }
-        D_801DFD30 = func_801CC898((s16)p->unk0[0x5F] * 8);
-        if (D_801DFD30 == NULL) {
-            func_801CD54C(3, "Error Allocating Mail List", D_801DFD38, 0x16A);
+        mail_list = kaj_malloc((s16)p->unk0[0x5F] * 8);
+        if (mail_list == NULL) {
+            kaj_abend(3, "Error Allocating Mail List", mail_str_file, 0x16A);
         }
         for (i = 0; i < 0x20; i++) {
             j = i / 2 + 0x60;
@@ -467,17 +466,17 @@ void func_8018B810(void) {
                 v = *(p->unk0 + j) >> 8;
             }
             if (v & 0x80) {
-                e = &D_801DFD30[v & 0x3F];
+                e = &mail_list[v & 0x3F];
                 e->unk0 = i;
                 e->unk2 = v;
                 e->unk4 = (v & 0x40) >> 6;
             }
         }
-        func_8018B564(p, 0);
+        mail_list_refresh(p, 0);
     }
 }
 
-void func_8018B924(void) {
+void mail_list_close(void) {
     s32 i;
     s32 j;
     s32 v;
@@ -485,11 +484,11 @@ void func_8018B924(void) {
     Unk_801DFD30 *e;
     Unk_801E0368 *p = &D_801E0368;
     if ((s16)p->unk0[0x5F] != 0) {
-        if (D_801DFD34 != NULL) {
-            D_801DFD34[6] = 0x29;
-            D_801DFD34 = NULL;
+        if (mail_scrollbar != NULL) {
+            mail_scrollbar[6] = 0x29;
+            mail_scrollbar = NULL;
         }
-        e = D_801DFD30;
+        e = mail_list;
         for (i = 0; i < (s16)p->unk0[0x5F]; i++, e++) {
             v = 0x80;
             if (e->unk4 != 0) {
@@ -504,15 +503,15 @@ void func_8018B924(void) {
                 *(p->unk0 + j) = (u8)*(p->unk0 + j) | (v << 8);
             }
         }
-        free3(D_801DFD30);
-        D_801DFD30 = NULL;
+        free3(mail_list);
+        mail_list = NULL;
         for (i = 0; i < 0x20; i++) {
-            func_801A43F4((u16)(i + 0x217));
+            sprite_delete((u16)(i + 0x217));
         }
     }
 }
 
-void func_8018BA48(u16 a) {
+void mail_receive(u16 a) {
     s32 v;
     s32 i;
     s16 odd;
@@ -537,79 +536,79 @@ void func_8018BA48(u16 a) {
     }
 }
 
-void func_8018BB00(s32 a, s32 b) {
+void mail_check_schedule(s32 a, s32 b) {
     Unk_801E0368 *p = &D_801E0368;
     if ((s16)p->unk0[0x30] == 0) {
         if (a == 0) {
             if (b == 10) {
-                func_8018BA48(0xE);
+                mail_receive(0xE);
             } else if (b == 0x11) {
-                func_8018BA48(8);
+                mail_receive(8);
             } else if (b == 0x15) {
-                func_8018BA48(0x17);
+                mail_receive(0x17);
             }
         } else if (a == 1) {
             if (b == 10) {
-                func_8018BA48(0xF);
+                mail_receive(0xF);
             } else if (b == 0x10) {
-                func_8018BA48(0x1C);
+                mail_receive(0x1C);
             }
         } else if (a == 2) {
             if (b == 10) {
                 if ((s16)p->unk0[0xB] == 100 && (s16)p->unk0[1] == 0) {
-                    func_8018BA48(2);
+                    mail_receive(2);
                 }
-                func_8018BA48(0x11);
+                mail_receive(0x11);
                 if ((s16)p->unk0[0x13] == 100) {
-                    func_8018BA48(0x14);
+                    mail_receive(0x14);
                 }
             } else if (b == 0xE) {
                 if ((s16)p->unk0[0x11] == 10) {
-                    func_8018BA48(0x15);
+                    mail_receive(0x15);
                 }
-                func_8018BA48(0x1A);
+                mail_receive(0x1A);
             }
         } else if (a == 3) {
             if (b == 0xC) {
-                func_8018BA48(0x1D);
+                mail_receive(0x1D);
                 if ((s16)p->unk0[0x4D] == 0) {
-                    func_8018BA48(0x1F);
+                    mail_receive(0x1F);
                 }
             }
         }
     }
 }
 
-void func_8018BC50(void) {
+void mail_free(void) {
     Unk_801E02D8 *p = &D_801E02D8;
     Unk_8018BC50 *e = p->unk4C;
     if (e != NULL) {
-        D_801DFD30[e->unk2].unk4 = 1;
+        mail_list[e->unk2].unk4 = 1;
         if (e->unk8 != NULL) {
-            func_801A461C((u16)(e->unk0 + 0x217), 7, 0x2C1F);
-            func_801A461C((u16)(e->unk0 + 0x217), 9, 0x1F);
-            e->unk8->unkC = D_801DFF00;
+            sprite_set_clut_entry((u16)(e->unk0 + 0x217), 7, 0x2C1F);
+            sprite_set_clut_entry((u16)(e->unk0 + 0x217), 9, 0x1F);
+            e->unk8->unkC = mail_entry_saved_y;
             e->unk8->unkE = 2;
         }
         if (e->unkC != NULL) {
-            e->unkC->unkC = D_801DFF02;
+            e->unkC->unkC = mail_scrollbar_saved_y;
         }
-        func_801A43F4(0x213);
-        func_801A43F4(0x214);
-        func_801A43F4(0x215);
-        func_801A43F4(0x216);
+        sprite_delete(0x213);
+        sprite_delete(0x214);
+        sprite_delete(0x215);
+        sprite_delete(0x216);
         free3(e);
         p->unk4C = NULL;
     }
 }
 
-s16 func_8018BD44(s16 i) { return D_801DFD30[i].unk0; }
+s16 mail_list_get_id(s16 i) { return mail_list[i].unk0; }
 
-void func_8018BD60(Unk_8018BD60 *a) {
-    func_8018BA48(a->unk0->unk4);
+void mail_cmd_receive(Unk_8018BD60 *a) {
+    mail_receive(a->unk0->unk4);
 }
 
-s32 func_8018BD8C(s16 a) {
+s32 mail_is_read(s16 a) {
     s32 v;
     Unk_801E0368 *p = &D_801E0368;
     s32 i = a / 2 + 0x60;
@@ -621,7 +620,7 @@ s32 func_8018BD8C(s16 a) {
     return v != 0;
 }
 
-void func_8018BDE8(void) {
+void main(void) {
     Unk_801E0340 *p;
     Unk_801E0340 *q;
     Unk_801E0368 *r;
@@ -629,8 +628,7 @@ void func_8018BDE8(void) {
     u16 a;
     u16 b;
 
-    __main();
-    func_801CC8F0();
+    kaj_init();
     memset(&D_801E02D8, 0, 0x64);
     D_801DFED8 = 0;
     D_801DFEE4 = 0;
@@ -638,20 +636,20 @@ void func_8018BDE8(void) {
     D_801DFEDC = 0;
     D_801DFED4 = 0;
     D_801DFEE8 = 0;
-    func_801CCAF4(&D_801DFE50);
-    func_801CCAF4(&D_801DFE54);
-    func_801CCAF4(&D_801DFE5C);
-    func_801CCAF4(&D_801DFE80);
-    func_801CCAF4(&D_801DFF0C);
-    func_801CCAF4(&D_801DFF80);
-    func_801CCAF4(&D_801DFFA0);
-    func_8018920C();
-    func_801A02C8();
-    func_80192B8C(1, 0);
+    kaj_ll_create(&action_set_list);
+    kaj_ll_create(&action_queue);
+    kaj_ll_create(&D_801DFE5C);
+    kaj_ll_create(&D_801DFE80);
+    kaj_ll_create(&mod_list);
+    kaj_ll_create(&sprite_list);
+    kaj_ll_create(&D_801DFFA0);
+    event_open();
+    roadmap_init_draw();
+    object_load_res(1, 0);
     r = &D_801E0368;
     while (1) {
         q = &D_801E0340;
-        f = D_801DFD48;
+        f = mail_main_restarted;
         if (f != 0) {
             a = r->unk200;
             b = r->unk202;
@@ -667,7 +665,7 @@ void func_8018BDE8(void) {
         }
         q->unk0[0] = -1;
         q->unk0[1] = -1;
-        func_801971D4();
+        player_init();
         r->unk0[0x5F] = 3;
         r->unkC0 = -0x7E80;
         r->unkC2[4] = 0x82;
@@ -681,40 +679,40 @@ void func_8018BDE8(void) {
         r->unk0[0x30] = 0;
         r->unk1FE = 0;
         r->unk1FC = 0;
-        func_801863B4();
+        effect_clear_alarms();
         p = &D_801E0340;
-        func_801AC9B4();
-        func_801A5254(D_801DFD48);
-        func_801CD808();
-        func_801A4A68(0x400, 1);
-        func_801A4A68(0x409, 1);
-        func_8018A24C();
+        vehicle_train_init_state();
+        sprite_title_run(mail_main_restarted);
+        kaj_srand_ticks();
+        sprite_set_visible(0x400, 1);
+        sprite_set_visible(0x409, 1);
+        event_draw_hud();
         while (p->unk0[4] == 0) {
             if (p->unk0[0] != p->unk0[1]) {
                 p->unk0[0] = p->unk0[1];
             }
             switch (p->unk0[0]) {
             case 1:
-                func_8017E544();
+                block_building_main();
                 break;
             case 0:
-                func_80194E5C();
+                object_room_run();
                 break;
             case 2:
-                func_801A9070();
+                thing_game_loop();
                 break;
             }
         }
         p->unk0[4] = 0;
-        func_801A4A68(0x400, 0);
-        func_801A4A68(0x409, 0);
-        if (D_801DFD48 == 0) {
-            D_801DFD48 = 1;
+        sprite_set_visible(0x400, 0);
+        sprite_set_visible(0x409, 0);
+        if (mail_main_restarted == 0) {
+            mail_main_restarted = 1;
         }
     }
 }
 
-s32 func_8018C0A0(s16 a) {
+s32 mail_angle_to_dir8(s16 a) {
     s32 b;
 
 loop:
@@ -732,77 +730,77 @@ loop:
     return 2;
 }
 
-s32 func_8018C170(void) {
+s32 mail_take_scene_change(void) {
     Unk_801E0340 *p = &D_801E0340;
     if (p->unkA == 0) {
         return 0;
     }
     p->unkA = 0;
-    func_801CD688(0);
+    kaj_pad_reset(0);
     return 1;
 }
 
-void func_8018C1B0(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+void mail_wait(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 buf[6];
     s32 n;
     for (n = arg3 * 30; n > 0;) {
-            switch (func_801CC378(buf)) {
+            switch (kaj_event_get(buf)) {
             case 2:
                 func_80189928(buf);
                 continue;
             case 4:
-                func_80189970(0);
+                event_handle_tick(0);
                 continue;
             case 0x200:
-                func_801899AC(buf);
+                event_handle_mod_finish(buf);
                 continue;
             case 0:
                 n -= D_801E6DA0.unk14;
                 break;
             case 0x100:
-                func_8018970C(buf);
+                event_handle_effect_done(buf);
                 continue;
             default:
-                func_801CC734(buf);
+                kaj_event_done(buf);
                 continue;
             }
             if ((u16)arg0 == 3) {
-                func_801A7560();
-                func_801A0418(3);
+                thing_update_all();
+                roadmap_draw_frame(3);
             } else {
-                do { func_8018C2FC(arg0, arg1, arg2); } while (0);
+                do { mail_step_frame(arg0, arg1, arg2); } while (0);
             }
     }
 }
 
-void func_8018C2FC(u16 a, s16 b, s16 c) {
+void mail_step_frame(u16 a, s16 b, s16 c) {
     Unk_801E0368 *p = &D_801E0368;
-    func_8017345C();
+    action_update();
     if (a < 2) {
-        func_801759B0();
-        func_80184C6C();
-        func_8018F234();
+        npc_update_all();
+        door_update_all();
+        mod_npcrec_update_all();
     } else if (a == 2) {
-        func_801AC4A8();
+        vehicle_update();
     }
-    func_8018DE58();
-    func_801A7560();
-    func_801979B4(a, b, c);
+    mod_update_all();
+    thing_update_all();
+    player_update(a, b, c);
     if ((u16)(a - 1) < 2) {
         if (p->unk252 != 0) {
-            func_80185E38();
+            effect_flame_small_update();
         }
         if (p->unk254 != 0) {
-            func_801865C0();
+            effect_clut_cycle_update();
         }
         if (p->unk250 != 0) {
-            func_80186010();
+            effect_flame_large_update();
         }
     }
-    func_801A0418(a);
+    roadmap_draw_frame(a);
 }
 
-void func_8018C414(s16 a, s16 b, s16 c, s16 d) {
+void mail_goto_ofc(s16 a, s16 b, s16 c, s16 d) {
     Unk_801E0340 *p = &D_801E0340;
     Unk_801E0710 *g = &D_801E0710;
     Unk_801E0368 *q = &D_801E0368;
@@ -840,7 +838,7 @@ void func_8018C414(s16 a, s16 b, s16 c, s16 d) {
     }
 }
 
-void func_8018C50C(s32 a, s32 b, s32 c, s16 d, s16 e) {
+void mail_goto_twn(s32 a, s32 b, s32 c, s16 d, s16 e) {
     Unk_801E0340 *p = &D_801E0340;
     p->unkA = 1;
     p->unk0[1] = 2;
@@ -854,7 +852,7 @@ void func_8018C50C(s32 a, s32 b, s32 c, s16 d, s16 e) {
     p->unk10 = e;
 }
 
-void func_8018C554(u16 arg0, char *arg1, s16 arg2, s16 arg3, u16 arg4, u16 arg5, u16 arg6, u32 arg7, u16 arg8) {
+void mail_goto_building(u16 arg0, char *arg1, s16 arg2, s16 arg3, u16 arg4, u16 arg5, u16 arg6, u32 arg7, u16 arg8) {
     Unk_8018C554 *p = (Unk_8018C554 *)&D_801E0340;
     Unk_801E0368 *g = &D_801E0368;
 
@@ -910,7 +908,7 @@ void func_8018C554(u16 arg0, char *arg1, s16 arg2, s16 arg3, u16 arg4, u16 arg5,
     }
 }
 
-s16 func_8018C750(s16 a) {
+s16 mail_wrap_angle(s16 a) {
     do {
         if (a < 0) a += 360;
         if (a >= 360) a -= 360;
@@ -918,7 +916,7 @@ s16 func_8018C750(s16 a) {
     return a;
 }
 
-s32 func_8018C790(s16 a) {
+s32 mail_angle_to_dir4(s16 a) {
     s32 b;
 
 loop:
@@ -932,7 +930,7 @@ loop:
     return 2;
 }
 
-s32 func_8018C810(s32 a) {
+s32 mail_exp_for_level(s32 a) {
     s32 i;
     s32 r;
     if (a == 1) return 0;
@@ -944,7 +942,7 @@ s32 func_8018C810(s32 a) {
     return r;
 }
 
-void func_8018C864(s32 a, s32 b, s32 c) {
+void mail_menu_draw_item_name(s32 a, s32 b, s32 c) {
     s16 r[4];
     u16 buf[0x20];
     Unk_8018C864 *p;
@@ -957,8 +955,8 @@ void func_8018C864(s32 a, s32 b, s32 c) {
     s32 n;
     s32 x;
 
-    p = (Unk_8018C864 *)func_801A44B8(a);
-    e = func_801891A4(c);
+    p = (Unk_8018C864 *)sprite_find(a);
+    e = effect_item_find(c);
     if (p == NULL || e == NULL) {
         return;
     }
@@ -1093,7 +1091,7 @@ void func_8018C864(s32 a, s32 b, s32 c) {
     }
 }
 
-void func_8018CB70(Unk_801E058C *p, s32 b) {
+void mail_menu_draw(Unk_801E058C *p, s32 b) {
     s32 i;
     s16 start;
     s16 end;
@@ -1101,8 +1099,8 @@ void func_8018CB70(Unk_801E058C *p, s32 b) {
     u16 col;
     u16 row;
 
-    func_801A4824(p->unkA, p->unk8, p->unk8 + p->unk18 - 1, p->unk10);
-    func_801A461C(p->unkA, p->unk4, (u16)p->unk12);
+    sprite_fill_clut(p->unkA, p->unk8, p->unk8 + p->unk18 - 1, p->unk10);
+    sprite_set_clut_entry(p->unkA, p->unk4, (u16)p->unk12);
     start = p->unk6;
     if (p->unk18 < p->unk1A) {
         end = start + p->unk18;
@@ -1119,15 +1117,15 @@ void func_8018CB70(Unk_801E058C *p, s32 b) {
                     col = p->unk1C[i] / p->unkE;
                     row = p->unk1C[i] % p->unkE;
                 }
-                func_801A3F90((u16)p->unkC, col, row, p->unkA, 0x10, (u16)(j * 0x11 + 0xC));
+                sprite_copy_cell((u16)p->unkC, col, row, p->unkA, 0x10, (u16)(j * 0x11 + 0xC));
             } else if (p->unkC == -2) {
-                func_8018C864((s16)p->unkA, j * 0x11 + 0xC, p->unk1C[i]);
+                mail_menu_draw_item_name((s16)p->unkA, j * 0x11 + 0xC, p->unk1C[i]);
             }
         }
     }
 }
 
-void func_8018CD4C(Unk_801E058C *p) {
+void mail_menu_clear_rows(Unk_801E058C *p) {
     s16 r[4];
     Unk_8018CD4C *a;
     Unk_8018CD4C *b;
@@ -1135,8 +1133,8 @@ void func_8018CD4C(Unk_801E058C *p) {
     s32 n;
     s32 i;
 
-    a = (Unk_8018CD4C *)func_801A44B8(p->unkA);
-    b = (Unk_8018CD4C *)func_801A44B8(p->unkC);
+    a = (Unk_8018CD4C *)sprite_find(p->unkA);
+    b = (Unk_8018CD4C *)sprite_find(p->unkC);
     if (a != NULL) {
         r[0] = a->unk1C->unk0;
         r[1] = a->unk1C->unk2 + 0xC;
@@ -1150,7 +1148,7 @@ void func_8018CD4C(Unk_801E058C *p) {
             p->unkE = b->unk16;
         }
         n = r[2] * r[3] * 2;
-        buf = func_801CC898(n);
+        buf = kaj_malloc(n);
         if (buf != NULL) {
             memset(buf, 0xEE, n);
             for (i = 0; i < 6; i++) {
@@ -1162,10 +1160,10 @@ void func_8018CD4C(Unk_801E058C *p) {
     }
 }
 
-s16 func_8018CEA0(s16 a) {
+s16 mail_menu_move(s16 a) {
     s16 snd = 1;
     s32 flag = 0;
-    Unk_801E058C *p = &D_801E058C;
+    Unk_801E058C *p = &mail_menu;
 
     if (a != 0) {
         p->unk2--;
@@ -1215,13 +1213,13 @@ s16 func_8018CEA0(s16 a) {
         }
     }
     if (snd) {
-        func_801A2678(0xF);
+        sound_se_play(0xF);
     }
-    func_8018CB70(p, flag);
+    mail_menu_draw(p, flag);
     return p->unk2;
 }
 
-s32 func_8018D078(s16 a, s16 b, s16 c, s16 d, s16 e, s16 *f, s16 g, s16 h, s16 i) {
+s32 mail_menu_open(s16 a, s16 b, s16 c, s16 d, s16 e, s16 *f, s16 g, s16 h, s16 i) {
     Unk_801E0368 *p = &D_801E0368;
     Unk_801E058C *q = &p->unk224;
     if (p->unk224.unk0 != 0) {
@@ -1251,27 +1249,27 @@ s32 func_8018D078(s16 a, s16 b, s16 c, s16 d, s16 e, s16 *f, s16 g, s16 h, s16 i
     q->unk1A = d;
     q->unk1C = f;
     if ((c == 0x40C || c == 0x402 || c == -2) && b == 0x40B) {
-        func_8018CD4C(q);
+        mail_menu_clear_rows(q);
     }
-    func_8018CB70(q, 1);
-    func_80185A60(0xB, b, 2);
+    mail_menu_draw(q, 1);
+    effect_start_sprite_slide(0xB, b, 2);
     return 1;
 }
 
-s32 func_8018D1A0(void) {
-    Unk_801E058C *p = &D_801E058C;
+s32 mail_menu_close(void) {
+    Unk_801E058C *p = &mail_menu;
     if (p->unk0 != 1) {
         return 0;
     }
     p->unk0 = 2;
-    func_80185A60(0xC, p->unkA, 2);
+    effect_start_sprite_slide(0xC, p->unkA, 2);
     return 1;
 }
 
-s16 func_8018D1F0(void) { return D_801E058C.unk0; }
+s16 mail_menu_get_state(void) { return mail_menu.unk0; }
 
-s32 func_8018D200(u16 a, s16 *b) {
-    Unk_801E058C *p = &D_801E058C;
+s32 mail_menu_set_list(u16 a, s16 *b) {
+    Unk_801E058C *p = &mail_menu;
     if (p->unk0 == 2) {
         return 0;
     }
@@ -1279,15 +1277,15 @@ s32 func_8018D200(u16 a, s16 *b) {
     p->unk6 = 0;
     p->unk1C = b;
     p->unk4 = p->unk8;
-    func_801A4A68(p->unkA, 0);
-    func_801A4A68(a, 1);
+    sprite_set_visible(p->unkA, 0);
+    sprite_set_visible(a, 1);
     p->unkA = a;
-    func_8018CB70(p, 0);
+    mail_menu_draw(p, 0);
     return 1;
 }
 
-s16 func_8018D294(s16 i) {
-    Unk_801E058C *p = &D_801E058C;
+s16 mail_menu_get_entry(s16 i) {
+    Unk_801E058C *p = &mail_menu;
     if (i < 0 || p->unk1A < i) {
         return -1;
     }

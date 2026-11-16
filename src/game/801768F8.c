@@ -23,8 +23,8 @@ typedef struct Unk_801CCB70 {
     Unk_80174B10 *unk8;
 } Unk_801CCB70;
 typedef struct { Unk_801CCB70 *unk0; Unk_801CCB70 *unk4; Unk_801CCB70 *unk8; s32 unkC; } Unk_801DFE54;
-Unk_801DFE54 *D_801DFE54;
-void func_801CCBF4(Unk_801DFE54 *a0, s32 a1);
+Unk_801DFE54 *action_queue;
+void kaj_ll_insert_before(Unk_801DFE54 *a0, s32 a1);
 typedef struct { s32 unk0; s32 unk4; s32 unk8; } Unk_80174F54;
 typedef struct { u16 unk0; s16 unk2; s16 unk4; s16 unk6; s16 unk8; u8 unkA; u8 unkB; s16 unkC; u8 unkE; u8 unkF; s16 unk10; u16 unk12; s16 unk14; s16 unk16; s16 unk18; s16 unk1A; s16 unk1C; s16 unk1E; s32 unk20; s32 unk24; s32 unk28; s32 unk2C; s32 unk30; s32 unk34; s16 unk38; s16 unk3A; s16 unk3C; s16 unk3E; s16 unk40; s16 unk42; u8 unk44; u8 unk45; s16 unk46; s32 unk48; } Unk_801762F4;
 typedef struct { u16 unk0; s16 unk2; s32 unk4; s16 unk8; u16 unkA; u8 unkC[0xC0]; } Unk_801767D4;
@@ -52,8 +52,8 @@ typedef struct {
 } Unk_801E02D8;
 extern Unk_801E02D8 D_801E02D8;
 void free3(void *ptr);
-s32 func_8017CDA4(s32 a0, s32 a1, s32 a2);
-Unk_801767D4 *func_801767D4(s16 arg0);
+s32 block_find_at(s32 a0, s32 a1, s32 a2);
+Unk_801767D4 *npc_find_body(s16 arg0);
 typedef struct { s16 unk0; s16 unk2; s16 unk4[2]; u8 unk8[0x28]; s16 unk30; s16 unk32[8]; s16 unk42; s16 unk44; s16 unk46; s16 unk48; u8 unk4A[2]; s32 unk4C; } Unk_801E0768;
 extern Unk_801E0768 *D_801E0768[];
 typedef struct {
@@ -89,11 +89,11 @@ typedef struct {
     u8 unk0[4];
     s16 unk4;
 } Unk_80176370;
-Unk_8018E56C *func_8018E56C(u16 arg0);
-void func_8018E6D8(s32 arg0, Unk_8018E56C *arg1, u16 arg2);
-void func_801CCDF8(Unk_801DFE54 *arg0);
-s16 func_801CD000(Unk_801DFE54 *arg0);
-Unk_801DFE54 *D_801DFE50;
+Unk_8018E56C *mod_find(u16 arg0);
+void mod_draw(s32 arg0, Unk_8018E56C *arg1, u16 arg2);
+void kaj_ll_remove_to_prev(Unk_801DFE54 *arg0);
+s16 kaj_ll_at_tail(Unk_801DFE54 *arg0);
+Unk_801DFE54 *action_set_list;
 typedef struct {
     s16 unk0;
     s16 unk2;
@@ -102,7 +102,7 @@ typedef struct {
     s16 unk8;
     s16 unkA;
 } Unk_80174D6C;
-Unk_80174B10 *func_80173DE0(Unk_80174B10 *arg0, s32 arg1, s32 arg2);
+Unk_80174B10 *action_run_set(Unk_80174B10 *arg0, s32 arg1, s32 arg2);
 typedef struct {
     u8 unk0[0x6];
     s16 unk6;
@@ -114,7 +114,7 @@ typedef struct {
     u16 unk12;
 } Unk_801DFFE8;
 extern Unk_801DFFE8 D_801DFFE8;
-void func_80184160(void);
+void text_release_cmd(void);
 void *memset(void *dst, s32 c, u32 n);
 typedef struct {
     u8 unk0[0x40];
@@ -138,24 +138,24 @@ typedef struct {
     s16 unk6;
 } Unk_80174FFC;
 extern Unk_801E076C *D_801E076C[];
-void func_8018D2DC(Unk_8018E56C *arg0, s32 arg1, s32 arg2, s32 arg3);
+void mod_setup(Unk_8018E56C *arg0, s32 arg1, s32 arg2, s32 arg3);
 void RotMatrix(Unk_80174FFC *arg0, void *arg1);
-void func_80174FFC(Unk_801762F4 *arg0, Unk_8018E56C *arg1);
-Unk_80174B10 *func_80174CB8(s16 arg0);
-void func_80184094(void);
+void action_place_npc(Unk_801762F4 *arg0, Unk_8018E56C *arg1);
+Unk_80174B10 *action_find_set(s16 arg0);
+void text_close(void);
 void GsSetLsMatrix(void *m);
-s16 func_8017B7CC(void *arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4);
-Unk_801762F4 *func_801762F4(s16 arg0, u16 arg1);
-s16 func_8018C750(s16 a);
+s16 block_point_on_model(void *arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4);
+Unk_801762F4 *npc_find(s16 arg0, u16 arg1);
+s16 mail_wrap_angle(s16 a);
 s32 ratan2(s32 y, s32 x);
-s32 func_8018C790(s16 a);
-extern s16 D_801D7440[];
+s32 mail_angle_to_dir4(s16 a);
+extern s16 ai_probe_angle[];
 s32 rsin(s32 a);
 s32 rcos(s32 a);
-s16 func_801768F8(Unk_801762F4 *arg0, Unk_80174F54 *arg1, s32 arg2);
-s16 func_80177608(Unk_801762F4 *arg0, Unk_80174F54 *arg1, s16 arg2);
+s16 ai_check_line(Unk_801762F4 *arg0, Unk_80174F54 *arg1, s32 arg2);
+s16 ai_try_move(Unk_801762F4 *arg0, Unk_80174F54 *arg1, s16 arg2);
 extern s32 D_801E6DB4[];
-Unk_8018E56C *D_801DFC68;
+Unk_8018E56C *ai_cur_model;
 typedef struct {
     u8 unk0[0x8];
     s16 unk8;
@@ -168,16 +168,16 @@ typedef struct {
     void *unk84;
     s32 unk88;
 } Unk_801DFC60;
-Unk_80176890 *func_80176890(s16 arg0);
-s16 func_8017726C(Unk_801762F4 *arg0, s16 arg1);
-s16 func_801788F8(Unk_801762F4 *arg0);
-void func_80178B84(Unk_801762F4 *arg0);
+Unk_80176890 *npc_find_stats(s16 arg0);
+s16 ai_find_target(Unk_801762F4 *arg0, s16 arg1);
+s16 ai_decide_fire(Unk_801762F4 *arg0);
+void ai_face_player(Unk_801762F4 *arg0);
 extern Unk_80176890 D_801D7328;
-extern Unk_801767D4 D_801D734C;
-Unk_801DFC60 *D_801DFC60;
-s32 D_801DFC64;
-Unk_80176890 *D_801DFC6C;
-Unk_801767D4 *D_801DFC70;
+extern Unk_801767D4 ai_default_body;
+Unk_801DFC60 *ai_cur_block;
+s32 ai_cur_grid;
+Unk_80176890 *ai_cur_stats;
+Unk_801767D4 *ai_cur_body;
 typedef struct {
     u16 unk0;
     u16 unk2;
@@ -201,30 +201,30 @@ typedef struct {
 } Unk_801E0710;
 extern Unk_801E0710 D_801E0710;
 s32 rand(void);
-void func_80197BB0(s16 arg0, s16 arg1);
-void func_80197D64(s32 arg0);
-void func_8018A968(s16 arg0, s16 arg1);
-extern s16 D_801D742C[];
-s16 func_8018C0A0(s16 a);
-void func_80176E2C(Unk_801762F4 *arg0);
-void func_801779B8(Unk_801762F4 *arg0, s16 arg1, s32 arg2, s32 arg3);
-s16 func_80179630(Unk_801762F4 *arg0, s16 arg1, s16 arg2);
-s16 func_80176FBC(Unk_801762F4 *arg0, s16 arg1);
-s32 func_80177110(Unk_801762F4 *arg0);
+void player_add_skill_exp(s16 arg0, s16 arg1);
+void player_add_exp(s32 arg0);
+void event_set_blink(s16 arg0, s16 arg1);
+extern s16 ai_dir_angle[];
+s16 mail_angle_to_dir8(s16 a);
+void ai_turn_step(Unk_801762F4 *arg0);
+void ai_move_toward(Unk_801762F4 *arg0, s16 arg1, s32 arg2, s32 arg3);
+s16 ai_in_aim_cone(Unk_801762F4 *arg0, s16 arg1, s16 arg2);
+s16 ai_heading_to(Unk_801762F4 *arg0, s16 arg1);
+s32 ai_player_in_front(Unk_801762F4 *arg0);
 s16 D_801DFC74;
 s16 D_801DFC76;
-void func_80178494(Unk_801762F4 *arg0, s16 arg1, s32 arg2);
-s32 func_801786A0(Unk_801762F4 *arg0, s32 arg1);
-s32 func_801787CC(Unk_801762F4 *arg0, s32 arg1);
-void func_8018DA2C(void *arg0, s16 arg1, s16 arg2);
-void func_801A25B4(s32 arg0);
-u16 func_80176734(Unk_801762F4 *arg0);
-extern s16 D_801D7418[];
-extern s16 D_801DFC78[4];
+void ai_walk(Unk_801762F4 *arg0, s16 arg1, s32 arg2);
+s32 ai_step_back(Unk_801762F4 *arg0, s32 arg1);
+s32 ai_sidestep(Unk_801762F4 *arg0, s32 arg1);
+void mod_set_anim(void *arg0, s16 arg1, s16 arg2);
+void sound_se_stop(s32 arg0);
+u16 npc_get_radius(Unk_801762F4 *arg0);
+extern s16 ai_dir_reverse[];
+extern s16 ai_quadrant_dir[4];
 extern u16 D_801E03E6[];
 s32 abs(s32 x);
-void func_801981D0(Unk_801762F4 *arg0, u16 arg1, s32 arg2);
-void func_801A2678(s32 arg0);
+void player_take_hit(Unk_801762F4 *arg0, u16 arg1, s32 arg2);
+void sound_se_play(s32 arg0);
 typedef struct {
     u16 unk0;
     u16 unk2;
@@ -233,25 +233,25 @@ typedef struct {
     u8 *unk8;
 } Unk_801DFC64;
 s32 SquareRoot0(s32 a);
-s16 func_80176464(s16 arg0, s32 arg1, s32 arg2, s32 arg3);
-s32 func_8017D414(void *arg0, s32 arg1, s32 arg2, s32 arg3);
+s16 npc_find_at_point(s16 arg0, s32 arg1, s32 arg2, s32 arg3);
+s32 block_model_surface(void *arg0, s32 arg1, s32 arg2, s32 arg3);
 
 static inline s32 cvx(s32 x) {
-    s32 d = x - D_801DFC60->unk10;
+    s32 d = x - ai_cur_block->unk10;
     s32 t = d >> 8;
-    s32 o = ((Unk_801DFC64 *)D_801DFC64)->unk0;
+    s32 o = ((Unk_801DFC64 *)ai_cur_grid)->unk0;
     return (d & 0xFF) ? t + 1 + o : t + o;
 }
 
 static inline s32 cvz(s32 z) {
-    s32 d = z - D_801DFC60->unk18;
+    s32 d = z - ai_cur_block->unk18;
     s32 t = d >> 8;
-    s32 o = ((Unk_801DFC64 *)D_801DFC64)->unk2;
+    s32 o = ((Unk_801DFC64 *)ai_cur_grid)->unk2;
     return (d & 0xFF) ? t + 1 + o : t + o;
 }
 
 static inline s32 cell(s32 x, s32 z) {
-    Unk_801DFC64 *m = (Unk_801DFC64 *)D_801DFC64;
+    Unk_801DFC64 *m = (Unk_801DFC64 *)ai_cur_grid;
     s32 i;
     s32 sh;
     if (x < 0 || x >= m->unk4 || z < 0 || z >= m->unk6) {
@@ -281,7 +281,7 @@ static inline s16 pass(s32 v, s32 mode) {
     return 1;
 }
 
-s16 func_801768F8(Unk_801762F4 *arg0, Unk_80174F54 *arg1, s32 arg2) {
+s16 ai_check_line(Unk_801762F4 *arg0, Unk_80174F54 *arg1, s32 arg2) {
     Unk_801E076C *p;
     s32 mode;
     s32 d;
@@ -299,10 +299,10 @@ s16 func_801768F8(Unk_801762F4 *arg0, Unk_80174F54 *arg1, s32 arg2) {
     s32 a;
     s16 b;
 
-    if (D_801DFC60 == NULL || D_801DFC64 == 0) {
+    if (ai_cur_block == NULL || ai_cur_grid == 0) {
         return 0;
     }
-    if ((arg2 & 1) && D_801DFC60->unk8 == 0) {
+    if ((arg2 & 1) && ai_cur_block->unk8 == 0) {
         return 0;
     }
     mode = 0;
@@ -388,7 +388,7 @@ s16 func_801768F8(Unk_801762F4 *arg0, Unk_80174F54 *arg1, s32 arg2) {
     return 1;
 }
 
-void func_80176E2C(Unk_801762F4 *arg0) {
+void ai_turn_step(Unk_801762F4 *arg0) {
     Unk_80174FFC sv;
     s16 d;
     s16 diff;
@@ -416,18 +416,18 @@ void func_80176E2C(Unk_801762F4 *arg0) {
                 d = -step;
             }
         }
-        arg0->unk3A = func_8018C750(arg0->unk3A + d);
-        if (D_801DFC68 != NULL && D_801DFC68->unk4 != 0) {
+        arg0->unk3A = mail_wrap_angle(arg0->unk3A + d);
+        if (ai_cur_model != NULL && ai_cur_model->unk4 != 0) {
             sv.unk0 = (arg0->unk38 << 12) / 360;
             sv.unk2 = (arg0->unk3A << 12) / 360;
             sv.unk4 = (arg0->unk3C << 12) / 360;
-            RotMatrix(&sv, D_801DFC68->unk40);
-            D_801DFC68->unk3C = 0;
+            RotMatrix(&sv, ai_cur_model->unk40);
+            ai_cur_model->unk3C = 0;
         }
     }
 }
 
-s16 func_80176FBC(Unk_801762F4 *arg0, s16 arg1) {
+s16 ai_heading_to(Unk_801762F4 *arg0, s16 arg1) {
     Unk_801E076C *p = D_801E076C[0];
     Unk_801762F4 *t;
     s32 dx;
@@ -443,17 +443,17 @@ s16 func_80176FBC(Unk_801762F4 *arg0, s16 arg1) {
         dx = p->unk54 + p->unk72 * 12500 - arg0->unk20;
         dz = p->unk5C + p->unk76 * 12500 - arg0->unk28;
     } else {
-        t = func_801762F4(0, arg1);
+        t = npc_find(0, arg1);
         if (t == 0) {
             return 0;
         }
         dx = t->unk20 - arg0->unk20;
         dz = t->unk28 - arg0->unk28;
     }
-    return func_8018C750((ratan2(dx, dz) * 360 >> 12) - 180);
+    return mail_wrap_angle((ratan2(dx, dz) * 360 >> 12) - 180);
 }
 
-s32 func_80177110(Unk_801762F4 *arg0) {
+s32 ai_player_in_front(Unk_801762F4 *arg0) {
     Unk_801E076C *p = D_801E076C[0];
     s32 dx;
     s32 dz;
@@ -463,7 +463,7 @@ s32 func_80177110(Unk_801762F4 *arg0) {
     if (dx >= -9999 && dx < 10000 && dz >= -9999 && dz < 10000) {
         return 1;
     }
-    switch ((s16)func_8018C790(arg0->unk3A - 180)) {
+    switch ((s16)mail_angle_to_dir4(arg0->unk3A - 180)) {
     case 0:
         if (dx < 0) {
             return 0;
@@ -488,7 +488,7 @@ s32 func_80177110(Unk_801762F4 *arg0) {
     return 1;
 }
 
-s16 func_8017726C(Unk_801762F4 *arg0, s16 arg1) {
+s16 ai_find_target(Unk_801762F4 *arg0, s16 arg1) {
     Unk_80174F54 v;
     s16 found;
     u16 min;
@@ -514,22 +514,22 @@ s16 func_8017726C(Unk_801762F4 *arg0, s16 arg1) {
     arg0->unk40 = 0;
     arg0->unk12 &= ~6;
     a = b;
-    if (D_801DFC60->unk8 != 0
-        && (D_801DFC74 != 0 || D_801DFC76 != 0 || (s16)func_80177110(arg0) != 0)) {
+    if (ai_cur_block->unk8 != 0
+        && (D_801DFC74 != 0 || D_801DFC76 != 0 || (s16)ai_player_in_front(arg0) != 0)) {
         v.unk0 = cam->unk54 + cam->unk72 * 12500;
         v.unk4 = cam->unk58 - cam->unk74 * 32000 + 1600;
         v.unk8 = cam->unk5C + cam->unk76 * 12500;
-        if (func_801768F8(arg0, &v, 15) != 0) {
+        if (ai_check_line(arg0, &v, 15) != 0) {
             saved = arg0->unk40;
             min = saved;
             arg0->unk12 |= 2;
-            a = func_80176FBC(arg0, -1);
+            a = ai_heading_to(arg0, -1);
             found = 1;
         }
     }
     if (arg1 == 2) {
-        arg0->unk3E = func_80176FBC(arg0, -2);
-        func_80176E2C(arg0);
+        arg0->unk3E = ai_heading_to(arg0, -2);
+        ai_turn_step(arg0);
         return 0;
     }
     if (g->unk1C > 0) {
@@ -539,7 +539,7 @@ s16 func_8017726C(Unk_801762F4 *arg0, s16 arg1) {
                 v.unk0 = e->unk20;
                 v.unk4 = e->unk24;
                 v.unk8 = e->unk28;
-                if (func_801768F8(arg0, &v, 6) != 0) {
+                if (ai_check_line(arg0, &v, 6) != 0) {
                     d = arg0->unk40;
                     if (d != 0 && d < min) {
                         min = d;
@@ -548,21 +548,21 @@ s16 func_8017726C(Unk_801762F4 *arg0, s16 arg1) {
                 }
             }
         }
-        b = func_80176FBC(arg0, best);
+        b = ai_heading_to(arg0, best);
     }
     if (found == 0 && best < 0) {
         return 0;
     }
     if (found != 0) {
         if (best >= 0) {
-            r = func_8018C750(a - b);
+            r = mail_wrap_angle(a - b);
             if (r < 10 || r > 350) {
                 arg0->unk12 |= 4;
             }
         }
         if (arg1 == 1) {
             arg0->unk3E = a;
-            func_80176E2C(arg0);
+            ai_turn_step(arg0);
         }
         arg0->unk10 = -1;
         arg0->unk40 = saved;
@@ -573,7 +573,7 @@ s16 func_8017726C(Unk_801762F4 *arg0, s16 arg1) {
     return 1;
 }
 
-s16 func_80177608(Unk_801762F4 *arg0, Unk_80174F54 *arg1, s16 arg2) {
+s16 ai_try_move(Unk_801762F4 *arg0, Unk_80174F54 *arg1, s16 arg2) {
     Unk_801E076C *cam = D_801E076C[0];
     Unk_80174FFC sv;
     s32 y;
@@ -587,10 +587,10 @@ s16 func_80177608(Unk_801762F4 *arg0, Unk_80174F54 *arg1, s16 arg2) {
     s32 s;
     s32 c;
 
-    if (D_801DFC60 == NULL) {
+    if (ai_cur_block == NULL) {
         return 0;
     }
-    if (!(D_801DFC60->unkE & 1)) {
+    if (!(ai_cur_block->unkE & 1)) {
         return 0;
     }
     arg0->unk12 &= ~0x10;
@@ -598,12 +598,12 @@ s16 func_80177608(Unk_801762F4 *arg0, Unk_80174F54 *arg1, s16 arg2) {
     if (ax == 0 && arg1->unk8 == 0) {
         return 1;
     }
-    r = D_801DFC70->unkA * 10;
+    r = ai_cur_body->unkA * 10;
     x = arg0->unk20 + ax - cam->unk72 * 12500;
     z = arg0->unk28 + arg1->unk8 - cam->unk76 * 12500;
     s = r * rsin(arg2) >> 12;
     c = r * rcos(arg2) >> 12;
-    if (func_80176464(arg0->unk0, x + s, arg0->unk24, z + c) >= 0) {
+    if (npc_find_at_point(arg0->unk0, x + s, arg0->unk24, z + c) >= 0) {
         return 0;
     }
     r += 600;
@@ -613,24 +613,24 @@ s16 func_80177608(Unk_801762F4 *arg0, Unk_80174F54 *arg1, s16 arg2) {
         arg0->unk12 |= 0x10;
         return arg0->unkE == 1;
     }
-    if (func_8017D414(D_801DFC60->unk84, x, z, (s32)&y) == 0) {
+    if (block_model_surface(ai_cur_block->unk84, x, z, (s32)&y) == 0) {
         return 0;
     }
     arg0->unk20 += arg1->unk0;
     arg0->unk24 = y - cam->unk74 * 32000;
     arg0->unk28 += arg1->unk8;
-    if (D_801DFC68 == NULL || D_801DFC68->unk4 == 0) {
+    if (ai_cur_model == NULL || ai_cur_model->unk4 == 0) {
         return 0;
     }
-    D_801DFC68->unk54 = arg0->unk20 - cam->unk72 * 12500;
-    D_801DFC68->unk58 = arg0->unk24 + cam->unk74 * 32000;
-    D_801DFC68->unk5C = arg0->unk28 - cam->unk76 * 12500;
+    ai_cur_model->unk54 = arg0->unk20 - cam->unk72 * 12500;
+    ai_cur_model->unk58 = arg0->unk24 + cam->unk74 * 32000;
+    ai_cur_model->unk5C = arg0->unk28 - cam->unk76 * 12500;
     sv.unk0 = (arg0->unk38 << 12) / 360;
     sv.unk2 = (arg0->unk3A << 12) / 360;
     sv.unk4 = (arg0->unk3C << 12) / 360;
-    RotMatrix(&sv, D_801DFC68->unk40);
-    D_801DFC68->unk3C = 0;
-    t = func_8017CDA4(arg0->unk20, arg0->unk24, arg0->unk28);
+    RotMatrix(&sv, ai_cur_model->unk40);
+    ai_cur_model->unk3C = 0;
+    t = block_find_at(arg0->unk20, arg0->unk24, arg0->unk28);
     if (arg0->unk48 != t) {
         arg0->unk48 = t;
     }
@@ -640,19 +640,19 @@ s16 func_80177608(Unk_801762F4 *arg0, Unk_80174F54 *arg1, s16 arg2) {
 static inline s32 func_801779B8_inline(Unk_801762F4 *arg0, s16 n, s32 arg2, s16 arg3) {
     Unk_80174F54 v;
     s16 a;
-    arg0->unk3E = D_801D742C[n];
-    func_80176E2C(arg0);
-    a = (func_8018C750(arg0->unk3E - 180) << 12) / 360;
+    arg0->unk3E = ai_dir_angle[n];
+    ai_turn_step(arg0);
+    a = (mail_wrap_angle(arg0->unk3E - 180) << 12) / 360;
     v.unk0 = arg2 * rsin(a) >> 12;
     v.unk4 = 0;
     v.unk8 = arg2 * rcos(a) >> 12;
-    if (!func_801768F8(arg0, &v, (arg3 != 0) * 16) || !func_80177608(arg0, &v, a)) {
+    if (!ai_check_line(arg0, &v, (arg3 != 0) * 16) || !ai_try_move(arg0, &v, a)) {
         return 0;
     }
     return 1;
 }
 
-void func_801779B8(Unk_801762F4 *arg0, s16 arg1, s32 arg2, s32 arg3) {
+void ai_move_toward(Unk_801762F4 *arg0, s16 arg1, s32 arg2, s32 arg3) {
     s16 f = arg3;
     Unk_801E076C *p = D_801E076C[0];
     s16 d[2];
@@ -666,8 +666,8 @@ void func_801779B8(Unk_801762F4 *arg0, s16 arg1, s32 arg2, s32 arg3) {
     s16 j;
     s32 k;
 
-    cur = func_8018C0A0(arg0->unk3A - 180);
-    back = D_801D7418[cur];
+    cur = mail_angle_to_dir8(arg0->unk3A - 180);
+    back = ai_dir_reverse[cur];
     d[1] = 8;
     d[0] = 8;
     if (arg1 == 0) {
@@ -681,12 +681,12 @@ void func_801779B8(Unk_801762F4 *arg0, s16 arg1, s32 arg2, s32 arg3) {
             dx = p->unk54 + p->unk72 * 12500 - arg0->unk20;
             dz = p->unk5C + p->unk76 * 12500 - arg0->unk28;
         } else {
-            t = func_801762F4(0, arg0->unk10);
+            t = npc_find(0, arg0->unk10);
             if (t == 0 || t->unk10 != -1) {
                 goto fallback;
             }
-            n = func_80176734(t) + D_801DFC70->unkA * 10;
-            a = (func_8018C750(t->unk3A - 270) << 12) / 360;
+            n = npc_get_radius(t) + ai_cur_body->unkA * 10;
+            a = (mail_wrap_angle(t->unk3A - 270) << 12) / 360;
             if (t->unk0 & 1) {
                 n = -n;
             }
@@ -708,7 +708,7 @@ void func_801779B8(Unk_801762F4 *arg0, s16 arg1, s32 arg2, s32 arg3) {
         d[1] = 2;
     }
     if (d[0] != 8 && d[1] != 8) {
-        j = D_801DFC78[((dz < 0) ? 2 : 0) + (dx > 0)];
+        j = ai_quadrant_dir[((dz < 0) ? 2 : 0) + (dx > 0)];
         if (j != back && func_801779B8_inline(arg0, j, arg2, f)) {
             return;
         }
@@ -758,11 +758,11 @@ fallback:
     if (back != 8 && func_801779B8_inline(arg0, back, arg2, f)) {
         return;
     }
-    arg0->unk3E = D_801D742C[cur];
-    func_80176E2C(arg0);
+    arg0->unk3E = ai_dir_angle[cur];
+    ai_turn_step(arg0);
 }
 
-void func_80178494(Unk_801762F4 *arg0, s16 arg1, s32 arg2) {
+void ai_walk(Unk_801762F4 *arg0, s16 arg1, s32 arg2) {
     Unk_80174F54 v;
     s32 f;
     s16 d;
@@ -784,15 +784,15 @@ void func_80178494(Unk_801762F4 *arg0, s16 arg1, s32 arg2) {
             return;
         }
     }
-    d = func_8018C0A0(arg0->unk3E - 180);
+    d = mail_angle_to_dir8(arg0->unk3E - 180);
     if ((rand() & 3) != 1) {
-        arg0->unk3E = D_801D742C[d];
-        func_80176E2C(arg0);
-        a = (func_8018C750(arg0->unk3E - 180) << 12) / 360;
+        arg0->unk3E = ai_dir_angle[d];
+        ai_turn_step(arg0);
+        a = (mail_wrap_angle(arg0->unk3E - 180) << 12) / 360;
         v.unk0 = arg2 * rsin(a) >> 12;
         v.unk4 = 0;
         v.unk8 = arg2 * rcos(a) >> 12;
-        if (!func_801768F8(arg0, &v, f * 16) || !func_80177608(arg0, &v, a)) {
+        if (!ai_check_line(arg0, &v, f * 16) || !ai_try_move(arg0, &v, a)) {
             r = 0;
         } else {
             r = 1;
@@ -801,10 +801,10 @@ void func_80178494(Unk_801762F4 *arg0, s16 arg1, s32 arg2) {
             return;
         }
     }
-    func_801779B8(arg0, arg1, arg2, f);
+    ai_move_toward(arg0, arg1, arg2, f);
 }
 
-s32 func_801786A0(Unk_801762F4 *arg0, s32 arg1) {
+s32 ai_step_back(Unk_801762F4 *arg0, s32 arg1) {
     Unk_80174F54 v;
     s32 i;
     s32 n;
@@ -814,12 +814,12 @@ s32 func_801786A0(Unk_801762F4 *arg0, s32 arg1) {
     i = 0;
     n = -arg1;
     for (; i < 7; i++) {
-        a = (func_8018C750(arg0->unk3E + D_801D7440[i] - 180) << 12) / 360;
+        a = (mail_wrap_angle(arg0->unk3E + ai_probe_angle[i] - 180) << 12) / 360;
         v.unk0 = n * rsin(a) >> 12;
         v.unk4 = 0;
         v.unk8 = n * rcos(a) >> 12;
-        if (func_801768F8(arg0, &v, 0)) {
-            r = func_80177608(arg0, &v, a);
+        if (ai_check_line(arg0, &v, 0)) {
+            r = ai_try_move(arg0, &v, a);
         } else {
             r = 0;
         }
@@ -830,19 +830,19 @@ s32 func_801786A0(Unk_801762F4 *arg0, s32 arg1) {
     return 0;
 }
 
-s32 func_801787CC(Unk_801762F4 *arg0, s32 arg1) {
+s32 ai_sidestep(Unk_801762F4 *arg0, s32 arg1) {
     Unk_80174F54 v;
     s32 i;
     s16 a;
     s16 r;
 
     for (i = 4; i > 0; i--) {
-        a = (func_8018C750(arg0->unk3E + D_801D7440[i] - 180) << 12) / 360;
+        a = (mail_wrap_angle(arg0->unk3E + ai_probe_angle[i] - 180) << 12) / 360;
         v.unk0 = arg1 * rsin(a) >> 12;
         v.unk4 = 0;
         v.unk8 = arg1 * rcos(a) >> 12;
-        if (func_801768F8(arg0, &v, 0)) {
-            r = func_80177608(arg0, &v, a);
+        if (ai_check_line(arg0, &v, 0)) {
+            r = ai_try_move(arg0, &v, a);
         } else {
             r = 0;
         }
@@ -853,7 +853,7 @@ s32 func_801787CC(Unk_801762F4 *arg0, s32 arg1) {
     return 0;
 }
 
-s16 func_801788F8(Unk_801762F4 *arg0) {
+s16 ai_decide_fire(Unk_801762F4 *arg0) {
     Unk_801E076C *p = D_801E076C[0];
     s32 c;
     s32 *pc;
@@ -871,7 +871,7 @@ s16 func_801788F8(Unk_801762F4 *arg0) {
     if (p->unk40 & 0xC9000000) {
         return 0;
     }
-    if (!func_80179630(arg0, 1, 0)) {
+    if (!ai_in_aim_cone(arg0, 1, 0)) {
         return 0;
     }
     if (arg0->unk12 & 4) {
@@ -884,14 +884,14 @@ s16 func_801788F8(Unk_801762F4 *arg0) {
         }
     }
     pc = &c;
-    t = -(D_801DFC70->unkA + 600) + (u16)arg0->unk40;
-    c = D_801DFC6C->unk14;
+    t = -(ai_cur_body->unkA + 600) + (u16)arg0->unk40;
+    c = ai_cur_stats->unk14;
     if (t < 0) {
         t = 0;
     }
-    a = D_801DFC6C->unk18 * 10;
-    b = D_801DFC6C->unk1C * 10;
-    d = D_801DFC6C->unk20 * 10;
+    a = ai_cur_stats->unk18 * 10;
+    b = ai_cur_stats->unk1C * 10;
+    d = ai_cur_stats->unk20 * 10;
     if (t < a) {
         c = 10;
         f = 0;
@@ -918,83 +918,83 @@ s16 func_801788F8(Unk_801762F4 *arg0) {
     return 1;
 }
 
-void func_80178B84(Unk_801762F4 *arg0) {
+void ai_face_player(Unk_801762F4 *arg0) {
     Unk_801E076C *p = D_801E076C[0];
     Unk_80174FFC sv;
 
-    if (D_801DFC68 != 0 && D_801DFC68->unk4 != 0) {
-        arg0->unk3A = func_8018C750((ratan2(p->unk54 + p->unk72 * 12500 - arg0->unk20, p->unk5C + p->unk76 * 12500 - arg0->unk28) * 360 >> 12) - 180);
+    if (ai_cur_model != 0 && ai_cur_model->unk4 != 0) {
+        arg0->unk3A = mail_wrap_angle((ratan2(p->unk54 + p->unk72 * 12500 - arg0->unk20, p->unk5C + p->unk76 * 12500 - arg0->unk28) * 360 >> 12) - 180);
         sv.unk0 = (arg0->unk38 << 12) / 360;
         sv.unk2 = (arg0->unk3A << 12) / 360;
         sv.unk4 = (arg0->unk3C << 12) / 360;
-        RotMatrix(&sv, D_801DFC68->unk40);
-        D_801DFC68->unk3C = 0;
+        RotMatrix(&sv, ai_cur_model->unk40);
+        ai_cur_model->unk3C = 0;
     }
 }
 
-void func_80178D04(Unk_801762F4 *arg0) {
+void ai_update_stand(Unk_801762F4 *arg0) {
     s16 f;
 
-    D_801DFC64 = 0;
-    D_801DFC6C = 0;
-    D_801DFC70 = 0;
-    D_801DFC60 = (Unk_801DFC60 *)arg0->unk48;
-    D_801DFC68 = func_8018E56C(arg0->unk16);
-    D_801DFC6C = func_80176890(arg0->unk18);
-    if (D_801DFC6C == 0) {
-        D_801DFC6C = &D_801D7328;
+    ai_cur_grid = 0;
+    ai_cur_stats = 0;
+    ai_cur_body = 0;
+    ai_cur_block = (Unk_801DFC60 *)arg0->unk48;
+    ai_cur_model = mod_find(arg0->unk16);
+    ai_cur_stats = npc_find_stats(arg0->unk18);
+    if (ai_cur_stats == 0) {
+        ai_cur_stats = &D_801D7328;
     }
-    D_801DFC70 = func_801767D4(arg0->unk14);
-    if (D_801DFC70 == 0) {
-        D_801DFC70 = &D_801D734C;
+    ai_cur_body = npc_find_body(arg0->unk14);
+    if (ai_cur_body == 0) {
+        ai_cur_body = &ai_default_body;
     }
     f = 0;
-    if (D_801DFC60 != 0) {
+    if (ai_cur_block != 0) {
         f = 1;
-        if (D_801DFC60->unk88 == 0) {
+        if (ai_cur_block->unk88 == 0) {
             f = 0;
         } else {
-            D_801DFC64 = D_801DFC60->unk88;
+            ai_cur_grid = ai_cur_block->unk88;
         }
     }
     if (arg0->unk12 & 1) {
         arg0->unk12 &= ~1;
-        func_80178B84(arg0);
+        ai_face_player(arg0);
     } else if (f != 0) {
-        if (func_8017726C(arg0, 1) && arg0->unkE == 1 && func_801788F8(arg0)) {
+        if (ai_find_target(arg0, 1) && arg0->unkE == 1 && ai_decide_fire(arg0)) {
             if (!(arg0->unk12 & 0x400)) {
                 arg0->unk12 |= 0x400;
             }
         }
     } else {
-        func_80178B84(arg0);
+        ai_face_player(arg0);
     }
 }
 
-void func_80178E38(Unk_801762F4 *arg0, s16 arg1) {
+void ai_update_move(Unk_801762F4 *arg0, s16 arg1) {
     s32 f;
     s32 n;
     s32 m;
     s32 d;
     s32 x;
 
-    D_801DFC64 = 0;
-    D_801DFC6C = 0;
-    D_801DFC70 = 0;
-    D_801DFC60 = (Unk_801DFC60 *)arg0->unk48;
-    D_801DFC68 = func_8018E56C(arg0->unk16);
-    D_801DFC6C = func_80176890(arg0->unk18);
-    if (D_801DFC6C == 0) {
-        D_801DFC6C = &D_801D7328;
+    ai_cur_grid = 0;
+    ai_cur_stats = 0;
+    ai_cur_body = 0;
+    ai_cur_block = (Unk_801DFC60 *)arg0->unk48;
+    ai_cur_model = mod_find(arg0->unk16);
+    ai_cur_stats = npc_find_stats(arg0->unk18);
+    if (ai_cur_stats == 0) {
+        ai_cur_stats = &D_801D7328;
     }
-    D_801DFC70 = func_801767D4(arg0->unk14);
-    if (D_801DFC70 == 0) {
-        D_801DFC70 = &D_801D734C;
+    ai_cur_body = npc_find_body(arg0->unk14);
+    if (ai_cur_body == 0) {
+        ai_cur_body = &ai_default_body;
     }
-    if (D_801DFC60 == 0 || D_801DFC60->unk88 == 0) {
+    if (ai_cur_block == 0 || ai_cur_block->unk88 == 0) {
         f = 0;
     } else {
-        D_801DFC64 = D_801DFC60->unk88;
+        ai_cur_grid = ai_cur_block->unk88;
         f = 1;
     }
     if (f == 0 || (arg0->unk12 & 0x20)) {
@@ -1003,7 +1003,7 @@ void func_80178E38(Unk_801762F4 *arg0, s16 arg1) {
     if (arg0->unk12 & 1) {
         arg0->unk12 &= ~1;
         if (arg1 != 0) {
-            func_8017726C(arg0, arg1);
+            ai_find_target(arg0, arg1);
             return;
         }
     }
@@ -1025,45 +1025,45 @@ void func_80178E38(Unk_801762F4 *arg0, s16 arg1) {
         break;
     }
     d = D_801E6DB4[0];
-    if ((u16)D_801DFC6C->unk10 != 0) {
-        x = d * (u16)D_801DFC6C->unk10;
+    if ((u16)ai_cur_stats->unk10 != 0) {
+        x = d * (u16)ai_cur_stats->unk10;
     } else {
         x = d * 3;
     }
     m = x * n;
     if (arg0->unkE == 1 && arg0->unkB == 2) {
-        if (!(s16)func_801787CC(arg0, m)) {
-            func_801786A0(arg0, m);
+        if (!(s16)ai_sidestep(arg0, m)) {
+            ai_step_back(arg0, m);
         }
     } else if (arg0->unkE == 1 && arg0->unkB == 3) {
-        if (!(s16)func_801786A0(arg0, m)) {
-            func_801787CC(arg0, m);
+        if (!(s16)ai_step_back(arg0, m)) {
+            ai_sidestep(arg0, m);
         }
     } else {
-        func_80178494(arg0, arg1, m);
+        ai_walk(arg0, arg1, m);
     }
-    D_801DFC64 = 0;
-    D_801DFC6C = 0;
-    D_801DFC70 = 0;
-    D_801DFC60 = (Unk_801DFC60 *)arg0->unk48;
-    D_801DFC68 = func_8018E56C(arg0->unk16);
-    D_801DFC6C = func_80176890(arg0->unk18);
-    if (D_801DFC6C == 0) {
-        D_801DFC6C = &D_801D7328;
+    ai_cur_grid = 0;
+    ai_cur_stats = 0;
+    ai_cur_body = 0;
+    ai_cur_block = (Unk_801DFC60 *)arg0->unk48;
+    ai_cur_model = mod_find(arg0->unk16);
+    ai_cur_stats = npc_find_stats(arg0->unk18);
+    if (ai_cur_stats == 0) {
+        ai_cur_stats = &D_801D7328;
     }
-    D_801DFC70 = func_801767D4(arg0->unk14);
-    if (D_801DFC70 == 0) {
-        D_801DFC70 = &D_801D734C;
+    ai_cur_body = npc_find_body(arg0->unk14);
+    if (ai_cur_body == 0) {
+        ai_cur_body = &ai_default_body;
     }
-    if (D_801DFC60 == 0 || D_801DFC60->unk88 == 0) {
+    if (ai_cur_block == 0 || ai_cur_block->unk88 == 0) {
         f = 0;
     } else {
-        D_801DFC64 = D_801DFC60->unk88;
+        ai_cur_grid = ai_cur_block->unk88;
         f = 1;
     }
     if (f != 0) {
-        if (func_8017726C(arg0, arg1)) {
-            if (arg0->unkE == 1 && func_801788F8(arg0)) {
+        if (ai_find_target(arg0, arg1)) {
+            if (arg0->unkE == 1 && ai_decide_fire(arg0)) {
                 if (!(arg0->unk12 & 0x400)) {
                     arg0->unk12 |= 0x400;
                 }
@@ -1076,7 +1076,7 @@ void func_80178E38(Unk_801762F4 *arg0, s16 arg1) {
     }
 }
 
-void func_8017917C(Unk_801762F4 *arg0) {
+void ai_fire(Unk_801762F4 *arg0) {
     Unk_801E076C *p;
     s32 f;
     s32 t;
@@ -1088,83 +1088,83 @@ void func_8017917C(Unk_801762F4 *arg0) {
     s32 r;
     s32 x;
 
-    D_801DFC64 = 0;
-    D_801DFC6C = 0;
-    D_801DFC70 = 0;
-    D_801DFC60 = (Unk_801DFC60 *)arg0->unk48;
+    ai_cur_grid = 0;
+    ai_cur_stats = 0;
+    ai_cur_body = 0;
+    ai_cur_block = (Unk_801DFC60 *)arg0->unk48;
     p = D_801E076C[0];
-    D_801DFC68 = func_8018E56C(arg0->unk16);
-    D_801DFC6C = func_80176890(arg0->unk18);
-    if (D_801DFC6C == 0) {
-        D_801DFC6C = &D_801D7328;
+    ai_cur_model = mod_find(arg0->unk16);
+    ai_cur_stats = npc_find_stats(arg0->unk18);
+    if (ai_cur_stats == 0) {
+        ai_cur_stats = &D_801D7328;
     }
-    D_801DFC70 = func_801767D4(arg0->unk14);
-    if (D_801DFC70 == 0) {
-        D_801DFC70 = &D_801D734C;
+    ai_cur_body = npc_find_body(arg0->unk14);
+    if (ai_cur_body == 0) {
+        ai_cur_body = &ai_default_body;
     }
-    if (D_801DFC60 == 0 || D_801DFC60->unk88 == 0) {
+    if (ai_cur_block == 0 || ai_cur_block->unk88 == 0) {
         f = 0;
     } else {
-        D_801DFC64 = D_801DFC60->unk88;
+        ai_cur_grid = ai_cur_block->unk88;
         f = 1;
     }
     if (f == 0) {
         if ((arg0->unk2 & 0xFF) == 2 || (arg0->unk2 & 0xFF) == 3) {
-            func_801A2678(0x28);
+            sound_se_play(0x28);
         } else {
-            switch ((u16)D_801DFC6C->unk2) {
+            switch ((u16)ai_cur_stats->unk2) {
             case 0:
-                func_801A2678(0x23);
+                sound_se_play(0x23);
                 break;
             case 1:
-                func_801A2678(0x24);
+                sound_se_play(0x24);
                 break;
             case 2:
-                func_801A2678(0x25);
+                sound_se_play(0x25);
                 break;
             case 3:
-                func_801A2678(0x26);
+                sound_se_play(0x26);
                 break;
             case 4:
-                func_801A2678(0x27);
+                sound_se_play(0x27);
                 break;
             }
         }
         return;
     }
-    if (!func_8017726C(arg0, 1) || arg0->unk10 != -1 || (arg0->unk12 & 4) || !func_80179630(arg0, 1, 0)) {
+    if (!ai_find_target(arg0, 1) || arg0->unk10 != -1 || (arg0->unk12 & 4) || !ai_in_aim_cone(arg0, 1, 0)) {
         if ((arg0->unk2 & 0xFF) == 2 || (arg0->unk2 & 0xFF) == 3) {
-            func_801A2678(0x28);
+            sound_se_play(0x28);
         } else {
-            switch ((u16)D_801DFC6C->unk2) {
+            switch ((u16)ai_cur_stats->unk2) {
             case 0:
-                func_801A2678(0x23);
+                sound_se_play(0x23);
                 break;
             case 1:
-                func_801A2678(0x24);
+                sound_se_play(0x24);
                 break;
             case 2:
-                func_801A2678(0x25);
+                sound_se_play(0x25);
                 break;
             case 3:
-                func_801A2678(0x26);
+                sound_se_play(0x26);
                 break;
             case 4:
-                func_801A2678(0x27);
+                sound_se_play(0x27);
                 break;
             }
         }
         return;
     }
-    t = -(D_801DFC70->unkA + 600) + (u16)arg0->unk40;
+    t = -(ai_cur_body->unkA + 600) + (u16)arg0->unk40;
     if (t < 0) {
         t = 0;
     }
     m = 0;
-    a = D_801DFC6C->unk18 * 10;
-    b = D_801DFC6C->unk1C * 10;
-    c = (u16)D_801DFC6C->unkC;
-    d = D_801DFC6C->unk20 * 10;
+    a = ai_cur_stats->unk18 * 10;
+    b = ai_cur_stats->unk1C * 10;
+    c = (u16)ai_cur_stats->unkC;
+    d = ai_cur_stats->unk20 * 10;
     r = 0;
     if (t < a) {
         r = -1;
@@ -1176,30 +1176,30 @@ void func_8017917C(Unk_801762F4 *arg0) {
     if (!(t < a)) {
         r = c * m >> 12;
     }
-    if ((u16)D_801DFC6C->unk2 == 0) {
+    if ((u16)ai_cur_stats->unk2 == 0) {
         x = p->unk58 - p->unk74 * 32000 - arg0->unk24 + 1600;
         if (x > 0) {
             x = -x;
         }
         if (x < -1600 || m == 0) {
             if ((arg0->unk2 & 0xFF) == 2 || (arg0->unk2 & 0xFF) == 3) {
-                func_801A2678(0x28);
+                sound_se_play(0x28);
             } else {
-                switch ((u16)D_801DFC6C->unk2) {
+                switch ((u16)ai_cur_stats->unk2) {
                 case 0:
-                    func_801A2678(0x23);
+                    sound_se_play(0x23);
                     break;
                 case 1:
-                    func_801A2678(0x24);
+                    sound_se_play(0x24);
                     break;
                 case 2:
-                    func_801A2678(0x25);
+                    sound_se_play(0x25);
                     break;
                 case 3:
-                    func_801A2678(0x26);
+                    sound_se_play(0x26);
                     break;
                 case 4:
-                    func_801A2678(0x27);
+                    sound_se_play(0x27);
                     break;
                 }
             }
@@ -1216,32 +1216,32 @@ void func_8017917C(Unk_801762F4 *arg0) {
         if (m < 410) {
             m = 410;
         }
-        func_801981D0(arg0, D_801DFC6C->unk2, (u16)D_801DFC6C->unk8 * m >> 12);
+        player_take_hit(arg0, ai_cur_stats->unk2, (u16)ai_cur_stats->unk8 * m >> 12);
     }
     if ((arg0->unk2 & 0xFF) == 2 || (arg0->unk2 & 0xFF) == 3) {
-        func_801A2678(0x28);
+        sound_se_play(0x28);
     } else {
-        switch ((u16)D_801DFC6C->unk2) {
+        switch ((u16)ai_cur_stats->unk2) {
         case 0:
-            func_801A2678(0x23);
+            sound_se_play(0x23);
             break;
         case 1:
-            func_801A2678(0x24);
+            sound_se_play(0x24);
             break;
         case 2:
-            func_801A2678(0x25);
+            sound_se_play(0x25);
             break;
         case 3:
-            func_801A2678(0x26);
+            sound_se_play(0x26);
             break;
         case 4:
-            func_801A2678(0x27);
+            sound_se_play(0x27);
             break;
         }
     }
 }
 
-s16 func_80179630(Unk_801762F4 *arg0, s16 arg1, s16 arg2) {
+s16 ai_in_aim_cone(Unk_801762F4 *arg0, s16 arg1, s16 arg2) {
     Unk_801E076C *p = D_801E076C[0];
     s32 dx;
     s32 dz;
@@ -1263,9 +1263,9 @@ s16 func_80179630(Unk_801762F4 *arg0, s16 arg1, s16 arg2) {
     }
     t = ratan2(dx, dz) * 360 >> 12;
     if (arg1 != 0) {
-        a = func_8018C750(t - arg0->unk3A + 180);
+        a = mail_wrap_angle(t - arg0->unk3A + 180);
     } else {
-        a = func_8018C750(t - p->unk6E);
+        a = mail_wrap_angle(t - p->unk6E);
     }
     if (a <= lim || a >= 360 - lim) {
         if (arg1 != 0) {

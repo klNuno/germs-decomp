@@ -2,26 +2,26 @@
 
 s32 DisableEvent(s32 event);
 s32 CloseEvent(s32 event);
-s32 D_801DFEC8;
-s32 D_801DFECC;
-s32 D_801DFED0;
+s32 event_enter_id;
+s32 event_leave_id;
+s32 event_mod_finish_id;
 extern s32 D_801DFF50;
-void func_8018AA00(s16 a);
+void event_clock_tick(s16 a);
 void (*D_801DFEDC)(void);
 typedef struct { s32 unk0; s16 unk4; s16 unk6; } Unk_801E024C;
 extern Unk_801E024C D_801E024C[];
 void (*D_801DFED8)(s32 *a, Unk_801E024C *b);
 typedef struct { s16 unk0; s16 unk2; s16 unk4; s16 unk6; s16 unk8[1]; } Unk_8018A8CC_58;
 typedef struct { u8 unk0[0x58]; Unk_8018A8CC_58 *unk58; } Unk_8018A8CC;
-void func_801A4944(s32 a, s32 b, s32 c);
-void func_801A461C(s32 a, s32 b, s32 c);
-s16 D_801DFD1C;
-s16 D_801DFD1E;
-s16 D_801DFD20;
-s16 D_801DFD22;
-s16 D_801DFD24;
-s16 D_801DFD26;
-void func_801A4824(s32 a, s32 b, s32 c, s32 d);
+void sprite_restore_clut(s32 a, s32 b, s32 c);
+void sprite_set_clut_entry(s32 a, s32 b, s32 c);
+s16 event_blink0_on;
+s16 event_blink1_on;
+s16 event_blink2_on;
+s16 event_blink0_timer;
+s16 event_blink1_timer;
+s16 event_blink2_timer;
+void sprite_fill_clut(s32 a, s32 b, s32 c, s32 d);
 typedef struct { s32 unk0; s16 unk4; s16 unk6; } Unk_801E056C;
 typedef struct { s16 unk0; s16 unk2; s16 unk4; s16 unk6; s16 unk8; u16 unkA; s16 unkC; s16 unkE; u16 unk10; s16 unk12; s16 unk14; s16 unk16; s16 unk18; s16 unk1A; s16 *unk1C; } Unk_801E058C;
 typedef struct {
@@ -47,8 +47,8 @@ typedef struct {
     s16 unk10;
 } Unk_801E1040;
 extern Unk_801E1040 D_801E1040;
-void func_80189C3C(s32 a, s16 b);
-void func_8018A3F8(s32 a);
+void event_draw_clock_digits(s32 a, s16 b);
+void event_update_daylight(s32 a);
 void SetFarColor(s32 r, s32 g, s32 b);
 typedef struct { u16 unk0; u8 unk2[0x22]; u16 unk24; u8 unk26[0x3A]; } Unk_80188FEC;
 typedef struct {
@@ -87,25 +87,25 @@ typedef struct {
 } Unk_801E0710;
 extern Unk_801E0710 D_801E0710;
 void (*D_801DFEE8)(s32 *a);
-Unk_80188FEC *func_80188FEC(s16 arg0);
-void func_80199A94(s16 a, s32 b);
-void func_8018DA2C(s32 a, s32 b, s32 c);
-void func_801A25B4(s32 a);
-void func_801A2678(s32 arg0);
-void func_8018A5F0(Unk_801E0710 *a, Unk_801E0368 *b, s32 c, s32 d);
+Unk_80188FEC *effect_weapon_find(s16 arg0);
+void player_weapon_sound(s16 a, s32 b);
+void mod_set_anim(s32 a, s32 b, s32 c);
+void sound_se_stop(s32 a);
+void sound_se_play(s32 arg0);
+void event_clock_add_minute(Unk_801E0710 *a, Unk_801E0368 *b, s32 c, s32 d);
 typedef struct { s16 unk0; s16 unk2; s16 unk4; s16 unk6; } Unk_8018AB48_10;
 typedef struct { s16 unk0; s16 unk2; } Unk_8018AB48_1C;
 typedef struct { u8 unk0[0x1C]; Unk_8018AB48_1C *unk1C; } Unk_8018AB48_r;
 typedef struct { u8 unk0[0x6E]; s16 unk6E; } Unk_8018AB48;
-u16 *func_801A44B8(u16 arg0);
+u16 *sprite_find(u16 arg0);
 s32 MoveImage(void *rect, s32 x, s32 y);
 s32 OpenEvent(u32 desc, s32 spec, s32 mode, s32 (*func)(void));
 s32 EnableEvent(s32 event);
 extern char D_801DFD14[];
-void func_801CD54C(s32 a, char *b, char *c, s32 d);
-s32 func_80194FAC(void);
-s32 func_80199FD8(void);
-s32 func_8018E7EC(void);
+void kaj_abend(s32 a, char *b, char *c, s32 d);
+s32 object_deliver_area_events(void);
+s32 player_leave_trigger(void);
+s32 mod_finish_handler(void);
 typedef struct {
     s32 unk0;
     s16 unk4;
@@ -120,55 +120,55 @@ typedef struct {
 extern Unk_801DFFE8 D_801DFFE8;
 typedef struct { s32 unk0; s32 unk4; s32 unk8; s32 unkC; void *unk10; } Unk_801895E0;
 s16 (*D_801DFEE0)(Unk_801895E0 *a);
-void func_80174840(s16 arg0);
-void func_80184094(void);
-s16 func_801752F4(u16 arg0, s16 arg1);
-s16 func_801A7ED4(s32 a, s32 b, s32 c);
-s16 func_80174E60(void *arg0);
+void action_reset(s16 arg0);
+void text_close(void);
+s16 action_run_npc_event(u16 arg0, s16 arg1);
+s16 thing_run_script(s32 a, s32 b, s32 c);
+s16 action_run_trigger_leave(void *arg0);
 extern Unk_801E0710_5C *D_801E076C[];
 typedef struct { s32 unk0; s32 unk4; s32 unk8; s32 unkC; s32 unk10; } Unk_8018970C;
 s16 (*D_801DFED4)(Unk_8018970C *a);
-void func_801D1300(s32 arg0);
-void func_801CD688(s32 a);
-void func_801D1BD4(void);
-void func_8018CD4C(Unk_801E058C *p);
-void func_80188760(void);
-void func_801A3C58(void);
-void func_8018A7C0(Unk_801E0710 *a);
-extern u8 D_801D7724[];
+void kaj_tss_release(s32 arg0);
+void kaj_pad_reset(s32 a);
+void kaj_view_clear_vram(void);
+void mail_menu_clear_rows(Unk_801E058C *p);
+void effect_item_use_selected(void);
+void sound_bgm_stop(void);
+void event_draw_gauge(Unk_801E0710 *a);
+extern u8 event_digit_segments[];
 typedef struct { u8 unk0; u8 unk1; u8 unk2; u8 unk3; } Unk_801D7730;
-extern Unk_801D7730 D_801D7730[];
-void func_8018BB00(s16 a, s16 b);
-void func_80189DE8(Unk_801E0710 *arg0);
+extern Unk_801D7730 event_limb_colors[];
+void mail_check_schedule(s16 a, s16 b);
+void event_draw_limb_status(Unk_801E0710 *arg0);
 s16 (*D_801DFEE4)(Unk_801895E0 *a);
-s16 func_80174D6C(void *arg0);
-void func_8017D574(u32 arg0);
-void func_80183E88(char *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
-void func_80189AC0(Unk_801E0710 *a);
-u16 D_801DFD28;
-u16 D_801DFD2A;
-u16 D_801DFD2C;
+s16 action_run_trigger_enter(void *arg0);
+void block_enter_area(u32 arg0);
+void text_show(char *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
+void event_drain_gauge(Unk_801E0710 *a);
+u16 event_blink0_color;
+u16 event_blink1_color;
+u16 event_blink2_color;
 
-void func_8018920C(void) {
-    D_801DFEC8 = OpenEvent(0xF3000000, 2, 0x1000, func_80194FAC);
-    D_801DFECC = OpenEvent(0xF3000001, 2, 0x1000, func_80199FD8);
-    D_801DFED0 = OpenEvent(0xF3000002, 2, 0x1000, func_8018E7EC);
-    if (D_801DFEC8 == -1 || D_801DFECC == -1 || D_801DFED0 == -1) {
-        func_801CD54C(0xC, "Can not Create User Defined Event", D_801DFD14, 0x34);
+void event_open(void) {
+    event_enter_id = OpenEvent(0xF3000000, 2, 0x1000, object_deliver_area_events);
+    event_leave_id = OpenEvent(0xF3000001, 2, 0x1000, player_leave_trigger);
+    event_mod_finish_id = OpenEvent(0xF3000002, 2, 0x1000, mod_finish_handler);
+    if (event_enter_id == -1 || event_leave_id == -1 || event_mod_finish_id == -1) {
+        kaj_abend(0xC, "Can not Create User Defined Event", D_801DFD14, 0x34);
     }
-    if (EnableEvent(D_801DFEC8) == 0) {
-        func_801CD54C(0xC, "Can not Enable to ENTER Event", D_801DFD14, 0x37);
+    if (EnableEvent(event_enter_id) == 0) {
+        kaj_abend(0xC, "Can not Enable to ENTER Event", D_801DFD14, 0x37);
     }
-    if (EnableEvent(D_801DFECC) == 0) {
-        func_801CD54C(0xC, "Can not Enable to LEAVE Event", D_801DFD14, 0x3A);
+    if (EnableEvent(event_leave_id) == 0) {
+        kaj_abend(0xC, "Can not Enable to LEAVE Event", D_801DFD14, 0x3A);
     }
-    if (EnableEvent(D_801DFED0) == 0) {
-        func_801CD54C(0xC, "Can not Enable to MOD Finish Event", D_801DFD14, 0x3D);
+    if (EnableEvent(event_mod_finish_id) == 0) {
+        kaj_abend(0xC, "Can not Enable to MOD Finish Event", D_801DFD14, 0x3D);
     }
     D_801DFF50 = 0;
 }
 
-void func_80189350(Unk_801895E0 *a) {
+void event_handle_enter(Unk_801895E0 *a) {
     Unk_801E0710_5C *q = D_801E076C[0];
     Unk_801DFFE8 *p = &D_801DFFE8;
     Unk_801E0368 *g = &D_801E0368;
@@ -186,9 +186,9 @@ void func_80189350(Unk_801895E0 *a) {
     }
     switch (a->unk8) {
     case 0xFC:
-        if (func_801752F4(a->unkC, 1) == 0) {
+        if (action_run_npc_event(a->unkC, 1) == 0) {
             q->unk42 &= 0xFFFB;
-            func_80174840(0);
+            action_reset(0);
         } else {
             p->unk6 = 1;
         }
@@ -196,13 +196,13 @@ void func_80189350(Unk_801895E0 *a) {
     case 0xFD:
         hi = ((u8 *)&a->unkC)[1] >> 4;
         lo = (u16)a->unkC & 0xFFF;
-        if (func_801A7ED4(hi, lo, 1) == 0) {
+        if (thing_run_script(hi, lo, 1) == 0) {
             if (hi == 0 && lo == 0) {
                 /* " 7クルマ1に乗る       3○" */
-                func_80183E88(" 7\203N\203\213\203}1\202\311\217\346\202\351       3\201\233", 1, -1, 8, -1, 0, 1);
+                text_show(" 7\203N\203\213\203}1\202\311\217\346\202\351       3\201\233", 1, -1, 8, -1, 0, 1);
             } else {
                 q->unk42 &= 0xFFFB;
-                func_80174840(0);
+                action_reset(0);
             }
         } else {
             p->unk6 = 1;
@@ -211,39 +211,39 @@ void func_80189350(Unk_801895E0 *a) {
     case 0xFE:
         if ((s16)g->unk0[0x3E] < 5) {
             /* "営業時間 ５：００〜２４：００" */
-            func_80183E88("\211c\213\306\216\236\212\324 \202T\201F\202O\202O\201`\202Q\202S\201F\202O\202O", 1, -1, 0, -1, 0, 1);
+            text_show("\211c\213\306\216\236\212\324 \202T\201F\202O\202O\201`\202Q\202S\201F\202O\202O", 1, -1, 0, -1, 0, 1);
         } else {
             switch (((u8 *)&a->unkC)[1]) {
             case 1:
                 /* " 7バス停 Ｃ１０１系統   3○" */
-                func_80183E88(" 7\203o\203X\222\342 \202b\202P\202O\202P\214n\223\235   3\201\233", 1, -1, 8, -1, 0, 1);
+                text_show(" 7\203o\203X\222\342 \202b\202P\202O\202P\214n\223\235   3\201\233", 1, -1, 8, -1, 0, 1);
                 break;
             case 2:
                 /* " 7バス停 Ｃ１０２系統   3○" */
-                func_80183E88(" 7\203o\203X\222\342 \202b\202P\202O\202Q\214n\223\235   3\201\233", 1, -1, 8, -1, 0, 1);
+                text_show(" 7\203o\203X\222\342 \202b\202P\202O\202Q\214n\223\235   3\201\233", 1, -1, 8, -1, 0, 1);
                 break;
             case 3:
                 /* " 7バス停 Ｃ１０３系統   3○" */
-                func_80183E88(" 7\203o\203X\222\342 \202b\202P\202O\202R\214n\223\235   3\201\233", 1, -1, 8, -1, 0, 1);
+                text_show(" 7\203o\203X\222\342 \202b\202P\202O\202R\214n\223\235   3\201\233", 1, -1, 8, -1, 0, 1);
                 break;
             default:
                 /* " 7バス停" */
-                func_80183E88(" 7\203o\203X\222\342", 1, -1, 0, -1, 0, 1);
+                text_show(" 7\203o\203X\222\342", 1, -1, 0, -1, 0, 1);
                 break;
             }
         }
         break;
     case 0xFF:
         /* " 7電話ボックス       3○" */
-        func_80183E88(" 7\223d\230b\203{\203b\203N\203X       3\201\233", 1, -1, 8, -1, 0, 1);
+        text_show(" 7\223d\230b\203{\203b\203N\203X       3\201\233", 1, -1, 8, -1, 0, 1);
         break;
     case 0x80:
-        func_8017D574(a->unkC);
+        block_enter_area(a->unkC);
         break;
     default:
-        if (func_80174D6C(a->unk10) == 0) {
+        if (action_run_trigger_enter(a->unk10) == 0) {
             q->unk42 &= 0xFFFB;
-            func_80174840(0);
+            action_reset(0);
             break;
         }
     case 0xF7:
@@ -252,36 +252,36 @@ void func_80189350(Unk_801895E0 *a) {
     }
 }
 
-void func_801895E0(Unk_801895E0 *a) {
+void event_handle_leave(Unk_801895E0 *a) {
     Unk_801DFFE8 *p = &D_801DFFE8;
 
     p->unk0 = a->unkC;
     p->unk4 = a->unk8;
     if (p->unk4 != 0x40) {
-        func_80174840(0);
-        func_80184094();
+        action_reset(0);
+        text_close();
     }
     if (D_801DFEE0 != NULL && D_801DFEE0(a) != 0) {
         return;
     }
     switch (a->unk8) {
     case 0xFC:
-        if (func_801752F4(a->unkC, 0) == 0) {
-            func_80174840(0);
+        if (action_run_npc_event(a->unkC, 0) == 0) {
+            action_reset(0);
         } else {
             p->unk6 = 1;
         }
         break;
     case 0xFD:
-        if (func_801A7ED4(((u8 *)&a->unkC)[1] >> 4, (u16)a->unkC & 0xFFF, 0) == 0) {
-            func_80174840(0);
+        if (thing_run_script(((u8 *)&a->unkC)[1] >> 4, (u16)a->unkC & 0xFFF, 0) == 0) {
+            action_reset(0);
         } else {
             p->unk6 = 1;
         }
         break;
     default:
-        if (func_80174E60(a->unk10) == 0) {
-            func_80174840(0);
+        if (action_run_trigger_leave(a->unk10) == 0) {
+            action_reset(0);
             break;
         }
     case 0xF7:
@@ -290,26 +290,26 @@ void func_801895E0(Unk_801895E0 *a) {
     }
 }
 
-s16 func_8018970C(Unk_8018970C *a) {
+s16 event_handle_effect_done(Unk_8018970C *a) {
     Unk_801E0368 *g = &D_801E0368;
     Unk_801E0710_5C *q = D_801E076C[0];
     Unk_801E058C *p = &g->unk224;
     s16 r = 0;
 
-    func_801D1300(a->unk8);
+    kaj_tss_release(a->unk8);
     switch (a->unk10) {
     case 0:
         if (a->unkC == 0) {
             g->unk244 = -1;
         }
-        func_801CD688(1);
+        kaj_pad_reset(1);
         break;
     case 1:
         if (a->unkC == 0) {
             g->unk244 = -1;
         }
         r = 1;
-        func_801D1BD4();
+        kaj_view_clear_vram();
         break;
     case 11:
         if (a->unkC == 0) {
@@ -324,19 +324,19 @@ s16 func_8018970C(Unk_8018970C *a) {
         p->unk0 = 0;
         g->unk24C = 0;
         if (p->unkC == -2) {
-            func_8018CD4C(p);
+            mail_menu_clear_rows(p);
         }
         if (q->unk42 & 0x4000) {
             a->unk8 = 999999;
             q->unk42 &= 0xBFFF;
-            func_80188760();
+            effect_item_use_selected();
         }
         break;
     case 13:
         if (a->unkC == 0) {
             g->unk244 = -1;
         }
-        func_801A3C58();
+        sound_bgm_stop();
         break;
     }
     if (r == 0 && D_801DFED4 != NULL) {
@@ -345,14 +345,14 @@ s16 func_8018970C(Unk_8018970C *a) {
     return r;
 }
 
-void func_801898C0(void) {
+void event_close(void) {
     D_801DFF50 = 0;
-    DisableEvent(D_801DFEC8);
-    DisableEvent(D_801DFECC);
-    DisableEvent(D_801DFED0);
-    CloseEvent(D_801DFEC8);
-    CloseEvent(D_801DFECC);
-    CloseEvent(D_801DFED0);
+    DisableEvent(event_enter_id);
+    DisableEvent(event_leave_id);
+    DisableEvent(event_mod_finish_id);
+    CloseEvent(event_enter_id);
+    CloseEvent(event_leave_id);
+    CloseEvent(event_mod_finish_id);
 }
 
 void func_80189928(s32 *a) {
@@ -364,14 +364,14 @@ void func_80189928(s32 *a) {
     }
 }
 
-void func_80189970(s16 a) {
-    func_8018AA00(a);
+void event_handle_tick(s16 a) {
+    event_clock_tick(a);
     if (D_801DFEDC != NULL) {
         D_801DFEDC();
     }
 }
 
-void func_801899AC(s32 *a) {
+void event_handle_mod_finish(s32 *a) {
     Unk_801E0710 *g = &D_801E0710;
     Unk_801E0710_5C *q = g->unk5C;
     Unk_801E0768 *p = g->unk58;
@@ -392,11 +392,11 @@ void func_801899AC(s32 *a) {
             break;
         case 6:
             p->unk48 = 7;
-            e = func_80188FEC(p->unk4[p->unk2]);
+            e = effect_weapon_find(p->unk4[p->unk2]);
             if (e != NULL) {
-                func_80199A94(e->unk0, 0);
+                player_weapon_sound(e->unk0, 0);
             }
-            func_8018DA2C(p->unk4C, 3, 0);
+            mod_set_anim(p->unk4C, 3, 0);
             break;
         case 7:
             p->unk48 = 3;
@@ -407,7 +407,7 @@ void func_801899AC(s32 *a) {
     }
 }
 
-void func_80189AC0(Unk_801E0710 *a) {
+void event_drain_gauge(Unk_801E0710 *a) {
     Unk_801E0368 *g = &D_801E0368;
     Unk_801E0768 *p = a->unk58;
     Unk_80188FEC *e;
@@ -447,17 +447,17 @@ void func_80189AC0(Unk_801E0710 *a) {
         break;
     }
     g->unk1FC++;
-    e = func_80188FEC(p->unk4[p->unk2]);
+    e = effect_weapon_find(p->unk4[p->unk2]);
     if (e != NULL && g->unk1FC == 6) {
         n += e->unk24;
         g->unk1FC = 0;
     }
     a->unk4A = 0;
     a->unk0 -= n;
-    func_8018A7C0(a);
+    event_draw_gauge(a);
 }
 
-void func_80189C3C(s32 a, s16 b) {
+void event_draw_clock_digits(s32 a, s16 b) {
     s16 i;
     s16 y;
     s16 d;
@@ -465,24 +465,24 @@ void func_80189C3C(s32 a, s16 b) {
     d = b / 10;
     y = (s16)t * 7 + 8;
     for (i = 0; i < 7; i++) {
-        if ((D_801D7724[d] >> i) & 1) {
-            func_801A461C(0x409, y - i, 0x7FFF);
+        if ((event_digit_segments[d] >> i) & 1) {
+            sprite_set_clut_entry(0x409, y - i, 0x7FFF);
         } else {
-            func_801A461C(0x409, y - i, 0);
+            sprite_set_clut_entry(0x409, y - i, 0);
         }
     }
     d = b % 10;
     y = (s16)(t + 1) * 7 + 8;
     for (i = 0; i < 7; i++) {
-        if ((D_801D7724[d] >> i) & 1) {
-            func_801A461C(0x409, y - i, 0x7FFF);
+        if ((event_digit_segments[d] >> i) & 1) {
+            sprite_set_clut_entry(0x409, y - i, 0x7FFF);
         } else {
-            func_801A461C(0x409, y - i, 0);
+            sprite_set_clut_entry(0x409, y - i, 0);
         }
     }
 }
 
-void func_80189DE8(Unk_801E0710 *a) {
+void event_draw_limb_status(Unk_801E0710 *a) {
     Unk_801E0368 *g = &D_801E0368;
     Unk_801D7730 *c;
     s16 f = 0;
@@ -511,16 +511,16 @@ void func_80189DE8(Unk_801E0710 *a) {
                 f = 1;
             }
         }
-        c = &D_801D7730[n];
-        func_801A461C(0x400, i + 0x40, (c->unk0 | (c->unk1 << 5) | (c->unk2 << 10)) & 0xFFFF);
+        c = &event_limb_colors[n];
+        sprite_set_clut_entry(0x400, i + 0x40, (c->unk0 | (c->unk1 << 5) | (c->unk2 << 10)) & 0xFFFF);
         if (f != 0) {
-            func_801A461C(0x400, 0x45, (c->unk0 | (c->unk1 << 5) | (c->unk2 << 10)) & 0xFFFF);
+            sprite_set_clut_entry(0x400, 0x45, (c->unk0 | (c->unk1 << 5) | (c->unk2 << 10)) & 0xFFFF);
             f = 0;
         }
     }
 }
 
-void func_80189F50(Unk_801E0710 *a) {
+void event_update_hud(Unk_801E0710 *a) {
     s32 i;
     s32 m;
     Unk_801E0768 *p;
@@ -528,105 +528,105 @@ void func_80189F50(Unk_801E0710 *a) {
 
     if (a->unk44 != 0) {
         a->unk44 = 0;
-        func_80189AC0(a);
+        event_drain_gauge(a);
     }
     if (a->unk46 != 0) {
         a->unk46 = 0;
-        func_80189DE8(a);
+        event_draw_limb_status(a);
     }
     if (a->unk48 != 0) {
         p = a->unk58;
         a->unk48 = 0;
         m = p->unk8[p->unk2] * 16 / 100;
-        func_801A4944(0x400, 0x50, 0x5F);
+        sprite_restore_clut(0x400, 0x50, 0x5F);
         for (i = 0x50; i < m + 0x50; i++) {
-            func_801A461C(0x400, i, 0x7E8A);
+            sprite_set_clut_entry(0x400, i, 0x7E8A);
         }
     }
-    if (D_801DFD1C != 0) {
-        n = D_801DFD22;
+    if (event_blink0_on != 0) {
+        n = event_blink0_timer;
         if ((s16)((s16)n % 3) == 0) {
-            func_801A461C(0x400, 1, D_801DFD28);
+            sprite_set_clut_entry(0x400, 1, event_blink0_color);
         } else if ((s16)((s16)n % 3) == 2) {
-            func_801A461C(0x400, 1, 0);
+            sprite_set_clut_entry(0x400, 1, 0);
         }
         if ((s16)n >= 11) {
-            D_801DFD1C = 0;
-            D_801DFD22 = 0;
-            func_801A4824(0x400, 1, 3, 0);
+            event_blink0_on = 0;
+            event_blink0_timer = 0;
+            sprite_fill_clut(0x400, 1, 3, 0);
         }
-        D_801DFD22++;
+        event_blink0_timer++;
     }
-    if (D_801DFD1E != 0) {
-        n = D_801DFD24;
+    if (event_blink1_on != 0) {
+        n = event_blink1_timer;
         if ((s16)((s16)n % 3) == 0) {
-            func_801A461C(0x400, 2, D_801DFD2A);
+            sprite_set_clut_entry(0x400, 2, event_blink1_color);
         } else if ((s16)((s16)n % 3) == 2) {
-            func_801A461C(0x400, 2, 0);
+            sprite_set_clut_entry(0x400, 2, 0);
         }
         if ((s16)n >= 11) {
-            D_801DFD1E = 0;
-            D_801DFD24 = 0;
-            func_801A4824(0x400, 1, 3, 0);
+            event_blink1_on = 0;
+            event_blink1_timer = 0;
+            sprite_fill_clut(0x400, 1, 3, 0);
         }
-        D_801DFD24++;
+        event_blink1_timer++;
     }
-    if (D_801DFD20 != 0) {
-        n = D_801DFD26;
+    if (event_blink2_on != 0) {
+        n = event_blink2_timer;
         if ((s16)((s16)n % 3) == 0) {
-            func_801A461C(0x400, 3, D_801DFD2C);
+            sprite_set_clut_entry(0x400, 3, event_blink2_color);
         } else if ((s16)((s16)n % 3) == 2) {
-            func_801A461C(0x400, 3, 0);
+            sprite_set_clut_entry(0x400, 3, 0);
         }
         if ((s16)n >= 11) {
-            D_801DFD20 = 0;
-            D_801DFD26 = 0;
-            func_801A4824(0x400, 1, 3, 0);
+            event_blink2_on = 0;
+            event_blink2_timer = 0;
+            sprite_fill_clut(0x400, 1, 3, 0);
         }
-        D_801DFD26++;
+        event_blink2_timer++;
     }
 }
 
-void func_8018A24C(void) {
+void event_draw_hud(void) {
     Unk_801E0710 *q = &D_801E0710;
     s32 i;
     s32 n;
     s32 v;
     s32 m;
 
-    func_801A4824(0x400, 0x40, 0x45, 0);
+    sprite_fill_clut(0x400, 0x40, 0x45, 0);
     if (q->unk0 <= 0) {
         q->unk0 = 0;
         n = 0;
-        func_801A25B4(4);
+        sound_se_stop(4);
     } else {
         n = q->unk0 * 0x24 / 255 + 0x10;
         v = (q->unk0 << 12) / 255;
         if (q->unk38 != 0) {
             if (v >= 0x400) {
                 q->unk38 = 0;
-                func_801A25B4(4);
+                sound_se_stop(4);
             }
         } else if (v < 0x400) {
             q->unk38 = 1;
-            func_801A2678(4);
+            sound_se_play(4);
         }
     }
-    func_801A4944(0x400, 0x10, 0x33);
+    sprite_restore_clut(0x400, 0x10, 0x33);
     for (i = 0x10; i < 0x34; i++) {
         if (n < i) {
-            func_801A461C(0x400, i, 0x1421);
+            sprite_set_clut_entry(0x400, i, 0x1421);
         }
     }
-    func_80189DE8(q);
+    event_draw_limb_status(q);
     m = q->unk58->unk8[q->unk58->unk2] * 0x10 / 100;
-    func_801A4944(0x400, 0x50, 0x5F);
+    sprite_restore_clut(0x400, 0x50, 0x5F);
     for (n = 0x50; n < m + 0x50; n++) {
-        func_801A461C(0x400, n, 0x7E8A);
+        sprite_set_clut_entry(0x400, n, 0x7E8A);
     }
 }
 
-void func_8018A3F8(s32 a) {
+void event_update_daylight(s32 a) {
     Unk_801E1040 *c = &D_801E1040;
     Unk_801E0368 *g = &D_801E0368;
     s16 m = g->unk0[0x3E];
@@ -672,7 +672,7 @@ void func_8018A3F8(s32 a) {
     }
 }
 
-void func_8018A5F0(Unk_801E0710 *a, Unk_801E0368 *b, s32 c, s32 d) {
+void event_clock_add_minute(Unk_801E0710 *a, Unk_801E0368 *b, s32 c, s32 d) {
     s32 i;
     s16 e = c;
 
@@ -692,13 +692,13 @@ void func_8018A5F0(Unk_801E0710 *a, Unk_801E0368 *b, s32 c, s32 d) {
                 b->unk0[0x3D] = 98;
             }
             if (e == 0) {
-                func_80189C3C(0, b->unk0[0x3D] + 1);
+                event_draw_clock_digits(0, b->unk0[0x3D] + 1);
             }
         }
         if (e == 0) {
-            func_80189C3C(1, (s16)b->unk0[0x3E]);
+            event_draw_clock_digits(1, (s16)b->unk0[0x3E]);
         }
-        func_8018BB00(b->unk0[0x3D], b->unk0[0x3E]);
+        mail_check_schedule(b->unk0[0x3D], b->unk0[0x3E]);
         for (i = 0; i < 5; i++) {
             if (a->unk2C != 0) {
                 if (b->unkB4[i] > 0) {
@@ -718,97 +718,97 @@ void func_8018A5F0(Unk_801E0710 *a, Unk_801E0368 *b, s32 c, s32 d) {
         }
     }
     if (e == 0) {
-        func_80189C3C(2, (s16)b->unk0[0x3F]);
+        event_draw_clock_digits(2, (s16)b->unk0[0x3F]);
     }
 }
 
-void func_8018A7C0(Unk_801E0710 *a) {
+void event_draw_gauge(Unk_801E0710 *a) {
     s32 n;
     s32 t;
     s32 i;
     if (a->unk0 <= 0) {
         a->unk0 = 0;
         n = 0;
-        func_801A25B4(4);
+        sound_se_stop(4);
     } else {
         n = a->unk0 * 36 / 255 + 0x10;
         t = (a->unk0 << 12) / 255;
         if (a->unk38 != 0) {
             if (t >= 0x400) {
                 a->unk38 = 0;
-                func_801A25B4(4);
+                sound_se_stop(4);
             }
         } else if (t < 0x400) {
             a->unk38 = 1;
-            func_801A2678(4);
+            sound_se_play(4);
         }
     }
-    func_801A4944(0x400, 0x10, 0x33);
+    sprite_restore_clut(0x400, 0x10, 0x33);
     for (i = 0x10; i < 0x34; i++) {
         if (n < i) {
-            func_801A461C(0x400, i, 0x1421);
+            sprite_set_clut_entry(0x400, i, 0x1421);
         }
     }
 }
 
-void func_8018A8CC(Unk_8018A8CC *a) {
+void event_draw_percent_gauge(Unk_8018A8CC *a) {
     s32 i;
     s32 n;
     Unk_8018A8CC_58 *p = a->unk58;
     n = p->unk8[p->unk2] * 16 / 100;
-    func_801A4944(0x400, 0x50, 0x5F);
+    sprite_restore_clut(0x400, 0x50, 0x5F);
     for (i = 0x50; i < n + 0x50; i++) {
-        func_801A461C(0x400, i, 0x7E8A);
+        sprite_set_clut_entry(0x400, i, 0x7E8A);
     }
 }
 
-void func_8018A968(s16 a, s16 b) {
+void event_set_blink(s16 a, s16 b) {
     switch (a) {
     case 0:
-        D_801DFD1C = b;
-        D_801DFD22 = 0;
+        event_blink0_on = b;
+        event_blink0_timer = 0;
         break;
     case 1:
-        D_801DFD1E = b;
-        D_801DFD24 = 0;
+        event_blink1_on = b;
+        event_blink1_timer = 0;
         break;
     case 2:
-        D_801DFD20 = b;
-        D_801DFD26 = 0;
+        event_blink2_on = b;
+        event_blink2_timer = 0;
         break;
     }
     if (b == 0) {
-        func_801A4824(0x400, 1, 3, 0);
+        sprite_fill_clut(0x400, 1, 3, 0);
     }
 }
 
-void func_8018AA00(s16 a) {
+void event_clock_tick(s16 a) {
     Unk_801E0710 *q = &D_801E0710;
     Unk_801E0368 *p = &D_801E0368;
-    func_8018A5F0(q, p, 0, 0);
+    event_clock_add_minute(q, p, 0, 0);
     if ((s16)((s16)p->unk0[0x3F] % 10) == p->unk1FE) {
         q->unk44 = 1;
     }
     if (a != 0) {
-        func_8018A3F8(0);
+        event_update_daylight(0);
     }
 }
 
-void func_8018AABC(s16 a) {
+void event_show_clock(s16 a) {
     Unk_801E0368 *p = &D_801E0368;
-    func_80189C3C(0, p->unk0[0x3D] + 1);
-    func_80189C3C(1, p->unk0[0x3E]);
-    func_80189C3C(2, p->unk0[0x3F]);
+    event_draw_clock_digits(0, p->unk0[0x3D] + 1);
+    event_draw_clock_digits(1, p->unk0[0x3E]);
+    event_draw_clock_digits(2, p->unk0[0x3F]);
     D_801E1040.unk0[0] = a;
     SetFarColor(0, 0, 0);
     if (a != 0) {
-        func_8018A3F8(1);
+        event_update_daylight(1);
     }
 }
 
-void func_8018AB48(Unk_8018AB48 *a) {
+void event_draw_compass(Unk_8018AB48 *a) {
     Unk_8018AB48_10 rect;
-    Unk_8018AB48_r *p = (Unk_8018AB48_r *)func_801A44B8(0x40E);
+    Unk_8018AB48_r *p = (Unk_8018AB48_r *)sprite_find(0x40E);
     if (p != NULL) {
         rect.unk0 = ((a->unk6E * 0xC0000 / 360) >> 14) + 0x140;
         rect.unk2 = 0x160;
@@ -818,14 +818,14 @@ void func_8018AB48(Unk_8018AB48 *a) {
     }
 }
 
-void func_8018ABE8(s16 a, s16 b) {
+void event_advance_clock(s16 a, s16 b) {
     s16 i;
     Unk_801E0710 *q = &D_801E0710;
     Unk_801E0368 *p = &D_801E0368;
     for (i = 0; i < a; i++) {
-        func_8018A5F0(q, p, 1, b);
+        event_clock_add_minute(q, p, 1, b);
     }
-    func_80189C3C(0, p->unk0[0x3D] + 1);
-    func_80189C3C(1, p->unk0[0x3E]);
-    func_80189C3C(2, p->unk0[0x3F]);
+    event_draw_clock_digits(0, p->unk0[0x3D] + 1);
+    event_draw_clock_digits(1, p->unk0[0x3E]);
+    event_draw_clock_digits(2, p->unk0[0x3F]);
 }

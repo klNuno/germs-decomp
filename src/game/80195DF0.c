@@ -54,10 +54,10 @@ s32 D_801DFF48;
 extern Unk_801E0600 D_801E0600;
 extern Unk_801E0600 D_801E0610;
 extern Unk_801E0620 D_801E0620;
-s16 func_80189054(s16 arg0, s16 arg1);
-s16 func_801890C4(s16 arg0, s16 arg1);
-void func_801875E4(s16 arg0);
-s16 func_80188C24(s16 arg0, s16 arg1);
+s16 effect_item_add(s16 arg0, s16 arg1);
+s16 effect_item_remove(s16 arg0, s16 arg1);
+void effect_weapon_unequip(s16 arg0);
+s16 effect_weapon_add(s16 arg0, s16 arg1);
 typedef struct { u8 unk0[0x16]; u16 unk16; } Unk_8018E56C;
 typedef struct Unk_801E076C {
     u8 unk0[0x3C];
@@ -137,7 +137,7 @@ typedef struct Unk_801E0710 {
     Unk_801E076C *unk5C;
 } Unk_801E0710;
 extern Unk_801E0710 D_801E0710;
-void func_8018A7C0(Unk_801E0710 *arg0);
+void event_draw_gauge(Unk_801E0710 *arg0);
 typedef struct {
     s16 unk0[0x14];
     s16 unk28[0x1C];
@@ -156,29 +156,29 @@ typedef struct {
 extern Unk_801E0368 D_801E0368;
 typedef struct { s32 unk0; s32 unk4; s32 unk8; s32 unkC; } Unk_80192F60;
 typedef struct { s16 unk0; s16 unk2; s16 unk4; } Unk_801DFF30;
-Unk_801DFF30 D_801DFF30;
-void func_80183E88(char *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
+Unk_801DFF30 object_room_phone;
+void text_show(char *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
 typedef struct { s16 unk0; s16 unk2; s16 unk4; } Unk_801DFF28;
-Unk_801DFF28 D_801DFF28;
+Unk_801DFF28 object_room_storage;
 u16 D_801DFD58;
 u16 D_801DFD5A;
 extern char D_80170E18[];
-void func_801A4A68(s32 arg0, s32 arg1);
-void func_801A461C(s32 arg0, s32 arg1, s32 arg2);
-void func_80184094(void);
-void func_8018C1B0(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+void sprite_set_visible(s32 arg0, s32 arg1);
+void sprite_set_clut_entry(s32 arg0, s32 arg1, s32 arg2);
+void text_close(void);
+void mail_wait(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 extern Unk_801E076C *D_801E076C[];
-Unk_8018E56C *func_8018E56C(u16 arg0);
-void func_8018DA2C(void *arg0, s16 arg1, s16 arg2);
-void func_80194F08(s16 arg0);
-void func_801A25B4(s32 arg0);
-void func_80186414(s32 arg0, s32 arg1, s32 arg2);
-void func_80199C68(s16 arg0);
-s16 D_801DFF38;
-void func_80194780(void);
-void func_80182300(void);
-void func_801808F0(s32 arg0, s32 arg1);
-void func_8018C414(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+Unk_8018E56C *mod_find(u16 arg0);
+void mod_set_anim(void *arg0, s16 arg1, s16 arg2);
+void object_room_play_call(s16 arg0);
+void sound_se_stop(s32 arg0);
+void effect_start_alarm(s32 arg0, s32 arg1, s32 arg2);
+void player_reset_triggers(s16 arg0);
+s16 object_room_exit_action;
+void object_room_main(void);
+void menu_run(void);
+void menu_card_run(s32 arg0, s32 arg1);
+void mail_goto_ofc(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 typedef struct {
     s32 unk0;
     s16 unk4;
@@ -193,15 +193,15 @@ typedef struct {
 extern Unk_801DFFE8 D_801DFFE8;
 typedef struct { void *unk0; s32 unk4; void *unk8; } Unk_80174B10;
 extern void *D_801E0760[];
-Unk_80174B10 *func_80174CB8(s16 arg0);
-Unk_80174B10 *func_80173DE0(Unk_80174B10 *arg0, s32 arg1, s32 arg2);
+Unk_80174B10 *action_find_set(s16 arg0);
+Unk_80174B10 *action_run_set(Unk_80174B10 *arg0, s32 arg1, s32 arg2);
 typedef struct { s32 unk0; s32 unk4; s32 unk8; s32 unkC; s32 unk10; } Unk_801CC1E8;
 s16 D_801DFF4C;
 void UnDeliverEvent(u32 ev, u32 spec);
-Unk_801CC1E8 *func_801CC1E8(s32 arg0);
-extern s16 D_801DFD64[];
-void func_80189DE8(Unk_801E0710 *arg0);
-void func_8018A968(s16 arg0, s16 arg1);
+Unk_801CC1E8 *kaj_event_push(s32 arg0);
+extern s16 player_part_damage_caps[];
+void event_draw_limb_status(Unk_801E0710 *arg0);
+void event_set_blink(s16 arg0, s16 arg1);
 typedef struct {
     u16 unk0;
     u16 unk2;
@@ -218,7 +218,7 @@ typedef struct {
     u8 unk0[0x3C];
     Unk_8019A07C_3C *unk3C;
 } Unk_8019A07C;
-void func_80197688(void);
+void player_finish_death(void);
 typedef struct {
     s32 unk0;
     s32 unk4;
@@ -241,14 +241,14 @@ typedef struct {
 } Unk_801E02D8;
 extern Unk_801E02D8 D_801E02D8;
 s16 D_801DFF18;
-s32 D_801DFF1C;
-extern u8 D_801DFF20[];
+s32 object_aset_count;
+extern u8 object_iff_file_pos[];
 s32 CdPosToInt(void *p);
 void *CdIntToPos(s32 i, void *p);
 s32 CdControl(u8 com, u8 *param, u8 *result);
-void func_801A2678(s32 arg0);
-void func_8019555C(Unk_801E076C *arg0, s16 arg1);
-void func_8018ABE8(s16 a, s16 b);
+void sound_se_play(s32 arg0);
+void player_set_view(Unk_801E076C *arg0, s16 arg1);
+void event_advance_clock(s16 a, s16 b);
 typedef struct { s32 unk0; u8 *unk4; u8 *unk8; s32 unkC; s32 unk10; s16 unk14; } Unk_801A3970;
 extern Unk_801A3970 D_801E05C0;
 s32 CdMode(void);
@@ -256,8 +256,8 @@ void *CdLastPos(void);
 s32 CdRead(s32 sectors, u32 *buf, s32 mode);
 s32 CdReadSync(s32 mode, u8 *result);
 s32 VSync(s32 mode);
-u32 *func_801A37E4(u8 *arg0, s32 arg1, Unk_801A3970 *arg2);
-void func_801A3970(Unk_801A3970 *arg0);
+u32 *sound_se_alloc_header(u8 *arg0, s32 arg1, Unk_801A3970 *arg2);
+void sound_vab_open_head(Unk_801A3970 *arg0);
 typedef struct Unk_801E6DA0 {
     s32 unk0;
     s32 unk4;
@@ -265,54 +265,54 @@ typedef struct Unk_801E6DA0 {
     s16 unkA;
 } Unk_801E6DA0;
 extern Unk_801E6DA0 D_801E6DA0;
-s32 func_801CD6B4(void);
-s16 func_80193880(void);
-s16 func_8018898C(Unk_801E0710 *arg0, s16 arg1);
-void func_80193DA8(Unk_801E0710 *arg0);
-void func_80198CFC(s16 arg0, u16 arg1, s32 arg2, s32 arg3, s32 arg4, s16 arg5, s16 arg6, s16 arg7, s32 arg8);
-void func_80199548(Unk_801E0710 *arg0, s32 arg1, s32 arg2);
+s32 kaj_pad_read(void);
+s16 object_room_storage_input(void);
+s16 effect_item_input(Unk_801E0710 *arg0, s16 arg1);
+void object_room_do_action(Unk_801E0710 *arg0);
+void player_start_move_to(s16 arg0, u16 arg1, s32 arg2, s32 arg3, s32 arg4, s16 arg5, s16 arg6, s16 arg7, s32 arg8);
+void player_handle_pad(Unk_801E0710 *arg0, s32 arg1, s32 arg2);
 s16 D_801DFD54;
 extern s32 D_801DFF50;
 extern s32 D_801DFED8;
 extern s32 D_801DFEE4;
 extern s32 D_801DFED4;
 extern s32 D_801DFEE8;
-void func_80174840(s16 arg0);
-void func_80174BC8(void);
-void func_80174FA8(void);
-void func_80176780(void);
-void func_8017D1BC(void);
-void func_80185548(void);
-void func_801863B4(void);
-void func_8018E47C(void);
-void func_80199E1C(s16 arg0, s16 arg1);
-void func_801A23B4(void);
-void func_801A252C(void);
-void func_801A3B5C(void);
-void func_801A3C58(void);
-void func_801A43F4(s32 arg0);
-void func_801A7BA4(void);
+void action_reset(s16 arg0);
+void action_free_all_sets(void);
+void action_free_triggers(void);
+void npc_free_bodies(void);
+void block_free_all(void);
+void door_free_all(void);
+void effect_clear_alarms(void);
+void mod_free_all(void);
+void player_add_hp(s16 arg0, s16 arg1);
+void sound_se_pop_scene(void);
+void sound_se_stop_all(void);
+void sound_bgm_close(void);
+void sound_bgm_stop(void);
+void sprite_delete(s32 arg0);
+void thing_free_all(void);
 extern Unk_801E0770 D_801E0770;
 void *memset(void *dst, s32 c, u32 n);
 void RotMatrix(s16 *arg0, void *arg1);
 void ApplyMatrixLV(void *arg0, void *arg1, void *arg2);
-void func_801B25D0(void *arg0);
+void GsSetView2(void *arg0);
 void GsInitCoordinate2(void *super, void *base);
 typedef struct { s16 unk0[5]; s16 unkA; char *unkC; s16 unk10; s16 unk12; s32 unk14; s32 unk18; s32 unk1C; } Unk_801E0340;
 extern Unk_801E0340 D_801E0340;
-extern s32 D_801DFD60[];
-void func_8018C554(s32 arg0, s32 *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
+extern s32 player_str_scene_cmn[];
+void mail_goto_building(s32 arg0, s32 *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 extern s16 D_801DFC76;
-void func_801A0690(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+void roadmap_start_flash(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 extern s16 D_801E1046[];
-u16 func_8019A6A4(void);
-s16 func_80179630(Unk_801762F4 *arg0, s32 arg1, s16 arg2);
+u16 roadmap_get_state(void);
+s16 ai_in_aim_cone(Unk_801762F4 *arg0, s32 arg1, s16 arg2);
 extern char D_80170EDC[];
 extern char D_80170EFC[];
 extern char D_80170F14[];
-s32 func_80199FA0(void);
-s32 D_801DFF40;
-s32 D_801DFF44;
+s32 player_is_injured(void);
+s32 player_slide_dx;
+s32 player_slide_dz;
 typedef struct {
     s32 unk0;
     s32 unk4;
@@ -356,18 +356,18 @@ void GsSetLsMatrix(void *m);
 void RotTrans(void *v0, s32 *v1, s32 *flag);
 typedef struct { s16 unk0[3]; s16 unk6; s16 unk8[3]; s16 unkE; } Unk_801E1040;
 extern Unk_801E1040 D_801E1040;
-void func_801958FC(Unk_801E0620 *arg0);
+void player_wrap_cell(Unk_801E0620 *arg0);
 void SetFogNearFar(s32 a, s32 b, s32 h);
 void RotMatrixZYX(s16 *r, void *m);
-void func_80197838(u16 arg0, Unk_801E0710 *arg1, Unk_801E0620 *arg2);
-void func_80189F50(Unk_801E0710 *a);
-void func_8017AAB4(u16 arg0);
-void func_8017A108(u16 arg0);
-void func_80196AE0(Unk_801E0620 *arg0, u16 arg1, s16 arg2, s16 arg3);
-void func_8018AB48(Unk_801E0620 *arg0);
-void func_801966B4(Unk_801E0620 *arg0, s32 arg1);
-void func_80196048(Unk_801E0620 *arg0, u16 arg1);
-void func_801A358C(Unk_801E0620 *arg0);
+void player_start_death(u16 arg0, Unk_801E0710 *arg1, Unk_801E0620 *arg2);
+void event_update_hud(Unk_801E0710 *a);
+void block_stream_update(u16 arg0);
+void block_update_visibility(u16 arg0);
+void player_move_on_foot(Unk_801E0620 *arg0, u16 arg1, s16 arg2, s16 arg3);
+void event_draw_compass(Unk_801E0620 *arg0);
+void player_move_in_car(Unk_801E0620 *arg0, s32 arg1);
+void player_move_in_train(Unk_801E0620 *arg0, u16 arg1);
+void sound_footstep_update(Unk_801E0620 *arg0);
 int rand(void);
 typedef struct {
     s16 unk0;
@@ -436,19 +436,19 @@ typedef struct Unk_801E1118 {
 } Unk_801E1118;
 extern Unk_801E1118 D_801E1118;
 extern Unk_801E032C *D_801E032C[];
-s16 func_80195DF0(s16 arg0, s16 arg1, s32 *arg2, s32 *arg3, s32 arg4, s32 arg5);
-void func_80195BC8(Unk_801E0620 *arg0, s16 *arg1, u16 arg2);
+s16 player_try_slide(s16 arg0, s16 arg1, s32 *arg2, s32 *arg3, s32 arg4, s32 arg5);
+void player_update_view(Unk_801E0620 *arg0, s16 *arg1, u16 arg2);
 s32 func_8017BBB0(s32 arg0, s32 arg1, s32 *arg2);
-s16 func_80195098(Unk_801E0620 *arg0, s32 arg1, s16 arg2, s16 arg3);
+s16 player_check_ground(Unk_801E0620 *arg0, s32 arg1, s16 arg2, s16 arg3);
 s32 rsin(s32 a);
 s32 rcos(s32 a);
 extern Unk_801E1158 D_801E1158;
-void func_80196454(Unk_801E0620 *arg0, Unk_801E032C *arg1, Unk_801E1158 *arg2, s32 arg3, s32 arg4, s16 arg5, s16 arg6);
-s32 func_8017C234(s32 *arg0, s32 arg1);
+void player_place_in_car(Unk_801E0620 *arg0, Unk_801E032C *arg1, Unk_801E1158 *arg2, s32 arg3, s32 arg4, s16 arg5, s16 arg6);
+s32 block_fit_ground_tilt(s32 *arg0, s32 arg1);
 s32 SquareRoot0(s32 arg0);
-s32 func_80197F34(s16 arg0);
-s16 func_8018C0A0(s16 a);
-void func_80197BB0(s16 arg0, s16 arg1);
+s32 player_pick_hit_part(s16 arg0);
+s16 mail_angle_to_dir8(s16 a);
+void player_add_skill_exp(s16 arg0, s16 arg1);
 typedef struct {
     u16 unk0;
     u16 unk2;
@@ -477,13 +477,13 @@ typedef struct {
     s32 unk58;
     s32 unk5C;
 } Unk_80188FEC;
-void func_80175FA8(Unk_801762F4 *arg0, s32 arg1, s32 arg2, s16 arg3);
-u16 func_80176734(Unk_801762F4 *arg0);
-Unk_80188FEC *func_80188FEC(s16 arg0);
-void func_80198ADC(Unk_80198ADC *arg0);
-void func_8019A07C(Unk_8019A07C *arg0);
-void *func_801D15C8(u32 arg0);
-s32 func_801D14B8(void *arg0);
+void npc_apply_damage(Unk_801762F4 *arg0, s32 arg1, s32 arg2, s16 arg3);
+u16 npc_get_radius(Unk_801762F4 *arg0);
+Unk_80188FEC *effect_weapon_find(s16 arg0);
+void player_move_to_step(Unk_80198ADC *arg0);
+void player_move_to_done(Unk_8019A07C *arg0);
+void *kaj_tss_alloc(u32 arg0);
+s32 kaj_tss_start(void *arg0);
 typedef struct {
     u16 unk0;
     u16 unk2;
@@ -494,24 +494,24 @@ typedef struct {
     char **unk8;
 } Unk_80199034;
 s32 atoi(char *s);
-s32 func_8017BD24(s32 arg0, s32 arg1, s32 *arg2, s16 arg3);
-s32 func_8017BF50(s32 arg0, s32 arg1, s32 arg2, s32 *arg3);
-s16 func_8018F7D0(s32 arg0, s32 arg1, s32 arg2);
-s16 func_80176464(s16 arg0, s32 arg1, s32 arg2, s32 arg3);
-Unk_801762F4 *func_801762F4(s16 arg0, u16 arg1);
-u16 func_801A7CF0(s32 arg0, s32 arg1, s32 arg2, u16 arg3);
+s32 block_find_surface(s32 arg0, s32 arg1, s32 *arg2, s16 arg3);
+s32 block_find_surface_nearest(s32 arg0, s32 arg1, s32 arg2, s32 *arg3);
+s16 mod_npcrec_find_at_point(s32 arg0, s32 arg1, s32 arg2);
+s16 npc_find_at_point(s16 arg0, s32 arg1, s32 arg2, s32 arg3);
+Unk_801762F4 *npc_find(s16 arg0, u16 arg1);
+u16 thing_hit_test(s32 arg0, s32 arg1, s32 arg2, u16 arg3);
 s16 D_801DFD5C;
 s16 D_801DFD5E;
 extern s32 D_801E6DB4[];
-s32 func_8018C810(s32 a);
-void func_80187978(s32 arg0);
+s32 mail_exp_for_level(s32 a);
+void effect_weapon_calc_rate(s32 arg0);
 typedef struct { s32 unk0; s16 unk4; } Unk_801AC55C;
 typedef struct { s16 unk0; s16 unk2; u8 unk4[0x8]; Unk_801AC55C *unkC; Unk_801AC55C *unk10; } Unk_801D7FB0;
 extern Unk_801E07C0 D_801E07C0;
 extern Unk_801D7FB0 D_801D7FB0;
-void func_80185A60(s32 arg0, u16 arg1, s32 arg2);
-void func_8019A1A4(Unk_801E076C *arg0, Unk_801E07C0 *arg1);
-void func_80187978(s32 a);
+void effect_start_sprite_slide(s32 arg0, u16 arg1, s32 arg2);
+void player_update_map_cursor(Unk_801E076C *arg0, Unk_801E07C0 *arg1);
+void effect_weapon_calc_rate(s32 a);
 
 INCLUDE_RODATA("asm/nonmatchings/game/80195DF0", D_80170EDC);
 
@@ -519,7 +519,7 @@ INCLUDE_RODATA("asm/nonmatchings/game/80195DF0", D_80170EFC);
 
 INCLUDE_RODATA("asm/nonmatchings/game/80195DF0", D_80170F14);
 
-s16 func_80195DF0(s16 arg0, s16 arg1, s32 *arg2, s32 *arg3, s32 arg4, s32 arg5) {
+s16 player_try_slide(s16 arg0, s16 arg1, s32 *arg2, s32 *arg3, s32 arg4, s32 arg5) {
     s16 ret = arg1;
 
     switch (arg1) {
@@ -527,70 +527,70 @@ s16 func_80195DF0(s16 arg0, s16 arg1, s32 *arg2, s32 *arg3, s32 arg4, s32 arg5) 
         *arg2 -= arg4;
         *arg3 -= arg5;
         ret = 1;
-        D_801DFF40 = arg4 < 0 ? -2 : arg4 > 0 ? 2 : 0;
-        D_801DFF44 = arg5 < 0 ? -2 : arg5 > 0 ? 2 : 0;
+        player_slide_dx = arg4 < 0 ? -2 : arg4 > 0 ? 2 : 0;
+        player_slide_dz = arg5 < 0 ? -2 : arg5 > 0 ? 2 : 0;
         if (arg0 != 2) {
-            D_801DFF40 *= 10;
-            D_801DFF44 *= 10;
+            player_slide_dx *= 10;
+            player_slide_dz *= 10;
         }
-        if (D_801DFF40 != 0) {
-            *arg2 += D_801DFF40;
+        if (player_slide_dx != 0) {
+            *arg2 += player_slide_dx;
         } else {
-            *arg2 += D_801DFF44;
+            *arg2 += player_slide_dz;
         }
         break;
     case 1:
         ret = 2;
-        if (D_801DFF40 != 0) {
-            *arg2 -= D_801DFF40;
+        if (player_slide_dx != 0) {
+            *arg2 -= player_slide_dx;
         } else {
-            *arg2 -= D_801DFF44;
+            *arg2 -= player_slide_dz;
         }
-        if (D_801DFF44 != 0) {
-            *arg3 += D_801DFF44;
+        if (player_slide_dz != 0) {
+            *arg3 += player_slide_dz;
         } else {
-            *arg3 += D_801DFF40;
+            *arg3 += player_slide_dx;
         }
         break;
     case 2:
         ret = 4;
-        if (D_801DFF44 != 0) {
-            *arg3 -= D_801DFF44;
+        if (player_slide_dz != 0) {
+            *arg3 -= player_slide_dz;
         } else {
-            *arg3 -= D_801DFF40;
+            *arg3 -= player_slide_dx;
         }
-        if (D_801DFF44 != 0) {
-            *arg3 -= D_801DFF44;
+        if (player_slide_dz != 0) {
+            *arg3 -= player_slide_dz;
         } else {
-            *arg3 -= D_801DFF40;
+            *arg3 -= player_slide_dx;
         }
         break;
     case 4:
         ret = 3;
-        if (D_801DFF44 != 0) {
-            *arg3 += D_801DFF44;
+        if (player_slide_dz != 0) {
+            *arg3 += player_slide_dz;
         } else {
-            *arg3 += D_801DFF40;
+            *arg3 += player_slide_dx;
         }
-        if (D_801DFF40 != 0) {
-            *arg2 -= D_801DFF40;
+        if (player_slide_dx != 0) {
+            *arg2 -= player_slide_dx;
         } else {
-            *arg2 -= D_801DFF44;
+            *arg2 -= player_slide_dz;
         }
         break;
     case 3:
         ret = -1;
-        if (D_801DFF40 != 0) {
-            *arg2 += D_801DFF40;
+        if (player_slide_dx != 0) {
+            *arg2 += player_slide_dx;
         } else {
-            *arg2 += D_801DFF44;
+            *arg2 += player_slide_dz;
         }
         break;
     }
     return ret;
 }
 
-void func_80196048(Unk_801E0620 *arg0, u16 arg1) {
+void player_move_in_train(Unk_801E0620 *arg0, u16 arg1) {
     s32 v[3];
     s16 rot[3];
     s16 dir[3];
@@ -630,13 +630,13 @@ void func_80196048(Unk_801E0620 *arg0, u16 arg1) {
         cam[2] = (p->unk38 << 12) / 360;
         dir[1] = ((p->unk36 + 90) << 12) / 360;
         if (arg0->unk3E != 0) {
-            func_8017A108(arg1);
+            block_update_visibility(arg1);
             col = func_8017BBB0(arg0->unk54, arg0->unk5C, &y);
             if (arg0->unk3E == 1) {
                 col = 0x1000000;
             }
             arg0->unk3E = 0;
-            func_80195098(arg0, col, 0, 0);
+            player_check_ground(arg0, col, 0, 0);
             arg0->unk58 = y + arg0->unk78;
         } else {
             dx = (arg0->unk50 * rsin(cam[1])) >> 12;
@@ -656,17 +656,17 @@ void func_80196048(Unk_801E0620 *arg0, u16 arg1) {
                 RotTrans(&p->unk2C, v, &flag);
                 arg0->unk54 = v[0];
                 arg0->unk5C = v[2];
-                func_8017AAB4(arg1);
-                func_8017A108(arg1);
+                block_stream_update(arg1);
+                block_update_visibility(arg1);
                 col = func_8017BBB0(arg0->unk54, arg0->unk5C, &y);
             } else {
-                func_8017AAB4(arg1);
-                func_8017A108(arg1);
+                block_stream_update(arg1);
+                block_update_visibility(arg1);
             }
-            if (func_80195098(arg0, col, moved, step) != 0) {
+            if (player_check_ground(arg0, col, moved, step) != 0) {
                 arg0->unk58 = y + arg0->unk78;
             } else {
-                step = func_80195DF0(2, step, (s32 *)&p->unk2C, (s32 *)&p->unk30, dx, dz);
+                step = player_try_slide(2, step, (s32 *)&p->unk2C, (s32 *)&p->unk30, dx, dz);
                 if (step != -1) {
                     goto loop;
                 }
@@ -674,13 +674,13 @@ void func_80196048(Unk_801E0620 *arg0, u16 arg1) {
                 arg0->unk5C = oz;
                 arg0->unk44 = 5;
             }
-            func_801958FC(arg0);
+            player_wrap_cell(arg0);
         }
     }
-    func_80195BC8(arg0, rot, 2);
+    player_update_view(arg0, rot, 2);
 }
 
-void func_80196454(Unk_801E0620 *arg0, Unk_801E032C *arg1, Unk_801E1158 *arg2, s32 arg3, s32 arg4, s16 arg5, s16 arg6) {
+void player_place_in_car(Unk_801E0620 *arg0, Unk_801E032C *arg1, Unk_801E1158 *arg2, s32 arg3, s32 arg4, s16 arg5, s16 arg6) {
     s32 v[3];
     s16 rot[3];
     s32 flag;
@@ -720,7 +720,7 @@ void func_80196454(Unk_801E0620 *arg0, Unk_801E032C *arg1, Unk_801E1158 *arg2, s
     }
 }
 
-void func_801966B4(Unk_801E0620 *arg0, s32 arg1) {
+void player_move_in_car(Unk_801E0620 *arg0, s32 arg1) {
     s16 rot[3];
     s32 y;
     Unk_801E1158 *p;
@@ -739,8 +739,8 @@ void func_801966B4(Unk_801E0620 *arg0, s32 arg1) {
     y = 0;
     m = D_801E032C[0];
     if (arg0->unk3E != 0) {
-        func_8017A108(arg1);
-        r = func_8017C234(&y, 1);
+        block_update_visibility(arg1);
+        r = block_fit_ground_tilt(&y, 1);
         if (r == 0xFFFF || r == 0xFF00) {
             m->unk8 = y;
         }
@@ -774,10 +774,10 @@ void func_801966B4(Unk_801E0620 *arg0, s32 arg1) {
             }
         }
         if (dx != 0 || dz != 0) {
-            func_80196454(arg0, m, p, dx, dz, p->unk14, 0);
-            func_8017AAB4(arg1);
-            func_8017A108(arg1);
-            r = func_8017C234(&y, 0);
+            player_place_in_car(arg0, m, p, dx, dz, p->unk14, 0);
+            block_stream_update(arg1);
+            block_update_visibility(arg1);
+            r = block_fit_ground_tilt(&y, 0);
             if (r == 0xFFFF || r == 0xFF00) {
                 m->unk8 = y;
             } else {
@@ -789,20 +789,20 @@ void func_801966B4(Unk_801E0620 *arg0, s32 arg1) {
                 p->unk6 = 0;
             }
         } else {
-            func_80196454(arg0, m, p, 0, 0, 0, 0);
-            func_8017AAB4(arg1);
-            func_8017A108(arg1);
+            player_place_in_car(arg0, m, p, 0, 0, 0, 0);
+            block_stream_update(arg1);
+            block_update_visibility(arg1);
         }
     }
-    func_80196454(arg0, m, p, 0, 0, 0, 1);
-    func_801958FC(arg0);
+    player_place_in_car(arg0, m, p, 0, 0, 0, 1);
+    player_wrap_cell(arg0);
     rot[0] = (-arg0->unk6C << 12) / 360;
     rot[1] = (-arg0->unk6E << 12) / 360;
     rot[2] = (-arg0->unk70 << 12) / 360;
-    func_80195BC8(arg0, rot, 2);
+    player_update_view(arg0, rot, 2);
 }
 
-void func_80196AE0(Unk_801E0620 *arg0, u16 arg1, s16 arg2, s16 arg3) {
+void player_move_on_foot(Unk_801E0620 *arg0, u16 arg1, s16 arg2, s16 arg3) {
     s16 rot[3];
     s16 dir[3];
     s32 y;
@@ -847,22 +847,22 @@ void func_80196AE0(Unk_801E0620 *arg0, u16 arg1, s16 arg2, s16 arg3) {
             col = 0x1000000;
             if (arg0->unk3E != 0) {
                 if (arg3) {
-                    func_8017A108(arg1);
+                    block_update_visibility(arg1);
                 }
                 switch (arg1) {
                 case 1:
-                    col = func_8017BF50(arg0->unk54, arg0->unk58 - arg0->unk78, arg0->unk5C, &y);
+                    col = block_find_surface_nearest(arg0->unk54, arg0->unk58 - arg0->unk78, arg0->unk5C, &y);
                     break;
                 case 0:
                 case 2:
-                    col = func_8017BD24(arg0->unk54, arg0->unk5C, &y, 1);
+                    col = block_find_surface(arg0->unk54, arg0->unk5C, &y, 1);
                     break;
                 }
                 if (arg0->unk3E == 1) {
                     col = 0x1000000;
                 }
                 arg0->unk3E = 0;
-                func_80195098(arg0, col, moved, step);
+                player_check_ground(arg0, col, moved, step);
                 arg0->unk58 = y + arg0->unk78;
                 goto end;
             }
@@ -888,35 +888,35 @@ void func_80196AE0(Unk_801E0620 *arg0, u16 arg1, s16 arg2, s16 arg3) {
                     px = (s * 600) >> 12;
                     pz = (c * 600) >> 12;
                 }
-                r1 = func_8018F7D0(arg0->unk54 + px, arg0->unk58 - arg0->unk78, arg0->unk5C + pz);
+                r1 = mod_npcrec_find_at_point(arg0->unk54 + px, arg0->unk58 - arg0->unk78, arg0->unk5C + pz);
                 if (r1 >= 0) {
                     col = r1 + 0xF70000;
                 } else {
-                    r2 = func_80176464(-1, arg0->unk54 + px, arg0->unk58 - arg0->unk78, arg0->unk5C + pz);
+                    r2 = npc_find_at_point(-1, arg0->unk54 + px, arg0->unk58 - arg0->unk78, arg0->unk5C + pz);
                     if (r2 >= 0) {
-                        e = func_801762F4(0, r2);
+                        e = npc_find(0, r2);
                         if (e != NULL && e->unkF == 6) {
                             y = e->unk24 + arg0->unk74 * 32000;
                         }
                         col = r2 + 0xFC0000;
                     } else {
-                        r3 = func_801A7CF0(arg0->unk54, arg0->unk58 - arg0->unk78, arg0->unk5C, arg1);
+                        r3 = thing_hit_test(arg0->unk54, arg0->unk58 - arg0->unk78, arg0->unk5C, arg1);
                         if (r3 != 0xFFFF) {
                             col = r3 + 0xFD0000;
                         } else {
                             if (arg2) {
-                                func_8017AAB4(arg1);
+                                block_stream_update(arg1);
                             }
                             if (arg3) {
-                                func_8017A108(arg1);
+                                block_update_visibility(arg1);
                             }
                             switch (arg1) {
                             case 1:
-                                col = func_8017BF50(arg0->unk54, arg0->unk58 - arg0->unk78, arg0->unk5C, &y);
+                                col = block_find_surface_nearest(arg0->unk54, arg0->unk58 - arg0->unk78, arg0->unk5C, &y);
                                 break;
                             case 0:
                             case 2:
-                                col = func_8017BD24(arg0->unk54, arg0->unk5C, &y, 1);
+                                col = block_find_surface(arg0->unk54, arg0->unk5C, &y, 1);
                                 break;
                             }
                         }
@@ -924,14 +924,14 @@ void func_80196AE0(Unk_801E0620 *arg0, u16 arg1, s16 arg2, s16 arg3) {
                 }
             } else {
                 if (arg2) {
-                    func_8017AAB4(arg1);
+                    block_stream_update(arg1);
                 }
                 if (arg3) {
-                    func_8017A108(arg1);
+                    block_update_visibility(arg1);
                 }
             }
         }
-        if (func_80195098(arg0, col, moved, step) != 0) {
+        if (player_check_ground(arg0, col, moved, step) != 0) {
             t = y + arg0->unk78;
             if (t < arg0->unk58) {
                 arg0->unk40 = 1;
@@ -944,19 +944,19 @@ void func_80196AE0(Unk_801E0620 *arg0, u16 arg1, s16 arg2, s16 arg3) {
             arg0->unk54 -= dx;
             arg0->unk5C -= dz;
         } else {
-            step = func_80195DF0(arg1, step, &arg0->unk54, &arg0->unk5C, dx, dz);
+            step = player_try_slide(arg1, step, &arg0->unk54, &arg0->unk5C, dx, dz);
             if (step != -1) {
                 goto loop;
             }
             arg0->unk44 = 5;
         }
-        func_801958FC(arg0);
+        player_wrap_cell(arg0);
     }
 end:
-    func_80195BC8(arg0, rot, arg1);
+    player_update_view(arg0, rot, arg1);
 }
 
-void func_801971D4(void) {
+void player_init(void) {
     Unk_801E0710 *p = &D_801E0710;
     Unk_801E0770 *q = &D_801E0770;
     Unk_801E0620 *r = &D_801E0620;
@@ -1007,13 +1007,13 @@ void func_801971D4(void) {
     RotMatrix(sv, r->unk7C);
     ApplyMatrixLV(r->unk7C, r->unk90, r->unk90);
     r->unk9C = 0;
-    func_801B25D0(r->unk7C);
+    GsSetView2(r->unk7C);
     GsInitCoordinate2(NULL, r->unkA0);
     p->unk58 = q;
     p->unk5C = (Unk_801E076C *)r;
 }
 
-void func_80197370(u16 arg0) {
+void player_place_for_scene(u16 arg0) {
     Unk_801E0710 *p = &D_801E0710;
     Unk_801E1040 *f = &D_801E1040;
     Unk_801E0340 *q = &D_801E0340;
@@ -1104,8 +1104,8 @@ void func_80197370(u16 arg0) {
         r->unk70 = 0;
         break;
     }
-    func_8019555C((Unk_801E076C *)r, 0);
-    func_801958FC(r);
+    player_set_view((Unk_801E076C *)r, 0);
+    player_wrap_cell(r);
     if (arg0 == 1) {
         r->unkA0->unk18 = r->unk54;
         r->unkA0->unk1C = r->unk58 - r->unk4C + 0x140;
@@ -1118,7 +1118,7 @@ void func_80197370(u16 arg0) {
     }
 }
 
-void func_80197688(void) {
+void player_finish_death(void) {
     Unk_801E0710 *p = &D_801E0710;
     Unk_801E0340 *q = &D_801E0340;
     Unk_801E0368 *o = &D_801E0368;
@@ -1164,51 +1164,51 @@ void func_80197688(void) {
             p->unk3A[i] = 0;
             o->unkB4[i] = 0;
         }
-        func_8018C554(1, D_801DFD60, 0x18, 0x41, 7, 0xB4, 0x15, 0x500F07, 1);
-        func_8018A7C0(p);
-        func_80189DE8(p);
+        mail_goto_building(1, player_str_scene_cmn, 0x18, 0x41, 7, 0xB4, 0x15, 0x500F07, 1);
+        event_draw_gauge(p);
+        event_draw_limb_status(p);
     } else {
         q->unk0[4] = 1;
         q->unkA = 1;
     }
 }
 
-void func_80197838(u16 arg0, Unk_801E0710 *arg1, Unk_801E0620 *arg2) {
+void player_start_death(u16 arg0, Unk_801E0710 *arg1, Unk_801E0620 *arg2) {
     Unk_801E0368 *o = &D_801E0368;
     s32 v;
 
-    if (D_801E1046[0] == 0 && o->unk24C == 0 && func_8019A6A4() == 0
+    if (D_801E1046[0] == 0 && o->unk24C == 0 && roadmap_get_state() == 0
         && arg2->unk46 != 1 && !(arg2->unk42 & 0x8000) && !(arg2->unk42 & 0x4802)) {
         arg2->unk42 |= 0x800;
         if (arg2->unk46 != 0) {
-            func_80197688();
+            player_finish_death();
             return;
         }
         v = 0x514;
         if (arg0 == 2) {
             v = 0x82;
         }
-        func_80198CFC(0, 0, arg2->unk54 + arg2->unk72 * 0x30D4,
+        player_start_move_to(0, 0, arg2->unk54 + arg2->unk72 * 0x30D4,
                       arg2->unk58 - arg2->unk74 * 0x7D00 - arg2->unk78 + v,
                       arg2->unk5C + arg2->unk76 * 0x30D4, -0x4B, arg2->unk6E, arg2->unk70, 4);
     }
 }
 
-void func_801979B4(u16 arg0, s16 arg1, s16 arg2) {
+void player_update(u16 arg0, s16 arg1, s16 arg2) {
     Unk_801E0710 *p = &D_801E0710;
     Unk_801E0620 *r = &D_801E0620;
 
     if (p->unk0 <= 0) {
-        func_80197838(arg0, p, r);
+        player_start_death(arg0, p, r);
     }
-    func_80189F50(p);
+    event_update_hud(p);
     r->unk44 = 0;
     if (r->unk3C == 0) {
         if (arg1 != 0) {
-            func_8017AAB4(arg0);
+            block_stream_update(arg0);
         }
         if (arg2 != 0) {
-            func_8017A108(arg0);
+            block_update_visibility(arg0);
         }
     } else {
         if (!(r->unk42 & 0x800) && !(r->unk42 & 2)) {
@@ -1228,18 +1228,18 @@ void func_801979B4(u16 arg0, s16 arg1, s16 arg2) {
         if (arg0 == 2) {
             switch (r->unk46) {
             case 0:
-                func_80196AE0(r, 2, arg1, arg2);
-                func_8018AB48(r);
+                player_move_on_foot(r, 2, arg1, arg2);
+                event_draw_compass(r);
                 break;
             case 1:
-                func_801966B4(r, 2);
-                func_8018AB48(r);
+                player_move_in_car(r, 2);
+                event_draw_compass(r);
                 r->unk4E = 0;
                 r->unk50 = 0;
                 return;
             case 2:
             case 3:
-                func_80196048(r, arg0);
+                player_move_in_train(r, arg0);
                 break;
             default:
                 r->unk4E = 0;
@@ -1247,15 +1247,15 @@ void func_801979B4(u16 arg0, s16 arg1, s16 arg2) {
                 return;
             }
         } else {
-            func_80196AE0(r, arg0, arg1, arg2);
+            player_move_on_foot(r, arg0, arg1, arg2);
         }
     }
-    func_801A358C(r);
+    sound_footstep_update(r);
     r->unk4E = 0;
     r->unk50 = 0;
 }
 
-void func_80197BB0(s16 arg0, s16 arg1) {
+void player_add_skill_exp(s16 arg0, s16 arg1) {
     Unk_801E0710 *p = &D_801E0710;
     s16 flag = 0;
     u16 a;
@@ -1331,12 +1331,12 @@ void func_80197BB0(s16 arg0, s16 arg1) {
     }
     if (flag && arg0 != 5) {
         for (i = 0; i < 2; i++) {
-            func_80187978(i);
+            effect_weapon_calc_rate(i);
         }
     }
 }
 
-void func_80197D64(s32 arg0) {
+void player_add_exp(s32 arg0) {
     Unk_801E0710 *p = &D_801E0710;
     s32 i;
 
@@ -1350,7 +1350,7 @@ void func_80197D64(s32 arg0) {
 loop:
     p->unk2++;
     if (p->unk2 < 100) {
-        p->unk8 = func_8018C810(p->unk2);
+        p->unk8 = mail_exp_for_level(p->unk2);
     }
     p->unkC += rand() % 3;
     if ((u16)p->unkC > 100) {
@@ -1369,14 +1369,14 @@ loop:
         p->unk12 = 100;
     }
     for (i = 0; i < 2; i++) {
-        func_80187978(i);
+        effect_weapon_calc_rate(i);
     }
     if (p->unk4 >= (u32)p->unk8) {
         goto loop;
     }
 }
 
-s32 func_80197F34(s16 arg0) {
+s32 player_pick_hit_part(s16 arg0) {
     if (rand() % 100 < 15) {
         return 0;
     }
@@ -1418,7 +1418,7 @@ s32 func_80197F34(s16 arg0) {
     }
 }
 
-void func_801981D0(Unk_801762F4 *arg0, s32 arg1, s32 arg2) {
+void player_take_hit(Unk_801762F4 *arg0, s32 arg1, s32 arg2) {
     Unk_801E0710 *p;
     Unk_801E0620 *q;
     Unk_801E0368 *r;
@@ -1434,13 +1434,13 @@ void func_801981D0(Unk_801762F4 *arg0, s32 arg1, s32 arg2) {
     if (p->unk0 > 0) {
         div = 1;
         n = rand() % (u16)p->unk12;
-        dir = func_8018C0A0(q->unk6E - arg0->unk3A);
+        dir = mail_angle_to_dir8(q->unk6E - arg0->unk3A);
         switch (dir) {
         case 6:
             arg2 = arg2 * 3 / 2;
         case 5:
         case 7:
-            k = func_80197F34(dir);
+            k = player_pick_hit_part(dir);
             break;
         default:
             n += rand() % (u16)p->unk28;
@@ -1471,11 +1471,11 @@ void func_801981D0(Unk_801762F4 *arg0, s32 arg1, s32 arg2) {
                 n += rand() % (u16)p->unk10;
                 break;
             }
-            k = func_80197F34(dir);
+            k = player_pick_hit_part(dir);
             n /= div;
             break;
         }
-        func_80197BB0(5, n * 10);
+        player_add_skill_exp(5, n * 10);
         arg2 -= n * 2;
         if (arg2 > 0) {
             *(r->unkB4 + k) += arg2;
@@ -1485,15 +1485,15 @@ void func_801981D0(Unk_801762F4 *arg0, s32 arg1, s32 arg2) {
                     p->unk4A = 1;
                 }
             }
-            func_8018A7C0(p);
-            func_80189DE8(p);
-            func_8018A968(2, 1);
-            func_801A0690(0xFF, 0, 0, 1);
+            event_draw_gauge(p);
+            event_draw_limb_status(p);
+            event_set_blink(2, 1);
+            roadmap_start_flash(0xFF, 0, 0, 1);
         }
     }
 }
 
-void func_801985AC(void) {
+void player_pick_target(void) {
     Unk_801E02D8 *g = &D_801E02D8;
     Unk_801762F4 *e = g->unk3C;
     Unk_801E0710 *p = &D_801E0710;
@@ -1507,7 +1507,7 @@ void func_801985AC(void) {
         v = q->unk4[q->unk2];
         for (i = 0; i < g->unk1C; i++, e++) {
             if (e->unk4 != 0 && e->unk6 != 0 && e->unkE != 2 && !(e->unk12 & 0x200) && (e->unk12 & 2)
-                && e->unk40 != 0 && func_80179630(e, 0, v) != 0) {
+                && e->unk40 != 0 && ai_in_aim_cone(e, 0, v) != 0) {
                 if (p->unk4C == NULL || e->unk40 < p->unk4C->unk40) {
                     p->unk4C = e;
                 }
@@ -1522,7 +1522,7 @@ void func_801985AC(void) {
     }
 }
 
-void func_80198720(void) {
+void player_shoot_target(void) {
     Unk_801E0710 *g = &D_801E0710;
     Unk_801E0620 *d = &D_801E0620;
     Unk_801E0770 *s = &D_801E0770;
@@ -1548,13 +1548,13 @@ void func_80198720(void) {
     if (s->unk46 == 0 || p == NULL || p->unkE == 2 || (p->unk12 & 0x200) || !(p->unk12 & 2)) {
         return;
     }
-    t = func_80176734(p) + 600;
+    t = npc_get_radius(p) + 600;
     k = p->unk40;
     dist = k - t;
     if (dist < 0) {
         dist = 0;
     }
-    e = func_80188FEC(s->unk4[s->unk2]);
+    e = effect_weapon_find(s->unk4[s->unk2]);
     if (e == NULL) {
         return;
     }
@@ -1588,7 +1588,7 @@ void func_80198720(void) {
     }
     if (chance < 20) {
         if (chance == 0) {
-            func_80175FA8(p, e->unk2, 0, 0);
+            npc_apply_damage(p, e->unk2, 0, 0);
             return;
         }
         if (chance < 0) {
@@ -1628,10 +1628,10 @@ void func_80198720(void) {
         miss = 1;
         amt = 0;
     }
-    func_80175FA8(p, e->unk2, amt, miss);
+    npc_apply_damage(p, e->unk2, amt, miss);
 }
 
-void func_80198ADC(Unk_80198ADC *arg0) {
+void player_move_to_step(Unk_80198ADC *arg0) {
     Unk_80198ADC_3C *e = arg0->unk3C;
     Unk_801E0620 *p = &D_801E0620;
 
@@ -1644,7 +1644,7 @@ void func_80198ADC(Unk_80198ADC *arg0) {
     p->unk3C = 1;
 }
 
-void func_80198CFC(s16 arg0, u16 arg1, s32 arg2, s32 arg3, s32 arg4, s16 arg5, s16 arg6, s16 arg7, s32 arg8) {
+void player_start_move_to(s16 arg0, u16 arg1, s32 arg2, s32 arg3, s32 arg4, s16 arg5, s16 arg6, s16 arg7, s32 arg8) {
     Unk_80198ADC *t;
     Unk_80198ADC_3C *p;
     u16 ax;
@@ -1657,14 +1657,14 @@ void func_80198CFC(s16 arg0, u16 arg1, s32 arg2, s32 arg3, s32 arg4, s16 arg5, s
     ax = arg5;
     ay = arg6;
     az = arg7;
-    t = func_801D15C8(0x4C);
+    t = kaj_tss_alloc(0x4C);
     t->unk22 = 4;
     t->unk28 = 1;
     t->unk2C = 2;
-    t->unk30 = func_80198ADC;
+    t->unk30 = player_move_to_step;
     t->unk24 = 0;
-    t->unk34 = func_8019A07C;
-    t->unk38 = func_8019A07C;
+    t->unk34 = player_move_to_done;
+    t->unk38 = player_move_to_done;
     p = t->unk3C;
     t->unk26 = arg8 * 30;
     p->unk0 = arg0;
@@ -1720,10 +1720,10 @@ loop:
         goto loop;
     }
     d->unk42 |= 2;
-    d->unk48 = func_801D14B8(t);
+    d->unk48 = kaj_tss_start(t);
 }
 
-void func_80199034(Unk_80199034 *arg0, Unk_801762F4 *arg1) {
+void player_exec_command(Unk_80199034 *arg0, Unk_801762F4 *arg1) {
     Unk_801E0620 *d = &D_801E0620;
     s16 a;
     s16 b;
@@ -1740,9 +1740,9 @@ void func_80199034(Unk_80199034 *arg0, Unk_801762F4 *arg1) {
     case 0:
         a = atoi(arg0->unk8[1]);
         if ((s16)atoi(arg0->unk8[0]) != 0) {
-            func_80189054(a, 2);
+            effect_item_add(a, 2);
         } else {
-            func_801890C4(a, 2);
+            effect_item_remove(a, 2);
         }
         break;
     case 1:
@@ -1756,15 +1756,15 @@ void func_80199034(Unk_80199034 *arg0, Unk_801762F4 *arg1) {
             arg1->unk6 = 4;
             arg1->unk12 |= 0x20;
         }
-        func_80198CFC(0, g, x, y, z, 0, e, 0, f);
+        player_start_move_to(0, g, x, y, z, 0, e, 0, f);
         break;
     case 2:
         a = atoi(arg0->unk8[0]);
         b = atoi(arg0->unk8[1]);
         if (a != 0) {
-            func_80188C24(b, 1);
+            effect_weapon_add(b, 1);
         } else {
-            func_801875E4(b);
+            effect_weapon_unequip(b);
         }
         break;
     case 3:
@@ -1797,12 +1797,12 @@ void func_80199034(Unk_80199034 *arg0, Unk_801762F4 *arg1) {
         } else if (v > 0 && v < 255 && v < b) {
             p->unk0 = b;
         }
-        func_8018A7C0(p);
+        event_draw_gauge(p);
         break;
     }
 }
 
-void func_80199370(s32 arg0, s32 arg1, s32 arg2, s16 arg3) {
+void player_recover(s32 arg0, s32 arg1, s32 arg2, s16 arg3) {
     Unk_801E0710 *p = &D_801E0710;
     Unk_801E0368 *o = &D_801E0368;
     Unk_801E076C *e = p->unk5C;
@@ -1826,17 +1826,17 @@ void func_80199370(s32 arg0, s32 arg1, s32 arg2, s16 arg3) {
         for (i = 9; i < 0x1C; i++) {
             o->unk0[i] = o->unk28[i];
         }
-        func_801A461C(0x400, 0x45, 0);
+        sprite_set_clut_entry(0x400, 0x45, 0);
         /* " ミュータント状態から回復した" */
-        func_80183E88(D_80170EDC, 1, -1, 0, -1, 0, 0);
+        text_show(D_80170EDC, 1, -1, 0, -1, 0, 0);
     } else {
-        r = func_80199FA0();
+        r = player_is_injured();
         if (r == 0 && arg3 == 0) {
             /* " 全身がとても軽くなった" */
-            func_80183E88(D_80170EFC, 1, -1, 0, -1, 0, 0);
+            text_show(D_80170EFC, 1, -1, 0, -1, 0, 0);
         } else {
             /* " 傷が完全に回復した" */
-            func_80183E88(D_80170F14, 1, -1, 0, -1, 0, 0);
+            text_show(D_80170F14, 1, -1, 0, -1, 0, 0);
         }
     }
     for (i = 0; i < 5; i++) {
@@ -1844,17 +1844,17 @@ void func_80199370(s32 arg0, s32 arg1, s32 arg2, s16 arg3) {
         o->unkB4[i] = 0;
     }
     if (arg3 == 0) {
-        func_8018ABE8(0x3C, 1);
+        event_advance_clock(0x3C, 1);
     }
-    func_8018A7C0(p);
-    func_80189DE8(p);
+    event_draw_gauge(p);
+    event_draw_limb_status(p);
     e->unk54 = arg0;
     e->unk5C = arg2;
     e->unk58 = arg1 + e->unk78;
-    func_8019555C(e, 1);
+    player_set_view(e, 1);
 }
 
-void func_80199548(Unk_801E0710 *arg0, s32 arg1, s32 arg2) {
+void player_handle_pad(Unk_801E0710 *arg0, s32 arg1, s32 arg2) {
     Unk_801E076C *p;
     Unk_801E1118 *q;
 
@@ -1996,79 +1996,79 @@ void func_80199548(Unk_801E0710 *arg0, s32 arg1, s32 arg2) {
     }
 }
 
-void func_80199A94(s16 arg0, s16 arg1) {
+void player_weapon_sound(s16 arg0, s16 arg1) {
     if (arg1 != 0) {
         D_801DFC76 = 1;
         switch (arg0) {
         case 0:
         case 2:
-            func_801A2678(0x23);
+            sound_se_play(0x23);
             break;
         case 1:
-            func_801A2678(0x29);
+            sound_se_play(0x29);
             break;
         case 3:
         case 4:
-            func_801A2678(0x2A);
+            sound_se_play(0x2A);
             break;
         case 6:
         case 12:
-            func_801A2678(0x24);
+            sound_se_play(0x24);
             break;
         case 5:
-            func_801A2678(0x25);
+            sound_se_play(0x25);
             break;
         case 7:
-            func_801A2678(0x2B);
+            sound_se_play(0x2B);
             break;
         case 8:
-            func_801A2678(0x2C);
+            sound_se_play(0x2C);
             break;
         case 9:
         case 11:
-            func_801A2678(0x26);
+            sound_se_play(0x26);
             break;
         case 10:
-            func_801A2678(0x2D);
+            sound_se_play(0x2D);
             break;
         case 14:
-            func_801A0690(0xFF, 0xFF, 0xFF, 1);
-            func_801A2678(0x27);
+            roadmap_start_flash(0xFF, 0xFF, 0xFF, 1);
+            sound_se_play(0x27);
             break;
         case 13:
-            func_801A0690(0xFF, 0xC0, 0, 1);
+            roadmap_start_flash(0xFF, 0xC0, 0, 1);
         case 15:
-            func_801A2678(0x2E);
+            sound_se_play(0x2E);
             break;
         case 16:
-            func_801A0690(0x60, 0xFF, 0xFF, 1);
-            func_801A2678(0x30);
+            roadmap_start_flash(0x60, 0xFF, 0xFF, 1);
+            sound_se_play(0x30);
             break;
         case 17:
-            func_801A0690(0xFF, 0x60, 0xFF, 1);
-            func_801A2678(0x2F);
+            roadmap_start_flash(0xFF, 0x60, 0xFF, 1);
+            sound_se_play(0x2F);
             break;
         }
     } else {
         switch (arg0) {
         case 14:
-            func_801A25B4(0x27);
+            sound_se_stop(0x27);
             break;
         case 13:
         case 15:
-            func_801A25B4(0x2E);
+            sound_se_stop(0x2E);
             break;
         case 17:
-            func_801A25B4(0x2F);
+            sound_se_stop(0x2F);
             break;
         case 16:
-            func_801A25B4(0x30);
+            sound_se_stop(0x30);
             break;
         }
     }
 }
 
-void func_80199C68(s16 arg0) {
+void player_reset_triggers(s16 arg0) {
     D_801DFF48 = 0xFFFFFF;
     D_801E0610.unk4 = 0;
     D_801E0600.unk4 = 0;
@@ -2081,37 +2081,37 @@ void func_80199C68(s16 arg0) {
     D_801E0620.unk42 &= ~4;
 }
 
-s32 func_80199CC0(s16 arg0, s16 arg1, s16 arg2) {
+s32 player_set_item(s16 arg0, s16 arg1, s16 arg2) {
     s32 ret;
 
     if (arg2 == 0) {
-        ret = func_801890C4(arg0, arg1);
+        ret = effect_item_remove(arg0, arg1);
     } else {
-        ret = func_80189054(arg0, arg1);
+        ret = effect_item_add(arg0, arg1);
     }
     return ret;
 }
 
-s32 func_80199D18(s16 arg0, s16 arg1, s16 arg2) {
+s32 player_set_weapon(s16 arg0, s16 arg1, s16 arg2) {
     s32 ret;
 
     if (arg1 == 0) {
-        func_801875E4(arg0);
+        effect_weapon_unequip(arg0);
         ret = 1;
     } else {
-        ret = func_80188C24(arg0, arg2);
+        ret = effect_weapon_add(arg0, arg2);
     }
     return ret;
 }
 
-void func_80199D68(s16 arg0, s16 arg1, s16 arg2) {
+void player_heal_part(s16 arg0, s16 arg1, s16 arg2) {
     Unk_801E0368 *p = &D_801E0368;
     Unk_801E0710 *q = &D_801E0710;
     s16 v = p->unkB4[arg0];
 
     v -= arg2;
     if (arg2 < 0) {
-        s16 *m = &D_801DFD64[arg1];
+        s16 *m = &player_part_damage_caps[arg1];
 
         if (v > *m) {
             v = *m;
@@ -2120,11 +2120,11 @@ void func_80199D68(s16 arg0, s16 arg1, s16 arg2) {
         v = 0;
     }
     *(p->unkB4 + arg0) = v;
-    func_80189DE8(q);
-    func_8018A968(2, 1);
+    event_draw_limb_status(q);
+    event_set_blink(2, 1);
 }
 
-void func_80199E1C(s16 arg0, s16 arg1) {
+void player_add_hp(s16 arg0, s16 arg1) {
     Unk_801E0710 *p = &D_801E0710;
     s16 v;
 
@@ -2145,10 +2145,10 @@ void func_80199E1C(s16 arg0, s16 arg1) {
             p->unk0 = arg1;
         }
     }
-    func_8018A7C0(p);
+    event_draw_gauge(p);
 }
 
-void func_80199EB4(s16 arg0, s32 arg1, s32 arg2, s32 arg3) {
+void player_rest(s16 arg0, s32 arg1, s32 arg2, s32 arg3) {
     Unk_801E0710 *p = &D_801E0710;
     Unk_801E076C *o = p->unk5C;
     Unk_801E0368 *q = &D_801E0368;
@@ -2172,11 +2172,11 @@ void func_80199EB4(s16 arg0, s32 arg1, s32 arg2, s32 arg3) {
     o->unk54 = arg1;
     o->unk5C = arg3;
     o->unk58 = arg2 + o->unk78;
-    func_8019555C(o, 1);
-    func_8018ABE8(v, 1);
+    player_set_view(o, 1);
+    event_advance_clock(v, 1);
 }
 
-s32 func_80199FA0(void) {
+s32 player_is_injured(void) {
     s32 i;
 
     for (i = 0; i < 5; i++) {
@@ -2187,12 +2187,12 @@ s32 func_80199FA0(void) {
     return 0;
 }
 
-s32 func_80199FD8(void) {
+s32 player_leave_trigger(void) {
     Unk_801E0620 *p = &D_801E0620;
     Unk_801CC1E8 *o;
 
     UnDeliverEvent(0xF3000001, 2);
-    o = func_801CC1E8(0x20);
+    o = kaj_event_push(0x20);
     if (o != NULL) {
         o->unkC = D_801E0600.unk0;
         o->unk8 = D_801E0600.unk4;
@@ -2205,7 +2205,7 @@ s32 func_80199FD8(void) {
     return 0;
 }
 
-void func_8019A07C(Unk_8019A07C *arg0) {
+void player_move_to_done(Unk_8019A07C *arg0) {
     Unk_8019A07C_3C *e = arg0->unk3C;
     Unk_801E0620 *p = &D_801E0620;
     Unk_801DFFE8 *s = &D_801DFFE8;
@@ -2237,11 +2237,11 @@ void func_8019A07C(Unk_8019A07C *arg0) {
     }
     p->unk48 = -1;
     if (p->unk42 & 0x800) {
-        func_80197688();
+        player_finish_death();
     }
 }
 
-void func_8019A1A4(Unk_801E076C *arg0, Unk_801E07C0 *arg1) {
+void player_update_map_cursor(Unk_801E076C *arg0, Unk_801E07C0 *arg1) {
     s32 dir;
 
     if (arg1->unk2 != 0) {
@@ -2283,7 +2283,7 @@ void func_8019A1A4(Unk_801E076C *arg0, Unk_801E07C0 *arg1) {
     }
 }
 
-s32 func_8019A3E8(Unk_801E0710 *arg0) {
+s32 player_update_map(Unk_801E0710 *arg0) {
     Unk_801E0368 *o = &D_801E0368;
     Unk_801E076C *e = arg0->unk5C;
     Unk_801E07C0 *p = &D_801E07C0;
@@ -2297,7 +2297,7 @@ s32 func_8019A3E8(Unk_801E0710 *arg0) {
             if (p->unk0 == 1) {
                 if (p->unk2 == 0) {
                     q = &D_801D7FB0;
-                    func_801A2678(0x13);
+                    sound_se_play(0x13);
                     if (q->unk0 != 0) {
                         if (q->unk10 != NULL) {
                             q->unk10->unk4 = 0;
@@ -2311,16 +2311,16 @@ s32 func_8019A3E8(Unk_801E0710 *arg0) {
                         p->unkC[2] = !p->unkC[2];
                     }
                 } else {
-                    func_801A2678(0x13);
+                    sound_se_play(0x13);
                     p->unk0 = 2;
                     p->unk2 = 0;
                     p->unk8[2] = 0;
                     p->unkC[2] = 0;
-                    func_80185A60(3, 0x405, 1);
+                    effect_start_sprite_slide(3, 0x405, 1);
                 }
             } else if (p->unk0 == 0 && o->unk24C == 0) {
                 q = &D_801D7FB0;
-                func_801A2678(0x13);
+                sound_se_play(0x13);
                 if (q->unk0 != 0) {
                     if (q->unk10 != NULL) {
                         q->unk10->unk4 = 0;
@@ -2329,16 +2329,16 @@ s32 func_8019A3E8(Unk_801E0710 *arg0) {
                         q->unkC->unk4 = 0;
                     }
                 }
-                func_80184094();
+                text_close();
                 p->unk0 = 2;
                 p->unk2 = 0;
-                func_80185A60(2, 0x405, 1);
+                effect_start_sprite_slide(2, 0x405, 1);
             }
         }
         if (p->unk0 != 1) {
             return 0;
         }
-        func_8019A1A4(e, p);
+        player_update_map_cursor(e, p);
     }
     return 1;
 }

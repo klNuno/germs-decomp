@@ -7,8 +7,8 @@ What this project wants to learn about Germs: Nerawareta Machi from its code. Ea
 ## Time and days
 
 - [x] 1. What does the "time control" cheat value at `0x801E6DB0` (600 normally) count? Answered: the number of screen refreshes per game minute, which gives the 6x speed players measured ([the clock](discoveries.md#-the-clock-counts-minutes-and-stops-at-day-99)).
-- [ ] 2. What decides when each of the 32 emails arrives? The fandom wiki lists fixed hours (Naomi day 1 21:00, Indenco days 1 to 3 at 10:00) and quest-driven ones, from play only. The clock code calls `func_8018BB00(day, hour)` every game hour and a hook in `D_801DFEDC` after every minute event; reading both, and the mail table they consult, would give the full schedule.
-- [ ] 3. Does the invasion move on by itself with time, or only through your actions? Players say there is no fixed order, but nobody says whether a building falls if you wait. The hourly call `func_8018BB00` and whatever sets the per-building state (question 18) would show any timed step.
+- [ ] 2. What decides when each of the 32 emails arrives? The fandom wiki lists fixed hours (Naomi day 1 21:00, Indenco days 1 to 3 at 10:00) and quest-driven ones, from play only. The clock code calls `mail_check_schedule(day, hour)` every game hour and a hook in `D_801DFEDC` after every minute event; reading both, and the mail table they consult, would give the full schedule.
+- [ ] 3. Does the invasion move on by itself with time, or only through your actions? Players say there is no fixed order, but nobody says whether a building falls if you wait. The hourly call `mail_check_schedule` and whatever sets the per-building state (question 18) would show any timed step.
 - [ ] 4. Where are opening hours stored? The hospital keeps short hours and the chiropractor never closes, known from play only. Some code must compare the hour at `0x801E03E4` with a table per building; finding the readers of that halfword would locate it.
 - [ ] 5. What is the day parity flag for? Every midnight the clock stores the parity of its zero-based day counter, before the day 99 clamp, in a halfword of the time block (`0x801E03E8`): 1 when the displayed day is even, and 1 for good once the day counter is capped. Nobody has reported anything that changes on alternate days; the readers of that address would say what does.
 
@@ -18,7 +18,7 @@ What this project wants to learn about Germs: Nerawareta Machi from its code. Ea
 - [ ] 7. What is the flag at `0x801E073C`? When set, it cancels the awake-time drain, heals every body part 16 points an hour, even at the worst level, and changes the body display colour of undamaged parts ([body parts](discoveries.md#-body-part-damage-heals-by-the-hour-unless-it-is-at-the-worst-level)). It fits the "changed" state after death by a mutant, but nothing proves it yet; the death and cure handlers would show who sets and clears it.
 - [ ] 8. Which body part is which, and what does each level do? The five damage values at `0x801E041C` to `0x801E0424` are known, and the fourth multiplies the energy drain; the part order comes only from a cheat author. Players say leg damage slows you; the movement code (`0x80199548`, speed step at `0x801E066A`) and the aiming code should read the leg and arm values.
 - [ ] 9. How much food is too much? Players say overeating makes you sick and hurts you. The eating handler, which must raise energy at `0x801E0710`, should hold the limit and the penalty.
-- [ ] 10. What happens at energy 0? Japanese Wikipedia says stamina at 0 kills outright. `func_8018A7C0` clamps the value at 0 and stops the warning effect; the caller that tests for 0 would say whether it is death, a faint or a trip to the mine.
+- [ ] 10. What happens at energy 0? Japanese Wikipedia says stamina at 0 kills outright. `event_draw_gauge` clamps the value at 0 and stops the warning effect; the caller that tests for 0 would say whether it is death, a faint or a trip to the mine.
 - [ ] 11. What do the chiropractor and the hospital heal? Players say the chiropractor heals limbs; the code shows a part at the worst level never heals by itself. The two places' handlers would show which values they reset and whether a cure costs time.
 
 ## Combat
@@ -61,5 +61,5 @@ What this project wants to learn about Germs: Nerawareta Machi from its code. Ea
 ## Data and formats
 
 - [ ] 34. How big is the town? Sources say 2.5 or 3 km square. The block grid in `C/CITY.MP`, with the 50 m block size, would give the real size.
-- [ ] 35. What are the `SCE.S` DIR fields a to d, the 12-byte `AREA` triggers, `ENMY` and `ACTR`? The scene loader `func_801926B4` copies four DIR fields into `D_801E02D8`; the readers of those fields and of each chunk would name them.
+- [ ] 35. What are the `SCE.S` DIR fields a to d, the 12-byte `AREA` triggers, `ENMY` and `ACTR`? The scene loader `object_load_scene` copies four DIR fields into `D_801E02D8`; the readers of those fields and of each chunk would name them.
 - [ ] 36. What is in the save? One memory card block, undocumented. The save routine that writes it would list the fields, and so map most of the game state above.

@@ -15,13 +15,13 @@ typedef struct {
     s32 unk10;
     s32 unk14;
 } Unk_801DFBB8;
-extern Unk_801DFBB8 D_801DFBB8;
+extern Unk_801DFBB8 kaj_timer_queue;
 void free3(void *ptr);
 s32 StopRCnt(s32 spec);
 s32 DisableEvent(s32 event);
 s32 CloseEvent(s32 event);
-s32 D_801DFDEC;
-extern s16 D_801E6DA8[];
+s32 kaj_timer_event;
+extern s16 kaj_timer_enabled[];
 typedef struct Unk_801E6DA0 {
     s32 unk0;
     s32 unk4;
@@ -33,8 +33,8 @@ typedef struct Unk_801E6DA0 {
 extern Unk_801E6DA0 D_801E6DA0;
 extern char D_801DFDF4[];
 void *calloc3(s32 n, s32 size);
-void func_801CD54C(s32 arg0, char *arg1, char *arg2, s32 arg3);
-s32 func_801CFD70(void);
+void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
+s32 kaj_timer_handler(void);
 s32 OpenEvent(u32 desc, s32 spec, s32 mode, s32 (*func)(void));
 s32 EnableEvent(s32 event);
 s32 SetRCnt(u32 spec, u16 target, s32 mode);
@@ -46,51 +46,51 @@ typedef struct Unk_801CC1E8 {
     s32 unkC;
     s32 unk10;
 } Unk_801CC1E8;
-s32 D_801DFDF0;
-extern s32 D_801E6DB0[];
-s16 func_801D0134(void);
-void func_801D05F8(void);
-Unk_801CC1E8 *func_801CC1E8(s32 arg0);
-Unk_801CC1E8 *func_801CC2AC(s32 arg0);
-extern u32 D_801E6DAC[];
+s32 kaj_timer_last_tick;
+extern s32 kaj_timer_period[];
+s16 kaj_timer_pop_due(void);
+void kaj_timer_clear_wrap(void);
+Unk_801CC1E8 *kaj_event_push(s32 arg0);
+Unk_801CC1E8 *kaj_event_push_front(s32 arg0);
+extern u32 kaj_timer_ticks[];
 void EnterCriticalSection(void);
 void ExitCriticalSection(void);
-void func_801D0414(s32 arg0);
+void kaj_timer_cancel(s32 arg0);
 void *realloc3(void *ptr, s32 size);
-void func_801CFEB0(s32 arg0, s32 arg1, s32 arg2);
+void kaj_timer_add_alarm(s32 arg0, s32 arg1, s32 arg2);
 
-s32 func_801CFD70(void) {
+s32 kaj_timer_handler(void) {
     Unk_801DFBB8 *q;
     Unk_801CC1E8 *e;
 
-    q = &D_801DFBB8;
+    q = &kaj_timer_queue;
     if (D_801E6DA0.unk8 == 0) {
         return 0;
     }
-    D_801DFDF0 = D_801E6DA0.unkC++;
-    while (func_801D0134()) {
+    kaj_timer_last_tick = D_801E6DA0.unkC++;
+    while (kaj_timer_pop_due()) {
         if (q->unk10 < 0x50) {
-            e = func_801CC2AC(2);
+            e = kaj_event_push_front(2);
         } else {
-            e = func_801CC1E8(2);
+            e = kaj_event_push(2);
         }
         if (e != NULL) {
             e->unk8 = q->unk10;
             e->unkC = q->unk14;
         }
     }
-    if (D_801DFDF0 != 0 && D_801DFDF0 % D_801E6DB0[0] == 0) {
-        func_801CC1E8(4);
+    if (kaj_timer_last_tick != 0 && kaj_timer_last_tick % kaj_timer_period[0] == 0) {
+        kaj_event_push(4);
     }
-    if ((D_801DFDF0 ^ D_801E6DA0.unkC) < 0) {
-        func_801D05F8();
-        D_801DFDF0 = 0;
+    if ((kaj_timer_last_tick ^ D_801E6DA0.unkC) < 0) {
+        kaj_timer_clear_wrap();
+        kaj_timer_last_tick = 0;
         D_801E6DA0.unkC = 1;
     }
     return 0;
 }
 
-void func_801CFEB0(s32 arg0, s32 arg1, s32 arg2) {
+void kaj_timer_add_alarm(s32 arg0, s32 arg1, s32 arg2) {
     Unk_801DFBB8 *q;
     Unk_801DFBB8 *p;
     Unk_801D05F8 *e;
@@ -101,21 +101,21 @@ void func_801CFEB0(s32 arg0, s32 arg1, s32 arg2) {
     s32 j;
 
     EnterCriticalSection();
-    q = &D_801DFBB8;
+    q = &kaj_timer_queue;
     if (q->unkC != 0) {
         n = q->unk4 << 1;
-        e = realloc3(D_801DFBB8.unk0, (n + 1) * sizeof(Unk_801D05F8));
+        e = realloc3(kaj_timer_queue.unk0, (n + 1) * sizeof(Unk_801D05F8));
         if (e == NULL) {
             ExitCriticalSection();
-            func_801CD54C(3, "Error Reallocating TIMER Queue", D_801DFDF4, 0x80);
+            kaj_abend(3, "Error Reallocating TIMER Queue", D_801DFDF4, 0x80);
         }
-        D_801DFBB8.unk0 = e;
+        kaj_timer_queue.unk0 = e;
         q->unk4 = n;
         q->unkC = 0;
     }
     q->unk0[++q->unk8].unk4 = (void *)arg1;
     q->unk0[q->unk8].unk8 = arg2;
-    t = arg0 + D_801E6DAC[0];
+    t = arg0 + kaj_timer_ticks[0];
     if (t < 0) {
         q->unk0[q->unk8].unk0 = t + 0x80000001;
         q->unk0[q->unk8].unkC = 1;
@@ -126,7 +126,7 @@ void func_801CFEB0(s32 arg0, s32 arg1, s32 arg2) {
     if (q->unk8 == q->unk4) {
         q->unkC = 1;
     }
-    p = &D_801DFBB8;
+    p = &kaj_timer_queue;
     i = q->unk8;
     if (i != 1) {
         j = i >> 1;
@@ -144,7 +144,7 @@ void func_801CFEB0(s32 arg0, s32 arg1, s32 arg2) {
     ExitCriticalSection();
 }
 
-s16 func_801D0134(void) {
+s16 kaj_timer_pop_due(void) {
     Unk_801DFBB8 *q;
     Unk_801DFBB8 *p;
     Unk_801D05F8 tmp;
@@ -152,21 +152,21 @@ s16 func_801D0134(void) {
     s32 j;
     s32 n;
 
-    q = &D_801DFBB8;
+    q = &kaj_timer_queue;
     if (q->unk8 == 0) {
         return 0;
     }
     if (q->unk0[1].unkC != 0) {
-        if ((s32)(D_801E6DAC[0] - q->unk0[1].unk0) > 0) {
+        if ((s32)(kaj_timer_ticks[0] - q->unk0[1].unk0) > 0) {
             return 0;
         }
-    } else if ((s32)(D_801E6DAC[0] - q->unk0[1].unk0) < 0) {
+    } else if ((s32)(kaj_timer_ticks[0] - q->unk0[1].unk0) < 0) {
         return 0;
     }
     q->unk10 = (s32)q->unk0[1].unk4;
     q->unk14 = q->unk0[1].unk8;
     q->unk0[1] = q->unk0[q->unk8--];
-    p = &D_801DFBB8;
+    p = &kaj_timer_queue;
     i = 1;
     n = p->unk8 >> i;
     if (i <= n) {
@@ -188,29 +188,29 @@ s16 func_801D0134(void) {
     return 1;
 }
 
-void func_801D0300(void) {
-    D_801DFBB8.unk4 = 8;
-    D_801DFBB8.unk0 = calloc3(9, 0x10);
-    if (D_801DFBB8.unk0 == NULL) {
-        func_801CD54C(3, "Error Allocating TIMER Queue", D_801DFDF4, 0xB4);
+void kaj_timer_init(void) {
+    kaj_timer_queue.unk4 = 8;
+    kaj_timer_queue.unk0 = calloc3(9, 0x10);
+    if (kaj_timer_queue.unk0 == NULL) {
+        kaj_abend(3, "Error Allocating TIMER Queue", D_801DFDF4, 0xB4);
     }
-    D_801DFBB8.unk8 = 0;
-    D_801DFBB8.unkC = 0;
+    kaj_timer_queue.unk8 = 0;
+    kaj_timer_queue.unkC = 0;
     D_801E6DA0.unkC = 0;
     D_801E6DA0.unk8 = 0;
     D_801E6DA0.unk10 = 0x258;
-    D_801DFDEC = OpenEvent(0xF2000003, 2, 0x1000, func_801CFD70);
-    if (D_801DFDEC == -1) {
-        func_801CD54C(2, "Can not Create TIMER Event", D_801DFDF4, 0xBF);
+    kaj_timer_event = OpenEvent(0xF2000003, 2, 0x1000, kaj_timer_handler);
+    if (kaj_timer_event == -1) {
+        kaj_abend(2, "Can not Create TIMER Event", D_801DFDF4, 0xBF);
     }
-    if (EnableEvent(D_801DFDEC) == 0) {
-        func_801CD54C(2, "Can not Enable TIMER Event", D_801DFDF4, 0xC2);
+    if (EnableEvent(kaj_timer_event) == 0) {
+        kaj_abend(2, "Can not Enable TIMER Event", D_801DFDF4, 0xC2);
     }
     SetRCnt(0xF2000003, 1, 0x1000);
     StartRCnt(0xF2000003);
 }
 
-void func_801D0414(s32 arg0) {
+void kaj_timer_cancel(s32 arg0) {
     Unk_801DFBB8 *q;
     Unk_801DFBB8 *p;
     Unk_801D05F8 tmp;
@@ -219,12 +219,12 @@ void func_801D0414(s32 arg0) {
     s32 j;
     s32 n;
 
-    q = &D_801DFBB8;
+    q = &kaj_timer_queue;
     EnterCriticalSection();
     for (k = 1; k <= q->unk8; k++) {
         if (arg0 == 0 || (s32)q->unk0[k].unk4 == arg0) {
             q->unk0[k] = q->unk0[q->unk8--];
-            p = &D_801DFBB8;
+            p = &kaj_timer_queue;
             i = k;
             n = p->unk8 >> 1;
             if (i <= n) {
@@ -249,8 +249,8 @@ void func_801D0414(s32 arg0) {
     ExitCriticalSection();
 }
 
-void func_801D05F8(void) {
-    Unk_801DFBB8 *p = &D_801DFBB8;
+void kaj_timer_clear_wrap(void) {
+    Unk_801DFBB8 *p = &kaj_timer_queue;
     s32 i;
 
     for (i = 1; i <= p->unk8; i++) {
@@ -260,22 +260,22 @@ void func_801D05F8(void) {
     }
 }
 
-void func_801D064C(void) {
-    if (D_801DFBB8.unk0 != NULL) {
-        free3(D_801DFBB8.unk0);
-        D_801DFBB8.unk0 = NULL;
+void kaj_timer_quit(void) {
+    if (kaj_timer_queue.unk0 != NULL) {
+        free3(kaj_timer_queue.unk0);
+        kaj_timer_queue.unk0 = NULL;
     }
     StopRCnt(0xF2000003);
-    if (D_801DFDEC != -1) {
-        DisableEvent(D_801DFDEC);
-        CloseEvent(D_801DFDEC);
+    if (kaj_timer_event != -1) {
+        DisableEvent(kaj_timer_event);
+        CloseEvent(kaj_timer_event);
     }
 }
 
-void func_801D06B4(void) {
-    D_801E6DA8[0] = 1;
+void kaj_timer_enable(void) {
+    kaj_timer_enabled[0] = 1;
 }
 
-void func_801D06C4(void) {
-    D_801E6DA8[0] = 0;
+void kaj_timer_disable(void) {
+    kaj_timer_enabled[0] = 0;
 }

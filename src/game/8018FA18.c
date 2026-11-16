@@ -56,10 +56,10 @@ s32 D_801DFF48;
 extern Unk_801E0600 D_801E0600;
 extern Unk_801E0600 D_801E0610;
 extern Unk_801E0620 D_801E0620;
-s16 func_80189054(s16 arg0, s16 arg1);
-s16 func_801890C4(s16 arg0, s16 arg1);
-void func_801875E4(s16 arg0);
-s16 func_80188C24(s16 arg0, s16 arg1);
+s16 effect_item_add(s16 arg0, s16 arg1);
+s16 effect_item_remove(s16 arg0, s16 arg1);
+void effect_weapon_unequip(s16 arg0);
+s16 effect_weapon_add(s16 arg0, s16 arg1);
 typedef struct {
     u8 unk0[8];
     s16 unk8;
@@ -112,7 +112,7 @@ typedef struct {
     Unk_801E076C *unk5C;
 } Unk_801E0710;
 extern Unk_801E0710 D_801E0710;
-void func_8018A7C0(Unk_801E0710 *arg0);
+void event_draw_gauge(Unk_801E0710 *arg0);
 typedef struct {
     s16 unk0[0x3D];
     s16 unk7A;
@@ -129,34 +129,34 @@ typedef struct {
 extern Unk_801E0368 D_801E0368;
 typedef struct { s32 unk0; s32 unk4; s32 unk8; s32 unkC; } Unk_80192F60;
 typedef struct { s16 unk0; s16 unk2; s16 unk4; } Unk_801DFF30;
-Unk_801DFF30 D_801DFF30;
-void func_80183E88(char *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
+Unk_801DFF30 object_room_phone;
+void text_show(char *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
 typedef struct {
     s16 unk0;
     s16 unk2;
     s16 unk4;
     s16 unk6;
 } Unk_801DFF28;
-Unk_801DFF28 D_801DFF28;
+Unk_801DFF28 object_room_storage;
 u16 D_801DFD58;
 u16 D_801DFD5A;
 extern char D_80170E18[];
-void func_801A4A68(s32 arg0, s32 arg1);
-void func_801A461C(s32 arg0, s32 arg1, s32 arg2);
-void func_80184094(void);
-void func_8018C1B0(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+void sprite_set_visible(s32 arg0, s32 arg1);
+void sprite_set_clut_entry(s32 arg0, s32 arg1, s32 arg2);
+void text_close(void);
+void mail_wait(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 extern Unk_801E076C *D_801E076C[];
-Unk_8018E56C *func_8018E56C(u16 arg0);
-void func_8018DA2C(void *arg0, s16 arg1, s16 arg2);
-void func_80194F08(s16 arg0);
-void func_801A25B4(s32 arg0);
-void func_80186414(s32 arg0, s32 arg1, s32 arg2);
-void func_80199C68(s16 arg0);
-s16 D_801DFF38;
-void func_80194780(void);
-void func_80182300(void);
-void func_801808F0(s32 arg0, s32 arg1);
-void func_8018C414(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+Unk_8018E56C *mod_find(u16 arg0);
+void mod_set_anim(void *arg0, s16 arg1, s16 arg2);
+void object_room_play_call(s16 arg0);
+void sound_se_stop(s32 arg0);
+void effect_start_alarm(s32 arg0, s32 arg1, s32 arg2);
+void player_reset_triggers(s16 arg0);
+s16 object_room_exit_action;
+void object_room_main(void);
+void menu_run(void);
+void menu_card_run(s32 arg0, s32 arg1);
+void mail_goto_ofc(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 typedef struct {
     s32 unk0;
     s16 unk4;
@@ -171,15 +171,15 @@ typedef struct {
 extern Unk_801DFFE8 D_801DFFE8;
 typedef struct { void *unk0; s32 unk4; void *unk8; } Unk_80174B10;
 extern void *D_801E0760[];
-Unk_80174B10 *func_80174CB8(s16 arg0);
-Unk_80174B10 *func_80173DE0(Unk_80174B10 *arg0, s32 arg1, s32 arg2);
+Unk_80174B10 *action_find_set(s16 arg0);
+Unk_80174B10 *action_run_set(Unk_80174B10 *arg0, s32 arg1, s32 arg2);
 typedef struct { s32 unk0; s32 unk4; s32 unk8; s32 unkC; s32 unk10; } Unk_801CC1E8;
 s16 D_801DFF4C;
 void UnDeliverEvent(u32 ev, u32 spec);
-Unk_801CC1E8 *func_801CC1E8(s32 arg0);
-extern s16 D_801DFD64[];
-void func_80189DE8(Unk_801E0710 *arg0);
-void func_8018A968(s16 arg0, s16 arg1);
+Unk_801CC1E8 *kaj_event_push(s32 arg0);
+extern s16 player_part_damage_caps[];
+void event_draw_limb_status(Unk_801E0710 *arg0);
+void event_set_blink(s16 arg0, s16 arg1);
 typedef struct {
     u16 unk0;
     u16 unk2;
@@ -196,7 +196,7 @@ typedef struct {
     u8 unk0[0x3C];
     Unk_8019A07C_3C *unk3C;
 } Unk_8019A07C;
-void func_80197688(void);
+void player_finish_death(void);
 typedef struct {
     s32 unk0;
     s32 unk4;
@@ -225,14 +225,14 @@ typedef struct {
 } Unk_801E02D8;
 extern Unk_801E02D8 D_801E02D8;
 s16 D_801DFF18;
-s32 D_801DFF1C;
-extern u8 D_801DFF20[4];
+s32 object_aset_count;
+extern u8 object_iff_file_pos[4];
 s32 CdPosToInt(void *p);
 void *CdIntToPos(s32 i, void *p);
 s32 CdControl(u8 com, u8 *param, u8 *result);
-void func_801A2678(s32 arg0);
-void func_8019555C(Unk_801E076C *arg0, s16 arg1);
-void func_8018ABE8(s16 a, s16 b);
+void sound_se_play(s32 arg0);
+void player_set_view(Unk_801E076C *arg0, s16 arg1);
+void event_advance_clock(s16 a, s16 b);
 typedef struct { s32 unk0; u8 *unk4; u8 *unk8; s32 unkC; s32 unk10; s16 unk14; } Unk_801A3970;
 extern Unk_801A3970 D_801E05C0;
 s32 CdMode(void);
@@ -240,8 +240,8 @@ void *CdLastPos(void);
 s32 CdRead(s32 sectors, u32 *buf, s32 mode);
 s32 CdReadSync(s32 mode, u8 *result);
 s32 VSync(s32 mode);
-u32 *func_801A37E4(u8 *arg0, s32 arg1, Unk_801A3970 *arg2);
-void func_801A3970(Unk_801A3970 *arg0);
+u32 *sound_se_alloc_header(u8 *arg0, s32 arg1, Unk_801A3970 *arg2);
+void sound_vab_open_head(Unk_801A3970 *arg0);
 typedef struct Unk_801E6DA0 {
     s32 unk0;
     s32 unk4;
@@ -249,37 +249,37 @@ typedef struct Unk_801E6DA0 {
     s16 unkA;
 } Unk_801E6DA0;
 extern Unk_801E6DA0 D_801E6DA0;
-s32 func_801CD6B4(void);
-s16 func_80193880(void);
-s16 func_8018898C(Unk_801E0710 *arg0, s16 arg1);
-void func_80193DA8(Unk_801E0710 *arg0);
-void func_80198CFC(s16 a, u16 b, s32 c, s32 d, s32 e, s16 f, s16 g, s16 h, s32 i);
-void func_80199548(Unk_801E0710 *arg0, s32 arg1, s32 arg2);
+s32 kaj_pad_read(void);
+s16 object_room_storage_input(void);
+s16 effect_item_input(Unk_801E0710 *arg0, s16 arg1);
+void object_room_do_action(Unk_801E0710 *arg0);
+void player_start_move_to(s16 a, u16 b, s32 c, s32 d, s32 e, s16 f, s16 g, s16 h, s32 i);
+void player_handle_pad(Unk_801E0710 *arg0, s32 arg1, s32 arg2);
 s16 D_801DFD54;
 extern s32 D_801DFF50;
 extern s32 D_801DFED8;
 extern s32 D_801DFEE4;
 extern s32 D_801DFED4;
 extern s32 D_801DFEE8;
-void func_80174840(s16 arg0);
-void func_80174BC8(void);
-void func_80174FA8(void);
-void func_80176780(void);
-void func_8017D1BC(void);
-void func_80185548(void);
-void func_801863B4(void);
-void func_8018E47C(void);
-void func_80199E1C(s16 arg0, s16 arg1);
-void func_801A23B4(void);
-void func_801A252C(void);
-void func_801A3B5C(void);
-void func_801A3C58(void);
-void func_801A43F4(s32 arg0);
-void func_801A7BA4(void);
+void action_reset(s16 arg0);
+void action_free_all_sets(void);
+void action_free_triggers(void);
+void npc_free_bodies(void);
+void block_free_all(void);
+void door_free_all(void);
+void effect_clear_alarms(void);
+void mod_free_all(void);
+void player_add_hp(s16 arg0, s16 arg1);
+void sound_se_pop_scene(void);
+void sound_se_stop_all(void);
+void sound_bgm_close(void);
+void sound_bgm_stop(void);
+void sprite_delete(s32 arg0);
+void thing_free_all(void);
 typedef struct { u8 unk0[0x7F8]; } Unk_8018FA18;
-void *func_801CC898(u32 size);
-void func_801CD54C(s32 arg0, char *arg1, char *arg2, s32 arg3);
-void *func_80173A44(void *arg0);
+void *kaj_malloc(u32 size);
+void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
+void *action_load_set(void *arg0);
 extern char D_80170B7C[];
 typedef struct {
     u16 unk0;
@@ -323,9 +323,9 @@ typedef struct Unk_8017CCE4 {
     Unk_8017C9F8 *unk88;
     void *unk8C;
 } Unk_8017CCE4;
-void func_8017CB98(Unk_8017CCE4 **arg0, s32 arg1);
-void func_80179848(Unk_8017CCE4 *arg0, u16 arg1);
-void func_8017D170(s32 arg0);
+void block_create(Unk_8017CCE4 **arg0, s32 arg1);
+void block_setup(Unk_8017CCE4 *arg0, u16 arg1);
+void block_list_add(s32 arg0);
 typedef struct Unk_801854B8 {
     u16 unk0;
     s16 unk2;
@@ -352,16 +352,16 @@ typedef struct Unk_801854B8 {
     void *unk78;
     void *unk7C;
 } Unk_801854B8;
-void func_80185380(Unk_801854B8 **arg0, u32 arg1);
-void func_801844D4(Unk_8017CCE4 *arg0);
-void func_801854FC(void *arg0);
-void func_8018ACAC(s32 *arg0, void *arg1, s16 arg2);
+void door_create(Unk_801854B8 **arg0, u32 arg1);
+void door_setup(Unk_8017CCE4 *arg0);
+void door_add(void *arg0);
+void mail_create(s32 *arg0, void *arg1, s16 arg2);
 extern s32 D_801E0324[];
 typedef struct { s16 unk0; s16 unk2; s32 unk4; void *unk8; } Unk_801A3B5C;
-void func_801A3AA0(Unk_801A3B5C **arg0, u32 arg1);
-void func_801A33E8(Unk_801A3B5C *arg0);
-void func_8018E03C(Unk_8018E56C **arg0, u32 arg1);
-void func_8018E2F8(s32 arg0);
+void sound_bgm_create(Unk_801A3B5C **arg0, u32 arg1);
+void sound_bgm_open(Unk_801A3B5C *arg0);
+void mod_alloc(Unk_8018E56C **arg0, u32 arg1);
+void mod_list_add(s32 arg0);
 typedef struct {
     u16 unk0;
     u16 unk2;
@@ -392,9 +392,9 @@ typedef struct {
     s16 unk12;
     u8 unk14[0x4];
 } Unk_801A3DD4;
-void func_801A3DD4(Unk_801A4370 **arg0, Unk_801A3DD4 *arg1);
-void func_801A43A8(s32 arg0);
-void func_801CFBB4(void *arg0);
+void sprite_create(Unk_801A4370 **arg0, Unk_801A3DD4 *arg1);
+void sprite_add(s32 arg0);
+void kaj_tim_upload_hdr(void *arg0);
 typedef struct Unk_801A7AFC {
     u16 unk0;
     u16 unk2;
@@ -421,11 +421,11 @@ typedef struct Unk_801A7AFC {
     void *unk80;
     void *unk84;
 } Unk_801A7AFC;
-void func_801A7A04(Unk_801A7AFC **arg0, u32 arg1);
-void func_801A6C34(Unk_801A7AFC *arg0);
-void func_801A7B58(s32 arg0);
+void thing_create(Unk_801A7AFC **arg0, u32 arg1);
+void sprite_thing_init(Unk_801A7AFC *arg0);
+void thing_list_add(s32 arg0);
 typedef struct { u8 unk0[0x7F4]; } Unk_8019120C;
-void func_801CFB4C(u32 *arg0, s16 arg1);
+void kaj_tim_upload(u32 *arg0, s16 arg1);
 extern u8 *D_801E05C8[];
 typedef struct {
     s32 unk0;
@@ -438,75 +438,75 @@ typedef struct {
     u16 unk18;
     u16 unk1A;
 } Unk_801A217C;
-void func_801A39F0(Unk_801A3970 *arg0);
-void func_801A217C(Unk_801A217C *arg0);
+void sound_vab_transfer(Unk_801A3970 *arg0);
+void sound_se_push(Unk_801A217C *arg0);
 typedef struct { u16 unk0; u8 pad2[0xB6]; void *unkB8; void *unkBC; void *unkC0; } Unk_801AC278;
 typedef struct { s32 unk0; s32 unk4; s32 unk8; s32 unkC; s32 unk10; s32 unk14; s32 unk18; s32 unk1C; s32 unk20; s32 unk24; s32 unk28; s32 unk2C; s32 unk30; s32 unk34; s32 unk38; } Unk_801E032C;
-void func_801AC158(Unk_801AC278 **arg0, u32 arg1);
-void func_801AC214(Unk_801E032C *arg0);
+void vehicle_create(Unk_801AC278 **arg0, u32 arg1);
+void vehicle_init(Unk_801E032C *arg0);
 typedef struct { s32 unk0; s32 unk4; s32 unk8; s32 unkC; s32 unk10; } Unk_80193068;
-void func_80194A2C(s16 arg0, char *arg1);
-void func_80186128(s32 arg0, s32 arg1);
-void func_801D1BAC(u8 arg0, u8 arg1, u8 arg2);
-void func_80199EB4(s16 arg0, s32 arg1, s32 arg2, s32 arg3);
-void func_801A3BCC(s16 arg0);
+void object_room_storage_open(s16 arg0, char *arg1);
+void effect_start_fade(s32 arg0, s32 arg1);
+void kaj_view_set_bg_color(u8 arg0, u8 arg1, u8 arg2);
+void player_rest(s16 arg0, s32 arg1, s32 arg2, s32 arg3);
+void sound_bgm_play(s16 arg0);
 s16 D_801DFD56;
 extern u16 D_801E0356[];
 typedef struct { s16 unk0[5]; s16 unkA; char *unkC; s16 unk10; s16 unk12; s32 unk14; s32 unk18; s32 unk1C; } Unk_801E0340;
 extern Unk_801E0340 D_801E0340;
-s32 func_80192F60(Unk_80192F60 *arg0);
-s32 func_80193068(Unk_80193068 *arg0);
-void func_80194B50(s32 *arg0);
-void func_80194C24(Unk_80192F60 *arg0);
-void func_80194D4C(Unk_80192F60 *arg0);
-void func_80197370(s32 arg0);
-void func_801926B4(void);
-void func_8018F428(s32 arg0, s32 arg1);
-void func_801A8000(s32 arg0, s32 arg1, s32 arg2);
-void func_801A80CC(s32 arg0, s32 arg1, s32 arg2);
-void func_801A8198(s32 arg0, s32 arg1, s32 arg2);
-void func_80187978(s32 arg0);
-void func_8018D2DC(Unk_8018E56C *arg0, s32 arg1, s32 arg2, s32 arg3);
-void func_8018AABC(s32 arg0);
-void func_80194140(void);
-void func_801945E0(void);
-void func_8019430C(void);
-void func_801D06B4(void);
-void func_801D06C4(void);
-void func_80186258(void);
-void func_80183CFC(s32 arg0);
-s32 func_801CC378(s32 *arg0);
+s32 object_room_on_enter(Unk_80192F60 *arg0);
+s32 object_room_on_effect_done(Unk_80193068 *arg0);
+void object_room_pick_desk_action(s32 *arg0);
+void object_room_on_alarm(Unk_80192F60 *arg0);
+void object_room_on_mod_finish(Unk_80192F60 *arg0);
+void player_place_for_scene(s32 arg0);
+void object_load_scene(void);
+void mod_npcrec_show(s32 arg0, s32 arg1);
+void thing_set_active(s32 arg0, s32 arg1, s32 arg2);
+void thing_set_animate(s32 arg0, s32 arg1, s32 arg2);
+void thing_set_flag10(s32 arg0, s32 arg1, s32 arg2);
+void effect_weapon_calc_rate(s32 arg0);
+void mod_setup(Unk_8018E56C *arg0, s32 arg1, s32 arg2, s32 arg3);
+void event_show_clock(s32 arg0);
+void object_room_update_input(void);
+void object_room_quit(void);
+void object_room_init(void);
+void kaj_timer_enable(void);
+void kaj_timer_disable(void);
+void effect_fade_set_black(void);
+void text_start_narration(s32 arg0);
+s32 kaj_event_get(s32 *arg0);
 void func_80189928(s32 *arg0);
-void func_80189350(s32 *arg0);
-void func_801895E0(s32 *arg0);
-void func_80189970(s16 arg0);
-void func_801899AC(s32 *arg0);
-s16 func_8018970C(s32 *arg0);
-void func_801CC734(s32 *arg0);
-s32 func_8018C170(void);
-void func_80184434(s16 arg0);
-void func_801932F8(void);
+void event_handle_enter(s32 *arg0);
+void event_handle_leave(s32 *arg0);
+void event_handle_tick(s16 arg0);
+void event_handle_mod_finish(s32 *arg0);
+s16 event_handle_effect_done(s32 *arg0);
+void kaj_event_done(s32 *arg0);
+s32 mail_take_scene_change(void);
+void text_narration_cues(s16 arg0);
+void object_room_check_calls(void);
 s32 rand(void);
-void func_8018C2FC(u16 a, s16 b, s16 c);
-void func_80176654(s32 arg0, s32 arg1, s32 arg2);
-void func_8017CF10(s32 arg0, s32 arg1, s32 arg2);
-void func_80185794(s32 arg0, s32 arg1, s32 arg2);
-void func_8018F5E8(s32 arg0, s32 arg1, s32 arg2);
-void func_801A7E10(s32 arg0, s32 arg1, s32 arg2);
-void func_801AC464(s32 arg0, s32 arg1, s32 arg2);
+void mail_step_frame(u16 a, s16 b, s16 c);
+void npc_rebase_all(s32 arg0, s32 arg1, s32 arg2);
+void block_set_origin(s32 arg0, s32 arg1, s32 arg2);
+void door_rebase_all(s32 arg0, s32 arg1, s32 arg2);
+void mod_npcrec_rebase_all(s32 arg0, s32 arg1, s32 arg2);
+void thing_set_origin(s32 arg0, s32 arg1, s32 arg2);
+void vehicle_set_origin(s32 arg0, s32 arg1, s32 arg2);
 void MatrixNormal(void *m, void *n);
 void RotMatrix(s16 *r, void *m);
 void ApplyMatrixLV(void *arg0, void *arg1, void *arg2);
-void func_801B25D0(void *arg0);
+void GsSetView2(void *arg0);
 void RotMatrixZYX(s16 *r, void *m);
-void func_80192380(Unk_80192F20 **arg0, s32 arg1, s32 arg2);
-void func_80191AB0(Unk_80192F20 *arg0, s32 arg1, s32 arg2, s32 arg3);
-void func_8017519C(void);
+void object_iff_open(Unk_80192F20 **arg0, s32 arg1, s32 arg2);
+void object_read_chunks(Unk_80192F20 *arg0, s32 arg1, s32 arg2, s32 arg3);
+void action_init_npcs(void);
 typedef struct { u8 unk0[4]; } Unk_801DFF20;
 void *CdSearchFile(void *fp, char *name);
-extern s32 D_801D7744[];
-extern s32 D_801D7780[];
-void func_80184100(Unk_801DFFE8 *arg0);
+extern s32 object_res_offsets[];
+extern s32 object_sce_offsets[];
+void text_next_page(Unk_801DFFE8 *arg0);
 typedef struct { s32 unk0; s32 unk4; s16 unk8; } Unk_80191AB0_C;
 typedef struct {
     s16 unk0;
@@ -533,35 +533,35 @@ typedef struct {
     s32 unk4C;
 } Unk_801E0768;
 extern Unk_801E0768 *D_801E0768[];
-s32 D_801DFF10;
-s32 D_801DFF14;
-void func_801A05EC(s32 arg0);
-void func_8018677C(void);
-s16 func_8018BD44(s16 i);
-void func_8018FA18(Unk_80192F20 *arg0, s32 arg1);
-void func_8018FC90(Unk_80192F20 *arg0, u16 arg1, s32 arg2);
-void func_8018FED4(Unk_80192F20 *arg0, s32 arg1);
-void func_80190108(Unk_80192F20 *arg0, s32 arg1, s32 arg2);
-void func_80190378(Unk_80192F20 *arg0, s32 arg1);
-void func_801905A0(Unk_80192F20 *arg0, s32 arg1);
-void func_801907C8(Unk_80192F20 *arg0, s32 arg1, s32 arg2);
-void func_80190B2C(Unk_80192F20 *arg0, s32 arg1);
-void func_80190D8C(Unk_80192F20 *arg0, s32 arg1);
-void func_80190FD8(Unk_80192F20 *arg0, s32 arg1);
-void func_8019120C(Unk_80192F20 *arg0, s32 arg1);
-void func_80191450(Unk_80192F20 *arg0, s32 arg1);
-void func_8019159C(Unk_80192F20 *arg0, s32 arg1);
-void func_80191888(Unk_80192F20 *arg0, s32 arg1);
-s32 func_8018BD8C(s16 a);
+s32 object_load_chunk_count;
+s32 object_load_bar_step;
+void roadmap_draw_sprite_frame(s32 arg0);
+void effect_clut_rotate(void);
+s16 mail_list_get_id(s16 i);
+void object_load_aset(Unk_80192F20 *arg0, s32 arg1);
+void object_load_blck(Unk_80192F20 *arg0, u16 arg1, s32 arg2);
+void object_load_door(Unk_80192F20 *arg0, s32 arg1);
+void object_load_mail(Unk_80192F20 *arg0, s32 arg1, s32 arg2);
+void object_load_midi(Unk_80192F20 *arg0, s32 arg1);
+void object_load_mod(Unk_80192F20 *arg0, s32 arg1);
+void object_load_other(Unk_80192F20 *arg0, s32 arg1, s32 arg2);
+void object_load_sprt(Unk_80192F20 *arg0, s32 arg1);
+void object_load_text(Unk_80192F20 *arg0, s32 arg1);
+void object_load_thng(Unk_80192F20 *arg0, s32 arg1);
+void object_load_tim(Unk_80192F20 *arg0, s32 arg1);
+void object_load_vabh(Unk_80192F20 *arg0, s32 arg1);
+void object_load_vabb(Unk_80192F20 *arg0, s32 arg1);
+void object_load_vecl(Unk_80192F20 *arg0, s32 arg1);
+s32 mail_is_read(s16 a);
 extern s16 D_801E05E0[];
-void func_80187BE4(s16 arg0, s16 arg1);
-s32 func_80188EB8(s16 arg0, s16 *arg1, s16 *arg2);
-s16 func_8018CEA0(s16 a);
-s32 func_8018D078(s16 a, s16 b, s16 c, s16 d, s16 e, s16 *f, s16 g, s16 h, s16 i);
-s32 func_8018D1A0(void);
-s16 func_8018D1F0(void);
+void effect_weapon_swap_stock(s16 arg0, s16 arg1);
+s32 effect_weapon_list(s16 arg0, s16 *arg1, s16 *arg2);
+s16 mail_menu_move(s16 a);
+s32 mail_menu_open(s16 a, s16 b, s16 c, s16 d, s16 e, s16 *f, s16 g, s16 h, s16 i);
+s32 mail_menu_close(void);
+s16 mail_menu_get_state(void);
 
-void func_8018FA18(Unk_80192F20 *arg0, s32 arg1) {
+void object_load_aset(Unk_80192F20 *arg0, s32 arg1) {
     u8 sp10;
     void *buf;
     void *o;
@@ -570,9 +570,9 @@ void func_8018FA18(Unk_80192F20 *arg0, s32 arg1) {
     u8 *p;
     u32 *dst;
 
-    buf = func_801CC898(arg1);
+    buf = kaj_malloc(arg1);
     if (buf == NULL) {
-        func_801CD54C(3, "Error Allocating IFF_ID_ASET Buffer", D_80170B7C, 0x8D);
+        kaj_abend(3, "Error Allocating IFF_ID_ASET Buffer", D_80170B7C, 0x8D);
     }
     *(Unk_8018FA18 *)buf = *(Unk_8018FA18 *)((u8 *)arg0->unkC + 8);
     if (arg1 > 0x7F8) {
@@ -601,13 +601,13 @@ void func_8018FA18(Unk_80192F20 *arg0, s32 arg1) {
         arg0->unk4 += arg1 - 0x7F8;
     }
     o = buf;
-    for (i = 0; i < D_801DFF1C; i++) {
-        o = func_80173A44(o);
+    for (i = 0; i < object_aset_count; i++) {
+        o = action_load_set(o);
     }
     free3(buf);
 }
 
-void func_8018FC90(Unk_80192F20 *arg0, u16 arg1, s32 arg2) {
+void object_load_blck(Unk_80192F20 *arg0, u16 arg1, s32 arg2) {
     Unk_8017CCE4 *o;
     u8 sp14;
     s32 n;
@@ -615,7 +615,7 @@ void func_8018FC90(Unk_80192F20 *arg0, u16 arg1, s32 arg2) {
     u8 *p;
 
     o = NULL;
-    func_8017CB98(&o, arg2);
+    block_create(&o, arg2);
     *(Unk_8018FA18 *)o->unk8C = *(Unk_8018FA18 *)((u8 *)arg0->unkC + 8);
     if (arg2 > 0x7F8) {
         dst = (u32 *)((u8 *)o->unk8C + 0x7F8);
@@ -643,11 +643,11 @@ void func_8018FC90(Unk_80192F20 *arg0, u16 arg1, s32 arg2) {
         }
         arg0->unk4 += arg2 - 0x7F8;
     }
-    func_80179848(o, arg1);
-    func_8017D170((s32)o);
+    block_setup(o, arg1);
+    block_list_add((s32)o);
 }
 
-void func_8018FED4(Unk_80192F20 *arg0, s32 arg1) {
+void object_load_door(Unk_80192F20 *arg0, s32 arg1) {
     Unk_801854B8 *o;
     u8 sp14;
     s32 n;
@@ -655,7 +655,7 @@ void func_8018FED4(Unk_80192F20 *arg0, s32 arg1) {
     u8 *p;
 
     o = NULL;
-    func_80185380(&o, arg1);
+    door_create(&o, arg1);
     *(Unk_8018FA18 *)o->unk7C = *(Unk_8018FA18 *)((u8 *)arg0->unkC + 8);
     if (arg1 > 0x7F8) {
         dst = (u32 *)((u8 *)o->unk7C + 0x7F8);
@@ -683,13 +683,13 @@ void func_8018FED4(Unk_80192F20 *arg0, s32 arg1) {
         }
         arg0->unk4 += arg1 - 0x7F8;
     }
-    func_801844D4((Unk_8017CCE4 *)o);
-    func_801854FC(o);
+    door_setup((Unk_8017CCE4 *)o);
+    door_add(o);
 }
 
 INCLUDE_RODATA("asm/nonmatchings/game/8018FA18", D_80170B7C);
 
-void func_80190108(Unk_80192F20 *arg0, s32 arg1, s32 arg2) {
+void object_load_mail(Unk_80192F20 *arg0, s32 arg1, s32 arg2) {
     u8 sp10;
     s32 sp14;
     void *buf;
@@ -697,9 +697,9 @@ void func_80190108(Unk_80192F20 *arg0, s32 arg1, s32 arg2) {
     u8 *p;
     u32 *dst;
 
-    buf = func_801CC898(arg1);
+    buf = kaj_malloc(arg1);
     if (buf == NULL) {
-        func_801CD54C(3, "Error Allocating IFF_ID_MAIL Buffer", D_80170B7C, 0xC6);
+        kaj_abend(3, "Error Allocating IFF_ID_MAIL Buffer", D_80170B7C, 0xC6);
     }
     *(Unk_8018FA18 *)buf = *(Unk_8018FA18 *)((u8 *)arg0->unkC + 8);
     if (arg1 > 0x7F8) {
@@ -727,12 +727,12 @@ void func_80190108(Unk_80192F20 *arg0, s32 arg1, s32 arg2) {
         }
         arg0->unk4 += arg1 - 0x7F8;
     }
-    func_8018ACAC(&sp14, buf, arg2);
+    mail_create(&sp14, buf, arg2);
     free3(buf);
     D_801E0324[0] = sp14;
 }
 
-void func_80190378(Unk_80192F20 *arg0, s32 arg1) {
+void object_load_midi(Unk_80192F20 *arg0, s32 arg1) {
     Unk_801A3B5C *o;
     u8 sp14;
     s32 n;
@@ -740,7 +740,7 @@ void func_80190378(Unk_80192F20 *arg0, s32 arg1) {
     u8 *p;
 
     o = NULL;
-    func_801A3AA0(&o, arg1);
+    sound_bgm_create(&o, arg1);
     *(Unk_8018FA18 *)o->unk8 = *(Unk_8018FA18 *)((u8 *)arg0->unkC + 8);
     if (arg1 > 0x7F8) {
         n = arg1 - 0x7F8;
@@ -768,10 +768,10 @@ void func_80190378(Unk_80192F20 *arg0, s32 arg1) {
         }
         arg0->unk4 += arg1 - 0x7F8;
     }
-    func_801A33E8(o);
+    sound_bgm_open(o);
 }
 
-void func_801905A0(Unk_80192F20 *arg0, s32 arg1) {
+void object_load_mod(Unk_80192F20 *arg0, s32 arg1) {
     Unk_8018E56C *o;
     u8 sp14;
     s32 n;
@@ -779,7 +779,7 @@ void func_801905A0(Unk_80192F20 *arg0, s32 arg1) {
     u8 *p;
 
     o = NULL;
-    func_8018E03C(&o, arg1);
+    mod_alloc(&o, arg1);
     *(Unk_8018FA18 *)o->unk90 = *(Unk_8018FA18 *)((u8 *)arg0->unkC + 8);
     if (arg1 > 0x7F8) {
         n = arg1 - 0x7F8;
@@ -807,10 +807,10 @@ void func_801905A0(Unk_80192F20 *arg0, s32 arg1) {
         }
         arg0->unk4 += arg1 - 0x7F8;
     }
-    func_8018E2F8((s32)o);
+    mod_list_add((s32)o);
 }
 
-void func_801907C8(Unk_80192F20 *arg0, s32 arg1, s32 arg2) {
+void object_load_other(Unk_80192F20 *arg0, s32 arg1, s32 arg2) {
     u8 sp10;
     void *buf;
     s32 n;
@@ -819,9 +819,9 @@ void func_801907C8(Unk_80192F20 *arg0, s32 arg1, s32 arg2) {
     Unk_801E02D8 *g;
 
     g = &D_801E02D8;
-    buf = func_801CC898(arg2);
+    buf = kaj_malloc(arg2);
     if (buf == NULL) {
-        func_801CD54C(3, "Error Allocating IFF_ID_OTHER Buffer", D_80170B7C, 0xFD);
+        kaj_abend(3, "Error Allocating IFF_ID_OTHER Buffer", D_80170B7C, 0xFD);
     }
     *(Unk_8018FA18 *)buf = *(Unk_8018FA18 *)((u8 *)arg0->unkC + 8);
     if (arg2 > 0x7F8) {
@@ -855,7 +855,7 @@ void func_801907C8(Unk_80192F20 *arg0, s32 arg1, s32 arg2) {
         break;
     case 0x52544341:
         g->unk3C = buf;
-        func_8017519C();
+        action_init_npcs();
         break;
     case 0x2043504E:
         g->unk50 = buf;
@@ -879,7 +879,7 @@ void func_801907C8(Unk_80192F20 *arg0, s32 arg1, s32 arg2) {
     }
 }
 
-void func_80190B2C(Unk_80192F20 *arg0, s32 arg1) {
+void object_load_sprt(Unk_80192F20 *arg0, s32 arg1) {
     Unk_801A4370 *o;
     u8 sp10;
     Unk_801A3DD4 *buf;
@@ -888,9 +888,9 @@ void func_80190B2C(Unk_80192F20 *arg0, s32 arg1) {
     u8 *p;
 
     o = NULL;
-    buf = func_801CC898(arg1);
+    buf = kaj_malloc(arg1);
     if (buf == NULL) {
-        func_801CD54C(3, "Error Allocating IFF_ID_SPRT Buffer", D_80170B7C, 0x12B);
+        kaj_abend(3, "Error Allocating IFF_ID_SPRT Buffer", D_80170B7C, 0x12B);
     }
     *(Unk_8018FA18 *)buf = *(Unk_8018FA18 *)((u8 *)arg0->unkC + 8);
     if (arg1 > 0x7F8) {
@@ -918,21 +918,21 @@ void func_80190B2C(Unk_80192F20 *arg0, s32 arg1) {
         }
         arg0->unk4 += arg1 - 0x7F8;
     }
-    func_801A3DD4(&o, buf);
-    func_801A43A8((s32)o);
+    sprite_create(&o, buf);
+    sprite_add((s32)o);
     free3(buf);
 }
 
-void func_80190D8C(Unk_80192F20 *arg0, s32 arg1) {
+void object_load_text(Unk_80192F20 *arg0, s32 arg1) {
     u8 sp10;
     void *buf;
     s32 n;
     u32 *dst;
     u8 *p;
 
-    buf = func_801CC898(arg1);
+    buf = kaj_malloc(arg1);
     if (buf == NULL) {
-        func_801CD54C(3, "Error Allocating IFF_ID_TEXT Buffer", D_80170B7C, 0x140);
+        kaj_abend(3, "Error Allocating IFF_ID_TEXT Buffer", D_80170B7C, 0x140);
     }
     *(Unk_8018FA18 *)buf = *(Unk_8018FA18 *)((u8 *)arg0->unkC + 8);
     if (arg1 > 0x7F8) {
@@ -960,11 +960,11 @@ void func_80190D8C(Unk_80192F20 *arg0, s32 arg1) {
         }
         arg0->unk4 += arg1 - 0x7F8;
     }
-    func_801CFBB4(buf);
+    kaj_tim_upload_hdr(buf);
     free3(buf);
 }
 
-void func_80190FD8(Unk_80192F20 *arg0, s32 arg1) {
+void object_load_thng(Unk_80192F20 *arg0, s32 arg1) {
     Unk_801A7AFC *sp10;
     u8 sp14;
     s32 n;
@@ -972,7 +972,7 @@ void func_80190FD8(Unk_80192F20 *arg0, s32 arg1) {
     u8 *p;
 
     sp10 = NULL;
-    func_801A7A04(&sp10, arg1);
+    thing_create(&sp10, arg1);
     *(Unk_8018FA18 *)sp10->unk84 = *(Unk_8018FA18 *)((u8 *)arg0->unkC + 8);
     if (arg1 > 0x7F8) {
         dst = (u32 *)((u8 *)sp10->unk84 + 0x7F8);
@@ -1000,20 +1000,20 @@ void func_80190FD8(Unk_80192F20 *arg0, s32 arg1) {
         }
         arg0->unk4 += arg1 - 0x7F8;
     }
-    func_801A6C34(sp10);
-    func_801A7B58((s32)sp10);
+    sprite_thing_init(sp10);
+    thing_list_add((s32)sp10);
 }
 
-void func_8019120C(Unk_80192F20 *arg0, s32 arg1) {
+void object_load_tim(Unk_80192F20 *arg0, s32 arg1) {
     u8 sp10;
     void *buf;
     s32 n;
     u32 *dst;
     u8 *p;
 
-    buf = func_801CC898(arg1);
+    buf = kaj_malloc(arg1);
     if (buf == NULL) {
-        func_801CD54C(3, "Error Allocating IFF_ID_TIM Buffer", D_80170B7C, 0x165);
+        kaj_abend(3, "Error Allocating IFF_ID_TIM Buffer", D_80170B7C, 0x165);
     }
     *(Unk_8019120C *)buf = *(Unk_8019120C *)((u8 *)arg0->unkC + 0xC);
     if (arg1 > 0x7F8) {
@@ -1041,17 +1041,17 @@ void func_8019120C(Unk_80192F20 *arg0, s32 arg1) {
         }
         arg0->unk4 += arg1 - 0x7F8;
     }
-    func_801CFB4C(buf, 0);
+    kaj_tim_upload(buf, 0);
     free3(buf);
 }
 
-void func_80191450(Unk_80192F20 *arg0, s32 arg1) {
+void object_load_vabh(Unk_80192F20 *arg0, s32 arg1) {
     u8 sp10;
     s32 n;
     u32 *buf;
     u8 *p;
 
-    buf = func_801A37E4((u8 *)arg0->unkC + 8, arg1, &D_801E05C0);
+    buf = sound_se_alloc_header((u8 *)arg0->unkC + 8, arg1, &D_801E05C0);
     n = arg1 - 0x7F8;
     while (1) {
         sp10 = CdMode();
@@ -1075,10 +1075,10 @@ void func_80191450(Unk_80192F20 *arg0, s32 arg1) {
     while (CdControl(2, p, NULL) == 0) {
     }
     arg0->unk4 += n;
-    func_801A3970(&D_801E05C0);
+    sound_vab_open_head(&D_801E05C0);
 }
 
-void func_8019159C(Unk_80192F20 *arg0, s32 arg1) {
+void object_load_vabb(Unk_80192F20 *arg0, s32 arg1) {
     u8 sp10;
     u8 sp11;
     u8 *buf;
@@ -1088,12 +1088,12 @@ void func_8019159C(Unk_80192F20 *arg0, s32 arg1) {
 
     D_801E05C0.unk8 = (u8 *)arg0->unkC + 8;
     D_801E05C0.unk10 = 0x7F8;
-    func_801A39F0(&D_801E05C0);
+    sound_vab_transfer(&D_801E05C0);
     arg1 -= D_801E05C0.unk10;
     D_801E05C0.unk10 = 0x2000;
-    D_801E05C0.unk8 = func_801CC898(0x2000);
+    D_801E05C0.unk8 = kaj_malloc(0x2000);
     if (D_801E05C0.unk8 == NULL) {
-        func_801CD54C(3, "Error Allocating vab_trans_buffer", D_80170B7C, 0x191);
+        kaj_abend(3, "Error Allocating vab_trans_buffer", D_80170B7C, 0x191);
     }
     while (D_801E05C0.unk10 < arg1) {
         buf = D_801E05C0.unk8;
@@ -1119,7 +1119,7 @@ void func_8019159C(Unk_80192F20 *arg0, s32 arg1) {
         while (CdControl(2, p, NULL) == 0) {
         }
         arg0->unk4 += D_801E05C0.unk10;
-        func_801A39F0(&D_801E05C0);
+        sound_vab_transfer(&D_801E05C0);
         arg1 -= D_801E05C0.unk10;
     }
     buf2 = D_801E05C8[0];
@@ -1145,12 +1145,12 @@ retry2:
     }
     arg0->unk4 += arg1;
     D_801E05C0.unk10 = arg1;
-    func_801A39F0(&D_801E05C0);
-    func_801A217C((Unk_801A217C *)&D_801E05C0);
+    sound_vab_transfer(&D_801E05C0);
+    sound_se_push((Unk_801A217C *)&D_801E05C0);
     free3(D_801E05C0.unk8);
 }
 
-void func_80191888(Unk_80192F20 *arg0, s32 arg1) {
+void object_load_vecl(Unk_80192F20 *arg0, s32 arg1) {
     Unk_801AC278 *sp10;
     u8 sp14;
     s32 n;
@@ -1158,7 +1158,7 @@ void func_80191888(Unk_80192F20 *arg0, s32 arg1) {
     u8 *p;
 
     sp10 = NULL;
-    func_801AC158(&sp10, arg1);
+    vehicle_create(&sp10, arg1);
     *(Unk_8018FA18 *)sp10->unkC0 = *(Unk_8018FA18 *)((u8 *)arg0->unkC + 8);
     if (arg1 > 0x7F8) {
         dst = (u32 *)((u8 *)sp10->unkC0 + 0x7F8);
@@ -1186,10 +1186,10 @@ void func_80191888(Unk_80192F20 *arg0, s32 arg1) {
         }
         arg0->unk4 += arg1 - 0x7F8;
     }
-    func_801AC214((Unk_801E032C *)sp10);
+    vehicle_init((Unk_801E032C *)sp10);
 }
 
-void func_80191AB0(Unk_80192F20 *arg0, s32 arg1, s32 arg2, s32 arg3) {
+void object_read_chunks(Unk_80192F20 *arg0, s32 arg1, s32 arg2, s32 arg3) {
     Unk_801E0768 *m;
     u32 *buf;
     s32 size;
@@ -1202,13 +1202,13 @@ void func_80191AB0(Unk_80192F20 *arg0, s32 arg1, s32 arg2, s32 arg3) {
     u8 sp10;
 
     if (arg2 == 1) {
-        func_801A2678(0x31);
-        D_801DFF10 = 0;
+        sound_se_play(0x31);
+        object_load_chunk_count = 0;
     } else if (arg2 == 2) {
         if ((((Unk_80191AB0 *)arg1)->unk0 == 0 && ((Unk_80191AB0 *)arg1)->unk12 != 0) ||
             (((Unk_80191AB0 *)arg1)->unk0 == 1 && ((Unk_80191AB0 *)arg1)->unk1C == 0) ||
             (((Unk_80191AB0 *)arg1)->unk0 == 2 && ((Unk_80191AB0 *)arg1)->unk10 == 0)) {
-            func_801A4A68(0x410, 0);
+            sprite_set_visible(0x410, 0);
             arg2 = -1;
         }
     }
@@ -1240,11 +1240,11 @@ void func_80191AB0(Unk_80192F20 *arg0, s32 arg1, s32 arg2, s32 arg3) {
         tag = ((Unk_80191AB0_C *)arg0->unkC)->unk0;
         switch (tag) {
         case 0x54455341:
-            func_8018FA18(arg0, size);
+            object_load_aset(arg0, size);
             break;
         case 0x4B434C42:
             if (arg1 == 0) {
-                func_8018FC90(arg0, 3, size);
+                object_load_blck(arg0, 3, size);
             } else if (((Unk_80191AB0 *)arg1)->unk0 == 0 && ((Unk_80191AB0 *)arg1)->unk10 == 0) {
                 size -= 0x7F8;
                 p = CdLastPos();
@@ -1253,16 +1253,16 @@ void func_80191AB0(Unk_80192F20 *arg0, s32 arg1, s32 arg2, s32 arg3) {
                 }
                 arg0->unk4 += size;
             } else {
-                func_8018FC90(arg0, ((Unk_80191AB0 *)arg1)->unk0, size);
+                object_load_blck(arg0, ((Unk_80191AB0 *)arg1)->unk0, size);
             }
             break;
         case 0x524F4F44:
-            func_8018FED4(arg0, size);
+            object_load_door(arg0, size);
             break;
         case 0x4C49414D:
             id2 = ((Unk_80191AB0_C *)arg0->unkC)->unk8;
-            if (id2 == func_8018BD44(arg3)) {
-                func_80190108(arg0, size, arg3);
+            if (id2 == mail_list_get_id(arg3)) {
+                object_load_mail(arg0, size, arg3);
                 return;
             }
             size -= 0x7F8;
@@ -1273,7 +1273,7 @@ void func_80191AB0(Unk_80192F20 *arg0, s32 arg1, s32 arg2, s32 arg3) {
             arg0->unk4 += size;
             break;
         case 0x4944494D:
-            func_80190378(arg0, size);
+            object_load_midi(arg0, size);
             break;
         case 0x20444F4D:
         case 0x20454F4D:
@@ -1288,7 +1288,7 @@ void func_80191AB0(Unk_80192F20 *arg0, s32 arg1, s32 arg2, s32 arg3) {
                 }
                 if (found) {
                     m->unk0++;
-                    func_801905A0(arg0, size);
+                    object_load_mod(arg0, size);
                 } else {
                     size -= 0x7F8;
                     p = CdLastPos();
@@ -1298,21 +1298,21 @@ void func_80191AB0(Unk_80192F20 *arg0, s32 arg1, s32 arg2, s32 arg3) {
                     arg0->unk4 += size;
                 }
             } else {
-                func_801905A0(arg0, size);
+                object_load_mod(arg0, size);
             }
             break;
         case 0x54525053:
             id = ((Unk_80191AB0_C *)arg0->unkC)->unk8;
-            func_80190B2C(arg0, size);
+            object_load_sprt(arg0, size);
             if (id == 0x40F) {
-                func_801A4A68(0x40F, 1);
-                D_801DFF10 = 0;
-                D_801DFF14 = 1;
+                sprite_set_visible(0x40F, 1);
+                object_load_chunk_count = 0;
+                object_load_bar_step = 1;
             }
             break;
         case 0x204D4954:
             if (((Unk_80191AB0_C *)arg0->unkC)->unk8 == arg3) {
-                func_8019120C(arg0, size);
+                object_load_tim(arg0, size);
             } else {
                 size -= 0x7F8;
                 p = CdLastPos();
@@ -1323,10 +1323,10 @@ void func_80191AB0(Unk_80192F20 *arg0, s32 arg1, s32 arg2, s32 arg3) {
             }
             break;
         case 0x54584554:
-            func_80190D8C(arg0, size);
+            object_load_text(arg0, size);
             break;
         case 0x474E4854:
-            func_80190FD8(arg0, size);
+            object_load_thng(arg0, size);
             break;
         case 0x42424156:
             if (arg1 != 0 && ((Unk_80191AB0 *)arg1)->unk0 == 0 && ((Unk_80191AB0 *)arg1)->unk14 == 0) {
@@ -1337,7 +1337,7 @@ void func_80191AB0(Unk_80192F20 *arg0, s32 arg1, s32 arg2, s32 arg3) {
                 }
                 arg0->unk4 += size;
             } else {
-                func_8019159C(arg0, size);
+                object_load_vabb(arg0, size);
             }
             break;
         case 0x48424156:
@@ -1349,11 +1349,11 @@ void func_80191AB0(Unk_80192F20 *arg0, s32 arg1, s32 arg2, s32 arg3) {
                 }
                 arg0->unk4 += size;
             } else {
-                func_80191450(arg0, size);
+                object_load_vabh(arg0, size);
             }
             break;
         case 0x4C434556:
-            func_80191888(arg0, size);
+            object_load_vecl(arg0, size);
             break;
         case 0x20545854:
         case 0x41455241:
@@ -1363,7 +1363,7 @@ void func_80191AB0(Unk_80192F20 *arg0, s32 arg1, s32 arg2, s32 arg3) {
         case 0x2043504E:
         case 0x52414843:
         case 0x594D4E45:
-            func_801907C8(arg0, tag, size);
+            object_load_other(arg0, tag, size);
             break;
         default:
             size -= 0x7F8;
@@ -1378,31 +1378,31 @@ void func_80191AB0(Unk_80192F20 *arg0, s32 arg1, s32 arg2, s32 arg3) {
         case -1:
             break;
         case 0:
-            if (D_801DFF10 != 0 && D_801DFF10 % 6 == 0) {
-                D_801DFF14++;
-                if (D_801DFF14 < 11) {
-                    func_801A461C(0x40F, D_801DFF14, 0x5318);
-                    func_801A461C(0x40F, D_801DFF14 - 1, 0);
+            if (object_load_chunk_count != 0 && object_load_chunk_count % 6 == 0) {
+                object_load_bar_step++;
+                if (object_load_bar_step < 11) {
+                    sprite_set_clut_entry(0x40F, object_load_bar_step, 0x5318);
+                    sprite_set_clut_entry(0x40F, object_load_bar_step - 1, 0);
                 }
             }
-            D_801DFF10++;
-            func_801A05EC(0x40F);
+            object_load_chunk_count++;
+            roadmap_draw_sprite_frame(0x40F);
             break;
         case 1:
-            if (D_801DFF10 < 16) {
-                func_801A461C(0x207, D_801DFF10++ + 0xF0, 0x1F);
+            if (object_load_chunk_count < 16) {
+                sprite_set_clut_entry(0x207, object_load_chunk_count++ + 0xF0, 0x1F);
             }
-            func_801A05EC(0x207);
+            roadmap_draw_sprite_frame(0x207);
             break;
         case 2:
-            func_8018677C();
-            func_801A05EC(0x410);
+            effect_clut_rotate();
+            roadmap_draw_sprite_frame(0x410);
             break;
         }
     }
 }
 
-void func_80192380(Unk_80192F20 **arg0, s32 arg1, s32 arg2) {
+void object_iff_open(Unk_80192F20 **arg0, s32 arg1, s32 arg2) {
     struct {
         Unk_801DFF20 unk0;
         u32 unk4;
@@ -1417,19 +1417,19 @@ void func_80192380(Unk_80192F20 **arg0, s32 arg1, s32 arg2) {
 
     flag = arg1;
     D_801DFF18 = 1;
-    *arg0 = func_801CC898(0x10);
+    *arg0 = kaj_malloc(0x10);
     if (*arg0 == NULL) {
-        func_801CD54C(3, "Error Allocation IFF Context", D_80170B7C, 0x2AA);
+        kaj_abend(3, "Error Allocation IFF Context", D_80170B7C, 0x2AA);
     }
     (*arg0)->unk0 = 0;
     (*arg0)->unk4 = 0;
-    (*arg0)->unk8 = func_801CC898(0x800);
+    (*arg0)->unk8 = kaj_malloc(0x800);
     if ((*arg0)->unk8 == NULL) {
-        func_801CD54C(3, "Error Allocating IFF Header", D_80170B7C, 0x2B1);
+        kaj_abend(3, "Error Allocating IFF Header", D_80170B7C, 0x2B1);
     }
-    (*arg0)->unkC = func_801CC898(0x800);
+    (*arg0)->unkC = kaj_malloc(0x800);
     if ((*arg0)->unkC == NULL) {
-        func_801CD54C(3, "Error Allocating IFF Chunk Header", D_80170B7C, 0x2B5);
+        kaj_abend(3, "Error Allocating IFF Chunk Header", D_80170B7C, 0x2B5);
     }
 retry0:
     if (flag) {
@@ -1440,26 +1440,26 @@ retry0:
     if ((u32)((s32)r + 1) < 2) {
         goto retry0;
     }
-    *(Unk_801DFF20 *)D_801DFF20 = file.unk0;
+    *(Unk_801DFF20 *)object_iff_file_pos = file.unk0;
     while (CdControl(2, (u8 *)&file, NULL) == 0) {
     }
     if (arg2 > 0) {
         if (flag) {
-            s32 n = D_801D7744[arg2];
+            s32 n = object_res_offsets[arg2];
 
-            p = D_801DFF20;
+            p = object_iff_file_pos;
             p = CdIntToPos(CdPosToInt(p) + (n >> 11), p);
             while (CdControl(2, p, NULL) == 0) {
             }
         } else {
-            s32 n = D_801D7780[arg2];
+            s32 n = object_sce_offsets[arg2];
 
-            p = D_801DFF20;
+            p = object_iff_file_pos;
             p = CdIntToPos(CdPosToInt(p) + (n >> 11), p);
             while (CdControl(2, p, NULL) == 0) {
             }
         }
-        *(Unk_801DFF20 *)D_801DFF20 = *(Unk_801DFF20 *)CdLastPos();
+        *(Unk_801DFF20 *)object_iff_file_pos = *(Unk_801DFF20 *)CdLastPos();
     }
     dst = (u32 *)(*arg0)->unk8;
     while (1) {
@@ -1485,7 +1485,7 @@ retry0:
     }
 }
 
-void func_801926B4(void) {
+void object_load_scene(void) {
     Unk_80192F20 *sp10;
     Unk_80192F20 *q;
     Unk_80192F20 *q2;
@@ -1504,7 +1504,7 @@ void func_801926B4(void) {
     u8 *loc2;
 
     s = &D_801E0340;
-    func_80192380(&sp10, 0, s->unk0[2]);
+    object_iff_open(&sp10, 0, s->unk0[2]);
     q = sp10;
     q->unk4 = 0;
     e = q->unk8;
@@ -1530,13 +1530,13 @@ void func_801926B4(void) {
     if (q->unk0 == 0) {
         D_801DFF18 = 0;
     } else {
-        loc = D_801DFF20;
+        loc = object_iff_file_pos;
         p = CdIntToPos(CdPosToInt(loc) + (pos >> 11), loc);
         while (CdControl(2, p, NULL) == 0) {
         }
     }
     if (sp10->unk0 > 0) {
-        func_80191AB0(sp10, (s32)s, 2, 0);
+        object_read_chunks(sp10, (s32)s, 2, 0);
     }
     q2 = sp10;
     idx = s->unk0[3];
@@ -1546,21 +1546,21 @@ void func_801926B4(void) {
     q2->unk0 = e2->unk4;
     D_801E02D8.unk1C = e2->unk8;
     D_801E02D8.unk18 = e2->unkC;
-    D_801DFF1C = e2->unk10;
+    object_aset_count = e2->unk10;
     D_801E02D8.unk28 = e2->unk14;
     if (D_801DFF18 != 0) {
-        loc2 = D_801DFF20;
+        loc2 = object_iff_file_pos;
         p2 = CdIntToPos(CdPosToInt(loc2) + ((pos2 - 0x800) >> 11), loc2);
         while (CdControl(2, p2, NULL) == 0) {
         }
     } else {
-        loc2 = D_801DFF20;
+        loc2 = object_iff_file_pos;
         p2 = CdIntToPos(CdPosToInt(loc2) + (pos2 >> 11), loc2);
         while (CdControl(2, p2, NULL) == 0) {
         }
     }
     if (sp10->unk0 > 0) {
-        func_80191AB0(sp10, (s32)s, 2, 0);
+        object_read_chunks(sp10, (s32)s, 2, 0);
     }
     q3 = sp10;
     free3(q3->unk8);
@@ -1568,7 +1568,7 @@ void func_801926B4(void) {
     free3(q3);
 }
 
-void func_8019290C(void) {
+void object_load_weapon_mods(void) {
     Unk_80192F20 *sp10;
     Unk_80192F20 *q;
     Unk_80192F20 *r;
@@ -1579,7 +1579,7 @@ void func_8019290C(void) {
     u8 *p;
     u8 *loc;
 
-    func_80192380(&sp10, 1, 2);
+    object_iff_open(&sp10, 1, 2);
     q = sp10;
     q->unk4 = 0;
     e = q->unk8;
@@ -1605,13 +1605,13 @@ void func_8019290C(void) {
     if (q->unk0 == 0) {
         D_801DFF18 = 0;
     } else {
-        loc = D_801DFF20;
+        loc = object_iff_file_pos;
         p = CdIntToPos(CdPosToInt(loc) + (pos >> 11), loc);
         while (CdControl(2, p, NULL) == 0) {
         }
     }
     if (sp10->unk0 > 0) {
-        func_80191AB0(sp10, 0, 2, 0x400);
+        object_read_chunks(sp10, 0, 2, 0x400);
     }
     r = sp10;
     free3(r->unk8);
@@ -1619,7 +1619,7 @@ void func_8019290C(void) {
     free3(r);
 }
 
-void func_80192A44(s16 arg0) {
+void object_load_mail_by_id(s16 arg0) {
     Unk_80192F20 *sp10;
     Unk_80192F20 *q;
     Unk_80192F20 *r;
@@ -1630,7 +1630,7 @@ void func_80192A44(s16 arg0) {
     u8 *p;
     u8 *loc;
 
-    func_80192380(&sp10, 1, 7);
+    object_iff_open(&sp10, 1, 7);
     q = sp10;
     q->unk4 = 0;
     e = q->unk8;
@@ -1656,13 +1656,13 @@ void func_80192A44(s16 arg0) {
     if (q->unk0 == 0) {
         D_801DFF18 = 0;
     } else {
-        loc = D_801DFF20;
+        loc = object_iff_file_pos;
         p = CdIntToPos(CdPosToInt(loc) + (pos >> 11), loc);
         while (CdControl(2, p, NULL) == 0) {
         }
     }
     if (sp10->unk0 > 0) {
-        func_80191AB0(sp10, 0, -1, arg0);
+        object_read_chunks(sp10, 0, -1, arg0);
     }
     r = sp10;
     free3(r->unk8);
@@ -1670,7 +1670,7 @@ void func_80192A44(s16 arg0) {
     free3(r);
 }
 
-void func_80192B8C(s32 arg0, s32 arg1) {
+void object_load_res(s32 arg0, s32 arg1) {
     Unk_80192F20 *sp10;
     Unk_80192F20 *q;
     Unk_80192F20 *r;
@@ -1681,7 +1681,7 @@ void func_80192B8C(s32 arg0, s32 arg1) {
     u8 *p;
     u8 *loc;
 
-    func_80192380(&sp10, 1, arg0);
+    object_iff_open(&sp10, 1, arg0);
     q = sp10;
     q->unk4 = 0;
     e = q->unk8;
@@ -1707,13 +1707,13 @@ void func_80192B8C(s32 arg0, s32 arg1) {
     if (q->unk0 == 0) {
         D_801DFF18 = 0;
     } else {
-        loc = D_801DFF20;
+        loc = object_iff_file_pos;
         p = CdIntToPos(CdPosToInt(loc) + (pos >> 11), loc);
         while (CdControl(2, p, NULL) == 0) {
         }
     }
     if (sp10->unk0 > 0) {
-        func_80191AB0(sp10, 0, arg1, 0);
+        object_read_chunks(sp10, 0, arg1, 0);
     }
     r = sp10;
     free3(r->unk8);
@@ -1721,7 +1721,7 @@ void func_80192B8C(s32 arg0, s32 arg1) {
     free3(r);
 }
 
-void func_80192CD0(s16 arg0) {
+void object_load_res12_by_id(s16 arg0) {
     Unk_80192F20 *sp10;
     Unk_80192F20 *q;
     Unk_80192F20 *r;
@@ -1732,7 +1732,7 @@ void func_80192CD0(s16 arg0) {
     u8 *p;
     u8 *loc;
 
-    func_80192380(&sp10, 1, 0xC);
+    object_iff_open(&sp10, 1, 0xC);
     q = sp10;
     q->unk4 = 0;
     e = q->unk8;
@@ -1758,13 +1758,13 @@ void func_80192CD0(s16 arg0) {
     if (q->unk0 == 0) {
         D_801DFF18 = 0;
     } else {
-        loc = D_801DFF20;
+        loc = object_iff_file_pos;
         p = CdIntToPos(CdPosToInt(loc) + (pos >> 11), loc);
         while (CdControl(2, p, NULL) == 0) {
         }
     }
     if (sp10->unk0 > 0) {
-        func_80191AB0(sp10, 0, 2, arg0);
+        object_read_chunks(sp10, 0, 2, arg0);
     }
     r = sp10;
     free3(r->unk8);
@@ -1772,7 +1772,7 @@ void func_80192CD0(s16 arg0) {
     free3(r);
 }
 
-void func_80192E18(Unk_80192F20 *arg0, u16 arg1) {
+void object_iff_seek_entry(Unk_80192F20 *arg0, u16 arg1) {
     Unk_80192E18 *e;
     s32 pos;
     u8 *p;
@@ -1784,50 +1784,50 @@ void func_80192E18(Unk_80192F20 *arg0, u16 arg1) {
     arg0->unk0 = e->unk4;
     D_801E02D8.unk1C = e->unk8;
     D_801E02D8.unk18 = e->unkC;
-    D_801DFF1C = e->unk10;
+    object_aset_count = e->unk10;
     D_801E02D8.unk28 = e->unk14;
     if (D_801DFF18 != 0) {
-        loc = D_801DFF20;
+        loc = object_iff_file_pos;
         p = CdIntToPos(CdPosToInt(loc) + ((pos - 0x800) >> 11), loc);
         while (CdControl(2, p, NULL) == 0) {
         }
     } else {
-        loc = D_801DFF20;
+        loc = object_iff_file_pos;
         p = CdIntToPos(CdPosToInt(loc) + (pos >> 11), loc);
         while (CdControl(2, p, NULL) == 0) {
         }
     }
 }
 
-void func_80192F20(Unk_80192F20 *arg0) {
+void object_iff_close(Unk_80192F20 *arg0) {
     free3(arg0->unk8);
     free3(arg0->unkC);
     free3(arg0);
 }
 
-s32 func_80192F60(Unk_80192F60 *arg0) {
-    Unk_801DFF30 *p = &D_801DFF30;
+s32 object_room_on_enter(Unk_80192F60 *arg0) {
+    Unk_801DFF30 *p = &object_room_phone;
 
     switch (arg0->unkC) {
     case 0xFA0000:
         /* " 8机1から離れる       3○" */
-        func_80183E88(" 8\212\3671\202\251\202\347\227\243\202\352\202\351       3\201\233", 1, -1, 8, -1, 0, 1);
+        text_show(" 8\212\3671\202\251\202\347\227\243\202\352\202\351       3\201\233", 1, -1, 8, -1, 0, 1);
         break;
     case 0xFA0001:
         /* " 8コンピュータ1を起動する  3○" */
-        func_80183E88(" 8\203R\203\223\203s\203\205\201[\203^1\202\360\213N\223\256\202\267\202\351  3\201\233", 1, -1, 8, -1, 0, 1);
+        text_show(" 8\203R\203\223\203s\203\205\201[\203^1\202\360\213N\223\256\202\267\202\351  3\201\233", 1, -1, 8, -1, 0, 1);
         break;
     case 0xFA0002:
         /* " 8日記1をつける       3○" */
-        func_80183E88(" 8\223\372\213L1\202\360\202\302\202\257\202\351       3\201\233", 1, -1, 8, -1, 0, 1);
+        text_show(" 8\223\372\213L1\202\360\202\302\202\257\202\351       3\201\233", 1, -1, 8, -1, 0, 1);
         break;
     case 0xFA0003:
         if (p->unk2 == 1) {
             /* " 8電話1をとる        3○" */
-            func_80183E88(" 8\223d\230b1\202\360\202\306\202\351        3\201\233", 1, -1, 8, -1, 0, 1);
+            text_show(" 8\223d\230b1\202\360\202\306\202\351        3\201\233", 1, -1, 8, -1, 0, 1);
         } else if (p->unk2 == 2) {
             /* " 8電話1をかける       3○" */
-            func_80183E88(" 8\223d\230b1\202\360\202\251\202\257\202\351       3\201\233", 1, -1, 8, -1, 0, 1);
+            text_show(" 8\223d\230b1\202\360\202\251\202\257\202\351       3\201\233", 1, -1, 8, -1, 0, 1);
         }
         break;
     default:
@@ -1836,7 +1836,7 @@ s32 func_80192F60(Unk_80192F60 *arg0) {
     return 1;
 }
 
-s32 func_80193068(Unk_80193068 *arg0) {
+s32 object_room_on_effect_done(Unk_80193068 *arg0) {
     Unk_801E0368 *g;
     Unk_801E076C *o;
     u16 v;
@@ -1844,7 +1844,7 @@ s32 func_80193068(Unk_80193068 *arg0) {
     Unk_801DFF28 *f;
 
     g = &D_801E0368;
-    f = &D_801DFF28;
+    f = &object_room_storage;
     o = D_801E076C[0];
     t = arg0->unk10;
     v = D_801E0356[0];
@@ -1855,49 +1855,49 @@ s32 func_80193068(Unk_80193068 *arg0) {
         }
         if (o->unk42 & 0x10) {
             /* " なんだか、うとうとしてきた" */
-            func_80183E88(" \202\310\202\361\202\276\202\251\201A\202\244\202\306\202\244\202\306\202\265\202\304\202\253\202\275", 1, -1, 0, -1, 0, 0);
-            func_801D1BAC(0, 0, 0);
-            func_80186128(10, 3);
+            text_show(" \202\310\202\361\202\276\202\251\201A\202\244\202\306\202\244\202\306\202\265\202\304\202\253\202\275", 1, -1, 0, -1, 0, 0);
+            kaj_view_set_bg_color(0, 0, 0);
+            effect_start_fade(10, 3);
         }
     } else if (t == 10) {
         if (arg0->unkC == 0) {
             g->unk244 = -1;
         }
-        func_80199EB4(0, 0xDAC, 0, 0xC80);
-        func_80184094();
-        func_8018C1B0(0, 0, 0, 4);
-        func_80186128(9, 3);
+        player_rest(0, 0xDAC, 0, 0xC80);
+        text_close();
+        mail_wait(0, 0, 0, 4);
+        effect_start_fade(9, 3);
     } else if (t == 9) {
         if (arg0->unkC == 0) {
             g->unk244 = -1;
         }
         o->unk42 &= ~0x10;
-        func_801D1BAC(0x30, 0x30, 0x10);
+        kaj_view_set_bg_color(0x30, 0x30, 0x10);
     } else if (t == 0) {
-        func_801D1BAC(0x30, 0x30, 0x10);
+        kaj_view_set_bg_color(0x30, 0x30, 0x10);
         if ((s16)v != 1) {
-            func_801A3BCC(0);
+            sound_bgm_play(0);
         }
     } else if (t == 11) {
         if (!(o->unk42 & 0x4000)) {
             if (f->unk2 != 0) {
                 /* " 1預ける8武器1を方向キー上下で, 選んで下さい,      決定 3○ 1戻る 4×" */
-                func_80183E88(" 1\227a\202\257\202\3518\225\220\212\3551\202\360\225\373\214\374\203L\201[\217\343\211\272\202\305, \221I\202\361\202\305\211\272\202\263\202\242,      \214\210\222\350 3\201\233 1\226\337\202\351 4\201~", 3, -1, 0, -1, 0, 1);
+                text_show(" 1\227a\202\257\202\3518\225\220\212\3551\202\360\225\373\214\374\203L\201[\217\343\211\272\202\305, \221I\202\361\202\305\211\272\202\263\202\242,      \214\210\222\350 3\201\233 1\226\337\202\351 4\201~", 3, -1, 0, -1, 0, 1);
             } else {
                 /* " 1受け取る8武器1を方向キー上下で, 選んで下さい,      決定 3○ 1戻る 4×" */
-                func_80183E88(" 1\216\363\202\257\216\346\202\3518\225\220\212\3551\202\360\225\373\214\374\203L\201[\217\343\211\272\202\305, \221I\202\361\202\305\211\272\202\263\202\242,      \214\210\222\350 3\201\233 1\226\337\202\351 4\201~", 3, -1, 0, -1, 0, 1);
+                text_show(" 1\216\363\202\257\216\346\202\3518\225\220\212\3551\202\360\225\373\214\374\203L\201[\217\343\211\272\202\305, \221I\202\361\202\305\211\272\202\263\202\242,      \214\210\222\350 3\201\233 1\226\337\202\351 4\201~", 3, -1, 0, -1, 0, 1);
             }
         }
     } else if (t == 12) {
         if (arg0->unk8 != 999999) {
-            func_80194A2C(1, 0);
+            object_room_storage_open(1, 0);
         }
     } else if (t == 13) {
         if ((s16)v == 1) {
-            func_801A3BCC(0);
+            sound_bgm_play(0);
         }
     } else if (t == 8) {
-        func_8018C1B0(0, 0, 0, 2);
+        mail_wait(0, 0, 0, 2);
         if (o->unk3C == 0) {
             o->unk3C = 1;
         }
@@ -1905,7 +1905,7 @@ s32 func_80193068(Unk_80193068 *arg0) {
     return 0;
 }
 
-void func_801932F8(void) {
+void object_room_check_calls(void) {
     Unk_801E076C *o;
     Unk_8018E56C *p;
     u16 flags;
@@ -1917,7 +1917,7 @@ void func_801932F8(void) {
 
     h = &D_801E0710;
     e = &D_801DFFE8;
-    f = &D_801DFF30;
+    f = &object_room_phone;
     g = &D_801E0368;
 
     o = h->unk5C;
@@ -1925,7 +1925,7 @@ void func_801932F8(void) {
     flags = g->unkB2;
     if (f->unk0 != 0) {
         if ((o->unk42 & 0x40) && f->unk2 == 4 && e->unk6 == 0 && p->unk8 == 0 && p->unk16 == 1) {
-            func_8018DA2C(p, 2, 0);
+            mod_set_anim(p, 2, 0);
         }
         return;
     }
@@ -1933,7 +1933,7 @@ void func_801932F8(void) {
         return;
     }
     t = g->unk7C + g->unk7A * 24;
-    if (!(flags & 1) && (s16)func_8018BD8C(1) != 0 && g->unk0[0xD] == 100 && g->unk0[0xB] != 0) {
+    if (!(flags & 1) && (s16)mail_is_read(1) != 0 && g->unk0[0xD] == 100 && g->unk0[0xB] != 0) {
         f->unk0 = 1;
         f->unk2 = 2;
         f->unk4 = 0x65;
@@ -1946,7 +1946,7 @@ void func_801932F8(void) {
         f->unk0 = 1;
         f->unk2 = 1;
         f->unk4 = 0x67;
-    } else if (!(flags & 8) && (s16)func_8018BD8C(0x13) != 0 && t < 58) {
+    } else if (!(flags & 8) && (s16)mail_is_read(0x13) != 0 && t < 58) {
         f->unk0 = 1;
         f->unk2 = 1;
         f->unk4 = 0x68;
@@ -2002,29 +2002,29 @@ void func_801932F8(void) {
     } else {
         return;
     }
-    func_801A2678(0x33);
-    func_80186414(2, 0x402, 0x14);
+    sound_se_play(0x33);
+    effect_start_alarm(2, 0x402, 0x14);
     if (o->unk42 & 1) {
-        func_80199C68(0);
+        player_reset_triggers(0);
     }
 }
 
 INCLUDE_RODATA("asm/nonmatchings/game/8018FA18", D_80170E18);
 
-s16 func_80193880(void) {
+s16 object_room_storage_input(void) {
     Unk_801DFF28 *p;
     s16 t;
     s16 r;
     s16 n;
 
-    p = &D_801DFF28;
-    if (D_801DFF28.unk0 == 0) {
+    p = &object_room_storage;
+    if (object_room_storage.unk0 == 0) {
         return 0;
     }
-    t = func_8018D1F0();
+    t = mail_menu_get_state();
     if (p->unk4 == 0 && t == 0) {
         if (!(D_801E6DA0.unk4 & 0x20) && (D_801E6DA0.unk0 & 0x20)) {
-            r = func_80188EB8(p->unk2, &n, D_801E05E0);
+            r = effect_weapon_list(p->unk2, &n, D_801E05E0);
             if (p->unk2 != 0) {
                 p->unk4 = 1;
                 if (r != 0) {
@@ -2036,28 +2036,28 @@ s16 func_80193880(void) {
 
                     /* " 8武器2を持っていないと危険です" */
                     s = " 8\225\220\212\3552\202\360\216\235\202\301\202\304\202\242\202\310\202\242\202\306\212\353\214\257\202\305\202\267";
-                    q = &D_801DFF28;
-                    func_801A4A68(0, 0);
+                    q = &object_room_storage;
+                    sprite_set_visible(0, 0);
                     if (s != NULL) {
-                        func_80183E88(s, 1, -1, 0, -1, 0, 4);
+                        text_show(s, 1, -1, 0, -1, 0, 4);
                     } else {
                         q->unk0 = 0;
                         q->unk4 = 0;
                         q->unk2 = 1;
-                        func_80184094();
+                        text_close();
                     }
                     if (s == NULL) {
-                        func_8018C1B0(0, 0, 0, 1);
+                        mail_wait(0, 0, 0, 1);
                         return 1;
                     }
-                    func_8018C1B0(0, 0, 0, 3);
+                    mail_wait(0, 0, 0, 3);
                     q->unk0 = 1;
                     q->unk4 = 0;
                     q->unk2 = 1;
-                    func_801A4A68(0, 1);
-                    func_801A461C(0, 4, D_801DFD5A);
-                    func_801A461C(0, 5, D_801DFD58);
-                    func_80183E88(D_80170E18, 3, -1, 0, -1, 0, 1);
+                    sprite_set_visible(0, 1);
+                    sprite_set_clut_entry(0, 4, D_801DFD5A);
+                    sprite_set_clut_entry(0, 5, D_801DFD58);
+                    text_show(D_80170E18, 3, -1, 0, -1, 0, 1);
                 }
             } else {
                 p->unk4 = 2;
@@ -2071,28 +2071,28 @@ s16 func_80193880(void) {
 
                         /* " 2預かっている8武器2はありません" */
                         s = " 2\227a\202\251\202\301\202\304\202\242\202\3518\225\220\212\3552\202\315\202\240\202\350\202\334\202\271\202\361";
-                        q = &D_801DFF28;
-                        func_801A4A68(0, 0);
+                        q = &object_room_storage;
+                        sprite_set_visible(0, 0);
                         if (s != NULL) {
-                            func_80183E88(s, 1, -1, 0, -1, 0, 4);
+                            text_show(s, 1, -1, 0, -1, 0, 4);
                         } else {
                             q->unk0 = 0;
                             q->unk4 = 0;
                             q->unk2 = 1;
-                            func_80184094();
+                            text_close();
                         }
                         if (s == NULL) {
-                            func_8018C1B0(0, 0, 0, 1);
+                            mail_wait(0, 0, 0, 1);
                             return 1;
                         }
-                        func_8018C1B0(0, 0, 0, 3);
+                        mail_wait(0, 0, 0, 3);
                         q->unk0 = 1;
                         q->unk4 = 0;
                         q->unk2 = 1;
-                        func_801A4A68(0, 1);
-                        func_801A461C(0, 4, D_801DFD5A);
-                        func_801A461C(0, 5, D_801DFD58);
-                        func_80183E88(D_80170E18, 3, -1, 0, -1, 0, 1);
+                        sprite_set_visible(0, 1);
+                        sprite_set_clut_entry(0, 4, D_801DFD5A);
+                        sprite_set_clut_entry(0, 5, D_801DFD58);
+                        text_show(D_80170E18, 3, -1, 0, -1, 0, 1);
                     }
                 } else {
                     {
@@ -2101,85 +2101,85 @@ s16 func_80193880(void) {
 
                         /* " 2もう、持てないようですよ" */
                         s = " 2\202\340\202\244\201A\216\235\202\304\202\310\202\242\202\346\202\244\202\305\202\267\202\346";
-                        q = &D_801DFF28;
-                        func_801A4A68(0, 0);
+                        q = &object_room_storage;
+                        sprite_set_visible(0, 0);
                         if (s != NULL) {
-                            func_80183E88(s, 1, -1, 0, -1, 0, 4);
+                            text_show(s, 1, -1, 0, -1, 0, 4);
                         } else {
                             q->unk0 = 0;
                             q->unk4 = 0;
                             q->unk2 = 1;
-                            func_80184094();
+                            text_close();
                         }
                         if (s == NULL) {
-                            func_8018C1B0(0, 0, 0, 1);
+                            mail_wait(0, 0, 0, 1);
                             return 1;
                         }
-                        func_8018C1B0(0, 0, 0, 3);
+                        mail_wait(0, 0, 0, 3);
                         q->unk0 = 1;
                         q->unk4 = 0;
                         q->unk2 = 1;
-                        func_801A4A68(0, 1);
-                        func_801A461C(0, 4, D_801DFD5A);
-                        func_801A461C(0, 5, D_801DFD58);
-                        func_80183E88(D_80170E18, 3, -1, 0, -1, 0, 1);
+                        sprite_set_visible(0, 1);
+                        sprite_set_clut_entry(0, 4, D_801DFD5A);
+                        sprite_set_clut_entry(0, 5, D_801DFD58);
+                        text_show(D_80170E18, 3, -1, 0, -1, 0, 1);
                     }
                 }
             }
             return 1;
         ok:
-            func_801A2678(0x11);
+            sound_se_play(0x11);
             p->unk6 = 0;
-            func_801A4A68(0, 0);
-            func_8018D078(1, 0x40B, 0x402, n, 6, D_801E05E0, 4, 0x2969, 0x2BFF);
+            sprite_set_visible(0, 0);
+            mail_menu_open(1, 0x40B, 0x402, n, 6, D_801E05E0, 4, 0x2969, 0x2BFF);
             return 1;
         }
         if (!(D_801E6DA0.unk4 & 0x40) && (D_801E6DA0.unk0 & 0x40)) {
             Unk_801DFF28 *q;
 
-            func_801A2678(8);
-            q = &D_801DFF28;
-            func_801A4A68(0, 0);
+            sound_se_play(8);
+            q = &object_room_storage;
+            sprite_set_visible(0, 0);
             q->unk0 = 0;
             q->unk4 = 0;
             q->unk2 = 1;
-            func_80184094();
-            func_8018C1B0(0, 0, 0, 1);
+            text_close();
+            mail_wait(0, 0, 0, 1);
             return 1;
         }
         if ((!(D_801E6DA0.unk4 & 0x1000) && (D_801E6DA0.unk0 & 0x1000)) ||
             (!(D_801E6DA0.unk4 & 0x4000) && (D_801E6DA0.unk0 & 0x4000))) {
-            func_801A2678(0xF);
+            sound_se_play(0xF);
             p->unk2 = p->unk2 == 0;
-            func_801A461C(0, 4, (&D_801DFD58)[p->unk2]);
-            func_801A461C(0, 5, (&D_801DFD58)[1 - p->unk2]);
+            sprite_set_clut_entry(0, 4, (&D_801DFD58)[p->unk2]);
+            sprite_set_clut_entry(0, 5, (&D_801DFD58)[1 - p->unk2]);
         }
         return 1;
     }
     if (p->unk4 == 1 || p->unk4 == 2) {
         if (t == 1) {
             if (!(D_801E6DA0.unk4 & 0x20) && (D_801E6DA0.unk0 & 0x20)) {
-                func_801A2678(0x11);
-                func_80187BE4(p->unk2, D_801E05E0[p->unk6]);
-                func_8018D1A0();
+                sound_se_play(0x11);
+                effect_weapon_swap_stock(p->unk2, D_801E05E0[p->unk6]);
+                mail_menu_close();
                 return 1;
             }
             if (!(D_801E6DA0.unk4 & 0x40) && (D_801E6DA0.unk0 & 0x40)) {
-                func_801A2678(8);
-                func_8018D1A0();
+                sound_se_play(8);
+                mail_menu_close();
                 return 1;
             }
             if (!(D_801E6DA0.unk4 & 0x1000) && (D_801E6DA0.unk0 & 0x1000)) {
-                p->unk6 = func_8018CEA0(1);
+                p->unk6 = mail_menu_move(1);
             } else if (!(D_801E6DA0.unk4 & 0x4000) && (D_801E6DA0.unk0 & 0x4000)) {
-                p->unk6 = func_8018CEA0(0);
+                p->unk6 = mail_menu_move(0);
             }
         }
     }
     return 1;
 }
 
-void func_80193DA8(Unk_801E0710 *arg0) {
+void object_room_do_action(Unk_801E0710 *arg0) {
     Unk_801E0340 *s;
     Unk_801DFFE8 *e;
     Unk_801DFF30 *q;
@@ -2192,28 +2192,28 @@ void func_80193DA8(Unk_801E0710 *arg0) {
 
     s = &D_801E0340;
     e = &D_801DFFE8;
-    q = &D_801DFF30;
+    q = &object_room_phone;
     g = &D_801E0368;
     mode = e->unk6;
     o = arg0->unk5C;
 
     if (mode == 3) {
-        func_80184100(e);
+        text_next_page(e);
     } else if (mode == 2 && (e->unk8 & 8)) {
-        func_80184094();
-        func_801A2678(D_801DFFE8.unk0 == 0xFA0000 ? 0xE : 0x11);
+        text_close();
+        sound_se_play(D_801DFFE8.unk0 == 0xFA0000 ? 0xE : 0x11);
         switch ((u32)D_801DFFE8.unk0) {
         case 0xFA0000:
-            func_80198CFC(2, 1, 0x76C, 0, 0x19C8, 0, 0xB4, 0, mode);
+            player_start_move_to(2, 1, 0x76C, 0, 0x19C8, 0, 0xB4, 0, mode);
             break;
         case 0xFA0001:
-            func_80198CFC(0, 0, 0xDF6, 0x244, 0x1888, 6, 0x8E, 0, mode);
-            D_801DFF38 = 1;
+            player_start_move_to(0, 0, 0xDF6, 0x244, 0x1888, 6, 0x8E, 0, mode);
+            object_room_exit_action = 1;
             s->unkA = 1;
             break;
         case 0xFA0002:
-            func_80198CFC(0, 0, 0xC12, 0x208, 0x18CE, -0x5A, 0xBF, 0, mode);
-            D_801DFF38 = 2;
+            player_start_move_to(0, 0, 0xC12, 0x208, 0x18CE, -0x5A, 0xBF, 0, mode);
+            object_room_exit_action = 2;
             D_801DFD56 = 1;
             s->unkA = 1;
             break;
@@ -2221,33 +2221,33 @@ void func_80193DA8(Unk_801E0710 *arg0) {
             if (q->unk2 == 1 || q->unk2 == 2) {
                 o->unk42 |= 0x40;
                 g->unkB2 |= 1 << (q->unk4 - 0x65);
-                func_8018DA2C(arg0->unk50, 1, 0);
+                mod_set_anim(arg0->unk50, 1, 0);
             }
             break;
         case 0xF0FF0A:
         case 0xF0FF14:
         case 0xF0FF1E:
             k = 1;
-            r = &D_801DFF28;
+            r = &object_room_storage;
             r->unk0 = k;
             r->unk4 = 0;
             r->unk2 = k;
-            func_801A4A68(0, k);
-            func_801A461C(0, 4, D_801DFD5A);
-            func_801A461C(0, 5, D_801DFD58);
-            func_80183E88(D_80170E18, 3, -1, 0, -1, 0, k);
+            sprite_set_visible(0, k);
+            sprite_set_clut_entry(0, 4, D_801DFD5A);
+            sprite_set_clut_entry(0, 5, D_801DFD58);
+            text_show(D_80170E18, 3, -1, 0, -1, 0, k);
             break;
         case 0xF0FF46:
             if (arg0->unk34 >= 2) {
                 /* ソファーでの仮眠は、１日２回まで */
-                func_80183E88("\203\134\203\164\203\100\201\133\202\305\202\314\211\274\226\260\202\315\201\101\202\120\223\372\202\121\211\361\202\334\202\305", 1, -1, 0, -1, 0, 4);
+                text_show("\203\134\203\164\203\100\201\133\202\305\202\314\211\274\226\260\202\315\201\101\202\120\223\372\202\121\211\361\202\334\202\305", 1, -1, 0, -1, 0, 4);
                 break;
             }
             arg0->unk34++;
         default:
-            t = func_80174CB8(e->unkA);
+            t = action_find_set(e->unkA);
             while (t != NULL) {
-                t = func_80173DE0(t, 0, 0);
+                t = action_run_set(t, 0, 0);
             }
             break;
         }
@@ -2256,7 +2256,7 @@ void func_80193DA8(Unk_801E0710 *arg0) {
     }
 }
 
-void func_80194140(void) {
+void object_room_update_input(void) {
     Unk_801E076C *s0;
     s32 s3;
     Unk_801E0710 *p = &D_801E0710;
@@ -2268,16 +2268,16 @@ void func_80194140(void) {
     if ((s0->unk42 & 2) || (s0->unk42 & 0x10)) {
         return;
     }
-    s3 = func_801CD6B4();
-    if (func_80193880() != 0) {
+    s3 = kaj_pad_read();
+    if (object_room_storage_input() != 0) {
         return;
     }
-    if (!(s0->unk42 & 1) && func_8018898C(p, 0) != 0) {
+    if (!(s0->unk42 & 1) && effect_item_input(p, 0) != 0) {
         return;
     }
     if (s0->unk42 & 4) {
         if (!(D_801E6DA0.unk4 & 0x20) && (D_801E6DA0.unk0 & 0x20)) {
-            func_80193DA8(p);
+            object_room_do_action(p);
             return;
         }
         if (!(D_801E6DA0.unk4 & 0x40) && (D_801E6DA0.unk0 & 0x40)) {
@@ -2285,9 +2285,9 @@ void func_80194140(void) {
             if (!(p->unk5C->unk42 & 0x40)) {
                 s16 t = q->unk6;
                 if (t == 2 && (p->unk5C->unk42 & 1)) {
-                    func_80184094();
-                    func_801A2678(0xE);
-                    func_80198CFC(2, 1, 0x76C, 0, 0x19C8, 0, 0xB4, 0, t);
+                    text_close();
+                    sound_se_play(0xE);
+                    player_start_move_to(2, 1, 0x76C, 0, 0x19C8, 0, 0xB4, 0, t);
                     q->unk6 = 0;
                 }
             }
@@ -2295,11 +2295,11 @@ void func_80194140(void) {
         }
     }
     if (!(s0->unk42 & 0x40)) {
-        func_80199548(p, 0, s3);
+        player_handle_pad(p, 0, s3);
     }
 }
 
-void func_8019430C(void) {
+void object_room_init(void) {
     Unk_801E0710 *p;
     Unk_801E076C *o;
     Unk_801DFF30 *q;
@@ -2313,31 +2313,31 @@ void func_8019430C(void) {
     r = &D_801E0340;
     o = p->unk5C;
     D_801DFD56 = 0;
-    func_801A4A68(0x410, 1);
-    func_80197370(0);
-    func_801926B4();
-    func_80174840(1);
-    func_8018F428(0, 1);
-    func_801A8000(3, 2, 1);
-    func_801A80CC(3, 2, 1);
-    func_801A8198(3, 2, 1);
-    func_80187978(0);
-    func_80187978(1);
-    m = func_8018E56C(0x40);
-    q = &D_801DFF30;
+    sprite_set_visible(0x410, 1);
+    player_place_for_scene(0);
+    object_load_scene();
+    action_reset(1);
+    mod_npcrec_show(0, 1);
+    thing_set_active(3, 2, 1);
+    thing_set_animate(3, 2, 1);
+    thing_set_flag10(3, 2, 1);
+    effect_weapon_calc_rate(0);
+    effect_weapon_calc_rate(1);
+    m = mod_find(0x40);
+    q = &object_room_phone;
     p->unk50 = m;
     if (m != NULL) {
-        func_8018D2DC(m, 0, 3, 0);
+        mod_setup(m, 0, 3, 0);
         p->unk50->unk54 = 0xDAC - o->unk72 * 12500;
         p->unk50->unk58 = 0;
         p->unk50->unk5C = 0x1A2C - o->unk76 * 12500;
         p->unk50->unk3C = 0;
     }
-    D_801DFF50 = (s32)func_80194B50;
-    D_801DFED8 = (s32)func_80194C24;
-    D_801DFEE4 = (s32)func_80192F60;
-    D_801DFED4 = (s32)func_80193068;
-    D_801DFEE8 = (s32)func_80194D4C;
+    D_801DFF50 = (s32)object_room_pick_desk_action;
+    D_801DFED8 = (s32)object_room_on_alarm;
+    D_801DFEE4 = (s32)object_room_on_enter;
+    D_801DFED4 = (s32)object_room_on_effect_done;
+    D_801DFEE8 = (s32)object_room_on_mod_finish;
     q->unk0 = 0;
     q->unk2 = 0;
     q->unk4 = -1;
@@ -2367,36 +2367,36 @@ void func_8019430C(void) {
         }
         g->unk7C = 5;
         g->unk7E = 0;
-        func_8018A7C0(p);
-        func_80189DE8(p);
+        event_draw_gauge(p);
+        event_draw_limb_status(p);
     }
-    func_8018AABC(0);
-    func_801A4A68(0x410, 0);
+    event_show_clock(0);
+    sprite_set_visible(0x410, 0);
 }
 
-void func_801945E0(void) {
+void object_room_quit(void) {
     Unk_801E02D8 *p = &D_801E02D8;
     Unk_801E0710 *q = &D_801E0710;
     s32 i;
 
-    func_801863B4();
-    func_801A3C58();
-    func_801A252C();
+    effect_clear_alarms();
+    sound_bgm_stop();
+    sound_se_stop_all();
     D_801DFF50 = 0;
     D_801DFED8 = 0;
     D_801DFEE4 = 0;
     D_801DFED4 = 0;
     D_801DFEE8 = 0;
     q->unk50 = 0;
-    func_80184094();
-    func_80174840(1);
-    func_80174FA8();
-    func_80174BC8();
-    func_80176780();
-    func_80185548();
-    func_8018E47C();
-    func_801A43F4(0);
-    func_801A7BA4();
+    text_close();
+    action_reset(1);
+    action_free_triggers();
+    action_free_all_sets();
+    npc_free_bodies();
+    door_free_all();
+    mod_free_all();
+    sprite_delete(0);
+    thing_free_all();
     for (i = 0; i < p->unk34; i++) {
         if (p->unk5C[i] != 0) {
             free3(p->unk5C[i]);
@@ -2404,26 +2404,26 @@ void func_801945E0(void) {
         }
     }
     p->unk34 = 0;
-    switch (D_801DFF38) {
+    switch (object_room_exit_action) {
     case 0:
-        func_8017D1BC();
-        func_801A3B5C();
-        func_801A23B4();
-        func_801A43F4(0x207);
+        block_free_all();
+        sound_bgm_close();
+        sound_se_pop_scene();
+        sprite_delete(0x207);
         if (D_801DFD54 != 0) {
-            func_80199E1C(0xFF, 0);
+            player_add_hp(0xFF, 0);
         }
         break;
     case 1:
-        func_8017D1BC();
+        block_free_all();
         break;
     case 2:
-        func_801A43F4(0x207);
+        sprite_delete(0x207);
         break;
     }
 }
 
-void func_80194780(void) {
+void object_room_main(void) {
     s32 buf[6];
     u16 mode;
     s16 done;
@@ -2431,93 +2431,93 @@ void func_80194780(void) {
 
     mode = D_801E0356[0];
     done = 0;
-    func_8019430C();
-    func_801D06B4();
+    object_room_init();
+    kaj_timer_enable();
     switch ((s16)mode) {
     case 0:
-        func_80186128(0, 3);
+        effect_start_fade(0, 3);
         break;
     case 1:
-        func_801A3BCC(1);
+        sound_bgm_play(1);
     case 2:
-        func_80186258();
-        func_80183CFC((s32)D_801E02D8.unk5C[(s16)mode - 1]);
+        effect_fade_set_black();
+        text_start_narration((s32)D_801E02D8.unk5C[(s16)mode - 1]);
         break;
     }
     m = mode;
     while (done == 0) {
-        switch (func_801CC378(buf)) {
+        switch (kaj_event_get(buf)) {
         case 2:
             func_80189928(buf);
             continue;
         case 0x10:
-            func_80189350(buf);
+            event_handle_enter(buf);
             continue;
         case 0x20:
-            func_801895E0(buf);
+            event_handle_leave(buf);
             continue;
         case 4:
-            func_80189970(0);
+            event_handle_tick(0);
             continue;
         case 0x200:
-            func_801899AC(buf);
+            event_handle_mod_finish(buf);
             continue;
         case 0:
-            func_80194140();
-            if ((s16)func_8018C170() != 0 && D_801DFF38 != 2) {
-                func_801D1BAC(0, 0, 0);
-                func_80186128(1, 3);
+            object_room_update_input();
+            if ((s16)mail_take_scene_change() != 0 && object_room_exit_action != 2) {
+                kaj_view_set_bg_color(0, 0, 0);
+                effect_start_fade(1, 3);
             }
             break;
         case 0x100:
-            done = func_8018970C(buf);
+            done = event_handle_effect_done(buf);
             continue;
         default:
-            func_801CC734(buf);
+            kaj_event_done(buf);
             continue;
         }
         if (m != 0) {
-            func_80184434(m - 1);
+            text_narration_cues(m - 1);
         }
-        func_801932F8();
-        func_80186414(0, 0x400, rand() % 10 + 10);
-        func_8018C2FC(0, 0, 0);
+        object_room_check_calls();
+        effect_start_alarm(0, 0x400, rand() % 10 + 10);
+        mail_step_frame(0, 0, 0);
     }
-    func_801D06C4();
-    func_801945E0();
+    kaj_timer_disable();
+    object_room_quit();
 }
 
-void func_80194A2C(s16 arg0, char *arg1) {
-    Unk_801DFF28 *p = &D_801DFF28;
+void object_room_storage_open(s16 arg0, char *arg1) {
+    Unk_801DFF28 *p = &object_room_storage;
 
     if (arg0 == 0) {
-        func_801A4A68(0, 0);
+        sprite_set_visible(0, 0);
         if (arg1 != NULL) {
-            func_80183E88(arg1, 1, -1, 0, -1, 0, 4);
+            text_show(arg1, 1, -1, 0, -1, 0, 4);
         } else {
             p->unk0 = 0;
             p->unk4 = 0;
             p->unk2 = 1;
-            func_80184094();
+            text_close();
         }
         if (arg1 == NULL) {
-            func_8018C1B0(0, 0, 0, 1);
+            mail_wait(0, 0, 0, 1);
             return;
         }
-        func_8018C1B0(0, 0, 0, 3);
+        mail_wait(0, 0, 0, 3);
     }
     p->unk0 = 1;
     p->unk4 = 0;
     p->unk2 = 1;
-    func_801A4A68(0, 1);
-    func_801A461C(0, 4, D_801DFD5A);
-    func_801A461C(0, 5, D_801DFD58);
-    func_80183E88(D_80170E18, 3, -1, 0, -1, 0, 1);
+    sprite_set_visible(0, 1);
+    sprite_set_clut_entry(0, 4, D_801DFD5A);
+    sprite_set_clut_entry(0, 5, D_801DFD58);
+    text_show(D_80170E18, 3, -1, 0, -1, 0, 1);
 }
 
-void func_80194B50(s32 *arg0) {
+void object_room_pick_desk_action(s32 *arg0) {
     Unk_801E076C *p = D_801E076C[0];
-    Unk_801DFF30 *q = &D_801DFF30;
+    Unk_801DFF30 *q = &object_room_phone;
     s16 v;
 
     if ((*(u32 *)&p->unk40 & 0x1010000) == 0x10000) {
@@ -2537,27 +2537,27 @@ void func_80194B50(s32 *arg0) {
     }
 }
 
-void func_80194C24(Unk_80192F60 *arg0) {
+void object_room_on_alarm(Unk_80192F60 *arg0) {
     Unk_801E076C *p = D_801E076C[0];
-    Unk_801DFF30 *q = &D_801DFF30;
+    Unk_801DFF30 *q = &object_room_phone;
     Unk_8018E56C *o;
 
     if (arg0->unkC == 0x400) {
-        o = func_8018E56C(0x440);
+        o = mod_find(0x440);
         if (o != NULL && o->unk16 == 0) {
-            func_8018DA2C(o, 1, 0);
+            mod_set_anim(o, 1, 0);
         }
     } else if (arg0->unkC == 0x401) {
         q->unk2 = 4;
-        func_80194F08(q->unk4);
-        func_801A25B4(0x33);
+        object_room_play_call(q->unk4);
+        sound_se_stop(0x33);
     } else if (arg0->unkC == 0x402) {
         if (!(p->unk42 & 0x40) && q->unk2 != 4) {
             q->unk2 = 3;
-            func_801A25B4(0x33);
-            func_80186414(3, 0x403, 10);
+            sound_se_stop(0x33);
+            effect_start_alarm(3, 0x403, 10);
             if (p->unk42 & 1) {
-                func_80199C68(0);
+                player_reset_triggers(0);
             }
         }
     } else if (arg0->unkC == 0x403) {
@@ -2569,52 +2569,52 @@ void func_80194C24(Unk_80192F60 *arg0) {
     }
 }
 
-void func_80194D4C(Unk_80192F60 *arg0) {
+void object_room_on_mod_finish(Unk_80192F60 *arg0) {
     Unk_801E0710 *r = &D_801E0710;
     Unk_801E076C *p = r->unk5C;
     Unk_8018E56C *o = r->unk50;
-    Unk_801DFF30 *q = &D_801DFF30;
+    Unk_801DFF30 *q = &object_room_phone;
 
     if (arg0->unkC == 3 && arg0->unk8 == 0x40) {
         if (o->unk16 == 1) {
             if (q->unk2 == 2) {
-                func_801A2678(0x33);
-                func_80186414(1, 0x401, 5);
+                sound_se_play(0x33);
+                effect_start_alarm(1, 0x401, 5);
             } else if (q->unk2 == 1) {
                 q->unk2 = 4;
-                func_80194F08(q->unk4);
-                func_801A25B4(0x33);
+                object_room_play_call(q->unk4);
+                sound_se_stop(0x33);
             }
         } else if (o->unk16 == 2) {
-            func_80184094();
+            text_close();
             p->unk42 &= ~0x40;
             q->unk0 = 0;
             q->unk2 = 0;
             q->unk4 = -1;
             if (p->unk42 & 1) {
-                func_80199C68(0);
+                player_reset_triggers(0);
             }
         }
     }
 }
 
-void func_80194E5C(void) {
-    D_801DFF38 = 0;
+void object_room_run(void) {
+    object_room_exit_action = 0;
     while (1) {
-        func_80194780();
-        switch (D_801DFF38) {
+        object_room_main();
+        switch (object_room_exit_action) {
         case 1:
-            func_80182300();
-            D_801DFF38 = 0;
+            menu_run();
+            object_room_exit_action = 0;
             break;
         case 2:
-            func_801A4A68(0x400, 0);
-            func_801A4A68(0x409, 0);
-            func_801808F0(0, 1);
-            func_8018C414(0, 1, 0, 0);
-            D_801DFF38 = 0;
-            func_801A4A68(0x400, 1);
-            func_801A4A68(0x409, 1);
+            sprite_set_visible(0x400, 0);
+            sprite_set_visible(0x409, 0);
+            menu_card_run(0, 1);
+            mail_goto_ofc(0, 1, 0, 0);
+            object_room_exit_action = 0;
+            sprite_set_visible(0x400, 1);
+            sprite_set_visible(0x409, 1);
             break;
         default:
             return;
@@ -2622,12 +2622,12 @@ void func_80194E5C(void) {
     }
 }
 
-void func_80194F08(s16 arg0) {
+void object_room_play_call(s16 arg0) {
     void *o = D_801E0760[0];
     Unk_801DFFE8 *p = &D_801DFFE8;
     Unk_80174B10 *item;
 
-    item = func_80174CB8(arg0);
+    item = action_find_set(arg0);
     if (item != NULL) {
         p->unk0 = 0;
         p->unkA = -1;
@@ -2636,28 +2636,28 @@ void func_80194F08(s16 arg0) {
         p->unk8 = 0;
         p->unkC = 0;
         p->unk6 = 1;
-        while ((item = func_80173DE0(item, 0, 0)) != NULL) {
+        while ((item = action_run_set(item, 0, 0)) != NULL) {
         }
     } else {
-        func_8018DA2C(o, 2, 0);
+        mod_set_anim(o, 2, 0);
     }
 }
 
-s32 func_80194FAC(void) {
+s32 object_deliver_area_events(void) {
     Unk_801E0620 *p = &D_801E0620;
     Unk_801CC1E8 *o;
 
     UnDeliverEvent(0xF3000000, 2);
     if (D_801DFF4C != 0) {
         D_801DFF4C = 0;
-        o = func_801CC1E8(0x20);
+        o = kaj_event_push(0x20);
         if (o != NULL) {
             o->unkC = D_801E0610.unk0;
             o->unk8 = D_801E0610.unk4;
             o->unk10 = D_801E0610.unk8;
         }
     }
-    o = func_801CC1E8(0x10);
+    o = kaj_event_push(0x10);
     if (o != NULL) {
         o->unkC = D_801E0600.unk0;
         o->unk8 = D_801E0600.unk4;

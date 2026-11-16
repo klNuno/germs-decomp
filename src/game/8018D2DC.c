@@ -42,9 +42,9 @@ typedef struct {
     Unk_8017D0E0 *unk8;
     s32 unkC;
 } Unk_801DFE5C;
-void func_801CCBF4(Unk_801DFE5C *arg0, s32 arg1);
-void func_801CCCF4(Unk_801DFE5C *arg0, s32 arg1);
-Unk_801DFE5C *D_801DFF0C;
+void kaj_ll_insert_before(Unk_801DFE5C *arg0, s32 arg1);
+void kaj_ll_insert_after(Unk_801DFE5C *arg0, s32 arg1);
+Unk_801DFE5C *mod_list;
 typedef struct { s32 unk0; s32 unk4; s32 unk8; } Unk_80174F54;
 typedef struct { u16 unk0; s16 unk2; s16 unk4; s16 unk6; s32 unk8; u8 unkC; u8 unkD; u8 unkE; u8 unkF; s32 unk10; s16 unk14; s16 unk16; s32 unk18; s32 unk1C; s32 unk20; s32 unk24; s32 unk28; s32 unk2C; s32 unk30; s32 unk34; s32 unk38; s32 unk3C; s32 unk40; s32 unk44; s32 unk48; } Unk_801762F4;
 typedef struct { u16 unk0; s16 unk2; s32 unk4; s16 unk8; u16 unkA; u8 unkC[0xC0]; } Unk_801767D4;
@@ -94,16 +94,16 @@ typedef struct {
     s32 unkC;
 } Unk_801CC1E8;
 extern Unk_801DFFE8 D_801DFFE8;
-Unk_801DFF08 *D_801DFF08;
+Unk_801DFF08 *mod_finished;
 void UnDeliverEvent(u32 ev, u32 spec);
-Unk_801CC1E8 *func_801CC1E8(s32 arg0);
-void func_8018DA2C(void *arg0, s16 arg1, s16 arg2);
-extern Unk_8018F590 *D_801E0328[];
+Unk_801CC1E8 *kaj_event_push(s32 arg0);
+void mod_set_anim(void *arg0, s16 arg1, s16 arg2);
+extern Unk_8018F590 *mod_npcrec_table[];
 extern s16 D_801E0368[];
-Unk_8018E56C *func_8018E56C(u16 arg0);
-void func_8018D2DC(Unk_8018E56C *arg0, s32 arg1, s32 arg2, s32 arg3);
-void func_8018E8B8(Unk_8018F590 *arg0, Unk_8018E56C *arg1);
-void func_8018E6D8(s32 arg0, Unk_8018E56C *arg1, u16 arg2);
+Unk_8018E56C *mod_find(u16 arg0);
+void mod_setup(Unk_8018E56C *arg0, s32 arg1, s32 arg2, s32 arg3);
+void mod_place_npcrec(Unk_8018F590 *arg0, Unk_8018E56C *arg1);
+void mod_draw(s32 arg0, Unk_8018E56C *arg1, u16 arg2);
 typedef struct {
     s32 unk0;
     s32 unk4;
@@ -144,28 +144,28 @@ typedef struct {
     void *unk38;
     Unk_8018F958_3C *unk3C;
 } Unk_8018F958;
-s16 func_801CD000(Unk_801DFE5C *arg0);
-Unk_801762F4 *func_801762F4(s16 arg0, u16 arg1);
-Unk_8018F590 *func_8018F590(u16 arg0);
-void func_8018E344(u16 arg0);
-void func_801CCDF8(Unk_801DFE5C *arg0);
-void func_8018F91C(void);
+s16 kaj_ll_at_tail(Unk_801DFE5C *arg0);
+Unk_801762F4 *npc_find(s16 arg0, u16 arg1);
+Unk_8018F590 *mod_npcrec_find(u16 arg0);
+void mod_free_by_id(u16 arg0);
+void kaj_ll_remove_to_prev(Unk_801DFE5C *arg0);
+void mod_npcrec_reset_all(void);
 extern char D_80170A80[];
-void *func_801CC898(u32 size);
-void func_801CD54C(s32 arg0, char *arg1, char *arg2, s32 arg3);
-extern char D_801DFD4C[];
-void func_8018E2F8(s32 arg0);
+void *kaj_malloc(u32 size);
+void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
+extern char mod_str_file[];
+void mod_list_add(s32 arg0);
 extern char D_80170AA0[];
-void func_801CD78C(s32 arg0, s32 arg1);
+void kaj_tmd_unmap(s32 arg0, s32 arg1);
 extern s32 D_801E6DB4[];
-void *func_801D0880(void *arg0, void *arg1, s32 *arg2, void *arg3, s32 arg4, s32 arg5);
+void *kaj_tod_set_packet(void *arg0, void *arg1, s32 *arg2, void *arg3, s32 arg4, s32 arg5);
 typedef struct {
     u16 unk0;
     u16 unk2;
     u32 unk4;
 } Unk_801D1088;
-void func_80188E0C(s32 arg0);
-void *func_801D1088(u32 arg0, Unk_801D1088 *arg1, void *arg2, s32 *arg3, void *arg4, s32 arg5, s32 arg6);
+void effect_weapon_check_fire_frame(s32 arg0);
+void *kaj_tod_set_frame(u32 arg0, Unk_801D1088 *arg1, void *arg2, s32 *arg3, void *arg4, s32 arg5, s32 arg6);
 void EnterCriticalSection(void);
 void ExitCriticalSection(void);
 void DeliverEvent(u32 ev, u32 spec);
@@ -190,7 +190,7 @@ typedef struct {
 extern Unk_801E076C *D_801E076C[];
 void RotMatrix(Unk_8018E8B8 *arg0, void *arg1);
 void GsSetLsMatrix(void *m);
-s16 func_8017B7CC(void *arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4);
+s16 block_point_on_model(void *arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4);
 typedef struct {
     u16 unk0;
     u16 unk2;
@@ -201,14 +201,14 @@ typedef struct {
     s32 unk14;
 } Unk_8018D2DC;
 void GsInitCoordinate2(void *super, void *base);
-void func_801CD3F0(void *arg0);
-void func_801CD028(void *arg0, void *arg1, void *arg2);
-void func_801D0E58(void *arg0, void *arg1, void *arg2, void *arg3, s32 arg4);
-void *func_801D15C8(u32 arg0);
-s32 func_801D14B8(void *arg0);
-void func_8018EA00(Unk_8018F958 *arg0);
-void func_8018F958(Unk_8018F958 *arg0);
-s16 func_8018C750(s16 a);
+void kaj_tmd_map(void *arg0);
+void kaj_tmd_load(void *arg0, void *arg1, void *arg2);
+void kaj_tod_init_table(void *arg0, void *arg1, void *arg2, void *arg3, s32 arg4);
+void *kaj_tss_alloc(u32 arg0);
+s32 kaj_tss_start(void *arg0);
+void mod_npcrec_move_step(Unk_8018F958 *arg0);
+void mod_npcrec_move_end(Unk_8018F958 *arg0);
+s16 mail_wrap_angle(s16 a);
 s32 ratan2(s32 y, s32 x);
 typedef struct {
     u16 unk0;
@@ -221,14 +221,14 @@ typedef struct {
     char **unk8;
 } Unk_8018EED4;
 s32 atoi(char *s);
-void func_8018E610(u16 arg0, s16 arg1, s16 arg2);
-void func_8018EC44(Unk_8018F590 *arg0, s32 arg1, s32 arg2, s32 arg3, s16 arg4, s16 arg5, s16 arg6, s32 arg7);
+void mod_set_anim_by_id(u16 arg0, s16 arg1, s16 arg2);
+void mod_npcrec_move_to(Unk_8018F590 *arg0, s32 arg1, s32 arg2, s32 arg3, s16 arg4, s16 arg5, s16 arg6, s32 arg7);
 
 INCLUDE_RODATA("asm/nonmatchings/game/8018D2DC", D_80170A80);
 
 INCLUDE_RODATA("asm/nonmatchings/game/8018D2DC", D_80170AA0);
 
-void func_8018D2DC(Unk_8018E56C *arg0, s32 arg1, s32 arg2, s32 arg3) {
+void mod_setup(Unk_8018E56C *arg0, s32 arg1, s32 arg2, s32 arg3) {
     Unk_8018D2DC *h;
     s32 n;
     s32 i;
@@ -251,29 +251,29 @@ void func_8018D2DC(Unk_8018E56C *arg0, s32 arg1, s32 arg2, s32 arg3) {
         arg0->unk20 = (s32)arg0->unk90 + h->unkC;
         arg0->unk30 = NULL;
         n = h->unk4;
-        func_801CD3F0((void *)arg0->unk20);
+        kaj_tmd_map((void *)arg0->unk20);
         if (h->unk10 != 0) {
-            func_801CD028(&arg0->unk30, (u8 *)arg0->unk90 + h->unk10, &arg0->unk3C);
+            kaj_tmd_load(&arg0->unk30, (u8 *)arg0->unk90 + h->unk10, &arg0->unk3C);
         }
-        arg0->unk28 = func_801CC898(0xC);
+        arg0->unk28 = kaj_malloc(0xC);
         if (arg0->unk28 == NULL) {
-            func_801CD54C(3, "Error Allocating GsOBJTABLE2", D_801DFD4C, 0x8E);
+            kaj_abend(3, "Error Allocating GsOBJTABLE2", mod_str_file, 0x8E);
         }
-        arg0->unk2C = func_801CC898(n * 16);
+        arg0->unk2C = kaj_malloc(n * 16);
         if (arg0->unk2C == NULL) {
-            func_801CD54C(3, "Error Allocating GsDOBJ2 Table", D_801DFD4C, 0x92);
+            kaj_abend(3, "Error Allocating GsDOBJ2 Table", mod_str_file, 0x92);
         }
-        arg0->unk38 = func_801CC898(n * 80);
+        arg0->unk38 = kaj_malloc(n * 80);
         if (arg0->unk38 == NULL) {
-            func_801CD54C(3, "Error Allocating GsCOORDINATE2", D_801DFD4C, 0x97);
+            kaj_abend(3, "Error Allocating GsCOORDINATE2", mod_str_file, 0x97);
         }
-        arg0->unk8C = func_801CC898(n * 40);
+        arg0->unk8C = kaj_malloc(n * 40);
         if (arg0->unk8C == NULL) {
-            func_801CD54C(3, "Error Allocating GsCOORD2PARAM", D_801DFD4C, 0x9C);
+            kaj_abend(3, "Error Allocating GsCOORD2PARAM", mod_str_file, 0x9C);
         }
-        arg0->unk24 = func_801CC898(arg0->unk14 * 4);
+        arg0->unk24 = kaj_malloc(arg0->unk14 * 4);
         if (arg0->unk24 == NULL) {
-            func_801CD54C(3, "Error Allocating TOD Table", D_801DFD4C, 0xA0);
+            kaj_abend(3, "Error Allocating TOD Table", mod_str_file, 0xA0);
         }
         p = (s32 *)((u8 *)arg0->unk90 + h->unk14);
         for (i = 0; i < arg0->unk14; i++) {
@@ -281,7 +281,7 @@ void func_8018D2DC(Unk_8018E56C *arg0, s32 arg1, s32 arg2, s32 arg3) {
             ((s32 **)arg0->unk24)[i] = p;
             p += len >> 2;
         }
-        func_801D0E58(arg0->unk28, arg0->unk2C, arg0->unk38, arg0->unk8C, n);
+        kaj_tod_init_table(arg0->unk28, arg0->unk2C, arg0->unk38, arg0->unk8C, n);
         arg0->unk54 = 0;
         arg0->unk58 = 0;
         arg0->unk5C = 0;
@@ -304,7 +304,7 @@ void func_8018D2DC(Unk_8018E56C *arg0, s32 arg1, s32 arg2, s32 arg3) {
             cnt = ((u16 *)q)[1];
             q += 2;
             for (k = 0; k < cnt; k++) {
-                q = func_801D0880(q, arg0->unk28, (s32 *)arg0->unk1C, (void *)arg0->unk20, 0, arg0->unk34);
+                q = kaj_tod_set_packet(q, arg0->unk28, (s32 *)arg0->unk1C, (void *)arg0->unk20, 0, arg0->unk34);
             }
         }
         arg0->unk16 = arg3;
@@ -314,15 +314,15 @@ void func_8018D2DC(Unk_8018E56C *arg0, s32 arg1, s32 arg2, s32 arg3) {
     }
 }
 
-void func_8018D5F8(s16 *arg0) {
+void mod_create(s16 *arg0) {
     Unk_8018E56C *mod;
     Unk_8018E56C **pp = &mod;
     Unk_801762F4 *e;
     u16 id;
 
-    *pp = func_801CC898(0x94);
+    *pp = kaj_malloc(0x94);
     if (*pp == NULL) {
-        func_801CD54C(3, D_80170A80, D_801DFD4C, 0x56);
+        kaj_abend(3, D_80170A80, mod_str_file, 0x56);
     }
     (*pp)->unk2 = 3;
     (*pp)->unk10 = 0;
@@ -335,18 +335,18 @@ void func_8018D5F8(s16 *arg0) {
     mod->unk90 = arg0;
     id = *arg0;
     if (id < 0x440) {
-        e = func_801762F4(1, id);
+        e = npc_find(1, id);
         if (e != NULL && e->unkF == 6) {
-            func_8018D2DC(mod, 0, 0, 8);
+            mod_setup(mod, 0, 0, 8);
         } else {
-            func_8018D2DC(mod, 0, 0, 0);
+            mod_setup(mod, 0, 0, 0);
         }
     }
-    func_8018E2F8((s32)mod);
+    mod_list_add((s32)mod);
 }
 
-void func_8018D6DC(s32 *arg0, s32 *arg1) {
-    Unk_801DFE5C *list = D_801DFF0C;
+void mod_relocate(s32 *arg0, s32 *arg1) {
+    Unk_801DFE5C *list = mod_list;
     Unk_8018E56C *item;
     Unk_8018E56C *t;
     s32 n;
@@ -363,7 +363,7 @@ void func_8018D6DC(s32 *arg0, s32 *arg1) {
                 item = t;
                 break;
             }
-            if (func_801CD000(list) != 0) {
+            if (kaj_ll_at_tail(list) != 0) {
                 item = NULL;
                 break;
             }
@@ -377,7 +377,7 @@ void func_8018D6DC(s32 *arg0, s32 *arg1) {
         }
         item->unk1C -= n * 4;
         item->unk20 -= n * 4;
-        func_801CD78C(item->unk20, n);
+        kaj_tmd_unmap(item->unk20, n);
         for (i = 0; i < item->unk14; i++) {
             ((s32 *)item->unk24)[i] -= n * 4;
         }
@@ -390,14 +390,14 @@ void func_8018D6DC(s32 *arg0, s32 *arg1) {
         }
         if (item->unk30 != NULL) {
             ((s32 *)item->unk30)[2] -= n * 4;
-            func_801CD78C((s32)arg1 + arg1[4], n);
+            kaj_tmd_unmap((s32)arg1 + arg1[4], n);
         }
         item->unk90 = (s16 *)arg1;
     }
 }
 
-void func_8018D8B8(void) {
-    Unk_801DFE5C *list = D_801DFF0C;
+void mod_free_pooled(void) {
+    Unk_801DFE5C *list = mod_list;
     Unk_8018E56C *mod;
     Unk_801762F4 *e;
     Unk_8018F590 *f;
@@ -412,12 +412,12 @@ void func_8018D8B8(void) {
         if (mod != NULL && mod->unk6 == 0) {
             id = mod->unk0;
             if (id >= 0x440) {
-                f = func_8018F590(id - 0x440);
+                f = mod_npcrec_find(id - 0x440);
                 if (f != NULL) {
                     f->unk1B = 1;
                 }
             } else {
-                e = func_801762F4(1, mod->unk0);
+                e = npc_find(1, mod->unk0);
                 if (e != NULL) {
                     e->unk4 = 0;
                 }
@@ -438,16 +438,16 @@ void func_8018D8B8(void) {
                 }
                 free3(mod);
             }
-            func_801CCDF8(list);
+            kaj_ll_remove_to_prev(list);
         }
-        if (func_801CD000(list) != 0) {
+        if (kaj_ll_at_tail(list) != 0) {
             break;
         }
         list->unk8 = list->unk8->unk4;
     }
 }
 
-void func_8018DA2C(void *arg0, s16 arg1, s16 arg2) {
+void mod_set_anim(void *arg0, s16 arg1, s16 arg2) {
     u16 *p;
     s32 i;
     s32 n;
@@ -462,7 +462,7 @@ void func_8018DA2C(void *arg0, s16 arg1, s16 arg2) {
         n = p[1];
         p += 4;
         for (i = 0; i < n; i++) {
-            p = func_801D0880(p, ((Unk_8018E56C *)arg0)->unk28, (s32 *)((Unk_8018E56C *)arg0)->unk1C, (void *)((Unk_8018E56C *)arg0)->unk20, 2, ((Unk_8018E56C *)arg0)->unk34);
+            p = kaj_tod_set_packet(p, ((Unk_8018E56C *)arg0)->unk28, (s32 *)((Unk_8018E56C *)arg0)->unk1C, (void *)((Unk_8018E56C *)arg0)->unk20, 2, ((Unk_8018E56C *)arg0)->unk34);
         }
         ((Unk_8018E56C *)arg0)->unk18 = (s32)p;
         ((Unk_8018E56C *)arg0)->unkA = 2;
@@ -488,10 +488,10 @@ void func_8018DA2C(void *arg0, s16 arg1, s16 arg2) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/8018D2DC", func_8018DBA4);
+INCLUDE_ASM("asm/nonmatchings/game/8018D2DC", mod_draw_player);
 
-void func_8018DE58(void) {
-    Unk_801DFE5C *list = D_801DFF0C;
+void mod_update_all(void) {
+    Unk_801DFE5C *list = mod_list;
     Unk_8018E56C *mod;
     s16 cnt;
     s32 k;
@@ -508,40 +508,40 @@ void func_8018DE58(void) {
 again:
                 if (mod->unkC < mod->unkE) {
                     if ((u16)mod->unk2 == 1 && (u16)mod->unk16 == 2) {
-                        func_80188E0C(mod->unkC);
+                        effect_weapon_check_fire_frame(mod->unkC);
                     }
                     mod->unkC++;
-                    mod->unk18 = (s32)func_801D1088(mod->unkC, (Unk_801D1088 *)mod->unk18, mod->unk28, (s32 *)mod->unk1C, (void *)mod->unk20, (u16)mod->unkA, mod->unk34);
+                    mod->unk18 = (s32)kaj_tod_set_frame(mod->unkC, (Unk_801D1088 *)mod->unk18, mod->unk28, (s32 *)mod->unk1C, (void *)mod->unk20, (u16)mod->unkA, mod->unk34);
                     cnt--;
                     if (cnt > 0) {
                         goto again;
                     }
                 } else {
-                    mod->unk18 = (s32)func_801D1088(mod->unkE, (Unk_801D1088 *)mod->unk18, mod->unk28, (s32 *)mod->unk1C, (void *)mod->unk20, (u16)mod->unkA, mod->unk34);
+                    mod->unk18 = (s32)kaj_tod_set_frame(mod->unkE, (Unk_801D1088 *)mod->unk18, mod->unk28, (s32 *)mod->unk1C, (void *)mod->unk20, (u16)mod->unkA, mod->unk34);
                     k = (u16)mod->unk2;
                     mod->unk8 = 0;
                     mod->unkC = -1;
                     mod->unkE = -1;
                     if (k != 0 && (k != 1 || (u16)mod->unk16 != 5)) {
                         EnterCriticalSection();
-                        D_801DFF08 = (Unk_801DFF08 *)mod;
+                        mod_finished = (Unk_801DFF08 *)mod;
                         DeliverEvent(0xF3000002, 2);
                         ExitCriticalSection();
                     }
                 }
             }
         }
-        if (func_801CD000(list) != 0) {
+        if (kaj_ll_at_tail(list) != 0) {
             break;
         }
         list->unk8 = list->unk8->unk4;
     }
 }
 
-void func_8018E03C(Unk_8018E56C **arg0, u32 arg1) {
-    *arg0 = func_801CC898(0x94);
+void mod_alloc(Unk_8018E56C **arg0, u32 arg1) {
+    *arg0 = kaj_malloc(0x94);
     if (*arg0 == NULL) {
-        func_801CD54C(3, D_80170A80, D_801DFD4C, 0x56);
+        kaj_abend(3, D_80170A80, mod_str_file, 0x56);
     }
     (*arg0)->unk2 = 3;
     (*arg0)->unk10 = 0;
@@ -552,15 +552,15 @@ void func_8018E03C(Unk_8018E56C **arg0, u32 arg1) {
     (*arg0)->unkC = -1;
     (*arg0)->unkE = -1;
     if (arg1 != 0) {
-        (*arg0)->unk90 = func_801CC898(arg1);
+        (*arg0)->unk90 = kaj_malloc(arg1);
         if ((*arg0)->unk90 == NULL) {
-            func_801CD54C(3, D_80170AA0, D_801DFD4C, 0x64);
+            kaj_abend(3, D_80170AA0, mod_str_file, 0x64);
         }
         (*arg0)->unk6 = 1;
     }
 }
 
-void func_8018E144(Unk_8018E56C *arg0) {
+void mod_free(Unk_8018E56C *arg0) {
     if (arg0 != NULL) {
         if (arg0->unk4 != 0) {
             free3(arg0->unk28);
@@ -579,8 +579,8 @@ void func_8018E144(Unk_8018E56C *arg0) {
     }
 }
 
-void func_8018E1F0(s16 *arg0) {
-    Unk_801DFE5C *list = D_801DFF0C;
+void mod_on_data_free(s16 *arg0) {
+    Unk_801DFE5C *list = mod_list;
     Unk_8018E56C *item;
     Unk_8018E56C *t;
     Unk_801762F4 *e;
@@ -597,7 +597,7 @@ void func_8018E1F0(s16 *arg0) {
                 item = t;
                 break;
             }
-            if (func_801CD000(list) != 0) {
+            if (kaj_ll_at_tail(list) != 0) {
                 item = NULL;
                 break;
             }
@@ -606,14 +606,14 @@ void func_8018E1F0(s16 *arg0) {
     }
     if (item != NULL) {
         id = *item->unk90;
-        func_8018E344(id);
+        mod_free_by_id(id);
         if (id >= 0x440) {
-            f = func_8018F590(id - 0x440);
+            f = mod_npcrec_find(id - 0x440);
             if (f != NULL) {
                 f->unk1B = 1;
             }
         } else {
-            e = func_801762F4(1, id);
+            e = npc_find(1, id);
             if (e != NULL) {
                 e->unk4 = 0;
             }
@@ -621,23 +621,23 @@ void func_8018E1F0(s16 *arg0) {
     }
 }
 
-void func_8018E2F8(s32 arg0) {
-    if (D_801DFF0C->unkC == 0) {
-        func_801CCBF4(D_801DFF0C, arg0);
+void mod_list_add(s32 arg0) {
+    if (mod_list->unkC == 0) {
+        kaj_ll_insert_before(mod_list, arg0);
     } else {
-        D_801DFF0C->unk8 = D_801DFF0C->unk4;
-        func_801CCCF4(D_801DFF0C, arg0);
+        mod_list->unk8 = mod_list->unk4;
+        kaj_ll_insert_after(mod_list, arg0);
     }
 }
 
-void func_8018E344(u16 arg0) {
-    Unk_801DFE5C *list = D_801DFF0C;
+void mod_free_by_id(u16 arg0) {
+    Unk_801DFE5C *list = mod_list;
     Unk_8018E56C *mod;
 
     if (list->unkC == 0) {
         return;
     }
-    mod = func_8018E56C(arg0);
+    mod = mod_find(arg0);
     if (mod == NULL) {
         return;
     }
@@ -660,18 +660,18 @@ void func_8018E344(u16 arg0) {
                 }
                 free3(mod);
             }
-            func_801CCDF8(list);
+            kaj_ll_remove_to_prev(list);
             return;
         }
-        if (func_801CD000(list) != 0) {
+        if (kaj_ll_at_tail(list) != 0) {
             break;
         }
         list->unk8 = list->unk8->unk4;
     }
 }
 
-void func_8018E47C(void) {
-    Unk_801DFE5C *list = D_801DFF0C;
+void mod_free_all(void) {
+    Unk_801DFE5C *list = mod_list;
     Unk_8018E56C *mod;
 
     while (1) {
@@ -695,13 +695,13 @@ void func_8018E47C(void) {
             }
             free3(mod);
         }
-        func_801CCDF8(list);
+        kaj_ll_remove_to_prev(list);
     }
-    func_8018F91C();
+    mod_npcrec_reset_all();
 }
 
-Unk_8018E56C *func_8018E56C(u16 arg0) {
-    Unk_801DFE5C *list = D_801DFF0C;
+Unk_8018E56C *mod_find(u16 arg0) {
+    Unk_801DFE5C *list = mod_list;
     Unk_8018E56C *item;
 
     if (list->unkC == 0) {
@@ -713,7 +713,7 @@ Unk_8018E56C *func_8018E56C(u16 arg0) {
         if (item != NULL && *item->unk90 == arg0) {
             return item;
         }
-        if (func_801CD000(list) != 0) {
+        if (kaj_ll_at_tail(list) != 0) {
             break;
         }
         list->unk8 = list->unk8->unk4;
@@ -721,8 +721,8 @@ Unk_8018E56C *func_8018E56C(u16 arg0) {
     return NULL;
 }
 
-void func_8018E610(u16 arg0, s16 arg1, s16 arg2) {
-    Unk_801DFE5C *list = D_801DFF0C;
+void mod_set_anim_by_id(u16 arg0, s16 arg1, s16 arg2) {
+    Unk_801DFE5C *list = mod_list;
     Unk_8018E56C *item;
 
     if (list->unkC == 0) {
@@ -734,29 +734,29 @@ void func_8018E610(u16 arg0, s16 arg1, s16 arg2) {
             if (item != NULL && *item->unk90 == arg0) {
                 break;
             }
-            if (func_801CD000(list) != 0) {
+            if (kaj_ll_at_tail(list) != 0) {
                 item = NULL;
                 break;
             }
             list->unk8 = list->unk8->unk4;
         }
     }
-    func_8018DA2C(item, arg1, arg2);
+    mod_set_anim(item, arg1, arg2);
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/8018D2DC", func_8018E6D8);
+INCLUDE_ASM("asm/nonmatchings/game/8018D2DC", mod_draw);
 
-s32 func_8018E7EC(void) {
+s32 mod_finish_handler(void) {
     Unk_801DFFE8 *s = &D_801DFFE8;
     Unk_801CC1E8 *e;
 
     UnDeliverEvent(0xF3000002, 2);
-    e = func_801CC1E8(0x200);
+    e = kaj_event_push(0x200);
     if (e != NULL) {
-        e->unk8 = D_801DFF08->unk0;
-        e->unkC = D_801DFF08->unk2;
+        e->unk8 = mod_finished->unk0;
+        e->unkC = mod_finished->unk2;
     }
-    if (D_801DFF08->unk2 == 2) {
+    if (mod_finished->unk2 == 2) {
         if (s->unk12 & 8) {
             s->unk12 &= ~8;
             if (s->unk12 == 0) {
@@ -764,14 +764,14 @@ s32 func_8018E7EC(void) {
             }
         }
     }
-    if (D_801DFF08->unk10 != 0) {
-        D_801DFF08->unk10 = 0;
-        func_8018DA2C(D_801DFF08, D_801DFF08->unk16, -1);
+    if (mod_finished->unk10 != 0) {
+        mod_finished->unk10 = 0;
+        mod_set_anim(mod_finished, mod_finished->unk16, -1);
     }
     return 0;
 }
 
-void func_8018E8B8(Unk_8018F590 *arg0, Unk_8018E56C *arg1) {
+void mod_place_npcrec(Unk_8018F590 *arg0, Unk_8018E56C *arg1) {
     Unk_801E076C *g = D_801E076C[0];
     Unk_8018E8B8 rot;
 
@@ -785,7 +785,7 @@ void func_8018E8B8(Unk_8018F590 *arg0, Unk_8018E56C *arg1) {
     arg1->unk3C = 0;
 }
 
-void func_8018EA00(Unk_8018F958 *arg0) {
+void mod_npcrec_move_step(Unk_8018F958 *arg0) {
     Unk_8018F958_3C *p = arg0->unk3C;
     Unk_8018F590 *e = p->unk48;
     Unk_8018E56C *item;
@@ -796,24 +796,24 @@ void func_8018EA00(Unk_8018F958 *arg0) {
     e->unk14 = p->unk30 + p->unk40 * arg0->unk24 / arg0->unk26;
     e->unk16 = p->unk32 + p->unk42 * arg0->unk24 / arg0->unk26;
     e->unk18 = p->unk34 + p->unk44 * arg0->unk24 / arg0->unk26;
-    item = func_8018E56C(e->unk6);
+    item = mod_find(e->unk6);
     if (item != NULL) {
-        func_8018E8B8(e, item);
+        mod_place_npcrec(e, item);
     }
 }
 
-void func_8018EC44(Unk_8018F590 *arg0, s32 arg1, s32 arg2, s32 arg3, s16 arg4, s16 arg5, s16 arg6, s32 arg7) {
+void mod_npcrec_move_to(Unk_8018F590 *arg0, s32 arg1, s32 arg2, s32 arg3, s16 arg4, s16 arg5, s16 arg6, s32 arg7) {
     Unk_8018F958 *t;
     Unk_8018F958_3C *p;
 
-    t = func_801D15C8(0x4C);
+    t = kaj_tss_alloc(0x4C);
     t->unk22 = 5;
     t->unk28 = 1;
     t->unk2C = 2;
-    t->unk30 = func_8018EA00;
+    t->unk30 = mod_npcrec_move_step;
     t->unk24 = 0;
-    t->unk34 = func_8018F958;
-    t->unk38 = func_8018F958;
+    t->unk34 = mod_npcrec_move_end;
+    t->unk38 = mod_npcrec_move_end;
     t->unk26 = arg7 * 30;
     if (arg0->unk8 == arg1 && arg0->unkC == arg2 && arg0->unk10 == arg3 &&
         arg0->unk14 == arg4 && arg0->unk16 == arg5 && arg0->unk18 == arg6) {
@@ -864,11 +864,11 @@ loop:
         arg6 += 360;
         goto loop;
     }
-    arg0->unk1C = func_801D14B8(t);
+    arg0->unk1C = kaj_tss_start(t);
     arg0->unk1E = 1;
 }
 
-void func_8018EED4(Unk_8018EED4 *arg0, Unk_8018E56C *arg1) {
+void mod_cmd_npcrec(Unk_8018EED4 *arg0, Unk_8018E56C *arg1) {
     Unk_801E02D8 *p = &D_801E02D8;
     Unk_8018F590 *e = p->unk50;
     Unk_8018EED4_0 *cmd = arg0->unk0;
@@ -903,7 +903,7 @@ done:
         break;
     case 1:
         found->unk6 = atoi(arg0->unk8[0]);
-        tb = D_801E0328[0];
+        tb = mod_npcrec_table[0];
         f = D_801E0368;
         t = tb + cmd->unk4;
         if (f[cmd->unk4] == 0) {
@@ -918,14 +918,14 @@ done:
         t->unk1B = 1;
         t->unk1C = -1;
         t->unk1E = 0;
-        obj = func_8018E56C(t->unk6);
+        obj = mod_find(t->unk6);
         if (obj == NULL) {
             break;
         }
         if (obj->unk4 == 0) {
-            func_8018D2DC(obj, 0, 2, 0);
+            mod_setup(obj, 0, 2, 0);
         }
-        func_8018E8B8(t, obj);
+        mod_place_npcrec(t, obj);
         t->unk1B = 2;
         break;
     case 3:
@@ -938,19 +938,19 @@ done:
             arg1->unk6 = 4;
             arg1->unk12 |= 0x10;
         }
-        func_8018EC44(found, x, y, z, 0, a, 0, b);
+        mod_npcrec_move_to(found, x, y, z, 0, a, 0, b);
         break;
     case 4:
         if (atoi(arg0->unk8[1]) == 1) {
             arg1->unk6 = 4;
             arg1->unk12 |= 8;
         }
-        ((void (*)())func_8018E610)((s16)found->unk6, (s16)atoi(arg0->unk8[0]), (s16)atoi(arg0->unk8[2]));
+        ((void (*)())mod_set_anim_by_id)((s16)found->unk6, (s16)atoi(arg0->unk8[0]), (s16)atoi(arg0->unk8[2]));
         break;
     }
 }
 
-void func_8018F234(void) {
+void mod_npcrec_update_all(void) {
     Unk_8018F590 *p;
     Unk_801E076C *cam;
     Unk_8018E56C *mod;
@@ -965,20 +965,20 @@ void func_8018F234(void) {
         for (i = 0; i < g->unk20; i++, p++) {
             if (p->unk1A != 0 && p->unk1B != 0) {
                 if (p->unk1B == 1) {
-                    mod = func_8018E56C(p->unk6);
+                    mod = mod_find(p->unk6);
                     if (mod != NULL) {
                         if (mod->unk4 == 0) {
-                            func_8018D2DC(mod, 0, 2, 0);
+                            mod_setup(mod, 0, 2, 0);
                         }
-                        func_8018E8B8(p, mod);
+                        mod_place_npcrec(p, mod);
                         p->unk1B = 2;
                     }
                 } else if (p->unk2 != 0 && p->unk1E == 0 && p->unk0 != 0) {
-                    p->unk16 = func_8018C750((ratan2(cam->unk54 + cam->unk72 * 12500 - p->unk8,
+                    p->unk16 = mail_wrap_angle((ratan2(cam->unk54 + cam->unk72 * 12500 - p->unk8,
                                                      cam->unk5C + cam->unk76 * 12500 - p->unk10) * 360 >> 12) - 180);
-                    mod2 = func_8018E56C(p->unk6);
+                    mod2 = mod_find(p->unk6);
                     if (mod2 != NULL) {
-                        func_8018E8B8(p, mod2);
+                        mod_place_npcrec(p, mod2);
                     }
                 }
             }
@@ -986,13 +986,13 @@ void func_8018F234(void) {
     }
 }
 
-void func_8018F428(u16 arg0, s16 arg1) {
+void mod_npcrec_show(u16 arg0, s16 arg1) {
     Unk_8018F590 *e;
     s16 *f;
     Unk_8018F590 *b;
     Unk_8018E56C *mod;
 
-    b = D_801E0328[0];
+    b = mod_npcrec_table[0];
     f = D_801E0368;
     e = b + arg0;
     if (f[arg0] != 0 || arg1 != 0) {
@@ -1005,18 +1005,18 @@ void func_8018F428(u16 arg0, s16 arg1) {
         e->unk1B = 1;
         e->unk1C = -1;
         e->unk1E = 0;
-        mod = func_8018E56C(e->unk6);
+        mod = mod_find(e->unk6);
         if (mod != NULL) {
             if (mod->unk4 == 0) {
-                func_8018D2DC(mod, 0, 2, 0);
+                mod_setup(mod, 0, 2, 0);
             }
-            func_8018E8B8(e, mod);
+            mod_place_npcrec(e, mod);
             e->unk1B = 2;
         }
     }
 }
 
-void func_8018F53C(void) {
+void mod_npcrec_free_table(void) {
     Unk_801E02D8 *p = &D_801E02D8;
     if (p->unk20 != 0) {
         if (p->unk50 != NULL) {
@@ -1027,7 +1027,7 @@ void func_8018F53C(void) {
     }
 }
 
-Unk_8018F590 *func_8018F590(u16 arg0) {
+Unk_8018F590 *mod_npcrec_find(u16 arg0) {
     Unk_801E02D8 *p = &D_801E02D8;
     s32 n = p->unk20;
     Unk_8018F590 *e = p->unk50;
@@ -1044,7 +1044,7 @@ Unk_8018F590 *func_8018F590(u16 arg0) {
     return NULL;
 }
 
-void func_8018F5E8(s32 arg0, s32 arg1, s32 arg2) {
+void mod_npcrec_rebase_all(s32 arg0, s32 arg1, s32 arg2) {
     Unk_801E02D8 *p = &D_801E02D8;
     Unk_8018F590 *e = p->unk50;
     Unk_8018E56C *mod;
@@ -1055,7 +1055,7 @@ void func_8018F5E8(s32 arg0, s32 arg1, s32 arg2) {
     }
     for (i = 0; i < p->unk20; i++, e++) {
         if (e->unk1A != 0 && e->unk2 != 0 && e->unk1B == 2) {
-            mod = func_8018E56C(e->unk6);
+            mod = mod_find(e->unk6);
             if (mod != NULL) {
                 mod->unk54 = e->unk8 - arg0;
                 mod->unk58 = e->unkC - arg1;
@@ -1066,7 +1066,7 @@ void func_8018F5E8(s32 arg0, s32 arg1, s32 arg2) {
     }
 }
 
-void func_8018F6E8(s32 arg0) {
+void mod_npcrec_draw_all(s32 arg0) {
     Unk_801E02D8 *p = &D_801E02D8;
     Unk_8018F590 *e = p->unk50;
     Unk_8018E56C *mod;
@@ -1077,15 +1077,15 @@ void func_8018F6E8(s32 arg0) {
     }
     for (i = 0; i < p->unk20; i++, e++) {
         if (e != NULL && e->unk1A != 0 && e->unk2 != 0 && e->unk1B == 2) {
-            mod = func_8018E56C(e->unk6);
+            mod = mod_find(e->unk6);
             if (mod != NULL && mod->unk4 != 0) {
-                func_8018E6D8(arg0, mod, e->unk4);
+                mod_draw(arg0, mod, e->unk4);
             }
         }
     }
 }
 
-s16 func_8018F7D0(s32 arg0, s32 arg1, s32 arg2) {
+s16 mod_npcrec_find_at_point(s32 arg0, s32 arg1, s32 arg2) {
     Unk_801E02D8 *p = &D_801E02D8;
     Unk_8018F590 *e = p->unk50;
     Unk_8018E56C *mod;
@@ -1096,10 +1096,10 @@ s16 func_8018F7D0(s32 arg0, s32 arg1, s32 arg2) {
     }
     for (i = 0; i < p->unk20; i++, e++) {
         if (e->unk1A != 0 && e->unk2 != 0 && e->unk1B == 2) {
-            mod = func_8018E56C(e->unk6);
+            mod = mod_find(e->unk6);
             if (mod != NULL && mod->unk4 != 0 && mod->unk30 != NULL) {
                 GsSetLsMatrix(mod->unk40);
-                if (func_8017B7CC(mod->unk30, arg0, arg1, arg2, 1) != 0) {
+                if (block_point_on_model(mod->unk30, arg0, arg1, arg2, 1) != 0) {
                     return e->unk0;
                 }
             }
@@ -1108,7 +1108,7 @@ s16 func_8018F7D0(s32 arg0, s32 arg1, s32 arg2) {
     return -2;
 }
 
-void func_8018F91C(void) {
+void mod_npcrec_reset_all(void) {
     Unk_801E02D8 *p = &D_801E02D8;
     Unk_8018F590 *e = p->unk50;
     s32 i;
@@ -1118,7 +1118,7 @@ void func_8018F91C(void) {
     }
 }
 
-void func_8018F958(Unk_8018F958 *arg0) {
+void mod_npcrec_move_end(Unk_8018F958 *arg0) {
     Unk_801DFFE8 *s = &D_801DFFE8;
     Unk_8018F958_3C *p = arg0->unk3C;
     Unk_8018F590 *e = p->unk48;
@@ -1131,9 +1131,9 @@ void func_8018F958(Unk_8018F958 *arg0) {
     e->unk16 = p->unk3A;
     e->unk18 = p->unk3C;
     e->unk1E = 0;
-    item = func_8018E56C(e->unk6);
+    item = mod_find(e->unk6);
     if (item != NULL) {
-        func_8018E8B8(e, item);
+        mod_place_npcrec(e, item);
     }
     if (s->unk12 & 0x10) {
         s->unk12 &= ~0x10;

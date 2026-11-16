@@ -11,8 +11,8 @@ typedef struct Unk_801CCAF4 {
     Unk_801CCB70 *unk8;
     s32 unkC;
 } Unk_801CCAF4;
-void *func_801CC898(u32 size);
-void func_801CD54C(s32 arg0, char *arg1, char *arg2, s32 arg3);
+void *kaj_malloc(u32 size);
+void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
 extern char D_801DFDC4[];
 void free3(void *ptr);
 typedef struct Unk_801E6DA0 {
@@ -28,10 +28,10 @@ void SsSetTableSize(char *table, s16 s_max, s16 t_max);
 void SsSetTickMode(s32 tick_mode);
 void SsStart(void);
 void SsSetMVol(s16 voll, s16 volr);
-extern char D_801E6DD8[];
+extern char kaj_sound_seq_table[];
 extern s32 D_801E6DB8[];
 void SsEnd(void);
-void func_801CDB50(void);
+void SsQuit(void);
 typedef struct Unk_801CD78C {
     s32 unk0;
     s32 unk4;
@@ -39,13 +39,13 @@ typedef struct Unk_801CD78C {
     s32 unkC[1];
 } Unk_801CD78C;
 void srand(u32 seed);
-extern u32 D_801E6DAC[];
+extern u32 kaj_timer_ticks[];
 extern char D_80172BB4[];
 typedef struct Unk_801DFAF8 {
     s32 unk0;
     char *unk4;
 } Unk_801DFAF8;
-extern Unk_801DFAF8 D_801DFAF8[];
+extern Unk_801DFAF8 kaj_error_names[];
 extern char D_80172CA8[];
 extern char D_80172CF0[];
 extern char D_80172D00[];
@@ -70,10 +70,10 @@ typedef struct Unk_801CD028 {
 void *memset(void *dst, s32 c, u32 n);
 void GsLinkObject4(u32 *tmd, Unk_801CD028 *obj, s32 n);
 
-void func_801CCAF4(Unk_801CCAF4 **arg0) {
-    *arg0 = func_801CC898(0x10);
+void kaj_ll_create(Unk_801CCAF4 **arg0) {
+    *arg0 = kaj_malloc(0x10);
     if (*arg0 == NULL) {
-        func_801CD54C(3, "Error Allocating LL Handle", D_801DFDC4, 0x15);
+        kaj_abend(3, "Error Allocating LL Handle", D_801DFDC4, 0x15);
     }
     (*arg0)->unk0 = NULL;
     (*arg0)->unk4 = NULL;
@@ -81,7 +81,7 @@ void func_801CCAF4(Unk_801CCAF4 **arg0) {
     (*arg0)->unkC = 0;
 }
 
-void func_801CCB70(Unk_801CCAF4 *arg0) {
+void kaj_ll_destroy(Unk_801CCAF4 *arg0) {
     Unk_801CCB70 *node;
 
     while (arg0->unk0 != NULL) {
@@ -100,12 +100,12 @@ void func_801CCB70(Unk_801CCAF4 *arg0) {
     free3(arg0);
 }
 
-void func_801CCBF4(Unk_801CCAF4 *arg0, void *arg1) {
+void kaj_ll_insert_before(Unk_801CCAF4 *arg0, void *arg1) {
     Unk_801CCB70 *node;
 
-    node = func_801CC898(0xC);
+    node = kaj_malloc(0xC);
     if (node == NULL) {
-        func_801CD54C(3, D_80172BB4, D_801DFDC4, 0x3C);
+        kaj_abend(3, D_80172BB4, D_801DFDC4, 0x3C);
     }
     node->unk8 = arg1;
     node->unk0 = NULL;
@@ -133,12 +133,12 @@ void func_801CCBF4(Unk_801CCAF4 *arg0, void *arg1) {
     }
 }
 
-void func_801CCCF4(Unk_801CCAF4 *arg0, void *arg1) {
+void kaj_ll_insert_after(Unk_801CCAF4 *arg0, void *arg1) {
     Unk_801CCB70 *node;
 
-    node = func_801CC898(0xC);
+    node = kaj_malloc(0xC);
     if (node == NULL) {
-        func_801CD54C(3, D_80172BB4, D_801DFDC4, 0x61);
+        kaj_abend(3, D_80172BB4, D_801DFDC4, 0x61);
     }
     node->unk8 = arg1;
     node->unk0 = NULL;
@@ -166,7 +166,7 @@ void func_801CCCF4(Unk_801CCAF4 *arg0, void *arg1) {
     }
 }
 
-void func_801CCDF8(Unk_801CCAF4 *arg0) {
+void kaj_ll_remove_to_prev(Unk_801CCAF4 *arg0) {
     Unk_801CCB70 *node;
 
     node = arg0->unk8;
@@ -200,7 +200,7 @@ void func_801CCDF8(Unk_801CCAF4 *arg0) {
     free3(node);
 }
 
-void func_801CCEE8(Unk_801CCAF4 *arg0) {
+void kaj_ll_remove_to_next(Unk_801CCAF4 *arg0) {
     Unk_801CCB70 *node;
 
     node = arg0->unk8;
@@ -234,14 +234,14 @@ void func_801CCEE8(Unk_801CCAF4 *arg0) {
     free3(node);
 }
 
-s32 func_801CCFD8(Unk_801CCAF4 *arg0) {
+s32 kaj_ll_at_head(Unk_801CCAF4 *arg0) {
     if (arg0 == NULL) {
         return 0;
     }
     return arg0->unk0 == arg0->unk8;
 }
 
-s32 func_801CD000(Unk_801CCAF4 *arg0) {
+s32 kaj_ll_at_tail(Unk_801CCAF4 *arg0) {
     if (arg0 == NULL) {
         return 0;
     }
@@ -266,7 +266,7 @@ INCLUDE_RODATA("asm/nonmatchings/kaj/801CCAF4", D_80172D28);
 
 INCLUDE_RODATA("asm/nonmatchings/kaj/801CCAF4", D_80172D34);
 
-void func_801CD028(Unk_801CD028 **arg0, u32 *arg1, void *arg2) {
+void kaj_tmd_load(Unk_801CD028 **arg0, u32 *arg1, void *arg2) {
     u32 *tmd;
 
     if (arg1[0] != 0x41) {
@@ -283,9 +283,9 @@ void func_801CD028(Unk_801CD028 **arg0, u32 *arg1, void *arg2) {
             printf(D_80172CA8);
         }
         s = D_80172CF0;
-        for (i = 0; D_801DFAF8[i].unk0 != 15; i++) {
-            if (D_801DFAF8[i].unk0 == code) {
-                s = D_801DFAF8[i].unk4;
+        for (i = 0; kaj_error_names[i].unk0 != 15; i++) {
+            if (kaj_error_names[i].unk0 == code) {
+                s = kaj_error_names[i].unk4;
                 break;
             }
         }
@@ -305,7 +305,7 @@ void func_801CD028(Unk_801CD028 **arg0, u32 *arg1, void *arg2) {
         exit(10);
     }
     if (*arg0 == NULL) {
-        *arg0 = func_801CC898(0x10);
+        *arg0 = kaj_malloc(0x10);
         if (*arg0 == NULL) {
             char *msg;
             char *file;
@@ -320,9 +320,9 @@ void func_801CD028(Unk_801CD028 **arg0, u32 *arg1, void *arg2) {
                 printf(D_80172CA8);
             }
             s = D_80172CF0;
-            for (i = 0; D_801DFAF8[i].unk0 != 15; i++) {
-                if (D_801DFAF8[i].unk0 == code) {
-                    s = D_801DFAF8[i].unk4;
+            for (i = 0; kaj_error_names[i].unk0 != 15; i++) {
+                if (kaj_error_names[i].unk0 == code) {
+                    s = kaj_error_names[i].unk4;
                     break;
                 }
             }
@@ -360,9 +360,9 @@ void func_801CD028(Unk_801CD028 **arg0, u32 *arg1, void *arg2) {
             printf(D_80172CA8);
         }
         s = D_80172CF0;
-        for (i = 0; D_801DFAF8[i].unk0 != 15; i++) {
-            if (D_801DFAF8[i].unk0 == code) {
-                s = D_801DFAF8[i].unk4;
+        for (i = 0; kaj_error_names[i].unk0 != 15; i++) {
+            if (kaj_error_names[i].unk0 == code) {
+                s = kaj_error_names[i].unk4;
                 break;
             }
         }
@@ -385,7 +385,7 @@ void func_801CD028(Unk_801CD028 **arg0, u32 *arg1, void *arg2) {
     (*arg0)->unk4 = arg2;
 }
 
-s32 func_801CD3F0(u32 *arg0) {
+s32 kaj_tmd_map(u32 *arg0) {
     char *msg;
     char *file;
     char *s;
@@ -400,9 +400,9 @@ s32 func_801CD3F0(u32 *arg0) {
             printf(D_80172CA8);
         }
         s = D_80172CF0;
-        for (i = 0; D_801DFAF8[i].unk0 != 15; i++) {
-            if (D_801DFAF8[i].unk0 == code) {
-                s = D_801DFAF8[i].unk4;
+        for (i = 0; kaj_error_names[i].unk0 != 15; i++) {
+            if (kaj_error_names[i].unk0 == code) {
+                s = kaj_error_names[i].unk4;
                 break;
             }
         }
@@ -425,7 +425,7 @@ s32 func_801CD3F0(u32 *arg0) {
     return arg0[2];
 }
 
-void func_801CD54C(s32 arg0, char *arg1, char *arg2, s32 arg3) {
+void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3) {
     char *s;
     s32 i;
 
@@ -436,9 +436,9 @@ void func_801CD54C(s32 arg0, char *arg1, char *arg2, s32 arg3) {
         printf(D_80172CC8, arg3);
     }
     s = D_80172CF0;
-    for (i = 0; D_801DFAF8[i].unk0 != 15; i++) {
-        if (D_801DFAF8[i].unk0 == arg0) {
-            s = D_801DFAF8[i].unk4;
+    for (i = 0; kaj_error_names[i].unk0 != 15; i++) {
+        if (kaj_error_names[i].unk0 == arg0) {
+            s = kaj_error_names[i].unk4;
             break;
         }
     }
@@ -458,7 +458,7 @@ void func_801CD54C(s32 arg0, char *arg1, char *arg2, s32 arg3) {
     exit(arg0);
 }
 
-void func_801CD688(s16 arg0) {
+void kaj_pad_reset(s16 arg0) {
     D_801E6DA0.unk0 = 0;
     D_801E6DA0.unk4 = 0;
     if (arg0 != 0) {
@@ -468,7 +468,7 @@ void func_801CD688(s16 arg0) {
     }
 }
 
-s32 func_801CD6B4(void) {
+s32 kaj_pad_read(void) {
     s32 v;
 
     if (D_801E6DA0.unkA != 1) {
@@ -480,21 +480,21 @@ s32 func_801CD6B4(void) {
     return v;
 }
 
-void func_801CD70C(void) {
+void kaj_sound_init(void) {
     SsInit();
-    SsSetTableSize(D_801E6DD8, 1, 3);
+    SsSetTableSize(kaj_sound_seq_table, 1, 3);
     SsSetTickMode(1);
     SsStart();
     SsSetMVol(0x7F, 0x7F);
     D_801E6DB8[0] = 0x7F;
 }
 
-void func_801CD764(void) {
+void kaj_sound_quit(void) {
     SsEnd();
-    func_801CDB50();
+    SsQuit();
 }
 
-void func_801CD78C(Unk_801CD78C *arg0, s32 arg1) {
+void kaj_tmd_unmap(Unk_801CD78C *arg0, s32 arg1) {
     s32 *p;
     s32 n;
     s32 i;
@@ -511,6 +511,6 @@ void func_801CD78C(Unk_801CD78C *arg0, s32 arg1) {
     }
 }
 
-void func_801CD808(void) {
-    srand(((D_801E6DAC[0] & 0xF0F0F0F0) >> 4) | ((D_801E6DAC[0] & 0x0F0F0F0F) << 4));
+void kaj_srand_ticks(void) {
+    srand(((kaj_timer_ticks[0] & 0xF0F0F0F0) >> 4) | ((kaj_timer_ticks[0] & 0x0F0F0F0F) << 4));
 }

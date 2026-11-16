@@ -1,4 +1,1923 @@
 // Our own names, with evidence. Sony names live in symbol_addrs.psyq.txt.
 // Address-only splits (no name): a C function reads the second half or the tail as its own symbol.
-D_801DFCA6 = 0x801DFCA6; // size:0x2
 D_80171048 = 0x80171048;
+// menu: direction flag of menu_cycle_pos_b; also an address split (a C function reads it as the second half of a pair)
+menu_cycle_dir_b = 0x801DFCA6; // size:0x2
+// its own message "kaj_abend: NULL File Pointer"; prints ERROR CODE, FILE, LINE, MESSAGE, then exit(code)
+kaj_abend = 0x801CD54C; // type:func size:0x13C
+// malloc3(size) then memset 0, NULL when size is 0; every allocation in the game and kaj goes through it
+kaj_malloc = 0x801CC898; // type:func size:0x58
+// kaj.c: ResetGraph, InitHeap3, CdInit ("can't initialize CD-ROM subsystem"), PadInit, MemCardInit, then the event, timer, sound, tss and view inits
+kaj_init = 0x801CC8F0; // type:func size:0x104
+// view.c: GsInitGraph, GsDefDispBuff, GsInit3D, "Error Allocating VIEW Tag", called once by kaj_init
+kaj_view_init = 0x801D17F0; // type:func size:0x1E0
+// tss.c: "Error Allocating Sharing Table", called once by kaj_init
+kaj_tss_init = 0x801D164C; // type:func size:0xE0
+// timer.c: calloc3 "Error Allocating TIMER Queue", OpenEvent/EnableEvent on a root counter, SetRCnt, StartRCnt
+kaj_timer_init = 0x801D0300; // type:func size:0x114
+// timer.c: binary-heap insert of an alarm (ticks + delay, callback, arg) sifted up by due time, realloc3 doubling only when full ("Error Reallocating TIMER Queue"); caller kaj_event_set_alarm
+kaj_timer_add_alarm = 0x801CFEB0; // type:func size:0x284
+// SsInit, SsSetTableSize, SsSetTickMode, SsSetMVol, SsStart, called once by kaj_init
+kaj_sound_init = 0x801CD70C; // type:func size:0x58
+// event.c: calloc3 "Error Allocating EVENT Queue", called once by kaj_init
+kaj_event_init = 0x801CC68C; // type:func size:0x7C
+// event.c: kaj_malloc a bigger queue, memcpy the old one, free3 it, "Error Reallocating EVENT Queue"
+kaj_event_queue_grow = 0x801CBCE0; // type:func size:0x110
+// ll.c: "Error Allocating LL Handle", kaj_malloc of the list head
+kaj_ll_create = 0x801CCAF4; // type:func size:0x7C
+// tim.c: GsGetTimInfo, LoadImage of pixels and CLUT, "Error Allocating TIM Handle", "No CLUT in this TIM"
+kaj_tim_load = 0x801CF790; // type:func size:0x358
+// misc.c: GsMapModelingData, "Crashed TMD or Illegal Data", "Too Many Objects in TMD", kaj_malloc of the GsDOBJ2 array, GsLinkObject4 per object
+kaj_tmd_load = 0x801CD028; // type:func size:0x3C8
+// misc.c: GsMapModelingData with the "Crashed TMD or Illegal Data" check, no object array
+kaj_tmd_map = 0x801CD3F0; // type:func size:0x15C
+// {code, text} table ending at code 15 that kaj_abend searches: "Error Occured", "TSS Error", "Invalid TMD"
+kaj_error_names = 0x801DFAF8;
+// event.c (kaj/801CBCE0). Type-2 event handler: arg0[2] = n in 1..16 indexes kaj_tss_table; steps cur (+0x24) toward target (+0x26) by step (+0x28), calls the step callback (+0x30) and re-arms with func_801CC3DC, or at the target calls the end callback (+0x34) and posts event 0x100; only caller func_801CC378
+kaj_event_run_tss = 0x801CBDF0; // type:func size:0x23C
+// event.c: under EnterCriticalSection copies the head entry (0x14 bytes) of the ring queue D_801DFAD4 into arg0, skips cleared entries, returns its type; a pending D_801DFFC4 == 1 is returned first
+kaj_event_pop = 0x801CC02C; // type:func size:0x1BC
+// event.c: grows the ring with kaj_event_queue_grow when full, writes the new entry at the tail index (+4) with type arg0 and the tick count D_801E6DAC, returns it; 6 callers fill +8/+0xC/+0x10
+kaj_event_push = 0x801CC1E8; // type:func size:0xC4
+// event.c: same as func_801CC1E8 but decrements the head index (+8), so the entry is read first; used by the timer handler for alarms under 0x50
+kaj_event_push_front = 0x801CC2AC; // type:func size:0xCC
+// event.c: kaj_event_pop, then runs type-2 tss events itself (kaj_event_run_tss) and recurses when one is consumed; returns the event type; called by 10 game loops that then call func_801CC734
+kaj_event_get = 0x801CC378; // type:func size:0x64
+// event.c: alarm (delay arg0, id arg1, data arg2); id 0 takes the next id from D_801DFFC0 (counts down from 1001); delay 0 pushes a type-2 event now, else hands it to the timer heap (kaj_timer_queue_grow); returns the id
+kaj_event_set_alarm = 0x801CC3DC; // type:func size:0x138
+// event.c: clears every queued entry whose type & arg0 (only id arg1 for type 2 when arg1 != 0), releases tss slots of type 0x100 entries via func_801D1300, bit 1 drops the pending event, bit 2 also cancels timers with func_801D0414
+kaj_event_flush = 0x801CC514; // type:func size:0x178
+// event.c: free3 of the ring buffer D_801DFAD4, counterpart of kaj_event_init, no caller
+kaj_event_quit = 0x801CC708; // type:func size:0x2C
+// event.c: for an event of type 0x100 (tss end notice) releases its tss slot arg0[2] with func_801D1300; called right after kaj_event_get by the same 10 game loops
+kaj_event_done = 0x801CC734; // type:func size:0x34
+// ll.c (kaj/801CCAF4): walks the list from head (+0) through node->next (+4), free3 of each node data (+8) and node, then free3 of the 0x10 handle made by kaj_ll_create
+kaj_ll_destroy = 0x801CCB70; // type:func size:0x84
+// ll.c: "Error Allocating a LL Node", kaj_malloc(0xC) node {prev, next, data}, links it before the cursor (+8), becomes head when the cursor is the head, cursor moves to it, count++
+kaj_ll_insert_before = 0x801CCBF4; // type:func size:0x100
+// ll.c: same node allocation, links it after the cursor (+8), becomes tail (+4) when the cursor is the tail, cursor moves to it, count++
+kaj_ll_insert_after = 0x801CCCF4; // type:func size:0x104
+// ll.c: unlinks the cursor node and free3s it (not its data); the cursor moves to the previous node, or to the next one when it was the head; count--
+kaj_ll_remove_to_prev = 0x801CCDF8; // type:func size:0xF0
+// ll.c: mirror of func_801CCDF8: unlinks the cursor node, the cursor moves to the next node, or to the previous one when it was the tail
+kaj_ll_remove_to_next = 0x801CCEE8; // type:func size:0xF0
+// ll.c: returns head (+0) == cursor (+8), 0 for a NULL list
+kaj_ll_at_head = 0x801CCFD8; // type:func size:0x28
+// ll.c: returns tail (+4) == cursor (+8), 0 for a NULL list; 55 game callers use it as a loop end test
+kaj_ll_at_tail = 0x801CD000; // type:func size:0x28
+// kaj.c/misc.c area: zeroes the pad words D_801E6DA0+0 (now) and +4 (previous), sets the read mode +0xA to 2 when arg0 else 0; pairs with func_801CD6B4
+kaj_pad_reset = 0x801CD688; // type:func size:0x2C
+// only when mode D_801E6DA0+0xA == 1: PadRead(1), previous = now, now = value, returns it; 9 game callers
+kaj_pad_read = 0x801CD6B4; // type:func size:0x58
+// SsEnd then func_801CDB50 (SpuQuit wrapper), counterpart of kaj_sound_init, no caller
+kaj_sound_quit = 0x801CD764; // type:func size:0x28
+// TMD id 0x41 with flag bit 0 (mapped): for each object (7 words) subtracts arg1*4 from the vertex, normal and primitive pointers, the inverse of GsMapModelingData
+kaj_tmd_unmap = 0x801CD78C; // type:func size:0x7C
+// srand() seeded with the nibble-swapped tick count D_801E6DAC
+kaj_srand_ticks = 0x801CD808; // type:func size:0x48
+// tim.c (kaj/801CF790): frees the two CLUT copies (+0x1C, +0x20) then the 0x24 handle made by kaj_tim_load
+kaj_tim_free = 0x801CFAE8; // type:func size:0x64
+// tim.c: GsGetTimInfo then LoadImage of the pixels, and of the CLUT when arg1 and the TIM has one; called after a CD read of a TIM
+kaj_tim_upload = 0x801CFB4C; // type:func size:0x68
+// tim.c: like kaj_tim_upload but the TIM sits after an 8-byte header whose halfword 1 is the CLUT flag; used by block.c for type-6 cache entries
+kaj_tim_upload_hdr = 0x801CFBB4; // type:func size:0x6C
+// timer.c (kaj/801CFD70): callback given to OpenEvent(0xF2000003 = vblank root counter) by kaj_timer_init; when enabled bumps the tick, posts a type-2 event for every expired alarm (func_801D0134), a type-4 event every D_801E6DB0 ticks
+kaj_timer_handler = 0x801CFD70; // type:func size:0x140
+// timer.c: if the heap top of D_801DFBB8 is due against tick D_801E6DAC, stores its id/data, moves the last entry to the top and sifts it down, returns 1
+kaj_timer_pop_due = 0x801D0134; // type:func size:0x1CC
+// timer.c: removes from the alarm heap every entry with id arg0 (all when 0) and re-sifts; called by kaj_event_flush bit 2
+kaj_timer_cancel = 0x801D0414; // type:func size:0x1E4
+// timer.c: clears the wrap flag (+0xC) of every heap entry; called by the handler when the tick count changes sign
+kaj_timer_clear_wrap = 0x801D05F8; // type:func size:0x54
+// timer.c: free3 of the heap, StopRCnt(0xF2000003), DisableEvent and CloseEvent of D_801DFDEC; counterpart of kaj_timer_init
+kaj_timer_quit = 0x801D064C; // type:func size:0x68
+// timer.c: sets D_801E6DA8 = 1, the flag the handler tests before counting ticks
+kaj_timer_enable = 0x801D06B4; // type:func size:0x10
+// timer.c: sets D_801E6DA8 = 0, ticks stop
+kaj_timer_disable = 0x801D06C4; // type:func size:0xC
+// kaj/801D0880 has no assert; prefix kaj_tod_ because it plays TOD animation packets: header id 16 bits, type 4 bits, flag 4 bits, length; type 0 attribute, 1 coordinate (rotate /360, scale, translate, flag bit 0 relative), 2 TMD id (GsLinkObject4), 3 parent id, 8 create/kill object
+kaj_tod_set_packet = 0x801D0880; // type:func size:0x5D8
+// TOD object table init: count 0, capacity arg4, each object gets attribute 0x80000000, id -1, coordinate arg2[i] and parameters arg3 + i*0x28
+kaj_tod_init_table = 0x801D0E58; // type:func size:0x60
+// returns the table entry whose id (+0xC) is arg1, NULL when absent; same code inlined in kaj_tod_set_packet
+kaj_tod_find_obj = 0x801D0EB8; // type:func size:0x4C
+// takes the first entry with id -1 (or appends below capacity), sets its id, GsInitCoordinate2, returns it; inlined for packet type 8 flag 0
+kaj_tod_create_obj = 0x801D0F04; // type:func size:0xB4
+// sets the id of entry arg1 to -1 and trims the table count; inlined for packet type 8 flag 1
+kaj_tod_remove_obj = 0x801D0FB8; // type:func size:0x8C
+// walks the TMD object table (7 words per object) with the id list arg1, returns the object whose id is arg2; inlined for packet type 2
+kaj_tod_find_tmd = 0x801D1044; // type:func size:0x44
+// when frame arg0 >= the frame header number (+4), runs kaj_tod_set_packet on its packet count (+2) packets; caller func_8018DE58
+kaj_tod_set_frame = 0x801D1088; // type:func size:0xB0
+// tss.c (kaj/801D12A8): free3 of the slot data (+0x3C) when not inline, pushes the slot on the free list (+8) of D_801DFBD0
+kaj_tss_free = 0x801D12A8; // type:func size:0x58
+// tss.c: unlinks slot arg0 from the finished list (+0xC) and pushes it on the free list; called by kaj_event_done and kaj_event_flush for 0x100 events
+kaj_tss_release = 0x801D1300; // type:func size:0x7C
+// tss.c: stops running slot arg0: kaj_event_flush(2, arg0 + 1), its kill callback (+0x38), posts event 0x100 {arg0, 1, +0x22} and moves it to the finished list
+kaj_tss_kill = 0x801D137C; // type:func size:0x13C
+// tss.c: kaj_event_set_alarm(1, slot index + 1, 0), returns the index; the 9 callers first get the slot from func_801D15C8
+kaj_tss_start = 0x801D14B8; // type:func size:0x38
+// tss.c: frees the slot data and pushes it on the finished list (+0xC); called by kaj_event_run_tss when the end event was posted
+kaj_tss_finish = 0x801D14F0; // type:func size:0x58
+// tss.c: kaj_malloc(arg0 * arg1) chained into a free list of arg0 blocks of arg1 bytes; the same loop is inlined in kaj_tss_init
+kaj_tss_pool_create = 0x801D1548; // type:func size:0x80
+// tss.c: pops a slot from the free list, data pointer (+0x3C) is the slot itself up to 0x20 bytes else kaj_malloc(arg0), clears the kill callback; 9 game callers then call kaj_tss_start
+kaj_tss_alloc = 0x801D15C8; // type:func size:0x84
+// tss.c: free3 of the table, free and finished lists cleared; counterpart of kaj_tss_init
+kaj_tss_quit = 0x801D172C; // type:func size:0x48
+// tss.c fields: step (+0x28) = rounded (target +0x26 - cur +0x24) / arg1, delay (+0x2C) 2; arg1 0 jumps in one step
+kaj_tss_set_steps = 0x801D1774; // type:func size:0x7C
+// view.c: free3 of both OT tag and packet buffers of D_801E6FF0, SetDispMask(0); counterpart of kaj_view_init
+kaj_view_quit = 0x801D19D0; // type:func size:0x5C
+// view.c: GPU packet pointer (func_801D1E30, reads Sony's work base) minus the packet area (+0x88) of the current buffer D_801DFFD0
+kaj_view_packet_used = 0x801D1A2C; // type:func size:0x2C
+// view.c: switches D_801DFFD0 to the other buffer, sets the packet work base (func_801D1E20) and ClearOTagR(0x2000) on its OT
+kaj_view_begin_frame = 0x801D1A58; // type:func size:0x54
+// view.c: DrawSync/VSync(2), PutDispEnv, PutDrawEnv, DrawOTag of the buffer, stores the vsync delta in D_801E6DA0+0x14
+kaj_view_flip = 0x801D1AAC; // type:func size:0x100
+// view.c: writes r0/g0/b0 (DRAWENV +0x19..+0x1B) of both buffers
+kaj_view_set_bg_color = 0x801D1BAC; // type:func size:0x28
+// view.c: ClearImage of the 320x480 rect at 0,0 then DrawSync
+kaj_view_clear_vram = 0x801D1BD4; // type:func size:0x4C
+// cdmgr.c (kaj/801D1E70, assert "cdmgr.c"): kaj_malloc of every pool buffer of D_801DFBE0, heap init (func_801D3924), clears the 32 cache slots of D_801E71C8; called by both map openers
+kaj_cdmgr_init = 0x801D1E70; // type:func size:0x100
+// cdmgr.c: read state machine on D_801E71C8: 1 CdControl seek, 3 double speed and CdRead, 4 CdReadSync with stall retry, -1 CdFlush; returns 1 when a read chain ends; polled in loops by block.c
+kaj_cdmgr_poll = 0x801D1F70; // type:func size:0x2A0
+// cdmgr.c: returns the slot (1..32) already caching file arg0 (same LBA, pool, type) with refcount+1, else when idle allocates a block in pool arg1 and starts its read
+kaj_cdmgr_load = 0x801D2210; // type:func size:0x1EC
+// cdmgr.c: when idle copies the 32 refcounts to D_801E7188 and adds one for every file of the list already cached or about to take a free slot
+kaj_cdmgr_count_refs = 0x801D23FC; // type:func size:0x150
+// cdmgr.c: compacts the pools, applies the D_801E7188 refcounts, gives a slot and block to every listed file not cached, chains them (+0x1E) and starts the chained read
+kaj_cdmgr_load_list = 0x801D254C; // type:func size:0x374
+// cdmgr.c: refcount-1 of slot arg0; at zero frees type data (func_801D3730), CdFlush if it is being read, frees its heap block, clears the slot, sets D_801DFFD8
+kaj_cdmgr_release = 0x801D28C0; // type:func size:0x188
+// cdmgr.c: copies {LBA, size, sectors, padded size} of directory entries arg2[] from the loaded directory slot arg0 into arg3[]; no caller
+kaj_cdmgr_dir_entries = 0x801D2A48; // type:func size:0x118
+// cdmgr.c: after compaction moves data, subtracts the move from TMD pointers (types 1 and 3) or calls func_8018D6DC (type 5), using the old addresses in D_801E7108
+kaj_cdmgr_relocate = 0x801D2B60; // type:func size:0x2E8
+// cdmgr.c: assert-checked index, returns the pool size (+4) of D_801DFBE0[arg0]
+kaj_cdmgr_pool_size = 0x801D2E48; // type:func size:0x68
+// cdmgr.c: returns the heap free space of the pool whose id (+0) is arg0
+kaj_cdmgr_pool_free = 0x801D2EB0; // type:func size:0x68
+// cdmgr.c: CdSearchFile(arg2), adds its LBA - 150 to every {offset, size} entry of the directory in slot arg0; used with CITY.F and CITY.BC
+kaj_cdmgr_rebase_dir = 0x801D2F18; // type:func size:0x148
+// cdmgr.c: CdSearchFile retried, fills {LBA, 0, size, sectors, sectors * 2048}
+kaj_cdmgr_find_file = 0x801D3060; // type:func size:0x84
+// cdmgr.c: fills the same record from entry arg1 (1-based) of the directory loaded in slot arg0
+kaj_cdmgr_dir_entry = 0x801D30E4; // type:func size:0xD4
+// cdmgr.c: returns read state D_801E71C8 == 0
+kaj_cdmgr_is_idle = 0x801D31B8; // type:func size:0x10
+// cdmgr.c: 1 when slot arg0 has a block and is not the one being read
+kaj_cdmgr_is_ready = 0x801D31C8; // type:func size:0x74
+// cdmgr.c: same compaction and relocation as the start of kaj_cdmgr_load_list, returns moved | D_801DFFD8; no caller
+kaj_cdmgr_compact = 0x801D323C; // type:func size:0xB4
+// cdmgr.c: returns the block (first word = data address) of slot arg0 when ready, else 0; 16 callers
+kaj_cdmgr_get = 0x801D32F0; // type:func size:0x74
+// cdmgr.c: returns the type byte (+0x1D) of slot arg0, -1 when out of range; block.c switches on it (5, 6)
+kaj_cdmgr_get_type = 0x801D3364; // type:func size:0x40
+// cdmgr.c: returns the file size (+8) of slot arg0
+kaj_cdmgr_get_size = 0x801D33A4; // type:func size:0x40
+// cdmgr.c: 1 when slot arg0 is ready and its load state (+0x22) is 1 (read done, not yet used)
+kaj_cdmgr_is_fresh = 0x801D33E4; // type:func size:0x84
+// cdmgr.c: sets load state (+0x22) of ready slot arg0 to 2; block.c calls it after setting up the data
+kaj_cdmgr_mark_used = 0x801D3468; // type:func size:0x74
+// cdmgr.c: CdIntToPos then CdControl(2) seek to the record LBA; no caller
+kaj_cdmgr_seek = 0x801D34DC; // type:func size:0x3C
+// cdmgr.c: double speed mode (CdControl 0xE, 0x80) then CdRead of the record sectors into arg1; no caller
+kaj_cdmgr_read = 0x801D3518; // type:func size:0x78
+// cdmgr.c: returns the cached slot whose file index (+4) is arg1 in pool arg0, else NULL
+kaj_cdmgr_find_slot = 0x801D3590; // type:func size:0x5C
+// cdmgr.c: stores the data address of each of the 32 slots in D_801E7108 before compaction
+kaj_cdmgr_save_addrs = 0x801D35EC; // type:func size:0x64
+// cdmgr.c: CdFlush then frees every heap block of every allocated pool; caller func_8017D3F0
+kaj_cdmgr_free_all = 0x801D3650; // type:func size:0x74
+// cdmgr.c: 1 when slot arg0 has a block and a non-zero load state (+0x22), even while reading
+kaj_cdmgr_is_loaded = 0x801D36C4; // type:func size:0x60
+// cdmgr.c: clears D_801DFFD8, the flag kaj_cdmgr_release sets
+kaj_cdmgr_clear_dirty = 0x801D3724; // type:func size:0xC
+// cdmgr.c: called by kaj_cdmgr_release with the slot type and data: type 5 goes to func_8018E1F0
+kaj_cdmgr_free_data = 0x801D3730; // type:func size:0x34
+// heap used only by cdmgr (no assert, prefix kaj_heap_): rounds arg1 to 4, kaj_malloc(0xC) block {addr, size, next}, appends after the last block, compacts with memmove when mode (+0x18) is 0 or 1 and full, NULL when no room
+kaj_heap_alloc = 0x801D3764; // type:func size:0x1AC
+// heap: {size, base, end, count 0, used 0, blocks NULL, mode arg3}; called per pool by kaj_cdmgr_init
+kaj_heap_init = 0x801D3924; // type:func size:0x24
+// heap: sets mode (+0x18); no caller
+kaj_heap_set_mode = 0x801D3948; // type:func size:0x8
+// heap: returns mode (+0x18); no caller
+kaj_heap_get_mode = 0x801D3950; // type:func size:0xC
+// heap: 1 when a block does not start where the previous one ends
+kaj_heap_has_gaps = 0x801D395C; // type:func size:0x44
+// heap: memmoves every block down to close the gaps, returns 1 when one moved
+kaj_heap_compact = 0x801D39A0; // type:func size:0x74
+// heap: unlinks block arg1, count-1, used -= size, free3
+kaj_heap_free = 0x801D3A14; // type:func size:0xC0
+// heap: bytes between the end of the last block and the heap end (the whole size when empty)
+kaj_heap_free_space = 0x801D3AD4; // type:func size:0x5C
+// heap: free3 of every block record
+kaj_heap_free_all = 0x801D3B30; // type:func size:0x4C
+// kaj/801D1E70 after the heap has no assert; prefix kaj_map_ for the CITY / per-place map streamer used by block.c. Mode 1: once CITY.MP is cached, loads "\C\CITY.F;1" (directory) and rebases it on "\C\CITY.BC;1"; returns 1 when done
+kaj_map_load_city_dir = 0x801D3B7C; // type:func size:0xD4
+// mode 2: once the .B is cached, loads "\F\%c\%s.F;1" and rebases it on "\M\%c\%s.RM;1", then func_801D5BE4; returns 1 when done
+kaj_map_load_place_dir = 0x801D3C50; // type:func size:0x1CC
+// mode 1: cell (arg0, arg1) is inside the CITY.MP grid (+0x14 by +0x18) and its entry is non-zero
+kaj_map_cell_exists = 0x801D3E1C; // type:func size:0xD0
+// mode 1: inside the bounds (+4..+0x10), reads the cell entry (indirect when -1, layer arg2) and stores its flag byte in arg3
+kaj_map_cell_flags = 0x801D3EEC; // type:func size:0x208
+// mode 1: for neighbour (arg3, arg4) of cell (arg0, arg1) tests the direction bit (4, 8, 1, 2) and stores the layer bit (0x40, 0x80, 0x10, 0x20) in arg5, returns kaj_map_cell_exists of the neighbour
+kaj_map_cell_link = 0x801D40F4; // type:func size:0x200
+// mode 1: steps (arg3, arg4) to the next neighbour of cell (arg0, arg1) in a fixed order through the same direction and layer bits, 1 when one exists; caller func_801D5E28
+kaj_map_next_neighbor = 0x801D42F4; // type:func size:0xA30
+// mode 1: world (arg0, arg1) to cell indices (bounds / grid size), -1 outside
+kaj_map_world_to_cell = 0x801D4D24; // type:func size:0x27C
+// mode 1: inside the bounds, takes the cell of world (arg0, arg1) and streams it with func_801D6120; block.c passes the player position
+kaj_map_update_city = 0x801D4FA0; // type:func size:0x154
+// mode 2: when the room (arg1[1], arg1[2]) changes, releases the slots of state arg0 and finds the group of the .B that holds the room
+kaj_map_set_room = 0x801D50F4; // type:func size:0x230
+// mode 2: fills D_801E7650 (count D_801DFFE0) with directory entries for the room, tagged types 3, 5, 6, within kaj_cdmgr_pool_size(1), qsort by index
+kaj_map_list_room_files = 0x801D5324; // type:func size:0x610
+// mode 2 counterpart of kaj_map_update_city: on a room change lists, counts and loads the files into the other half of the D_801E7830 pair; block.c calls it with the place room
+kaj_map_update_place = 0x801D5934; // type:func size:0x2B0
+// mode 2: turns the offsets of the cached .B (groups, rooms, lists) into pointers; called once by kaj_map_load_place_dir
+kaj_map_fix_place = 0x801D5BE4; // type:func size:0x178
+// resets both city cell states of D_801E7950 (cells -1, counts 0); called by kaj_map_open_city
+kaj_map_reset_cells = 0x801D5D5C; // type:func size:0xCC
+// mode 1: fills D_801E7650 with the directory entries of the cell and its neighbours (kaj_map_next_neighbor), budgeted by pool size, qsort by index
+kaj_map_list_cell_files = 0x801D5E28; // type:func size:0x2F8
+// mode 1: when idle and the cell changed, lists, counts and loads the files of cell (arg0, arg1) into the other half of the D_801E7950 pair; returns 0..3 like kaj_map_update_place
+kaj_map_stream_cell = 0x801D6120; // type:func size:0x42C
+// mode 1: copies up to *arg0 distinct slot ids of the current cell into arg1 when it is ready
+kaj_map_cell_slots = 0x801D654C; // type:func size:0x128
+// mode 1: same, keeping only slots kaj_cdmgr_is_loaded accepts
+kaj_map_cell_loaded_slots = 0x801D6674; // type:func size:0x16C
+// kaj_cdmgr_init, mode 1, caches "\C\CITY.MP;1" in pool 0 as type 2, kaj_map_reset_cells; block.c then waits on kaj_map_load_city_dir
+kaj_map_open_city = 0x801D67E0; // type:func size:0x70
+// 1 when the current cell state (+0xA) is above 0; block.c polls it
+kaj_map_city_ready = 0x801D6850; // type:func size:0x44
+// kaj_cdmgr_init, mode 2, letter D_801DFE44 = arg0, caches sprintf("\B\%c\%s.B;1", arg0, arg1) as type 4, kaj_map_reset_rooms
+kaj_map_open_place = 0x801D6894; // type:func size:0xAC
+// mode 2: copies the 3 position words and 2 room bytes of entry arg0 of the .B into arg1 and arg2
+kaj_map_get_entry = 0x801D6940; // type:func size:0xC4
+// sets the ready field (+0xA) of the current cell state; block.c after kaj_cdmgr_poll returns 1
+kaj_map_set_cell_ready = 0x801D6A04; // type:func size:0x28
+// sets the ready field (+6) of the current room state; block.c after kaj_cdmgr_poll returns 1
+kaj_map_set_room_ready = 0x801D6A2C; // type:func size:0x2C
+// resets both room states of D_801E7830; called by kaj_map_open_place
+kaj_map_reset_rooms = 0x801D6A58; // type:func size:0xBC
+// returns the CITY.MP block when mode is 1
+kaj_map_get_city = 0x801D6B14; // type:func size:0x44
+// returns the .B block when mode is 2
+kaj_map_get_place = 0x801D6B58; // type:func size:0x44
+// returns the directory slot D_801DFE40
+kaj_map_get_dir_slot = 0x801D6B9C; // type:func size:0xC
+// mode 1: (arg0, arg1) is inside the CITY.MP bounds
+kaj_map_in_bounds = 0x801D6BA8; // type:func size:0x100
+// mode 1: directory record of the file of cell (arg0, arg1) layer arg2 via kaj_cdmgr_dir_entry
+kaj_map_cell_file = 0x801D6CA8; // type:func size:0x120
+// qsort comparator of kaj_map_list_*_files: difference of the +4 field (directory index)
+kaj_map_cmp_index = 0x801D6DC8; // type:func size:0x10
+// number of slots of the current room state when ready
+kaj_map_room_slot_count = 0x801D6DD8; // type:func size:0x44
+// 1 when the current room state is ready (+6 > 0); block.c polls it
+kaj_map_place_ready = 0x801D6E1C; // type:func size:0x44
+// mode 2: copies up to *arg0 distinct slot ids of the current room into arg1
+kaj_map_room_slots = 0x801D6E60; // type:func size:0x114
+// mode 2: same, keeping only slots kaj_cdmgr_is_loaded accepts
+kaj_map_room_loaded_slots = 0x801D6F74; // type:func size:0x15C
+// releases slot arg0 from the current room list with kaj_cdmgr_release and sets D_801DFFE4; block.c after uploading a type-6 TIM
+kaj_map_room_release = 0x801D70D0; // type:func size:0x98
+// returns &D_801E7950[D_801DFE49], the current cell state
+kaj_map_get_cell_state = 0x801D7168; // type:func size:0x24
+// number of slots of the current cell state when ready
+kaj_map_cell_slot_count = 0x801D718C; // type:func size:0x44
+// on a cell change releases the slots of state arg0, takes the link layer with kaj_map_cell_link, stores the new cell
+kaj_map_set_cell = 0x801D71D0; // type:func size:0x124
+// 1 when the pair arg0[0..1] differs from (arg1, arg2)
+kaj_map_cell_changed = 0x801D72F4; // type:func size:0x34
+// event.c ring queue {buffer, tail, head, count, capacity}: users only event.c functions; capacity 0x40 entries of 0x14 in kaj_event_init
+kaj_event_queue = 0x801DFAD4;
+// alarm id counter: starts at 0x3E9 in kaj_event_init, decremented by kaj_event_set_alarm
+kaj_event_alarm_id = 0x801DFFC0;
+// flag tested by kaj_event_pop: 1 returns D_801DFFC8 as an event before the queue; cleared by kaj_event_init and kaj_event_flush
+kaj_event_pending = 0x801DFFC4;
+// value returned with the pending event by kaj_event_pop
+kaj_event_pending_data = 0x801DFFC8;
+// timer.c alarm heap {entries, capacity 8, count, full flag, popped id, popped data}: users only timer.c
+kaj_timer_queue = 0x801DFBB8;
+// OpenEvent handle of the vblank counter, closed in kaj_timer_quit
+kaj_timer_event = 0x801DFDEC;
+// tick count before the increment in kaj_timer_handler, tested against D_801E6DB0
+kaj_timer_last_tick = 0x801DFDF0;
+// flag set by kaj_timer_enable, cleared by kaj_timer_disable, tested by the handler
+kaj_timer_enabled = 0x801E6DA8;
+// tick count incremented by the handler; stamps events, alarms and kaj_srand_ticks
+kaj_timer_ticks = 0x801E6DAC;
+// interval of the type-4 event in kaj_timer_handler, 0x258 from kaj_timer_init
+kaj_timer_period = 0x801E6DB0;
+// tss.c table {16, slots, free list, finished list}: "Error Allocating Sharing Table"
+kaj_tss_table = 0x801DFBD0;
+// view.c two buffers (DRAWENV, DISPENV +0x5C, GsOT +0x70, tags +0x84, packets +0x88)
+kaj_view_buffers = 0x801E6FF0;
+// view.c current buffer pointer, swapped by kaj_view_begin_frame
+kaj_view_current = 0x801DFFD0;
+// previous VSync(-1) value in kaj_view_flip
+kaj_view_last_vsync = 0x801DFE0C;
+// SsSetTableSize(table, 1, 3) area in kaj_sound_init, its only user
+kaj_sound_seq_table = 0x801E6DD8;
+// cdmgr.c pool table {id, size, buffer, heap}, count D_801DFE10
+kaj_cdmgr_pools = 0x801DFBE0;
+// number of pools, bound of the "cdmgr.c" asserts
+kaj_cdmgr_pool_count = 0x801DFE10;
+// the 32 cache slots of 0x24 after the 2 state halfwords at D_801E71C8
+kaj_cdmgr_slots = 0x801E71CC;
+// D_801E71CC - 0x24, indexed 1..32 by every kaj_cdmgr slot accessor
+kaj_cdmgr_slots_1 = 0x801E71A8;
+// current slot halfword, written by kaj_cdmgr_load_list to start the chain
+kaj_cdmgr_cur_slot = 0x801E71CA;
+// 32 refcounts built by kaj_cdmgr_count_refs, applied by kaj_cdmgr_load_list
+kaj_cdmgr_refs = 0x801E7188;
+// old data addresses saved by kaj_cdmgr_save_addrs for kaj_cdmgr_relocate
+kaj_cdmgr_old_addrs = 0x801E7108;
+// set by kaj_cdmgr_release, cleared by kaj_cdmgr_clear_dirty
+kaj_cdmgr_dirty = 0x801DFFD8;
+// map mode: 1 city (kaj_map_open_city), 2 place (kaj_map_open_place)
+kaj_map_mode = 0x801DFE38;
+// slot of CITY.MP or of the .B
+kaj_map_slot = 0x801DFE3C;
+// slot of the directory CITY.F or the place .F
+kaj_map_dir_slot = 0x801DFE40;
+// place letter for the %c of the \B, \F, \M paths
+kaj_map_letter = 0x801DFE44;
+// index of the current room state in D_801E7830
+kaj_map_room_cur = 0x801DFE48;
+// index of the current cell state in D_801E7950
+kaj_map_cell_cur = 0x801DFE49;
+// two room states of 0x90
+kaj_map_rooms = 0x801E7830;
+// two cell states of 0x60
+kaj_map_cells = 0x801E7950;
+// file list built by kaj_map_list_*_files
+kaj_map_file_list = 0x801E7650;
+// entry count of D_801E7650
+kaj_map_file_count = 0x801DFFE0;
+// "\C\CITY.MP;1", used once by kaj_map_open_city
+kaj_map_str_city_mp = 0x80173028;
+// "\C\CITY.F;1"
+kaj_map_str_city_f = 0x80173038;
+// "\C\CITY.BC;1"
+kaj_map_str_city_bc = 0x80173044;
+// "\B\%c\%s.B;1"
+kaj_map_str_place_b = 0x80172FF8;
+// "\M\%c\%s.RM;1"
+kaj_map_str_place_rm = 0x80173008;
+// "\F\%c\%s.F;1"
+kaj_map_str_place_f = 0x80173018;
+// action.c: opcode 6 handler of action_update: arg 0 -> func_8018C414 (reaches "\S\OFC.S;1"), 2 -> func_8018C50C (reaches "\S\TWN.S;1") with atoi x,y,z *10 and angle, 1/3 -> func_8018C554 with a name string
+action_cmd_change_scene = 0x80173054; // type:func size:0x1FC
+// action.c: opcode 10 handler of action_update: on the u16 game variable D_801E0368[cmd->unk4] does set, -=, +=, *=, /=, %= with an atoi value, or =, -=, += another variable
+action_cmd_var = 0x80173250; // type:func size:0x20C
+// action.c: pops one command from action_queue each call, switch on opcode 0..14 to the command handlers (action_cmd_var, action_cmd_change_scene, npc_exec_command, SsSepPlay wrapper...); state D_801DFFE8.unk6 3 = blink wait, 4 = timed wait; called by the main loop step func_8018C2FC
+action_update = 0x8017345C; // type:func size:0x4F8
+// action.c: 4th condition of an action set (header +0x2C): with unk4 set, range test of D_801E0768[0]->unk4[1] (weapon slot), else looks for unk8 in the 8 item slots D_801E0768[0]->unk32[]; returns 2 when the condition is unused, inverted by unk2
+action_test_inventory = 0x80173954; // type:func size:0xF0
+// action.c: kaj_malloc 0xC/0x38/n*0xC with "Error Allocating Action Set", "Error Allocating Action", "Error Allocating Argument Handle"; splits the NUL-separated argument strings, appends the set to action_set_list, returns the next read pointer; called per set by the scene loader func_8018FA18
+action_load_set = 0x80173A44; // type:func size:0x39C
+// action.c: evaluates the 4 conditions of a set (2 game variables, D_801E0710 counters, action_test_inventory), on success links its commands into action_queue (front when action_queue_front_flag), returns the chained set found by id in action_set_list; looped on by 12 callers
+action_run_set = 0x80173DE0; // type:func size:0xA60
+// action.c: memsets the current event state D_801DFFE8 (0x14 bytes), then with arg != 0 removes every node of action_queue, else only commands of type 5 or 0xB; called with 1 by action_update when the queue is empty
+action_reset = 0x80174840; // type:func size:0x1A8
+// action.c: rewinds action_queue to its head and inserts the given command there (func_801CCBF4)
+action_push_front = 0x801749E8; // type:func size:0x2C
+// action.c: same queue sweep as action_reset without the state reset: removes all action_queue nodes (arg != 0) or those of type 5 / 0xB; no caller
+action_flush_queue = 0x80174A14; // type:func size:0xFC
+// action.c: free3 of one action set: each command's argument buffer and handle, the command array, the header, the set
+action_free_set = 0x80174B10; // type:func size:0xB8
+// action.c: pops every node of action_set_list and free3s it like action_free_set; called by the scene unload paths func_8017E25C, func_801945E0, func_801A8B38
+action_free_all_sets = 0x80174BC8; // type:func size:0xF0
+// action.c: walks action_set_list for the set whose header id (unk0->unk0) equals arg, NULL when arg < 0 or not found; 10 callers then loop action_run_set on it
+action_find_set = 0x80174CB8; // type:func size:0xB4
+// action.c: given a trigger record (unkA enabled), finds the set of id unk4 and runs its chain with action_run_set; default case of the ENTER event handler func_80189350
+action_run_trigger_enter = 0x80174D6C; // type:func size:0xF4
+// action.c: same as action_run_trigger_enter with the set id at unk6; default case of the LEAVE event handler func_801895E0
+action_run_trigger_leave = 0x80174E60; // type:func size:0xF4
+// action.c: linear search of the 12-byte trigger table D_801E02D8.unk38 (count unk18) by s32 id; action_update opcode 0 then sets its enter/leave set ids and flags
+action_find_trigger = 0x80174F54; // type:func size:0x54
+// action.c: free3 of the trigger table D_801E02D8.unk38, count unk18 cleared; called by the scene unload paths
+action_free_triggers = 0x80174FA8; // type:func size:0x54
+// action.c: sets an NPC's model object (func_8018E56C result): first-time func_8018D2DC with pose 8 when dead (unkF 6), position = NPC pos minus area cell * 12500/32000, RotMatrix from the degree angles unk38..unk3C
+action_place_npc = 0x80174FFC; // type:func size:0x1A0
+// action.c: for every NPC of D_801E02D8.unk3C (count unk1C) scales the position *10, action_place_npc, block lookup func_8017CDA4 into unk48, resets AI fields; called once by the object loader func_801907C8
+action_init_npcs = 0x8017519C; // type:func size:0x158
+// action.c: finds NPC by id, runs its action set unk1A (arg 1, enter) or unk1C (arg 0, leave) through action_run_set, dead NPCs (unkF 6) give set 0x400; case 0xFC of the ENTER/LEAVE event handlers
+action_run_npc_event = 0x801752F4; // type:func size:0x178
+// action.c: ll list head made by kaj_ll_create in main; action_load_set appends each set, action_find_set searches it, action_free_all_sets empties it
+action_set_list = 0x801DFE50;
+// action.c: ll list head made by kaj_ll_create in main; action_run_set inserts commands, action_update pops one per frame, action_reset flushes it
+action_queue = 0x801DFE54;
+// action.c: set by opcode 11 in action_update; the next action_run_set inserts its first command at the queue head and clears it
+action_queue_front_flag = 0x801DFC58;
+// action.c: (n + 1) % 16 counter of action_update state 3, toggles the colour of sprite 0x40A at 0 and 8 (func_801A461C)
+action_blink_count = 0x801DFC5A;
+// no assert (jtbl cut): every function here walks the NPC table D_801E02D8.unk3C, hence prefix npc (people with hp, enter/leave action sets, hostile state); this one sets the model animation by mode via func_8018DA2C (idle 0/3, walk 2/4, 1, hit 9, hurt 7, attack 5/6) and returns 1 on the attack frame
+npc_update_anim = 0x8017546C; // type:func size:0x544
+// npc: per-frame loop over all NPCs: init on first frame, death (unkE 2) runs set unk1E and sound 0x14, then by state calls npc_update_anim with ai_update_stand / ai_update_move / ai_fire; called by the main loop step func_8018C2FC
+npc_update_all = 0x801759B0; // type:func size:0x328
+// npc: opcode 1 handler of action_update: finds NPC by cmd id, sets its enter/leave/death set ids (unk1A/unk1C/unk1E), unk8, unk6, unkF, state unkE (2 = dead), move flags from atoi args
+npc_exec_command = 0x80175CD8; // type:func size:0x2D0
+// npc: damage to an NPC: random defence from stats unkA, halved without the weak-type bit unk12, hp unkC -= dmg; at 0 sets state 2 (dead) and calls func_80197D64 with a score scaled by type; called by the shot handler func_80198720
+npc_apply_damage = 0x80175FA8; // type:func size:0x2F8
+// npc: free3 of the NPC table D_801E02D8.unk3C, count unk1C cleared; called by the scene unload func_8017E25C
+npc_free_all = 0x801762A0; // type:func size:0x54
+// npc: search of the NPC table by id (arg0 0) or by model object id unk16; 8 callers
+npc_find = 0x801762F4; // type:func size:0x7C
+// npc: for every visible NPC with a model, func_8018E6D8 (GsGetLs, GsSetLsMatrix, sort) into the frame's OT; called by the frame draw func_801A0418 next to door_draw_all
+npc_draw_all = 0x80176370; // type:func size:0xF4
+// npc: returns the id of the first other visible NPC whose model contains point (x,y,z) (GsSetLsMatrix + func_8017B7CC), else -2; used by ai_try_move and by the player move func_80196AE0, which turns a hit into event code 0xFC0000 + id
+npc_find_at_point = 0x80176464; // type:func size:0x158
+// npc: refreshes unk48 = func_8017CDA4(x,y,z) (block.c block lookup) for every active NPC
+npc_update_blocks = 0x801765BC; // type:func size:0x98
+// npc: model position = NPC position minus the new area origin (x,y,z) for every NPC; called with door_rebase_all when the player changes area cell (func_801958FC)
+npc_rebase_all = 0x80176654; // type:func size:0xE0
+// npc: NPC radius: body record (npc_find_body of unk14) unkA * 10, 600 when none; used by ai_move_toward as keep-away distance
+npc_get_radius = 0x80176734; // type:func size:0x4C
+// npc: free3 of the NPC body table D_801E02D8.unk40 (count unk24); called by the scene unload paths
+npc_free_bodies = 0x80176780; // type:func size:0x54
+// npc: search of the 0xCC-byte body table D_801E02D8.unk40 by id, NULL when arg < 0; unkA is the radius (npc_get_radius)
+npc_find_body = 0x801767D4; // type:func size:0x68
+// npc: free3 of the NPC stats table D_801E02D8.unk44 (count unk28); called by the scene unload func_8017E25C
+npc_free_stats = 0x8017683C; // type:func size:0x54
+// npc: search of the stats table D_801E02D8.unk44 by id: weapon kind unk2 (shot sounds 0x23..0x27), damage unk8, defence unkA, speed unk10, weak-type bits unk12, range bands unk18/1C/20
+npc_find_stats = 0x80176890; // type:func size:0x68
+// no assert (gp cut): steering, line of sight and firing for one NPC, hence prefix ai; this one walks a Bresenham line over the 2-bit walk grid of ai_cur_grid and returns 0 on a blocked cell, flag 4 stores SquareRoot0 distance, flag 8 ratan2 elevation
+ai_check_line = 0x801768F8; // type:func size:0x534
+// ai: turns heading unk3A toward target heading unk3E by at most 2 * frame time degrees (wraps at 180), then RotMatrix into ai_cur_model
+ai_turn_step = 0x80176E2C; // type:func size:0x190
+// ai: ratan2 heading in degrees to the waypoint (-2), the player D_801E076C (-1) or the NPC of that id
+ai_heading_to = 0x80176FBC; // type:func size:0x154
+// ai: 1 when the player is within 10000 units or on the side the NPC faces (func_8018C790 octant of unk3A)
+ai_player_in_front = 0x80177110; // type:func size:0x15C
+// ai: picks the target: the player when ai_check_line sees him, else the nearest visible other NPC on the same floor; stores it in unk10 (-1 player), sets flag 4 when an NPC stands in the line of fire
+ai_find_target = 0x8017726C; // type:func size:0x39C
+// ai: tries to move by a delta: refuses on npc_find_at_point or when inside the player radius, takes the floor height from func_8017D414, moves the model (RotMatrix) and refreshes the block
+ai_try_move = 0x80177608; // type:func size:0x3B0
+// ai: chooses one of 8 directions (ai_dir_angle) toward the target, waypoint or keeps the current one, skipping the reverse (ai_dir_reverse), and moves with ai_check_line + ai_try_move
+ai_move_toward = 0x801779B8; // type:func size:0xADC
+// ai: 3 in 4 keeps walking the current heading, else ai_move_toward; mode 2 stops when the waypoint cell is reached
+ai_walk = 0x80178494; // type:func size:0x20C
+// ai: moves backwards (negative distance) trying the 7 offsets of ai_probe_angle; used when too close to the player (unkB 3)
+ai_step_back = 0x801786A0; // type:func size:0x12C
+// ai: moves sideways trying offsets 4..1 of ai_probe_angle (-90, 90, -45, 45 degrees); used when an NPC blocks the line of fire (unkB 2)
+ai_sidestep = 0x801787CC; // type:func size:0x12C
+// ai: fire decision: needs the player as target and in the aim cone, chance from stats accuracy unk14 scaled by the range bands, rand() % 100; sets unkB 1 fire, 2 blocked, 3 too close
+ai_decide_fire = 0x801788F8; // type:func size:0x28C
+// ai: turns the NPC straight at the player (ratan2) and RotMatrix into ai_cur_model
+ai_face_player = 0x80178B84; // type:func size:0x180
+// ai: sets the ai_cur_* context for a standing NPC, faces the player or runs ai_find_target, sets fire flag 0x400 when hostile and ai_decide_fire agrees; called by npc_update_all (unkF 0)
+ai_update_stand = 0x80178D04; // type:func size:0x134
+// ai: sets the ai_cur_* context for a moving NPC, speed from stats unk10 * frame time, sidestep / step back / ai_walk by unkB, then ai_find_target and the fire flag
+ai_update_move = 0x80178E38; // type:func size:0x344
+// ai: shot at the player: hit chance from the stats range bands, func_801981D0(npc, weapon kind, damage) on rand() % 100 success, shot sound func_801A2678 0x23..0x28 by weapon kind
+ai_fire = 0x8017917C; // type:func size:0x4B4
+// ai: aim cone test: NPC toward player within 10 degrees (arg1 1) or player toward NPC within 15/25 degrees; callers ai_decide_fire, ai_fire and the player shot func_801985AC
+ai_in_aim_cone = 0x80179630; // type:func size:0x218
+// ai: block of the NPC being updated (npc->unk48, block.c record); its unk88 is the walk grid, unk84 the floor for func_8017D414
+ai_cur_block = 0x801DFC60;
+// ai: walk grid of ai_cur_block (unk88): u16 origin x/z, width, height, 2-bit cells read by ai_check_line
+ai_cur_grid = 0x801DFC64;
+// ai: model object (func_8018E56C of npc->unk16) of the NPC being updated, its matrix set by ai_turn_step and ai_try_move
+ai_cur_model = 0x801DFC68;
+// ai: stats record (npc_find_stats) of the NPC being updated, D_801D7328 when none; read by ai_decide_fire and ai_fire
+ai_cur_stats = 0x801DFC6C;
+// ai: body record (npc_find_body) of the NPC being updated, ai_default_body when none; radius unkA for ai_try_move
+ai_cur_body = 0x801DFC70;
+// ai: default body record used by ai_update_stand / ai_update_move / ai_fire when npc_find_body fails (unkA 600)
+ai_default_body = 0x801D734C;
+// ai: 4 direction indices picked by dx > 0 and dz < 0 in ai_move_toward
+ai_quadrant_dir = 0x801DFC78;
+// ai: reverse of each of the 8 directions (4,5,6,7,0,1,2,3, then 8 = none), read by ai_move_toward
+ai_dir_reverse = 0x801D7418;
+// ai: heading in degrees of the 8 directions (270, 225, 180, 135, 90, 45, 0, 315), read by ai_move_toward and ai_walk
+ai_dir_angle = 0x801D742C;
+// ai: angle offsets 0, 45, -45, 90, -90, 135... tried in turn by ai_step_back and ai_sidestep
+ai_probe_angle = 0x801D7440;
+// door.c: kaj_malloc(0x80) with "Error Allocating DOOR Pointer", optional buffer "Error Allocating DOOR Buffer", sets defaults; called once by the object loader func_8018FED4
+door_create = 0x80185380; // type:func size:0x138
+// door.c: free3 of a door's two buffers (unk78, unk7C) and the door
+door_free = 0x801854B8; // type:func size:0x44
+// door.c: appends a door to the door list D_801DFE80 (func_801CCBF4 when empty, else after the tail); called by func_8018FED4 after door_create
+door_add = 0x801854FC; // type:func size:0x4C
+// door.c: pops every node of the door list and free3s each door like door_free; called by the scene unload paths
+door_free_all = 0x80185548; // type:func size:0x80
+// door.c: walks the door list for the door with id unk0; callers in effect.c look up the two leaves (id - 1) * 2 + i
+door_find = 0x801855C8; // type:func size:0x9C
+// door.c: for every active, visible door with a model, GsGetLs + GsSetLsMatrix and the sort call func_801B34C0 into the frame OT; called by the frame draw func_801A0418 next to npc_draw_all
+door_draw_all = 0x80185664; // type:func size:0x130
+// door.c: door model position = door position minus the new area origin, for every door; called with npc_rebase_all by func_801958FC
+door_rebase_all = 0x80185794; // type:func size:0xC4
+// door.c: finds a door by id and sets unk6, the flag door_draw_all needs (door_create sets 1); func_8019A5D4 code clears it for 40 ids
+door_set_visible = 0x80185858; // type:func size:0xC0
+// door.c: both callbacks of the fade timer made by func_80186128 (0/9 from 0 to 0x1000, 1/10 back): clamps the level into D_801E1040.unkE, at the end SsSepSetVol(level >> 5) and clears the fade flag unk6
+door_fade_step = 0x80185918; // type:func size:0x148
+// block.c: reads a block's data header at +0x8C (mode 2 city: position*100, mode 1 building: raw), kaj_tmd_load up to 4 models (flags 1,2,4,8), arena (flag 0x10, "Error Allocating Arena Buffer"), GsInitCoordinate2, origin from the player cell (unk72*12500); called by block_load_all, block_stream_update, func_8018FC90
+block_setup = 0x80179848; // type:func size:0x408
+// block.c (asm): walks the block list D_801DFE5C, GsGetLs/GsSetLsMatrix, sorts the models at +0x80/+0x7C/+0x78 (flags 2,4,8) of each active visible block with func_801B34C0 (sort-object routine); called from the frame draw func_801A0418
+block_draw_all = 0x80179C50; // type:func size:0x200
+// block.c: block box relative to the player (unk54/58/5C); city mode sets the far flag unkC by SquareRoot0 distance (3537/7073); sets unk8 when the player is inside the arena grid; returns 1 when the player x,z lies inside the box; only caller block_update_visibility
+block_test_player_inside = 0x80179E50; // type:func size:0x2B8
+// block.c: for every block in D_801DFE5C sets unk6 = block_test_player_inside, unk4 = visible (inside, or by the camera octant func_8018C0A0(unk6E) against the box); called each frame by the movement code func_80196048/func_801966B4/func_80196AE0/func_801979B4
+block_update_visibility = 0x8017A108; // type:func size:0x2DC
+// block.c: 12 times kaj_malloc(0x90) "Error Allocating BLOCK Pointer", clears fields, appends each to the block list D_801DFE5C (kaj ll add); called by block_building_main
+block_create_all = 0x8017A3E4; // type:func size:0x150
+// block.c: sets D_801DFC80 = 1, gets up to 12 resource ids (func_801D654C city / func_801D6E60 building), type 5 -> func_8018D5F8, type 6 -> func_801CFBB4, else block_setup into D_801E0000[i]
+block_load_all = 0x8017A534; // type:func size:0x1B4
+// block.c: sets the D_801E0368 flags +0x250/+0x252/+0x254 from hard-coded x,z rectangles of the city; called by block_set_mode and block_stream_update with the player /100 position
+block_set_zone_flags = 0x8017A6E8; // type:func size:0x184
+// block.c: "Can not set City Mode" (arg 2) / "Can not set Building Mode" (arg 1), waits on the stream calls, then block_load_all; called by the scene loader block_building_load and func_801A88B4
+block_set_mode = 0x8017A86C; // type:func size:0x248
+// block.c: per-frame stream poll (func_801D4FA0 with the player position in city mode, func_801D5934 with the building id in building mode); result 3 refills D_801E0000 via block_setup, result 1 restarts with block_load_all
+block_stream_update = 0x8017AAB4; // type:func size:0x1D4
+// block.c: even-odd crossing count of a point against an n-vertex polygon in the x,z plane (doubles, returns n % 2); only caller block_poly_height
+block_point_in_poly = 0x8017AC88; // type:func size:0x290
+// block.c: x,z bounding box of a 3/4-vertex polygon, block_point_in_poly, then the y of the polygon plane from its normal at (x,z); 99999999 when outside
+block_poly_height = 0x8017AF18; // type:func size:0x2D0
+// block.c: walks TMD triangles (primitive mode 0x20, 0x10 bytes each), block_poly_height on each; returns the surface code (bytes 4,5,6 of the primitive) of the first hit and writes the height
+block_hit_tris = 0x8017B1E8; // type:func size:0x200
+// block.c: same as block_hit_tris for TMD quads (mode 0x28, 0x14 bytes each); code 0xFF.. also stores the quad centre in the player object
+block_hit_quads = 0x8017B3E8; // type:func size:0x3E4
+// block.c: RotTrans every TMD triangle and quad of a GsDOBJ2 with the current matrix, returns 1 when the point lies over one (mode 1 also checks y against the polygon y range); callers object.c func_8018F7D0, thing.c func_801A7CF0, func_80176464
+block_point_on_model = 0x8017B7CC; // type:func size:0x3E4
+// block.c: for every active block with a floor model (+0x84, flag 1), optionally only those the player is in, block_hit_tris/block_hit_quads at (x,z); returns the first surface code and writes the height
+block_find_surface = 0x8017BD24; // type:func size:0x22C
+// block.c: collects the surface hit of up to 12 blocks the player is in, returns the one whose height is closest to the given y (abs, start 1600)
+block_find_surface_nearest = 0x8017BF50; // type:func size:0x2E4
+// block.c: RotTrans 4 corner points (D_801E1158+0x2C) and finds the surface code under each in the block floors, then the centre; derives two tilt angles with ratan2 over 300 and 508 from the corner height differences and stores them at D_801E032C[0]+0x10/+0x14
+block_fit_ground_tilt = 0x8017C234; // type:func size:0x7C4
+// block.c: finds the block whose arena (+0x88) points to the old data and repoints it to the new data; caller kaj stream func_801D2B60
+block_replace_arena = 0x8017C9F8; // type:func size:0xD0
+// block.c: kaj_malloc(0x10) "Error Allocating Arena Buffer" or memset the existing one, copies 4 halves and the data pointers (same code as inline in block_setup)
+block_arena_init = 0x8017CAC8; // type:func size:0xD0
+// block.c: kaj_malloc(0x90) "Error Allocating BLOCK Pointer", clears fields, optional kaj_malloc(size) "Error Allocating BLOCK Buffer" marked owned (unk2 = 1); caller func_8018FC90
+block_create = 0x8017CB98; // type:func size:0x14C
+// block.c: free3 the 4 models, the arena, the owned buffer (unk2), then the block itself
+block_free = 0x8017CCE4; // type:func size:0xC0
+// block.c: walks the block list for the active block whose x,z box contains the point (y checked when D_801E0340.unk0 == 1); 11 callers across action/door/thing code
+block_find_at = 0x8017CDA4; // type:func size:0x16C
+// block.c: sets unk40/44/48 of every active block to its position minus the new origin; called by player_wrap_cell with the origin of the new cell
+block_set_origin = 0x8017CF10; // type:func size:0xD4
+// block.c: clears the visible flag unk4 of every active block in the list
+block_hide_all = 0x8017D0E0; // type:func size:0x90
+// block.c: appends one block to the list D_801DFE5C (first add or insert after the tail); caller func_8018FC90 after block_create
+block_list_add = 0x8017D170; // type:func size:0x4C
+// block.c: until the list is empty: free3 the models, arena, owned buffer and block of the current node, func_801CCDF8 removes the node; called by the scene teardowns
+block_free_all = 0x8017D1BC; // type:func size:0xFC
+// block.c: frees only the blocks with an owned buffer (unk2) and removes their nodes; caller func_801A6528
+block_free_owned = 0x8017D2B8; // type:func size:0x138
+// block.c: D_801DFC80 = 0 then func_801D3650 (CdFlush); first call of the building scene teardown
+block_stream_stop = 0x8017D3F0; // type:func size:0x24
+// block.c: block_hit_tris/block_hit_quads over one GsDOBJ2 model, returns the surface code at (x,z) and writes the height
+block_model_surface = 0x8017D414; // type:func size:0x150
+// block.c: surface code 0x80xxyy: stores the 3 bytes at D_801DFC8C..E and sets the D_801E0368 +0x250/+0x252 flags from xx (1, 2, 3); called by event_handle_enter for type 0x80
+block_enter_area = 0x8017D574; // type:func size:0x90
+// block.c: hook stored in D_801DFED4 by block_building_load, called by event_handle_effect_done with the ended effect id (0,4,7,9,10,11,12,13; it starts the next with func_80186128(10,3), (9,3)): sleep texts (Japanese text), warp to D_801D7450[D_801DFE64]
+block_on_effect_done = 0x8017D604; // type:func size:0x4E4
+// block.c: action button handler on the current trigger D_801DFFE8: codes 0xFC/0x10/0x60/0x30, beds 0xF02150..0xF02154 set D_801DFE64 or show (Japanese text) when awake < 6 hours; caller block_update_input on pad 0x20
+block_on_action = 0x8017DAE8; // type:func size:0x288
+// block.c: per-frame building input: pad 0x20 newly pressed -> block_on_action, 0x40 -> cancel the current trigger, else the player control func_80199548; called on message 0 of block_building_run
+block_update_input = 0x8017DD70; // type:func size:0x234
+// block.c: building scene load: D_801DFED4 = block_on_effect_done, block_set_mode(1), sprintf "\S\%s.S;1" with the scene name, scene loader func_801926B4, per-scene setup switch, event_show_clock
+block_building_load = 0x8017DFA4; // type:func size:0x2B8
+// block.c: block_building_load then the message loop (func_801CC378: 0x10 event_handle_enter, 0x20 event_handle_leave, 0x4 event_handle_tick, 0x100 event_handle_effect_done, 0x200 event_handle_mod_finish), then clears the hooks and frees everything (block_free_all and the other module frees)
+block_building_run = 0x8017E25C; // type:func size:0x2A8
+// block.c: hook stored in D_801DFEE4 for scene 23, called by event_handle_enter: trigger codes 0xF0233C/0xF02350/0xF0235A set D_801DFE64 to 5/6/7
+block_on_enter = 0x8017E504; // type:func size:0x40
+// block.c: block_create_all then block_building_run, again with func_8018748C between runs while D_801DFE60 == 1; called by func_8018BDE8
+block_building_main = 0x8017E544; // type:func size:0x50
+// block.c: pad up/down (0x1000/0x4000) moves the selected floor 1..11 (1..5 for building 3) and recolours the CLUTs; 0x20/0x40 warp with func_8018C50C to D_801D74B0[(building*11+floor-12)*3]; only caller block_elevator_run
+block_elevator_input = 0x8017E594; // type:func size:0x408
+// block.c: floor selection loop (func_801CC378 messages, block_elevator_input on message 0) then event_advance_clock(|floors moved| * 5 minutes); caller func_801A9070
+block_elevator_run = 0x8017E99C; // type:func size:0x25C
+// event.c: OpenEvent 0xF3000000/0xF3000001/0xF3000002, "Can not Enable to ENTER Event", "LEAVE Event", "MOD Finish Event", clears D_801DFF50; called by func_8018BDE8
+event_open = 0x8018920C; // type:func size:0x144
+// event.c: handles message 0x10 (ENTER) of the scene loops: copies the trigger into D_801DFFE8, calls hook D_801DFEE4, per type prompts (Japanese text), bus stops (Japanese text), (Japanese text), 0x80 -> block_enter_area
+event_handle_enter = 0x80189350; // type:func size:0x290
+// event.c: handles message 0x20 (LEAVE): copies the trigger into D_801DFFE8, closes the prompt (func_80184094), hook D_801DFEE0, per type 0xFC/0xFD/default release
+event_handle_leave = 0x801895E0; // type:func size:0x12C
+// event.c: handles message 0x100 of the scene loops, posted by the kaj tss task end func_801D137C with the task id that effect.c func_80186128(id, 3) started: func_801D1300 on it, ids 0, 1 (ClearImage, returns done), 11, 12, 13, then the hook D_801DFED4; 10 callers, all scene loops
+event_handle_effect_done = 0x8018970C; // type:func size:0x1B4
+// event.c: handles message 0x200, posted by the "MOD Finish" event handler func_8018E7EC (mod.c) with D_801DFF08 id/status: status 1 steps the state +0x48 of D_801E0710.unk58, else the hook D_801DFEE8; callers block_building_run and 2 other scene loops
+event_handle_mod_finish = 0x801899AC; // type:func size:0x114
+// event.c: DisableEvent and CloseEvent of the three events opened by event_open, clears D_801DFF50
+event_close = 0x801898C0; // type:func size:0x68
+// event.c: handles message 0x4 of the scene loops: event_clock_tick then the hook D_801DFEDC
+event_handle_tick = 0x80189970; // type:func size:0x3C
+// event.c: removes n from the gauge D_801E0710.unk0, n grows with hours awake (unk36 >> 4) and limb state 3 (unk3A[3]), plus an item value every 6th call, then event_draw_gauge; caller event_update_hud when unk44 is set
+event_drain_gauge = 0x80189AC0; // type:func size:0x17C
+// event.c: draws two digits (b/10, b%10) as 7 segments from the bit table D_801D7724 into CLUT 0x409 via func_801A461C; called with (0, day), (1, hour), (2, minute)
+event_draw_clock_digits = 0x80189C3C; // type:func size:0x1AC
+// event.c: maps the 5 limb values D_801E0368+0xB4 (0x801E041C, per-limb health, leads.md 5) to states 0..3 (<0x10, <0xA6, <0xF0, else) and writes the state colour from D_801D7730 into CLUT 0x400 entries 0x40..0x45
+event_draw_limb_status = 0x80189DE8; // type:func size:0x168
+// event.c: per-frame HUD refresh on flags unk44 (event_drain_gauge), unk46 (event_draw_limb_status), unk48 (gauge 0x50..0x5F), and the 3 blinking entries D_801DFD1C..D_801DFD2C; caller func_801979B4
+event_update_hud = 0x80189F50; // type:func size:0x2FC
+// event.c: full HUD redraw: gauge CLUT 0x400 0x10..0x33 from D_801E0710.unk0 (low sound 4), event_draw_limb_status, gauge 0x50..0x5F; caller func_8018BDE8
+event_draw_hud = 0x8018A24C; // type:func size:0x1AC
+// event.c: SetFarColor from the hour D_801E0368+0x7C: ramp by minute at 5 and 18, 0x7A from 6 to 17, 0x2D at 19, gated by D_801E1040.unk0
+event_update_daylight = 0x8018A3F8; // type:func size:0x1F8
+// event.c: minute +1, at 60 hour +1 (and hours awake +1), at 24 day +1 (max 98); redraws the digits, func_8018BB00(day, hour), limb values decay by 4 (0x10 when unk2C) each hour
+event_clock_add_minute = 0x8018A5F0; // type:func size:0x1D0
+// event.c: gauge bar from D_801E0710.unk0 (0..255) into CLUT 0x400 entries 0x10..0x33, starts sound 4 below 1/4 and stops it above; callers event_drain_gauge and 6 others
+event_draw_gauge = 0x8018A7C0; // type:func size:0x10C
+// event.c: draws CLUT 0x400 entries 0x50..0x5F as value[index]*16/100 of the struct at +0x58 (same loop as in event_draw_hud and event_update_hud)
+event_draw_percent_gauge = 0x8018A8CC; // type:func size:0x9C
+// event.c: sets blink flag a (0..2) of D_801DFD1C/1E/20 to b and zeroes its timer D_801DFD22/24/26; clears the CLUT entries when b == 0
+event_set_blink = 0x8018A968; // type:func size:0x98
+// event.c: event_clock_add_minute once, sets the gauge-drain flag unk44 when minute % 10 == D_801E0368+0x1FE, event_update_daylight when asked; only caller event_handle_tick
+event_clock_tick = 0x8018AA00; // type:func size:0xBC
+// event.c: draws day+1, hour and minute with event_draw_clock_digits, stores the daylight switch into D_801E1040.unk0, SetFarColor(0,0,0), event_update_daylight(1); called by block_building_load and 2 scene loaders
+event_show_clock = 0x8018AABC; // type:func size:0x8C
+// event.c: event_clock_add_minute a times without redrawing, then the three digit pairs; block_elevator_run calls it with 5 minutes per floor
+event_advance_clock = 0x8018ABE8; // type:func size:0xC4
+// event.c: MoveImage of a 12x16 strip of sprite 0x40E at x = 0x140 + heading (unk6E, degrees) * 48 / 360; caller func_801979B4
+event_draw_compass = 0x8018AB48; // type:func size:0xA0
+// no assert, prefix player: the 4 functions work on the controlled character (D_801E0620, pos unk54/58/5C, cell unk72/74/76); called with the surface code from block_find_surface: sets the move state unk44, delivers DeliverEvent 0xF3000000 (ENTER) / 0xF3000001 (LEAVE) with the trigger in D_801E0600 when the code changes, returns 0 when the move is blocked
+player_check_ground = 0x80195098; // type:func size:0x4C4
+// player: (asm) rebuilds the view matrix at +0x7C from the angles unk6C/6E/70 (degrees to 4096) with RotMatrix, ApplyMatrixLV, func_801B25D0, recomputes the /100 position; mode 1 folds the cell offset (unk72*12500, unk74*32000) into the position; callers are the warps func_80199370/func_80199EB4 and func_80197370
+player_set_view = 0x8019555C; // type:func size:0x3A0
+// player: when the position leaves +-12500 (x,z) / +-32000 (y) moves the cell unk72/74/76 and rebases every module with the new origin (block_set_origin, func_80176654, func_80185794, func_8018F5E8, func_801A7E10, func_801AC464)
+player_wrap_cell = 0x801958FC; // type:func size:0x2CC
+// player: recomputes the /100 position, MatrixNormal/RotMatrix/ApplyMatrixLV of the view matrix +0x7C, func_801B25D0; mode 1 also sets the model coordinate (translation, RotMatrixZYX of the angles); end of each movement function
+player_update_view = 0x80195BC8; // type:func size:0x228
+// block.c: format of block_building_load, sprintf with the scene name D_801E0340+0x20
+block_str_scene_path = 0x80170374;
+// block.c: 3 ints per index D_801DFE64, the warp target after sleeping or fainting in block_on_effect_done (func_80199EB4 / func_80199370)
+block_wake_positions = 0x801D7450;
+// block.c: {x/10, z/10, direction} per building*11 + floor - 12, warp target of block_elevator_input via func_8018C50C
+block_elevator_stops = 0x801D74B0;
+// block.c: building id copied from D_801E0340+0x18 by block_set_mode, passed to the building stream calls func_801D6940/func_801D5934
+block_building_id = 0x801DFE58;
+// block.c: set to the scene kind when it is 1 by block_building_load, passed to event_show_clock (daylight switch) and event_handle_tick
+block_scene_daylight = 0x801DFE62;
+// block.c: index into block_wake_positions, set from bed triggers 0xF02150..4 in block_on_action and 0xF0233C/50/5A in block_on_enter
+block_wake_index = 0x801DFE64;
+// block.c: the 12 block pointers allocated by block_create_all and filled by block_load_all / block_stream_update
+block_slots = 0x801E0000;
+// event.c: OpenEvent 0xF3000000 handle, "Can not Enable to ENTER Event"
+event_enter_id = 0x801DFEC8;
+// event.c: OpenEvent 0xF3000001 handle, "Can not Enable to LEAVE Event"
+event_leave_id = 0x801DFECC;
+// event.c: OpenEvent 0xF3000002 handle, "Can not Enable to MOD Finish Event"
+event_mod_finish_id = 0x801DFED0;
+// event.c: 7-bit segment masks per digit 0..9 read by event_draw_clock_digits
+event_digit_segments = 0x801D7724;
+// event.c: {r, g, b} 5-bit colours per limb state, packed into CLUT 0x400 by event_draw_limb_status
+event_limb_colors = 0x801D7730;
+// event.c: blink flag of HUD entry 1, set by event_set_blink(0), run by event_update_hud
+event_blink0_on = 0x801DFD1C;
+// event.c: blink flag of HUD entry 2, event_set_blink(1)
+event_blink1_on = 0x801DFD1E;
+// event.c: blink flag of HUD entry 3, event_set_blink(2)
+event_blink2_on = 0x801DFD20;
+// event.c: frame counter of blink 0, stops at 11 in event_update_hud
+event_blink0_timer = 0x801DFD22;
+// event.c: frame counter of blink 1
+event_blink1_timer = 0x801DFD24;
+// event.c: frame counter of blink 2
+event_blink2_timer = 0x801DFD26;
+// event.c: colour written to CLUT 0x400 entry 1 every third frame of blink 0
+event_blink0_color = 0x801DFD28;
+// event.c: colour of CLUT 0x400 entry 2 for blink 1
+event_blink1_color = 0x801DFD2A;
+// event.c: colour of CLUT 0x400 entry 3 for blink 2
+event_blink2_color = 0x801DFD2C;
+// no assert (jtbl cut) and the unit holds 3 modules, so 3 prefixes: menu (memory card screen + pause menu, both modal func_801CC378 loops on sprites 0x200..0x23D), text (Kanji message window, sprites 0x403..0x40D), door (works on the door list D_801DFE80, door.c follows at 0x80185380) menu: for the 4 save slots sprintf "BISLPS-02107GERMS%d" file names and a memory card header ('S','C', 0x11, 1 block, 0x40 title, CLUT D_801D75F4), resets cursor unk8; with arg 1 clears 3 VRAM strips by LoadImage2 of 0x22 bytes
+menu_card_init_slots = 0x8017EBF8; // type:func size:0x234
+// menu: maps a MemCard result 1..7 to a message id 0x66..0x6B in unk0C (or takes an id >= 0x64), SE 0xE for errors, shows it on sprites 0x202/0x203 (func_801A4BC8 frame (id-0x64)/4, %4); 4 callers in the card code
+menu_card_set_message = 0x8017EE2C; // type:func size:0x1C0
+// menu: MemCardOpen of the slot file, reads blocks 2..9 (128 bytes, XOR checksum, falls back to the copy block), memcpys the game variables D_801E0368 and D_801E0710 back, then func_8018C414 / func_8018C50C to enter the saved scene; returns 0x6C (done) or 0x68 (bad data)
+menu_card_load = 0x8017EFEC; // type:func size:0x708
+// menu: MemCardCreateFile when the slot is empty, title (Japanese text) from day/hour/minute, writes header, icon D_801D7614 and 4 checksummed 127-byte chunks twice; MemCardDeleteFile of a new file on error
+menu_card_save = 0x8017F6F4; // type:func size:0x818
+// menu: MemCardGetDirentry "*", counts used blocks, marks the slots whose name matches by strncmp, MemCardReadFile of each header and draws its day/hour/minute digits (func_801A3F90); returns 0x6A when nothing to load or the card is full
+menu_card_scan = 0x8017FF0C; // type:func size:0x394
+// menu: moves the slot cursor unk8 up (arg 1) or down over 4 slots with wrap, skipping empty slots in load mode, highlights sprite 0x200 entry 9+i, SE 1 or 0xF
+menu_card_move_cursor = 0x801802A0; // type:func size:0x11C
+// menu: pad edges of D_801E6DA0: 0x20 confirm picks the next card step (unk10 = 0xA format, 0xC load, 0xD/0xE save), 0x40 cancel (func_8018C1B0), 0x1000/0x4000 menu_card_move_cursor; MemCardExist poll first
+menu_card_handle_input = 0x801803BC; // type:func size:0x380
+// menu: one MemCardSync step: issues MemCardExist / MemCardFormat / menu_card_scan / menu_card_load / menu_card_save by state unk10 (0, 10..14), MemCardAccept on a new card, results through menu_card_set_message
+menu_card_process = 0x8018073C; // type:func size:0x1B4
+// menu: memory card screen loop: MemCardStart, sprites 0x200..0x203, func_801CC378 messages, menu_card_handle_input + menu_card_process each frame, MemCardStop, returns unk2 (game loaded); arg0 = load mode; 3 callers
+menu_card_run = 0x801808F0; // type:func size:0x214
+// menu: pause menu item 1 page: 8 entries (cursor unk6 wraps 0..7, SE 0xF), MoveImage2 of the entry picture, marks 2..5 lit by the game variable D_801E0368[D_801D7694[i]] = 10 / 1000 / 2000
+menu_list_page = 0x80180B04; // type:func size:0x288
+// menu: pause menu item 4 page: fills bar sprites 0x23A/0x23B from D_801E0710 fields and game variables 0x5A..0x5E, plus the 2 equipped weapons found with func_80188FEC (ammo unk30, unk50); arg 1 flips between the two pages
+menu_status_page = 0x80180D8C; // type:func size:0x8C0
+// menu: pause menu item 3 page: two 3-way settings, D_801E0368+0x202 (text speed, read by text_exec_command for 20/10/5) and +0x200, chosen by row unk6, drawn on sprite 0x23D
+menu_options_page = 0x8018164C; // type:func size:0x1CC
+// menu: up/down handler: at the top level moves the item cursor 0..4 (sprite 0x20B y = 0x48 + 16*i) and starts the item sprite animation, inside a page forwards to menu_list_page, the mail list func_8018B69C or menu_options_page; SE 0xF
+menu_move_cursor = 0x80181818; // type:func size:0x24C
+// menu: confirm handler: opens the chosen item (1 list, 2 mail when D_801E0368+0xBE, 3 options, 4 status) or acts inside it; SE 0x11
+menu_confirm = 0x80181A64; // type:func size:0x1AC
+// menu: cancel handler: SE 8, closes the open page (frees sprites 0x237..0x23C, mail func_8018B924) or goes back one level
+menu_back = 0x80181C10; // type:func size:0x11C
+// menu: pad edges of D_801E6DA0: 0x1000/0x4000 menu_move_cursor, 0x8000/0x2000 options left/right, 0x40 menu_back (top level: func_8018C414 leaves), 0x20 menu_confirm
+menu_handle_input = 0x80181D2C; // type:func size:0x270
+// menu: per-frame: cycles three palette entries of sprite 0x208 (ranges 0x90, 0xA0, 0xB0) with random direction flips (rand % 100 < 10/5/15), steps the selected item sprite frame unk1A to 3
+menu_animate = 0x80181F9C; // type:func size:0x364
+// menu: pause menu loop: sprites 0x207..0x20B, BGM SEP 2 (sound_bgm_play), func_801CC378 messages, menu_handle_input + menu_animate per frame, then sound_bgm_stop and frees sprites 0x207..0x23D; caller func_80194E5C
+menu_run = 0x80182300; // type:func size:0x218
+// text: draws a Shift-JIS string into the VRAM of the window sprite text_window_sprite: Krom2RawAdd2 glyph to 4-bit pixels, LoadImage2 4x16 cells, ' ' skips a cell, ',' new line, an ASCII digit sets the colour, stops at arg1 rows
+text_draw_string = 0x80182518; // type:func size:0x348
+// text: typewriter step: draws the glyph at text_pos with the same Krom2RawAdd2 code, advances text_col/text_row; returns 1 when 3 rows are full (with arg1 sets event state 3/8 and shows prompt sprite 0x40A) or the end is reached
+text_draw_next = 0x80182860; // type:func size:0x4D4
+// text: draws one profile line at y D_801D76A4[line], centred for lines 0/1, wraps at 15 cells from line 3; StoreImage2 first to blend over the picture; only caller text_show_profile
+text_draw_line = 0x80182D34; // type:func size:0x36C
+// text: writes n % 1000 as up to 3 full-width Shift-JIS digits (0x82, 0x4F + d), (Japanese text) for 0; used by text_show_profile for age and height
+text_format_number = 0x801830A0; // type:func size:0x14C
+// text: text_show in window 0x404 (arg1 != 0) or 0x403, then func_8018C1B0(arg0, ...) waits arg4 seconds running the frame loop; callers in effect.c and roadmap.c pass messages like (Japanese text)
+text_show_timed = 0x801831EC; // type:func size:0x2C0
+// text: starts typewriter mode in the big window 0x404: resets text_col/text_row/text_pos, ClearImage2 of the window, length strlen, first text_draw_next, then the wait countdown and func_801749E8 (action_push_front) of text_cmd
+text_start_typing = 0x801834AC; // type:func size:0x16C
+// text: profile panel of NPC arg0 (npc_find, npc_find_body): (Japanese text) age, sex D_801D76C4, height, blood type D_801D76D0, name and 2 more lines through text_draw_line on sprite 0x40D
+text_show_profile = 0x80183618; // type:func size:0x1D8
+// text: opcode 5 handler of action_update: state 0 starts typing with delay 20/10/5 from the text speed setting, 1 shows a window with atoi args (choice ids, sound), 3 continues typing, 4 waits; requeues itself with func_801749E8
+text_exec_command = 0x801837F0; // type:func size:0x50C
+// text: narration crawl: kaj tss task (func_801D15C8(4)) stepping 0..strlen with callbacks text_narration_step / text_narration_end, window 0x404, blocks the player (flag 0x100 on D_801E076C[0]->unk42); callers func_80194780 (ending scene) and func_801A4FA4
+text_start_narration = 0x80183CFC; // type:func size:0x18C
+// text: opens window 1 (0x403) or 3 (0x404), stores the two answer ids/sets in D_801DFFE8 +8..+E (state 2 when present), ClearImage2, text_draw_string, SE 0xF/6/5/0xE by arg6; 27 callers
+text_show = 0x80183E88; // type:func size:0x20C
+// text: text_release_cmd, hides sprites 0x403, 0x404, 0x40A, 0x40D and clears the window-open flag D_801E0368+0x24E; 31 callers
+text_close = 0x80184094; // type:func size:0x6C
+// text: when the page-full flag 8 is set (text_draw_next): clears it, state unk6 = 1, hides the prompt sprite 0x40A, SE 0x11; called by the action button handlers block_on_action and func_80193DA8
+text_next_page = 0x80184100; // type:func size:0x60
+// text: resets the running command text_cmd (type 5 in state 3/4 back to 0) and text_window_sprite to -1; called by text_close, text_draw_next and action_reset
+text_release_cmd = 0x80184160; // type:func size:0x64
+// text: same as text_exec_command state 4: text_wait -= frame time, command state 4 (wait) or 3, func_801749E8 of text_cmd; no caller
+text_wait_step = 0x801841C4; // type:func size:0x6C
+// text: same as text_exec_command state 3: clears the window after 3 rows, text_draw_next, then the wait countdown and requeue; no caller
+text_type_step = 0x80184230; // type:func size:0x108
+// text: step callback of the text_start_narration task: stores text_pos in the task, clears the window after 3 rows, text_draw_next on every other call
+text_narration_step = 0x80184338; // type:func size:0xD0
+// text: end callback of the text_start_narration task: text_window_sprite = -1, unblocks the player (clears 0x100 in unk42), task handle D_801E0368+0x248 = -1
+text_narration_end = 0x80184408; // type:func size:0x2C
+// text: while the narration task runs, at text_pos 0x1AA / 0x182 starts the fade func_80186128(0, 3) once and at 0x21A sound_bgm_fade_out(3) once; caller func_80194780 (ending scene)
+text_narration_cues = 0x80184434; // type:func size:0xA0
+// door: copies id, type, position *10 and angle from the record at unk7C, kaj_tmd_load of its model, GsInitCoordinate2, position relative to the cell origin, RotMatrix of the angle, block lookup func_8017CDA4, active; called by the object loader func_8018FED4 after door_create
+door_setup = 0x801844D4; // type:func size:0x1C4
+// door: for every door of D_801DFE80 recomputes the model position from the cell origin (D_801E076C[0] unk72..76), RotMatrix and the block lookup; caller block_set_mode
+door_refresh_all = 0x80184698; // type:func size:0x17C
+// door: moves x (unk14) by speed unk22 * frame time to target unkE; at the end state 3 (opening) goes back to closed or stays open (1), state 2 (closing) becomes 0, and clears the event wait flag 4 of D_801DFFE8
+door_move_x = 0x80184814; // type:func size:0x114
+// door: door_move_x on y (unk18)
+door_move_y = 0x80184928; // type:func size:0x114
+// door: door_move_x on z (unk1C)
+door_move_z = 0x80184A3C; // type:func size:0x114
+// door: door_move_x on the angle (unk20)
+door_move_angle = 0x80184B50; // type:func size:0x11C
+// door: per-frame for every visible door in state 2/3: door_move_x/y/z/angle by axis unk2, then model position and RotMatrix, block lookup when D_801DFC80; called by the main loop step func_8018C2FC
+door_update_all = 0x80184C6C; // type:func size:0x260
+// door: state 3 (open), target = current + dist * 10 on the door axis (angle unscaled), speed signed by direction, return flag unk24
+door_start_open = 0x80184ECC; // type:func size:0x168
+// door: state 2 (close), target = current + dist * 10 on the door axis, speed signed by direction
+door_start_close = 0x80185034; // type:func size:0x168
+// door: opcode 4 handler of action_update: finds the door by id in D_801DFE80, sub 0 door_start_open with atoi distance, speed, return, sub 1 door_start_close; last arg 1 makes the action wait (state 4, flag 4)
+door_exec_command = 0x8018519C; // type:func size:0x1E4
+// sound.c: kaj_malloc(0xC) "Error Allocating SE Pointer", keeps vab id, id, flag and the header buffer, clears the 8 voice slots on the first bank, pushes on the bank stack D_801E02D8 +4 (count +0x14); called after the VAB transfer by func_8019159C
+sound_se_push = 0x801A217C; // type:func size:0x10C
+// sound.c: pops the top SE bank: SsUtKeyOffV its voices in sound_voice_table, SsVabClose, free3 of header and bank; 5 callers
+sound_se_pop = 0x801A2288; // type:func size:0x12C
+// sound.c: pops banks like sound_se_pop while the top bank flag (2nd u16 of the resource) is > 0; callers func_8017E25C (scene unload), func_801945E0, func_801A8B38
+sound_se_pop_scene = 0x801A23B4; // type:func size:0x178
+// sound.c: SsUtKeyOffV of every playing voice of sound_voice_table
+sound_se_stop_all = 0x801A252C; // type:func size:0x88
+// sound.c: SsUtKeyOffV of the voice playing SE id arg0
+sound_se_stop = 0x801A25B4; // type:func size:0xC4
+// sound.c: plays entry arg0 of sound_se_table: finds its bank, scales volume by VAB master, program and tone volume/pan, takes a free or the oldest voice of sound_voice_table, SsUtKeyOnV; 55 callers
+sound_se_play = 0x801A2678; // type:func size:0x5E8
+// sound.c: same as sound_se_play with bank, program, tone, note, volumes and hold flag given as args; callers sound_exec_command and func_8017D604
+sound_se_play_note = 0x801A2C60; // type:func size:0x5EC
+// sound.c: opcode 9 handler of action_update: atoi of 5, 7 or 8 args into sound_se_play_note (volumes 0x7F by default)
+sound_exec_command = 0x801A324C; // type:func size:0x19C
+// sound.c: SsSepOpen of a SEP on bank id 2 ("VAB is not Ready", "Too Many SEQ in This SEP", "Can not Open Specified SEP"), SsSepSetVol per seq, closes the previous one, stores it in D_801E02D8; caller loader func_80190378
+sound_bgm_open = 0x801A33E8; // type:func size:0x1A4
+// sound.c: player move state unk44 (1/3 walk, 2 run): plays SE 3 every 30 / 15 time units of D_801E6DB4 and sets unk4C to a rsin bob 0..50; state 4 plays SE 0xE; caller func_801979B4 (player update)
+sound_footstep_update = 0x801A358C; // type:func size:0x258
+// sound.c: memsets the bank info, "Error sound stack overflow" at 4 banks, id/flag from the first 2 u16, kaj_malloc "Error Allocating SE header", copies the 0x7F8-byte VAB header, returns where the body goes; caller func_80191450
+sound_se_alloc_header = 0x801A37E4; // type:func size:0x18C
+// sound.c: SsVabOpenHead, "Can not Open VAB Header", "Error sound stack overflow"; caller func_80191450
+sound_vab_open_head = 0x801A3970; // type:func size:0x80
+// sound.c: SsVabTransBodyPartly + SsVabTransCompleted, "VAB Data Transfer Error"; called per chunk by func_8019159C
+sound_vab_transfer = 0x801A39F0; // type:func size:0x64
+// sound.c: sound_se_pop until the bank stack is empty; no caller
+sound_se_pop_all = 0x801A3A54; // type:func size:0x4C
+// sound.c: kaj_malloc(0xC) "Error Allocating BGM Handle" (access -1, seq -1) and the data buffer "Error Allocating BGM Buffer"; caller loader func_80190378 before sound_bgm_open
+sound_bgm_create = 0x801A3AA0; // type:func size:0xBC
+// sound.c: SsSepClose and free3 of the current BGM handle in D_801E02D8
+sound_bgm_close = 0x801A3B5C; // type:func size:0x70
+// sound.c: SsSepPlay(seq arg0) of the current SEP when a different valid seq, stops the previous one; called by action_update opcode 3 and menu_run
+sound_bgm_play = 0x801A3BCC; // type:func size:0x8C
+// sound.c: SsSepStop of the playing seq and SsSepSetVol back to the volume D_801E6DB8
+sound_bgm_stop = 0x801A3C58; // type:func size:0x68
+// sound.c: kaj tss task 0xD from volume D_801E6DB8 to 0 over arg0 * 30 frames with sound_bgm_fade_step as callbacks; called by action_update opcode 3 and text_narration_cues
+sound_bgm_fade_out = 0x801A3CC0; // type:func size:0xB4
+// sound.c: callback of the sound_bgm_fade_out task: SsSepSetVol of the current seq to the task level
+sound_bgm_fade_step = 0x801A3D74; // type:func size:0x48
+// sound.c: clears unk4C and the 3 footstep counters, as sound_footstep_update does on state changes
+sound_footstep_reset = 0x801A3DBC; // type:func size:0x18
+// menu: 4 save slot contexts, cursor, mode and state, only used by menu_card_run
+menu_card_state = 0x801E0030;
+// menu: 32-byte 16-colour CLUT copied into each save header at +0x60 by menu_card_init_slots
+menu_card_icon_clut = 0x801D75F4;
+// menu: 128 bytes of 4-bit pixels written as block 1 of the save file by menu_card_save
+menu_card_icon_image = 0x801D7614;
+// menu: format "BISLPS-02107GERMS%d" of the save file names, menu_card_init_slots
+menu_str_save_name = 0x8017041C;
+// menu: save title format (Japanese text), menu_card_save
+menu_str_save_title = 0x80170430;
+// menu: 8 game variable indices (0x10, 0x12, 0x13, 0xF, 0xB, 0x17, 0x18, 0xE) read by menu_list_page
+menu_list_vars = 0x801D7694;
+// menu: sprite of the item being animated (0x20C + item), set by menu_move_cursor, cleared by menu_run
+menu_anim_sprite = 0x801DFC94;
+// menu: palette index of the first colour cycle (0x90..0x9F) of menu_animate
+menu_cycle_pos_a = 0x801DFC98;
+// menu: palette index of the second colour cycle (0xA0..0xAF) of menu_animate
+menu_cycle_pos_b = 0x801DFC9C;
+// menu: palette index of the third colour cycle (0xB0..0xBF) of menu_animate
+menu_cycle_pos_c = 0x801DFCA0;
+// menu: direction flag of menu_cycle_pos_a
+menu_cycle_dir_a = 0x801DFCA4;
+// menu: direction flag of menu_cycle_pos_c
+menu_cycle_dir_c = 0x801DFCA8;
+// text: sprite id of the open window (0x403, 0x404, 0x40D) whose VRAM the draw functions write, -1 when none
+text_window_sprite = 0x801DFCB0;
+// text: cell column of the typewriter, wraps at 16
+text_col = 0x801DFE70;
+// text: row of the typewriter, page full at 3
+text_row = 0x801DFE72;
+// text: current glyph colour, set by ASCII digits in the string
+text_color = 0x801DFE74;
+// text: strlen of the string being typed
+text_len = 0x801DFE76;
+// text: byte offset of the next glyph being typed, also the narration cue position
+text_pos = 0x801DFE78;
+// text: wait countdown after a typed page, 20/10/5 by the text speed setting
+text_wait = 0x801DFE7A;
+// text: once flag of the fade cue in text_narration_cues
+text_cue_fade_done = 0x801DFE7C;
+// text: once flag of the BGM fade cue in text_narration_cues
+text_cue_bgm_done = 0x801DFE7E;
+// text: action command being typed (opcode 5), requeued until done
+text_cmd = 0x801DFCAC;
+// text: y offsets of the 8 profile lines, text_draw_line and text_show_profile
+text_line_y = 0x801D76A4;
+// text: sex strings ((Japanese text), (Japanese text), (Japanese text)) of text_show_profile
+text_sex_names = 0x801D76C4;
+// text: blood type strings ((Japanese text), (Japanese text), (Japanese text), (Japanese text), (Japanese text)) of text_show_profile
+text_blood_types = 0x801D76D0;
+// text: profile format (Japanese text) of text_show_profile
+text_str_profile = 0x801704F0;
+// sound.c: 8 voice slots {kind, SE id, prog, tone, note, bank, voice, playing, age, hold} of sound_se_play / sound_se_play_note
+sound_voice_table = 0x801E1078;
+// sound.c: SE entries {.., bank, prog, tone, note, voll, volr, hold} indexed by sound_se_play
+sound_se_table = 0x801D7B58;
+// sound.c: file name "sound.c" passed to kaj_abend by every sound.c error
+sound_str_file = 0x801DFD7C;
+// sound.c: running clock of sound_footstep_update, wraps at 12000
+sound_footstep_clock = 0x801DFD84;
+// sound.c: last step number (clock / period); a new value plays SE 3
+sound_footstep_count = 0x801DFD88;
+// sound.c: time inside the current step, drives the rsin bob
+sound_footstep_phase = 0x801DFD8C;
+// sound.c: player move state of the previous call to sound_footstep_update
+sound_footstep_prev_state = 0x801DFD90;
+// effect.c (assert "Specified Sprite not Found", line 0x97): kaj_tss_alloc task, mode 2/0xB moves the sprite y (+0xC) from 0xF0 up to its own y, 3/0xC back down to 0xF0, over arg2*30 frames; callers mail_menu_open (0xB) and mail_menu_close (0xC)
+effect_start_sprite_slide = 0x80185A60; // type:func size:0x180
+// effect.c: step callback of effect_start_sprite_slide: sprite y (+0xC) = task value, height (+0x12) = min(0xF0 - y, saved height effect_slide_height)
+effect_sprite_slide_step = 0x801867E8; // type:func size:0x50
+// effect.c: end callback of effect_start_sprite_slide: restores y/height from effect_slide_y/effect_slide_height, hides the sprite (+4 = 0) for modes 3 and 0xC, clears the running task D_801E0368+0x244
+effect_sprite_slide_end = 0x80186838; // type:func size:0x4C
+// effect.c: saved sprite y (+0xC) written by effect_start_sprite_slide, restored by effect_sprite_slide_end
+effect_slide_y = 0x801DFE88;
+// effect.c: saved sprite height (+0x12) written by effect_start_sprite_slide, used as the clamp by effect_sprite_slide_step
+effect_slide_height = 0x801DFE8A;
+// effect.c: builds a 256-entry 15-bit colour ramp for kind 0, 1 or 2 (kind 2 a grey ramp v|v<<5|v<<10) and LoadImage2 it at VRAM (0, 0x1EE) 256x1; only caller effect_flame_small_init
+effect_flame_make_clut = 0x80185BE0; // type:func size:0x258
+// effect.c: fire simulation on two 0x200-byte buffers: random 0/255 bottom rows (rand), each cell = average of 5 neighbours minus 4, swaps buffers, LoadImage2 into effect_flame_small_rect (and CLUT effect_flame_small_cluts when kind 1); run by the frame step func_8018C2FC when D_801E0368+0x252 is set
+effect_flame_small_update = 0x80185E38; // type:func size:0x1D8
+// effect.c: same fire filter on two 0x400-byte buffers (32x32), random bottom row, weighted average (1,2,3,2)/8, LoadImage2 into effect_flame_large_rect; run by func_8018C2FC when D_801E0368+0x250 is set
+effect_flame_large_update = 0x80186010; // type:func size:0x118
+// effect.c: kaj_malloc 2 x 0x200 with "Error Allocating Flame Image Buffer", image rect (0x1B0, 0xE0, 8, 0x20), CLUT rect (0x100, 0x1ED, 16, 1), effect_flame_make_clut(kind)
+effect_flame_small_init = 0x8018647C; // type:func size:0xE0
+// effect.c: clears D_801E0368+0x252 and free3s both effect_flame_small_bufs buffers
+effect_flame_small_free = 0x8018655C; // type:func size:0x64
+// effect.c: kaj_malloc 2 x 0x400 with "Error Allocating Flame Image Buffer", image rect (0x1B0, 0xC0, 0x10, 0x20)
+effect_flame_large_init = 0x80186680; // type:func size:0x98
+// effect.c: clears D_801E0368+0x250 and free3s both effect_flame_large_bufs buffers
+effect_flame_large_free = 0x80186718; // type:func size:0x64
+// effect.c: two-entry pointer array of the 0x200-byte fire buffers, kaj_malloc'd by effect_flame_small_init, swapped by effect_flame_small_update
+effect_flame_small_bufs = 0x801DFCF0;
+// effect.c: second entry of effect_flame_small_bufs, written by effect_flame_small_init
+effect_flame_small_bufs_1 = 0x801DFCF4;
+// effect.c: two-entry pointer array of the 0x400-byte fire buffers of effect_flame_large_init / effect_flame_large_update
+effect_flame_large_bufs = 0x801DFCF8;
+// effect.c: second entry of effect_flame_large_bufs, written by effect_flame_large_init
+effect_flame_large_bufs_1 = 0x801DFCFC;
+// effect.c: flame colour kind given to effect_flame_small_init; kind 1 makes effect_flame_small_update also load a CLUT from D_801D76E4
+effect_flame_small_kind = 0x801DFE8C;
+// effect.c: index (0/1) of the current fire buffer, toggled by effect_flame_small_update
+effect_flame_small_cur = 0x801DFE8E;
+// effect.c: VRAM rect (0x1B0, 0xE0, 8, 0x20) of the small fire image, set by effect_flame_small_init, LoadImage2 target of effect_flame_small_update
+effect_flame_small_rect = 0x801DFE90;
+// effect.c: CLUT rect (0x100, 0x1ED, 16, 1) of the small fire, LoadImage2 target of the D_801D76E4 palettes
+effect_flame_small_clut_rect = 0x801DFE98;
+// effect.c: 0x20-byte (16 colour) CLUTs indexed by effect_flame_small_cur, loaded by effect_flame_small_update when the kind is 1
+effect_flame_small_cluts = 0x801D76E4;
+// effect.c: index (0/1) of the current large fire buffer, toggled by effect_flame_large_update
+effect_flame_large_cur = 0x801DFEA8;
+// effect.c: VRAM rect (0x1B0, 0xC0, 0x10, 0x20) of the large fire, set by effect_flame_large_init
+effect_flame_large_rect = 0x801DFEB0;
+// effect.c: rotates entries 1..14 of the 16-colour buffer effect_clut_cycle_buf by one and LoadImage2 it; run by func_8018C2FC when D_801E0368+0x254 is set
+effect_clut_cycle_update = 0x801865C0; // type:func size:0x70
+// effect.c: rect (0x60, 0x1E6, 16, 1), StoreImage2 of that CLUT into effect_clut_cycle_buf, clears D_801E0368+0x254
+effect_clut_cycle_init = 0x80186630; // type:func size:0x50
+// effect.c: CLUT rect (0x60, 0x1E6, 16, 1) of effect_clut_cycle_init / effect_clut_cycle_update
+effect_clut_cycle_rect = 0x801DFEA0;
+// effect.c: 16 colours stored by effect_clut_cycle_init and rotated by effect_clut_cycle_update
+effect_clut_cycle_buf = 0x801E02A8;
+// effect.c: StoreImage2 of the 16-entry rect D_801DFD00, rotates all 16 colours by one, LoadImage2 back; caller func_80191AB0
+effect_clut_rotate = 0x8018677C; // type:func size:0x6C
+// effect.c: rect used by effect_clut_rotate for its StoreImage2/LoadImage2 pair
+effect_clut_rotate_rect = 0x801DFD00;
+// effect.c: kaj_tss_alloc task, mode 0/9 level 0 -> 0x1000, 1/10 0x1000 -> 0, over arg1*30 frames, both callbacks door_fade_step (screen level D_801E1040+0xE and SsSepSetVol); 11 callers in the scene code
+effect_start_fade = 0x80186128; // type:func size:0x108
+// effect.c: when the fade flag D_801E1040+6 is set: level +0xE = 0x1000 (full) and the flag cleared
+effect_fade_reset = 0x80186230; // type:func size:0x28
+// effect.c: when no fade runs: level D_801E1040+0xE = 0 and the fade flag +6 set; caller func_80194780 (the ending scene)
+effect_fade_set_black = 0x80186258; // type:func size:0x28
+// effect.c: when no fade runs: level D_801E1040+0xE = 0x400 (a quarter of 0x1000) and the fade flag +6 set
+effect_fade_set_dim = 0x80186280; // type:func size:0x2C
+// effect.c (assert "Specified Sprite not Found", line 0xCC): kaj_tss_alloc task type 6 counting frames 1..cols*rows (+0x14 * +0x16) over arg1*30 frames, callbacks effect_sprite_anim_step
+effect_start_sprite_anim = 0x801862AC; // type:func size:0x108
+// effect.c: step of effect_start_sprite_anim: sprite frame row +0x18 = (n-1) / cols, column +0x1A = (n-1) % cols
+effect_sprite_anim_step = 0x80186884; // type:func size:0x8C
+// effect.c: for the 4 slots of effect_alarms: active 0, id -1, kaj_event_flush(2, 0x64 + i); 4 callers at scene start/end
+effect_clear_alarms = 0x801863B4; // type:func size:0x60
+// effect.c: when slot arg0 of effect_alarms is idle: kaj_event_set_alarm(arg2 * 60, 0x64 + arg0, arg1), stores the id and marks it active
+effect_start_alarm = 0x80186414; // type:func size:0x68
+// effect.c: 4 {id, active} alarm slots (D_801E0368+0x204) of effect_start_alarm, reset by effect_clear_alarms
+effect_alarms = 0x801E056C;
+// effect.c: elevator hook put in D_801DFED4 by effect_elevator_enter, called by event_handle_effect_done; for task type 4 shows the floor prompt (Japanese text) when riding (player +0x42 bit 0x80), else rebases both door leaves (door_find (floor-1)*2+i) to the player cell and returns 1
+effect_elevator_on_task_end = 0x80186910; // type:func size:0x1DC
+// effect.c: leaving the elevator (cross): hides sprite 2, kaj_pad_reset(0), camera func_80198CFC placed 0x1194 in front of the player with rsin/rcos of its heading
+effect_elevator_exit = 0x80186AEC; // type:func size:0x194
+// effect.c: both door leaves of the floor (door_find): arg1 1 moves them with func_80184ECC (state 2); 0 writes the next scene name "IDC"/"HTL"/"CMN" (building 28/7/15) and the floor into D_801E0340, moves them with func_80185034 (state 1); sound 0xB
+effect_elevator_move_doors = 0x80186C80; // type:func size:0x278
+// effect.c: elevator pad handler (kaj_pad_read): up 0x1000 / down 0x4000 change the chosen floor and its panel CLUT, cross 0x40 effect_elevator_exit, circle 0x20 on another floor mod_free_pooled then effect_elevator_move_doors(0)
+effect_elevator_input = 0x80186EF8; // type:func size:0x264
+// effect.c: sets the hook D_801DFED4 = effect_elevator_on_task_end, colours the floor panel (sprite 2), puts the camera behind the player (func_80198CFC), kaj_timer_enable
+effect_elevator_enter = 0x8018715C; // type:func size:0x178
+// effect.c: elevator state machine on effect_elevator+6: 3 block_set_mode(1) and riding flag, 4 effect_elevator_move_doors(1), else waits on the door state to show the prompt or to switch floors
+effect_elevator_update = 0x801872D4; // type:func size:0x1B8
+// effect.c: effect_elevator_enter, then kaj_event_get loop: 0 runs effect_elevator_update + effect_elevator_input + func_8018C2FC, 0x100 event_handle_effect_done ends it; kaj_timer_disable and clears D_801DFED4; caller block_building_main
+effect_elevator_run = 0x8018748C; // type:func size:0xD4
+// effect.c: chosen = current = arg0, state 0, floor count 3/4/3 for building 28/7/15 (D_801DFE68+2); caller block_on_action
+effect_elevator_init = 0x80187560; // type:func size:0x84
+// effect.c: elevator state {chosen floor, current floor, floor count, state} used by every effect_elevator_* function
+effect_elevator = 0x801DFEB8;
+// effect.c: floor count field (effect_elevator+4) read by effect_elevator_input as the up wrap limit
+effect_elevator_floor_count = 0x801DFEBC;
+// effect.c: scene name "IDC" copied by effect_elevator_move_doors for building 28
+effect_str_scene_idc = 0x801DFD08;
+// effect.c: scene name "HTL" copied by effect_elevator_move_doors for building 7
+effect_str_scene_htl = 0x801DFD0C;
+// effect.c: scene name "CMN" copied by effect_elevator_move_doors for building 15
+effect_str_scene_cmn = 0x801DFD10;
+// effect.c: file name "effect.c" passed to kaj_abend by the effect.c errors
+effect_str_file = 0x80170560;
+// effect.c: weapon id arg0 in one of the 2 equipped slots (D_801E0710.unk58 +4): mod_free_by_id(id + 0x400), slot -1, switches the current slot (+2) to the other one, mod_find + mod_setup of its model on the player (+0xA0), effect_weapon_calc_rate
+effect_weapon_unequip = 0x801875E4; // type:func size:0x134
+// effect.c: weapon panel of the current weapon (effect_weapon_find): three bars on CLUT 0x401 from record +0x30, +0x52, +0x50, type icon by +2, icon func_801A4BC8(0x402, id / 9, id % 9), prompt (Japanese text); arg0 0 closes the message (func_80184094)
+effect_weapon_draw_panel = 0x80187718; // type:func size:0x260
+// effect.c: per equipped slot value from the WEPN record: base +0x50 scaled by the ratios level D_801E0710+2 / required +0x30 and two stat / requirement pairs, clamped 20..100, stored in slot table +8; 9 callers after each equip or stat change
+effect_weapon_calc_rate = 0x80187978; // type:func size:0x26C
+// effect.c: arg0 != 0: effect_weapon_unequip(arg1) and stock count +0xC[arg1]++; arg0 0: puts arg1 in a free equipped slot (mod_setup of model arg1 + 0x400, effect_weapon_calc_rate) and stock--; caller func_80193880
+effect_weapon_swap_stock = 0x80187BE4; // type:func size:0x140
+// effect.c: room test by kind: 0 fewer than 5 item ids < 100 and a free slot of the 8 item slots (+0x32), 1/3 a free item slot, 4 a free weapon slot, 2 always; caller func_801A14A0
+effect_inventory_has_room = 0x80187D24; // type:func size:0x114
+// effect.c: weapon pad handler of block_update_input: select 0x100 opens the weapon panel (player +0x42 bit 0x8000), up/down cycle the 2 slots with mod_set_anim 5, then circle/select arms (state 3, sound 0x11) and cross disarms (state 1, sound 8) as its prompt says; L2/R2 (1/2) play attack animations 1 and 2 (mod_set_anim) when armed (+0x46)
+effect_weapon_input = 0x80187E38; // type:func size:0x474
+// effect.c: uses ITEM record arg2 (effect_item_find): kind 0 food/drink, vitality func_80199E1C with (Japanese text) and the stomach-ache texts; kind 3 lowers the 5 per-limb values D_801E0368+0xB4, event_draw_limb_status, (Japanese text); returns -1 for no record
+effect_item_use = 0x801882AC; // type:func size:0x4B4
+// effect.c: uses the item chosen in the item menu (effect_item_menu_list[effect_item_sel]) with effect_item_use, then removes it from the 8 inventory slots; caller event_handle_effect_done when the menu slide-out (type 12) ends
+effect_item_use_selected = 0x80188760; // type:func size:0xEC
+// effect.c: arg2 1: sound 0x13, fills effect_item_menu_list from the inventory, mail_menu_open(1, 0x40B, -2, ...) with item names; arg2 0: sound 8 or 0x11 and mail_menu_close
+effect_item_menu_show = 0x8018884C; // type:func size:0x140
+// effect.c: item pad handler: start 0x800 opens the menu (player +0x42 bit 0x4000), prompt (Japanese text), up/down mail_menu_move, circle/cross close with or without a choice; callers block_update_input and 2 scene loops
+effect_item_input = 0x8018898C; // type:func size:0x298
+// effect.c: puts weapon arg0 in a free equipped slot (mod_find(arg0 + 0x400), mod_setup, effect_weapon_calc_rate), else adds it to the stock (+0xC[arg0]++) when arg1; callers func_80199034, func_80199D18
+effect_weapon_add = 0x80188C24; // type:func size:0xC0
+// effect.c: armed flag +0x46 = 1, then mod_setup of the model (id + 0x400) of each equipped weapon on the player and effect_weapon_calc_rate; caller block_building_load
+effect_weapon_load_models = 0x80188CE4; // type:func size:0x104
+// effect.c: clears the weapon state of D_801E0710.unk58 (+0x44, +0x48, count +0, model +0x4C, armed +0x46); caller block_building_run
+effect_weapon_reset = 0x80188DE8; // type:func size:0x24
+// effect.c: called by mod_update_all on each frame of the player weapon animation 2: when the frame equals the WEPN record +0x4C, sets player flag 0x400 and fires func_80199A94(weapon id, 1)
+effect_weapon_check_fire_frame = 0x80188E0C; // type:func size:0xAC
+// effect.c: lists equipped weapon ids (arg0 != 0, returns 1 when both slots are full) or the stock ids of the 18 (0x12) weapon kinds (returns 1 when a slot is free and the stock not empty), count in *arg1
+effect_weapon_list = 0x80188EB8; // type:func size:0xE0
+// effect.c: free3 of the WEPN chunk table (D_801E02D8 +0x58, loader case 0x4E504557 "WEPN") and count +0x30 cleared
+effect_weapon_free_records = 0x80188F98; // type:func size:0x54
+// effect.c: searches the WEPN chunk table (D_801E02D8 +0x58, count +0x30) for id arg0; 9 callers
+effect_weapon_find = 0x80188FEC; // type:func size:0x68
+// effect.c: adds item arg0 to the first free of the 8 inventory slots (+0x32, count +0x30); kind 2 stores arg0 - 100 in +0x42 instead; callers func_80199034, func_80199CC0
+effect_item_add = 0x80189054; // type:func size:0x70
+// effect.c: removes item arg0 from the 8 inventory slots (count +0x30--); kind 2 resets +0x42 to 0xF
+effect_item_remove = 0x801890C4; // type:func size:0x8C
+// effect.c: free3 of the ITEM chunk table (D_801E02D8 +0x48, loader case 0x4D455449 "ITEM") and count +0x2C cleared
+effect_item_free_records = 0x80189150; // type:func size:0x54
+// effect.c: searches the ITEM chunk table (D_801E02D8 +0x48, count +0x2C) for id arg0; callers effect_item_use, mail_menu_draw_item_name
+effect_item_find = 0x801891A4; // type:func size:0x68
+// effect.c: index into effect_item_menu_list of the chosen item, -1 for none; set by effect_item_input, read by effect_item_use_selected
+effect_item_sel = 0x801DFEC0;
+// effect.c: 1 once the item prompt is shown by effect_item_input, cleared when the menu closes
+effect_item_prompt_shown = 0x801DFEC4;
+// effect.c: set when D_801E0710 vitality +0 is 0xFF (full) or an item already filled it; passed as the over-eating flag of effect_item_use
+effect_item_full = 0x801DFEC6;
+// effect.c: up to 8 item ids filled by effect_item_menu_show and given to mail_menu_open as the menu list
+effect_item_menu_list = 0x801E02C8;
+// mail.c: kaj_malloc(0x20) with "Error Allocating MAIL Handler", up to 4 page sprites (func_801A3DD4 from the chunk offsets), saves their height/texture v, list entry sprite 0x217 + id; caller the IFF_ID_MAIL loader func_80190108
+mail_create = 0x8018ACAC; // type:func size:0x470
+// mail.c: scrolls the open mail by one line up/down over its pages (128 lines each, offset +6), moves the scrollbar sprite y to 41 + 114 * v / max; caller func_80181D2C
+mail_scroll = 0x8018B11C; // type:func size:0x448
+// mail.c: lays out the mail list: 9 visible entries from mail_list_top at y 0x33 + 16 n, CLUT entry 9 highlight on the selection, entry 7 colour by the read flag
+mail_list_refresh = 0x8018B564; // type:func size:0x138
+// mail.c: moves the list selection up/down within the count D_801E0368+0xBE, scrolls mail_list_top / mail_list_row, scrollbar y 41 + 114 * sel / (n - 1), sound 0xF; caller func_80181818
+mail_list_move = 0x8018B69C; // type:func size:0x174
+// mail.c: kaj_malloc(count * 8) with "Error Allocating Mail List", fills it from the 32 per-mail bytes of D_801E0368+0xC0 (0x80 received, 0x40 read, low 6 bits order), mail_list_refresh; caller func_80181A64
+mail_list_open = 0x8018B810; // type:func size:0x114
+// mail.c: writes the read flags back into the per-mail bytes, free3 of mail_list, releases the 32 entry sprites 0x217..0x236; caller func_80181C10
+mail_list_close = 0x8018B924; // type:func size:0x124
+// mail.c: mail arg0 < 32 not yet received: its byte gets 0x80 | order (count D_801E0368+0xBE incremented)
+mail_receive = 0x8018BA48; // type:func size:0xB8
+// mail.c: called by event_clock_add_minute with (day D_801E0368+0x7A, hour +0x7C): gives mail_receive the scheduled mails (e.g. day 0 hour 10 mail 0xE) under game-variable conditions
+mail_check_schedule = 0x8018BB00; // type:func size:0x150
+// mail.c: closes the open mail (D_801E02D8+0x4C): marks its list entry read, restores the entry and scrollbar sprites saved by mail_create, releases sprites 0x213..0x216, free3; caller func_80181C10
+mail_free = 0x8018BC50; // type:func size:0xF4
+// mail.c: returns the mail id (+0) of entry arg0 of mail_list; caller func_80191AB0
+mail_list_get_id = 0x8018BD44; // type:func size:0x1C
+// mail.c: action command handler (caller action_update): mail_receive(cmd->unk0->unk4)
+mail_cmd_receive = 0x8018BD60; // type:func size:0x2C
+// mail.c: returns the read flag 0x40 of the byte of mail arg0; caller func_801932F8
+mail_is_read = 0x8018BD8C; // type:func size:0x5C
+// called by __SN_ENTRY_POINT and starts with __main(), the call gcc emits only at the top of main; then kaj_init, the 7 kaj_ll_create lists, event_open, and the endless loop that resets the game state and runs the scene D_801E0340 (0 func_80194E5C, 1 block_building_main, 2 func_801A9070)
+main = 0x8018BDE8; // type:func size:0x2B8
+// mail.c (unit prefix): read only by main: 0 on the first run, then 1; when set the loop keeps D_801E0368+0x200/+0x202 across the reset and passes it to func_801A5254
+mail_main_restarted = 0x801DFD48;
+// mail.c (unit prefix): angle in degrees wrapped to 0..359, then 45-degree sectors centred on 0, 45, 90 ... mapped to 2, 1, 0, 7, 6, 5, 4, 3; callers in the NPC steering code (ai_move_toward, ai_walk)
+mail_angle_to_dir8 = 0x8018C0A0; // type:func size:0xD0
+// mail.c (unit prefix): when the scene-change flag D_801E0340+0xA is set, clears it, kaj_pad_reset(0) and returns 1; 8 scene loops test it
+mail_take_scene_change = 0x8018C170; // type:func size:0x40
+// mail.c (unit prefix): waits arg3 seconds (arg3 * 30 frames, minus the ticks D_801E6DA0+0x14 per frame) while running the kaj_event_get loop (event_handle_*) and func_8018C2FC each frame; 9 callers
+mail_wait = 0x8018C1B0; // type:func size:0x14C
+// mail.c (unit prefix): one game frame: action_update, npc_update_all and mod_npcrec_update_all (mode < 2), mod_update_all, the three effect updates (effect_flame_small_update, effect_clut_cycle_update, effect_flame_large_update) by the D_801E0368 flags, then func_801A0418(mode)
+mail_step_frame = 0x8018C2FC; // type:func size:0x118
+// mail.c (unit prefix): requests scene 0 with path "\S\OFC.S;1" in D_801E0340 (+0xC), entry point and angle, plus a counter-based flag +6; 5 callers (action_cmd_change_scene, ...)
+mail_goto_ofc = 0x8018C414; // type:func size:0xF8
+// mail.c (unit prefix): requests scene 2 with path "\S\TWN.S;1" and position x, y, z, angle in D_801E0340; 8 callers
+mail_goto_twn = 0x8018C50C; // type:func size:0x48
+// mail.c (unit prefix): requests scene 1 (building, block_building_main) with a 3-letter scene name strncpy'd to D_801E0340+0x20 and the floor/door codes 0xF6/0xF9; 5 callers
+mail_goto_building = 0x8018C554; // type:func size:0x1FC
+// "\S\OFC.S;1", used once by mail_goto_ofc
+mail_str_ofc_path = 0x80170A68;
+// "\S\TWN.S;1", used once by mail_goto_twn
+mail_str_twn_path = 0x80170A74;
+// mail.c (unit prefix): adds or subtracts 360 until the angle is in 0..359; 12 callers (ai_*, mod_npcrec_update_all)
+mail_wrap_angle = 0x8018C750; // type:func size:0x40
+// mail.c (unit prefix): angle wrapped to 0..359 then quadrants 45..135, 135..225, 225..315, else mapped to 0, 6, 4, 2 (the even mail_angle_to_dir8 values); caller ai_player_in_front
+mail_angle_to_dir4 = 0x8018C790; // type:func size:0x80
+// mail.c (unit prefix): 0 for 1, 0x144 for 2, then + 0x195 + (i - 3) * 0xA2 per level; caller func_80197D64 stores it as the next threshold of the experience D_801E0710+4 while level +2 < 100
+mail_exp_for_level = 0x8018C810; // type:func size:0x54
+// mail.c: draws the ITEM name (effect_item_find(arg2) +4, 12 Shift-JIS chars) with Krom2RawAdd2 font bitmaps converted to 4-bit pixels, LoadImage2 into the sprite arg0 at row arg1; caller mail_menu_draw for list kind -2
+mail_menu_draw_item_name = 0x8018C864; // type:func size:0x30C
+// mail.c: menu highlight (func_801A4824 CLUT range, cursor entry colour), and when asked redraws the visible rows: icons with func_801A3F90 or item names with mail_menu_draw_item_name, row y j * 0x11 + 0xC
+mail_menu_draw = 0x8018CB70; // type:func size:0x1DC
+// mail.c: kaj_malloc a row buffer filled with 0xEE and LoadImage2 it on the 6 menu rows of the sprite (step 0x11), free3; callers mail_menu_open, event_handle_effect_done
+mail_menu_clear_rows = 0x8018CD4C; // type:func size:0x154
+// mail.c: moves the cursor of mail_menu up (arg0 1) or down, wrapping or scrolling the window, sound 0xF, mail_menu_draw; returns the selected index; 4 callers (effect_item_input, ...)
+mail_menu_move = 0x8018CEA0; // type:func size:0x1D8
+// mail.c: when mail_menu is closed (+0 == 0): busy flag D_801E0368+0x24C, state 2, sprite, list and colours, mail_menu_clear_rows for the item list, mail_menu_draw, effect_start_sprite_slide(0xB, sprite, 2); event_handle_effect_done sets state 1 at the end
+mail_menu_open = 0x8018D078; // type:func size:0x128
+// mail.c: when mail_menu is open (state 1): state 2 and effect_start_sprite_slide(0xC, sprite, 2); the slide end sets state 0
+mail_menu_close = 0x8018D1A0; // type:func size:0x50
+// mail.c: returns the mail_menu state +0 (0 closed, 1 open, 2 sliding); 8 callers
+mail_menu_get_state = 0x8018D1F0; // type:func size:0x10
+// mail.c: unless sliding, resets the cursor, sets the list arg1, hides the old sprite and shows sprite arg0 (func_801A4A68), mail_menu_draw; caller func_801A14A0
+mail_menu_set_list = 0x8018D200; // type:func size:0x94
+// mail.c: returns entry arg0 of the mail_menu list (+0x1C), -1 out of range; caller func_801A14A0
+mail_menu_get_entry = 0x8018D294; // type:func size:0x48
+// mail.c: selection menu state at D_801E0368+0x224 (state, cursor, window, sprite, list): every mail_menu_* function, opened by mail_menu_open
+mail_menu = 0x801E058C;
+// mail.c: kaj_malloc'd array of 8-byte entries {mail id, flag byte, read} from mail_list_open, freed by mail_list_close
+mail_list = 0x801DFD30;
+// mail.c: scrollbar sprite 0x20C (func_801A44B8) whose y (+0xC) mail_list_move and mail_list_open set
+mail_scrollbar = 0x801DFD34;
+// mail.c: first visible list entry, 9 rows shown by mail_list_refresh, moved by mail_list_move
+mail_list_top = 0x801DFF04;
+// mail.c: cursor row 0..8 inside the visible window, moved by mail_list_move
+mail_list_row = 0x801DFF06;
+// mail.c: saved texture v (sprite +0x1C +0x12) of page 1 of the open mail, written by mail_create, restored by mail_scroll
+mail_page_tex_v_0 = 0x801DFEF0;
+// mail.c: saved texture v of page 2, mail_create / mail_scroll
+mail_page_tex_v_1 = 0x801DFEF2;
+// mail.c: saved texture v of page 3, mail_create / mail_scroll
+mail_page_tex_v_2 = 0x801DFEF4;
+// mail.c: saved texture v of page 4, mail_create / mail_scroll
+mail_page_tex_v_3 = 0x801DFEF6;
+// mail.c: saved height (+0x12) of page 1 of the open mail, mail_create / mail_scroll
+mail_page_height_0 = 0x801DFEF8;
+// mail.c: saved height of page 2, mail_create / mail_scroll
+mail_page_height_1 = 0x801DFEFA;
+// mail.c: saved height of page 3, mail_create / mail_scroll
+mail_page_height_2 = 0x801DFEFC;
+// mail.c: saved height of page 4, mail_create / mail_scroll
+mail_page_height_3 = 0x801DFEFE;
+// mail.c: y (+0xC) of the list entry sprite saved by mail_create before it moves it to 0x33, restored by mail_free
+mail_entry_saved_y = 0x801DFF00;
+// mail.c: y (+0xC) of the scrollbar mail_scrollbar saved by mail_create, restored by mail_free
+mail_scrollbar_saved_y = 0x801DFF02;
+// file name "mail.c" passed to kaj_abend by the mail.c errors
+mail_str_file = 0x801DFD38;
+// mod.c: model setup: kaj_tmd_map, kaj_tmd_load, kaj_malloc "Error Allocating GsOBJTABLE2", "GsDOBJ2 Table", "GsCOORDINATE2", "GsCOORD2PARAM", "TOD Table", kaj_tod_init_table, GsInitCoordinate2 on parent arg1, plays frame 0 of animation arg3 (kaj_tod_set_packet); 11 callers
+mod_setup = 0x8018D2DC; // type:func size:0x31C
+// mod.c: kaj_malloc(0x94) with "Error Allocating MOD Pointer" on resident data arg0, mod_setup with animation 8 for an NPC of type 6 else 0, mod_list_add; caller block_load_all (resource type 5)
+mod_create = 0x8018D5F8; // type:func size:0xE4
+// mod.c: relocation callback of kaj_cdmgr_relocate: finds the model whose data is arg0 and moves every pointer (TMD with kaj_tmd_unmap, TOD table, GsDOBJ2) by the distance to arg1
+mod_relocate = 0x8018D6DC; // type:func size:0x1DC
+// mod.c: frees every model of mod_list without its own buffer (+6 == 0), marking its "NPC " record (id >= 0x440) or NPC unloaded; caller effect_elevator_input before a floor change
+mod_free_pooled = 0x8018D8B8; // type:func size:0x174
+// mod.c: starts TOD animation arg1 (table +0x24) of model arg0: first frame packets, frame range +0xC..+0xE, loop flag +0x10 from arg2, speed 1..3 by D_801E6DB4; 11 callers
+mod_set_anim = 0x8018DA2C; // type:func size:0x178
+// mod.c: draws the player model D_801E0710+0x50 (GsGetLs, GsSetLsMatrix, func_801B34C0 per object) and, when arg1 is 1 and the weapon flag (D_801E0710.unk58 +0x44) is set, the current weapon model (id + 0x400 in mod_list); caller func_801A0418
+mod_draw_player = 0x8018DBA4; // type:func size:0x2B4
+// mod.c: per frame, advances the animation frames of every playing model (kaj_tod_set_frame), effect_weapon_check_fire_frame for weapon animation 2, and at the end delivers DeliverEvent(0xF3000002, 2) with the model in mod_finished; caller func_8018C2FC
+mod_update_all = 0x8018DE58; // type:func size:0x1E4
+// mod.c: model whose animation just ended, set by mod_update_all before DeliverEvent(0xF3000002), read by mod_finish_handler
+mod_finished = 0x801DFF08;
+// mod.c: kaj_ll list of the models (kaj_ll_create in main), walked by every mod_* lookup
+mod_list = 0x801DFF0C;
+// mod.c: kaj_malloc(0x94) with "Error Allocating MOD Pointer", and a data buffer of arg1 bytes with "Error Allocating MOD Buffer" (owned flag +6); caller the object loader func_801905A0
+mod_alloc = 0x8018E03C; // type:func size:0x108
+// mod.c: free3 of the setup tables, the TMD objects, the owned data buffer and the model itself
+mod_free = 0x8018E144; // type:func size:0xAC
+// mod.c: data-release callback of kaj_cdmgr_free_data: model whose data is arg0, mod_free_by_id, marks its "NPC " record or NPC unloaded
+mod_on_data_free = 0x8018E1F0; // type:func size:0x108
+// mod.c: appends the model to mod_list (kaj_ll_insert_before when empty, else kaj_ll_insert_after the tail); callers mod_create and func_801905A0
+mod_list_add = 0x8018E2F8; // type:func size:0x4C
+// mod.c: mod_find(arg0), then frees it (tables, owned buffer) and kaj_ll_remove_to_prev; callers effect_weapon_unequip, mod_on_data_free
+mod_free_by_id = 0x8018E344; // type:func size:0x138
+// mod.c: frees every model and empties mod_list, then mod_npcrec_reset_all; 3 callers at scene end
+mod_free_all = 0x8018E47C; // type:func size:0xF0
+// mod.c: returns the model of mod_list whose data id (*+0x90) is arg0; 26 callers
+mod_find = 0x8018E56C; // type:func size:0xA4
+// mod.c: mod_set_anim on the model found by id arg0 in mod_list; callers npc_update_all, mod_cmd_npcrec
+mod_set_anim_by_id = 0x8018E610; // type:func size:0xC8
+// mod.c: draws one model (GsGetLs, GsSetLsMatrix, func_801B34C0 per object); callers npc_draw_all and mod_npcrec_draw_all
+mod_draw = 0x8018E6D8; // type:func size:0x114
+// mod.c: handler of the 0xF3000002 event opened by event_open: UnDeliverEvent, kaj_event_push(0x200) with the mod_finished id and type, clears the script wait bit 8 of D_801DFFE8, restarts looping animations
+mod_finish_handler = 0x8018E7EC; // type:func size:0xCC
+// mod.c: model position from an "NPC " record (+8/+0xC/+0x10) minus the player cell * 12500 / 32000, rotation degrees +0x14..+0x18 * 4096 / 360 with RotMatrix; 5 callers
+mod_place_npcrec = 0x8018E8B8; // type:func size:0x148
+// mod.c: step callback of mod_npcrec_move_to: record position and angles = start + delta * step / steps, then mod_place_npcrec
+mod_npcrec_move_step = 0x8018EA00; // type:func size:0x244
+// mod.c: kaj_tss_alloc(0x4C) task type 5 moving an "NPC " record to x, y, z and angles over arg7*30 frames (angle deltas folded into -180..180), callbacks mod_npcrec_move_step / mod_npcrec_move_end
+mod_npcrec_move_to = 0x8018EC44; // type:func size:0x290
+// mod.c: action command on the "NPC " record cmd->unk4 (atoi arguments): 0 set +2, 1 set model and show it, 3 mod_npcrec_move_to (x, y, z * 10), 4 mod_set_anim_by_id, both with the script wait bits; caller action_update
+mod_cmd_npcrec = 0x8018EED4; // type:func size:0x360
+// mod.c: per frame over the "NPC " records (D_801E02D8+0x50, count +0x20): sets up pending models, turns the others toward the player (ratan2) and mod_place_npcrec; caller func_8018C2FC
+mod_npcrec_update_all = 0x8018F234; // type:func size:0x1F4
+// mod.c: shows "NPC " record arg0 when its game variable D_801E0368[arg0] is set or arg1: positions *10 once, mod_setup of its model, mod_place_npcrec; callers block_building_load, func_8019430C
+mod_npcrec_show = 0x8018F428; // type:func size:0x114
+// mod.c: free3 of the "NPC " chunk table (D_801E02D8+0x50, loader case 0x2043504E) and count +0x20 cleared
+mod_npcrec_free_table = 0x8018F53C; // type:func size:0x54
+// mod.c: searches the "NPC " chunk table (D_801E02D8+0x50, count +0x20) for id arg0; callers mod_free_pooled, mod_on_data_free
+mod_npcrec_find = 0x8018F590; // type:func size:0x58
+// mod.c: shown records' models get position = record - (arg0, arg1, arg2); caller player_wrap_cell
+mod_npcrec_rebase_all = 0x8018F5E8; // type:func size:0x100
+// mod.c: mod_draw of every shown "NPC " record model; caller func_801A0418
+mod_npcrec_draw_all = 0x8018F6E8; // type:func size:0xE8
+// mod.c: for every shown record model with a TMD, GsSetLsMatrix and block_point_on_model(x, y, z); returns the record id hit or -2; caller func_80196AE0
+mod_npcrec_find_at_point = 0x8018F7D0; // type:func size:0x14C
+// mod.c: clears the shown state +0x1B of every "NPC " record; caller mod_free_all
+mod_npcrec_reset_all = 0x8018F91C; // type:func size:0x3C
+// mod.c: end callback of mod_npcrec_move_to: final position and angles, mod_place_npcrec, clears the script wait bit 0x10 of D_801DFFE8
+mod_npcrec_move_end = 0x8018F958; // type:func size:0xC0
+// mod.c: "NPC " chunk table pointer (D_801E02D8+0x50), indexed by mod_cmd_npcrec and mod_npcrec_show
+mod_npcrec_table = 0x801E0328;
+// file name "mod.c" passed to kaj_abend by the mod.c errors
+mod_str_file = 0x801DFD4C;
+// object.c: IFF chunk 'ASET' (0x54455341) handler of object_read_chunks: kaj_malloc(size) with "Error Allocating IFF_ID_ASET Buffer", reads the rest of the chunk, calls action_load_set object_aset_count times, free3
+object_load_aset = 0x8018FA18; // type:func size:0x278
+// object.c: chunk 'BLCK' handler: block_create, reads the chunk into o->unk8C, block_setup(o, mode), block_list_add
+object_load_blck = 0x8018FC90; // type:func size:0x244
+// object.c: chunk 'DOOR' handler: door_create, reads the chunk into o->unk7C, func_801844D4, door_add
+object_load_door = 0x8018FED4; // type:func size:0x234
+// object.c: chunk 'MAIL' handler (only the mail whose id matches): kaj_malloc with "Error Allocating IFF_ID_MAIL Buffer", builds the mail handler with func_8018ACAC (mail.c "Error Allocating MAIL Handler") into D_801E0324, free3
+object_load_mail = 0x80190108; // type:func size:0x270
+// object.c: chunk 'MIDI' handler: func_801A3AA0 allocates, reads the chunk into o->unk8, func_801A33E8 (sound.c unit)
+object_load_midi = 0x80190378; // type:func size:0x228
+// object.c: chunk 'MOD ' / 'MOE ' handler: func_8018E03C allocates the mod, reads the chunk into o->unk90, func_8018E2F8 (mod.c unit)
+object_load_mod = 0x801905A0; // type:func size:0x228
+// object.c: handler for chunks AREA, ACTR, NPC , CHAR, ENMY, ITEM, TXT , WEPN: "Error Allocating IFF_ID_OTHER Buffer", stores the buffer in the scene table D_801E02D8 (+0x38..+0x5C by tag), ACTR also runs action_init_npcs
+object_load_other = 0x801907C8; // type:func size:0x364
+// object.c: chunk 'SPRT' handler: "Error Allocating IFF_ID_SPRT Buffer", func_801A3DD4 builds the sprite, func_801A43A8 adds it, free3
+object_load_sprt = 0x80190B2C; // type:func size:0x260
+// object.c: chunk 'TEXT' handler: "Error Allocating IFF_ID_TEXT Buffer", uploads it with kaj_tim_upload_hdr, free3
+object_load_text = 0x80190D8C; // type:func size:0x24C
+// object.c: chunk 'THNG' handler: func_801A7A04 allocates the thing, reads the chunk, func_801A6C34, func_801A7B58 (thing.c unit)
+object_load_thng = 0x80190FD8; // type:func size:0x234
+// object.c: chunk 'TIM ' handler (only the TIM whose id matches): "Error Allocating IFF_ID_TIM Buffer", kaj_tim_upload(buf, 0), free3
+object_load_tim = 0x8019120C; // type:func size:0x244
+// object.c: chunk 'VABH' handler: func_801A37E4 opens the VAB header into D_801E05C0, reads the chunk, func_801A3970
+object_load_vabh = 0x80191450; // type:func size:0x14C
+// object.c: chunk 'VABB' handler: streams the VAB body through a 0x2000 "vab_trans_buffer" with func_801A39F0, then func_801A217C, free3
+object_load_vabb = 0x8019159C; // type:func size:0x2EC
+// object.c: chunk 'VECL' handler: reads the chunk, func_801AC158 then func_801AC214 (vehicle.c unit)
+object_load_vecl = 0x80191888; // type:func size:0x228
+// object.c: loop over the open IFF context: reads each 0x800 chunk header, switch on the tag (ASET BLCK DOOR MAIL MIDI MOD SPRT TIM TEXT THNG VABB VABH VECL and the OTHER tags) to the object_load_* handlers, skips the rest by seek; mode 0/1/2 animate loading sprites 0x40F/0x207/0x410
+object_read_chunks = 0x80191AB0; // type:func size:0x8D0
+// object.c: kaj_malloc of the 0x10 context with "Error Allocation IFF Context", "Error Allocating IFF Header", "Error Allocating IFF Chunk Header"; CdSearchFile "\SCE.S;1" or "\RES.R;1", seeks to entry N from object_sce_offsets / object_res_offsets, reads the header sector
+object_iff_open = 0x80192380; // type:func size:0x334
+// object.c: object_iff_open(SCE.S, D_801E0340.unk4), reads chunk range 0 and range unk6+1 with object_read_chunks (mode 2), sets object_aset_count, frees the context; called by block_building_load, object_room_init and thing.c
+object_load_scene = 0x801926B4; // type:func size:0x258
+// object.c: object_iff_open(RES.R, 2) then object_read_chunks with id 0x400: keeps only the MOD chunks whose id is one of the 2 weapon slots D_801E0768[0]->unk4[i] + 0x400; called once by func_80188CE4
+object_load_weapon_mods = 0x8019290C; // type:func size:0x138
+// object.c: object_iff_open(RES.R, 7) then object_read_chunks with id arg0: keeps the MAIL chunk of that id (via func_8018BD44) and the TIM of that id; called by func_80181A64 on its mail case
+object_load_mail_by_id = 0x80192A44; // type:func size:0x148
+// object.c: object_iff_open(RES.R, arg0), object_read_chunks with progress mode arg1, frees the context; 7 callers with entries 0..0xE
+object_load_res = 0x80192B8C; // type:func size:0x144
+// object.c: object_iff_open(RES.R, 0xC) then object_read_chunks keeping the TIM (and MAIL) chunk of id arg0; called by thing.c func_801A88B4 when the cached id changes
+object_load_res12_by_id = 0x80192CD0; // type:func size:0x148
+// object.c: sets the context chunk range to table entry arg1+1, copies its fields to D_801E02D8 and object_aset_count, seeks there (the code inlined in object_load_scene); no caller
+object_iff_seek_entry = 0x80192E18; // type:func size:0x108
+// object.c: free3 of the IFF context header buffer, chunk buffer and the context itself (same 3 free3 that end every object_load_*)
+object_iff_close = 0x80192F20; // type:func size:0x40
+// object.c (whole unit uses object_): room scene ENTER handler installed in D_801DFEE4 by object_room_init: for ids 0xFA0000..0xFA0003 shows the prompts (Japanese text), (Japanese text), (Japanese text), (Japanese text)
+object_room_on_enter = 0x80192F60; // type:func size:0x108
+// object.c: room EFFECT_DONE handler installed in D_801DFED4: type 4 (Japanese text) (drowsy), 9/10 sleep, 11 weapon deposit/withdraw prompt ((Japanese text)), 12 object_room_storage_open
+object_room_on_effect_done = 0x80193068; // type:func size:0x290
+// object.c: called every room frame: unless already ringing, checks game variables (hour, day, counters, D_801E0710 fields) and picks one phone message 0x65..0x74 not yet heard (bit in D_801E0368.unkB2) into object_room_phone, plays sound 0x33, sets alarm 0x402
+object_room_check_calls = 0x801932F8; // type:func size:0x588
+// object.c: input of the weapon storage menu object_room_storage: circle deposits/withdraws with func_80188EB8 / func_80187BE4, messages (Japanese text), (Japanese text), (Japanese text); cross closes; up/down toggles
+object_room_storage_input = 0x80193880; // type:func size:0x528
+// object.c: circle action in the room: 0xFA0000 leave desk, 0xFA0001 computer (object_room_exit_action 1), 0xFA0002 diary (2), 0xFA0003 phone, 0xF0FF0A/14/1E open storage, 0xF0FF46 sofa nap ((Japanese text)), else action_find_set + action_run_set
+object_room_do_action = 0x80193DA8; // type:func size:0x398
+// object.c: per-frame room input: kaj_pad_read, object_room_storage_input, func_8018898C, circle -> object_room_do_action, cross at the desk stands up, else func_80199548 (player move)
+object_room_update_input = 0x80194140; // type:func size:0x1CC
+// object.c: room setup: object_load_scene, action_reset, mod 0x40 placement, installs the 5 room handlers (object_room_pick_desk_action, on_alarm, on_enter, on_effect_done, on_mod_finish) into D_801DFF50/D_801DFED8/D_801DFEE4/D_801DFED4/D_801DFEE8, resets object_room_phone
+object_room_init = 0x8019430C; // type:func size:0x2D4
+// object.c: room teardown: clears the 5 handlers, action_reset, action_free_triggers, action_free_all_sets, npc_free_bodies, door_free_all, frees the TXT chunks, then block_free_all etc. by object_room_exit_action
+object_room_quit = 0x801945E0; // type:func size:0x1A0
+// object.c: room main: object_room_init, then the kaj_event_get loop (event_handle_enter, event_handle_leave, event_handle_effect_done, event_handle_mod_finish, alarms), object_room_update_input, object_room_check_calls, random ambient alarm 0x400; object_room_quit
+object_room_main = 0x80194780; // type:func size:0x2AC
+// object.c: opens the weapon storage menu (sprite 0 rows 4/5, prompt D_80170E18 (Japanese text)), optional message first when arg0 == 0
+object_room_storage_open = 0x80194A2C; // type:func size:0x124
+// object.c: handler in D_801DFF50 called by player_check_ground: when seated at the desk picks 0xFA0000..0xFA0003 by the player angle unk6E (computer 130..170, diary 180..220, phone 220..250)
+object_room_pick_desk_action = 0x80194B50; // type:func size:0xD4
+// object.c: room alarm handler in D_801DFED8 (called by func_80189928): 0x400 animates mod 0x440, 0x401 plays the call, 0x402 hang-up timeout, 0x403 resets object_room_phone
+object_room_on_alarm = 0x80194C24; // type:func size:0x128
+// object.c: room MOD_FINISH handler in D_801DFEE8 (event_handle_mod_finish): phone mod 0x40 picked up -> plays the call or rings back, put down -> clears object_room_phone
+object_room_on_mod_finish = 0x80194D4C; // type:func size:0x110
+// object.c: scene mode 0 of the main loop func_8018BDE8: loops object_room_main; exit 1 runs the computer func_80182300, exit 2 the diary save func_801808F0 (MemCard) then func_8018C414 ("\S\OFC.S;1")
+object_room_run = 0x80194E5C; // type:func size:0xAC
+// object.c: plays phone message arg0: action_find_set + action_run_set loop with a reset D_801DFFE8, else animates D_801E0760[0] with func_8018DA2C
+object_room_play_call = 0x80194F08; // type:func size:0xA4
+// object.c: OpenEvent(0xF3000000, 2, 0x1000, this) callback set by event_open: UnDeliverEvent, pushes event 0x20 (LEAVE) for the previous area D_801E0610 when pending, event 0x10 (ENTER) for D_801E0600, copies current to previous
+object_deliver_area_events = 0x80194FAC; // type:func size:0xEC
+// object.c: incremented per chunk by object_read_chunks; in mode 0 every 6 chunks steps the loading bar, in mode 1 counts up to 16
+object_load_chunk_count = 0x801DFF10;
+// object.c: loading bar frame of sprite 0x40F (< 11), advanced by object_read_chunks
+object_load_bar_step = 0x801DFF14;
+// object.c: number of action sets in the scene, from the chunk table entry field +0x10; loop count of object_load_aset
+object_aset_count = 0x801DFF1C;
+// object.c: CdlLOC of the opened SCE.S/RES.R entry, saved by object_iff_open, base of every seek in object_load_*
+object_iff_file_pos = 0x801DFF20;
+// object.c: byte offsets of the RES.R entries, indexed by entry in object_iff_open (15 entries, research leads)
+object_res_offsets = 0x801D7744;
+// object.c: byte offsets of the SCE.S scenes, indexed by scene in object_iff_open (24 entries, research leads)
+object_sce_offsets = 0x801D7780;
+// object.c: weapon storage menu state: unk0 open, unk2 deposit/withdraw, unk4 stage, unk6 selection; users object_room_* only
+object_room_storage = 0x801DFF28;
+// object.c: phone state: unk0 ringing, unk2 1 take / 2 make / 3 / 4, unk4 message id 0x65..0x74; users object_room_* only
+object_room_phone = 0x801DFF30;
+// object.c: why the room loop ended: 0 none, 1 computer, 2 diary; read by object_room_run and object_room_quit
+object_room_exit_action = 0x801DFF38;
+// roadmap.c: finds sprites 0x405, 0x406, 0x407 with func_801A44B8 into D_801E07C0, kaj_abend "Road Map Parts not Found" "roadmap.c"
+roadmap_init = 0x8019A5D4; // type:func size:0x90
+// roadmap.c: clears D_801E07C0 and the 3 road map part sprites set by roadmap_init; called by the thing.c unload func_801A8B38
+roadmap_quit = 0x8019A664; // type:func size:0x40
+// roadmap.c: returns D_801E07C0.unk0; 3 callers refuse input while it is non-zero
+roadmap_get_state = 0x8019A6A4; // type:func size:0x10
+// roadmap.c (whole unit uses roadmap_): emits one POLY_F3 (len 4, code 0x20) per clipped triangle for the F3/F4 handlers, applies daylight (GPF), depth cue (DPCS) and brightness by D_801DFF74 flags
+roadmap_add_clipped_f3 = 0x8019A6B4; // type:func size:0x27C
+// roadmap.c: same as roadmap_add_clipped_f3 for POLY_G3 (len 6, code 0x30), used by the G3/G4 handlers
+roadmap_add_clipped_g3 = 0x8019A930; // type:func size:0x448
+// roadmap.c: primitive handler 0 installed by roadmap_init_draw: Clip3FP then roadmap_add_clipped_f3
+roadmap_draw_f3 = 0x8019AD78; // type:func size:0x784
+// roadmap.c: primitive handler 1: Clip3GP then roadmap_add_clipped_g3
+roadmap_draw_g3 = 0x8019B4FC; // type:func size:0x970
+// roadmap.c: primitive handler 2: DivideFT3 with roadmap_divpoly3, SetShadeTex
+roadmap_draw_ft3 = 0x8019BE6C; // type:func size:0x920
+// roadmap.c: primitive handler 3: DivideGT3 with roadmap_divpoly3
+roadmap_draw_gt3 = 0x8019C78C; // type:func size:0xA44
+// roadmap.c: primitive handler 4: Clip4FP then roadmap_add_clipped_f3
+roadmap_draw_f4 = 0x8019D1D0; // type:func size:0x8EC
+// roadmap.c: primitive handler 5: Clip4GP then roadmap_add_clipped_g3
+roadmap_draw_g4 = 0x8019DABC; // type:func size:0xBCC
+// roadmap.c: primitive handler 6: DivideFT4 with roadmap_divpoly4, SetShadeTex
+roadmap_draw_ft4 = 0x8019E688; // type:func size:0xA9C
+// roadmap.c: primitive handler 7: DivideGT4 with roadmap_divpoly4
+roadmap_draw_gt4 = 0x8019F124; // type:func size:0xCB4
+// roadmap.c: builds a SPRT (code 0x64) with color from roadmap_sprite_colors scaled by brightness, then a DR_MODE (SetDrawMode), LoadImage when the sprite is flagged dirty; callers func_801A4554 and roadmap_draw_sprite_frame
+roadmap_add_sprite = 0x8019FDD8; // type:func size:0x314
+// roadmap.c: when roadmap_flash is on, counts its timer down by D_801E6DB4 and adds a full-screen 320x240 semi-transparent TILE in its color
+roadmap_draw_flash = 0x801A00EC; // type:func size:0x1DC
+// roadmap.c: draw init, called once by the boot func_8018BDE8: installs roadmap_draw_f3..gt4 into roadmap_prim_handlers, sets roadmap_divpoly3/4 (ndiv 3, 320x240), D_801E1040 defaults, clears roadmap_flash, InitClip
+roadmap_init_draw = 0x801A02C8; // type:func size:0x150
+// roadmap.c: one frame: computes roadmap_daylight_level, roadmap_brightness, roadmap_ft_color_*, kaj_view_begin_frame, draws sprites, mods, npc_draw_all, flash, things, door_draw_all, vehicles, block_draw_all, kaj_view_flip; 8 callers
+roadmap_draw_frame = 0x801A0418; // type:func size:0x1D4
+// roadmap.c: draws the single sprite arg0 alone in a frame (kaj_view_begin_frame, roadmap_add_sprite, kaj_view_flip); called by object_read_chunks for the loading sprites
+roadmap_draw_sprite_frame = 0x801A05EC; // type:func size:0xA4
+// roadmap.c: starts roadmap_flash with color (arg0, arg1, arg2) and duration arg3 unless one is running; callers action_update and func_80195DF0-unit hit colors (0xFF,0,0) etc.
+roadmap_start_flash = 0x801A0690; // type:func size:0x30
+// roadmap.c: the TILE part of roadmap_draw_flash as a function (320x240 semi-transparent, OT slot 0x10); no caller
+roadmap_add_flash_tile = 0x801A06C0; // type:func size:0x160
+// roadmap.c: gun shop list: player level D_801E0712/20 (0..2), weapons 1..12 but 10 by required level func_80188FEC()->unk30, qsort with roadmap_cmp_weapon_level, keeps 6 into roadmap_shop_weapons
+roadmap_shop_pick_weapons = 0x801A0820; // type:func size:0x158
+// roadmap.c: shop talk menu: arg0 != 0 shows the 3-topic chooser (sprite 3 rows 4..6, D_801DFF78 = 0), else closes it or opens the list of topic D_801DFF78 (D_801D7A92 / D_801D7AB0 / D_801D7ACE) with func_8018D078
+roadmap_shop_topic_menu = 0x801A0978; // type:func size:0x1D0
+// roadmap.c: clerk replies after a choice: (Japanese text), (Japanese text), (Japanese text), (Japanese text), then closes the menu func_8018D1A0
+roadmap_shop_say_reply = 0x801A0B48; // type:func size:0x210
+// roadmap.c: fades D_801E1040.unkE between 0x80 and 0x1000 frame by frame (func_8018C2FC) and sets the sequence volume with SsSepSetVol to match; arg0 = fade in
+roadmap_fade_screen_music = 0x801A0D58; // type:func size:0x184
+// roadmap.c: ends a shop deal by shop type: gun shop (Japanese text) with level advice (roadmap_shop_weapon_advice), map shop (Japanese text), course (Japanese text) with roadmap_fade_screen_music, food via func_801882AC; resets D_801E1058
+roadmap_shop_finish = 0x801A0EDC; // type:func size:0x5C4
+// roadmap.c: pad input of the shop menus (circle, cross, up, down) driving D_801E1058.unk2 stages, item checks func_80199CC0 / func_80199D18, (Japanese text); returns 0 when no shop menu is open; caller block_update_input
+roadmap_shop_update_input = 0x801A14A0; // type:func size:0x618
+// roadmap.c: opens the first shop menu for shop type 3..9 (order menus by hour D_801E0368.unk1F8, gun shop via roadmap_shop_pick_weapons, info 0x300600 else roadmap_shop_topic_menu), func_8018D078
+roadmap_shop_open_menu = 0x801A1AB8; // type:func size:0x408
+// roadmap.c: shop entry setup called by block_building_load: resets D_801E1058, saves the hour, hides the doors outside the shop's 10 with door_set_visible, installs roadmap_shop_on_enter / roadmap_shop_on_leave into D_801DFEE4 / D_801DFEE0
+roadmap_shop_init = 0x801A1EC0; // type:func size:0x114
+// roadmap.c: for shop types 4..7 and exit arg1 picks (x, z, angle) in roadmap_shop_exit_points and calls func_8018C50C(x, 0, z, angle, 1), the "\S\TWN.S;1" town scene change; caller block_on_action
+roadmap_shop_exit_to_town = 0x801A1FD4; // type:func size:0xD4
+// roadmap.c: roadmap_shop_topic_menu(0, 1); called by block_building_run
+roadmap_shop_close_topic = 0x801A20A8; // type:func size:0x24
+// roadmap.c: ENTER handler in D_801DFEE4: area type 0x30 with index < 11 (shop 3) or < 6 (shop 6) sets D_801E1058.unk8 = 1 (at the counter)
+roadmap_shop_on_enter = 0x801A20CC; // type:func size:0x50
+// roadmap.c: LEAVE counterpart in D_801DFEE0: same test, clears D_801E1058.unk8
+roadmap_shop_on_leave = 0x801A211C; // type:func size:0x50
+// roadmap.c: qsort comparator of roadmap_shop_pick_weapons: difference of the s16 level fields
+roadmap_cmp_weapon_level = 0x801A216C; // type:func size:0x10
+// roadmap.c: full-screen flash request {on, timer, r, g, b}; users roadmap_start_flash, roadmap_draw_flash, roadmap_init_draw only
+roadmap_flash = 0x801DFF68;
+// roadmap.c: daylight light level from D_801E1040.unk8[0] (*42 + *2/3 + 0x600, the event_update_daylight formula), GPF scale in the polygon handlers
+roadmap_daylight_level = 0x801DFF60;
+// roadmap.c: copy of the brightness D_801E1040.unkE per frame, GPF scale when D_801DFF74 & 4
+roadmap_brightness = 0x801DFF64;
+// roadmap.c: r of the POLY_FT3/FT4 color, 0x60 by default, from daylight in roadmap_draw_frame
+roadmap_ft_color_r = 0x801DFF70;
+// roadmap.c: g of the POLY_FT3/FT4 color
+roadmap_ft_color_g = 0x801DFF71;
+// roadmap.c: b of the POLY_FT3/FT4 color
+roadmap_ft_color_b = 0x801DFF72;
+// roadmap.c: DivideFT3/DivideGT3 work area (ndiv 3, 320, 240 set by roadmap_init_draw)
+roadmap_divpoly3 = 0x801E07D0;
+// roadmap.c: DivideFT4/DivideGT4 work area (ndiv 3, 320, 240)
+roadmap_divpoly4 = 0x801E09F0;
+// roadmap.c: InitClip buffer (InitClip(&this, 0x150, 0x100, 0xE4, 0x6E, 0xFFFF)) in roadmap_init_draw
+roadmap_clip_buf = 0x801E0D30;
+// roadmap.c: 8 entries of 0x20, handler at +0x18 = roadmap_draw_f3..gt4, set by roadmap_init_draw
+roadmap_prim_handlers = 0x801E2DB0;
+// roadmap.c: rgb table indexed by sprite field unk8 in roadmap_add_sprite
+roadmap_sprite_colors = 0x801DFD6C;
+// roadmap.c: the 6 weapon ids offered by the gun shop, written by roadmap_shop_pick_weapons, menu list of roadmap_shop_open_menu
+roadmap_shop_weapons = 0x801D7A68;
+// roadmap.c: advice strings (3 per entry) chosen by required level vs player level in roadmap_shop_finish
+roadmap_shop_weapon_advice = 0x801D7B34;
+// roadmap.c: (x, z, angle) triples per shop type and exit, passed to func_8018C50C (town position) by roadmap_shop_exit_to_town
+roadmap_shop_exit_points = 0x801D77E0;
+// no assert, prefix player (same as unit game/80195098, player_check_ground): every function here works on the controlled character D_801E0620 (pos unk54/58/5C, angles unk6C/6E/70) or its stats D_801E0710 collision fallback: called by player_move_on_foot / player_move_in_train when player_check_ground blocks the move; steps through states 0,1,2,4,3 nudging x/z by +-2 (x10 off mode 2) along D_801DFF40/44, returns -1 when all tries fail
+player_try_slide = 0x80195DF0; // type:func size:0x258
+// x step sign (+-2, x10) chosen by player_try_slide state 0 and reused by its later states; only user player_try_slide
+player_slide_dx = 0x801DFF40;
+// z step sign (+-2, x10) chosen by player_try_slide state 0; only user player_try_slide
+player_slide_dz = 0x801DFF44;
+// player_update case unk46 2/3 (set to 2 train / 3 subway by sprite_station_board_train): moves the offset D_801E1118.unk2C/30 inside the carriage, RotTrans by the carriage matrix D_801E032C into unk54/5C, player_check_ground, player_try_slide on block
+player_move_in_train = 0x80196048; // type:func size:0x40C
+// car seat placement: adds dx/dz/angle to the vehicle D_801E032C, rebuilds its RotMatrixZXY, RotTrans of the seat offset D_801E1158.unk1C into the player pos (y - 0x172), player angle = seat angle + car yaw, wraps 0..359
+player_place_in_car = 0x80196454; // type:func size:0x260
+// player_update case unk46 1: car motion from D_801E1158 (speed unk10, steering unk18 via SquareRoot0), player_place_in_car, func_8017C234 ground test, undoes the move on 0xFFFF/0xFF00 failure
+player_move_in_car = 0x801966B4; // type:func size:0x42C
+// player_update case unk46 0 (and modes 0/1): walk/strafe from unk50/unk4E by rsin/rcos of yaw, probes 600 ahead for mods (func_8018F7D0, 0xF7xxxx), npcs (func_80176464, 0xFCxxxx), things (func_801A7CF0, 0xFDxxxx) else ground, player_check_ground, player_try_slide
+player_move_on_foot = 0x80196AE0; // type:func size:0x6F4
+// called once by main func_8018BDE8: memsets D_801E0710 (HP unk0 = 0xC9, level unk2 1, next exp unk8 0x144, stats 1), D_801E0770 (8 item slots -1, 0xF) and D_801E0620 (pos 0x5C30/-0x1004, RotMatrix, GsInitCoordinate2), links them at D_801E0710.unk58/5C
+player_init = 0x801971D4; // type:func size:0x19C
+// scene entry placement by mode: 0 fixed room spots (0xCE4,-0x384,0x1AF4 or 0xDAC,-0x640,0x2BC), 1 city (SetFogNearFar 0x30D4), 2 from the D_801E0340 position (fog 0x1388), 3 origin; resets the trigger state D_801E0600/0610 and calls player_set_view; 5 callers incl. block city mode and title
+player_place_for_scene = 0x80197370; // type:func size:0x318
+// end of death: if infected (D_801E0710.unk4A) and not yet mutant, saves the stats into D_801E0368.unk62, sets them all to 100 and loads scene D_801DFD60 "CMN" via func_8018C554; else sets D_801E0340.unk0[4] (ends the main game loop) and unkA
+player_finish_death = 0x80197688; // type:func size:0x1B0
+// "CMN" scene name passed to func_8018C554 by player_finish_death
+player_str_scene_cmn = 0x801DFD60;
+// called by player_update when HP D_801E0710.unk0 <= 0: sets dying flag 0x800 on unk42, in a vehicle (unk46) goes straight to player_finish_death, else player_start_move_to the fall pose (angle -0x4B) whose end callback finishes the death
+player_start_death = 0x80197838; // type:func size:0x17C
+// per-frame player step from the main loop step func_8018C2FC: death check, clamps pitch -0x19..0x41 and wraps yaw, dispatches on unk46 to player_move_on_foot / player_move_in_car / player_move_in_train, func_801A358C
+player_update = 0x801979B4; // type:func size:0x1FC
+// 6 (level, exp) pairs at D_801E0710.unk14..unk2A: adds arg1 to pair arg0, levels up past 0x144 / (lvl-2)*0xA2+0x195, max 100, refreshes the weapon state func_80187978; callers func_80175FA8 (shot on npc) and player_take_hit (pair 5)
+player_add_skill_exp = 0x80197BB0; // type:func size:0x1B4
+// adds arg0 to exp D_801E0710.unk4; while >= next unk8: level unk2++ (max 100), next = func_8018C810(level), stats unkC..unk12 += rand()%3 capped 100
+player_add_exp = 0x80197D64; // type:func size:0x1D0
+// 15% returns 0, else picks 1..4 from the relative direction 0..7 with 30% chances; result indexes the per-part damage D_801E0368.unkB4 in player_take_hit
+player_pick_hit_part = 0x80197F34; // type:func size:0x29C
+// hit by an npc shot (caller ai shot code): defense from stats unkC/unkE/unk10/unk12/unk28 by attack kind, player_add_skill_exp(5), adds the rest to part damage unkB4[player_pick_hit_part], part 0 also takes HP and sets infected unk4A, red flash func_801A0690
+player_take_hit = 0x801981D0; // type:func size:0x3DC
+// scans the npc array D_801E02D8.unk3C (count unk1C) for the nearest live, targetable npc in range of the current weapon (func_80179630), stores it in D_801E0710.unk4C
+player_pick_target = 0x801985AC; // type:func size:0x174
+// on player flag 0x400 (set by effect_weapon_check_fire_frame): hit chance from the target distance vs the WEPN record ranges unk54/58/5C, damage unk52 scaled, rand()%100, then func_80175FA8(target, kind, damage, miss)
+player_shoot_target = 0x80198720; // type:func size:0x3BC
+// step callback (unk30) of the task made by player_start_move_to: lerps pos and angles from start to end by unk24/unk26 frames
+player_move_to_step = 0x80198ADC; // type:func size:0x220
+// starts a func_801D15C8 task (0x4C) moving the player from its pos/angles to (arg2..arg4, arg5..arg7) over arg8*30 frames, angle deltas wrapped to +-180, sets unk42 |= 2; step player_move_to_step, end player_move_to_done; 6 callers
+player_start_move_to = 0x80198CFC; // type:func size:0x338
+// action command handler (caller action_update): sub-op 0 item func_80189054/func_801890C4, 1 player_start_move_to with atoi x,y,z *10, 2 weapon func_80188C24/func_801875E4, 3 flag 0x100, 4 HP add with floor
+player_exec_command = 0x80199034; // type:func size:0x33C
+// full recovery: restores the saved stats if mutant ((Japanese text)), else (Japanese text) / (Japanese text); clears part damage unkB4, advances the clock 0x3C, warps the player to (arg0, arg1, arg2) with player_set_view
+player_recover = 0x80199370; // type:func size:0x1D8
+// pad bits arg2 to motion: 0x1000/0x4000 pitch, 0x8000/0x2000 yaw (car or train camera D_801E1118.unk34/36 when unk46), 0x40/0x10 back/forward with run ramp unk4A and flag 0x1000, 4/8 strafe; slowed by leg damage unk3A[4]; called by 3 scene input loops
+player_handle_pad = 0x80199548; // type:func size:0x54C
+// weapon id arg0: arg1 1 plays the shot SE sound_se_play 0x23..0x30 and colour flash func_801A0690 for ids 13, 14, 16, 17, arg1 0 stops the looping ones with sound_se_stop; caller effect_weapon_check_fire_frame and func_801899AC
+player_weapon_sound = 0x80199A94; // type:func size:0x1D4
+// resets the trigger state: D_801DFF48 and D_801E0600/D_801E0610 ids to 0xFFFFFF (none), sets D_801E0620.unk3E = arg0, unk3C = 1, clears flag 4; 5 callers after scene changes
+player_reset_triggers = 0x80199C68; // type:func size:0x58
+// arg2 0 -> func_801890C4 (removes item arg0 from the 8 slots D_801E0768.unk32) else func_80189054 (adds it), returns their result; caller func_801A14A0
+player_set_item = 0x80199CC0; // type:func size:0x58
+// arg1 0 -> func_801875E4 (drops weapon arg0 from the 2 slots D_801E0770.unk4) else func_80188C24 (gives it), returns 1/result; caller func_801A14A0
+player_set_weapon = 0x80199D18; // type:func size:0x50
+// part damage D_801E0368.unkB4[arg0] -= arg2: floor 0 when healing, capped by D_801DFD64[arg1] when arg2 < 0; refreshes the status func_80189DE8; caller func_801882AC
+player_heal_part = 0x80199D68; // type:func size:0xB4
+// per-kind cap of part damage used by player_heal_part; only user player_heal_part
+player_part_damage_caps = 0x801DFD64;
+// HP D_801E0710.unk0 += arg0, clamped 0..0xFF with floor arg1, clears infected unk4A on loss; func_8018A7C0 refresh; same code as player_exec_command op 4
+player_add_hp = 0x80199E1C; // type:func size:0x98
+// warp then rest: arg0 0 -> 60 minutes and fatigue unk36 -= 4, else sleep (fatigue 0, minutes computed from the hour D_801E0368.unk7C / minute unk7E); player_set_view then event_advance_clock; callers func_8017D604, func_80193068
+player_rest = 0x80199EB4; // type:func size:0xEC
+// returns 1 when any of the 5 part damages D_801E0368.unkB4[0..4] is > 0
+player_is_injured = 0x80199FA0; // type:func size:0x38
+// trigger leave: UnDeliverEvent(0xF3000001, 2), posts message 0x20 (the LEAVE handler) with the current trigger D_801E0600, copies it to D_801E0610, clears flag 4; installed as a handler by func_8018920C
+player_leave_trigger = 0x80199FD8; // type:func size:0xA4
+// end callback of the player_start_move_to task: sets the final pos/angles, applies the flag op (0 or, 1 and, 2 clear) on unk42, clears 2, calls player_finish_death when dying (0x800)
+player_move_to_done = 0x8019A07C; // type:func size:0x128
+// map cursor: from the player pos unk60/unk68 and yaw (8 directions) sets the cursor cell and screen x/y in D_801E07C0.unk8, two scales (/10 or /40) by zoom unk2, hides it out of bounds
+player_update_map_cursor = 0x8019A1A4; // type:func size:0x244
+// pad 0x100 edge opens, zooms or closes the map state D_801E07C0 (unk0 0/1/2) with SE 0x13 and effect func_80185A60(.., 0x405, 1), then player_update_map_cursor; skipped in a train; callers 2 scene loops
+player_update_map = 0x8019A3E8; // type:func size:0x1EC
+// sprite.c: kaj_malloc(0x20) with "Error Allocating SPRITE Pointer", copies id/mode/x/y/z/cell counts from the record, kaj_tim_load of its TIM at +0x1C, cell size = width/columns, height/rows
+sprite_create = 0x801A3DD4; // type:func size:0x1BC
+// sprite.c: the sprite list (kaj ll), walked by sprite_find and every sprite_* lookup; created by main func_8018BDE8 with kaj_ll_create
+sprite_list = 0x801DFF80;
+// sprite.c: finds sprites arg0 and arg3 in sprite_list, MoveImage of cell (arg1, arg2) of the first into the second's VRAM at (arg4, arg5); 3 callers
+sprite_copy_cell = 0x801A3F90; // type:func size:0x1EC
+// sprite.c: action command 12 handler (action_update): finds sprite by id, sub-op 2 sets one CLUT entry, 3 a range, 4 reloads the original CLUT, all with atoi args and LoadImage
+sprite_exec_command = 0x801A417C; // type:func size:0x1F4
+// sprite.c: if non-null, frees the TIM at +0x1C (func_801CFAE8) then free3 the sprite
+sprite_free = 0x801A4370; // type:func size:0x38
+// sprite.c: appends arg0 to sprite_list (func_801CCBF4 when empty, else func_801CCCF4 after the tail); callers the two loaders that call sprite_create
+sprite_add = 0x801A43A8; // type:func size:0x4C
+// sprite.c: sprite_find(arg0), frees its TIM and memory, unlinks the node with func_801CCDF8; 13 callers
+sprite_delete = 0x801A43F4; // type:func size:0xC4
+// sprite.c: walks sprite_list for the sprite whose id (u16 at +0) is arg0, returns it or NULL; 28 callers
+sprite_find = 0x801A44B8; // type:func size:0x9C
+// sprite.c: (asm) walks sprite_list, for each sprite with +4 set calls the packet builder func_8019FDD8(sprite, D_801E2D98, ot) and stores the new packet pointer; caller the frame draw func_801A0418
+sprite_draw_all = 0x801A4554; // type:func size:0xC8
+// sprite.c: sets working CLUT entry arg1 of sprite arg0 to colour arg2 and marks it dirty (+6, reloaded by func_8019FDD8); 39 callers
+sprite_set_clut_entry = 0x801A461C; // type:func size:0xEC
+// sprite.c: copies the whole original CLUT (+0x1C) over the working one (+0x20), marks dirty
+sprite_reset_clut = 0x801A4708; // type:func size:0x11C
+// sprite.c: sets working CLUT entries arg1..arg2 of sprite arg0 to colour arg3, marks dirty
+sprite_fill_clut = 0x801A4824; // type:func size:0x120
+// sprite.c: copies original CLUT entries arg1..arg2 back into the working CLUT, marks dirty
+sprite_restore_clut = 0x801A4944; // type:func size:0x124
+// sprite.c: sets +4 of sprite arg0, the flag sprite_draw_all tests before drawing; 39 callers
+sprite_set_visible = 0x801A4A68; // type:func size:0xB0
+// sprite.c: sets +8 of sprite arg0, the index func_8019FDD8 uses in the colour table D_801DFD6C
+sprite_set_color = 0x801A4B18; // type:func size:0xB0
+// sprite.c: sets +0x18/+0x1A of sprite arg0, the cell column/row func_8019FDD8 adds to u/v
+sprite_set_cell = 0x801A4BC8; // type:func size:0xC0
+// sprite.c: title menu input (kaj_pad_read): up/down toggles sprite_title_choice and starts the cursor animation, confirm with choice 1 calls func_8018C414 (OFC scene, new game), choice 0 sets sprite_title_load; SE via sound_se_play
+sprite_title_handle_input = 0x801A4C88; // type:func size:0x17C
+// sprite.c: title setup: player_place_for_scene(3), scene 0 of RES.R (func_80192B8C), hides sprite 0x40F; arg0 set: thing (3,10) flies in from z 7500 with sprite_title_on_effect_done installed, else sprite_title_show_menu inline
+sprite_title_init = 0x801A4E04; // type:func size:0x1A0
+// sprite.c: title message loop (func_801CC378): sprite_title_handle_input each frame, animates sprites 1/2 rows by sprite_title_cursor_frame, things and draw; on exit (not loading) frees sprites 0..2 and the D_801E02D8 buffers
+sprite_title_loop = 0x801A4FA4; // type:func size:0x2B0
+// sprite.c: called by main func_8018BDE8 before the game loop: runs sprite_title_loop until "load" (sprite_title_load) and menu_card_run(1, 0) succeeds or a new game starts, then frees the title sprites
+sprite_title_run = 0x801A5254; // type:func size:0xE8
+// sprite.c: title EFFECT_DONE handler in D_801DFED4: message 8 (logo landed) calls sprite_title_show_menu(1)
+sprite_title_on_effect_done = 0x801A533C; // type:func size:0x30
+// sprite.c: shows title sprites 0..2, cursor cells (0,0)/(0,3), thing (3,10); sets menu active, choice 1, animation idle; arg0 also func_8018C1B0(3,0,0,2)
+sprite_title_show_menu = 0x801A536C; // type:func size:0xA0
+// sprite.c: 1 when the player chose load on the title; sprite_title_run then calls menu_card_run(1, 0); users title functions only
+sprite_title_load = 0x801DFF88;
+// sprite.c: title cursor, toggled by up/down: 1 -> new game (func_8018C414), 0 -> load; users title functions only
+sprite_title_choice = 0x801DFF8A;
+// sprite.c: 1 once the title menu is shown (input accepted); users sprite_title_handle_input / init / show_menu
+sprite_title_menu_active = 0x801DFF8C;
+// sprite.c: cursor animation frame 0..3 copied to the rows of sprites 1 and 2 by sprite_title_loop
+sprite_title_cursor_frame = 0x801DFF8E;
+// sprite.c: 1 while the cursor animation runs (input blocked), cleared at frame 0 or 3
+sprite_title_cursor_moving = 0x801DFF90;
+// sprite.c: station ENTER handler in D_801DFEE4 (installed by sprite_station_init): platform triggers 0x100010/0x100020 store the trigger and show the boarding prompt, 0xF00110/0xF00120 print (Japanese text) (arrival-only platform) by line/station
+sprite_station_on_enter = 0x801A540C; // type:func size:0x148
+// sprite.c: station per-frame hook in D_801DFEDC: clock minute D_801E03E6 % 10 matches the arrival/departure minutes D_801E1118.unk18/1A -> func_801AAA9C(1/0, station); counts down the stop and hides the prompt
+sprite_station_update = 0x801A5554; // type:func size:0xFC
+// sprite.c: arg0 1 shows the boarding prompt (Japanese text) (subway, line 2) or (Japanese text) (train, line 1) when a train waits on the right platform and sets D_801DFFE8 to the trigger, else (Japanese text); arg0 0 hides it
+sprite_station_show_prompt = 0x801A5650; // type:func size:0x360
+// sprite.c: subway only (D_801DFE68.unk0 == 2): MoveImage2 of cell (station-1)%2,/2 of sprites 0 and 1 to VRAM 0x2C0 and 0x2F0 (station name signs), then sprite_delete(0) and (1)
+sprite_station_copy_signs = 0x801A59B0; // type:func size:0x160
+// sprite.c: boarding confirmed on trigger 0x100010 (arg0 1) or 0x100020 (arg0 0) (caller func_8017DAE8): player unk46 = 2 train / 3 subway, func_8018C50C ("\S\TWN.S;1") at the track x for the station number, angle 270 or 90
+sprite_station_board_train = 0x801A5B10; // type:func size:0x124
+// sprite.c: station setup called by the scene loader func_8017DFA4 for scene types 1 and 2: train timing D_801E1118, sprite_station_copy_signs, installs sprite_station_on_enter / on_leave / update into D_801DFEE4 / D_801DFEE0 / D_801DFEDC
+sprite_station_init = 0x801A5C34; // type:func size:0xA0
+// sprite.c: subway exit (action 0x60 in func_8017DAE8): station 2 -> func_8018C554 scene "GST", else func_8018C50C town at the triple of sprite_station_exit_points for the station
+sprite_station_exit_to_town = 0x801A5CD4; // type:func size:0xCC
+// sprite.c: (x, z, angle) per subway station, read by sprite_station_exit_to_town only
+sprite_station_exit_points = 0x801D7F68;
+// sprite.c: "GST" scene name passed to func_8018C554 by sprite_station_exit_to_town
+sprite_str_scene_gst = 0x801DFD94;
+// sprite.c: station LEAVE handler in D_801DFEE0: leaving 0x100010/0x100020 hides the boarding prompt (sprite_station_show_prompt(0))
+sprite_station_on_leave = 0x801A5DA0; // type:func size:0x6C
+// sprite.c: phone scene per-frame input: phone menu (sprite 0x206, cursor CLUT 0x24DF) choices 0 save (sets sprite_phone_save), 1 (Japanese text), 2 (Japanese text), 3 (Japanese text) (hang up); circle on trigger 0xFB0000/0xFB0001; else pad turns the view
+sprite_phone_update = 0x801A5E0C; // type:func size:0x71C
+// sprite.c: phone scene loop: scene 9, mod 0x40, installs sprite_phone_pick_trigger / on_enter / on_alarm / on_effect_done, message loop with sprite_phone_update, cleanup deletes sprites 0x205/0x206
+sprite_phone_loop = 0x801A6528; // type:func size:0x3C8
+// sprite.c: handler in D_801DFF50 (called by player_check_ground): 0xFFFFFF while calling, 0xFB0001 (exit) by the player angles, else 0xFB0000 (phone)
+sprite_phone_pick_trigger = 0x801A68F0; // type:func size:0x78
+// sprite.c: ENTER handler in D_801DFEE4: 0xFB0000 prints (Japanese text) (make a call), 0xFB0001 (Japanese text) (go outside)
+sprite_phone_on_enter = 0x801A6968; // type:func size:0x78
+// sprite.c: alarm handler in D_801DFED8: alarm 0x405 stops SE 0x1C (sound_se_stop) and runs func_801862AC(0x205, 2)
+sprite_phone_on_alarm = 0x801A69E0; // type:func size:0x3C
+// sprite.c: EFFECT_DONE handler in D_801DFED4: message 6 prints (Japanese text) and opens the phone menu (sprite 0x206 visible, rows 5..7 grey, row 4 lit), state 1, cursor 0
+sprite_phone_on_effect_done = 0x801A6A1C; // type:func size:0xA8
+// sprite.c: entry from the city loop func_801A9070 (state 1, after trigger 0xFF): repeats sprite_phone_loop, and while the save choice is set calls menu_card_run(0, 0) then reopens the menu (Japanese text)
+sprite_phone_run = 0x801A6AC4; // type:func size:0x8C
+// sprite.c: 1 when the save choice was taken in the phone menu; read by sprite_phone_run / sprite_phone_loop; users phone functions only
+sprite_phone_save = 0x801DFF98;
+// sprite.c: phone menu state (0 none, 1 menu, 3 car moved, 4 car coming); users sprite_phone_update / loop / on_effect_done
+sprite_phone_menu_state = 0x801DFF9C;
+// sprite.c: phone menu cursor 0..3, moved by up/down in sprite_phone_update, reset by sprite_phone_on_effect_done
+sprite_phone_menu_cursor = 0x801DFF9E;
+// sprite.c: trigger 0xFF in the city (func_801A850C): unpacks arg0 (direction <<12, angle <<8, distance *100) and stores the world position (unk54 + cell unk72 * 12500...) and yaw into the player block +0x18, used by sprite_phone_update to go back outside
+sprite_phone_save_exit = 0x801A6B50; // type:func size:0xE4
+// sprite.c: thing setup from its record +0x84 (caller the ASET reader func_80190FD8): copies fields, pos *10, kaj_tmd_load of 2 TMDs, GsInitCoordinate2, cell-relative pos, RotMatrix; type 4 always on
+sprite_thing_init = 0x801A6C34; // type:func size:0x280
+// sprite.c: walks the thing list D_801DFFA0 and recomputes each thing's cell-relative position, RotMatrix and func_8017CDA4 slot; callers the block city mode setter func_8017A86C and func_801A88B4
+sprite_thing_refresh_all = 0x801A6EB4; // type:func size:0x1D0
+// sprite.c: (asm) walks the thing list D_801DFFA0, for each visible thing GsGetLs / GsSetLsMatrix then func_801B34C0 on its TMD object +0x7C; caller the frame draw func_801A0418
+sprite_thing_draw_all = 0x801A7084; // type:func size:0x1F8
+// sprite.c: thing subtype 7 in the thing update func_801A7560: spins (yaw -= frame time D_801E6DB4) and hovers above the target npc, height from its func_801767D4 record
+sprite_thing_update_marker = 0x801A727C; // type:func size:0x1B0
+// sprite.c: thing subtype 10 (the title thing set at z 7500 by sprite_title_init): rolls +3 and moves z -= 25 per frame unit until z 1500, then stops (+6 = 0)
+sprite_thing_update_fly_in = 0x801A742C; // type:func size:0x134
+// thing.c unit: walks the thing list D_801DFFA0 (kaj ll), per active thing (unk4) runs its rotation animation by kind (unk2 type 3, RotMatrix/RotMatrixZYX on the GsCOORDINATE2 at +0x2C) or func_801A727C/func_801A742C, train thing type 2 id 0 -> func_801AACF4, block id via func_8017CDA4; called from the frame driver func_8018C2FC
+thing_update_all = 0x801A7560; // type:func size:0x4A4
+// thing.c: kaj_malloc(0x88) "Error Allocating THING Pointer" (thing.c line 38), zeroes fields, then kaj_malloc(arg1) "Error Allocating THING Buffer" into +0x84; called by the CD object loader func_80190FD8
+thing_create = 0x801A7A04; // type:func size:0xF8
+// free3 of the thing buffers +0x7C, +0x80 (optional), +0x84 then the thing itself; exact inverse of thing_create
+thing_free = 0x801A7AFC; // type:func size:0x5C
+// adds a node to the thing list D_801DFFA0: ll insert into empty list (func_801CCBF4) else seek tail and insert after it (func_801CCCF4); called by func_80190FD8 right after thing_create
+thing_list_add = 0x801A7B58; // type:func size:0x4C
+// pops every node of D_801DFFA0 (func_801CCDF8) and free3()s its thing like thing_free; called on scene teardown
+thing_free_all = 0x801A7BA4; // type:func size:0x98
+// walks D_801DFFA0 and returns the thing with type (unk2) == arg0 and id (unk0) == arg1, else NULL; vehicle.c calls it with (0,0) "My Car Object not Found" and (2,0) for the train
+thing_find = 0x801A7C3C; // type:func size:0xB4
+// for each active thing with a collision model (+0x80): GsSetLsMatrix(own matrix) then func_8017B7CC(model, x,y,z, arg3); returns id + (type << 12) of the first hit, 0xFFFF if none; used by the player move code func_80196AE0
+thing_hit_test = 0x801A7CF0; // type:func size:0x120
+// sets every thing's coord.t (+0x44/+0x48/+0x4C) = world pos (+0x18/+0x1C/+0x20) - (arg0,arg1,arg2) and clears the coord flag; called by func_801958FC next to vehicle_set_origin (func_801AC464) which does the same
+thing_set_origin = 0x801A7E10; // type:func size:0xC4
+// finds thing (type,id) like thing_find; if it has a script (+0x8) and is active, runs event script unkC (arg2 != 0) or unkE via func_80174CB8 + func_80173DE0 loop, returns 1; called by the action-button handlers func_80189350 ((Japanese text), (Japanese text) prompts) and func_801895E0
+thing_run_script = 0x801A7ED4; // type:func size:0x12C
+// thing_find(type,id) inline, then sets its active flag +0x4 (the flag thing_update_all and thing_hit_test test)
+thing_set_active = 0x801A8000; // type:func size:0xCC
+// thing_find(type,id) inline, then sets +0x6, the flag gating the rotation animation in thing_update_all and the train motion (vehicle_train_set_doors calls it with (2,0,1) to start the train)
+thing_set_animate = 0x801A80CC; // type:func size:0xCC
+// thing_find(type,id) inline, then sets +0x10; thing_update_all skips the func_8017CDA4 block lookup while it is set
+thing_set_flag10 = 0x801A8198; // type:func size:0xCC
+// script command: args type = byte +5, id = byte +4 of the command, if argc (+2) == 2 sets the thing's active flag to atoi(argv[0]); called only by the script interpreter func_8017345C (which also uses atoi)
+thing_cmd_set_active = 0x801A8264; // type:func size:0x10C
+// field mode, task-end hook: stored in D_801DFED4 by thing_field_enter, called by func_8018970C (event 0x100); case 11 shows (Japanese text) (car-navi destination prompt), case 7 opens the train exit via func_801AB310 / func_801AB040
+thing_field_task_hook = 0x801A8370; // type:func size:0x19C
+// field mode: acts on the confirmed action prompt (D_801DFFE8 state 2, flag 8) by code: 0xFD id 0 = get in my car (sound 0x16, exit code 3, next mode 1), 0xFE = exit code 2 with two bytes, 0xFF = exit code 1 + func_801A6B50, 0x20 = get off train (func_801AB1A0), else runs the event script (func_80174CB8)
+thing_field_do_action = 0x801A850C; // type:func size:0x25C
+// field mode per frame input: pad D_801E6DA0; in car (player unk46 == 1) runs vehicle_car_input (func_801ABC70) and sets exit code 4 / next mode 0 when it returns nonzero, else player control func_80199548 and, on a new circle press (0x20) with a prompt up, thing_field_do_action
+thing_field_input = 0x801A8768; // type:func size:0x14C
+// field mode setup: sets the hooks D_801DFED4..D_801DFEE4 (func_801A8370, func_801A8EFC, func_801A8F2C, func_801A8F8C, func_801A8FF8), loads per vehicle mode (my car placement func_801AC500, func_801AC0E4), calls func_80192CD0 only when the id changed; first call of func_801A8CFC
+thing_field_enter = 0x801A88B4; // type:func size:0x284
+// field mode teardown: clears the hooks D_801DFED4..D_801DFEE4, frees the vehicle (func_801AC278), on exit code 0 frees things (thing_free_all) and sprites, finally writes the next vehicle mode D_801DFDA0 to player unk46
+thing_field_leave = 0x801A8B38; // type:func size:0x1C4
+// field mode loop: thing_field_enter, then polls kaj events (func_801CC378) and dispatches 2/0x10/0x20/4/0x100, per frame thing_field_input + func_8018C2FC, random timer 0x404; ends with thing_field_leave; called by func_801A9070
+thing_field_loop = 0x801A8CFC; // type:func size:0x200
+// timer hook (D_801DFED8, called by func_80189928): on timer 0x404 (armed with rand()%30+30 in the field loop) plays sound 0x17
+thing_field_timer_hook = 0x801A8EFC; // type:func size:0x30
+// trigger-enter hook (D_801DFEE4, called by func_80189350): for trigger 0x200010/0x200020 stores it in the train state D_801E1118 and shows the train exit prompt (func_801AB040(1)) if the doors are open
+thing_train_enter_hook = 0x801A8F2C; // type:func size:0x60
+// trigger-leave hook (D_801DFEE0, called by func_801895E0): for trigger 0x200010/0x200020 clears it and hides the train exit prompt (func_801AB040(0))
+thing_train_leave_hook = 0x801A8F8C; // type:func size:0x6C
+// tick hook (D_801DFEDC, called by func_80189970): counts down the train stop timer D_801E1118.unk16, then closes the doors (func_801AC70C(0)) and hides the exit prompt
+thing_train_tick_hook = 0x801A8FF8; // type:func size:0x78
+// called once by the entry function func_8018BDE8 after kaj_init: clears the exit code D_801DFFAE, func_8017A3E4 (block list init), then loops thing_field_loop forever; exit code 0 returns, 1 runs func_801A6AC4 ((Japanese text) menu), 2 runs func_8017E99C(D_801DFFA8, D_801DFFAA)
+thing_game_loop = 0x801A9070; // type:func size:0x9C
+// from the station index (+0x10) and direction (+0x8) of the train state D_801E1118 computes the four z marks (+0x1C..+0x28, steps of 100000) that func_801A9EA4 uses to brake and stop
+thing_train_calc_stops = 0x801A910C; // type:func size:0x130
+// car init (vehicle_init case 1): places the vehicle at my car thing's position +370 y, kaj_tmd_load of its two models, resets the drive state D_801E1158, speed divisor D_801DFFB4 = 300/400/500 from D_801E0368.unk200
+thing_car_init = 0x801A923C; // type:func size:0x450
+// car exit (vehicle_free when unk0 == 1): copies the car pose to the player, tries 4 spots (+-245 sides, +-490 front/back) for free ground (func_8017CFE4), stops sound 0x1A, hides navi, func_8018C50C (\S\TWN.S, position)
+thing_car_get_out = 0x801A968C; // type:func size:0x568
+// train/subway init (vehicle_init cases 2 and 3): thing_train_calc_stops, kaj_tmd_load of the models, places the vehicle at the player, turns 180 when going backward
+thing_train_init = 0x801A9BF4; // type:func size:0x2B0
+// train/subway motion per frame (vehicle_update for modes 2,3): accelerates/brakes z (+0xC) through the stop marks, at the stop plays sound 0x1F, steps the station index (1..6), opens the doors (func_801AC70C(1)), carries the player (RotTrans of its offset)
+thing_train_update = 0x801A9EA4; // type:func size:0x4BC
+// vehicle.c unit: car driving per frame (vehicle_update mode 1): speed from accel/brake (D_801E1158 +0x8/+0xC), gear +6, steering +4, divisor D_801DFFB4; when stopped shows (Japanese text) (get out of the car)
+vehicle_car_drive = 0x801AA360; // type:func size:0x57C
+// puts the train thing (thing_find(2,0)) at the platform (x +-0xF0A, z 16000, 180 deg when backward), state D_801E1118 unkE = 1 (doors open), unk12 = 0; called by func_801A5C34
+vehicle_train_place = 0x801AA8DC; // type:func size:0x1C0
+// train arrival: if the train thing (2,0) is idle, places it at z -16000 (or 48000 when arg0 == 0), state 3 (arriving), direction arg0, station arg1; copies sprite 0x408 to VRAM (MoveImage), sound 0x1E; by func_801A5554
+vehicle_train_arrive = 0x801AAA9C; // type:func size:0x258
+// train thing motion, called by thing_update_all for thing (2,0): state 3 brakes to z 16000 then starts the door animation task (func_801D15C8, frame callbacks func_801AC88C/func_801AC91C, sound 0xB); state 1 leaves to +-48000
+vehicle_train_update = 0x801AACF4; // type:func size:0x34C
+// arg0 != 0: with the right trigger (0x200010/0x200020) sets action code 0x20 in D_801DFFE8 and shows (Japanese text) (train) or (Japanese text) (subway) by player unk46; arg0 == 0 hides it
+vehicle_train_exit_prompt = 0x801AB040; // type:func size:0x160
+// get off: player mode 3 -> func_8018C554(1, "SB1", ...) station scene, mode 2 -> "RW1"; returns 0 (on foot); called by thing_field_do_action for action 0x20
+vehicle_train_get_off = 0x801AB1A0; // type:func size:0x170
+// same scene change as vehicle_train_get_off but only at the line end (station 6/1 subway, 3/1 train) and sets D_801E0340.unkA; called by the task hook thing_field_task_hook when the doors finished opening
+vehicle_train_end_of_line = 0x801AB310; // type:func size:0x1C4
+// copies the player pose (D_801E0710.unk5C) to a thing, finding ground height (func_8017BD24) when y == 9999; with arg1 also activates it and stores it as D_801E0710.unk54; used for my car (0,0) by thing_update_all and func_801AC500
+vehicle_car_follow_player = 0x801AB4D4; // type:func size:0x2A0
+// car navi per frame: distance to the destination (D_801D7FC4[dest] x,z, SquareRoot0), blinks under 25, gauge func_801A4824, arrow sprite frame from ratan2 in 8 directions; called by vehicle_car_drive
+vehicle_navi_update = 0x801AB774; // type:func size:0x26C
+// hides the two navi sprites (D_801D7FB0 +0xC/+0x10), sound 0x13, opens the list menu with sprites 0x40B/0x40C (func_8018D078); called on a Start press (0x800) by func_801ABA88
+vehicle_navi_open_menu = 0x801AB9E0; // type:func size:0xA8
+// input while the car is stopped (D_801E1158.unk0 set): navi menu open -> circle on / cross off / up-down cursor (func_8018CEA0); menu closed -> circle returns 1 (get out), Start opens the navi menu
+vehicle_car_stopped_input = 0x801ABA88; // type:func size:0x1E8
+// car pad input (arg1 = pad bits): up/down and left/right clamp camera angles (+-20, +-65), 4/8 steer +-45, 0x10/0x40 gear forward/reverse and throttle/brake ramps to 256; stopped -> vehicle_car_stopped_input
+vehicle_car_input = 0x801ABC70; // type:func size:0x474
+// loads the vehicle data by player mode unk46: car func_80192B8C(3,-1), train (0xB,2), subway (0xA,2)
+vehicle_load_data = 0x801AC0E4; // type:func size:0x74
+// vehicle.c: kaj_malloc(0xC4) "Error Allocating VEHICLE Pointer", then kaj_malloc(arg1) "Error Allocating VEHICLE Buffer" into +0xC0; called by the CD loader func_80191888
+vehicle_create = 0x801AC158; // type:func size:0xBC
+// by player mode: car -> thing_car_init, train/subway -> thing_train_init, then D_801E032C[0] = vehicle; called by func_80191888 right after vehicle_create
+vehicle_init = 0x801AC214; // type:func size:0x64
+// frees the vehicle D_801E02D8.unk54 (models +0xB8/+0xBC, buffer +0xC0, itself; car first gets thing_car_get_out), clears the pointer, func_801A2288; called by thing_field_leave
+vehicle_free = 0x801AC278; // type:func size:0x94
+// asm: if a vehicle exists, GsGetLs/GsSetLsMatrix on its coord then draws model +0xB8 (and +0xBC for the car) with func_801B34C0 on the scratchpad stack; called by the frame draw func_801A0418
+vehicle_draw = 0x801AC30C; // type:func size:0x158
+// vehicle coord.t (+0x30/+0x34/+0x38) = world pos - (arg0,arg1,arg2), same job as thing_set_origin, same caller
+vehicle_set_origin = 0x801AC464; // type:func size:0x44
+// per frame by player mode: 1 -> vehicle_car_drive, 2 or 3 -> thing_train_update; called by func_8018C2FC
+vehicle_update = 0x801AC4A8; // type:func size:0x58
+// thing_find(0,0) else kaj_abend "My Car Object not Found", then vehicle_car_follow_player(car, 1)
+vehicle_car_place = 0x801AC500; // type:func size:0x5C
+// clears the active flag of the current vehicle thing D_801E0710.unk54 and the pointer; by thing_field_leave
+vehicle_car_release = 0x801AC55C; // type:func size:0x1C
+// arg1 != 0: shows navi sprites 4 and 0x406, arg2 measures the start distance to D_801D7FC4[dest] (SquareRoot0) into D_801D7FB0.unk8; arg1 == 0 hides them
+vehicle_navi_show = 0x801AC578; // type:func size:0x150
+// sets navi on/off D_801D7FB0[0], sound 0x11 (on) or 8 (off), closes the menu func_8018D1A0; the same code as the circle/cross branch of vehicle_car_stopped_input (no direct caller)
+vehicle_navi_set_enabled = 0x801AC6C8; // type:func size:0x44
+// train doors: animates sprite 0x408 frames through a task (func_801D15C8, callbacks func_801AC88C/func_801AC91C, sound 0xB), arg0 != 0 open (state 3) else close (state 2); without the sprite closes and starts the train
+vehicle_train_set_doors = 0x801AC70C; // type:func size:0x138
+// deactivates the train thing (2,0) and sets the stop timer D_801E1118.unk16 to -1 (no direct caller)
+vehicle_train_hide = 0x801AC844; // type:func size:0x48
+// door task frame callback: MoveImage of frame unk24 (4 per column) of the sprite sheet to VRAM 0x2F0,0x20
+vehicle_train_door_frame = 0x801AC88C; // type:func size:0x90
+// door task end callback: same MoveImage as vehicle_train_door_frame, then D_801E1118.unk0 = -1 (task gone)
+vehicle_train_door_last = 0x801AC91C; // type:func size:0x98
+// sets the train state D_801E1118 station fields unk18 = 2, unk1A = 7; called once by the entry function func_8018BDE8
+vehicle_train_init_state = 0x801AC9B4; // type:func size:0x1C
+// data, thing.c unit "thing.c", file argument of both kaj_abend calls in thing_create
+thing_str_file = 0x801DFD98;
+// vehicle mode written to player unk46 by thing_field_leave when != -1; set by thing_field_do_action (1 = car), thing_field_input (0 = on foot), vehicle_train_get_off returns
+thing_next_vehicle_mode = 0x801DFDA0;
+// cache of D_801E0710.unk58->unk42: thing_field_enter calls func_80192CD0 only when it differs
+thing_field_loaded_id = 0x801DFDA2;
+// exit code of thing_field_loop: 0 quit, 1 menu, 2 func_8017E99C, 3 get in car, 4 get out; read by thing_game_loop
+thing_field_exit_code = 0x801DFFAE;
+// high byte of the 0xFE action code, first argument of func_8017E99C in thing_game_loop
+thing_field_exit_arg_hi = 0x801DFFA8;
+// low byte of the 0xFE action code, second argument of func_8017E99C in thing_game_loop
+thing_field_exit_arg_lo = 0x801DFFAA;
+// set when vehicle_car_drive shows the (Japanese text) prompt, cleared on hide; reset by thing_car_init
+thing_car_exit_prompt_on = 0x801DFFB0;
+// 300/400/500 by D_801E0368.unk200, set by thing_car_init, divides the car speed in vehicle_car_drive
+thing_car_speed_div = 0x801DFFB4;
+// (Japanese text), shown by thing_field_task_hook case 11
+thing_str_navi_prompt = 0x80171A28;
+// data, vehicle.c unit "vehicle.c", file argument of kaj_abend in vehicle_create and vehicle_car_place
+vehicle_str_file = 0x80171A9C;
+// "SB1", subway station scene name passed to func_8018C554 by vehicle_train_get_off / vehicle_train_end_of_line
+vehicle_str_sb1 = 0x801DFDA8;
+// "RW1", railway station scene name passed to func_8018C554 by the same two functions
+vehicle_str_rw1 = 0x801DFDAC;
+// (Japanese text), get-out-of-car prompt of vehicle_car_drive
+vehicle_str_car_exit = 0x80171AC8;
+// (Japanese text), train exit prompt of vehicle_train_exit_prompt
+vehicle_str_train_exit = 0x80171AE4;
+// (Japanese text), subway exit prompt of vehicle_train_exit_prompt
+vehicle_str_subway_exit = 0x80171B00;
+// flag toggled with sound 0x1B in vehicle_car_drive when speed >= 25 and steering >= 40, cleared when stopped
+vehicle_car_turn_sfx_on = 0x801DFDA4;
+// toggles each frame under 25 units from the destination to blink the navi sprite (vehicle_navi_update)
+vehicle_navi_blink = 0x801DFDB0;
+// x,z pairs indexed by the navi destination D_801D7FB0.unk4, read by vehicle_navi_update and vehicle_navi_show
+vehicle_navi_dest_xz = 0x801D7FC4;
+// LIBC QSORT.OBJ +0x150: 4.0 label memswap@0x154 in the same slot after qsort; swaps n bytes between two pointers; only caller qsort
+memswap = 0x801ACF80; // type:func size:0x3C
+// LIBGPU SYS.OBJ +0x3E4, between DrawSync and ClearImage as checkRECT is in 3.3-4.0; prints "%s:bad RECT" and "(%d,%d)-(%d,%d)"; callers ClearImage, LoadImage, StoreImage, MoveImage and their *2 forms
+checkRECT = 0x801ADEC4; // type:func size:0x11C
+// LIBGPU SYS.OBJ +0x13C0: slot of the global SetDrawEnv2 of 3.7/4.0 (right after SetDrawEnv, same 3-block shape, opcode ratio 0.84); builds a draw-env packet from get_mode/get_cs/get_ce/get_ofs/get_tw; callers PutDrawEnv, DrawOTagEnv
+SetDrawEnv2 = 0x801AEEA0; // type:func size:0x270
+// LIBGPU SYS.OBJ: get_mode slot (3.x label); returns 0xE1000000 draw-mode word from dfe, dtd, tpage; callers SetDrawEnv, SetDrawEnv2
+get_mode = 0x801AF110; // type:func size:0x20
+// LIBGPU SYS.OBJ: get_cs slot (3.x label); clamps x/y and returns the 0xE3000000 draw-area top-left word; callers SetDrawArea, SetDrawEnv
+get_cs = 0x801AF130; // type:func size:0x98
+// LIBGPU SYS.OBJ: get_ce slot (3.x label), right after get_cs; returns the 0xE4000000 draw-area bottom-right word; callers SetDrawArea, SetDrawEnv
+get_ce = 0x801AF1C8; // type:func size:0x98
+// LIBGPU SYS.OBJ: get_ofs slot (3.x label); returns 0xE5000000 | (y&0x7FF)<<11 | (x&0x7FF), the draw-offset word; callers SetDrawOffset, SetDrawEnv
+get_ofs = 0x801AF260; // type:func size:0x1C
+// LIBGPU SYS.OBJ: get_tw slot (3.3 label, opcode ratio 0.92); reads a RECT and returns the 0xE2000000 texture-window word; callers SetDrawEnv, SetDrawEnv2
+get_tw = 0x801AF27C; // type:func size:0x80
+// LIBGPU SYS.OBJ: byte-exact to the _status label of SYS.OBJ 2.6-4.0; entry 14 of the GPU function table D_801D80B8, whose 15 entries follow the 3.x names in alphabetical order (_addque.._sync)
+_status = 0x801AF2FC; // type:func size:0x18
+// LIBGPU SYS.OBJ: GPU table D_801D80B8 entry 11 (_otc in the alphabetical order); 3.3 _otc opcode ratio 0.93; uses set_alarm/get_alarm
+_otc = 0x801AF314; // type:func size:0xE0
+// LIBGPU SYS.OBJ: GPU table D_801D80B8 entry 3 (_clr), slot after _otc as in 4.0; calls _cwc and _param
+_clr = 0x801AF3F4; // type:func size:0x230
+// LIBGPU SYS.OBJ: GPU table D_801D80B8 entry 8 (_dws); 3.7 _dws opcode ratio 0.90; uses set_alarm/get_alarm
+_dws = 0x801AF624; // type:func size:0x23C
+// LIBGPU SYS.OBJ: GPU table D_801D80B8 entry 7 (_drs); 3.7 _drs opcode ratio 0.91; uses set_alarm/get_alarm
+_drs = 0x801AF860; // type:func size:0x280
+// LIBGPU SYS.OBJ: GPU table D_801D80B8 entry 4 (_ctl); writes a0 to the GP1 port pointer D_801D8208 and keeps it in a shadow byte table D_801E1240 indexed by command
+_ctl = 0x801AFAE0; // type:func size:0x24
+// LIBGPU SYS.OBJ: GPU table D_801D80B8 entry 10 (_getctl); returns the shadow byte D_801E1240[a0] written by _ctl
+_getctl = 0x801AFB04; // type:func size:0x14
+// LIBGPU SYS.OBJ: GPU table D_801D80B8 entry 5 (_cwb), slot between _getctl and _cwc as in 3.x-4.0; writes words to the GPU ports D_801D8208/D_801D8204
+_cwb = 0x801AFB18; // type:func size:0x40
+// LIBGPU SYS.OBJ: GPU table D_801D80B8 entry 6 (_cwc); 3.3 _cwc opcode ratio 0.92; sets up GPU DMA registers D_801D820C..D_801D8214; called by _clr
+_cwc = 0x801AFB58; // type:func size:0x48
+// LIBGPU SYS.OBJ: byte-exact to the _param label of SYS.OBJ 3.3-4.0; GPU table D_801D80B8 entry 12
+_param = 0x801AFBA0; // type:func size:0x30
+// LIBGPU SYS.OBJ: byte-exact to the _addque label of SYS.OBJ 3.3-4.0; GPU table D_801D80B8 entry 1; tail-calls _addque2
+_addque = 0x801AFBD0; // type:func size:0x24
+// LIBGPU SYS.OBJ: GPU table D_801D80B8 entry 2 (_addque2); 3.7 opcode ratio 0.87; queues a GPU command, DMACallback, SetIntrMask, calls _exeque
+_addque2 = 0x801AFBF4; // type:func size:0x2B0
+// LIBGPU SYS.OBJ: GPU table D_801D80B8 entry 9 (_exeque); 3.7 opcode ratio 0.76; runs the queued command, DMACallback, SetIntrMask; also used by _GPU_ResetCallback
+_exeque = 0x801AFEA4; // type:func size:0x260
+// LIBGPU SYS.OBJ: GPU table D_801D80B8 entry 13 (_reset); 3.7 opcode ratio 0.88; only caller ResetGraph; calls _version and memset
+_reset = 0x801B0104; // type:func size:0x150
+// LIBGPU SYS.OBJ: GPU table D_801D80B8 entry 15 (_sync); 3.7 opcode ratio 0.86; waits on the queue with set_alarm/get_alarm, calls _exeque
+_sync = 0x801B0254; // type:func size:0x13C
+// LIBGPU SYS.OBJ: byte-exact to the set_alarm label of SYS.OBJ 3.3-4.0; stores VSync(-1) start time in D_801D823C/D_801D8240
+set_alarm = 0x801B0390; // type:func size:0x34
+// LIBGPU SYS.OBJ: get_alarm slot after set_alarm (3.x label); prints "GPU timeout:que=%d,stat=%08x,chcr=%08x,madr=%08x"; 9 GPU callers
+get_alarm = 0x801B03C4; // type:func size:0x144
+// LIBGPU SYS.OBJ: _version slot (3.x label, opcode ratio 0.76); sends GP1 0x10000007 (get GPU info) and tests the answer; only caller _reset
+_version = 0x801B0508; // type:func size:0xA0
+// LIBGPU SYS.OBJ static copy of memset (4.0 SYS.OBJ label memset, ratio 0.90): fills a2 bytes at a0 with a1; address suffix because LIBC2 memset owns the bare name (tools/psyq/match.py rule)
+memset_801B09E8 = 0x801B09E8; // type:func size:0x24
+// LIBGS GS_107.OBJ: gte_set_lc slot (4.0 label, ratio 0.94); copies a 0x20 MATRIX to D_801E2C08 then SetColorMatrix; caller GsSetFlatLight
+gte_set_lc = 0x801B2448; // type:func size:0x64
+// LIBGS GS_107.OBJ: gte_read_lc slot after gte_set_lc (4.0 label, ratio 0.92); copies the D_801E2C08 light-colour matrix out; caller GsSetFlatLight
+gte_read_lc = 0x801B24AC; // type:func size:0x4C
+// LIBGS GS_132.OBJ GsSetView2 (4.4 LIBGS, kept hit); same bytes as VWUNIT.OBJ GsSetViewUnit, which 4.3+ ships only in LIBHMD and no LIBHMD OBJ is in the exe
+GsSetView2 = 0x801B25D0; // type:func size:0x160
+// LIBGS GS_001.OBJ: gpu_init slot between GsInitGraph and GsInitGraph2 (3.7/4.0 label); calls ResetGraph, GetVideoMode, PutDispEnv, PutDrawEnv; caller GsInitGraph
+gpu_init = 0x801B2A64; // type:func size:0x11C
+// LIBGS GS_001.OBJ: valiable_init slot between GsInitGraph2 and GsSortClear (3.7/4.0 label, Sony spelling); zeroes and sets a dozen libgs globals; callers GsInitGraph, GsInitGraph2
+valiable_init = 0x801B2BE8; // type:func size:0x220
+// LIBGS OBJT3.OBJ GsSortObject4J (same bytes as OBJT2 GsSortObject4, relocations differ): dispatches by jalr through a .bss table at D_801E2DC8+0x20*n that game code fills (func_801A02C8 writes D_801E2DB0[i].unk18), the user-filled GsFCALL4 table of the J variant
+GsSortObject4J = 0x801B34C0; // type:func size:0x890
+// LIBCD BIOS.OBJ +0: getintr is at offset 0 of BIOS.OBJ in 3.3-4.0; prints "DiskError: ", "com=%s,code=(%02x:%02x)", "CDROM: unknown intr"; callers CD_sync, CD_ready, CD_cw, callback
+getintr = 0x801B98E0; // type:func size:0x55C
+// LIBCD BIOS.OBJ: callback slot after CD_set_test_parmnum (3.5-4.0 label, ratio 0.88); installed by CD_init/CD_initintr as the CD interrupt handler, calls getintr
+callback = 0x801BAF68; // type:func size:0xD8
+// LIBCD ISO9660.OBJ: byte-exact to the _cmp label of 3.7/4.0; strncmp(a, b, 12) == 0; caller CdSearchFile
+_cmp = 0x801BB378; // type:func size:0x20
+// LIBCD ISO9660.OBJ: own strings "CD_newmedia: Read error in cd_read(PVD)", "CD_newmedia: %d dir entries found"
+CD_newmedia = 0x801BB398; // type:func size:0x2C4
+// LIBCD ISO9660.OBJ: CD_searchdir slot between CD_newmedia and CD_cachefile (3.5 label, ratio 0.87); strcmp over the directory table D_801E3804; caller CdSearchFile
+CD_searchdir = 0x801BB65C; // type:func size:0xA4
+// LIBCD ISO9660.OBJ: own strings "CD_cachefile: dir not found", "CD_cachefile: %d files found"
+CD_cachefile = 0x801BB700; // type:func size:0x29C
+// LIBCD ISO9660.OBJ: cd_read slot at the OBJ end (3.7/4.0 label, ratio 0.79); CdControl, CdRead, CdReadSync; callers CD_newmedia, CD_cachefile
+cd_read = 0x801BB99C; // type:func size:0x68
+// LIBCD CDREAD.OBJ: cb_read slot (4.0 label, ratio 0.53); installed by CdRead as the ready callback, reads each sector with CdGetSector/CdGetSector2, "CdRead: sector error"
+cb_read = 0x801BBAB4; // type:func size:0x274
+// LIBCD CDREAD.OBJ: cb_data slot after cb_read (4.0 label); installed with CdDataCallback by cb_read (DMA-done callback), restores the user ready/data callbacks
+cb_data = 0x801BBD28; // type:func size:0xD0
+// LIBCD CDREAD.OBJ: cd_read_retry slot before CdReadBreak (3.5-4.0 label, ratio 0.52); "CdRead: retry...", "CdRead: Shell open..."; callers CdRead, CdReadSync, cb_read
+cd_read_retry = 0x801BBDF8; // type:func size:0x1E8
+// LIBCD EVENT.OBJ: def_cbsync (3.7/4.0 label order); DeliverEvent(0xF0000003, 0x20); CdInit stores it in the sync slot D_801DDAE8 read by CdSyncCallback
+def_cbsync = 0x801BC51C; // type:func size:0x28
+// LIBCD EVENT.OBJ: def_cbready (3.7/4.0 label order); DeliverEvent(0xF0000003, 0x40); CdInit stores it in the ready slot D_801DDAEC read by CdReadyCallback
+def_cbready = 0x801BC544; // type:func size:0x28
+// LIBCD EVENT.OBJ: def_cbread (3.7/4.0 label order); DeliverEvent(0xF0000003, 0x40); CdInit stores it in D_801DDE60 read by CdReadCallback
+def_cbread = 0x801BC56C; // type:func size:0x28
+// LIBETC VSYNC.OBJ: v_wait slot (3.7/4.0 label, ratio 0.88); "VSync: timeout", ChangeClearPAD, ChangeClearRCnt; caller VSync
+v_wait = 0x801BC718; // type:func size:0x98
+// LIBETC INTR.OBJ: startIntr slot (3.7/4.0 label, ratio 0.83); HookEntryInt, setjmp, startIntrVSync, startIntrDMA; entry of the intr table D_801DEF50
+startIntr = 0x801BC964; // type:func size:0xD8
+// LIBETC INTR.OBJ: trapIntr slot (ratio 0.84); "unexpected interrupt(%04x)", "intr timeout(%04x:%04x)", ReturnFromException; caller startIntr
+trapIntr = 0x801BCA3C; // type:func size:0x1D0
+// LIBETC INTR.OBJ: setIntr slot (3.7/4.0 label, ratio 0.84); in the intr table D_801DEF50
+setIntr = 0x801BCC0C; // type:func size:0x148
+// LIBETC INTR.OBJ: stopIntr slot (ratio 0.83); EnterCriticalSection, ResetEntryInt; intr table D_801DEF50
+stopIntr = 0x801BCD54; // type:func size:0xA0
+// LIBETC INTR.OBJ: restartIntr slot (ratio 0.75); HookEntryInt, ExitCriticalSection; intr table D_801DEF50
+restartIntr = 0x801BCDF4; // type:func size:0x78
+// LIBETC INTR.OBJ static memclr (3.3-4.0 label at the OBJ end): zeroes a1 words at a0; caller startIntr; address suffix as INTR_VB and INTR_DMA have their own copy
+memclr_801BCE6C = 0x801BCE6C; // type:func size:0x24
+// LIBETC INTR_VB.OBJ: trapIntrVSync slot (3.7/4.0 label, ratio 0.91); used by startIntrVSync
+trapIntrVSync = 0x801BCFB8; // type:func size:0x6C
+// LIBETC INTR_VB.OBJ: byte-exact to the setIntrVSync label of 3.3-4.0; used by startIntrVSync
+setIntrVSync = 0x801BD024; // type:func size:0x2C
+// LIBETC INTR_VB.OBJ static memclr (3.3-4.0 label at the OBJ end); zeroes words; caller startIntrVSync
+memclr_801BD050 = 0x801BD050; // type:func size:0x24
+// LIBETC INTR_DMA.OBJ: trapIntrDMA slot (3.7/4.0 label, ratio 0.96); "DMA bus error: code=%08x", "MADR[%d]=%08x"; used by startIntrDMA
+trapIntrDMA = 0x801BD0CC; // type:func size:0x180
+// LIBETC INTR_DMA.OBJ: setIntrDMA slot (3.7/4.0 label, ratio 0.89); used by startIntrDMA
+setIntrDMA = 0x801BD24C; // type:func size:0xAC
+// LIBETC INTR_DMA.OBJ static memclr (3.3-4.0 label at the OBJ end); zeroes words; caller startIntrDMA
+memclr_801BD2F8 = 0x801BD2F8; // type:func size:0x24
+// LIBSND SSCLOSE.OBJ +0: _SsClose in 3.5-4.0 (same size 0x17C, ratio 0.94); _SsVmSeqKeyOff, _SsVmSetSeqVol; callers SsSeqClose, SsSepClose
+_SsClose = 0x801BE500; // type:func size:0x17C
+// LIBSND DE_15.OBJ _SsSetNrpnVabAttr15: SsSepOpen stores it at table offset 0x80 (attr13 at 0x78, attr16 at 0x84), between named Attr14 and Attr16; calls SsUtSetReverbType
+_SsSetNrpnVabAttr15 = 0x801C0150; // type:func size:0x24
+// LIBSND DE_17.OBJ _SsSetNrpnVabAttr17: SsSepOpen table offset 0x88, after Attr16; calls SsUtSetReverbFeedback
+_SsSetNrpnVabAttr17 = 0x801C01B0; // type:func size:0x24
+// LIBSND DE_18.OBJ _SsSetNrpnVabAttr18: SsSepOpen table offset 0x8C; calls SsUtSetReverbDelay
+_SsSetNrpnVabAttr18 = 0x801C01E0; // type:func size:0x24
+// LIBSND DE_19.OBJ _SsSetNrpnVabAttr19: SsSepOpen table offset 0x90, last before _SsSetPitchBend; calls SsUtSetReverbDelay
+_SsSetNrpnVabAttr19 = 0x801C0210; // type:func size:0x24
+// LIBSND UT_ROFF.OBJ SsUtReverbOff: signature hit shared by 0x20 stubs, the callee decides: SpuSetReverb(0); sits after UT_RFB, before UT_RON
+SsUtReverbOff = 0x801C1AF0; // type:func size:0x20
+// LIBSND UT_RON.OBJ SsUtReverbOn: signature hit shared by 0x20 stubs, the callee decides: SpuSetReverb(1); sits before UT_SVA
+SsUtReverbOn = 0x801C1B10; // type:func size:0x20
+// LIBSPU SPU.OBJ: _spu_FwriteByIO slot (4.0 label, 3.7 _spu_writeByIO, ratio 0.85); "SPU:T/O [%s]", "wait (wrdy H -> L)"; callers _spu_Fw, _spu_init
+_spu_FwriteByIO = 0x801C5AF0; // type:func size:0x1C0
+// LIBSPU SPU.OBJ: _spu_FsetDelayW slot (3.6-4.0 label, first of the pair, ratio 0.86); caller _spu_t
+_spu_FsetDelayW = 0x801C62F8; // type:func size:0x28
+// LIBSPU SPU.OBJ: _spu_FsetDelayR slot (second of the pair); callers _spu_Fr_ (read) and _spu_t
+_spu_FsetDelayR = 0x801C6320; // type:func size:0x28
+// LIBMCRD LIBMCRD.OBJ: _card_exist_back slot after MemCardExist (4.0 label); _get_card_event, _card_info, _rslt_to_code; used by MemCardExist
+_card_exist_back = 0x801C8AE8; // type:func size:0x300
+// LIBMCRD LIBMCRD.OBJ: _card_accept_back slot after MemCardAccept (4.0 label); _card_info, _card_load; used by MemCardAccept and the file calls
+_card_accept_back = 0x801C8E50; // type:func size:0x2A8
+// LIBMCRD LIBMCRD.OBJ: _card_read_data slot after MemCardReadData (4.0 label, ratio 0.74); lseek + read; used by MemCardReadData
+_card_read_data = 0x801C937C; // type:func size:0x13C
+// LIBMCRD LIBMCRD.OBJ: _card_write_data slot after MemCardWriteData (4.0 label); lseek + write; used by MemCardWriteData
+_card_write_data = 0x801C9570; // type:func size:0x13C
+// LIBMCRD LIBMCRD.OBJ: _card_read_file slot after MemCardReadFile (4.0 label); open/close, chains _card_read_data; used by MemCardReadFile
+_card_read_file = 0x801C97C4; // type:func size:0x140
+// LIBMCRD LIBMCRD.OBJ: _card_write_file slot after MemCardWriteFile (4.0 label); open/close, chains _card_write_data; used by MemCardWriteFile
+_card_write_file = 0x801C9A1C; // type:func size:0x140
+// LIBMCRD LIBMCRD.OBJ: _rslt_to_code slot after MemCardUnformat (4.0 label, ratio 0.79); 6 MemCard callers map card results through it
+_rslt_to_code = 0x801CA40C; // type:func size:0x54
+// LIBMCRD LIBMCRD.OBJ: _callback_handler slot (4.0 label); UserFuncExecute/UserFuncComplete; installed by MemCardStart
+_callback_handler = 0x801CA460; // type:func size:0xAC
+// LIBMCRD LIBMCRD.OBJ: byte-exact to the _make_file_discrpt label of 4.0; builds "bu00:" paths; 6 MemCard file callers
+_make_file_discrpt = 0x801CA50C; // type:func size:0x5C
+// LIBCARD FORMAT.OBJ +0: _card_sector_write in 4.0 (ratio 0.83), before _card_format; _card_write, _card_read, "card read error"; caller _card_format
+_card_sector_write = 0x801CA9B0; // type:func size:0x144
+// LIBAPI PAD.OBJ: SetPatchPad slot after StopPAD (3.7/4.0 label, ratio 0.77); SysEnqIntRP of _Pad1/_IsVSync; callers PAD_init, InitPAD
+SetPatchPad = 0x801CB794; // type:func size:0x78
+// LIBAPI PAD.OBJ: byte-exact to the RemovePatchPad label of 3.7/4.0; SysDeqIntRP; caller StopPAD
+RemovePatchPad = 0x801CB80C; // type:func size:0x38
+// LIBAPI PAD.OBJ: byte-exact to the _Pad1 label of 3.7/4.0; registered by SetPatchPad
+_Pad1 = 0x801CB844; // type:func size:0x68
+// LIBAPI PAD.OBJ: byte-exact to the _IsVSync label of 3.7/4.0; registered by SetPatchPad
+_IsVSync = 0x801CB8AC; // type:func size:0x40
+// LIBAPI CALLOC3.OBJ: byte-exact to the _bzero label of 4.0; caller calloc3
+_bzero = 0x801CC7BC; // type:func size:0x2C
+// LIBSND SSQUIT.OBJ SsQuit: 0x20 stub signature shared by several, the callee decides: calls SpuQuit; sits between SSINIT_C and SSSMV
+SsQuit = 0x801CDB50; // type:func size:0x20
+// LIBSND SSSTART.OBJ +0: _SsStart in 3.5-4.0 (ratio 0.59, same OBJ head); VSyncCallback, SetRCnt, InterruptCallback; callers SsStart, SsStart2
+_SsStart = 0x801CDBC0; // type:func size:0x230
+// LIBSND SSSTART.OBJ: _SsTrapIntrVSync slot after SsStart2 (3.4-4.0 label); calls an optional user hook D_801DFB84 then the sequencer D_801DFB80; installed by _SsStart
+_SsTrapIntrVSync = 0x801CDE30; // type:func size:0x4C
+// LIBSND SSSTART.OBJ: _SsSeqCalledTbyT_1per2 slot (3.7/4.0 label, ratio 0.84); calls the sequencer D_801DFB80 every second tick (flag D_801DFB8C); installed by _SsStart
+_SsSeqCalledTbyT_1per2 = 0x801CDE7C; // type:func size:0x48
+// LIBSND PLAY.OBJ _SsSndPlay (4.4 PLAY.OBJ label, signature hit); calls _SsSeqPlay with two shorts; caller SsSeqCalledTbyT
+_SsSndPlay = 0x801CE560; // type:func size:0x2C
+// LIBSPU S_I.OBJ SpuInit: 0x20 stub signature shared by several, the callee decides: _SpuInit(0); caller SsInit
+SpuInit = 0x801CF370; // type:func size:0x20
+// LIBAPI REALLOC3.OBJ: _unfree3 slot (4.0 label); caller realloc3
+_unfree3 = 0x801D07B4; // type:func size:0x54
+// LIBAPI REALLOC3.OBJ: _memmove slot after _unfree3 (4.0 label, ratio 0.76); caller realloc3
+_memmove = 0x801D0808; // type:func size:0x74
+// LIBGS GS_106.OBJ GsSetProjection: 0x20 stub signature shared by several, the callee decides: calls SetGeomScreen; caller kaj_view_init
+GsSetProjection = 0x801D1E00; // type:func size:0x20
+// LIBGS GS_124.OBJ GsSetWorkBase (0x10 OBJ): stores a0 in D_801E2D98, the packet pointer GsSortObject4J reads; GsGetWorkBase reads it back at the next OBJ
+GsSetWorkBase = 0x801D1E20; // type:func size:0xC
+// LIBGS GS_125.OBJ GsGetWorkBase (0x10 OBJ): returns D_801E2D98 set by GsSetWorkBase; not SsGetVoiceMask, whose 4.4 OBJ puts it 0xC after the setter
+GsGetWorkBase = 0x801D1E30; // type:func size:0x10
