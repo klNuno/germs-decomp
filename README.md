@@ -6,6 +6,21 @@ The goal is C that rebuilds the retail executable byte for byte, and through it 
 game works: the city, the scenes, the weapons, the per-limb damage and what the disc holds that the game
 never shows.
 
+<img src="docs/img/game/clock-day99.png" width="24%" alt="The HUD clock stuck on day 99 after two midnights">
+<img src="docs/img/game/mutant-wakes-in-mine.png" width="24%" alt="Awake in the coal mine among mutants, the body figure pink">
+<img src="docs/img/game/profile-panel.png" width="24%" alt="The lingering-thoughts card of a dead mutant: name, job, age, height, blood type">
+<img src="docs/img/game/energy0-game-over.png" width="24%" alt="The GAME OVER screen after energy reached 0">
+
+## What the code taught us so far
+
+Eleven findings in [docs/discoveries.md](docs/discoveries.md), six of them checked in an emulator and two in part:
+
+- [Energy at 0 is death, and only a hit to the head makes you wake up changed](docs/discoveries.md#-energy-at-0-is-death-and-only-a-hit-to-the-head-makes-you-wake-up-changed): starving is always game over, never the mine.
+- [Being changed is one flag](docs/discoveries.md#-being-changed-is-one-flag-a-pink-body-fast-healing-and-no-fatigue): a pink body, wounds that heal four times faster, no fatigue, and every stat set to 100.
+- [The five body parts](docs/discoveries.md#-body-part-damage-heals-by-the-hour-unless-it-is-at-the-worst-level) are head, arm, arm, torso and legs, not the order cheat makers used, and the worst level never heals by itself.
+- [The calendar stops at day 99](docs/discoveries.md#-the-clock-counts-minutes-and-stops-at-day-99), and one game minute is exactly 600 screen refreshes.
+- [One shop swaps its two menus on even days](docs/discoveries.md#-one-shop-swaps-its-two-menus-on-even-days), the only thing in the game that reads the day's parity.
+
 ## Status
 
 [![Progress map: one rectangle per function, sized by its code bytes](docs/progress/treemap.svg)](docs/progress/treemap.svg)
@@ -17,12 +32,24 @@ never shows.
   bytes) stay as Sony shipped them.
 - The map is regenerated after each wave with `tools/progress_map.py` (after `make check`); open it to hover
   each function, `docs/progress/progress.json` holds the same data.
-- Names: 650 of the 655 functions, 95 of Sony's 109 unnamed internals and 215 globals carry names, each
+- Names: 650 of the 655 functions, 95 of Sony's 109 unnamed internals and 221 globals carry names, each
   with its evidence in `config/symbol_addrs.txt` (`tools/xref.py` builds the cross-references, `tools/rename.py`
-  applies a batch and rechecks the sha1). 23 functions are fully read: no address name, `unk` field or `Unk`
-  type left in their body; struct types and fields are the next pass.
+  applies a batch and rechecks the sha1). The structs each source file used to declare on its own are merged
+  into one header, `include/game/types.h` (88 types, the game's main records named: `PlayerStatus`, `Player`,
+  `Inventory`, `GameVars`, `SceneTables`, `Npc`), with 68 fields named from their readers and from emulator runs.
+  36 functions are fully read: no address name, `unk` field, `Unk` type or compiler-made local left in their
+  body. The rules and the glossary are in [docs/naming.md](docs/naming.md).
 - Compiler: GCC 2.8.1 with ASPSX 2.56, `-O2 -G8 -funsigned-char`, found by compiling small functions until
   they matched.
+
+## Documents
+
+| Page | What it holds |
+|---|---|
+| [docs/discoveries.md](docs/discoveries.md) | What the code taught us about the game, for players first, with the proof folded under each finding |
+| [docs/mysteries.md](docs/mysteries.md) | The questions this project wants the code to answer, ticked as they are answered |
+| [docs/community-knowledge.md](docs/community-knowledge.md) | What players, wikis, cheat makers and earlier projects already knew, with sources |
+| [docs/naming.md](docs/naming.md) | How names are given, the evidence they need, the tools, and the glossary of modules |
 
 ## Building
 

@@ -2,23 +2,23 @@
 
 What this project wants to learn about Germs: Nerawareta Machi from its code. Each question says why it is still open and where in the code the answer should be. A question is ticked only when the code already answers it, with a link to the entry in [discoveries.md](discoveries.md) that cites the functions and addresses. What players and earlier projects already know: [community-knowledge.md](community-knowledge.md).
 
-36 questions: 3 answered, 33 open.
+36 questions: 7 answered, 29 open, 3 of them partly answered.
 
 ## Time and days
 
 - [x] 1. What does the "time control" cheat value at `0x801E6DB0` (600 normally) count? Answered: the number of screen refreshes per game minute, which gives the 6x speed players measured ([the clock](discoveries.md#-the-clock-counts-minutes-and-stops-at-day-99)).
-- [ ] 2. What decides when each of the 32 emails arrives? The fandom wiki lists fixed hours (Naomi day 1 21:00, Indenco days 1 to 3 at 10:00) and quest-driven ones, from play only. The clock code calls `mail_check_schedule(day, hour)` every game hour and a hook in `D_801DFEDC` after every minute event; reading both, and the mail table they consult, would give the full schedule.
+- [ ] 2. What decides when each of the 32 emails arrives? Partly answered: the timed ones are a list in `mail_check_schedule`, twelve mails at eight times on days 1 to 4, four of them under story conditions ([the timed mails](discoveries.md#-the-timed-mails-are-written-in-the-code-for-days-1-to-4)). Open: the story-driven mails and the per-minute hook in `D_801DFEDC`.
 - [ ] 3. Does the invasion move on by itself with time, or only through your actions? Players say there is no fixed order, but nobody says whether a building falls if you wait. The hourly call `mail_check_schedule` and whatever sets the per-building state (question 18) would show any timed step.
 - [ ] 4. Where are opening hours stored? The hospital keeps short hours and the chiropractor never closes, known from play only. Some code must compare the hour at `0x801E03E4` with a table per building; finding the readers of that halfword would locate it.
-- [ ] 5. What is the day parity flag for? Every midnight the clock stores the parity of its zero-based day counter, before the day 99 clamp, in a halfword of the time block (`0x801E03E8`): 1 when the displayed day is even, and 1 for good once the day counter is capped. Nobody has reported anything that changes on alternate days; the readers of that address would say what does.
+- [x] 5. What is the day parity flag for? Answered: its only reader swaps the two menus of one shop between odd and even days ([the shop](discoveries.md#-one-shop-swaps-its-two-menus-on-even-days)). Which shop it is stays to check.
 
 ## Survival
 
-- [ ] 6. Where are HP, fatigue and stamina? Japanese Wikipedia and GameFAQs describe three values; the code read so far shows one energy value at `0x801E0710` drained by time awake and body damage ([energy](discoveries.md#-energy-drains-faster-the-longer-you-stay-awake)). Whether HP is the body part damage and fatigue the hours-awake counter at `0x801E0746` needs the status screen code that draws the three, and the food and sleep handlers.
-- [ ] 7. What is the flag at `0x801E073C`? When set, it cancels the awake-time drain, heals every body part 16 points an hour, even at the worst level, and changes the body display colour of undamaged parts ([body parts](discoveries.md#-body-part-damage-heals-by-the-hour-unless-it-is-at-the-worst-level)). It fits the "changed" state after death by a mutant, but nothing proves it yet; the death and cure handlers would show who sets and clears it.
-- [ ] 8. Which body part is which, and what does each level do? The five damage values at `0x801E041C` to `0x801E0424` are known, and the fourth multiplies the energy drain; the part order comes only from a cheat author. Players say leg damage slows you; the movement code (`0x80199548`, speed step at `0x801E066A`) and the aiming code should read the leg and arm values.
+- [ ] 6. Where are HP, fatigue and stamina? The emulator shows one energy value at `0x801E0710` that is your life ([energy at 0](discoveries.md#-energy-at-0-is-death-and-only-a-hit-to-the-head-makes-you-wake-up-changed)), drained faster by hours awake (`0x801E0746`, the fatigue players describe) and by torso damage ([energy](discoveries.md#-energy-drains-faster-the-longer-you-stay-awake)). Whether the status screen shows three values built from these needs the status screen code, and the food handler.
+- [x] 7. What is the flag at `0x801E073C`? Answered: the "changed" (mutant) state, set when you wake up in the mine and cleared by the cure; it also sets every stat to 100 ([being changed](discoveries.md#-being-changed-is-one-flag-a-pink-body-fast-healing-and-no-fatigue)).
+- [ ] 8. Which body part is which, and what does each level do? Partly answered: the order is head, arm, arm, torso, legs, checked on the HUD figure, and the torso multiplies the energy drain ([body parts](discoveries.md#-body-part-damage-heals-by-the-hour-unless-it-is-at-the-worst-level)). Open: what the head, arm and leg levels change; players say leg damage slows you, so the movement code (speed step at `0x801E066A`) and the aiming code should read them.
 - [ ] 9. How much food is too much? Players say overeating makes you sick and hurts you. The eating handler, which must raise energy at `0x801E0710`, should hold the limit and the penalty.
-- [ ] 10. What happens at energy 0? Japanese Wikipedia says stamina at 0 kills outright. `event_draw_gauge` clamps the value at 0 and stops the warning effect; the caller that tests for 0 would say whether it is death, a faint or a trip to the mine.
+- [x] 10. What happens at energy 0? Answered: you fall; it is game over, unless an enemy hit your head since the last energy tick, which wakes you changed in the mine ([energy at 0](discoveries.md#-energy-at-0-is-death-and-only-a-hit-to-the-head-makes-you-wake-up-changed)).
 - [ ] 11. What do the chiropractor and the hospital heal? Players say the chiropractor heals limbs; the code shows a part at the worst level never heals by itself. The two places' handlers would show which values they reset and whether a cure costs time.
 
 ## Combat
@@ -47,19 +47,19 @@ What this project wants to learn about Germs: Nerawareta Machi from its code. Ea
 - [ ] 24. Can Naomi be hurt? She cannot be targeted, yet her profile text and a hit animation exist. The target selection code would show whether she is excluded by a flag that some event could clear.
 - [ ] 25. Were faces planned for everyone? Most people have no face texture. The people models in the area files and the code that applies their textures would show empty face slots or a shared blank.
 - [ ] 26. Was the town once in colour? The rumour has no source. The clock code shades the outdoor fog through `SetFarColor` by time of day; any unused colour path in the town renderer, or colour data in `C/CITY.*`, would support it.
-- [ ] 27. What opens the profiles panel at `0x80182D34`? hiddenblur found the four-line renderer and its caller `0x80183618` but never saw it in play. Tracing who calls `0x80183618` would say whether it is the lingering-thoughts screen or something unused.
+- [x] 27. What opens the profiles panel at `0x80182D34`? Answered: it is the lingering-thoughts card, opened by confirming the prompt of a dead person ([the profile panel](discoveries.md#-the-profile-panel-is-the-lingering-thoughts-of-the-dead)).
 - [ ] 28. How does the Kouda reward get skipped? A player found that clearing the hospital sends you one way to mine level 2 and loses the M47 event. The flag the morgue exit sets and the Kouda event's conditions would show the exact rule.
 
 ## Bugs
 
 - [ ] 29. Why can boss music start after the boss is dead? Players tie it to the dialogue radius. The boss trigger in the `AREA` chunks and the code that starts the music would show the order of checks.
 - [ ] 30. Why does the mine music keep playing during the Komuro fight? The music switch for that fight probably skips the stop call that other bosses use; comparing the two would show it.
-- [ ] 31. Why does the game need a faster CPU in emulators? Players set DuckStation to 190 %. hiddenblur found a frame step at `0x801E6DB4`; how the game measures frame time and what it does when frames run late would explain the slowdown.
+- [ ] 31. Why does the game need a faster CPU in emulators? Partly answered: the game measures each frame's real length and scales movement by it, 30 frames a second at best ([frame timing](discoveries.md#-the-game-times-every-frame-so-a-slow-machine-makes-it-choppy-not-slow)), so a slow emulator makes it choppy. Open: a run at another emulated CPU speed, and why 190 % helps.
 - [ ] 32. Why does the car snag on kerbs and tunnel edges? The car physics at `0x801AA360` and the collision reader at `0x8017A29C` hold the step height and the stop rule.
 - [ ] 33. Does the analog pad bug come from the game or only from the BIOS routine? hiddenblur reads it as the BIOS pad routine leaving the button word empty for analog pads. Our own reading of the pad handler at `0x801E6DA0` would confirm whether the game checks the pad type.
 
 ## Data and formats
 
 - [ ] 34. How big is the town? Sources say 2.5 or 3 km square. The block grid in `C/CITY.MP`, with the 50 m block size, would give the real size.
-- [ ] 35. What are the `SCE.S` DIR fields a to d, the 12-byte `AREA` triggers, `ENMY` and `ACTR`? The scene loader `object_load_scene` copies four DIR fields into `D_801E02D8`; the readers of those fields and of each chunk would name them.
+- [ ] 35. What are the `SCE.S` DIR fields a to d, the 12-byte `AREA` triggers, `ENMY` and `ACTR`? The scene loader `object_load_scene` copies four DIR fields into `object_scene_tables`; the readers of those fields and of each chunk would name them.
 - [ ] 36. What is in the save? One memory card block, undocumented. The save routine that writes it would list the fields, and so map most of the game state above.
