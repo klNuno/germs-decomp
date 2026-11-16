@@ -78,7 +78,7 @@ extern char mod_str_file[];
 void mod_list_add(s32 arg0);
 extern char D_80170AA0[];
 void kaj_tmd_unmap(s32 arg0, s32 arg1);
-extern s32 D_801E6DB4[];
+extern s32 kaj_system_vsync_delta[];
 void *kaj_tod_set_packet(void *arg0, void *arg1, s32 *arg2, void *arg3, s32 arg4, s32 arg5);
 void effect_weapon_check_fire_frame(s32 arg0);
 void *kaj_tod_set_frame(u32 arg0, TodFrame *arg1, void *arg2, s32 *arg3, void *arg4, s32 arg5, s32 arg6);
@@ -383,9 +383,9 @@ void mod_set_anim(void *mod, s16 anim, s16 frames) {
             }
             ((Model *)mod)->playing = 1;
             ((Model *)mod)->frame_step = 1;
-            if (D_801E6DB4[0] == 4 || D_801E6DB4[0] == 5) {
+            if (kaj_system_vsync_delta[0] == 4 || kaj_system_vsync_delta[0] == 5) {
                 ((Model *)mod)->frame_step = 2;
-            } else if (D_801E6DB4[0] >= 6) {
+            } else if (kaj_system_vsync_delta[0] >= 6) {
                 ((Model *)mod)->frame_step = 3;
             }
         }
@@ -657,8 +657,8 @@ s32 mod_finish_handler(void) {
     UnDeliverEvent(0xF3000002, 2);
     e = kaj_event_push(0x200);
     if (e != NULL) {
-        e->unk8 = mod_finished->unk0;
-        e->unkC = mod_finished->unk2;
+        e->param0 = mod_finished->unk0;
+        e->param1 = mod_finished->unk2;
     }
     if (mod_finished->unk2 == 2) {
         if (s->wait_flags & 8) {
@@ -774,7 +774,7 @@ loop:
 
 void mod_cmd_npcrec(Unk_8018EED4 *action, Model *event) {
     SceneTables *p = &object_scene_tables;
-    NpcRecord *rec = p->unk50;
+    NpcRecord *rec = p->npc_records;
     Unk_8018EED4_0 *cmd = action->unk0;
     u16 id = cmd->unk4;
     NpcRecord *found;
@@ -786,10 +786,10 @@ void mod_cmd_npcrec(Unk_8018EED4 *action, Model *event) {
     s32 x, y, z;
     s32 rot_y, seconds;
 
-    if (p->unk20 == 0) {
+    if (p->npc_record_count == 0) {
         found = NULL;
     } else {
-        for (i = 0; i < p->unk20; i++, rec++) {
+        for (i = 0; i < p->npc_record_count; i++, rec++) {
             if (rec->id == id) {
                 found = rec;
                 goto done;
@@ -863,10 +863,10 @@ void mod_npcrec_update_all(void) {
     s32 i;
 
     tables = &object_scene_tables;
-    rec = tables->unk50;
+    rec = tables->npc_records;
     player = player_status_player[0];
-    if (tables->unk20 != 0) {
-        for (i = 0; i < tables->unk20; i++, rec++) {
+    if (tables->npc_record_count != 0) {
+        for (i = 0; i < tables->npc_record_count; i++, rec++) {
             if (rec->scaled != 0 && rec->shown != 0) {
                 if (rec->shown == 1) {
                     mod = mod_find(rec->model);
@@ -922,19 +922,19 @@ void mod_npcrec_show(u16 id, s16 force) {
 
 void mod_npcrec_free_table(void) {
     SceneTables *p = &object_scene_tables;
-    if (p->unk20 != 0) {
-        if (p->unk50 != NULL) {
-            free3(p->unk50);
+    if (p->npc_record_count != 0) {
+        if (p->npc_records != NULL) {
+            free3(p->npc_records);
         }
-        p->unk20 = 0;
-        p->unk50 = NULL;
+        p->npc_record_count = 0;
+        p->npc_records = NULL;
     }
 }
 
 NpcRecord *mod_npcrec_find(u16 id) {
     SceneTables *p = &object_scene_tables;
-    s32 n = p->unk20;
-    NpcRecord *rec = p->unk50;
+    s32 n = p->npc_record_count;
+    NpcRecord *rec = p->npc_records;
     s32 i;
 
     if (n == 0) {
@@ -950,14 +950,14 @@ NpcRecord *mod_npcrec_find(u16 id) {
 
 void mod_npcrec_rebase_all(s32 origin_x, s32 origin_y, s32 origin_z) {
     SceneTables *p = &object_scene_tables;
-    NpcRecord *rec = p->unk50;
+    NpcRecord *rec = p->npc_records;
     Model *mod;
     s32 i;
 
-    if (p->unk20 == 0) {
+    if (p->npc_record_count == 0) {
         return;
     }
-    for (i = 0; i < p->unk20; i++, rec++) {
+    for (i = 0; i < p->npc_record_count; i++, rec++) {
         if (rec->scaled != 0 && rec->enabled != 0 && rec->shown == 2) {
             mod = mod_find(rec->model);
             if (mod != NULL) {
@@ -972,14 +972,14 @@ void mod_npcrec_rebase_all(s32 origin_x, s32 origin_y, s32 origin_z) {
 
 void mod_npcrec_draw_all(s32 view) {
     SceneTables *p = &object_scene_tables;
-    NpcRecord *rec = p->unk50;
+    NpcRecord *rec = p->npc_records;
     Model *mod;
     s32 i;
 
-    if (p->unk20 == 0) {
+    if (p->npc_record_count == 0) {
         return;
     }
-    for (i = 0; i < p->unk20; i++, rec++) {
+    for (i = 0; i < p->npc_record_count; i++, rec++) {
         if (rec != NULL && rec->scaled != 0 && rec->enabled != 0 && rec->shown == 2) {
             mod = mod_find(rec->model);
             if (mod != NULL && mod->ready != 0) {
@@ -991,14 +991,14 @@ void mod_npcrec_draw_all(s32 view) {
 
 s16 mod_npcrec_find_at_point(s32 x, s32 y, s32 z) {
     SceneTables *p = &object_scene_tables;
-    NpcRecord *rec = p->unk50;
+    NpcRecord *rec = p->npc_records;
     Model *mod;
     s32 i;
 
-    if (p->unk20 == 0) {
+    if (p->npc_record_count == 0) {
         return -2;
     }
-    for (i = 0; i < p->unk20; i++, rec++) {
+    for (i = 0; i < p->npc_record_count; i++, rec++) {
         if (rec->scaled != 0 && rec->enabled != 0 && rec->shown == 2) {
             mod = mod_find(rec->model);
             if (mod != NULL && mod->ready != 0 && mod->tmd_objects != NULL) {
@@ -1014,10 +1014,10 @@ s16 mod_npcrec_find_at_point(s32 x, s32 y, s32 z) {
 
 void mod_npcrec_reset_all(void) {
     SceneTables *p = &object_scene_tables;
-    NpcRecord *rec = p->unk50;
+    NpcRecord *rec = p->npc_records;
     s32 i;
 
-    for (i = 0; i < p->unk20; i++, rec++) {
+    for (i = 0; i < p->npc_record_count; i++, rec++) {
         rec->shown = 0;
     }
 }

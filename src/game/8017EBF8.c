@@ -6,7 +6,7 @@ BlockList *block_list;
 void kaj_ll_insert_before(BlockList *arg0, s32 arg1);
 void kaj_ll_insert_after(BlockList *arg0, s32 arg1);
 void kaj_cdmgr_free_all(void);
-extern s16 D_801E71C8;
+extern s16 kaj_cdmgr_state;
 /* Local view of GameVars: this unit reads 0x0-0xBE as one s16 array (lh), the shared type has a u16 array. */
 typedef struct {
     s16 unk0[0x5F];
@@ -41,14 +41,14 @@ TextCmd **text_cmd;
 s16 text_window_sprite;
 void action_push_front(TextCmd **arg0);
 s16 text_wait;
-extern s32 D_801E6DB4[];
+extern s32 kaj_system_vsync_delta[];
 extern s32 D_801E05B0[];
 extern Player *player_status_player[];
 extern char D_80170250[];
 void *kaj_malloc(u32 size);
 void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
 void *memset(void *dst, s32 c, u32 n);
-extern char D_801DFC84[];
+extern char block_str_file[];
 void free3(void *ptr);
 typedef struct {
     u8 unk0[0x20];
@@ -64,7 +64,7 @@ typedef struct {
     u8 unk1C[0x40];
     u8 unk5C[0x1C];
     Unk_801D75F4 unk78;
-} Unk_801802A0_14;
+} CardSlot;
 typedef struct {
     s16 unk0;
     s16 unk2;
@@ -74,8 +74,8 @@ typedef struct {
     u8 padA[0x2];
     s32 unkC;
     u32 unk10;
-    Unk_801802A0_14 unk14[4];
-} Unk_801802A0;
+    CardSlot unk14[4];
+} CardMenu;
 void sprite_fill_clut(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 typedef struct Unk_801A44B8 {
     u8 pad0[0x4];
@@ -128,28 +128,7 @@ void kaj_map_cell_loaded_slots(s16 *arg0, s32 *arg1);
 void kaj_map_set_cell_ready(void);
 void kaj_map_set_room_ready(void);
 void kaj_map_room_loaded_slots(s16 *arg0, s32 *arg1);
-typedef struct {
-    s32 unk0;
-    struct {
-        u8 pad0[0x18];
-        s32 unk18;
-        s32 unk1C;
-        s32 unk20;
-    } *unk4;
-    struct {
-        s32 unk0;
-        s32 unk4;
-        s32 unk8;
-        s32 unkC;
-        TmdTri *unk10;
-        s32 unk14;
-    } *unk8;
-} Unk_8017BBB0;
-typedef struct {
-    u8 pad0[0xBC];
-    Unk_8017BBB0 *unkBC;
-} Unk_801E032C;
-extern Unk_801E032C *D_801E032C[];
+extern Vehicle *object_scene_vehicle[];
 s32 block_hit_tris(TmdTri *arg0, s32 arg1, s32 arg2, Vec3 *arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7);
 s32 block_hit_quads(TmdTri *arg0, s32 arg1, s32 arg2, Vec3 *arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7);
 char *strncpy(char *dst, char *src, u32 n);
@@ -173,31 +152,26 @@ s32 kaj_tss_start(void *arg0);
 DoorList *door_list;
 void RotMatrix(SVector *arg0, void *arg1);
 Block *block_find_at(s32 arg0, s32 arg1, s32 arg2);
-typedef struct {
-    Unk_8018519C_0 *unk0;
-    s32 unk4;
-    char **unk8;
-} Unk_8018519C;
 s32 atoi(char *s);
 void door_start_open(DoorMove *arg0, s16 arg1, s16 arg2, s16 arg3);
 void door_start_close(DoorMove *arg0, s16 arg1, s16 arg2);
 extern char D_80170290[];
-void menu_card_init_slots(Unk_801802A0 *arg0, s32 arg1);
+void menu_card_init_slots(CardMenu *arg0, s32 arg1);
 void sprite_set_cell(s32 arg0, s32 arg1, s32 arg2);
 s32 MemCardSync(s32 arg0, s32 *arg1, s32 *arg2);
 void MemCardExist(s32 arg0);
 s32 MemCardFormat(s32 arg0);
 void MemCardAccept(s32 arg0);
-void menu_card_set_message(Unk_801802A0 *arg0, s32 arg1);
-s32 menu_card_load(Unk_801802A0 *arg0);
-s32 menu_card_save(Unk_801802A0 *arg0, s32 arg1);
-s32 menu_card_scan(Unk_801802A0 *arg0);
+void menu_card_set_message(CardMenu *arg0, s32 arg1);
+s32 menu_card_load(CardMenu *arg0);
+s32 menu_card_save(CardMenu *arg0, s32 arg1);
+s32 menu_card_scan(CardMenu *arg0);
 extern Unk_801D75F4 menu_card_icon_clut;
 s32 LoadImage2(void *rect, void *p);
 int sprintf(char *buf, const char *fmt, ...);
-extern Unk_801802A0 menu_card_state;
-void menu_card_process(Unk_801802A0 *arg0);
-s16 menu_card_handle_input(Unk_801802A0 *arg0);
+extern CardMenu menu_card_state;
+void menu_card_process(CardMenu *arg0);
+s16 menu_card_handle_input(CardMenu *arg0);
 s32 mail_take_scene_change(void);
 s16 event_handle_effect_done(s32 *arg0);
 s32 kaj_event_get(s32 *arg0);
@@ -232,7 +206,7 @@ void door_move_x(DoorMove *arg0);
 void door_move_y(DoorMove *arg0);
 void door_move_z(DoorMove *arg0);
 void door_move_angle(DoorMove *arg0);
-void menu_card_move_cursor(Unk_801802A0 *arg0, s16 arg1);
+void menu_card_move_cursor(CardMenu *arg0, s16 arg1);
 extern s16 D_801E6DAA[];
 u16 *Krom2RawAdd2(u16 sjis);
 s32 StoreImage2(void *rect, void *p);
@@ -247,17 +221,9 @@ typedef struct {
     u8 pad28[0x10];
     s16 unk38;
 } Unk_801E0710_5C;
-typedef struct Unk_80188FEC {
-    u16 unk0;
-    u16 unk2;
-    u8 pad4[0x2C];
-    s16 unk30;
-    u8 pad32[0x1E];
-    u16 unk50;
-} Unk_80188FEC;
 extern PlayerStatus player_status;
 void sprite_copy_cell(s32 a, s32 b, s32 c, s32 d, s32 e, s32 f);
-Unk_80188FEC *effect_weapon_find(s16 arg0);
+WeaponRecord *effect_weapon_find(s16 arg0);
 s32 rand(void);
 s32 menu_cycle_pos_a;
 s32 menu_cycle_pos_b;
@@ -321,10 +287,10 @@ s32 MemCardReadFile(s32 arg0, char *arg1, void *arg2, s32 arg3, s32 arg4);
 int strncmp(const char *a, const char *b, int n);
 extern char D_801DFC90[];
 
-void menu_card_init_slots(Unk_801802A0 *card, s32 clear_icons) {
+void menu_card_init_slots(CardMenu *card, s32 clear_icons) {
     Rect rect;
     void *buf;
-    Unk_801802A0_14 *slot;
+    CardSlot *slot;
     s32 i;
 
     slot = card->unk14;
@@ -368,7 +334,7 @@ void menu_card_init_slots(Unk_801802A0 *card, s32 clear_icons) {
 
 INCLUDE_RODATA("asm/nonmatchings/game/8017EBF8", menu_str_save_title);
 
-void menu_card_set_message(Unk_801802A0 *card, s32 result) {
+void menu_card_set_message(CardMenu *card, s32 result) {
     s32 cell;
 
     if (result < 0x64) {
@@ -482,7 +448,7 @@ static inline s16 func_8017EFEC_inline2(u8 *sec) {
     return 1;
 }
 
-s32 menu_card_load(Unk_801802A0 *card) {
+s32 menu_card_load(CardMenu *card) {
     Unk_8017EFEC save;
     u8 sec[0x80];
     PlayerStatus *status = &player_status;
@@ -490,7 +456,7 @@ s32 menu_card_load(Unk_801802A0 *card) {
     s16 *car_speed = &vars->car_speed_setting;
     Inventory *inventory = status->inventory;
     Unk_801E0710_5C *player = status->player;
-    Unk_801802A0_14 *slot;
+    CardSlot *slot;
     s32 ret;
     s32 i;
 
@@ -570,7 +536,7 @@ static inline void func_8017F6F4_digits(char *out, s32 n) {
     out[4] = 0;
 }
 
-s32 menu_card_save(Unk_801802A0 *card, s32 overwrite) {
+s32 menu_card_save(CardMenu *card, s32 overwrite) {
     Unk_8017EFEC save;
     u8 sec[0x80];
     char day_str[8];
@@ -582,7 +548,7 @@ s32 menu_card_save(Unk_801802A0 *card, s32 overwrite) {
     s16 *car_speed = &vars->car_speed_setting;
     Inventory *inventory = status->inventory;
     Unk_801E0710_5C *player = status->player;
-    Unk_801802A0_14 *slot;
+    CardSlot *slot;
     u8 *header;
     u8 *p;
     u8 sum;
@@ -655,7 +621,7 @@ error:
     return 0x68;
 }
 
-s32 menu_card_scan(Unk_801802A0 *card) {
+s32 menu_card_scan(CardMenu *card) {
     Unk_8017FF0C entries[15];
     s32 count;
     s32 cmd;
@@ -674,7 +640,7 @@ s32 menu_card_scan(Unk_801802A0 *card) {
     u8 *r3;
     u8 *header;
     u8 *title;
-    Unk_801802A0_14 *slot;
+    CardSlot *slot;
 
     ret = MemCardGetDirentry(0, D_801DFC90, entries, &count, 0, 15);
     if (ret != 0) {
@@ -758,7 +724,7 @@ s32 menu_card_scan(Unk_801802A0 *card) {
     return 0x64;
 }
 
-void menu_card_move_cursor(Unk_801802A0 *card, s16 up) {
+void menu_card_move_cursor(CardMenu *card, s16 up) {
     s32 i;
     s32 se;
 
@@ -800,7 +766,7 @@ loop:
     sound_se_play(se);
 }
 
-s16 menu_card_handle_input(Unk_801802A0 *card) {
+s16 menu_card_handle_input(CardMenu *card) {
     s32 cmd;
     s32 result;
     s32 ok;
@@ -921,7 +887,7 @@ s16 menu_card_handle_input(Unk_801802A0 *card) {
     return 0;
 }
 
-void menu_card_process(Unk_801802A0 *card) {
+void menu_card_process(CardMenu *card) {
     s32 cmd;
     s32 result;
     s32 r;
@@ -988,7 +954,7 @@ void menu_card_process(Unk_801802A0 *card) {
 
 s16 menu_card_run(s16 load_mode, s16 in_office) {
     s32 ev[6];
-    Unk_801802A0 *card;
+    CardMenu *card;
     s16 done = 0;
     s16 ready;
     s32 i;
@@ -1112,7 +1078,7 @@ void menu_status_page(PauseMenu *menu, s32 flip) {
     PlayerStatus *status = &player_status;
     GameVars_u8017EBF8 *vars = &action_vars;
     Inventory *inventory = status->inventory;
-    Unk_80188FEC *weapon;
+    WeaponRecord *weapon;
     s32 len;
     s32 j;
     s32 i;
@@ -1278,8 +1244,8 @@ void menu_status_page(PauseMenu *menu, s32 flip) {
         if (id >= 0) {
             weapon = effect_weapon_find(id);
             if (weapon != NULL) {
-                sprite_set_clut_entry(0x23B, (i * 16 + 0x60) + weapon->unk2, 0x154);
-                len = (weapon->unk30 << 5) / 50 + 1;
+                sprite_set_clut_entry(0x23B, (i * 16 + 0x60) + weapon->weapon_class, 0x154);
+                len = ((s16)weapon->req_level << 5) / 50 + 1; /* lh: this unit reads req_level signed */
                 if (len > 32) {
                     len = 32;
                 }
@@ -1289,7 +1255,7 @@ void menu_status_page(PauseMenu *menu, s32 flip) {
                         sprite_set_clut_entry(0x23B, k + j, (u16)col);
                     }
                 }
-                len = (weapon->unk50 << 12) / 25600;
+                len = (weapon->accuracy << 12) / 25600;
                 m = i * 16 + 0xC0;
                 if (len != 0) {
                     for (j = 0; j < len; j++) {
@@ -2255,7 +2221,7 @@ void text_start_typing(s32 str) {
     text_pos = 0;
     text_len = strlen((char *)str);
     if (text_draw_next(str, 1) != 0) {
-        text_wait -= D_801E6DB4[0];
+        text_wait -= kaj_system_vsync_delta[0];
         if (text_wait > 0) {
             (*text_cmd)->state = 4;
         } else {
@@ -2369,10 +2335,10 @@ static inline void func_801837F0_inl(s32 str, s16 mode, s16 circle_set, u16 circ
     }
 }
 
-void text_exec_command(Unk_8018519C *action) {
+void text_exec_command(Action *action) {
     GameVars_u8017EBF8 *vars = &action_vars;
     Player *player = player_status_player[0];
-    u16 state = action->unk0->unk2;
+    u16 state = action->cmd->sub;
     Unk_801A44B8 *window;
     char **args;
     s16 circle_set;
@@ -2396,13 +2362,13 @@ void text_exec_command(Unk_8018519C *action) {
             break;
         }
         text_cmd = (TextCmd **)action;
-        text_start_typing((s32)action->unk8[0]);
+        text_start_typing((s32)action->args[0]);
         break;
     case 1:
         if (D_801DFC5C != 0) {
             player->flags |= 0x100;
             D_801DFC5C = 0;
-            text_show_timed(1, 0, (s32)action->unk8[0], atoi(action->unk8[5]), 2);
+            text_show_timed(1, 0, (s32)action->args[0], atoi(action->args[5]), 2);
             player->flags &= 0xFEFF;
             text_release_cmd();
             sprite_set_visible(0x403, 0);
@@ -2413,12 +2379,12 @@ void text_exec_command(Unk_8018519C *action) {
                 vars->unk24E = 0;
             }
         } else {
-            args = action->unk8;
+            args = action->args;
             circle_set = atoi(args[1]);
-            circle_flags = atoi(action->unk8[2]);
-            cross_set = atoi(action->unk8[3]);
-            cross_flags = atoi(action->unk8[4]);
-            se = atoi(action->unk8[5]);
+            circle_flags = atoi(action->args[2]);
+            cross_set = atoi(action->args[3]);
+            cross_flags = atoi(action->args[4]);
+            se = atoi(action->args[5]);
             func_801837F0_inl((s32)args[0], 1, circle_set, circle_flags, cross_set, cross_flags, se);
         }
         break;
@@ -2434,7 +2400,7 @@ void text_exec_command(Unk_8018519C *action) {
             text_wait = 5;
             break;
         }
-        str = (s32)action->unk8[0];
+        str = (s32)action->args[0];
         if (text_row == 3) {
             text_row = 0;
             window = sprite_find(text_window_sprite);
@@ -2449,7 +2415,7 @@ void text_exec_command(Unk_8018519C *action) {
             }
         }
         if (text_draw_next(str, 1) != 0) {
-            text_wait -= D_801E6DB4[0];
+            text_wait -= kaj_system_vsync_delta[0];
             if (text_wait > 0) {
                 (*text_cmd)->state = 4;
             } else {
@@ -2460,7 +2426,7 @@ void text_exec_command(Unk_8018519C *action) {
         }
         break;
     case 4:
-        text_wait -= D_801E6DB4[0];
+        text_wait -= kaj_system_vsync_delta[0];
         if (text_wait > 0) {
             (*text_cmd)->state = 4;
         } else {
@@ -2600,7 +2566,7 @@ void text_release_cmd(void) {
 }
 
 void text_wait_step(void) {
-    text_wait -= D_801E6DB4[0];
+    text_wait -= kaj_system_vsync_delta[0];
     if (text_wait > 0) {
         (*text_cmd)->state = 4;
     } else {
@@ -2626,7 +2592,7 @@ void text_type_step(s32 str) {
         }
     }
     if (text_draw_next(str, 1) != 0) {
-        text_wait -= D_801E6DB4[0];
+        text_wait -= kaj_system_vsync_delta[0];
         if (text_wait > 0) {
             (*text_cmd)->state = 4;
         } else {
@@ -2753,7 +2719,7 @@ void door_refresh_all(void) {
 void door_move_x(DoorMove *door) {
     EventState *event;
 
-    door->pos_x += D_801E6DB4[0] * door->speed;
+    door->pos_x += kaj_system_vsync_delta[0] * door->speed;
     if (door->speed > 0) {
         if (door->pos_x >= door->move_to) {
             event = &event_state;
@@ -2810,7 +2776,7 @@ void door_move_x(DoorMove *door) {
 void door_move_y(DoorMove *door) {
     EventState *event;
 
-    door->pos_y += D_801E6DB4[0] * door->speed;
+    door->pos_y += kaj_system_vsync_delta[0] * door->speed;
     if (door->speed > 0) {
         if (door->pos_y >= door->move_to) {
             event = &event_state;
@@ -2867,7 +2833,7 @@ void door_move_y(DoorMove *door) {
 void door_move_z(DoorMove *door) {
     EventState *event;
 
-    door->pos_z += D_801E6DB4[0] * door->speed;
+    door->pos_z += kaj_system_vsync_delta[0] * door->speed;
     if (door->speed > 0) {
         if (door->pos_z >= door->move_to) {
             event = &event_state;
@@ -2924,7 +2890,7 @@ void door_move_z(DoorMove *door) {
 void door_move_angle(DoorMove *door) {
     EventState *event;
 
-    door->angle += D_801E6DB4[0] * door->speed;
+    door->angle += kaj_system_vsync_delta[0] * door->speed;
     if (door->speed > 0) {
         if (door->angle >= door->move_to) {
             event = &event_state;
@@ -3109,12 +3075,12 @@ void door_start_close(DoorMove *door, s16 dist, s16 speed) {
     }
 }
 
-void door_exec_command(Unk_8018519C *action, EventState *event) {
+void door_exec_command(Action *action, EventState *event) {
     DoorList *list = door_list;
-    Unk_8018519C_0 *cmd = action->unk0;
+    ActionCmdShort *cmd = (ActionCmdShort *)action->cmd;
     DoorMove *door;
     DoorMove *found;
-    u16 id = cmd->unk4;
+    u16 id = cmd->target;
     s32 dist;
     s32 speed;
 
@@ -3136,21 +3102,21 @@ void door_exec_command(Unk_8018519C *action, EventState *event) {
         }
     }
     if (found != NULL) {
-        if (cmd->unk2 == 0) {
+        if (cmd->sub == 0) {
             if (found->state != 1) {
-                dist = (s16)atoi(action->unk8[0]);
-                speed = (s16)atoi(action->unk8[1]);
-                door_start_open(found, dist, speed, atoi(action->unk8[2]));
-                if (atoi(action->unk8[3]) == 1) {
+                dist = (s16)atoi(action->args[0]);
+                speed = (s16)atoi(action->args[1]);
+                door_start_open(found, dist, speed, atoi(action->args[2]));
+                if (atoi(action->args[3]) == 1) {
                     event->state = 4;
                     event->wait_flags |= 4;
                 }
             }
         } else {
             if (found->state != 0) {
-                s32 close_dist = (s16)atoi(action->unk8[0]);
-                door_start_close(found, close_dist, atoi(action->unk8[1]));
-                if (atoi(action->unk8[2]) == 1) {
+                s32 close_dist = (s16)atoi(action->args[0]);
+                door_start_close(found, close_dist, atoi(action->args[1]));
+                if (atoi(action->args[2]) == 1) {
                     event->state = 4;
                     event->wait_flags |= 4;
                 }

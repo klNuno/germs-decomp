@@ -3,29 +3,9 @@
 
 extern Player *player_status_player[];
 void object_load_res(s32 arg0, s32 arg1);
-typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    s32 unk20;
-    s32 unk24;
-    s32 unk28;
-    s32 unk2C;
-    s32 unk30;
-    s32 unk34;
-    s32 unk38;
-    u8 pad3C[0x2C];
-    s32 unk68;
-    u8 unk6C[0x20];
-} Unk_801E032C;
-extern Unk_801E032C *D_801E032C[];
-void thing_car_init(Unk_801E032C *arg0, Player *arg1);
-void thing_train_init(Unk_801E032C *arg0, Player *arg1);
+extern Vehicle *object_scene_vehicle[];
+void thing_car_init(Vehicle *arg0, Player *arg1);
+void thing_train_init(Vehicle *arg0, Player *arg1);
 extern SceneTables object_scene_tables;
 void thing_car_get_out(Vehicle *arg0);
 void free3(void *ptr);
@@ -80,7 +60,7 @@ void sprite_set_clut_entry(s32 arg0, s32 arg1, s32 arg2);
 void sprite_fill_clut(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 s16 mail_wrap_angle(s16 a);
 s32 ratan2(s32 y, s32 x);
-extern s32 D_801E6DB4[];
+extern s32 kaj_system_vsync_delta[];
 extern CarState vehicle_car_state;
 s16 vehicle_car_stopped_input(void);
 s32 player_update_map(PlayerStatus *arg0);
@@ -103,7 +83,7 @@ INCLUDE_RODATA("asm/nonmatchings/game/801AA360", D_80171AA8);
 void vehicle_car_drive(Player *player) {
     Unk_801AA8DC_10 sv;
     s32 flag;
-    Unk_801E032C *car = D_801E032C[0];
+    Vehicle *car = object_scene_vehicle[0];
     CarState *state = &vehicle_car_state;
     s32 speed_div;
     s32 revs;
@@ -120,8 +100,8 @@ void vehicle_car_drive(Player *player) {
     sv.unk0 = 0;
     sv.unk2 = 0;
     sv.unk4 = (state->steer << 12) / 360;
-    RotMatrix(&sv, car->unk6C);
-    car->unk68 = 0;
+    RotMatrix(&sv, car->coord2.coord_m);
+    car->coord2.flg = 0;
     speed_div = thing_car_speed_div;
     if (state->unk2 != 0) {
         speed_div = thing_car_speed_div * 3;
@@ -155,7 +135,7 @@ void vehicle_car_drive(Player *player) {
     }
     speed = ((speed << 12) / 4) >> 12;
     sgn = 0;
-    state->speed = speed * D_801E6DB4[0];
+    state->speed = speed * kaj_system_vsync_delta[0];
     if (state->steer != 0) {
         if (state->steer > 0) {
             sgn = 1;
@@ -181,7 +161,7 @@ void vehicle_car_drive(Player *player) {
     } else {
         player->unk3C = 1;
         t = (sgn * state->unk18 * cs) >> 12;
-        GsSetLsMatrix(&car->unk1C);
+        GsSetLsMatrix(&car->coord.coord_m);
         sv.unk0 = t;
         sv.unk2 = 0;
         sv.unk4 = -0x98;
@@ -318,7 +298,7 @@ void vehicle_train_update(Thing *thing) {
         motion = train->motion;
         if (motion == 3) {
             step = (16000 - thing->pos_z) / 100 + 5;
-            thing->pos_z += step * D_801E6DB4[0];
+            thing->pos_z += step * kaj_system_vsync_delta[0];
             if (thing->pos_z >= 16000) {
                 thing->animate = 0;
                 thing->pos_z = 16000;
@@ -349,7 +329,7 @@ void vehicle_train_update(Thing *thing) {
             }
         } else if (motion == 1) {
             step = (thing->pos_z - 16000) / 100 + 5;
-            thing->pos_z += step * D_801E6DB4[0];
+            thing->pos_z += step * kaj_system_vsync_delta[0];
             if (thing->pos_z > 47999) {
                 thing->animate = 0;
                 thing->active = 0;
@@ -360,7 +340,7 @@ void vehicle_train_update(Thing *thing) {
         motion = train->motion;
         if (motion == 3) {
             step = (thing->pos_z - 16000) / 100 + 5;
-            thing->pos_z -= step * D_801E6DB4[0];
+            thing->pos_z -= step * kaj_system_vsync_delta[0];
             if (thing->pos_z <= 16000) {
                 thing->pos_z = 16000;
                 thing->animate = 0;
@@ -391,7 +371,7 @@ void vehicle_train_update(Thing *thing) {
             }
         } else if (motion == 1) {
             step = (16000 - thing->pos_z) / 100 + 5;
-            thing->pos_z -= step * D_801E6DB4[0];
+            thing->pos_z -= step * kaj_system_vsync_delta[0];
             if (thing->pos_z < -15999) {
                 thing->animate = 0;
                 thing->active = 0;
@@ -659,7 +639,7 @@ s16 vehicle_car_input(PlayerStatus *status, s32 pad) {
     if (pad & 0x1000) {
         if (state->look_pitch < 20) {
             player->unk3C = 1;
-            state->look_pitch += D_801E6DB4[0];
+            state->look_pitch += kaj_system_vsync_delta[0];
             if (state->look_pitch > 20) {
                 state->look_pitch = 20;
             }
@@ -667,7 +647,7 @@ s16 vehicle_car_input(PlayerStatus *status, s32 pad) {
     } else if (pad & 0x4000) {
         if (state->look_pitch > -20) {
             player->unk3C = 1;
-            state->look_pitch -= D_801E6DB4[0];
+            state->look_pitch -= kaj_system_vsync_delta[0];
             if (state->look_pitch < -20) {
                 state->look_pitch = -20;
             }
@@ -675,7 +655,7 @@ s16 vehicle_car_input(PlayerStatus *status, s32 pad) {
     } else if (pad & 0x8000) {
         if (state->look_yaw > -65) {
             player->unk3C = 1;
-            state->look_yaw -= D_801E6DB4[0];
+            state->look_yaw -= kaj_system_vsync_delta[0];
             if (state->look_yaw < -65) {
                 state->look_yaw = -65;
             }
@@ -683,7 +663,7 @@ s16 vehicle_car_input(PlayerStatus *status, s32 pad) {
     } else if (pad & 0x2000) {
         if (state->look_yaw < 65) {
             player->unk3C = 1;
-            state->look_yaw += D_801E6DB4[0];
+            state->look_yaw += kaj_system_vsync_delta[0];
             if (state->look_yaw > 65) {
                 state->look_yaw = 65;
             }
@@ -711,52 +691,52 @@ s16 vehicle_car_input(PlayerStatus *status, s32 pad) {
     }
     if (steer_minus) {
         if (state->steer > -45) {
-            state->steer -= D_801E6DB4[0];
+            state->steer -= kaj_system_vsync_delta[0];
             if (state->steer < -45) {
                 state->steer = -45;
             }
         }
     } else if (!steer_plus && state->speed != 0 && state->steer < 0) {
-        state->steer += D_801E6DB4[0];
+        state->steer += kaj_system_vsync_delta[0];
         if (state->steer > 0) {
             state->steer = 0;
         }
     }
     if (steer_plus) {
         if (state->steer < 45) {
-            state->steer += D_801E6DB4[0];
+            state->steer += kaj_system_vsync_delta[0];
             if (state->steer > 45) {
                 state->steer = 45;
             }
         }
     } else if (!steer_minus && state->speed != 0 && state->steer > 0) {
-        state->steer -= D_801E6DB4[0];
+        state->steer -= kaj_system_vsync_delta[0];
         if (state->steer < 0) {
             state->steer = 0;
         }
     }
     if (brake_held) {
         if (state->brake < 256) {
-            state->brake += D_801E6DB4[0];
+            state->brake += kaj_system_vsync_delta[0];
             if (state->brake > 256) {
                 state->brake = 256;
             }
         }
     } else if (state->brake > 0) {
-        state->brake -= D_801E6DB4[0];
+        state->brake -= kaj_system_vsync_delta[0];
         if (state->brake < 0) {
             state->brake = 0;
         }
     }
     if (throttle_held) {
         if (state->throttle < 256) {
-            state->throttle += D_801E6DB4[0];
+            state->throttle += kaj_system_vsync_delta[0];
             if (state->throttle > 256) {
                 state->throttle = 256;
             }
         }
     } else if (state->throttle > 0) {
-        state->throttle -= D_801E6DB4[0];
+        state->throttle -= kaj_system_vsync_delta[0];
         if (state->throttle < 0) {
             state->throttle = 0;
         }
@@ -792,7 +772,7 @@ void vehicle_create(Vehicle **out, u32 size) {
     }
 }
 
-void vehicle_init(Unk_801E032C *car) {
+void vehicle_init(Vehicle *car) {
     switch (player_status_player[0]->vehicle_mode) {
     case 1:
         thing_car_init(car, player_status_player[0]);
@@ -802,14 +782,14 @@ void vehicle_init(Unk_801E032C *car) {
         thing_train_init(car, player_status_player[0]);
         break;
     }
-    D_801E032C[0] = car;
+    object_scene_vehicle[0] = car;
 }
 
 void vehicle_free(void) {
     SceneTables *tables = &object_scene_tables;
-    Vehicle *vehicle = tables->unk54;
+    Vehicle *vehicle = tables->vehicle;
     if (vehicle != NULL) {
-        if (vehicle->unk0 == 1) {
+        if (vehicle->kind == 1) {
             thing_car_get_out(vehicle);
         }
         free3(vehicle->model0);
@@ -818,7 +798,7 @@ void vehicle_free(void) {
         }
         free3(vehicle->data);
         free3(vehicle);
-        tables->unk54 = NULL;
+        tables->vehicle = NULL;
         sound_se_pop();
     }
 }
@@ -826,12 +806,12 @@ void vehicle_free(void) {
 INCLUDE_ASM("asm/nonmatchings/game/801AA360", vehicle_draw);
 
 void vehicle_set_origin(s32 origin_x, s32 origin_y, s32 origin_z) {
-    Unk_801E032C *car = D_801E032C[0];
+    Vehicle *car = object_scene_vehicle[0];
     if (car != NULL) {
-        car->unk18 = 0;
-        car->unk30 = car->unk4 - origin_x;
-        car->unk34 = car->unk8 - origin_y;
-        car->unk38 = car->unkC - origin_z;
+        car->coord.flg = 0;
+        car->coord.coord_tx = car->pos_x - origin_x;
+        car->coord.coord_ty = car->pos_y - origin_y;
+        car->coord.coord_tz = car->pos_z - origin_z;
     }
 }
 

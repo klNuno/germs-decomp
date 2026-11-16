@@ -6,12 +6,12 @@ s32 CloseEvent(s32 event);
 s32 event_enter_id;
 s32 event_leave_id;
 s32 event_mod_finish_id;
-extern s32 D_801DFF50;
+extern s32 player_pick_trigger_hook;
 void event_clock_tick(s16 a);
-void (*D_801DFEDC)(void);
+void (*event_tick_hook)(void);
 typedef struct { s32 unk0; s16 unk4; s16 unk6; } Unk_801E024C;
-extern Unk_801E024C D_801E024C[];
-void (*D_801DFED8)(s32 *a, Unk_801E024C *b);
+extern Unk_801E024C event_alarm_slots[];
+void (*event_alarm_hook)(s32 *a, Unk_801E024C *b);
 typedef struct { s16 unk0; s16 unk2; s16 unk4; s16 unk6; s16 unk8[1]; } Unk_8018A8CC_58;
 typedef struct { u8 unk0[0x58]; Unk_8018A8CC_58 *unk58; } Unk_8018A8CC;
 void sprite_restore_clut(s32 a, s32 b, s32 c);
@@ -28,10 +28,9 @@ extern ScreenLight screen_light;
 void event_draw_clock_digits(s32 a, s16 b);
 void event_update_daylight(s32 a);
 void SetFarColor(s32 r, s32 g, s32 b);
-typedef struct Unk_80188FEC { u16 unk0; u8 unk2[0x22]; u16 unk24; u8 unk26[0x3A]; } Unk_80188FEC;
 extern PlayerStatus player_status;
-void (*D_801DFEE8)(s32 *a);
-Unk_80188FEC *effect_weapon_find(s16 arg0);
+void (*event_mod_finish_hook)(s32 *a);
+WeaponRecord *effect_weapon_find(s16 arg0);
 void player_weapon_sound(s16 a, s32 b);
 void mod_set_anim(s32 a, s32 b, s32 c);
 void sound_se_stop(s32 a);
@@ -45,14 +44,14 @@ u16 *sprite_find(u16 arg0);
 s32 MoveImage(void *rect, s32 x, s32 y);
 s32 OpenEvent(u32 desc, s32 spec, s32 mode, s32 (*func)(void));
 s32 EnableEvent(s32 event);
-extern char D_801DFD14[];
+extern char event_str_file[];
 void kaj_abend(s32 a, char *b, char *c, s32 d);
 s32 object_deliver_area_events(void);
 s32 player_leave_trigger(void);
 s32 mod_finish_handler(void);
 extern EventState event_state;
 typedef struct { s32 unk0; s32 unk4; s32 unk8; s32 unkC; void *unk10; } Unk_801895E0;
-s16 (*D_801DFEE0)(Unk_801895E0 *a);
+s16 (*event_leave_hook)(Unk_801895E0 *a);
 void action_reset(s16 arg0);
 void text_close(void);
 s16 action_run_npc_event(u16 arg0, s16 arg1);
@@ -60,7 +59,7 @@ s16 thing_run_script(s32 a, s32 b, s32 c);
 s16 action_run_trigger_leave(void *arg0);
 extern Player *player_status_player[];
 typedef struct { s32 unk0; s32 unk4; s32 unk8; s32 unkC; s32 unk10; } Unk_8018970C;
-s16 (*D_801DFED4)(Unk_8018970C *a);
+s16 (*event_effect_done_hook)(Unk_8018970C *a);
 void kaj_tss_release(s32 arg0);
 void kaj_pad_reset(s32 a);
 void kaj_view_clear_vram(void);
@@ -73,7 +72,7 @@ typedef struct { u8 unk0; u8 unk1; u8 unk2; u8 unk3; } Unk_801D7730;
 extern Unk_801D7730 event_limb_colors[];
 void mail_check_schedule(s16 a, s16 b);
 void event_draw_limb_status(PlayerStatus *arg0);
-s16 (*D_801DFEE4)(Unk_801895E0 *a);
+s16 (*event_enter_hook)(Unk_801895E0 *a);
 s16 action_run_trigger_enter(void *arg0);
 void block_enter_area(u32 arg0);
 void text_show(char *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
@@ -87,18 +86,18 @@ void event_open(void) {
     event_leave_id = OpenEvent(0xF3000001, 2, 0x1000, player_leave_trigger);
     event_mod_finish_id = OpenEvent(0xF3000002, 2, 0x1000, mod_finish_handler);
     if (event_enter_id == -1 || event_leave_id == -1 || event_mod_finish_id == -1) {
-        kaj_abend(0xC, "Can not Create User Defined Event", D_801DFD14, 0x34);
+        kaj_abend(0xC, "Can not Create User Defined Event", event_str_file, 0x34);
     }
     if (EnableEvent(event_enter_id) == 0) {
-        kaj_abend(0xC, "Can not Enable to ENTER Event", D_801DFD14, 0x37);
+        kaj_abend(0xC, "Can not Enable to ENTER Event", event_str_file, 0x37);
     }
     if (EnableEvent(event_leave_id) == 0) {
-        kaj_abend(0xC, "Can not Enable to LEAVE Event", D_801DFD14, 0x3A);
+        kaj_abend(0xC, "Can not Enable to LEAVE Event", event_str_file, 0x3A);
     }
     if (EnableEvent(event_mod_finish_id) == 0) {
-        kaj_abend(0xC, "Can not Enable to MOD Finish Event", D_801DFD14, 0x3D);
+        kaj_abend(0xC, "Can not Enable to MOD Finish Event", event_str_file, 0x3D);
     }
-    D_801DFF50 = 0;
+    player_pick_trigger_hook = 0;
 }
 
 void event_handle_enter(Unk_801895E0 *ev) {
@@ -114,7 +113,7 @@ void event_handle_enter(Unk_801895E0 *ev) {
     state->circle_flags = 0;
     state->cross_set = -1;
     state->circle_set = -1;
-    if (D_801DFEE4 != NULL && D_801DFEE4(ev) != 0) {
+    if (event_enter_hook != NULL && event_enter_hook(ev) != 0) {
         return;
     }
     switch (ev->unk8) {
@@ -194,7 +193,7 @@ void event_handle_leave(Unk_801895E0 *ev) {
         action_reset(0);
         text_close();
     }
-    if (D_801DFEE0 != NULL && D_801DFEE0(ev) != 0) {
+    if (event_leave_hook != NULL && event_leave_hook(ev) != 0) {
         return;
     }
     switch (ev->unk8) {
@@ -272,14 +271,14 @@ s16 event_handle_effect_done(Unk_8018970C *ev) {
         sound_bgm_stop();
         break;
     }
-    if (handled == 0 && D_801DFED4 != NULL) {
-        handled = D_801DFED4(ev);
+    if (handled == 0 && event_effect_done_hook != NULL) {
+        handled = event_effect_done_hook(ev);
     }
     return handled;
 }
 
 void event_close(void) {
-    D_801DFF50 = 0;
+    player_pick_trigger_hook = 0;
     DisableEvent(event_enter_id);
     DisableEvent(event_leave_id);
     DisableEvent(event_mod_finish_id);
@@ -288,19 +287,19 @@ void event_close(void) {
     CloseEvent(event_mod_finish_id);
 }
 
-void func_80189928(s32 *ev) {
-    Unk_801E024C *p = &D_801E024C[ev[2]];
+void event_handle_alarm(s32 *ev) {
+    Unk_801E024C *p = &event_alarm_slots[ev[2]];
     p->unk0 = -1;
     p->unk4 = 0;
-    if (D_801DFED8 != NULL) {
-        D_801DFED8(ev, p);
+    if (event_alarm_hook != NULL) {
+        event_alarm_hook(ev, p);
     }
 }
 
 void event_handle_tick(s16 daylight) {
     event_clock_tick(daylight);
-    if (D_801DFEDC != NULL) {
-        D_801DFEDC();
+    if (event_tick_hook != NULL) {
+        event_tick_hook();
     }
 }
 
@@ -308,7 +307,7 @@ void event_handle_mod_finish(s32 *ev) {
     PlayerStatus *status = &player_status;
     Player *player = status->player;
     Inventory *inv = status->inventory;
-    Unk_80188FEC *weapon;
+    WeaponRecord *weapon;
 
     if (ev[3] == 1) {
         switch (inv->weapon_state) {
@@ -327,7 +326,7 @@ void event_handle_mod_finish(s32 *ev) {
             inv->weapon_state = 7;
             weapon = effect_weapon_find(inv->weapon_ids[inv->weapon_slot]);
             if (weapon != NULL) {
-                player_weapon_sound(weapon->unk0, 0);
+                player_weapon_sound(weapon->id, 0);
             }
             mod_set_anim(inv->weapon_model, 3, 0);
             break;
@@ -335,15 +334,15 @@ void event_handle_mod_finish(s32 *ev) {
             inv->weapon_state = 3;
             break;
         }
-    } else if (D_801DFEE8 != NULL) {
-        D_801DFEE8(ev);
+    } else if (event_mod_finish_hook != NULL) {
+        event_mod_finish_hook(ev);
     }
 }
 
 void event_drain_gauge(PlayerStatus *status) {
     GameVars *game = &action_vars;
     Inventory *inv = status->inventory;
-    Unk_80188FEC *weapon;
+    WeaponRecord *weapon;
     s32 drain = 1;
 
     if (status->mutant == 0 && status->hours_awake >= 0x10) {
@@ -382,7 +381,7 @@ void event_drain_gauge(PlayerStatus *status) {
     game->drain_count++;
     weapon = effect_weapon_find(inv->weapon_ids[inv->weapon_slot]);
     if (weapon != NULL && game->drain_count == 6) {
-        drain += weapon->unk24;
+        drain += weapon->drain_extra;
         game->drain_count = 0;
     }
     status->infected = 0;

@@ -9,7 +9,7 @@ typedef struct Unk_801CCAF4 {
 } Unk_801CCAF4;
 void *kaj_malloc(u32 size);
 void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
-extern char D_801DFDC4[];
+extern char kaj_ll_str_file[];
 void free3(void *ptr);
 extern KajSystem kaj_system;
 u32 PadRead(s32 id);
@@ -46,7 +46,7 @@ extern char D_80172D34[];
 extern char D_801DFDD0[];
 extern char D_801DFDD4[];
 extern char D_801DFDD8[];
-extern char D_801DFDDC[];
+extern char kaj_misc_str_file[];
 int printf(const char *fmt, ...);
 void exit(s32 code);
 void GsMapModelingData(u32 *p);
@@ -63,7 +63,7 @@ void GsLinkObject4(u32 *tmd, Unk_801CD028 *obj, s32 n);
 void kaj_ll_create(Unk_801CCAF4 **list) {
     *list = kaj_malloc(0x10);
     if (*list == NULL) {
-        kaj_abend(3, "Error Allocating LL Handle", D_801DFDC4, 0x15);
+        kaj_abend(3, "Error Allocating LL Handle", kaj_ll_str_file, 0x15);
     }
     (*list)->unk0 = NULL;
     (*list)->unk4 = NULL;
@@ -95,7 +95,7 @@ void kaj_ll_insert_before(Unk_801CCAF4 *list, void *data) {
 
     node = kaj_malloc(0xC);
     if (node == NULL) {
-        kaj_abend(3, D_80172BB4, D_801DFDC4, 0x3C);
+        kaj_abend(3, D_80172BB4, kaj_ll_str_file, 0x3C);
     }
     node->data = data;
     node->prev = NULL;
@@ -128,7 +128,7 @@ void kaj_ll_insert_after(Unk_801CCAF4 *list, void *data) {
 
     node = kaj_malloc(0xC);
     if (node == NULL) {
-        kaj_abend(3, D_80172BB4, D_801DFDC4, 0x61);
+        kaj_abend(3, D_80172BB4, kaj_ll_str_file, 0x61);
     }
     node->data = data;
     node->prev = NULL;
@@ -267,7 +267,7 @@ void kaj_tmd_load(Unk_801CD028 **obj, u32 *tmd_file, void *coord) {
         s32 i;
 
         msg = D_80172D34;
-        file = D_801DFDDC;
+        file = kaj_misc_str_file;
         code = 10;
         if (file == NULL) {
             printf(D_80172CA8);
@@ -304,7 +304,7 @@ void kaj_tmd_load(Unk_801CD028 **obj, u32 *tmd_file, void *coord) {
             s32 i;
 
             msg = "Error Allocating GsDOBJ2 Handle";
-            file = D_801DFDDC;
+            file = kaj_misc_str_file;
             code = 3;
             if (file == NULL) {
                 printf(D_80172CA8);
@@ -344,7 +344,7 @@ void kaj_tmd_load(Unk_801CD028 **obj, u32 *tmd_file, void *coord) {
         s32 i;
 
         msg = "Too Many Objects in TMD";
-        file = D_801DFDDC;
+        file = kaj_misc_str_file;
         code = 10;
         if (file == NULL) {
             printf(D_80172CA8);
@@ -384,7 +384,7 @@ s32 kaj_tmd_map(u32 *tmd_file) {
 
     if (tmd_file[0] != 0x41) {
         msg = D_80172D34;
-        file = D_801DFDDC;
+        file = kaj_misc_str_file;
         code = 10;
         if (file == NULL) {
             printf(D_80172CA8);

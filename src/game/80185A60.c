@@ -61,32 +61,6 @@ typedef struct {
 Unk_801DFEB8 effect_elevator;
 extern BuildingState block_building_state;
 extern Inventory *player_status_inventory[];
-typedef struct Unk_80188FEC {
-    u16 unk0;
-    u16 unk2;
-    u8 unk4[0x20];
-    u16 unk24;
-    u8 unk26[2];
-    s16 unk28;
-    u8 unk2A[6];
-    u16 unk30;
-    u8 unk32[2];
-    s16 unk34;
-    u8 unk36[2];
-    u16 unk38;
-    u8 unk3A[2];
-    s16 unk3C;
-    u8 unk3E[2];
-    s16 unk40;
-    u8 unk42[6];
-    s16 unk48;
-    u8 unk4A[2];
-    u16 unk4C;
-    u8 unk4E[2];
-    u16 unk50;
-    u16 unk52;
-    u8 unk54[0xC];
-} Unk_80188FEC;
 extern SceneTables object_scene_tables;
 typedef struct { s16 unk0; s16 unk2; s16 unk4; s16 unk6; } Unk_801DFEB0;
 Unk_801DFEB0 effect_flame_large_rect;
@@ -121,7 +95,7 @@ s16 effect_flame_small_kind;
 s16 effect_flame_small_cur;
 void effect_flame_make_clut(s16 arg0);
 void *kaj_malloc(s32 size);
-extern s32 D_801DFED4;
+extern s32 event_effect_done_hook;
 void effect_elevator_enter(void);
 void effect_elevator_update(void);
 void effect_elevator_input(void);
@@ -143,7 +117,7 @@ void effect_weapon_calc_rate(s32 arg0);
 void object_load_weapon_mods(void);
 void thing_set_animate(s32 a, s32 b, s32 c);
 void thing_set_flag10(s32 a, s32 b, s32 c);
-Unk_80188FEC *effect_weapon_find(s16 arg0);
+WeaponRecord *effect_weapon_find(s16 arg0);
 void player_weapon_sound(s16 a, s32 b);
 extern Player *player_status_player[];
 s32 effect_elevator_on_task_end(s32 *arg0);
@@ -217,7 +191,7 @@ void event_advance_clock(s16 a, s16 b);
 void player_heal_part(s16 arg0, s16 arg1, s16 arg2);
 void player_add_hp(s16 arg0, s16 arg1);
 s32 player_is_injured(void);
-extern s32 D_801E6DB4[];
+extern s32 kaj_system_vsync_delta[];
 void block_set_mode(u16 arg0);
 void sound_se_stop(s32 arg0);
 void effect_weapon_draw_panel(s16 arg0, s16 arg1);
@@ -664,7 +638,7 @@ void effect_elevator_exit(void) {
     z = rcos((player->yaw << 12) / 360) * 0x1194 >> 12;
     x += player->pos_x + player->cell_x * 0x30D4;
     z += player->pos_z + player->cell_z * 0x30D4;
-    player_start_move_to(2, 0x80, x, player->pos_y - player->cell_y * 0x7D00 - player->unk78, z, player->pitch, player->yaw, player->unk70, 2);
+    player_start_move_to(2, 0x80, x, player->pos_y - player->cell_y * 0x7D00 - player->unk78, z, player->pitch, player->yaw, player->roll, 2);
 }
 
 void effect_elevator_move_doors(Unk_801DFEB8 *elevator, s16 open) {
@@ -781,7 +755,7 @@ void effect_elevator_enter(void) {
     s32 y;
     s32 z;
 
-    D_801DFED4 = (s32)effect_elevator_on_task_end;
+    event_effect_done_hook = (s32)effect_elevator_on_task_end;
     player = player_status_player[0];
     sprite_fill_clut(2, 1, 8, 0x421);
     elevator = &effect_elevator;
@@ -795,7 +769,7 @@ void effect_elevator_enter(void) {
     y = player->pos_y - player->cell_y * 0x7D00 - player->unk78;
     z = player->pos_z + player->cell_z * 0x30D4;
     kaj_timer_enable();
-    player_start_move_to(0, 0, x, y, z, player->pitch, (s16)(player->yaw + 0xB4), player->unk70, 2);
+    player_start_move_to(0, 0, x, y, z, player->pitch, (s16)(player->yaw + 0xB4), player->roll, 2);
 }
 
 static inline u16 func_801872D4_inl(s32 floor) {
@@ -822,7 +796,7 @@ void effect_elevator_update(void) {
     case 4:
         sound_se_stop(0x12);
         effect_elevator_move_doors(elevator, 1);
-        D_801E6DB4[0] = 0;
+        kaj_system_vsync_delta[0] = 0;
         break;
     default:
         door_state = func_801872D4_inl((u16)elevator->unk2);
@@ -871,7 +845,7 @@ void effect_elevator_run(void) {
         mail_step_frame(1, 1, 1);
     } while (done == 0);
     kaj_timer_disable();
-    D_801DFED4 = 0;
+    event_effect_done_hook = 0;
 }
 
 void effect_elevator_init(s16 floor) {
@@ -939,7 +913,7 @@ INCLUDE_RODATA("asm/nonmatchings/game/80185A60", D_80170590);
 
 void effect_weapon_draw_panel(s16 show, s16 with_text) {
     Inventory *inv = player_status_inventory[0];
-    Unk_80188FEC *weapon;
+    WeaponRecord *weapon;
     s16 id;
     s16 bar;
 
@@ -951,20 +925,20 @@ void effect_weapon_draw_panel(s16 show, s16 with_text) {
         id = inv->weapon_ids[inv->weapon_slot];
         weapon = effect_weapon_find(id);
         if (weapon != NULL) {
-            bar = (s16)weapon->unk30 >> 3;
+            bar = (s16)weapon->req_level >> 3;
             sprite_fill_clut(0x401, 0x10, bar + 0x10, 0x67FF);
             sprite_fill_clut(0x401, bar + 0x11, 0x2F, 0x3D40);
-            bar = weapon->unk52 >> 3;
+            bar = weapon->damage >> 3;
             sprite_fill_clut(0x401, 0x40, bar + 0x40, 0x67FF);
             sprite_fill_clut(0x401, bar + 0x41, 0x5F, 0x3D40);
-            bar = weapon->unk50 / 3 - 1;
+            bar = weapon->accuracy / 3 - 1;
             if (bar < 0) {
                 bar = 0;
             }
             sprite_fill_clut(0x401, 0x70, bar + 0x70, 0x67FF);
             sprite_fill_clut(0x401, bar + 0x71, 0x8F, 0x3D40);
             sprite_fill_clut(0x401, 0xC, 0xE, 0xD20);
-            switch (weapon->unk2) {
+            switch (weapon->weapon_class) {
             case 0:
                 sprite_set_clut_entry(0x401, 0xC, 0xD3F);
                 break;
@@ -1016,7 +990,7 @@ INCLUDE_RODATA("asm/nonmatchings/game/80185A60", D_8017080C);
 void effect_weapon_calc_rate(s32 slot) {
     PlayerStatus *status = &player_status;
     Inventory *inv = status->inventory;
-    Unk_80188FEC *weapon = effect_weapon_find(inv->weapon_ids[slot]);
+    WeaponRecord *weapon = effect_weapon_find(inv->weapon_ids[slot]);
     s32 level_part, stat_part, skill_part, rate;
     s32 val;
 
@@ -1024,12 +998,12 @@ void effect_weapon_calc_rate(s32 slot) {
         return;
     }
     level_part = 0x2000;
-    if (weapon->unk28 != 0 && status->level < (s16)weapon->unk30) {
-        level_part = (status->level << 13) / (s16)weapon->unk30;
+    if (weapon->req_level_on != 0 && status->level < (s16)weapon->req_level) {
+        level_part = (status->level << 13) / (s16)weapon->req_level;
     }
     stat_part = 0x1000;
-    if (weapon->unk34 != 0) {
-        switch (weapon->unk38) {
+    if (weapon->req_stat_on != 0) {
+        switch (weapon->req_stat_id) {
         case 0:
             val = status->stat0;
             break;
@@ -1043,13 +1017,13 @@ void effect_weapon_calc_rate(s32 slot) {
             val = status->stat3;
             break;
         }
-        if (val < weapon->unk3C) {
-            stat_part = (val << 12) / weapon->unk3C;
+        if (val < weapon->req_stat) {
+            stat_part = (val << 12) / weapon->req_stat;
         }
     }
     skill_part = 0x1000;
-    if (weapon->unk40 != 0) {
-        switch (weapon->unk2) {
+    if (weapon->req_class_on != 0) {
+        switch (weapon->weapon_class) {
         case 0:
             val = status->weapon0_level;
             break;
@@ -1066,11 +1040,11 @@ void effect_weapon_calc_rate(s32 slot) {
             val = status->weapon4_level;
             break;
         }
-        if (val < weapon->unk48) {
-            skill_part = (val << 12) / weapon->unk48;
+        if (val < weapon->req_class) {
+            skill_part = (val << 12) / weapon->req_class;
         }
     }
-    val = (weapon->unk50 * (level_part + stat_part + skill_part)) >> 14;
+    val = (weapon->accuracy * (level_part + stat_part + skill_part)) >> 14;
     rate = (val < 20) ? 20 : (val > 100) ? 100 : val;
     inv->weapon_rate[slot] = rate;
     status->weapon_redraw = 1;
@@ -1266,8 +1240,8 @@ s16 effect_item_use(PlayerStatus *status, s16 b, s16 item_id, s16 full, s16 clos
     s16 value;
     s32 injured;
 
-    count = tables->unk2C;
-    rec = (ItemRecord *)tables->unk48;
+    count = tables->item_count;
+    rec = (ItemRecord *)tables->items;
     if (count != 0) {
         if (item_id < 0) {
             item = NULL;
@@ -1578,15 +1552,15 @@ void effect_weapon_check_fire_frame(s32 frame) {
     PlayerStatus *status = &player_status;
     Inventory *inv = status->inventory;
     Player *player = status->player;
-    Unk_80188FEC *weapon = effect_weapon_find(inv->weapon_ids[inv->weapon_slot]);
+    WeaponRecord *weapon = effect_weapon_find(inv->weapon_ids[inv->weapon_slot]);
 
-    if (weapon != NULL && weapon->unk4C == frame) {
+    if (weapon != NULL && weapon->fire_frame == frame) {
         if (status->target_npc != 0) {
             if (!(player->flags & 0x400)) {
                 player->flags |= 0x400;
             }
         }
-        player_weapon_sound(weapon->unk0, 1);
+        player_weapon_sound(weapon->id, 1);
     }
 }
 
@@ -1628,25 +1602,25 @@ s32 effect_weapon_list(s16 equipped, s16 *count_out, s16 *ids_out) {
 
 void effect_weapon_free_records(void) {
     SceneTables *tables = &object_scene_tables;
-    if (tables->unk30 != 0) {
-        if (tables->unk58 != NULL) {
-            free3(tables->unk58);
+    if (tables->weapon_count != 0) {
+        if (tables->weapons != NULL) {
+            free3(tables->weapons);
         }
-        tables->unk30 = 0;
-        tables->unk58 = NULL;
+        tables->weapon_count = 0;
+        tables->weapons = NULL;
     }
 }
 
-Unk_80188FEC *effect_weapon_find(s16 id) {
+WeaponRecord *effect_weapon_find(s16 id) {
     SceneTables *tables = &object_scene_tables;
-    s32 n = tables->unk30;
-    Unk_80188FEC *rec = tables->unk58;
+    s32 n = tables->weapon_count;
+    WeaponRecord *rec = tables->weapons;
     s32 i;
     if (n == 0 || id < 0) {
         return NULL;
     }
-    for (i = 0; i < tables->unk30; i++, rec++) {
-        if (rec->unk0 == id) {
+    for (i = 0; i < tables->weapon_count; i++, rec++) {
+        if (rec->id == id) {
             return rec;
         }
     }
@@ -1694,24 +1668,24 @@ s32 effect_item_remove(s16 item_id, s16 kind) {
 
 void effect_item_free_records(void) {
     SceneTables *tables = &object_scene_tables;
-    if (tables->unk2C != 0) {
-        if (tables->unk48 != 0) {
-            free3((void *)tables->unk48);
+    if (tables->item_count != 0) {
+        if (tables->items != 0) {
+            free3((void *)tables->items);
         }
-        tables->unk2C = 0;
-        tables->unk48 = 0;
+        tables->item_count = 0;
+        tables->items = 0;
     }
 }
 
 ItemRecord *effect_item_find(s16 id) {
     SceneTables *tables = &object_scene_tables;
-    s32 n = tables->unk2C;
-    ItemRecord *rec = (ItemRecord *)tables->unk48;
+    s32 n = tables->item_count;
+    ItemRecord *rec = (ItemRecord *)tables->items;
     s32 i;
     if (n == 0 || id < 0) {
         return NULL;
     }
-    for (i = 0; i < tables->unk2C; i++, rec++) {
+    for (i = 0; i < tables->item_count; i++, rec++) {
         if (rec->id == id) {
             return rec;
         }

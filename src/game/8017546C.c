@@ -34,7 +34,7 @@ s32 rsin(s32 a);
 s32 rcos(s32 a);
 s16 ai_check_line(Npc *arg0, SceneTrigger *arg1, s32 arg2);
 s16 ai_try_move(Npc *arg0, SceneTrigger *arg1, s16 arg2);
-extern s32 D_801E6DB4[];
+extern s32 kaj_system_vsync_delta[];
 extern Model *ai_cur_model;
 NpcStats *npc_find_stats(s16 arg0);
 s16 ai_find_target(Npc *arg0, s16 arg1);
@@ -46,17 +46,6 @@ extern Block *ai_cur_block;
 extern s32 ai_cur_grid;
 extern NpcStats *ai_cur_stats;
 extern NpcBody *ai_cur_body;
-/* Local view of ActionCmd: this unit reads 0x4 as u16, the shared type has an s32 there. */
-typedef struct {
-    u16 unk0;
-    u16 unk2;
-    u16 target;
-} ActionCmd_u8017546C;
-typedef struct {
-    ActionCmd_u8017546C *unk0;
-    s32 unk4;
-    char **unk8;
-} Unk_80173054;
 s32 atoi(char *s);
 extern PlayerStatus player_status;
 s32 rand(void);
@@ -212,7 +201,7 @@ s16 npc_update_anim(Npc *npc, s16 state) {
         case 5:
             if (model->playing == 0) {
                 if (npc->unk46 != 0) {
-                    npc->unk46 -= D_801E6DB4[0];
+                    npc->unk46 -= kaj_system_vsync_delta[0];
                     if (npc->unk46 <= 0) {
                         npc->unk46 = 0;
                         mod_set_anim(model, 6, 0);
@@ -276,7 +265,7 @@ void npc_update_all(void) {
                 model = mod_find(npc->unk16);
                 if (model != NULL) {
                     action_place_npc(npc, model);
-                    npc->unk48 = block_find_at(npc->unk20, npc->unk24, npc->unk28);
+                    npc->block = block_find_at(npc->unk20, npc->unk24, npc->unk28);
                     npc->unk10 = -2;
                     npc->unk40 = 0;
                     npc->unkB = 0;
@@ -351,10 +340,10 @@ void npc_update_all(void) {
     }
 }
 
-void npc_exec_command(Unk_80173054 *action) {
+void npc_exec_command(Action *action) {
     SceneTables *tables = &object_scene_tables;
     Npc *npc = tables->npcs;
-    ActionCmd_u8017546C *cmd = action->unk0;
+    ActionCmdShort *cmd = (ActionCmdShort *)action->cmd;
     u16 id = cmd->target;
     Npc *target;
     s32 i;
@@ -374,34 +363,34 @@ done:
     if (target == NULL) {
         return;
     }
-    switch (cmd->unk2) {
+    switch (cmd->sub) {
     case 0:
-        if (atoi(action->unk8[0]) != 0) {
-            if (atoi(action->unk8[1]) != 0) {
-                target->unk1C = atoi(action->unk8[2]);
+        if (atoi(action->args[0]) != 0) {
+            if (atoi(action->args[1]) != 0) {
+                target->unk1C = atoi(action->args[2]);
             } else {
-                target->unk1A = atoi(action->unk8[2]);
+                target->unk1A = atoi(action->args[2]);
             }
         } else {
-            if (atoi(action->unk8[1]) != 0) {
-                target->unk1E = atoi(action->unk8[2]);
+            if (atoi(action->args[1]) != 0) {
+                target->unk1E = atoi(action->args[2]);
             }
         }
         break;
     case 1:
-        target->unk8 = atoi(action->unk8[0]);
+        target->unk8 = atoi(action->args[0]);
         break;
     case 2:
-        target->unk6 = atoi(action->unk8[0]);
+        target->unk6 = atoi(action->args[0]);
         break;
     case 3:
         if (target->unkE != 2 && target->unkF != 6) {
-            target->unkF = atoi(action->unk8[0]);
+            target->unkF = atoi(action->args[0]);
         }
         break;
     case 5:
         if (target->unkE != 2 && target->unkF != 6) {
-            target->unkE = atoi(action->unk8[0]);
+            target->unkE = atoi(action->args[0]);
             if (target->unkE == 2) {
                 target->unk12 = 0;
             }
@@ -409,7 +398,7 @@ done:
         break;
     case 7:
         if (target->unkE != 2 && target->unkF != 6) {
-            switch (atoi(action->unk8[0])) {
+            switch (atoi(action->args[0])) {
             case 0:
                 target->unk12 &= 0x1FF;
                 break;
@@ -577,7 +566,7 @@ Npc *npc_find(s16 by_model, u16 id) {
 void npc_draw_all(s32 view) {
     SceneTables *p = &object_scene_tables;
     Npc *npc = p->npcs;
-    Unk_80176370 *block;
+    Block *block;
     Model *model;
     s32 i;
 
@@ -585,8 +574,8 @@ void npc_draw_all(s32 view) {
         return;
     }
     for (i = 0; i < p->npc_count; i++, npc++) {
-        block = (Unk_80176370 *)npc->unk48;
-        if (npc != NULL && npc->unk4 != 0 && npc->unk6 != 0 && block != NULL && block->unk4 != 0) {
+        block = (Block *)npc->block;
+        if (npc != NULL && npc->unk4 != 0 && npc->unk6 != 0 && block != NULL && block->visible != 0) {
             model = mod_find(npc->unk16);
             if (model != NULL && model->ready != 0) {
                 mod_draw(view, model, npc->unkA);
@@ -624,7 +613,7 @@ void npc_update_blocks(void) {
     s32 i;
     for (i = 0; i < p->npc_count; i++, npc++) {
         if (npc->unk4 != 0 && npc->unk6 != 0) {
-            npc->unk48 = block_find_at(npc->unk20, npc->unk24, npc->unk28);
+            npc->block = block_find_at(npc->unk20, npc->unk24, npc->unk28);
         }
     }
 }

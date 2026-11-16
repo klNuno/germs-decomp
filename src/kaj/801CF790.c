@@ -39,7 +39,7 @@ u16 GetTPage(s32 tp, s32 abr, s32 x, s32 y);
 u16 GetClut(s32 x, s32 y);
 void *kaj_malloc(u32 size);
 void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
-extern char D_801DFDE4[];
+extern char kaj_tim_str_file[];
 
 static inline void func_801CF790_inline(Unk_801CFB4C *tim, void **buf) {
     s32 size;
@@ -52,12 +52,12 @@ static inline void func_801CF790_inline(Unk_801CFB4C *tim, void **buf) {
             size = 0x200;
             break;
         default:
-            kaj_abend(9, "No CLUT in this TIM", D_801DFDE4, 28);
+            kaj_abend(9, "No CLUT in this TIM", kaj_tim_str_file, 28);
             break;
         }
         *buf = kaj_malloc(size);
         if (*buf == NULL) {
-            kaj_abend(3, "Error Allocating CLUT Buffer", D_801DFDE4, 33);
+            kaj_abend(3, "Error Allocating CLUT Buffer", kaj_tim_str_file, 33);
         }
         StoreImage(&tim->unk10, *buf);
     }
@@ -70,7 +70,7 @@ void kaj_tim_load(Unk_801CFAE8 **handle, u32 *tim_file, u16 mode, s16 keep_clut)
 
     *handle = kaj_malloc(0x24);
     if (*handle == NULL) {
-        kaj_abend(3, "Error Allocating TIM Handle", D_801DFDE4, 47);
+        kaj_abend(3, "Error Allocating TIM Handle", kaj_tim_str_file, 47);
     }
     (*handle)->unk1C = NULL;
     (*handle)->unk20 = NULL;

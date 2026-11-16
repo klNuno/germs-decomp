@@ -26,7 +26,7 @@ void ClearOTagR(u32 *ot, s32 n);
 s32 ClearImage(Rect *rect, s32 r, s32 g, s32 b);
 s32 DrawSync(s32 mode);
 void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
-extern char D_801DFDFC[];
+extern char kaj_tss_str_file[];
 extern KajSystem kaj_system;
 s32 VSync(s32 mode);
 void ResetGraph(s32 mode);
@@ -40,8 +40,8 @@ KajEvent *kaj_event_push(s32 arg0);
 void kaj_event_flush(s32 a, s32 b);
 void EnterCriticalSection(void);
 void ExitCriticalSection(void);
-extern char D_801DFE04[];
-extern s32 D_801E6DB4[];
+extern char kaj_view_str_file[];
+extern s32 kaj_system_vsync_delta[];
 void GsInitGraph(s32 w, s32 h, s32 intl, s32 dither, s32 vrammode);
 void GsDefDispBuff(s32 x0, s32 y0, s32 x1, s32 y1);
 void SetDefDispEnv(void *env, s32 x, s32 y, s32 w, s32 h);
@@ -100,9 +100,9 @@ s32 kaj_tss_kill(s32 index) {
     EnterCriticalSection();
     e = kaj_event_push(0x100);
     if (e != 0) {
-        e->unk8 = index;
-        e->unkC = 1;
-        e->unk10 = node->type;
+        e->param0 = index;
+        e->param1 = 1;
+        e->param2 = node->type;
         {
             TssTable *q = &kaj_tss_table;
 
@@ -215,7 +215,7 @@ void kaj_tss_init(void) {
     }
     p->slots = res;
     if (res == 0) {
-        kaj_abend(3, "Error Allocating Sharing Table", D_801DFDFC, 0x78);
+        kaj_abend(3, "Error Allocating Sharing Table", kaj_tss_str_file, 0x78);
     }
     for (i = 0; i < p->count; i++) {
         p->slots[i].index = i;
@@ -278,11 +278,11 @@ void kaj_view_init(void) {
         p->bg_b = 0;
         p->ot_tags = kaj_malloc(0x8000);
         if (p->ot_tags == 0) {
-            kaj_abend(3, "Error Allocating VIEW Tag", D_801DFE04, 0x30);
+            kaj_abend(3, "Error Allocating VIEW Tag", kaj_view_str_file, 0x30);
         }
         p->packets = (s32)kaj_malloc(0x2C000);
         if (p->packets == 0) {
-            kaj_abend(3, "Error Allocating VIEW Packet", D_801DFE04, 0x35);
+            kaj_abend(3, "Error Allocating VIEW Packet", kaj_view_str_file, 0x35);
         }
         p->ot_length = 13;
         p->ot_org = p->ot_tags;
@@ -298,7 +298,7 @@ void kaj_view_init(void) {
     SetBackColor(0, 0, 0);
     SetFarColor(0, 0, 0);
     kaj_view_current = kaj_view_buffers;
-    D_801E6DB4[0] = 0;
+    kaj_system_vsync_delta[0] = 0;
 }
 
 void kaj_view_quit(void) {

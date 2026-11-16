@@ -5,7 +5,7 @@ void *malloc3(u32 size);
 void *memset(void *dst, s32 c, u32 n);
 extern KajSystem kaj_system;
 void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
-extern char D_801DFDBC[];
+extern char kaj_str_file[];
 void ResetCallback(void);
 void InitHeap3(void *head, u32 size);
 s32 VSync(s32 mode);
@@ -53,7 +53,7 @@ void kaj_init(void) {
     DrawSync(0);
     PadInit(0);
     if (CdInit() == 0) {
-        kaj_abend(1, "can't initialize CD-ROM subsystem", D_801DFDBC, 0x3B);
+        kaj_abend(1, "can't initialize CD-ROM subsystem", kaj_str_file, 0x3B);
     }
     kaj_event_init();
     kaj_timer_init();

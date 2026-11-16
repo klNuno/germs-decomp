@@ -86,11 +86,11 @@ void object_room_do_action(PlayerStatus *arg0);
 void player_start_move_to(s16 a, u16 b, s32 c, s32 d, s32 e, s16 f, s16 g, s16 h, s32 i);
 void player_handle_pad(PlayerStatus *arg0, s32 arg1, s32 arg2);
 s16 D_801DFD54;
-extern s32 D_801DFF50;
-extern s32 D_801DFED8;
-extern s32 D_801DFEE4;
-extern s32 D_801DFED4;
-extern s32 D_801DFEE8;
+extern s32 player_pick_trigger_hook;
+extern s32 event_alarm_hook;
+extern s32 event_enter_hook;
+extern s32 event_effect_done_hook;
+extern s32 event_mod_finish_hook;
 void action_reset(s16 arg0);
 void action_free_all_sets(void);
 void action_free_triggers(void);
@@ -109,7 +109,7 @@ void thing_free_all(void);
 void *kaj_malloc(u32 size);
 void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
 void *action_load_set(void *arg0);
-extern char D_80170B7C[];
+extern char object_str_file[];
 void block_create(Block **arg0, s32 arg1);
 void block_setup(Block *arg0, u16 arg1);
 void block_list_add(s32 arg0);
@@ -132,9 +132,8 @@ void kaj_tim_upload(u32 *arg0, s16 arg1);
 extern u8 *D_801E05C8[];
 void sound_vab_transfer(VabStream *arg0);
 void sound_se_push(Unk_801A217C *arg0);
-typedef struct { s32 unk0; s32 unk4; s32 unk8; s32 unkC; s32 unk10; s32 unk14; s32 unk18; s32 unk1C; s32 unk20; s32 unk24; s32 unk28; s32 unk2C; s32 unk30; s32 unk34; s32 unk38; } Unk_801E032C;
 void vehicle_create(Vehicle **arg0, u32 arg1);
-void vehicle_init(Unk_801E032C *arg0);
+void vehicle_init(Vehicle *arg0);
 void object_room_storage_open(s16 arg0, char *arg1);
 void effect_start_fade(s32 arg0, s32 arg1);
 void kaj_view_set_bg_color(u8 arg0, u8 arg1, u8 arg2);
@@ -143,11 +142,11 @@ void sound_bgm_play(s16 arg0);
 s16 D_801DFD56;
 extern u16 D_801E0356[];
 extern SceneRequest scene_request;
-s32 object_room_on_enter(Unk_80192F60 *arg0);
-s32 object_room_on_effect_done(Unk_80193068 *arg0);
+s32 object_room_on_enter(KajEvent *arg0);
+s32 object_room_on_effect_done(KajEvent *arg0);
 void object_room_pick_desk_action(s32 *arg0);
-void object_room_on_alarm(Unk_80192F60 *arg0);
-void object_room_on_mod_finish(Unk_80192F60 *arg0);
+void object_room_on_alarm(KajEvent *arg0);
+void object_room_on_mod_finish(KajEvent *arg0);
 void player_place_for_scene(s32 arg0);
 void object_load_scene(void);
 void mod_npcrec_show(s32 arg0, s32 arg1);
@@ -165,7 +164,7 @@ void kaj_timer_disable(void);
 void effect_fade_set_black(void);
 void text_start_narration(s32 arg0);
 s32 kaj_event_get(s32 *arg0);
-void func_80189928(s32 *arg0);
+void event_handle_alarm(s32 *arg0);
 void event_handle_enter(s32 *arg0);
 void event_handle_leave(s32 *arg0);
 void event_handle_tick(s16 arg0);
@@ -235,7 +234,7 @@ void object_load_aset(IffContext *iff, s32 size) {
 
     buf = kaj_malloc(size);
     if (buf == NULL) {
-        kaj_abend(3, "Error Allocating IFF_ID_ASET Buffer", D_80170B7C, 0x8D);
+        kaj_abend(3, "Error Allocating IFF_ID_ASET Buffer", object_str_file, 0x8D);
     }
     *(IffChunkBody *)buf = *(IffChunkBody *)((u8 *)iff->chunk + 8);
     if (size > 0x7F8) {
@@ -350,7 +349,7 @@ void object_load_door(IffContext *iff, s32 size) {
     door_add(door);
 }
 
-INCLUDE_RODATA("asm/nonmatchings/game/8018FA18", D_80170B7C);
+INCLUDE_RODATA("asm/nonmatchings/game/8018FA18", object_str_file);
 
 void object_load_mail(IffContext *iff, s32 size, s32 list_index) {
     u8 cd_mode;
@@ -362,7 +361,7 @@ void object_load_mail(IffContext *iff, s32 size, s32 list_index) {
 
     buf = kaj_malloc(size);
     if (buf == NULL) {
-        kaj_abend(3, "Error Allocating IFF_ID_MAIL Buffer", D_80170B7C, 0xC6);
+        kaj_abend(3, "Error Allocating IFF_ID_MAIL Buffer", object_str_file, 0xC6);
     }
     *(IffChunkBody *)buf = *(IffChunkBody *)((u8 *)iff->chunk + 8);
     if (size > 0x7F8) {
@@ -484,7 +483,7 @@ void object_load_other(IffContext *iff, s32 tag, s32 size) {
     tables = &object_scene_tables;
     buf = kaj_malloc(size);
     if (buf == NULL) {
-        kaj_abend(3, "Error Allocating IFF_ID_OTHER Buffer", D_80170B7C, 0xFD);
+        kaj_abend(3, "Error Allocating IFF_ID_OTHER Buffer", object_str_file, 0xFD);
     }
     *(IffChunkBody *)buf = *(IffChunkBody *)((u8 *)iff->chunk + 8);
     if (size > 0x7F8) {
@@ -521,7 +520,7 @@ void object_load_other(IffContext *iff, s32 tag, s32 size) {
         action_init_npcs();
         break;
     case 0x2043504E:
-        tables->unk50 = buf;
+        tables->npc_records = buf;
         break;
     case 0x52414843:
         tables->npc_bodies = buf;
@@ -530,14 +529,14 @@ void object_load_other(IffContext *iff, s32 tag, s32 size) {
         tables->npc_stats = buf;
         break;
     case 0x4D455449:
-        tables->unk48 = buf;
+        tables->items = buf;
         break;
     case 0x20545854:
-        tables->unk5C[tables->unk34] = buf;
-        tables->unk34++;
+        tables->texts[tables->text_count] = buf;
+        tables->text_count++;
         break;
     case 0x4E504557:
-        tables->unk58 = buf;
+        tables->weapons = buf;
         break;
     }
 }
@@ -553,7 +552,7 @@ void object_load_sprt(IffContext *iff, s32 size) {
     sprite = NULL;
     rec = kaj_malloc(size);
     if (rec == NULL) {
-        kaj_abend(3, "Error Allocating IFF_ID_SPRT Buffer", D_80170B7C, 0x12B);
+        kaj_abend(3, "Error Allocating IFF_ID_SPRT Buffer", object_str_file, 0x12B);
     }
     *(IffChunkBody *)rec = *(IffChunkBody *)((u8 *)iff->chunk + 8);
     if (size > 0x7F8) {
@@ -595,7 +594,7 @@ void object_load_text(IffContext *iff, s32 size) {
 
     buf = kaj_malloc(size);
     if (buf == NULL) {
-        kaj_abend(3, "Error Allocating IFF_ID_TEXT Buffer", D_80170B7C, 0x140);
+        kaj_abend(3, "Error Allocating IFF_ID_TEXT Buffer", object_str_file, 0x140);
     }
     *(IffChunkBody *)buf = *(IffChunkBody *)((u8 *)iff->chunk + 8);
     if (size > 0x7F8) {
@@ -676,7 +675,7 @@ void object_load_tim(IffContext *iff, s32 size) {
 
     buf = kaj_malloc(size);
     if (buf == NULL) {
-        kaj_abend(3, "Error Allocating IFF_ID_TIM Buffer", D_80170B7C, 0x165);
+        kaj_abend(3, "Error Allocating IFF_ID_TIM Buffer", object_str_file, 0x165);
     }
     *(Unk_8019120C *)buf = *(Unk_8019120C *)((u8 *)iff->chunk + 0xC);
     if (size > 0x7F8) {
@@ -756,7 +755,7 @@ void object_load_vabb(IffContext *iff, s32 size) {
     sound_vab_stream.body_len = 0x2000;
     sound_vab_stream.body_buf = kaj_malloc(0x2000);
     if (sound_vab_stream.body_buf == NULL) {
-        kaj_abend(3, "Error Allocating vab_trans_buffer", D_80170B7C, 0x191);
+        kaj_abend(3, "Error Allocating vab_trans_buffer", object_str_file, 0x191);
     }
     while (sound_vab_stream.body_len < size) {
         buf = sound_vab_stream.body_buf;
@@ -849,7 +848,7 @@ void object_load_vecl(IffContext *iff, s32 size) {
         }
         iff->pos += size - 0x7F8;
     }
-    vehicle_init((Unk_801E032C *)vehicle);
+    vehicle_init((Vehicle *)vehicle);
 }
 
 void object_read_chunks(IffContext *iff, s32 request, s32 progress, s32 filter_id) {
@@ -1082,17 +1081,17 @@ void object_iff_open(IffContext **out, s32 res_file, s32 index) {
     D_801DFF18 = 1;
     *out = kaj_malloc(0x10);
     if (*out == NULL) {
-        kaj_abend(3, "Error Allocation IFF Context", D_80170B7C, 0x2AA);
+        kaj_abend(3, "Error Allocation IFF Context", object_str_file, 0x2AA);
     }
     (*out)->size = 0;
     (*out)->pos = 0;
     (*out)->header = kaj_malloc(0x800);
     if ((*out)->header == NULL) {
-        kaj_abend(3, "Error Allocating IFF Header", D_80170B7C, 0x2B1);
+        kaj_abend(3, "Error Allocating IFF Header", object_str_file, 0x2B1);
     }
     (*out)->chunk = kaj_malloc(0x800);
     if ((*out)->chunk == NULL) {
-        kaj_abend(3, "Error Allocating IFF Chunk Header", D_80170B7C, 0x2B5);
+        kaj_abend(3, "Error Allocating IFF Chunk Header", object_str_file, 0x2B5);
     }
 retry0:
     if (res) {
@@ -1182,13 +1181,13 @@ void object_load_scene(void) {
         tables->npc_body_count = a;
     }
     if (b != 0) {
-        tables->unk20 = b;
+        tables->npc_record_count = b;
     }
     if (c != 0) {
-        tables->unk30 = c;
+        tables->weapon_count = c;
     }
     if (d != 0) {
-        tables->unk2C = d;
+        tables->item_count = d;
     }
     if (q->size == 0) {
         D_801DFF18 = 0;
@@ -1257,13 +1256,13 @@ void object_load_weapon_mods(void) {
         tables->npc_body_count = a;
     }
     if (b != 0) {
-        tables->unk20 = b;
+        tables->npc_record_count = b;
     }
     if (c != 0) {
-        tables->unk30 = c;
+        tables->weapon_count = c;
     }
     if (d != 0) {
-        tables->unk2C = d;
+        tables->item_count = d;
     }
     if (q->size == 0) {
         D_801DFF18 = 0;
@@ -1308,13 +1307,13 @@ void object_load_mail_by_id(s16 list_index) {
         tables->npc_body_count = a;
     }
     if (b != 0) {
-        tables->unk20 = b;
+        tables->npc_record_count = b;
     }
     if (c != 0) {
-        tables->unk30 = c;
+        tables->weapon_count = c;
     }
     if (d != 0) {
-        tables->unk2C = d;
+        tables->item_count = d;
     }
     if (q->size == 0) {
         D_801DFF18 = 0;
@@ -1359,13 +1358,13 @@ void object_load_res(s32 index, s32 progress) {
         tables->npc_body_count = a;
     }
     if (b != 0) {
-        tables->unk20 = b;
+        tables->npc_record_count = b;
     }
     if (c != 0) {
-        tables->unk30 = c;
+        tables->weapon_count = c;
     }
     if (d != 0) {
-        tables->unk2C = d;
+        tables->item_count = d;
     }
     if (q->size == 0) {
         D_801DFF18 = 0;
@@ -1410,13 +1409,13 @@ void object_load_res12_by_id(s16 id) {
         tables->npc_body_count = a;
     }
     if (b != 0) {
-        tables->unk20 = b;
+        tables->npc_record_count = b;
     }
     if (c != 0) {
-        tables->unk30 = c;
+        tables->weapon_count = c;
     }
     if (d != 0) {
-        tables->unk2C = d;
+        tables->item_count = d;
     }
     if (q->size == 0) {
         D_801DFF18 = 0;
@@ -1468,10 +1467,10 @@ void object_iff_close(IffContext *iff) {
     free3(iff);
 }
 
-s32 object_room_on_enter(Unk_80192F60 *ev) {
+s32 object_room_on_enter(KajEvent *ev) {
     RoomPhone *phone = &object_room_phone;
 
-    switch (ev->unkC) {
+    switch (ev->param1) {
     case 0xFA0000:
         /* " 8机1から離れる       3○" */
         text_show(" 8\212\3671\202\251\202\347\227\243\202\352\202\351       3\201\233", 1, -1, 8, -1, 0, 1);
@@ -1499,7 +1498,7 @@ s32 object_room_on_enter(Unk_80192F60 *ev) {
     return 1;
 }
 
-s32 object_room_on_effect_done(Unk_80193068 *ev) {
+s32 object_room_on_effect_done(KajEvent *ev) {
     GameVars_u8018FA18 *game;
     Player *player;
     u16 mode;
@@ -1509,7 +1508,7 @@ s32 object_room_on_effect_done(Unk_80193068 *ev) {
     game = &action_vars;
     storage = &object_room_storage;
     player = player_status_player[0];
-    kind = ev->unk10;
+    kind = ev->param2;
     mode = D_801E0356[0];
     if (kind == 4) {
         if (D_801DFD56 != 0) {
@@ -1523,7 +1522,7 @@ s32 object_room_on_effect_done(Unk_80193068 *ev) {
             effect_start_fade(10, 3);
         }
     } else if (kind == 10) {
-        if (ev->unkC == 0) {
+        if (ev->param1 == 0) {
             game->unk244 = -1;
         }
         player_rest(0, 0xDAC, 0, 0xC80);
@@ -1531,7 +1530,7 @@ s32 object_room_on_effect_done(Unk_80193068 *ev) {
         mail_wait(0, 0, 0, 4);
         effect_start_fade(9, 3);
     } else if (kind == 9) {
-        if (ev->unkC == 0) {
+        if (ev->param1 == 0) {
             game->unk244 = -1;
         }
         player->flags &= ~0x10;
@@ -1552,7 +1551,7 @@ s32 object_room_on_effect_done(Unk_80193068 *ev) {
             }
         }
     } else if (kind == 12) {
-        if (ev->unk8 != 999999) {
+        if (ev->param0 != 999999) {
             object_room_storage_open(1, 0);
         }
     } else if (kind == 13) {
@@ -1996,11 +1995,11 @@ void object_room_init(void) {
         status->model->coord_tz = 0x1A2C - player->cell_z * 12500;
         status->model->coord_flg = 0;
     }
-    D_801DFF50 = (s32)object_room_pick_desk_action;
-    D_801DFED8 = (s32)object_room_on_alarm;
-    D_801DFEE4 = (s32)object_room_on_enter;
-    D_801DFED4 = (s32)object_room_on_effect_done;
-    D_801DFEE8 = (s32)object_room_on_mod_finish;
+    player_pick_trigger_hook = (s32)object_room_pick_desk_action;
+    event_alarm_hook = (s32)object_room_on_alarm;
+    event_enter_hook = (s32)object_room_on_enter;
+    event_effect_done_hook = (s32)object_room_on_effect_done;
+    event_mod_finish_hook = (s32)object_room_on_mod_finish;
     phone->ringing = 0;
     phone->state = 0;
     phone->message = -1;
@@ -2045,11 +2044,11 @@ void object_room_quit(void) {
     effect_clear_alarms();
     sound_bgm_stop();
     sound_se_stop_all();
-    D_801DFF50 = 0;
-    D_801DFED8 = 0;
-    D_801DFEE4 = 0;
-    D_801DFED4 = 0;
-    D_801DFEE8 = 0;
+    player_pick_trigger_hook = 0;
+    event_alarm_hook = 0;
+    event_enter_hook = 0;
+    event_effect_done_hook = 0;
+    event_mod_finish_hook = 0;
     status->model = 0;
     text_close();
     action_reset(1);
@@ -2060,13 +2059,13 @@ void object_room_quit(void) {
     mod_free_all();
     sprite_delete(0);
     thing_free_all();
-    for (i = 0; i < tables->unk34; i++) {
-        if (tables->unk5C[i] != 0) {
-            free3(tables->unk5C[i]);
-            tables->unk5C[i] = 0;
+    for (i = 0; i < tables->text_count; i++) {
+        if (tables->texts[i] != 0) {
+            free3(tables->texts[i]);
+            tables->texts[i] = 0;
         }
     }
-    tables->unk34 = 0;
+    tables->text_count = 0;
     switch (object_room_exit_action) {
     case 0:
         block_free_all();
@@ -2104,14 +2103,14 @@ void object_room_main(void) {
         sound_bgm_play(1);
     case 2:
         effect_fade_set_black();
-        text_start_narration((s32)object_scene_tables.unk5C[(s16)mode - 1]);
+        text_start_narration((s32)object_scene_tables.texts[(s16)mode - 1]);
         break;
     }
     m = mode;
     while (done == 0) {
         switch (kaj_event_get(buf)) {
         case 2:
-            func_80189928(buf);
+            event_handle_alarm(buf);
             continue;
         case 0x10:
             event_handle_enter(buf);
@@ -2200,21 +2199,21 @@ void object_room_pick_desk_action(s32 *out) {
     }
 }
 
-void object_room_on_alarm(Unk_80192F60 *ev) {
+void object_room_on_alarm(KajEvent *ev) {
     Player *player = player_status_player[0];
     RoomPhone *phone = &object_room_phone;
     Model *model;
 
-    if (ev->unkC == 0x400) {
+    if (ev->param1 == 0x400) {
         model = mod_find(0x440);
         if (model != NULL && model->anim == 0) {
             mod_set_anim(model, 1, 0);
         }
-    } else if (ev->unkC == 0x401) {
+    } else if (ev->param1 == 0x401) {
         phone->state = 4;
         object_room_play_call(phone->message);
         sound_se_stop(0x33);
-    } else if (ev->unkC == 0x402) {
+    } else if (ev->param1 == 0x402) {
         if (!(player->flags & 0x40) && phone->state != 4) {
             phone->state = 3;
             sound_se_stop(0x33);
@@ -2223,7 +2222,7 @@ void object_room_on_alarm(Unk_80192F60 *ev) {
                 player_reset_triggers(0);
             }
         }
-    } else if (ev->unkC == 0x403) {
+    } else if (ev->param1 == 0x403) {
         if (phone->state == 3) {
             phone->ringing = 0;
             phone->state = 0;
@@ -2232,13 +2231,13 @@ void object_room_on_alarm(Unk_80192F60 *ev) {
     }
 }
 
-void object_room_on_mod_finish(Unk_80192F60 *ev) {
+void object_room_on_mod_finish(KajEvent *ev) {
     PlayerStatus *status = &player_status;
     Player *player = status->player;
     Model *model = status->model;
     RoomPhone *phone = &object_room_phone;
 
-    if (ev->unkC == 3 && ev->unk8 == 0x40) {
+    if (ev->param1 == 3 && ev->param0 == 0x40) {
         if (model->anim == 1) {
             if (phone->state == 2) {
                 sound_se_play(0x33);
@@ -2315,16 +2314,16 @@ s32 object_deliver_area_events(void) {
         D_801DFF4C = 0;
         ev = kaj_event_push(0x20);
         if (ev != NULL) {
-            ev->unkC = object_area_previous.trigger;
-            ev->unk8 = object_area_previous.trigger_type;
-            ev->unk10 = object_area_previous.scene_trigger;
+            ev->param1 = object_area_previous.trigger;
+            ev->param0 = object_area_previous.trigger_type;
+            ev->param2 = object_area_previous.scene_trigger;
         }
     }
     ev = kaj_event_push(0x10);
     if (ev != NULL) {
-        ev->unkC = object_area_current.trigger;
-        ev->unk8 = object_area_current.trigger_type;
-        ev->unk10 = object_area_current.scene_trigger;
+        ev->param1 = object_area_current.trigger;
+        ev->param0 = object_area_current.trigger_type;
+        ev->param2 = object_area_current.scene_trigger;
     }
     object_area_previous.trigger_type = object_area_current.trigger_type;
     object_area_previous.trigger = object_area_current.trigger;

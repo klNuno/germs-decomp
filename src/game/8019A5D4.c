@@ -6,22 +6,8 @@ typedef struct { s16 unk0; s16 unk2; u8 unk4; u8 unk5; u8 unk6; u8 unk7; } Unk_8
 Unk_801DFF68 roadmap_flash;
 void roadmap_shop_topic_menu(s16 arg0, s16 arg1);
 typedef struct { s32 unk0; s32 unk4; s32 unk8; u8 unkC; } Unk_801A20CC;
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
-    s16 unkE;
-    s16 unk10;
-    s16 unk12[3];
-    s16 *unk18;
-    s16 *unk1C;
-} Unk_801E1058;
 extern BuildingState block_building_state;
-extern Unk_801E1058 D_801E1058;
+extern ShopState roadmap_shop;
 typedef struct { s16 unk0; s16 unk2; } Unk_801A216C;
 extern s32 roadmap_shop_exit_points[];
 void mail_goto_twn(s32 a, s32 b, s32 c, s16 d, s16 e);
@@ -63,15 +49,8 @@ void mod_draw_player(ViewBuffer *arg0, s32 arg1);
 void vehicle_draw(ViewBuffer *arg0);
 void block_draw_all(ViewBuffer *arg0, s32 arg1);
 void kaj_view_flip(ViewBuffer *arg0);
-typedef struct Unk_80188FEC {
-    u16 unk0;
-    u8 unk2[2];
-    char unk4[0x2C];
-    u16 unk30;
-    u8 unk32[0x2E];
-} Unk_80188FEC;
 typedef struct { u8 unk0[0xE]; s16 unkE; } Unk_801A0820;
-Unk_80188FEC *effect_weapon_find(s16 arg0);
+WeaponRecord *effect_weapon_find(s16 arg0);
 s32 roadmap_cmp_weapon_level(Unk_801A216C *arg0, Unk_801A216C *arg1);
 void qsort(void *base, s32 nel, s32 width, s32 (*cmp)());
 extern s16 D_801E0712[];
@@ -80,7 +59,7 @@ extern SceneTables object_scene_tables[];
 void SsSepSetVol(s16 access_num, s16 seq_num, s16 voll, s16 volr);
 void mail_step_frame(u16 a, s16 b, s16 c);
 extern Player *player_status_player[];
-s16 D_801DFF78;
+s16 roadmap_shop_topic;
 extern char D_801715C4[];
 s16 mail_menu_get_state(void);
 s32 mail_menu_close(void);
@@ -152,8 +131,8 @@ void mail_menu_set_list(s32 arg0, s16 *arg1);
 s16 mail_menu_get_entry(s16 arg0);
 s16 player_set_item(s16 arg0, s32 arg1, s32 arg2);
 s16 player_set_weapon(s16 arg0, s32 arg1, s32 arg2);
-extern s32 (*D_801DFEE4)(Unk_801A20CC *arg0);
-extern s32 (*D_801DFEE0)(Unk_801A20CC *arg0);
+extern s32 (*event_enter_hook)(Unk_801A20CC *arg0);
+extern s32 (*event_leave_hook)(Unk_801A20CC *arg0);
 void door_set_visible(u16 arg0, s16 arg1);
 s32 roadmap_shop_on_enter(Unk_801A20CC *arg0);
 s32 roadmap_shop_on_leave(Unk_801A20CC *arg0);
@@ -471,7 +450,7 @@ Unk_801A06C0 *roadmap_add_flash_tile(Unk_801DFF68 *flash, Unk_801A06C0 *tile, u3
 
 void roadmap_shop_pick_weapons(Unk_801A0820 *shop) {
     Unk_801A216C tab[12];
-    Unk_80188FEC *weapon;
+    WeaponRecord *weapon;
     s32 i;
     s32 j;
     s32 end;
@@ -487,7 +466,7 @@ void roadmap_shop_pick_weapons(Unk_801A0820 *shop) {
             weapon = effect_weapon_find(i);
             if (weapon != NULL) {
                 tab[j].unk0 = i;
-                tab[j].unk2 = weapon->unk30;
+                tab[j].unk2 = weapon->req_level;
             } else {
                 tab[j].unk0 = i;
                 tab[j].unk2 = 100;
@@ -516,7 +495,7 @@ void roadmap_shop_pick_weapons(Unk_801A0820 *shop) {
 }
 
 void roadmap_shop_topic_menu(s16 open, s16 open_list) {
-    Unk_801E1058 *shop = &D_801E1058;
+    ShopState *shop = &roadmap_shop;
     s32 sprite;
     s16 icon_sprite;
     s16 count;
@@ -526,8 +505,8 @@ void roadmap_shop_topic_menu(s16 open, s16 open_list) {
     s16 cursor_color;
 
     if (open != 0) {
-        D_801DFF78 = 0;
-        shop->unk2 = 3;
+        roadmap_shop_topic = 0;
+        shop->menu_stage = 3;
         sprite_set_visible(3, 1);
         sprite_fill_clut(3, 4, 6, 0x2969);
         sprite_set_clut_entry(3, 4, 0x2BFF);
@@ -536,11 +515,11 @@ void roadmap_shop_topic_menu(s16 open, s16 open_list) {
         sprite_set_visible(3, 0);
         text_close();
         if (open_list == 0) {
-            D_801E1058.unk0 = 0;
-            shop->unk2 = -1;
+            roadmap_shop.unk0 = 0;
+            shop->menu_stage = -1;
         } else {
-            if (D_801E1058.unk0 == 0) {
-                D_801E1058.unk0 = 1;
+            if (roadmap_shop.unk0 == 0) {
+                roadmap_shop.unk0 = 1;
             }
             sprite = 0x40B;
             icon_sprite = 0x40C;
@@ -548,26 +527,26 @@ void roadmap_shop_topic_menu(s16 open, s16 open_list) {
             first_entry = 4;
             color = 0x2969;
             cursor_color = 0x2BFF;
-            shop->unk1C = D_801D7B20;
-            shop->unk2 = 0;
-            switch (D_801DFF78) {
+            shop->texts = D_801D7B20;
+            shop->menu_stage = 0;
+            switch (roadmap_shop_topic) {
             case 0:
                 count = 0xE;
-                shop->unk18 = D_801D7A92;
+                shop->list = D_801D7A92;
                 break;
             case 1:
                 count = 0xF;
-                shop->unk18 = D_801D7AB0;
+                shop->list = D_801D7AB0;
                 break;
             case 2:
                 sprite = 4;
                 icon_sprite = -1;
                 count = 4;
                 rows = 4;
-                shop->unk18 = D_801D7ACE;
+                shop->list = D_801D7ACE;
                 break;
             }
-            mail_menu_open(1, sprite, icon_sprite, count, rows, shop->unk18, first_entry, color, cursor_color);
+            mail_menu_open(1, sprite, icon_sprite, count, rows, shop->list, first_entry, color, cursor_color);
         }
     }
 }
@@ -616,7 +595,7 @@ void roadmap_shop_say_reply(s16 building, s16 arg1, s16 arg2, s16 reply) {
             }
         } else if (reply == menu_state) {
             if (building == 8) {
-                topic = D_801DFF78;
+                topic = roadmap_shop_topic;
                 if (topic == -1) {
                     if (player->flags & 0x100) {
                         player->flags &= 0xFEFF;
@@ -635,7 +614,7 @@ void roadmap_shop_say_reply(s16 building, s16 arg1, s16 arg2, s16 reply) {
 }
 
 void roadmap_fade_screen_music(s16 fade_in) {
-    BgmSep *bgm = object_scene_tables[0].unk0;
+    BgmSep *bgm = object_scene_tables[0].bgm;
     ScreenLight *light = &screen_light;
     s32 t;
     s32 volume;
@@ -684,12 +663,12 @@ INCLUDE_RODATA("asm/nonmatchings/game/8019A5D4", D_801715C4);
 
 s16 roadmap_shop_finish(s16 building) {
     PlayerStatus *status = &player_status;
-    Unk_801E1058 *shop = &D_801E1058;
+    ShopState *shop = &roadmap_shop;
     GameVars_u8019A5D4 *game = &action_vars;
     Player *player = status->player;
     char buf[0x80];
     Unk_801D7B34 *advice;
-    Unk_80188FEC *weapon;
+    WeaponRecord *weapon;
     ItemRecord *item;
     char *line;
     s32 i;
@@ -698,7 +677,7 @@ s16 roadmap_shop_finish(s16 building) {
     s16 v;
     s32 j;
     s16 m;
-    Unk_801E1058 *shop2;
+    ShopState *shop2;
 
     switch (building) {
     case 7:
@@ -706,16 +685,16 @@ s16 roadmap_shop_finish(s16 building) {
             advice = &roadmap_shop_weapon_advice[shop->unkE];
             weapon = effect_weapon_find(shop->unk12[0]);
             if (weapon != NULL) {
-                if ((s16)weapon->unk30 == status->level) {
+                if ((s16)weapon->req_level == status->level) {
                     line = advice->unk4;
-                } else if ((s16)weapon->unk30 < status->level) {
+                } else if ((s16)weapon->req_level < status->level) {
                     line = advice->unk8;
                 } else {
                     line = advice->unk0;
                 }
                 text_show_timed(1, 1, line, 1, 2);
                 memset(buf, 0, 0x80);
-                sprintf(buf, " 8%s1, \202\360\216\363\202\257\216\346\202\301\202\275", weapon->unk4);
+                sprintf(buf, " 8%s1, \202\360\216\363\202\257\216\346\202\301\202\275", weapon->name);
                 text_show_timed(1, 1, buf, 2, 2);
             }
         }
@@ -737,9 +716,9 @@ s16 roadmap_shop_finish(s16 building) {
             }
         } else if (shop->unk12[0] >= 0) {
             ret = shop->unk12[0];
-            if (D_801DFF78 == 0) {
+            if (roadmap_shop_topic == 0) {
                 ret += 10;
-            } else if (D_801DFF78 == 1) {
+            } else if (roadmap_shop_topic == 1) {
                 ret += 30;
             }
         }
@@ -811,9 +790,9 @@ s16 roadmap_shop_finish(s16 building) {
         }
         break;
     }
-    shop2 = &D_801E1058;
-    D_801E1058.unk0 = 0;
-    shop2->unk2 = -1;
+    shop2 = &roadmap_shop;
+    roadmap_shop.unk0 = 0;
+    shop2->menu_stage = -1;
     shop2->unk4 = 0;
     shop2->unk6 = 0;
     shop2->unk8 = 0;
@@ -825,8 +804,8 @@ s16 roadmap_shop_finish(s16 building) {
     for (j = 2; j >= 0; j--) {
         shop2->unk12[j] = m;
     }
-    shop2->unk18 = NULL;
-    shop2->unk1C = NULL;
+    shop2->list = NULL;
+    shop2->texts = NULL;
     if (building == 3 || building == 6) {
         player_reset_triggers(2);
     }
@@ -834,21 +813,21 @@ s16 roadmap_shop_finish(s16 building) {
 }
 
 s16 roadmap_shop_update_input(PlayerStatus *status) {
-    Unk_801E1058 *shop = &D_801E1058;
+    ShopState *shop = &roadmap_shop;
     BuildingState *bstate = &block_building_state;
     Player *player = status->player;
     s16 sel;
 
-    if (D_801E1058.unk0 == 0) {
+    if (roadmap_shop.unk0 == 0) {
         return 0;
     }
     sel = mail_menu_get_state();
     if (!(kaj_system.pad_prev & 0x20) && (kaj_system.pad_now & 0x20)) {
-        if (shop->unk2 == 3 && sel == 0) {
+        if (shop->menu_stage == 3 && sel == 0) {
             sound_se_play(0x11);
             roadmap_shop_topic_menu(0, 1);
             return 1;
-        } else if (shop->unk2 == 0 && sel == 1) {
+        } else if (shop->menu_stage == 0 && sel == 1) {
             sound_se_play(0x11);
             sel = mail_menu_get_entry(shop->unk10);
             if (shop->unk4 != 0) {
@@ -883,13 +862,13 @@ s16 roadmap_shop_update_input(PlayerStatus *status) {
                 shop->unk12[0] = sel;
             }
             if (shop->unkA != 0) {
-                shop->unk2 = 1;
+                shop->menu_stage = 1;
                 shop->unk10 = 0;
-                text_show(((char **)shop->unk1C)[1], 3, -1, 0, -1, 0, 1);
-                mail_menu_set_list(4, shop->unk18 + 4);
+                text_show(((char **)shop->texts)[1], 3, -1, 0, -1, 0, 1);
+                mail_menu_set_list(4, shop->list + 4);
                 return 1;
             }
-        } else if (shop->unk2 == 1 && sel == 1) {
+        } else if (shop->menu_stage == 1 && sel == 1) {
             sound_se_play(0x11);
             sel = mail_menu_get_entry(shop->unk10);
             if (shop->unk4 != 0) {
@@ -905,13 +884,13 @@ s16 roadmap_shop_update_input(PlayerStatus *status) {
                 shop->unk12[1] = sel;
             }
             if (shop->unkC != 0) {
-                shop->unk2 = 2;
-                text_show(((char **)shop->unk1C)[2], 3, -1, 0, -1, 0, 1);
+                shop->menu_stage = 2;
+                text_show(((char **)shop->texts)[2], 3, -1, 0, -1, 0, 1);
                 return 1;
             }
-        } else if (shop->unk2 == 2 && sel == 1) {
+        } else if (shop->menu_stage == 2 && sel == 1) {
             sound_se_play(0x11);
-            sel = shop->unk18[8];
+            sel = shop->list[8];
             if (shop->unk4 != 0) {
                 if (effect_inventory_has_room(0) != 0) {
                     if (player_set_item(sel, 0, 1) != 0) {
@@ -930,50 +909,50 @@ s16 roadmap_shop_update_input(PlayerStatus *status) {
         roadmap_shop_say_reply(bstate->building, shop->unk4, shop->unk6, 0);
     } else if (!(kaj_system.pad_prev & 0x40) && (kaj_system.pad_now & 0x40)) {
         sound_se_play(8);
-        if (shop->unk2 == 3 && sel == 0) {
+        if (shop->menu_stage == 3 && sel == 0) {
             roadmap_shop_topic_menu(0, 0);
             /* " 2話が聞きたくなったら, いつでもおいで" */
             text_show_timed(1, 1, " 2\230b\202\252\225\267\202\253\202\275\202\255\202\310\202\301\202\275\202\347, \202\242\202\302\202\305\202\340\202\250\202\242\202\305", 1, 1);
             if (player->flags & 0x100) {
                 player->flags &= 0xFEFF;
             }
-        } else if (shop->unk2 == 0 && sel == 1) {
+        } else if (shop->menu_stage == 0 && sel == 1) {
             roadmap_shop_say_reply(bstate->building, shop->unk4, shop->unk6, 1);
             return 1;
-        } else if (shop->unk2 == 1 && sel == 1 && shop->unkC != 0) {
-            shop->unk2 = 2;
-            text_show(((char **)shop->unk1C)[2], 3, -1, 0, -1, 0, sel);
+        } else if (shop->menu_stage == 1 && sel == 1 && shop->unkC != 0) {
+            shop->menu_stage = 2;
+            text_show(((char **)shop->texts)[2], 3, -1, 0, -1, 0, sel);
         } else {
             roadmap_shop_say_reply(bstate->building, shop->unk4, shop->unk6, 0);
             return 1;
         }
     } else if (!(kaj_system.pad_prev & 0x1000) && (kaj_system.pad_now & 0x1000)) {
         if (sel == 0) {
-            if (shop->unk2 == 3) {
+            if (shop->menu_stage == 3) {
                 sound_se_play(0xF);
-                if (--D_801DFF78 < 0) {
-                    D_801DFF78 = 2;
+                if (--roadmap_shop_topic < 0) {
+                    roadmap_shop_topic = 2;
                 }
                 sprite_fill_clut(3, 4, 6, 0x2969);
-                sprite_set_clut_entry(3, D_801DFF78 + 4, 0x2BFF);
+                sprite_set_clut_entry(3, roadmap_shop_topic + 4, 0x2BFF);
             }
         } else if (sel == 1) {
-            if (shop->unk2 != 2) {
+            if (shop->menu_stage != 2) {
                 shop->unk10 = mail_menu_move(1);
             }
         }
     } else if (!(kaj_system.pad_prev & 0x4000) && (kaj_system.pad_now & 0x4000)) {
         if (sel == 0) {
-            if (shop->unk2 == 3) {
+            if (shop->menu_stage == 3) {
                 sound_se_play(0xF);
-                if (++D_801DFF78 >= 3) {
-                    D_801DFF78 = 0;
+                if (++roadmap_shop_topic >= 3) {
+                    roadmap_shop_topic = 0;
                 }
                 sprite_fill_clut(3, 4, 6, 0x2969);
-                sprite_set_clut_entry(3, D_801DFF78 + 4, 0x2BFF);
+                sprite_set_clut_entry(3, roadmap_shop_topic + 4, 0x2BFF);
             }
         } else if (sel == 1) {
-            if (shop->unk2 != 2) {
+            if (shop->menu_stage != 2) {
                 shop->unk10 = mail_menu_move(0);
             }
         }
@@ -985,7 +964,7 @@ s16 roadmap_shop_update_input(PlayerStatus *status) {
 s16 roadmap_shop_open_menu(s16 building, s32 trigger) {
     Player *player = player_status_player[0];
     GameVars_u8019A5D4 *game = &action_vars;
-    Unk_801E1058 *shop = &D_801E1058;
+    ShopState *shop = &roadmap_shop;
     s32 j;
     s16 m;
     s16 sprite;
@@ -999,8 +978,8 @@ s16 roadmap_shop_open_menu(s16 building, s32 trigger) {
     if (mail_menu_get_state() != 0) {
         return 0;
     }
-    D_801E1058.unk0 = 1;
-    shop->unk2 = 0;
+    roadmap_shop.unk0 = 1;
+    shop->menu_stage = 0;
     shop->unk6 = 0;
     shop->unkA = 0;
     shop->unkC = 0;
@@ -1021,63 +1000,63 @@ s16 roadmap_shop_open_menu(s16 building, s32 trigger) {
     case 3:
         if (game->unk14 == 2000) {
             shop->unk6 = 1;
-            shop->unk18 = D_801D7A08;
+            shop->list = D_801D7A08;
         } else if (game->unk1F8 >= 8 && game->unk1F8 < 10) {
-            shop->unk18 = D_801D79F0;
+            shop->list = D_801D79F0;
         } else if (game->unk1F8 >= 10 && game->unk1F8 < 14) {
-            shop->unk18 = D_801D79F8;
+            shop->list = D_801D79F8;
         } else {
-            shop->unk18 = D_801D7A00;
+            shop->list = D_801D7A00;
         }
-        shop->unk1C = D_801D7AEC;
+        shop->texts = D_801D7AEC;
         break;
     case 4:
         if (game->unk14 == 1000) {
-            shop->unk18 = D_801D7A10;
-            shop->unk1C = D_801D7AF8;
+            shop->list = D_801D7A10;
+            shop->texts = D_801D7AF8;
         } else if (game->unk14 == 2000) {
             shop->unk6 = 1;
-            shop->unk18 = D_801D7A22;
-            shop->unk1C = D_801D7B04;
+            shop->list = D_801D7A22;
+            shop->texts = D_801D7B04;
         } else if (game->unk80 != 0) {
             if (game->unk60 != 0 || !(game->unk1F8 >= 8 && game->unk1F8 < 14)) {
-                shop->unk18 = D_801D7A10;
-                shop->unk1C = D_801D7AF8;
+                shop->list = D_801D7A10;
+                shop->texts = D_801D7AF8;
             } else {
                 shop->unk6 = 1;
-                shop->unk18 = D_801D7A22;
-                shop->unk1C = D_801D7B04;
+                shop->list = D_801D7A22;
+                shop->texts = D_801D7B04;
             }
         } else {
             if (game->unk60 != 0 || (game->unk1F8 >= 8 && game->unk1F8 < 14)) {
-                shop->unk18 = D_801D7A10;
-                shop->unk1C = D_801D7AF8;
+                shop->list = D_801D7A10;
+                shop->texts = D_801D7AF8;
             } else {
                 shop->unk6 = 1;
-                shop->unk18 = D_801D7A22;
-                shop->unk1C = D_801D7B04;
+                shop->list = D_801D7A22;
+                shop->texts = D_801D7B04;
             }
         }
         shop->unkA = 1;
         shop->unkC = 1;
         break;
     case 5:
-        shop->unk1C = D_801D7B10;
-        shop->unk18 = D_801D7A34;
+        shop->texts = D_801D7B10;
+        shop->list = D_801D7A34;
         shop->unkA = 1;
         shop->unkC = 1;
         break;
     case 6:
-        shop->unk1C = D_801D7AEC;
+        shop->texts = D_801D7AEC;
         if (game->unk14 == 2000) {
             shop->unk6 = 1;
-            shop->unk18 = D_801D7A60;
+            shop->list = D_801D7A60;
         } else if (game->unk1F8 >= 11 && game->unk1F8 < 14) {
-            shop->unk18 = D_801D7A48;
+            shop->list = D_801D7A48;
         } else if (game->unk1F8 >= 14 && game->unk1F8 < 17) {
-            shop->unk18 = D_801D7A50;
+            shop->list = D_801D7A50;
         } else {
-            shop->unk18 = D_801D7A58;
+            shop->list = D_801D7A58;
         }
         break;
     case 7:
@@ -1090,8 +1069,8 @@ s16 roadmap_shop_open_menu(s16 building, s32 trigger) {
         color = 0x2969;
         cursor_color = 0x2BFF;
         shop->unk4 = 1;
-        shop->unk1C = D_801D7AEC;
-        shop->unk18 = roadmap_shop_weapons;
+        shop->texts = D_801D7AEC;
+        shop->list = roadmap_shop_weapons;
         break;
     case 8:
         player->flags |= 0x100;
@@ -1105,19 +1084,19 @@ s16 roadmap_shop_open_menu(s16 building, s32 trigger) {
         first_entry = 4;
         color = 0x2969;
         cursor_color = 0x2BFF;
-        D_801DFF78 = -1;
-        shop->unk1C = D_801D7B1C;
+        roadmap_shop_topic = -1;
+        shop->texts = D_801D7B1C;
         shop->unk4 = 1;
-        shop->unk18 = D_801D7A74;
+        shop->list = D_801D7A74;
         break;
     case 9:
         count = 3;
         rows = count;
-        shop->unk1C = D_801D7B28;
-        shop->unk18 = D_801DFD74;
+        shop->texts = D_801D7B28;
+        shop->list = D_801DFD74;
         break;
     }
-    return mail_menu_open(1, sprite, icon_sprite, count, rows, shop->unk18, first_entry, color, cursor_color);
+    return mail_menu_open(1, sprite, icon_sprite, count, rows, shop->list, first_entry, color, cursor_color);
 fail:
     roadmap_shop_topic_menu(1, 0);
     return 1;
@@ -1125,12 +1104,12 @@ fail:
 
 void roadmap_shop_init(s16 building) {
     GameVars_u8019A5D4 *game = &action_vars;
-    Unk_801E1058 *shop = &D_801E1058;
+    ShopState *shop = &roadmap_shop;
     s32 door;
     s32 j;
 
-    D_801E1058.unk0 = 0;
-    shop->unk2 = -1;
+    roadmap_shop.unk0 = 0;
+    shop->menu_stage = -1;
     shop->unk4 = 0;
     shop->unk6 = 0;
     shop->unk8 = 0;
@@ -1141,8 +1120,8 @@ void roadmap_shop_init(s16 building) {
     for (j = 0; j < 3; j++) {
         shop->unk12[j] = -1;
     }
-    shop->unk18 = 0;
-    shop->unk1C = 0;
+    shop->list = 0;
+    shop->texts = 0;
     game->unk1F8 = game->unk7C;
     switch (building) {
     case 8:
@@ -1156,8 +1135,8 @@ void roadmap_shop_init(s16 building) {
         }
         break;
     }
-    D_801DFEE4 = roadmap_shop_on_enter;
-    D_801DFEE0 = roadmap_shop_on_leave;
+    event_enter_hook = roadmap_shop_on_enter;
+    event_leave_hook = roadmap_shop_on_leave;
 }
 
 void roadmap_shop_exit_to_town(s16 building, s16 exit_no) {
@@ -1185,7 +1164,7 @@ void roadmap_shop_close_topic(void) {
 }
 
 s32 roadmap_shop_on_enter(Unk_801A20CC *ev) {
-    Unk_801E1058 *shop = &D_801E1058;
+    ShopState *shop = &roadmap_shop;
 
     if (ev->unk8 == 0x30) {
         u32 trigger = ev->unkC;
@@ -1204,7 +1183,7 @@ s32 roadmap_shop_on_enter(Unk_801A20CC *ev) {
 }
 
 s32 roadmap_shop_on_leave(Unk_801A20CC *ev) {
-    Unk_801E1058 *shop = &D_801E1058;
+    ShopState *shop = &roadmap_shop;
 
     if (ev->unk8 == 0x30) {
         u32 trigger = ev->unkC;

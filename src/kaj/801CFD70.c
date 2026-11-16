@@ -9,7 +9,7 @@ s32 CloseEvent(s32 event);
 s32 kaj_timer_event;
 extern s16 kaj_timer_enabled[];
 extern KajSystem kaj_system;
-extern char D_801DFDF4[];
+extern char kaj_timer_str_file[];
 void *calloc3(s32 n, s32 size);
 void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
 s32 kaj_timer_handler(void);
@@ -46,8 +46,8 @@ s32 kaj_timer_handler(void) {
             e = kaj_event_push(2);
         }
         if (e != NULL) {
-            e->unk8 = q->popped_id;
-            e->unkC = q->popped_data;
+            e->param0 = q->popped_id;
+            e->param1 = q->popped_data;
         }
     }
     if (kaj_timer_last_tick != 0 && kaj_timer_last_tick % kaj_timer_period[0] == 0) {
@@ -78,7 +78,7 @@ void kaj_timer_add_alarm(s32 delay, s32 id, s32 data) {
         e = realloc3(kaj_timer_queue.entries, (n + 1) * sizeof(TimerAlarm));
         if (e == NULL) {
             ExitCriticalSection();
-            kaj_abend(3, "Error Reallocating TIMER Queue", D_801DFDF4, 0x80);
+            kaj_abend(3, "Error Reallocating TIMER Queue", kaj_timer_str_file, 0x80);
         }
         kaj_timer_queue.entries = e;
         q->capacity = n;
@@ -163,7 +163,7 @@ void kaj_timer_init(void) {
     kaj_timer_queue.capacity = 8;
     kaj_timer_queue.entries = calloc3(9, 0x10);
     if (kaj_timer_queue.entries == NULL) {
-        kaj_abend(3, "Error Allocating TIMER Queue", D_801DFDF4, 0xB4);
+        kaj_abend(3, "Error Allocating TIMER Queue", kaj_timer_str_file, 0xB4);
     }
     kaj_timer_queue.count = 0;
     kaj_timer_queue.full = 0;
@@ -172,10 +172,10 @@ void kaj_timer_init(void) {
     kaj_system.timer_period = 0x258;
     kaj_timer_event = OpenEvent(0xF2000003, 2, 0x1000, kaj_timer_handler);
     if (kaj_timer_event == -1) {
-        kaj_abend(2, "Can not Create TIMER Event", D_801DFDF4, 0xBF);
+        kaj_abend(2, "Can not Create TIMER Event", kaj_timer_str_file, 0xBF);
     }
     if (EnableEvent(kaj_timer_event) == 0) {
-        kaj_abend(2, "Can not Enable TIMER Event", D_801DFDF4, 0xC2);
+        kaj_abend(2, "Can not Enable TIMER Event", kaj_timer_str_file, 0xC2);
     }
     SetRCnt(0xF2000003, 1, 0x1000);
     StartRCnt(0xF2000003);

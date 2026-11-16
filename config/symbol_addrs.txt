@@ -1965,3 +1965,67 @@ ai_default_stats = 0x801D7328;
 player_status_player = 0x801E076C;
 // player_status + 0x58 (PlayerStatus.inventory): the Inventory pointer read as D_801E0768[0] (action_test_inventory weapon and item slots)
 player_status_inventory = 0x801E0768;
+// "action.c": the file name action.c passes to kaj_abend with its allocation errors
+action_str_file = 0x8017001C;
+// "object.c": the file name passed to kaj_abend with the IFF loader errors ("Error Allocation IFF Context", "Error Allocating IFF Header") in 8018FA18 and 80195098
+object_str_file = 0x80170B7C;
+// "block.c": the file name passed to kaj_abend with "Error Allocating Arena Buffer" (80179848, 8017EBF8)
+block_str_file = 0x801DFC84;
+// "door.c": the file name passed to kaj_abend with "Error Allocating DOOR Pointer" and "Error Allocating DOOR Buffer"
+door_str_file = 0x801DFCE8;
+// "event.c": the file name passed to kaj_abend by event_open ("Can not Create User Defined Event", "Can not Enable to ENTER Event")
+event_str_file = 0x801DFD14;
+// "event.c": the file name passed to kaj_abend by the kaj event queue ("Error Allocating EVENT Queue", "Error Reallocating EVENT Queue")
+kaj_event_str_file = 0x801DFDB4;
+// "kaj.c": the file name passed to kaj_abend with "can't initialize CD-ROM subsystem"
+kaj_str_file = 0x801DFDBC;
+// "ll.c": the file name passed to kaj_abend by the kaj linked lists ("Error Allocating LL Handle")
+kaj_ll_str_file = 0x801DFDC4;
+// "misc.c": the file name the kaj abend paths of 801CCAF4 report (file = kaj_misc_str_file before printing)
+kaj_misc_str_file = 0x801DFDDC;
+// "tim.c": the file name passed to kaj_abend by the TIM loader ("No CLUT in this TIM", "Error Allocating CLUT Buffer")
+kaj_tim_str_file = 0x801DFDE4;
+// "timer.c": the file name passed to kaj_abend by the kaj timer ("Error Allocating TIMER Queue", "Can not Create TIMER Event")
+kaj_timer_str_file = 0x801DFDF4;
+// "tss.c": the file name passed to kaj_abend with "Error Allocating Sharing Table" (kaj tasks)
+kaj_tss_str_file = 0x801DFDFC;
+// "view.c": the file name passed to kaj_abend with "Error Allocating VIEW Tag" and "Error Allocating VIEW Packet"
+kaj_view_str_file = 0x801DFE04;
+// "cdmgr.c": the file name the kaj CD manager prints with a line number (printf in kaj_cdmgr_poll and siblings)
+kaj_cdmgr_str_file = 0x801DFE14;
+// KajSystem.vsync_delta (kaj_system + 0x14) declared as its own array: kaj_view_flip stores the VSync delta there; kaj tasks step cur by step * delta, mail_wait subtracts it from its frame count, mod_set_anim and 801A217C read it
+kaj_system_vsync_delta = 0x801E6DB4;
+// SceneTables.vehicle (object_scene_tables + 0x54) declared as its own array: vehicle_init stores the car there; block_vehicle_surface and the thing code read its coordinates and models
+object_scene_vehicle = 0x801E032C;
+// ShopState used only by the roadmap_shop_* functions (init, open_menu, topic_menu, update_input, finish, on_enter, on_leave) and block_update_input / block_on_effect_done
+roadmap_shop = 0x801E1058;
+// roadmap_shop_topic_menu: the chosen topic 0..2 (lists D_801D7A92, D_801D7AB0, D_801D7ACE); roadmap_shop_update_input steps it with wrap 0..2; set to 0 when the chooser opens, -1 by roadmap_shop_open_menu case 8
+roadmap_shop_topic = 0x801DFF78;
+// kaj ll list created by main with action_set_list, block_list, door_list, mod_list and sprite_list; thing_list_add inserts into it, sprite_thing_refresh_all walks it
+thing_list = 0x801DFFA0;
+// hook called by event_handle_enter with the ENTER event (block_on_enter, object_room_on_enter, roadmap_shop_on_enter, sprite_station_on_enter, sprite_phone_on_enter, thing_train_enter_hook); main clears it
+event_enter_hook = 0x801DFEE4;
+// hook called by event_handle_leave with the LEAVE event (roadmap_shop_on_leave, sprite_station_on_leave, thing_train_leave_hook); main clears it
+event_leave_hook = 0x801DFEE0;
+// hook called by event_handle_effect_done (block_on_effect_done, effect_elevator_on_task_end, object_room_on_effect_done, sprite_phone_on_effect_done, sprite_title_on_effect_done, thing_field_task_hook)
+event_effect_done_hook = 0x801DFED4;
+// hook called by event_handle_alarm with the event and its alarm slot (object_room_on_alarm, sprite_phone_on_alarm, thing_field_timer_hook); main clears it
+event_alarm_hook = 0x801DFED8;
+// hook called by event_handle_tick (sprite_station_update, thing_train_tick_hook); main clears it
+event_tick_hook = 0x801DFEDC;
+// hook called by event_handle_mod_finish (object_room_on_mod_finish); main clears it
+event_mod_finish_hook = 0x801DFEE8;
+// called by player_check_ground with the trigger to pick (object_room_pick_desk_action, sprite_phone_pick_trigger set it; event_close clears it)
+player_pick_trigger_hook = 0x801DFF50;
+// kaj CD manager state: kaj_cdmgr_poll switches on [0] (0 idle, 1 CdControl setloc, 3 CdRead, 4 CdReadSync, -1 CdFlush); [1] is kaj_cdmgr_cur_slot (0x801E71CA), the 32 kaj_cdmgr_slots follow at +4; kaj_cdmgr_init clears it
+kaj_cdmgr_state = 0x801E71C8;
+// event.c: clears event_alarm_slots[ev[2]] (+0 = -1, +4 = 0) and calls event_alarm_hook; called on event type 2 by mail_wait, object_room_main, sprite_phone_loop and thing_field_loop
+event_handle_alarm = 0x80189928; // type:func size:0x48
+// alarm slots indexed by the alarm id in the event (ev[2]): event_handle_alarm sets +0 to -1 and +4 to 0
+event_alarm_slots = 0x801E024C;
+// block.c: surface code under (x, z) on object_scene_vehicle model1: walks its TMD primitives like block_model_surface; player_move_in_train calls it
+block_vehicle_surface = 0x8017BBB0; // type:func size:0x174
+// block.c: 1 when an active block with model flag 1 has a surface code under (x, z) that is not 0, not 0xC8 and not 0xFFxxxx; thing_car_get_out tries 4 exit spots with it
+block_has_ground_at = 0x8017CFE4; // type:func size:0xFC
+// block.c: returns kaj_cdmgr_state[0] == 0 (no CD read running); thing_field_loop waits on it with elevator_wait
+block_cd_idle = 0x8017D564; // type:func size:0x10

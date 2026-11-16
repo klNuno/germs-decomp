@@ -81,16 +81,16 @@ void vehicle_train_place(void);
 void sprite_station_copy_signs(TrainState *arg0, BuildingState *arg1);
 s32 sprite_station_on_enter(Unk_801A5DA0 *arg0);
 void sprite_station_update(void);
-extern s32 (*D_801DFEE4)();
-extern s32 (*D_801DFEE0)(Unk_801A5DA0 *arg0);
-extern void (*D_801DFEDC)(void);
+extern s32 (*event_enter_hook)();
+extern s32 (*event_leave_hook)(Unk_801A5DA0 *arg0);
+extern void (*event_tick_hook)(void);
 extern s32 sprite_station_exit_points[];
 extern s32 sprite_str_scene_gst[];
 void mail_goto_twn(s32 a, s32 b, s32 c, s16 d, s16 e);
 void mail_goto_building(s32 arg0, s32 *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 extern u16 D_801E1126[];
 extern SceneTables object_scene_tables;
-extern s32 D_801DFED4;
+extern s32 event_effect_done_hook;
 s16 sprite_title_load;
 void sprite_title_loop(s16 arg0);
 void thing_free_all(void);
@@ -123,11 +123,11 @@ void thing_set_animate(s32 a, s32 b, s32 c);
 Thing *thing_find(s32 arg0, s32 arg1);
 extern char D_80171820[];
 s32 MoveImage2(Rect *rect, s32 x, s32 y);
-Unk_801DFF80 *D_801DFFA0;
+Unk_801DFF80 *thing_list;
 void RotMatrix(SVector *arg0, void *arg1);
 s32 block_find_at(s32 a0, s32 a1, s32 a2);
 NpcBody *npc_find_body(s16 arg0);
-extern s32 D_801E6DB4[];
+extern s32 kaj_system_vsync_delta[];
 typedef struct {
     u8 unk0[0x6];
     s16 unk6;
@@ -202,8 +202,8 @@ void sprite_phone_pick_trigger(s32 *arg0);
 s32 sprite_phone_on_enter(Unk_801A6968 *arg0);
 void sprite_phone_on_alarm(Unk_801A69E0 *arg0);
 s32 sprite_phone_on_effect_done(Unk_801A6A1C *arg0);
-extern s32 D_801DFF50;
-extern s32 D_801DFED8;
+extern s32 player_pick_trigger_hook;
+extern s32 event_alarm_hook;
 extern PlayerStatus player_status;
 extern ScreenLight screen_light;
 extern s16 D_801E05B4[];
@@ -212,7 +212,7 @@ void mod_setup(Model *arg0, s32 arg1, s32 arg2, s32 arg3);
 void mod_set_anim(void *arg0, s16 arg1, s16 arg2);
 void player_reset_triggers(s16 arg0);
 void effect_start_alarm(s32 arg0, s32 arg1, s32 arg2);
-void func_80189928(s32 *arg0);
+void event_handle_alarm(s32 *arg0);
 void event_handle_enter(s32 *arg0);
 void event_handle_tick(s16 arg0);
 void mail_step_frame(u16 arg0, s16 arg1, s16 arg2);
@@ -710,7 +710,7 @@ void sprite_title_init(s16 restarted) {
     }
     sprite_title_menu_active = 0;
     if (restarted != 0) {
-        D_801DFED4 = (s32)sprite_title_on_effect_done;
+        event_effect_done_hook = (s32)sprite_title_on_effect_done;
         thing = thing_find(3, 10);
         if (thing != NULL) {
             thing->pos_x = 0;
@@ -798,7 +798,7 @@ void sprite_title_loop(s16 restarted) {
     }
     kaj_timer_disable();
     tables = &object_scene_tables;
-    D_801DFED4 = 0;
+    event_effect_done_hook = 0;
     if (sprite_title_load != 1) {
         thing_free_all();
         sound_se_stop_all();
@@ -806,13 +806,13 @@ void sprite_title_loop(s16 restarted) {
         for (i = 0; i < 3; i++) {
             sprite_delete((u16)i);
         }
-        for (i = 0; i < tables->unk34; i++) {
-            if (tables->unk5C[i] != NULL) {
-                free3(tables->unk5C[i]);
-                tables->unk5C[i] = NULL;
+        for (i = 0; i < tables->text_count; i++) {
+            if (tables->texts[i] != NULL) {
+                free3(tables->texts[i]);
+                tables->texts[i] = NULL;
             }
         }
-        tables->unk34 = 0;
+        tables->text_count = 0;
     }
 }
 
@@ -830,7 +830,7 @@ loop:
         goto loop;
     }
     sprite_title_load = 0;
-    D_801DFED4 = 0;
+    event_effect_done_hook = 0;
     tables = &object_scene_tables;
     thing_free_all();
     sound_se_stop_all();
@@ -838,13 +838,13 @@ loop:
     for (i = 0; i < 3; i++) {
         sprite_delete((u16)i);
     }
-    for (i = 0; i < tables->unk34; i++) {
-        if (tables->unk5C[i] != NULL) {
-            free3(tables->unk5C[i]);
-            tables->unk5C[i] = NULL;
+    for (i = 0; i < tables->text_count; i++) {
+        if (tables->texts[i] != NULL) {
+            free3(tables->texts[i]);
+            tables->texts[i] = NULL;
         }
     }
-    tables->unk34 = 0;
+    tables->text_count = 0;
 }
 
 s32 sprite_title_on_effect_done(Unk_801A533C *ev) {
@@ -1109,9 +1109,9 @@ void sprite_station_init(void) {
         vehicle_train_place();
     }
     sprite_station_copy_signs(train, &block_building_state);
-    D_801DFEE4 = sprite_station_on_enter;
-    D_801DFEE0 = sprite_station_on_leave;
-    D_801DFEDC = sprite_station_update;
+    event_enter_hook = sprite_station_on_enter;
+    event_leave_hook = sprite_station_on_leave;
+    event_tick_hook = sprite_station_update;
 }
 
 void sprite_station_exit_to_town(void) {
@@ -1165,7 +1165,7 @@ void sprite_phone_update(void) {
             if (!(kaj_system.pad_prev & 0x20) && (kaj_system.pad_now & 0x20)) {
                 EventState *ev_state = &event_state;
                 Player *player2 = status->player;
-                Unk_801E076C_18 *exit = &player2->unk18;
+                PlayerExit *exit = &player2->exit;
 
                 if (ev_state->state == 2 && (ev_state->circle_flags & 8)) {
                     text_close();
@@ -1178,21 +1178,21 @@ void sprite_phone_update(void) {
                         }
                         break;
                     case 0xFB0001:
-                        mail_goto_twn(exit->unk4, exit->unk8, exit->unkC, exit->unk20, 0);
+                        mail_goto_twn(exit->pos_x, exit->pos_y, exit->pos_z, exit->yaw, 0);
                         break;
                     }
                     ev_state->state = 1;
                 }
             } else if (!(kaj_system.pad_prev & 0x40) && (kaj_system.pad_now & 0x40)) {
                 EventState *ev_state = &event_state;
-                Unk_801E076C_18 *exit = &player->unk18;
+                PlayerExit *exit = &player->exit;
 
                 if (player->flags & 0x40) {
                     return;
                 }
                 text_close();
                 sound_se_play(8);
-                mail_goto_twn(exit->unk4, exit->unk8, exit->unkC, exit->unk20, 0);
+                mail_goto_twn(exit->pos_x, exit->pos_y, exit->pos_z, exit->yaw, 0);
                 ev_state->state = 0;
             }
         }
@@ -1237,16 +1237,16 @@ void sprite_phone_update(void) {
             break;
         case 4:
             {
-                Unk_801E076C_18 *exit = &player->unk18;
+                PlayerExit *exit = &player->exit;
 
-                ang = ((exit->unk1C * 45) << 12) / 360;
-                x = (player->unk18.unk0 * rsin(ang)) >> 12;
-                y = (player->unk18.unk0 * rcos(ang)) >> 12;
+                ang = ((exit->direction * 45) << 12) / 360;
+                x = (player->exit.distance * rsin(ang)) >> 12;
+                y = (player->exit.distance * rcos(ang)) >> 12;
                 player->unk0 = exit->unk10 + x;
                 player->unk4 = 9999;
                 player->unk8 = exit->unk18 + y;
                 player->unk10 = 0;
-                player->unk12 = exit->unk1E * 45;
+                player->unk12 = exit->facing * 45;
                 player->unk14 = 0;
             }
             break;
@@ -1310,16 +1310,16 @@ void sprite_phone_update(void) {
     }
     if (buttons & 0x1000) {
         player->unk3C = 1;
-        player->pitch += D_801E6DB4[0];
+        player->pitch += kaj_system_vsync_delta[0];
     } else if (buttons & 0x4000) {
         player->unk3C = 1;
-        player->pitch -= D_801E6DB4[0];
+        player->pitch -= kaj_system_vsync_delta[0];
     } else if (buttons & 0x8000) {
         player->unk3C = 1;
-        player->yaw -= D_801E6DB4[0];
+        player->yaw -= kaj_system_vsync_delta[0];
     } else if (buttons & 0x2000) {
         player->unk3C = 1;
-        player->yaw += D_801E6DB4[0];
+        player->yaw += kaj_system_vsync_delta[0];
     }
 }
 
@@ -1346,10 +1346,10 @@ void sprite_phone_loop(void) {
         if (status->model != NULL) {
             mod_setup(status->model, 0, 3, 0);
         }
-        D_801DFF50 = (s32)sprite_phone_pick_trigger;
-        D_801DFEE4 = sprite_phone_on_enter;
-        D_801DFED8 = (s32)sprite_phone_on_alarm;
-        D_801DFED4 = (s32)sprite_phone_on_effect_done;
+        player_pick_trigger_hook = (s32)sprite_phone_pick_trigger;
+        event_enter_hook = sprite_phone_on_enter;
+        event_alarm_hook = (s32)sprite_phone_on_alarm;
+        event_effect_done_hook = (s32)sprite_phone_on_effect_done;
         menu[0] = 0;
         menu[1] = -1;
         sprite_set_visible(0x400, 0);
@@ -1367,7 +1367,7 @@ void sprite_phone_loop(void) {
     while (done == 0) {
         switch (kaj_event_get(buf)) {
         case 2:
-            func_80189928(buf);
+            event_handle_alarm(buf);
             continue;
         case 0x10:
             event_handle_enter(buf);
@@ -1413,10 +1413,10 @@ void sprite_phone_loop(void) {
     sound_se_stop_all();
     if (sprite_phone_save != 1) {
         status3->model = NULL;
-        D_801DFF50 = 0;
-        D_801DFEE4 = 0;
-        D_801DFED8 = 0;
-        D_801DFED4 = 0;
+        player_pick_trigger_hook = 0;
+        event_enter_hook = 0;
+        event_alarm_hook = 0;
+        event_effect_done_hook = 0;
         text_close();
         block_free_owned();
         mod_free_all();
@@ -1504,15 +1504,15 @@ void sprite_phone_run(void) {
 
 void sprite_phone_save_exit(u16 trigger) {
     Player *player = player_status_player[0];
-    Unk_801E076C_18 *exit = &player->unk18;
+    PlayerExit *exit = &player->exit;
 
-    exit->unk1C = (trigger & 0xF000) >> 12;
-    exit->unk1E = (trigger & 0xF00) >> 8;
-    exit->unk0 = (trigger & 0xFF) * 100;
-    exit->unk4 = player->pos_x + player->cell_x * 12500;
-    exit->unk8 = player->pos_y - player->cell_y * 32000 - player->unk78;
-    exit->unkC = player->pos_z + player->cell_z * 12500;
-    exit->unk20 = player->yaw;
+    exit->direction = (trigger & 0xF000) >> 12;
+    exit->facing = (trigger & 0xF00) >> 8;
+    exit->distance = (trigger & 0xFF) * 100;
+    exit->pos_x = player->pos_x + player->cell_x * 12500;
+    exit->pos_y = player->pos_y - player->cell_y * 32000 - player->unk78;
+    exit->pos_z = player->pos_z + player->cell_z * 12500;
+    exit->yaw = player->yaw;
 }
 
 void sprite_thing_init(Thing *thing) {
@@ -1557,7 +1557,7 @@ void sprite_thing_init(Thing *thing) {
 
 void sprite_thing_refresh_all(void) {
     SVector sv;
-    Unk_801DFF80 *list = D_801DFFA0;
+    Unk_801DFF80 *list = thing_list;
     Player *player = player_status_player[0];
     Thing *thing;
 
@@ -1597,7 +1597,7 @@ void sprite_thing_update_marker(Player *player, Unk_801A742C *marker, Unk_801A72
     if (body != NULL && body->unk2 != 0) {
         y = target->unk24 - body->unk2 * 10 - 300;
     }
-    marker->unk26 -= D_801E6DB4[0];
+    marker->unk26 -= kaj_system_vsync_delta[0];
     if (marker->unk26 < 0) {
         marker->unk26 += 360;
     }

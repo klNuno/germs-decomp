@@ -9,7 +9,7 @@ void kaj_ll_remove_to_prev(DoorList *arg0);
 s16 kaj_ll_at_tail(DoorList *arg0);
 void *kaj_malloc(u32 size);
 void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
-extern char D_801DFCE8[];
+extern char door_str_file[];
 extern SceneTables object_scene_tables[];
 extern ScreenLight screen_light;
 void SsSepSetVol(s16 access_num, s16 seq_num, s16 voll, s16 volr);
@@ -17,7 +17,7 @@ void SsSepSetVol(s16 access_num, s16 seq_num, s16 voll, s16 volr);
 void door_create(Door **out, u32 record_size) {
     *out = kaj_malloc(0x80);
     if (*out == NULL) {
-        kaj_abend(3, "Error Allocating DOOR Pointer", D_801DFCE8, 0x23);
+        kaj_abend(3, "Error Allocating DOOR Pointer", door_str_file, 0x23);
     }
     (*out)->active = 0;
     (*out)->axis = 0;
@@ -35,7 +35,7 @@ void door_create(Door **out, u32 record_size) {
     if (record_size != 0) {
         (*out)->record = kaj_malloc(record_size);
         if ((*out)->record == NULL) {
-            kaj_abend(3, "Error Allocating DOOR Buffer", D_801DFCE8, 0x36);
+            kaj_abend(3, "Error Allocating DOOR Buffer", door_str_file, 0x36);
         }
     }
 }
@@ -150,7 +150,7 @@ void door_set_visible(u16 id, s16 visible) {
 
 void door_fade_step(Door *door) {
     ScreenLight *light = &screen_light;
-    BgmSep *bgm = object_scene_tables[0].unk0;
+    BgmSep *bgm = object_scene_tables[0].bgm;
     s32 volume;
     s32 t;
 

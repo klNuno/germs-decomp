@@ -13,7 +13,7 @@ typedef struct Unk_801DFAD4 {
 void *calloc3(s32 n, s32 size);
 void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
 extern Unk_801DFAD4 kaj_event_queue;
-extern char D_801DFDB4[];
+extern char kaj_event_str_file[];
 s32 kaj_event_alarm_id;
 s32 kaj_event_pending;
 void free3(void *ptr);
@@ -31,7 +31,7 @@ s32 kaj_event_set_alarm(s32 arg0, s32 arg1, s32 arg2);
 extern TssTable kaj_tss_table;
 void kaj_tss_free(TssSlot *arg0);
 void kaj_tss_finish(TssSlot *arg0);
-extern s32 D_801E6DB4[];
+extern s32 kaj_system_vsync_delta[];
 
 void kaj_event_queue_grow(void) {
     u32 buf;
@@ -40,7 +40,7 @@ void kaj_event_queue_grow(void) {
     capacity = kaj_event_queue.unk10 << 1;
     buf = (u32)kaj_malloc(capacity * sizeof(KajEvent));
     if (buf == 0) {
-        kaj_abend(3, "Error Reallocating EVENT Queue", D_801DFDB4, 0x27);
+        kaj_abend(3, "Error Reallocating EVENT Queue", kaj_event_str_file, 0x27);
     }
     if (kaj_event_queue.unk4 != 0) {
         memcpy((void *)((kaj_event_queue.unk10 - kaj_event_queue.unk8) * sizeof(KajEvent) + buf), kaj_event_queue.unk0, kaj_event_queue.unk4 * sizeof(KajEvent));
@@ -80,9 +80,9 @@ void kaj_event_run_tss(s32 *event) {
             e->type = 0x100;
             e->ticks = kaj_timer_ticks[0];
             if (e != NULL) {
-                e->unk8 = tss_id - 1;
-                e->unkC = 0;
-                e->unk10 = t->type;
+                e->param0 = tss_id - 1;
+                e->param1 = 0;
+                e->param2 = t->type;
                 ok = 1;
             }
             ExitCriticalSection();
@@ -93,8 +93,8 @@ void kaj_event_run_tss(s32 *event) {
             }
         } else {
             t->on_step(t);
-            if (t->delay == 2 && D_801E6DB4[0] < 11) {
-                t->cur += t->step * D_801E6DB4[0];
+            if (t->delay == 2 && kaj_system_vsync_delta[0] < 11) {
+                t->cur += t->step * kaj_system_vsync_delta[0];
             } else {
                 t->cur += t->step;
             }
@@ -217,8 +217,8 @@ s32 kaj_event_set_alarm(s32 delay, s32 id, s32 data) {
         e->type = 2;
         e->ticks = kaj_timer_ticks[0];
         if (e != NULL) {
-            e->unk8 = id;
-            e->unkC = data;
+            e->param0 = id;
+            e->param1 = data;
         } else {
             id = -1;
         }
@@ -246,9 +246,9 @@ void kaj_event_flush(s32 type_mask, s32 id) {
         type = ((KajEvent *)q->unk0)[i].type;
         if (type & type_mask) {
             if (type == 0x100) {
-                kaj_tss_release(((KajEvent *)q->unk0)[id].unk8);
+                kaj_tss_release(((KajEvent *)q->unk0)[id].param0);
             }
-            if (type != 2 || id == 0 || ((KajEvent *)q->unk0)[i].unk8 == id) {
+            if (type != 2 || id == 0 || ((KajEvent *)q->unk0)[i].param0 == id) {
                 ((KajEvent *)q->unk0)[i].type = 0;
             }
         }
@@ -264,7 +264,7 @@ void kaj_event_init(void) {
     kaj_event_queue.unk10 = 0x40;
     kaj_event_queue.unk0 = calloc3(0x40, 0x14);
     if (kaj_event_queue.unk0 == NULL) {
-        kaj_abend(3, "Error Allocating EVENT Queue", D_801DFDB4, 0xED);
+        kaj_abend(3, "Error Allocating EVENT Queue", kaj_event_str_file, 0xED);
     }
     kaj_event_queue.unk4 = 0;
     kaj_event_queue.unk8 = 0;

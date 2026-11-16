@@ -23,7 +23,6 @@ void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
 void mail_list_refresh(GameVars *a, s16 b);
 void sprite_delete(s32 arg0);
 void free3(void *ptr);
-typedef struct Unk_80188FEC { u16 unk0; u8 unk2[0x5E]; } Unk_80188FEC;
 typedef struct { u8 unk0[0xC]; u16 unkC; s16 unkE; } Unk_8018BC50_8;
 typedef struct Unk_8018BC50 { u16 unk0; s16 unk2; s32 unk4; Unk_8018BC50_8 *unk8; Unk_8018BC50_8 *unkC; } Unk_8018BC50;
 extern SceneTables object_scene_tables;
@@ -48,7 +47,7 @@ void sound_se_play(s32 a);
 extern KajSystem kaj_system;
 s32 kaj_event_get(s32 *arg0);
 void kaj_event_done(s32 *arg0);
-void func_80189928(s32 *a);
+void event_handle_alarm(s32 *a);
 void event_handle_tick(s16 a);
 void event_handle_mod_finish(s32 *a);
 s16 event_handle_effect_done(s32 *arg0);
@@ -135,19 +134,19 @@ typedef struct {
 void sprite_create(Unk_801E0324_10 **arg0, void *arg1);
 void sprite_add(s32 arg0);
 s16 mail_main_restarted;
-extern s32 D_801DFED4;
-extern s32 D_801DFED8;
-extern s32 D_801DFEDC;
-extern s32 D_801DFEE0;
-extern s32 D_801DFEE4;
-extern s32 D_801DFEE8;
+extern s32 event_effect_done_hook;
+extern s32 event_alarm_hook;
+extern s32 event_tick_hook;
+extern s32 event_leave_hook;
+extern s32 event_enter_hook;
+extern s32 event_mod_finish_hook;
 extern void *action_set_list;
 extern void *action_queue;
 extern void *block_list;
 extern void *door_list;
 extern void *mod_list;
 extern void *sprite_list;
-extern void *D_801DFFA0;
+extern void *thing_list;
 void kaj_init(void);
 void kaj_ll_create(void *arg0);
 void event_open(void);
@@ -539,7 +538,7 @@ void mail_check_schedule(s32 day, s32 hour) {
 
 void mail_free(void) {
     SceneTables *tables = &object_scene_tables;
-    Unk_8018BC50 *mail = tables->unk4C;
+    Unk_8018BC50 *mail = tables->mail;
     if (mail != NULL) {
         mail_list[mail->unk2].unk4 = 1;
         if (mail->unk8 != NULL) {
@@ -556,7 +555,7 @@ void mail_free(void) {
         sprite_delete(0x215);
         sprite_delete(0x216);
         free3(mail);
-        tables->unk4C = NULL;
+        tables->mail = NULL;
     }
 }
 
@@ -588,19 +587,19 @@ void main(void) {
 
     kaj_init();
     memset(&object_scene_tables, 0, 0x64);
-    D_801DFED8 = 0;
-    D_801DFEE4 = 0;
-    D_801DFEE0 = 0;
-    D_801DFEDC = 0;
-    D_801DFED4 = 0;
-    D_801DFEE8 = 0;
+    event_alarm_hook = 0;
+    event_enter_hook = 0;
+    event_leave_hook = 0;
+    event_tick_hook = 0;
+    event_effect_done_hook = 0;
+    event_mod_finish_hook = 0;
     kaj_ll_create(&action_set_list);
     kaj_ll_create(&action_queue);
     kaj_ll_create(&block_list);
     kaj_ll_create(&door_list);
     kaj_ll_create(&mod_list);
     kaj_ll_create(&sprite_list);
-    kaj_ll_create(&D_801DFFA0);
+    kaj_ll_create(&thing_list);
     event_open();
     roadmap_init_draw();
     object_load_res(1, 0);
@@ -704,7 +703,7 @@ void mail_wait(s32 mode, s32 arg1, s32 arg2, s32 seconds) {
     for (frames = seconds * 30; frames > 0;) {
             switch (kaj_event_get(buf)) {
             case 2:
-                func_80189928(buf);
+                event_handle_alarm(buf);
                 continue;
             case 4:
                 event_handle_tick(0);

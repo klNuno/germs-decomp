@@ -34,7 +34,7 @@ s32 rsin(s32 a);
 s32 rcos(s32 a);
 s16 ai_check_line(Npc *arg0, SceneTrigger *arg1, s32 arg2);
 s16 ai_try_move(Npc *arg0, SceneTrigger *arg1, s16 arg2);
-extern s32 D_801E6DB4[];
+extern s32 kaj_system_vsync_delta[];
 Model *ai_cur_model;
 NpcStats *npc_find_stats(s16 arg0);
 s16 ai_find_target(Npc *arg0, s32 arg1);
@@ -46,11 +46,6 @@ Block *ai_cur_block;
 s32 ai_cur_grid;
 NpcStats *ai_cur_stats;
 NpcBody *ai_cur_body;
-typedef struct {
-    ActionCmd *unk0;
-    s32 unk4;
-    char **unk8;
-} Unk_80173054;
 s32 atoi(char *s);
 void mail_goto_ofc(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 void mail_goto_twn(s32 a, s32 b, s32 c, s16 d, s16 e);
@@ -60,31 +55,31 @@ typedef struct {
     s16 unk0;
     s16 unk2;
 } Unk_8017345C;
-void action_cmd_change_scene(Unk_80173054 *arg0, s32 *arg1);
-void action_cmd_var(Unk_80173054 *arg0);
+void action_cmd_change_scene(Action *arg0, s32 *arg1);
+void action_cmd_var(Action *arg0);
 void action_reset(s16 arg0);
 SceneTrigger *action_find_trigger(s32 arg0);
 s16 action_queue_front_flag;
 s16 action_blink_count;
 void sprite_set_clut_entry(s32 arg0, s32 arg1, s32 arg2);
-void npc_exec_command(Unk_80173054 *arg0);
-void thing_cmd_set_active(Unk_80173054 *arg0);
+void npc_exec_command(Action *arg0);
+void thing_cmd_set_active(Action *arg0);
 void sound_bgm_fade_out(s32 arg0);
 void sound_bgm_play(s16 arg0);
-void door_exec_command(Unk_80173054 *arg0, EventState *arg1);
-void text_exec_command(Unk_80173054 *arg0);
-void mod_cmd_npcrec(Unk_80173054 *arg0, EventState *arg1);
-void player_exec_command(Unk_80173054 *arg0, EventState *arg1);
-void sound_exec_command(Unk_80173054 *arg0);
+void door_exec_command(Action *arg0, EventState *arg1);
+void text_exec_command(Action *arg0);
+void mod_cmd_npcrec(Action *arg0, EventState *arg1);
+void player_exec_command(Action *arg0, EventState *arg1);
+void sound_exec_command(Action *arg0);
 void kaj_event_push(s32 arg0);
-void sprite_exec_command(Unk_80173054 *arg0);
-void mail_cmd_receive(Unk_80173054 *arg0);
+void sprite_exec_command(Action *arg0);
+void mail_cmd_receive(Action *arg0);
 void roadmap_start_flash(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 void kaj_ll_insert_after(LlList *a0, s32 a1);
 extern PlayerStatus player_status;
 s16 action_test_inventory(ActionCond *arg0);
 extern char D_80170000[];
-extern char D_8017001C[];
+extern char action_str_file[];
 extern char D_80170028[];
 extern char D_80170050[];
 extern char D_80170068[];
@@ -101,14 +96,14 @@ void kaj_abend(s32 a, char *b, char *c, s32 d);
 void *memcpy(void *dst, void *src, s32 n);
 s32 strlen(char *s);
 
-void action_cmd_change_scene(Unk_80173054 *action, s32 *event) {
-    ActionCmd *cmd = action->unk0;
+void action_cmd_change_scene(Action *action, s32 *event) {
+    ActionCmd *cmd = action->cmd;
     s32 a, b, c, d;
     s32 x, y, z;
 
     switch (cmd->sub) {
     case 0:
-        if (atoi(action->unk8[0]) != 0) {
+        if (atoi(action->args[0]) != 0) {
             mail_goto_ofc(1, 0, 1, 0);
         } else {
             mail_goto_ofc(1, 1, 1, 2);
@@ -116,24 +111,24 @@ void action_cmd_change_scene(Unk_80173054 *action, s32 *event) {
         break;
     case 1:
     case 3:
-        a = (s16)atoi(action->unk8[4]);
-        b = (s16)atoi(action->unk8[2]);
-        c = (s16)atoi(action->unk8[3]);
-        d = (s16)atoi(action->unk8[5]);
-        mail_goto_building(cmd->sub, action->unk8[1], a, action->unk8[0][0], b, c, d, *event, 1);
+        a = (s16)atoi(action->args[4]);
+        b = (s16)atoi(action->args[2]);
+        c = (s16)atoi(action->args[3]);
+        d = (s16)atoi(action->args[5]);
+        mail_goto_building(cmd->sub, action->args[1], a, action->args[0][0], b, c, d, *event, 1);
         break;
     case 2:
-        x = atoi(action->unk8[0]) * 10;
-        y = atoi(action->unk8[1]) * 10;
-        z = atoi(action->unk8[2]) * 10;
-        mail_goto_twn(x, y, z, atoi(action->unk8[3]), 1);
+        x = atoi(action->args[0]) * 10;
+        y = atoi(action->args[1]) * 10;
+        z = atoi(action->args[2]) * 10;
+        mail_goto_twn(x, y, z, atoi(action->args[3]), 1);
         break;
     }
 }
 
 INCLUDE_RODATA("asm/nonmatchings/game/80173054", D_80170000);
 
-INCLUDE_RODATA("asm/nonmatchings/game/80173054", D_8017001C);
+INCLUDE_RODATA("asm/nonmatchings/game/80173054", action_str_file);
 
 INCLUDE_RODATA("asm/nonmatchings/game/80173054", D_80170028);
 
@@ -145,10 +140,10 @@ INCLUDE_RODATA("asm/nonmatchings/game/80173054", D_8017008C);
 
 INCLUDE_RODATA("asm/nonmatchings/game/80173054", D_801700B0);
 
-void action_cmd_var(Unk_80173054 *action) {
+void action_cmd_var(Action *action) {
     u16 *vars = action_vars;
-    ActionCmd *cmd = action->unk0;
-    s32 value = atoi(action->unk8[0]);
+    ActionCmd *cmd = action->cmd;
+    s32 value = atoi(action->args[0]);
 
     switch (cmd->sub) {
     case 0:
@@ -184,7 +179,7 @@ void action_cmd_var(Unk_80173054 *action) {
 void action_update(void) {
     EventState *event = &event_state;
     LlList *list;
-    Unk_80173054 *action;
+    Action *action;
     ActionCmd *cmd;
     SceneTrigger *trigger;
     ActionSet *set;
@@ -209,7 +204,7 @@ void action_update(void) {
         if ((s16)event->wait_timer == 0) {
             return;
         }
-        event->wait_timer -= D_801E6DB4[0];
+        event->wait_timer -= kaj_system_vsync_delta[0];
         if ((s16)event->wait_timer > 0) {
             return;
         }
@@ -228,10 +223,10 @@ void action_update(void) {
     if (n == 0) {
         action = NULL;
     } else {
-        Unk_80173054 *first;
+        Action *first;
         list->cursor = list->head;
-        first = (Unk_80173054 *)list->cursor->data;
-        op.unk0 = first->unk0->unk0;
+        first = (Action *)list->cursor->data;
+        op.unk0 = first->cmd->opcode;
         action = first;
         kaj_ll_remove_to_prev(list);
     }
@@ -241,24 +236,24 @@ void action_update(void) {
     }
     switch (op.unk0) {
     case 0:
-        cmd = action->unk0;
+        cmd = action->cmd;
         trigger = action_find_trigger(cmd->target);
         if (trigger == NULL) {
             return;
         }
         switch (cmd->sub) {
         case 0:
-            if (atoi(action->unk8[0]) != 0) {
-                trigger->leave_set = atoi(action->unk8[1]);
+            if (atoi(action->args[0]) != 0) {
+                trigger->leave_set = atoi(action->args[1]);
             } else {
-                trigger->enter_set = atoi(action->unk8[1]);
+                trigger->enter_set = atoi(action->args[1]);
             }
             break;
         case 1:
-            trigger->enabled = atoi(action->unk8[0]);
+            trigger->enabled = atoi(action->args[0]);
             break;
         case 2:
-            trigger->unk8 = atoi(action->unk8[0]);
+            trigger->unk8 = atoi(action->args[0]);
             break;
         }
         break;
@@ -269,10 +264,10 @@ void action_update(void) {
         thing_cmd_set_active(action);
         break;
     case 3:
-        if (action->unk0->sub != 0) {
+        if (action->cmd->sub != 0) {
             sound_bgm_fade_out(3);
         } else {
-            sound_bgm_play(atoi(action->unk8[0]));
+            sound_bgm_play(atoi(action->args[0]));
         }
         break;
     case 4:
@@ -299,17 +294,17 @@ void action_update(void) {
     case 11:
         action_queue_front_flag = 1;
         flag = 0;
-        switch (action->unk0->sub) {
+        switch (action->cmd->sub) {
         case 0:
             event->state = 4;
             event->wait_flags |= 1;
-            event->wait_timer = atoi(action->unk8[0]) * 2;
+            event->wait_timer = atoi(action->args[0]) * 2;
             break;
         case 10:
-            action->unk0->sub = 1;
+            action->cmd->sub = 1;
             flag = 1;
         case 1:
-            set = action_find_set(atoi(action->unk8[0]));
+            set = action_find_set(atoi(action->args[0]));
             while (set != NULL) {
                 set = action_run_set(set, 1, (s16)flag);
             }
@@ -326,10 +321,10 @@ void action_update(void) {
         mail_cmd_receive(action);
         break;
     case 14:
-        red = atoi(action->unk8[0]) & 0xFF;
-        green = atoi(action->unk8[1]) & 0xFF;
-        blue = atoi(action->unk8[2]) & 0xFF;
-        roadmap_start_flash(red, green, blue, (s16)atoi(action->unk8[3]));
+        red = atoi(action->args[0]) & 0xFF;
+        green = atoi(action->args[1]) & 0xFF;
+        blue = atoi(action->args[2]) & 0xFF;
+        roadmap_start_flash(red, green, blue, (s16)atoi(action->args[3]));
         break;
     }
 }
@@ -373,7 +368,7 @@ s16 action_test_inventory(ActionCond *cond) {
 u8 *action_load_set(u8 *src) {
     ActionSet *set;
     Action *act;
-    ActionArgs *args;
+    char **args;
     char *buf;
     s32 size;
     s32 len;
@@ -383,12 +378,12 @@ u8 *action_load_set(u8 *src) {
 
     set = kaj_malloc(0xC);
     if (set == NULL) {
-        kaj_abend(3, D_80170000, D_8017001C, 0x1F1);
+        kaj_abend(3, D_80170000, action_str_file, 0x1F1);
     }
     src += 4;
     set->header = kaj_malloc(0x38);
     if (set->header == NULL) {
-        kaj_abend(3, D_80170028, D_8017001C, 0x1F9);
+        kaj_abend(3, D_80170028, action_str_file, 0x1F9);
     }
     *set->header = *(ActionSetHeader *)src;
     src += 0x38;
@@ -396,7 +391,7 @@ u8 *action_load_set(u8 *src) {
     src += 4;
     act = kaj_malloc(set->count * 0xC);
     if (act == NULL) {
-        kaj_abend(3, D_80170050, D_8017001C, 0x204);
+        kaj_abend(3, D_80170050, action_str_file, 0x204);
     }
     set->actions = act;
     for (i = 0; i < set->count; i++, act++) {
@@ -405,7 +400,7 @@ u8 *action_load_set(u8 *src) {
         act->cmd = kaj_malloc(8);
         len = size - 0xC;
         if (act->cmd == NULL) {
-            kaj_abend(3, D_80170068, D_8017001C, 0x210);
+            kaj_abend(3, D_80170068, action_str_file, 0x210);
         }
         *(Unk_80173A44 *)act->cmd = *(Unk_80173A44 *)src;
         act->argc = *(s32 *)(src + 8);
@@ -418,11 +413,11 @@ u8 *action_load_set(u8 *src) {
         } else {
             args = kaj_malloc(act->argc * 4);
             if (args == NULL) {
-                kaj_abend(3, D_8017008C, D_8017001C, 0x220);
+                kaj_abend(3, D_8017008C, action_str_file, 0x220);
             }
             buf = kaj_malloc(len);
             if (buf == NULL) {
-                kaj_abend(3, D_801700B0, D_8017001C, 0x225);
+                kaj_abend(3, D_801700B0, action_str_file, 0x225);
             }
             act->args = args;
             memcpy(buf, src + 0xC, len);
@@ -431,11 +426,11 @@ u8 *action_load_set(u8 *src) {
             } while (0);
             for (j = 0; j < act->argc; j++) {
                 if (j == 0) {
-                    args[0].unk0 = buf;
+                    args[0] = buf;
                 } else {
                     off++;
-                    off += strlen(args[j - 1].unk0);
-                    args[j].unk0 = buf + off;
+                    off += strlen(args[j - 1]);
+                    args[j] = buf + off;
                 }
             }
             src += size;
@@ -731,7 +726,7 @@ void action_free_set(ActionSet *set) {
 
     for (i = 0; i < set->count; i++, act++) {
         if (act->args != NULL) {
-            free3(act->args->unk0);
+            free3(act->args[0]);
             free3(act->args);
         }
         free3(act->cmd);
@@ -755,7 +750,7 @@ void action_free_all_sets(void) {
         act = set->actions;
         for (i = 0; i < set->count; i++, act++) {
             if (act->args != NULL) {
-                free3(act->args->unk0);
+                free3(act->args[0]);
                 free3(act->args);
             }
             free3(act->cmd);
@@ -936,7 +931,7 @@ void action_init_npcs(void) {
         model = mod_find(npc->unk16);
         if (model != NULL) {
             action_place_npc(npc, model);
-        npc->unk48 = block_find_at(npc->unk20, npc->unk24, npc->unk28);
+        npc->block = block_find_at(npc->unk20, npc->unk24, npc->unk28);
         npc->unk10 = -2;
         npc->unk40 = 0;
         npc->unkB = 0;

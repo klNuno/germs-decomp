@@ -72,11 +72,11 @@ void object_room_do_action(PlayerStatus *arg0);
 void player_start_move_to(s16 a, u16 b, s32 c, s32 d, s32 e, s16 f, s16 g, s16 h, s32 i);
 void player_handle_pad(PlayerStatus *arg0, s32 arg1, s32 arg2);
 s16 D_801DFD54;
-s32 D_801DFF50;
-extern s32 D_801DFED8;
-extern s32 D_801DFEE4;
-extern s32 D_801DFED4;
-extern s32 D_801DFEE8;
+s32 player_pick_trigger_hook;
+extern s32 event_alarm_hook;
+extern s32 event_enter_hook;
+extern s32 event_effect_done_hook;
+extern s32 event_mod_finish_hook;
 void action_reset(s16 arg0);
 void action_free_all_sets(void);
 void action_free_triggers(void);
@@ -95,7 +95,7 @@ void thing_free_all(void);
 void *kaj_malloc(u32 size);
 void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
 void *action_load_set(void *arg0);
-extern char D_80170B7C[];
+extern char object_str_file[];
 void block_create(Block **arg0, s32 arg1);
 void block_setup(Block *arg0, u16 arg1);
 void block_list_add(s32 arg0);
@@ -118,9 +118,8 @@ void kaj_tim_upload(u32 *arg0, s16 arg1);
 extern u8 *D_801E05C8[];
 void sound_vab_transfer(VabStream *arg0);
 void sound_se_push(Unk_801A217C *arg0);
-typedef struct { s32 unk0; s32 unk4; s32 unk8; s32 unkC; s32 unk10; s32 unk14; s32 unk18; s32 unk1C; s32 unk20; s32 unk24; s32 unk28; s32 unk2C; s32 unk30; s32 unk34; s32 unk38; } Unk_801E032C;
 void vehicle_create(Vehicle **arg0, u32 arg1);
-void vehicle_init(Unk_801E032C *arg0);
+void vehicle_init(Vehicle *arg0);
 void object_room_storage_open(s16 arg0, char *arg1);
 void effect_start_fade(s32 arg0, s32 arg1);
 void kaj_view_set_bg_color(u8 arg0, u8 arg1, u8 arg2);
@@ -129,11 +128,11 @@ void sound_bgm_play(s16 arg0);
 s16 D_801DFD56;
 extern u16 D_801E0356[];
 extern SceneRequest scene_request;
-s32 object_room_on_enter(Unk_80192F60 *arg0);
-s32 object_room_on_effect_done(Unk_80193068 *arg0);
+s32 object_room_on_enter(KajEvent *arg0);
+s32 object_room_on_effect_done(KajEvent *arg0);
 void object_room_pick_desk_action(s32 *arg0);
-void object_room_on_alarm(Unk_80192F60 *arg0);
-void object_room_on_mod_finish(Unk_80192F60 *arg0);
+void object_room_on_alarm(KajEvent *arg0);
+void object_room_on_mod_finish(KajEvent *arg0);
 void player_place_for_scene(s32 arg0);
 void object_load_scene(void);
 void mod_npcrec_show(s32 arg0, s32 arg1);
@@ -151,7 +150,7 @@ void kaj_timer_disable(void);
 void effect_fade_set_black(void);
 void text_start_narration(s32 arg0);
 s32 kaj_event_get(s32 *arg0);
-void func_80189928(s32 *arg0);
+void event_handle_alarm(s32 *arg0);
 void event_handle_enter(s32 *arg0);
 void event_handle_leave(s32 *arg0);
 void event_handle_tick(s16 arg0);
@@ -238,8 +237,8 @@ s16 player_check_ground(Player *player, s32 col, s16 sidestep, s16 slide) {
     switch ((u32)col) {
     case 0x1000000:
     case 0x2000000:
-        if (D_801DFF50 != 0) {
-            ((void (*)(s32 *))D_801DFF50)(&trigger);
+        if (player_pick_trigger_hook != 0) {
+            ((void (*)(s32 *))player_pick_trigger_hook)(&trigger);
         }
         enter_only = 1;
         trigger_type = ((u8 *)&trigger)[2];
@@ -467,7 +466,7 @@ void player_update_view(Player *player, s16 *view_rot, u16 mode) {
         player->coord[0].coord_tz = player->pos_z;
         rot[0] = (player->pitch << 12) / 360;
         rot[1] = (player->yaw << 12) / 360;
-        rot[2] = (player->unk70 << 12) / 360;
+        rot[2] = (player->roll << 12) / 360;
         RotMatrixZYX(rot, player->coord[0].coord_m);
         player->coord[0].flg = 0;
     }

@@ -33,7 +33,7 @@ typedef struct {
 } Unk_801D3060;
 void *CdSearchFile(void *fp, char *name);
 s32 CdPosToInt(void *p);
-extern s16 D_801E71C8[];
+extern s16 kaj_cdmgr_state[];
 typedef struct {
     s32 unk0;
     s32 unk4;
@@ -108,7 +108,7 @@ typedef struct {
 s16 D_801DFFE4;
 void kaj_cdmgr_release(s32 arg0);
 extern char D_80172FD0[];
-extern char D_801DFE14[];
+extern char kaj_cdmgr_str_file[];
 int printf(const char *fmt, ...);
 void exit(s32 code);
 extern char kaj_map_str_city_mp[];
@@ -242,13 +242,13 @@ void kaj_cdmgr_init(void) {
         if (pool->unk8 == 0) {
             pool->unk8 = (s32)kaj_malloc(pool->unk4);
             if (pool == NULL) {
-                printf(D_80172FD0, D_801DFE14, 168);
+                printf(D_80172FD0, kaj_cdmgr_str_file, 168);
                 exit(1);
             }
         }
         kaj_heap_init((Unk_801D3924 *)pool->unkC, (u8 *)pool->unk8, pool->unk4, 2);
     }
-    state = (Unk_801E71C8 *)D_801E71C8;
+    state = (Unk_801E71C8 *)kaj_cdmgr_state;
     state->unk0 = 0;
     state->unk2 = 0;
     for (i = 0; i < 32; i++) {
@@ -273,10 +273,10 @@ s32 kaj_cdmgr_poll(void) {
     u8 pos[8];
     u8 param[8];
 
-    cur = D_801E71C8[1];
-    slot = (cur >= 1 && cur <= 32) ? &((Unk_801E71C8 *)D_801E71C8)->unk4[cur - 1] : NULL;
-    state = (Unk_801E71C8 *)D_801E71C8;
-    switch (D_801E71C8[0]) {
+    cur = kaj_cdmgr_state[1];
+    slot = (cur >= 1 && cur <= 32) ? &((Unk_801E71C8 *)kaj_cdmgr_state)->unk4[cur - 1] : NULL;
+    state = (Unk_801E71C8 *)kaj_cdmgr_state;
+    switch (kaj_cdmgr_state[0]) {
     case 1:
         if (state->unk2 > 0 && slot->unk18 != 0) {
             D_801DFE1C = 0;
@@ -284,9 +284,9 @@ s32 kaj_cdmgr_poll(void) {
             CdIntToPos(slot->unk0, pos);
             while (CdControl(2, pos, NULL) == 0) {
             }
-            D_801E71C8[0] = 3;
+            kaj_cdmgr_state[0] = 3;
         } else {
-            D_801E71C8[0] = -1;
+            kaj_cdmgr_state[0] = -1;
         }
         break;
     case 3:
@@ -300,24 +300,24 @@ s32 kaj_cdmgr_poll(void) {
                 VSync(3);
             }
             if (CdRead(slot->unkC, buf, 0x80) != 0) {
-                D_801E71C8[0] = 4;
+                kaj_cdmgr_state[0] = 4;
             } else {
                 CdFlush();
-                D_801E71C8[0] = 1;
+                kaj_cdmgr_state[0] = 1;
             }
         } else {
-            D_801E71C8[0] = -1;
+            kaj_cdmgr_state[0] = -1;
         }
         break;
     case 4:
         left = CdReadSync(1, NULL);
         if (left == 0) {
             if (slot->unk1E != 0) {
-                D_801E71C8[0] = 1;
+                kaj_cdmgr_state[0] = 1;
                 state->unk2 = slot->unk1E;
                 slot->unk1E = 0;
             } else {
-                D_801E71C8[0] = 0;
+                kaj_cdmgr_state[0] = 0;
                 state->unk2 = 0;
                 D_801DFE24 = 1;
                 ret = 1;
@@ -336,13 +336,13 @@ s32 kaj_cdmgr_poll(void) {
                 } else {
                     CdFlush();
                 }
-                D_801E71C8[0] = 1;
+                kaj_cdmgr_state[0] = 1;
             }
         }
         break;
     case -1:
         CdFlush();
-        D_801E71C8[0] = 0;
+        kaj_cdmgr_state[0] = 0;
         break;
     }
     return ret;
@@ -356,16 +356,16 @@ s32 kaj_cdmgr_load(Unk_801D3060 *file, s32 pool, s32 type) {
     s32 i;
 
     for (i = 0; i < 32; i++) {
-        slot = &((Unk_801E71C8 *)D_801E71C8)->unk4[i];
+        slot = &((Unk_801E71C8 *)kaj_cdmgr_state)->unk4[i];
         if (slot->unk18 != 0 && slot->unk0 == file->unk0 && slot->unk1C == pool && slot->unk1D == type) {
-            ((Unk_801E71C8 *)D_801E71C8)->unk4[i].unk20++;
+            ((Unk_801E71C8 *)kaj_cdmgr_state)->unk4[i].unk20++;
             return i + 1;
         }
     }
-    if (D_801E71C8[0] == 0) {
+    if (kaj_cdmgr_state[0] == 0) {
         for (i = 0; i < 32; i++) {
-            if (((Unk_801E71C8 *)D_801E71C8)->unk4[i].unk18 == 0) {
-                slot = &((Unk_801E71C8 *)D_801E71C8)->unk4[i];
+            if (((Unk_801E71C8 *)kaj_cdmgr_state)->unk4[i].unk18 == 0) {
+                slot = &((Unk_801E71C8 *)kaj_cdmgr_state)->unk4[i];
                 slot->unk0 = file->unk0;
                 slot->unk8 = file->unk8;
                 slot->unkC = file->unkC;
@@ -373,7 +373,7 @@ s32 kaj_cdmgr_load(Unk_801D3060 *file, s32 pool, s32 type) {
                 size = file->unk10;
                 blk = NULL;
                 if (pool < 0 || pool >= kaj_cdmgr_pool_count) {
-                    printf(D_80172FD0, D_801DFE14, 93);
+                    printf(D_80172FD0, kaj_cdmgr_str_file, 93);
                     exit(1);
                 }
                 heap = (Unk_801D3924 *)kaj_cdmgr_pools[pool].unkC;
@@ -384,8 +384,8 @@ s32 kaj_cdmgr_load(Unk_801D3060 *file, s32 pool, s32 type) {
                 if (blk == NULL) {
                     break;
                 }
-                D_801E71C8[0] = 1;
-                D_801E71C8[1] = i + 1;
+                kaj_cdmgr_state[0] = 1;
+                kaj_cdmgr_state[1] = i + 1;
                 slot->unk1C = pool;
                 slot->unk1D = type;
                 slot->unk1E = 0;
@@ -403,11 +403,11 @@ s32 kaj_cdmgr_count_refs(s32 count, Unk_801D2A48 *files, s32 *handles, s32 pool)
     s32 j;
     s32 k;
 
-    if (D_801E71C8[0] != 0) {
+    if (kaj_cdmgr_state[0] != 0) {
         return 0;
     }
     for (i = 0; i < 32; i++) {
-        kaj_cdmgr_refs[i] = ((Unk_801E71C8 *)D_801E71C8)->unk4[i].unk20;
+        kaj_cdmgr_refs[i] = ((Unk_801E71C8 *)kaj_cdmgr_state)->unk4[i].unk20;
     }
     k = 0;
     for (i = 0; i < count; i++, files++) {
@@ -437,7 +437,7 @@ static inline Unk_801D395C *func_801D254C_alloc(s32 pool, u32 size) {
     Unk_801D395C *blk = NULL;
     Unk_801D3924 *heap;
     if (pool < 0 || pool >= kaj_cdmgr_pool_count) {
-        printf(D_80172FD0, D_801DFE14, 93);
+        printf(D_80172FD0, kaj_cdmgr_str_file, 93);
         exit(1);
     }
     heap = (Unk_801D3924 *)kaj_cdmgr_pools[pool].unkC;
@@ -462,24 +462,24 @@ s16 kaj_cdmgr_load_list(s32 *count, Unk_801D2A48 *files, s32 *handles, s32 pool,
     s32 first;
     s32 last;
 
-    if (D_801E71C8[0] != 0) {
+    if (kaj_cdmgr_state[0] != 0) {
         return 0;
     }
     pool_desc = kaj_cdmgr_pools;
     moved = 0;
     for (i = 0; i < kaj_cdmgr_pool_count; i++, pool_desc++) {
         if (kaj_heap_has_gaps((Unk_801D3924 *)pool_desc->unkC) != 0) {
-            kaj_cdmgr_save_addrs((Unk_801D35EC *)D_801E71C8);
+            kaj_cdmgr_save_addrs((Unk_801D35EC *)kaj_cdmgr_state);
             moved |= kaj_heap_compact((Unk_801D3924 *)pool_desc->unkC);
         }
     }
     if (moved != 0) {
-        kaj_cdmgr_relocate(D_801E71C8);
+        kaj_cdmgr_relocate(kaj_cdmgr_state);
     }
     r = moved | kaj_cdmgr_dirty;
     *moved_out = r;
     for (k = 0; k < 32; k++) {
-        ((Unk_801E71C8 *)D_801E71C8)->unk4[k].unk20 = kaj_cdmgr_refs[k];
+        ((Unk_801E71C8 *)kaj_cdmgr_state)->unk4[k].unk20 = kaj_cdmgr_refs[k];
     }
     j = 0;
     last = -1;
@@ -517,7 +517,7 @@ s16 kaj_cdmgr_load_list(s32 *count, Unk_801D2A48 *files, s32 *handles, s32 pool,
                     first = j;
                 }
                 if (last >= 0) {
-                    ((Unk_801E71C8 *)D_801E71C8)->unk4[last].unk1E = j + 1;
+                    ((Unk_801E71C8 *)kaj_cdmgr_state)->unk4[last].unk1E = j + 1;
                 }
                 last = j;
                 slot->unk1C = pool;
@@ -548,7 +548,7 @@ void kaj_cdmgr_release(s32 handle) {
         return;
     }
     slot = handle - 1;
-    if (((Unk_801E71C8 *)D_801E71C8)->unk4[slot].unk18 == 0) {
+    if (((Unk_801E71C8 *)kaj_cdmgr_state)->unk4[slot].unk18 == 0) {
         return;
     }
     if (kaj_cdmgr_refs[slot] <= 0) {
@@ -557,24 +557,24 @@ void kaj_cdmgr_release(s32 handle) {
     if (--kaj_cdmgr_refs[slot] != 0) {
         return;
     }
-    kaj_cdmgr_free_data(((Unk_801E71C8 *)D_801E71C8)->unk4[slot].unk1D, *(s32 *)((Unk_801E71C8 *)D_801E71C8)->unk4[slot].unk18);
-    if (D_801E71C8[0] != 0 && D_801E71C8[1] == handle) {
+    kaj_cdmgr_free_data(((Unk_801E71C8 *)kaj_cdmgr_state)->unk4[slot].unk1D, *(s32 *)((Unk_801E71C8 *)kaj_cdmgr_state)->unk4[slot].unk18);
+    if (kaj_cdmgr_state[0] != 0 && kaj_cdmgr_state[1] == handle) {
         CdFlush();
-        D_801E71C8[0] = 0;
+        kaj_cdmgr_state[0] = 0;
     }
-    pool = ((Unk_801E71C8 *)D_801E71C8)->unk4[slot].unk1C;
-    blk = (Unk_801D395C *)((Unk_801E71C8 *)D_801E71C8)->unk4[slot].unk18;
+    pool = ((Unk_801E71C8 *)kaj_cdmgr_state)->unk4[slot].unk1C;
+    blk = (Unk_801D395C *)((Unk_801E71C8 *)kaj_cdmgr_state)->unk4[slot].unk18;
     if (pool < 0 || pool >= kaj_cdmgr_pool_count) {
-        printf(D_80172FD0, D_801DFE14, 93);
+        printf(D_80172FD0, kaj_cdmgr_str_file, 93);
         exit(1);
     }
     heap = (Unk_801D3924 *)kaj_cdmgr_pools[pool].unkC;
     if (heap != NULL && blk != NULL) {
         kaj_heap_free(heap, blk);
     }
-    ((Unk_801E71C8 *)D_801E71C8)->unk4[slot].unk18 = 0;
-    ((Unk_801E71C8 *)D_801E71C8)->unk4[slot].unk1C = 0;
-    ((Unk_801E71C8 *)D_801E71C8)->unk4[slot].unk1D = 0;
+    ((Unk_801E71C8 *)kaj_cdmgr_state)->unk4[slot].unk18 = 0;
+    ((Unk_801E71C8 *)kaj_cdmgr_state)->unk4[slot].unk1C = 0;
+    ((Unk_801E71C8 *)kaj_cdmgr_state)->unk4[slot].unk1D = 0;
     kaj_cdmgr_dirty = 1;
 }
 
@@ -588,7 +588,7 @@ s32 kaj_cdmgr_dir_entries(s32 handle, s16 count, s16 *indices, Unk_801D2A48 *fil
 
     slot = (handle >= 1 && handle <= 32) ? &kaj_cdmgr_slots_1[handle] : NULL;
     if (slot != NULL && slot->unk18 != 0) {
-        if (D_801E71C8[0] == 0 || D_801E71C8[1] != handle) {
+        if (kaj_cdmgr_state[0] == 0 || kaj_cdmgr_state[1] != handle) {
             dir = (s32 *)slot->unk18;
         } else {
             dir = NULL;
@@ -686,7 +686,7 @@ void kaj_cdmgr_relocate(s16 *state) {
 
 s32 kaj_cdmgr_pool_size(s32 pool) {
     if (pool < 0 || pool >= kaj_cdmgr_pool_count) {
-        printf(D_80172FD0, D_801DFE14, 137);
+        printf(D_80172FD0, kaj_cdmgr_str_file, 137);
         exit(1);
     }
     return kaj_cdmgr_pools[pool].unk4;
@@ -730,7 +730,7 @@ s32 kaj_cdmgr_rebase_dir(s32 handle, u32 dir_size, char *name) {
     n = dir_size >> 3;
     slot = (handle >= 1 && handle <= 32) ? &kaj_cdmgr_slots_1[handle] : NULL;
     if (slot != NULL && slot->unk18 != 0) {
-        if (D_801E71C8[0] == 0 || D_801E71C8[1] != handle) {
+        if (kaj_cdmgr_state[0] == 0 || kaj_cdmgr_state[1] != handle) {
             dir = (s32 *)slot->unk18;
         } else {
             dir = NULL;
@@ -771,7 +771,7 @@ s32 kaj_cdmgr_dir_entry(s32 handle, s16 index, Unk_801D3060 *info) {
 
     slot = (handle >= 1 && handle <= 32) ? &kaj_cdmgr_slots_1[handle] : NULL;
     if (slot != NULL && slot->unk18 != 0) {
-        if (D_801E71C8[0] == 0 || D_801E71C8[1] != handle) {
+        if (kaj_cdmgr_state[0] == 0 || kaj_cdmgr_state[1] != handle) {
             dir = (s32 *)slot->unk18;
         } else {
             dir = NULL;
@@ -793,7 +793,7 @@ s32 kaj_cdmgr_dir_entry(s32 handle, s16 index, Unk_801D3060 *info) {
 }
 
 s32 kaj_cdmgr_is_idle(void) {
-    return D_801E71C8[0] == 0;
+    return kaj_cdmgr_state[0] == 0;
 }
 
 s32 kaj_cdmgr_is_ready(s32 handle) {
@@ -801,7 +801,7 @@ s32 kaj_cdmgr_is_ready(s32 handle) {
 
     slot = (handle >= 1 && handle <= 32) ? &kaj_cdmgr_slots_1[handle] : NULL;
     if (slot != NULL && slot->unk18 != 0) {
-        if (D_801E71C8[0] == 0 || D_801E71C8[1] != handle) {
+        if (kaj_cdmgr_state[0] == 0 || kaj_cdmgr_state[1] != handle) {
             return 1;
         }
     }
@@ -815,12 +815,12 @@ s32 kaj_cdmgr_compact(void) {
 
     for (i = 0; i < kaj_cdmgr_pool_count; i++, pool++) {
         if (kaj_heap_has_gaps((Unk_801D3924 *)pool->unkC) != 0) {
-            kaj_cdmgr_save_addrs((Unk_801D35EC *)D_801E71C8);
+            kaj_cdmgr_save_addrs((Unk_801D35EC *)kaj_cdmgr_state);
             moved |= kaj_heap_compact((Unk_801D3924 *)pool->unkC);
         }
     }
     if (moved != 0) {
-        kaj_cdmgr_relocate(D_801E71C8);
+        kaj_cdmgr_relocate(kaj_cdmgr_state);
     }
     return moved | kaj_cdmgr_dirty;
 }
@@ -830,7 +830,7 @@ s32 kaj_cdmgr_get(s32 handle) {
 
     slot = (handle >= 1 && handle <= 32) ? &kaj_cdmgr_slots_1[handle] : NULL;
     if (slot != NULL && slot->unk18 != 0) {
-        if (D_801E71C8[0] == 0 || D_801E71C8[1] != handle) {
+        if (kaj_cdmgr_state[0] == 0 || kaj_cdmgr_state[1] != handle) {
             return slot->unk18;
         }
     }
@@ -862,7 +862,7 @@ s32 kaj_cdmgr_is_fresh(s32 handle) {
 
     slot = (handle >= 1 && handle <= 32) ? &kaj_cdmgr_slots_1[handle] : NULL;
     if (slot != NULL && slot->unk18 != 0 && slot->unk22 == 1) {
-        if (D_801E71C8[0] == 0 || D_801E71C8[1] != handle) {
+        if (kaj_cdmgr_state[0] == 0 || kaj_cdmgr_state[1] != handle) {
             return 1;
         }
     }
@@ -874,7 +874,7 @@ void kaj_cdmgr_mark_used(s32 handle) {
 
     slot = (handle >= 1 && handle <= 32) ? &kaj_cdmgr_slots_1[handle] : NULL;
     if (slot != NULL && slot->unk18 != 0) {
-        if (D_801E71C8[0] == 0 || D_801E71C8[1] != handle) {
+        if (kaj_cdmgr_state[0] == 0 || kaj_cdmgr_state[1] != handle) {
             slot->unk22 = 2;
         }
     }

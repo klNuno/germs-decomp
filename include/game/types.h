@@ -24,18 +24,18 @@ typedef struct GsCoordinate2 {
     u8 unk24[0x2C];
 } GsCoordinate2;
 
-typedef struct Unk_801E076C_18 {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
+typedef struct PlayerExit {
+    s32 distance;
+    s32 pos_x;
+    s32 pos_y;
+    s32 pos_z;
     s32 unk10;
     u8 unk14[0x4];
     s32 unk18;
-    s16 unk1C;
-    s16 unk1E;
-    u16 unk20;
-} Unk_801E076C_18;
+    s16 direction;
+    s16 facing;
+    u16 yaw;
+} PlayerExit;
 
 typedef struct Player {
     s32 unk0;
@@ -46,7 +46,7 @@ typedef struct Player {
     s16 unk12;
     s16 unk14;
     u8 unk16[0x2];
-    Unk_801E076C_18 unk18;
+    PlayerExit exit;
     s16 unk3C;
     s16 unk3E;
     s16 unk40;
@@ -67,7 +67,7 @@ typedef struct Player {
     s32 unk68;
     s16 pitch;
     s16 yaw;
-    s16 unk70;
+    s16 roll;
     s16 cell_x;
     s16 cell_y;
     s16 cell_z;
@@ -129,7 +129,7 @@ typedef struct Npc {
     u8 unk44;
     u8 unk45;
     s16 unk46;
-    s32 unk48;
+    s32 block;
 } Npc;
 
 typedef struct Model {
@@ -315,28 +315,58 @@ typedef struct EventState {
     u16 wait_flags;
 } EventState;
 
+/* WEPN chunk record (0x60 bytes), the table at SceneTables.weapons searched by effect_weapon_find. */
+typedef struct WeaponRecord {
+    u16 id;
+    u16 weapon_class;
+    char name[0x20];
+    u16 drain_extra;
+    u8 unk26[2];
+    s16 req_level_on;
+    u8 unk2A[6];
+    u16 req_level;
+    u8 unk32[2];
+    s16 req_stat_on;
+    u8 unk36[2];
+    u16 req_stat_id;
+    u8 unk3A[2];
+    s16 req_stat;
+    u8 unk3E[2];
+    s16 req_class_on;
+    u8 unk42[6];
+    s16 req_class;
+    u8 unk4A[2];
+    u16 fire_frame;
+    u8 unk4E[2];
+    u16 accuracy;
+    u16 damage;
+    s32 range_min;
+    s32 range_full;
+    s32 range_max;
+} WeaponRecord;
+
 typedef struct SceneTables {
-    struct BgmSep *unk0;
-    struct Unk_801E02DC *unk4[4];
-    s32 unk14;
+    struct BgmSep *bgm;
+    struct Unk_801E02DC *se_banks[4];
+    s32 se_bank_count;
     s32 trigger_count;
     s32 npc_count;
-    s32 unk20;
+    s32 npc_record_count;
     s32 npc_body_count;
     s32 npc_stats_count;
-    s32 unk2C;
-    s32 unk30;
-    s32 unk34;
+    s32 item_count;
+    s32 weapon_count;
+    s32 text_count;
     struct SceneTrigger *triggers;
     Npc *npcs;
     struct NpcBody *npc_bodies;
     struct NpcStats *npc_stats;
-    void *unk48;
-    struct Unk_8018BC50 *unk4C;
-    struct NpcRecord *unk50;
-    struct Vehicle *unk54;
-    struct Unk_80188FEC *unk58;
-    void *unk5C[1];
+    void *items;
+    struct Unk_8018BC50 *mail;
+    struct NpcRecord *npc_records;
+    struct Vehicle *vehicle;
+    WeaponRecord *weapons;
+    void *texts[1];
 } SceneTables;
 
 typedef struct EffectAlarm {
@@ -400,9 +430,9 @@ typedef struct NpcBody {
 typedef struct KajEvent {
     s32 type;
     u32 ticks;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
+    s32 param0;
+    s32 param1;
+    s32 param2;
 } KajEvent;
 
 typedef struct ActionSet {
@@ -506,20 +536,20 @@ typedef struct RoadMap {
     s16 *part2;
 } RoadMap;
 
-typedef struct Unk_8017CAC8 {
-    u16 unk0;
-    u16 unk2;
-    u16 unk4;
-    u16 unk6;
-} Unk_8017CAC8;
+typedef struct ArenaHeader {
+    u16 origin_x;
+    u16 origin_z;
+    u16 width;
+    u16 depth;
+} ArenaHeader;
 
 typedef struct Arena {
-    u16 unk0;
-    u16 unk2;
-    u16 unk4;
-    u16 unk6;
+    u16 origin_x;
+    u16 origin_z;
+    u16 width;
+    u16 depth;
     void *data;
-    Unk_8017CAC8 *cells;
+    ArenaHeader *cells;
 } Arena;
 
 typedef struct DoorListNode {
@@ -555,14 +585,10 @@ typedef struct ActionSetHeader {
     ActionCond cond_inventory;
 } ActionSetHeader;
 
-typedef struct ActionArgs {
-    void *unk0;
-} ActionArgs;
-
 typedef struct Action {
-    void *cmd;
+    struct ActionCmd *cmd;
     s32 argc;
-    ActionArgs *args;
+    char **args;
 } Action;
 
 typedef struct LlList {
@@ -571,11 +597,6 @@ typedef struct LlList {
     LlNode *cursor;
     s32 count;
 } LlList;
-
-typedef struct Unk_80176370 {
-    u8 unk0[0x4];
-    s16 unk4;
-} Unk_80176370;
 
 typedef struct BlockListNode {
     u8 unk0[0x4];
@@ -667,8 +688,17 @@ typedef struct SpriteRecord {
 } SpriteRecord;
 
 typedef struct Vehicle {
-    u16 unk0;
-    u8 unk2[0xB6];
+    u16 kind;
+    s16 unk2;
+    s32 pos_x;
+    s32 pos_y;
+    s32 pos_z;
+    s16 rot_x;
+    s16 rot_y;
+    s16 rot_z;
+    u8 unk16[0x2];
+    GsCoordinate2 coord;
+    GsCoordinate2 coord2;
     void *model0;
     void *model1;
     void *data;
@@ -691,12 +721,6 @@ typedef struct AreaTrigger {
     u8 unkC[0x4];
 } AreaTrigger;
 
-typedef struct Unk_80192F60 {
-    u8 unk0[0x8];
-    s32 unk8;
-    s32 unkC;
-} Unk_80192F60;
-
 typedef struct RoomPhone {
     s16 ringing;
     s16 state;
@@ -710,23 +734,33 @@ typedef struct RoomStorage {
     s16 unk6;
 } RoomStorage;
 
-typedef struct Unk_8019A07C_3C {
-    u16 unk0;
-    u16 unk2;
-    u8 unk4[0x10];
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    u8 unk20[0x1C];
-    s16 unk3C;
-    s16 unk3E;
-    s16 unk40;
-} Unk_8019A07C_3C;
-
-typedef struct Unk_8019A07C {
-    u8 unk0[0x3C];
-    Unk_8019A07C_3C *unk3C;
-} Unk_8019A07C;
+typedef struct PlayerMove {
+    u16 flag_op;
+    u16 flag_bits;
+    s32 from_x;
+    s32 from_y;
+    s32 from_z;
+    u8 unk10[4];
+    s32 to_x;
+    s32 to_y;
+    s32 to_z;
+    u8 unk20[4];
+    s32 delta_x;
+    s32 delta_y;
+    s32 delta_z;
+    u8 unk30[4];
+    s16 from_pitch;
+    s16 from_yaw;
+    s16 from_roll;
+    u8 unk3A[2];
+    s16 to_pitch;
+    s16 to_yaw;
+    s16 to_roll;
+    u8 unk42[2];
+    s16 delta_pitch;
+    s16 delta_yaw;
+    s16 delta_roll;
+} PlayerMove;
 
 typedef struct TimerAlarm {
     s32 due;
@@ -866,17 +900,50 @@ typedef struct TmdTri {
     u16 vert2;
 } TmdTri;
 
+/* TMD object table entry: vertex, normal and primitive tops and counts (block_hit_tris walks the primitives). */
+typedef struct TmdObject {
+    s32 vert_top;
+    s32 unk4;
+    s32 normal_top;
+    s32 unkC;
+    TmdTri *primitive_top;
+    s32 n_primitive;
+} TmdObject;
+
+/* GsDOBJ2 head as the block and vehicle code read it: attribute, coordinate, TMD object. */
+typedef struct GsDobj2 {
+    s32 unk0;
+    GsCoordinate2 *coord2;
+    TmdObject *tmd;
+} GsDobj2;
+
+typedef struct ShopState {
+    s16 unk0;
+    s16 menu_stage;
+    s16 unk4;
+    s16 unk6;
+    s16 unk8;
+    s16 unkA;
+    s16 unkC;
+    s16 unkE;
+    s16 unk10;
+    s16 unk12[3];
+    s16 *list;
+    s16 *texts;
+} ShopState;
+
 typedef struct Vec3 {
     s32 x;
     s32 y;
     s32 z;
 } Vec3;
 
-typedef struct Unk_8018519C_0 {
-    u8 unk0[0x2];
-    u16 unk2;
-    u16 unk4;
-} Unk_8018519C_0;
+/* View of ActionCmd for the handlers that read the target +4 as u16 (lhu): npc_exec_command, door_exec_command. */
+typedef struct ActionCmdShort {
+    u16 opcode;
+    u16 sub;
+    u16 target;
+} ActionCmdShort;
 
 typedef struct IffChunkBody {
     u8 unk0[0x7F8];
@@ -885,13 +952,6 @@ typedef struct IffChunkBody {
 typedef struct Unk_8019120C {
     u8 unk0[0x7F4];
 } Unk_8019120C;
-
-typedef struct Unk_80193068 {
-    u8 unk0[0x8];
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-} Unk_80193068;
 
 typedef struct CdLoc {
     u8 unk0[0x4];
@@ -912,14 +972,6 @@ typedef struct Unk_80191AB0 {
     u8 unk16[0x6];
     s16 unk1C;
 } Unk_80191AB0;
-
-typedef struct Unk_801DFC64 {
-    u16 unk0;
-    u16 unk2;
-    u16 unk4;
-    u16 unk6;
-    u8 *unk8;
-} Unk_801DFC64;
 
 typedef struct CarState {
     s16 stopped;
@@ -983,7 +1035,7 @@ typedef struct SceneTrigger {
 } SceneTrigger;
 
 typedef struct ActionCmd {
-    u16 unk0;
+    u16 opcode;
     u16 sub;
     s32 target;
 } ActionCmd;

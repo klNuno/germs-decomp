@@ -37,7 +37,7 @@ s32 rsin(s32 a);
 s32 rcos(s32 a);
 s16 ai_check_line(Npc *arg0, SceneTrigger_u801768F8 *arg1, s32 arg2);
 s16 ai_try_move(Npc *arg0, SceneTrigger_u801768F8 *arg1, s16 arg2);
-extern s32 D_801E6DB4[];
+extern s32 kaj_system_vsync_delta[];
 Model *ai_cur_model;
 NpcStats *npc_find_stats(s16 arg0);
 s16 ai_find_target(Npc *arg0, s16 arg1);
@@ -49,11 +49,6 @@ Block *ai_cur_block;
 s32 ai_cur_grid;
 NpcStats *ai_cur_stats;
 NpcBody *ai_cur_body;
-typedef struct {
-    ActionCmd *unk0;
-    s32 unk4;
-    char **unk8;
-} Unk_80173054;
 s32 atoi(char *s);
 extern PlayerStatus player_status;
 s32 rand(void);
@@ -88,27 +83,27 @@ s32 block_model_surface(void *arg0, s32 arg1, s32 arg2, s32 arg3);
 static inline s32 cvx(s32 x) {
     s32 d = x - ai_cur_block->pos_x;
     s32 t = d >> 8;
-    s32 o = ((Unk_801DFC64 *)ai_cur_grid)->unk0;
+    s32 o = ((Arena *)ai_cur_grid)->origin_x;
     return (d & 0xFF) ? t + 1 + o : t + o;
 }
 
 static inline s32 cvz(s32 z) {
     s32 d = z - ai_cur_block->pos_z;
     s32 t = d >> 8;
-    s32 o = ((Unk_801DFC64 *)ai_cur_grid)->unk2;
+    s32 o = ((Arena *)ai_cur_grid)->origin_z;
     return (d & 0xFF) ? t + 1 + o : t + o;
 }
 
 static inline s32 cell(s32 x, s32 z) {
-    Unk_801DFC64 *grid = (Unk_801DFC64 *)ai_cur_grid;
+    Arena *grid = (Arena *)ai_cur_grid;
     s32 i;
     s32 shift;
-    if (x < 0 || x >= grid->unk4 || z < 0 || z >= grid->unk6) {
+    if (x < 0 || x >= grid->width || z < 0 || z >= grid->depth) {
         return 1;
     }
-    i = z * (grid->unk4 >> 2) + (x >> 2);
+    i = z * (grid->width >> 2) + (x >> 2);
     shift = (x % 4) * 2;
-    return (grid->unk8[i] & (3 << shift)) >> shift;
+    return (((u8 *)grid->data)[i] & (3 << shift)) >> shift;
 }
 
 static inline s16 pass(s32 cell_value, s32 mode) {
@@ -245,7 +240,7 @@ void ai_turn_step(Npc *npc) {
 
     if (npc->unk3A != npc->unk3E) {
         diff = npc->unk3E - npc->unk3A;
-        step = D_801E6DB4[0] * 2;
+        step = kaj_system_vsync_delta[0] * 2;
         turn = diff;
         if (npc->unk3A < npc->unk3E) {
             if (diff >= 180) {
@@ -480,8 +475,8 @@ s16 ai_try_move(Npc *npc, SceneTrigger_u801768F8 *delta, s16 angle) {
     RotMatrix(&rot, ai_cur_model->coord_m);
     ai_cur_model->coord_flg = 0;
     block = block_find_at(npc->unk20, npc->unk24, npc->unk28);
-    if (npc->unk48 != block) {
-        npc->unk48 = block;
+    if (npc->block != block) {
+        npc->block = block;
     }
     return 1;
 }
@@ -787,7 +782,7 @@ void ai_update_stand(Npc *npc) {
     ai_cur_grid = 0;
     ai_cur_stats = 0;
     ai_cur_body = 0;
-    ai_cur_block = (Block *)npc->unk48;
+    ai_cur_block = (Block *)npc->block;
     ai_cur_model = mod_find(npc->unk16);
     ai_cur_stats = npc_find_stats(npc->unk18);
     if (ai_cur_stats == 0) {
@@ -830,7 +825,7 @@ void ai_update_move(Npc *npc, s16 mode) {
     ai_cur_grid = 0;
     ai_cur_stats = 0;
     ai_cur_body = 0;
-    ai_cur_block = (Block *)npc->unk48;
+    ai_cur_block = (Block *)npc->block;
     ai_cur_model = mod_find(npc->unk16);
     ai_cur_stats = npc_find_stats(npc->unk18);
     if (ai_cur_stats == 0) {
@@ -873,7 +868,7 @@ void ai_update_move(Npc *npc, s16 mode) {
         mult = 6;
         break;
     }
-    frame_time = D_801E6DB4[0];
+    frame_time = kaj_system_vsync_delta[0];
     if ((u16)ai_cur_stats->speed != 0) {
         speed = frame_time * (u16)ai_cur_stats->speed;
     } else {
@@ -894,7 +889,7 @@ void ai_update_move(Npc *npc, s16 mode) {
     ai_cur_grid = 0;
     ai_cur_stats = 0;
     ai_cur_body = 0;
-    ai_cur_block = (Block *)npc->unk48;
+    ai_cur_block = (Block *)npc->block;
     ai_cur_model = mod_find(npc->unk16);
     ai_cur_stats = npc_find_stats(npc->unk18);
     if (ai_cur_stats == 0) {
@@ -940,7 +935,7 @@ void ai_fire(Npc *npc) {
     ai_cur_grid = 0;
     ai_cur_stats = 0;
     ai_cur_body = 0;
-    ai_cur_block = (Block *)npc->unk48;
+    ai_cur_block = (Block *)npc->block;
     player = player_status_player[0];
     ai_cur_model = mod_find(npc->unk16);
     ai_cur_stats = npc_find_stats(npc->unk18);

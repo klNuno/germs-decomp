@@ -7,7 +7,7 @@ void kaj_ll_insert_before(BlockList *arg0, s32 arg1);
 void kaj_ll_insert_after(BlockList *arg0, s32 arg1);
 void kaj_cdmgr_free_all(void);
 s16 D_801DFC80;
-extern s16 D_801E71C8;
+extern s16 kaj_cdmgr_state;
 u8 D_801DFC8C;
 u8 D_801DFC8D[1];
 u8 D_801DFC8E;
@@ -25,7 +25,7 @@ TextCmd **text_cmd;
 s16 text_window_sprite;
 void action_push_front(TextCmd **arg0);
 s16 text_wait;
-extern s32 D_801E6DB4[];
+extern s32 kaj_system_vsync_delta[];
 typedef struct {
     s32 unk0;
     s32 unk4;
@@ -38,18 +38,8 @@ extern char D_80170250[];
 void *kaj_malloc(u32 size);
 void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
 void *memset(void *dst, s32 c, u32 n);
-extern char D_801DFC84[];
+extern char block_str_file[];
 void free3(void *ptr);
-typedef struct {
-    s16 unk0;
-    u8 pad2[0x6];
-    s16 unk8;
-    u8 padA[0xA];
-    struct {
-        s16 unk0;
-        u8 pad2[0x96];
-    } unk14[4];
-} Unk_801802A0;
 void sprite_fill_clut(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 void sprite_delete(s32 arg0);
 void mail_list_close(void);
@@ -94,34 +84,7 @@ void kaj_map_cell_loaded_slots(s16 *arg0, s32 *arg1);
 void kaj_map_set_cell_ready(void);
 void kaj_map_set_room_ready(void);
 void kaj_map_room_loaded_slots(s16 *arg0, s32 *arg1);
-typedef struct {
-    s32 unk0;
-    struct {
-        u8 pad0[0x18];
-        s32 unk18;
-        s32 unk1C;
-        s32 unk20;
-    } *unk4;
-    struct {
-        s32 unk0;
-        s32 unk4;
-        s32 unk8;
-        s32 unkC;
-        TmdTri *unk10;
-        s32 unk14;
-    } *unk8;
-} Unk_8017BBB0;
-typedef struct {
-    u8 pad0[0x10];
-    s16 unk10;
-    s16 unk12;
-    s16 unk14;
-    u8 pad16[0x6];
-    s16 unk1C[0x10];
-    u8 pad3C[0x80];
-    Unk_8017BBB0 *unkBC;
-} Unk_801E032C;
-extern Unk_801E032C *D_801E032C[];
+extern Vehicle *object_scene_vehicle[];
 s32 block_hit_tris(TmdTri *arg0, s32 arg1, s32 arg2, Vec3 *arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7);
 s32 block_hit_quads(TmdTri *arg0, s32 arg1, s32 arg2, Vec3 *arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7);
 char *strncpy(char *dst, char *src, u32 n);
@@ -159,11 +122,6 @@ s32 kaj_tss_start(void *arg0);
 DoorList *door_list;
 void RotMatrix(SVector *arg0, void *arg1);
 Block *block_find_at(s32 arg0, s32 arg1, s32 arg2);
-typedef struct {
-    Unk_8018519C_0 *unk0;
-    s32 unk4;
-    char **unk8;
-} Unk_8018519C;
 s32 atoi(char *s);
 void door_start_open(DoorMove *arg0, s16 arg1, s16 arg2, s16 arg3);
 void door_start_close(DoorMove *arg0, s16 arg1, s16 arg2);
@@ -186,15 +144,7 @@ void *action_find_set(s16 arg0);
 void *action_run_set(void *arg0, s32 arg1, s32 arg2);
 extern PlayerStatus player_status;
 extern KajSystem kaj_system;
-typedef struct {
-    u8 pad0[0x4];
-    s16 unk4;
-    u8 pad6[0x2];
-    s16 unk8;
-    u8 padA[0x12];
-    char **unk1C;
-} Unk_801E1058;
-extern Unk_801E1058 D_801E1058[];
+extern ShopState roadmap_shop[];
 s32 kaj_pad_read(void);
 s16 effect_item_input(PlayerStatus *arg0, s16 arg1);
 s16 roadmap_shop_update_input(PlayerStatus *arg0);
@@ -202,8 +152,8 @@ s16 effect_weapon_input(PlayerStatus *arg0);
 void block_on_action(PlayerStatus *arg0);
 void player_handle_pad(PlayerStatus *arg0, s32 arg1, s32 arg2);
 s16 block_scene_daylight;
-extern s32 (*D_801DFED4)(KajEvent *arg0);
-extern s32 (*D_801DFEE4)(KajEvent *arg0);
+extern s32 (*event_effect_done_hook)(KajEvent *arg0);
+extern s32 (*event_enter_hook)(KajEvent *arg0);
 s32 block_on_effect_done(KajEvent *arg0);
 s32 block_on_enter(KajEvent *arg0);
 void action_reset(s16 arg0);
@@ -219,8 +169,8 @@ void effect_flame_large_init(void);
 void sprite_station_init(void);
 void roadmap_shop_init(s16 arg0);
 void event_show_clock(s16 arg0);
-extern void (*D_801DFEDC)(void);
-extern s32 (*D_801DFEE0)();
+extern void (*event_tick_hook)(void);
+extern s32 (*event_leave_hook)();
 void block_building_load(void);
 void block_update_input(void);
 void kaj_timer_enable(void);
@@ -298,7 +248,7 @@ typedef struct {
 void GsInitCoordinate2(void *super, void *base);
 void kaj_tmd_load(void *arg0, void *arg1, void *arg2);
 extern TrainState vehicle_train_state;
-extern s16 D_801DFF78;
+extern s16 roadmap_shop_topic;
 extern s32 block_wake_positions[];
 void sound_bgm_play(s32 arg0);
 void sound_se_play_note(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6);
@@ -325,7 +275,7 @@ void block_setup(Block *block, u16 mode) {
     s32 offsets[5];
     Player *player;
     Unk_80179848 *hdr;
-    Unk_8017CAC8 *src;
+    ArenaHeader *src;
     Arena **arena;
     s32 i;
 
@@ -377,19 +327,19 @@ void block_setup(Block *block, u16 mode) {
     }
     if (offsets[4] != 0) {
         arena = &block->arena;
-        src = (Unk_8017CAC8 *)((u8 *)block->data + offsets[4]);
+        src = (ArenaHeader *)((u8 *)block->data + offsets[4]);
         if (*arena == NULL) {
             *arena = kaj_malloc(0x10);
             if (*arena == NULL) {
-                kaj_abend(3, "Error Allocating Arena Buffer", D_801DFC84, 0x49);
+                kaj_abend(3, "Error Allocating Arena Buffer", block_str_file, 0x49);
             }
         } else {
             memset(*arena, 0, 0x10);
         }
-        (*arena)->unk0 = src->unk0;
-        (*arena)->unk2 = src->unk2;
-        (*arena)->unk4 = src->unk4;
-        (*arena)->unk6 = src->unk6;
+        (*arena)->origin_x = src->origin_x;
+        (*arena)->origin_z = src->origin_z;
+        (*arena)->width = src->width;
+        (*arena)->depth = src->depth;
         (*arena)->data = src + 1;
         (*arena)->cells = src;
         block->model_flags |= 0x10;
@@ -444,12 +394,12 @@ s32 block_test_player_inside(Player *player, u16 mode, Block *block, s32 *lo, s3
         x = player->pos_x + player->cell_x * 12500 - block->pos_x;
         z = player->pos_z + player->cell_z * 12500 - block->pos_z;
         h = x >> 8;
-        w = arena->unk0;
+        w = arena->origin_x;
         x = (x & 0xFF) ? (f = w + 1, h + f) : h + w;
         h = z >> 8;
-        w = arena->unk2;
+        w = arena->origin_z;
         z = (z & 0xFF) ? (f = w + 1, h + f) : h + w;
-        if (x >= 0 && x < arena->unk4 && z >= 0 && z < arena->unk6) {
+        if (x >= 0 && x < arena->width && z >= 0 && z < arena->depth) {
             block->in_arena = 1;
         }
     }
@@ -475,7 +425,7 @@ static inline s32 func_8017A108_1(Player *player, s32 *lo, s32 *hi) {
     s32 pos[4];
     s32 flag;
     s32 i;
-    GsSetLsMatrix(D_801E032C[0]->unk1C);
+    GsSetLsMatrix(object_scene_vehicle[0]->coord.coord_m);
     for (i = 0; i < 4; i++) {
         RotTrans(&car->corners[i], pos, &flag);
         pos[0] -= player->pos_x;
@@ -573,7 +523,7 @@ void block_create_all(void) {
     for (i = 0; i < 12; i++) {
         block_slots[i] = kaj_malloc(0x90);
         if (block_slots[i] == NULL) {
-            kaj_abend(3, D_80170270, D_801DFC84, 0x5D);
+            kaj_abend(3, D_80170270, block_str_file, 0x5D);
         }
         block_slots[i]->active = 0;
         block_slots[i]->owns_data = 0;
@@ -685,7 +635,7 @@ void block_set_mode(u16 mode) {
 
     if (mode == 2) {
         if (kaj_map_open_city() != 0) {
-            kaj_abend(4, D_801702B0, D_801DFC84, 0x2EC);
+            kaj_abend(4, D_801702B0, block_str_file, 0x2EC);
         }
         while (kaj_map_load_city_dir() == 0) {
             kaj_cdmgr_poll();
@@ -699,7 +649,7 @@ void block_set_mode(u16 mode) {
         block_set_zone_flags(player->unk60, player->unk68);
     } else {
         if (kaj_map_open_place(req->unk16, req->unk20) != 0) {
-            kaj_abend(4, D_801702C8, D_801DFC84, 0x2F8);
+            kaj_abend(4, D_801702C8, block_str_file, 0x2F8);
         }
         while (kaj_map_load_place_dir() == 0) {
             kaj_cdmgr_poll();
@@ -984,7 +934,7 @@ s32 block_hit_quads(TmdTri *prims, s32 verts, s32 normals, Vec3 *offset, s32 cou
             code = (prim->unk4 << 16) | (prim->unk5 << 8) | prim->unk6;
             if (prim->unk4 == 0xFF) {
                 player = player_status_player[0];
-                centre = (Unk_8017AC88 *)&player->unk18; /* this unit reads +0x18 as two quads */
+                centre = (Unk_8017AC88 *)&player->exit; /* this unit reads +0x18 as two quads */
                 if (poly[0].unk0 > poly[1].unk0) {
                     maxx = poly[0].unk0;
                     minx = poly[1].unk0;
@@ -1031,7 +981,7 @@ s32 block_hit_quads(TmdTri *prims, s32 verts, s32 normals, Vec3 *offset, s32 cou
 s16 block_point_on_model(void *obj, s32 x, s32 y, s32 z, u16 mode) {
     Unk_8017AC88 poly[4];
     s32 flag;
-    Unk_8017BBB0 *model;
+    GsDobj2 *model;
     struct {
         u16 unk0;
         u8 unk2;
@@ -1057,11 +1007,11 @@ s16 block_point_on_model(void *obj, s32 x, s32 y, s32 z, u16 mode) {
     s32 max;
 
     model = obj;
-    prim = (void *)model->unk8->unk10;
-    left = model->unk8->unk14;
+    prim = (void *)model->tmd->primitive_top;
+    left = model->tmd->n_primitive;
     player = player_status_player[0];
-    verts = (SVector *)model->unk8->unk0;
-    normals = (SVector *)model->unk8->unk8;
+    verts = (SVector *)model->tmd->vert_top;
+    normals = (SVector *)model->tmd->normal_top;
     while (left != 0) {
         cnt = prim->unk0;
         if ((prim->unk3 & 0xFD) == 0x20) {
@@ -1160,7 +1110,7 @@ s16 block_point_on_model(void *obj, s32 x, s32 y, s32 z, u16 mode) {
     return 0;
 }
 
-s32 func_8017BBB0(s32 x, s32 z, s32 height_out) {
+s32 block_vehicle_surface(s32 x, s32 z, s32 height_out) {
     Vec3 offset;
     TmdTri *prim;
     s32 left;
@@ -1169,16 +1119,16 @@ s32 func_8017BBB0(s32 x, s32 z, s32 height_out) {
     s32 cnt;
     s32 code;
     s32 hit;
-    Unk_8017BBB0 *model;
+    GsDobj2 *model;
 
-    model = D_801E032C[0]->unkBC;
-    offset.x = model->unk4->unk18;
-    offset.y = model->unk4->unk1C;
-    offset.z = model->unk4->unk20;
-    prim = model->unk8->unk10;
-    left = model->unk8->unk14;
-    verts = model->unk8->unk0;
-    normals = model->unk8->unk8;
+    model = object_scene_vehicle[0]->model1;
+    offset.x = model->coord2->coord_tx;
+    offset.y = model->coord2->coord_ty;
+    offset.z = model->coord2->coord_tz;
+    prim = model->tmd->primitive_top;
+    left = model->tmd->n_primitive;
+    verts = model->tmd->vert_top;
+    normals = model->tmd->normal_top;
     while (left != 0) {
         cnt = prim->unk0;
         switch (prim->mode & 0xFD) {
@@ -1224,7 +1174,7 @@ s32 block_find_surface(s32 x, s32 z, s32 *height_out, s16 all) {
     s32 code;
     s32 hit;
     s32 all_blocks;
-    Unk_8017BBB0 *model;
+    GsDobj2 *model;
 
     if (list->count == 0) {
         return 0;
@@ -1236,13 +1186,13 @@ s32 block_find_surface(s32 x, s32 z, s32 *height_out, s16 all) {
         Block *block = list->cursor->data;
         if (block != NULL && block->active != 0 && (block->model_flags & 1) && (all_blocks != 0 || block->player_inside != 0)) {
             model = block->floor_model;
-            offset.x = model->unk4->unk18;
-            offset.y = model->unk4->unk1C;
-            offset.z = model->unk4->unk20;
-            prim = model->unk8->unk10;
-            left = model->unk8->unk14;
-            verts = model->unk8->unk0;
-            normals = model->unk8->unk8;
+            offset.x = model->coord2->coord_tx;
+            offset.y = model->coord2->coord_ty;
+            offset.z = model->coord2->coord_tz;
+            prim = model->tmd->primitive_top;
+            left = model->tmd->n_primitive;
+            verts = model->tmd->vert_top;
+            normals = model->tmd->normal_top;
             while (left != 0) {
                 cnt = prim->unk0;
                 switch (prim->mode & 0xFD) {
@@ -1298,7 +1248,7 @@ s32 block_find_surface_nearest(s32 x, s32 y, s32 z, s32 *height_out) {
     s32 n_hits;
     s32 i;
     s32 best_dy;
-    Unk_8017BBB0 *model;
+    GsDobj2 *model;
 
     if (list->count == 0) {
         return 0;
@@ -1310,13 +1260,13 @@ s32 block_find_surface_nearest(s32 x, s32 y, s32 z, s32 *height_out) {
         Block *block = list->cursor->data;
         if (block != NULL && block->active != 0 && block->player_inside != 0 && (block->model_flags & 1)) {
             model = block->floor_model;
-            offset.x = model->unk4->unk18;
-            offset.y = model->unk4->unk1C;
-            offset.z = model->unk4->unk20;
-            prim = model->unk8->unk10;
-            left = model->unk8->unk14;
-            verts = model->unk8->unk0;
-            normals = model->unk8->unk8;
+            offset.x = model->coord2->coord_tx;
+            offset.y = model->coord2->coord_ty;
+            offset.z = model->coord2->coord_tz;
+            prim = model->tmd->primitive_top;
+            left = model->tmd->n_primitive;
+            verts = model->tmd->vert_top;
+            normals = model->tmd->normal_top;
             height_p = &height;
             while (left != 0) {
                 cnt = prim->unk0;
@@ -1379,20 +1329,20 @@ s32 block_find_surface_nearest(s32 x, s32 y, s32 z, s32 *height_out) {
     return 0;
 }
 
-static inline s32 func_8017C234_inl(Unk_8017BBB0 *model, Vec3 *offset, s32 x, s32 z, s32 height_out) {
+static inline s32 func_8017C234_inl(GsDobj2 *model, Vec3 *offset, s32 x, s32 z, s32 height_out) {
     TmdTri *prim;
     s32 left;
     s32 verts;
     s32 normals;
     s32 cnt;
     s32 hit;
-    offset->x = model->unk4->unk18;
-    offset->y = model->unk4->unk1C;
-    offset->z = model->unk4->unk20;
-    prim = model->unk8->unk10;
-    left = model->unk8->unk14;
-    verts = model->unk8->unk0;
-    normals = model->unk8->unk8;
+    offset->x = model->coord2->coord_tx;
+    offset->y = model->coord2->coord_ty;
+    offset->z = model->coord2->coord_tz;
+    prim = model->tmd->primitive_top;
+    left = model->tmd->n_primitive;
+    verts = model->tmd->vert_top;
+    normals = model->tmd->normal_top;
     while (left != 0) {
         cnt = prim->unk0;
         switch (prim->mode & 0xFD) {
@@ -1427,9 +1377,9 @@ s32 block_fit_ground_tilt(s32 *height_out, s16 all) {
     Vec3 offset;
     s32 flag;
     BlockList *list = block_list;
-    Unk_801E032C *m = D_801E032C[0];
+    Vehicle *m = object_scene_vehicle[0];
     CarState *car = &vehicle_car_state;
-    Unk_8017BBB0 *model;
+    GsDobj2 *model;
     Block *block;
     s32 i;
     s16 c1;
@@ -1446,7 +1396,7 @@ s32 block_fit_ground_tilt(s32 *height_out, s16 all) {
     if (list->count == 0) {
         return 0;
     }
-    GsSetLsMatrix(&m->unk1C);
+    GsSetLsMatrix(&m->coord.coord_m);
     for (i = 0; i < 4; i++) {
         codes[i] = 0;
         RotTrans(&car->corners[i], &corners[i].unk0, &flag);
@@ -1507,15 +1457,15 @@ s32 block_fit_ground_tilt(s32 *height_out, s16 all) {
         if (block != NULL && block->active != 0 && (model = block->floor_model) != NULL && (all != 0 || block->player_inside != 0)) {
             codes[4] = func_8017C234_inl(model, &offset, centre.unk0, centre.unk8, (s32)height_out);
             if (codes[4] != 0) {
-                m->unk14 = 0;
-                m->unk10 = 0;
+                m->rot_z = 0;
+                m->rot_x = 0;
                 dx1 = corners[1].unk4 - corners[0].unk4;
                 dx2 = corners[3].unk4 - corners[2].unk4;
                 dz1 = corners[2].unk4 - corners[0].unk4;
                 dz2 = corners[3].unk4 - corners[1].unk4;
                 if (dx1 != 0 || dx2 != 0 || dz1 != 0 || dz2 != 0) {
-                    sn = rsin((m->unk12 << 12) / 360);
-                    cs = rcos((m->unk12 << 12) / 360);
+                    sn = rsin((m->rot_y << 12) / 360);
+                    cs = rcos((m->rot_y << 12) / 360);
                     tilt_x = 0;
                     tilt_z = 0;
                     if (dx1 != 0) {
@@ -1533,8 +1483,8 @@ s32 block_fit_ground_tilt(s32 *height_out, s16 all) {
                         s32 t1 = tilt_x * sn;
                         s32 t2 = tilt_z * cs;
                         s32 t3 = tilt_z * sn;
-                        m->unk10 = ((t1 + t2) >> 12) * 45 >> 9;
-                        m->unk14 = ((t0 - t3) >> 12) * 45 >> 9;
+                        m->rot_x = ((t1 + t2) >> 12) * 45 >> 9;
+                        m->rot_z = ((t0 - t3) >> 12) * 45 >> 9;
                     }
                 }
                 *height_out += 370;
@@ -1549,7 +1499,7 @@ s32 block_fit_ground_tilt(s32 *height_out, s16 all) {
     return 0;
 }
 
-void block_replace_arena(Unk_8017CAC8 *old_cells, Unk_8017CAC8 *new_cells) {
+void block_replace_arena(ArenaHeader *old_cells, ArenaHeader *new_cells) {
     BlockList *list = block_list;
     Arena *arena;
 
@@ -1578,19 +1528,19 @@ void block_replace_arena(Unk_8017CAC8 *old_cells, Unk_8017CAC8 *new_cells) {
     }
 }
 
-void block_arena_init(Arena **arena_p, Unk_8017CAC8 *src) {
+void block_arena_init(Arena **arena_p, ArenaHeader *src) {
     if (*arena_p == NULL) {
         *arena_p = kaj_malloc(0x10);
         if (*arena_p == NULL) {
-            kaj_abend(3, "Error Allocating Arena Buffer", D_801DFC84, 0x49);
+            kaj_abend(3, "Error Allocating Arena Buffer", block_str_file, 0x49);
         }
     } else {
         memset(*arena_p, 0, 0x10);
     }
-    (*arena_p)->unk0 = src->unk0;
-    (*arena_p)->unk2 = src->unk2;
-    (*arena_p)->unk4 = src->unk4;
-    (*arena_p)->unk6 = src->unk6;
+    (*arena_p)->origin_x = src->origin_x;
+    (*arena_p)->origin_z = src->origin_z;
+    (*arena_p)->width = src->width;
+    (*arena_p)->depth = src->depth;
     (*arena_p)->data = src + 1;
     (*arena_p)->cells = src;
 }
@@ -1598,7 +1548,7 @@ void block_arena_init(Arena **arena_p, Unk_8017CAC8 *src) {
 void block_create(Block **block_p, s32 size) {
     *block_p = kaj_malloc(0x90);
     if (*block_p == NULL) {
-        kaj_abend(3, D_80170270, D_801DFC84, 0x5D);
+        kaj_abend(3, D_80170270, block_str_file, 0x5D);
     }
     (*block_p)->active = 0;
     (*block_p)->owns_data = 0;
@@ -1616,7 +1566,7 @@ void block_create(Block **block_p, s32 size) {
     if (size != 0) {
         (*block_p)->data = kaj_malloc(size);
         if ((*block_p)->data == NULL) {
-            kaj_abend(3, D_80170290, D_801DFC84, 0x70);
+            kaj_abend(3, D_80170290, block_str_file, 0x70);
         }
         (*block_p)->owns_data = 1;
     }
@@ -1696,7 +1646,7 @@ void block_set_origin(s32 x, s32 y, s32 z) {
     }
 }
 
-s32 func_8017CFE4(s32 x, s32 height_out, s32 z) {
+s32 block_has_ground_at(s32 x, s32 height_out, s32 z) {
     BlockList *list = block_list;
     s32 code;
     s32 ret;
@@ -1833,15 +1783,15 @@ s32 block_model_surface(void *obj, s32 x, s32 z, s32 height_out) {
     s32 normals;
     s32 cnt;
     s32 hit;
-    Unk_8017BBB0 *model = obj;
+    GsDobj2 *model = obj;
 
-    offset.x = model->unk4->unk18;
-    offset.y = model->unk4->unk1C;
-    offset.z = model->unk4->unk20;
-    prim = model->unk8->unk10;
-    left = model->unk8->unk14;
-    verts = model->unk8->unk0;
-    normals = model->unk8->unk8;
+    offset.x = model->coord2->coord_tx;
+    offset.y = model->coord2->coord_ty;
+    offset.z = model->coord2->coord_tz;
+    prim = model->tmd->primitive_top;
+    left = model->tmd->n_primitive;
+    verts = model->tmd->vert_top;
+    normals = model->tmd->normal_top;
     while (left != 0) {
         cnt = prim->unk0;
         switch (prim->mode & 0xFD) {
@@ -1868,8 +1818,8 @@ s32 block_model_surface(void *obj, s32 x, s32 z, s32 height_out) {
     return 0;
 }
 
-s32 func_8017D564(void) {
-    return D_801E71C8 == 0;
+s32 block_cd_idle(void) {
+    return kaj_cdmgr_state == 0;
 }
 
 void block_enter_area(u32 code) {
@@ -1902,9 +1852,9 @@ s32 block_on_effect_done(KajEvent *ev) {
     SceneRequest_u80179848 *req = &scene_request;
     Player *player = player_status_player[0];
     TrainState *train = &vehicle_train_state;
-    Unk_801E1058 *d = D_801E1058;
+    ShopState *d = roadmap_shop;
     EventState *event = &event_state;
-    s32 effect_id = ev->unk10;
+    s32 effect_id = ev->param2;
     s16 set_id;
     void *set;
     u16 f;
@@ -1926,7 +1876,7 @@ s32 block_on_effect_done(KajEvent *ev) {
             sound_se_play_note(10, 0x29, 0, 0x3C, 0x7F, 0x7F, 1);
         }
     } else if (effect_id == 7) {
-        if (ev->unkC == 0) {
+        if (ev->param1 == 0) {
             vars->unk244 = -1;
         }
         if (train->door_state == 3) {
@@ -1939,12 +1889,12 @@ s32 block_on_effect_done(KajEvent *ev) {
         }
     } else if (effect_id == 11) {
         if (!(player->flags & 0x4000)) {
-            text_show(*d->unk1C, 3, -1, 0, -1, 0, 1);
+            text_show(*(char **)d->texts, 3, -1, 0, -1, 0, 1); /* texts read as strings here */
         }
     } else if (effect_id == 12) {
         if (!(player->flags & 0x4000)) {
             set_id = roadmap_shop_finish(block_building_state.building);
-            if (block_building_state.building == 8 && D_801DFF78 >= 0) {
+            if (block_building_state.building == 8 && roadmap_shop_topic >= 0) {
                 if (set_id >= 0) {
                     set = action_find_set(set_id);
                     if (set != NULL) {
@@ -1986,7 +1936,7 @@ s32 block_on_effect_done(KajEvent *ev) {
             roadmap_shop_open_menu(block_building_state.building, 0);
         }
     } else if (effect_id == 10) {
-        if (ev->unkC == 0) {
+        if (ev->param1 == 0) {
             vars->unk244 = -1;
         }
         f = player->flags;
@@ -2003,7 +1953,7 @@ s32 block_on_effect_done(KajEvent *ev) {
         mail_wait(1, 1, 1, 4);
         effect_start_fade(9, 3);
     } else if (effect_id == 9) {
-        if (ev->unkC == 0) {
+        if (ev->param1 == 0) {
             vars->unk244 = -1;
         }
         f = player->flags;
@@ -2123,7 +2073,7 @@ void block_update_input(void) {
         }
         if (!(kaj_system.pad_prev & 0x40) && (kaj_system.pad_now & 0x40)) {
             EventState *event = &event_state;
-            Unk_801E1058 *r = D_801E1058;
+            ShopState *r = roadmap_shop;
             void *set;
 
             if (event->state == 2 && (event->cross_flags & 2)) {
@@ -2160,7 +2110,7 @@ void block_building_load(void) {
     BuildingState *bstate;
 
     action_reset(1);
-    D_801DFED4 = block_on_effect_done;
+    event_effect_done_hook = block_on_effect_done;
     bstate = &block_building_state;
     bstate->unk2 = req->unk12;
     block_scene_daylight = 0;
@@ -2191,7 +2141,7 @@ void block_building_load(void) {
             break;
         case 23:
             mod_npcrec_show(2, 0);
-            D_801DFEE4 = block_on_enter;
+            event_enter_hook = block_on_enter;
             break;
         case 28:
             thing_set_active(3, 5, 1);
@@ -2290,10 +2240,10 @@ void block_building_run(void) {
         mail_step_frame(1, 1, 1);
     }
     kaj_timer_disable();
-    D_801DFEE4 = 0;
-    D_801DFEE0 = 0;
-    D_801DFED4 = 0;
-    D_801DFEDC = 0;
+    event_enter_hook = 0;
+    event_leave_hook = 0;
+    event_effect_done_hook = 0;
+    event_tick_hook = 0;
     action_reset(1);
     text_close();
     if (D_801DFE60 != 1) {
@@ -2321,7 +2271,7 @@ void block_building_run(void) {
 }
 
 s32 block_on_enter(KajEvent *ev) {
-    s32 code = ev->unkC;
+    s32 code = ev->param1;
 
     if (code == 0xF0233C) {
         block_wake_index = 5;
@@ -2435,7 +2385,7 @@ void block_elevator_run(s16 building, s16 start_floor) {
 
     done = 0;
     floor = start_floor;
-    D_801DFED4 = 0;
+    event_effect_done_hook = 0;
     sprite_set_visible(0x400, 0);
     sprite_set_visible(0x409, 0);
     sprite_set_visible(0x40E, 0);
