@@ -14,46 +14,46 @@ extern SceneTables object_scene_tables[];
 extern ScreenLight screen_light;
 void SsSepSetVol(s16 access_num, s16 seq_num, s16 voll, s16 volr);
 
-void door_create(Door **arg0, u32 arg1) {
-    *arg0 = kaj_malloc(0x80);
-    if (*arg0 == NULL) {
+void door_create(Door **out, u32 record_size) {
+    *out = kaj_malloc(0x80);
+    if (*out == NULL) {
         kaj_abend(3, "Error Allocating DOOR Pointer", D_801DFCE8, 0x23);
     }
-    (*arg0)->active = 0;
-    (*arg0)->axis = 0;
-    (*arg0)->visible = 1;
-    (*arg0)->speed = 0;
-    (*arg0)->unk8 = 2;
-    (*arg0)->state = 0;
-    (*arg0)->move_from = 0;
-    (*arg0)->move_to = 0;
-    (*arg0)->speed = 0;
-    (*arg0)->auto_return = 0;
-    (*arg0)->block = 0;
-    (*arg0)->tmd_objects = NULL;
-    (*arg0)->record = NULL;
-    if (arg1 != 0) {
-        (*arg0)->record = kaj_malloc(arg1);
-        if ((*arg0)->record == NULL) {
+    (*out)->active = 0;
+    (*out)->axis = 0;
+    (*out)->visible = 1;
+    (*out)->speed = 0;
+    (*out)->unk8 = 2;
+    (*out)->state = 0;
+    (*out)->move_from = 0;
+    (*out)->move_to = 0;
+    (*out)->speed = 0;
+    (*out)->auto_return = 0;
+    (*out)->block = 0;
+    (*out)->tmd_objects = NULL;
+    (*out)->record = NULL;
+    if (record_size != 0) {
+        (*out)->record = kaj_malloc(record_size);
+        if ((*out)->record == NULL) {
             kaj_abend(3, "Error Allocating DOOR Buffer", D_801DFCE8, 0x36);
         }
     }
 }
 
-void door_free(Door *arg0) {
-    if (arg0 != NULL) {
-        free3(arg0->tmd_objects);
-        free3(arg0->record);
-        free3(arg0);
+void door_free(Door *door) {
+    if (door != NULL) {
+        free3(door->tmd_objects);
+        free3(door->record);
+        free3(door);
     }
 }
 
-void door_add(void *arg0) {
+void door_add(void *door) {
     if (door_list->count == 0) {
-        kaj_ll_insert_before(door_list, arg0);
+        kaj_ll_insert_before(door_list, door);
     } else {
         door_list->cursor = door_list->tail;
-        kaj_ll_insert_after(door_list, arg0);
+        kaj_ll_insert_after(door_list, door);
     }
 }
 
@@ -75,7 +75,7 @@ void door_free_all(void) {
     }
 }
 
-Door *door_find(u16 arg0) {
+Door *door_find(u16 id) {
     DoorList *list = door_list;
     Door *item;
 
@@ -85,7 +85,7 @@ Door *door_find(u16 arg0) {
     list->cursor = list->head;
     while (1) {
         item = list->cursor->data;
-        if (item != NULL && item->id == arg0) {
+        if (item != NULL && item->id == id) {
             return item;
         }
         if (kaj_ll_at_tail(list) != 0) {
@@ -98,7 +98,7 @@ Door *door_find(u16 arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/game/80185380", door_draw_all);
 
-void door_rebase_all(s32 arg0, s32 arg1, s32 arg2) {
+void door_rebase_all(s32 origin_x, s32 origin_y, s32 origin_z) {
     DoorList *list = door_list;
     Door *item;
 
@@ -110,9 +110,9 @@ void door_rebase_all(s32 arg0, s32 arg1, s32 arg2) {
         item = list->cursor->data;
         if (item != NULL) {
             item->coord_flg = 0;
-            item->coord_tx = item->pos_x - arg0;
-            item->coord_ty = item->pos_y - arg1;
-            item->coord_tz = item->pos_z - arg2;
+            item->coord_tx = item->pos_x - origin_x;
+            item->coord_ty = item->pos_y - origin_y;
+            item->coord_tz = item->pos_z - origin_z;
         }
         if (kaj_ll_at_tail(list) != 0) {
             break;
@@ -121,7 +121,7 @@ void door_rebase_all(s32 arg0, s32 arg1, s32 arg2) {
     }
 }
 
-void door_set_visible(u16 arg0, s16 arg1) {
+void door_set_visible(u16 id, s16 visible) {
     DoorList *list = door_list;
     Door *item;
     Door *found;
@@ -132,7 +132,7 @@ void door_set_visible(u16 arg0, s16 arg1) {
         list->cursor = list->head;
         while (1) {
             item = list->cursor->data;
-            if (item != NULL && item->id == arg0) {
+            if (item != NULL && item->id == id) {
                 found = item;
                 break;
             }
@@ -143,43 +143,43 @@ void door_set_visible(u16 arg0, s16 arg1) {
             list->cursor = list->cursor->next;
         }
     }
-    if (found != NULL && found->visible != arg1) {
-        found->visible = arg1;
+    if (found != NULL && found->visible != visible) {
+        found->visible = visible;
     }
 }
 
-void door_fade_step(Door *arg0) {
-    ScreenLight *p = &screen_light;
-    BgmSep *q = object_scene_tables[0].unk0;
-    s32 v;
+void door_fade_step(Door *door) {
+    ScreenLight *light = &screen_light;
+    BgmSep *bgm = object_scene_tables[0].unk0;
+    s32 volume;
     s32 t;
 
-    p->fade_level = arg0->auto_return;
-    if (arg0->speed < 2) {
-        if (p->fade_level < 0) {
-            p->fade_level = 0;
+    light->fade_level = door->auto_return;
+    if (door->speed < 2) {
+        if (light->fade_level < 0) {
+            light->fade_level = 0;
         }
-    } else if (p->fade_level < 0x80) {
-        p->fade_level = 0x80;
+    } else if (light->fade_level < 0x80) {
+        light->fade_level = 0x80;
     }
-    if (p->fade_level > 0x1000) {
-        p->fade_level = 0x1000;
+    if (light->fade_level > 0x1000) {
+        light->fade_level = 0x1000;
     }
-    if (((s16)arg0->coord_flg > 0 && arg0->auto_return >= arg0->unk26) ||
-        ((s16)arg0->coord_flg < 0 && arg0->auto_return <= arg0->unk26)) {
-        if (arg0->speed != 0 && q != NULL && q->seq >= 0) {
-            t = arg0->auto_return >> 5;
-            v = 0x7F;
+    if (((s16)door->coord_flg > 0 && door->auto_return >= door->unk26) ||
+        ((s16)door->coord_flg < 0 && door->auto_return <= door->unk26)) {
+        if (door->speed != 0 && bgm != NULL && bgm->seq >= 0) {
+            t = door->auto_return >> 5;
+            volume = 0x7F;
             if (t < 0x80) {
-                v = (s16)t;
+                volume = (s16)t;
                 if (t < 0) {
-                    v = 0;
+                    volume = 0;
                 }
             }
-            SsSepSetVol(q->sep, q->seq, v, v);
+            SsSepSetVol(bgm->sep, bgm->seq, volume, volume);
         }
-        if (arg0->speed != 10) {
-            p->fade_active = 0;
+        if (door->speed != 10) {
+            light->fade_active = 0;
         }
     }
 }

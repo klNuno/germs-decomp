@@ -60,23 +60,23 @@ typedef struct Unk_801CD028 {
 void *memset(void *dst, s32 c, u32 n);
 void GsLinkObject4(u32 *tmd, Unk_801CD028 *obj, s32 n);
 
-void kaj_ll_create(Unk_801CCAF4 **arg0) {
-    *arg0 = kaj_malloc(0x10);
-    if (*arg0 == NULL) {
+void kaj_ll_create(Unk_801CCAF4 **list) {
+    *list = kaj_malloc(0x10);
+    if (*list == NULL) {
         kaj_abend(3, "Error Allocating LL Handle", D_801DFDC4, 0x15);
     }
-    (*arg0)->unk0 = NULL;
-    (*arg0)->unk4 = NULL;
-    (*arg0)->unk8 = NULL;
-    (*arg0)->unkC = 0;
+    (*list)->unk0 = NULL;
+    (*list)->unk4 = NULL;
+    (*list)->unk8 = NULL;
+    (*list)->unkC = 0;
 }
 
-void kaj_ll_destroy(Unk_801CCAF4 *arg0) {
+void kaj_ll_destroy(Unk_801CCAF4 *list) {
     LlNode *node;
 
-    while (arg0->unk0 != NULL) {
-        node = arg0->unk0;
-        arg0->unk0 = node->next;
+    while (list->unk0 != NULL) {
+        node = list->unk0;
+        list->unk0 = node->next;
         if (node != NULL) {
             if (node->data != NULL) {
                 free3(node->data);
@@ -84,158 +84,158 @@ void kaj_ll_destroy(Unk_801CCAF4 *arg0) {
             free3(node);
         }
     }
-    arg0->unk4 = NULL;
-    arg0->unk8 = NULL;
-    arg0->unkC = 0;
-    free3(arg0);
+    list->unk4 = NULL;
+    list->unk8 = NULL;
+    list->unkC = 0;
+    free3(list);
 }
 
-void kaj_ll_insert_before(Unk_801CCAF4 *arg0, void *arg1) {
+void kaj_ll_insert_before(Unk_801CCAF4 *list, void *data) {
     LlNode *node;
 
     node = kaj_malloc(0xC);
     if (node == NULL) {
         kaj_abend(3, D_80172BB4, D_801DFDC4, 0x3C);
     }
-    node->data = arg1;
+    node->data = data;
     node->prev = NULL;
     node->next = NULL;
-    if (arg0->unk0 == NULL) {
-        arg0->unk0 = node;
-        arg0->unk4 = node;
-        arg0->unk8 = node;
-        arg0->unkC = 1;
+    if (list->unk0 == NULL) {
+        list->unk0 = node;
+        list->unk4 = node;
+        list->unk8 = node;
+        list->unkC = 1;
     } else {
-        if (arg0->unk0 == arg0->unk8) {
-            node->next = arg0->unk8;
-            arg0->unk0->prev = node;
-            arg0->unk0 = node;
-            arg0->unk8 = node;
-            arg0->unkC++;
+        if (list->unk0 == list->unk8) {
+            node->next = list->unk8;
+            list->unk0->prev = node;
+            list->unk0 = node;
+            list->unk8 = node;
+            list->unkC++;
         } else {
-            node->next = arg0->unk8;
-            node->prev = arg0->unk8->prev;
-            arg0->unk8->prev = node;
-            arg0->unk8 = node;
+            node->next = list->unk8;
+            node->prev = list->unk8->prev;
+            list->unk8->prev = node;
+            list->unk8 = node;
             node->prev->next = node;
-            arg0->unkC++;
+            list->unkC++;
         }
     }
 }
 
-void kaj_ll_insert_after(Unk_801CCAF4 *arg0, void *arg1) {
+void kaj_ll_insert_after(Unk_801CCAF4 *list, void *data) {
     LlNode *node;
 
     node = kaj_malloc(0xC);
     if (node == NULL) {
         kaj_abend(3, D_80172BB4, D_801DFDC4, 0x61);
     }
-    node->data = arg1;
+    node->data = data;
     node->prev = NULL;
     node->next = NULL;
-    if (arg0->unk0 == NULL) {
-        arg0->unk0 = node;
-        arg0->unk4 = node;
-        arg0->unk8 = node;
-        arg0->unkC = 1;
+    if (list->unk0 == NULL) {
+        list->unk0 = node;
+        list->unk4 = node;
+        list->unk8 = node;
+        list->unkC = 1;
     } else {
-        if (arg0->unk4 == arg0->unk8) {
-            node->prev = arg0->unk8;
-            arg0->unk4->next = node;
-            arg0->unk4 = node;
-            arg0->unk8 = node;
-            arg0->unkC++;
+        if (list->unk4 == list->unk8) {
+            node->prev = list->unk8;
+            list->unk4->next = node;
+            list->unk4 = node;
+            list->unk8 = node;
+            list->unkC++;
         } else {
-            node->prev = arg0->unk8;
-            node->next = arg0->unk8->next;
-            arg0->unk8->next = node;
-            arg0->unk8 = node;
+            node->prev = list->unk8;
+            node->next = list->unk8->next;
+            list->unk8->next = node;
+            list->unk8 = node;
             node->next->prev = node;
-            arg0->unkC++;
+            list->unkC++;
         }
     }
 }
 
-void kaj_ll_remove_to_prev(Unk_801CCAF4 *arg0) {
+void kaj_ll_remove_to_prev(Unk_801CCAF4 *list) {
     LlNode *node;
 
-    node = arg0->unk8;
-    if (arg0->unk0 == arg0->unk4) {
-        arg0->unk0 = NULL;
-        arg0->unk4 = NULL;
-        arg0->unk8 = NULL;
-        arg0->unkC = 0;
+    node = list->unk8;
+    if (list->unk0 == list->unk4) {
+        list->unk0 = NULL;
+        list->unk4 = NULL;
+        list->unk8 = NULL;
+        list->unkC = 0;
     } else {
-        if (arg0->unk0 == node) {
-            arg0->unk8 = node->next;
-            arg0->unk8->prev = NULL;
+        if (list->unk0 == node) {
+            list->unk8 = node->next;
+            list->unk8->prev = NULL;
         } else {
-            arg0->unk8 = node->prev;
-            arg0->unk8->next = node->next;
+            list->unk8 = node->prev;
+            list->unk8->next = node->next;
             if (node->next != NULL) {
                 node->next->prev = node->prev;
             }
         }
-        arg0->unkC--;
+        list->unkC--;
     }
     node->prev = NULL;
     node->next = NULL;
     node->data = NULL;
-    if (arg0->unk0 == node) {
-        arg0->unk0 = arg0->unk8;
+    if (list->unk0 == node) {
+        list->unk0 = list->unk8;
     }
-    if (arg0->unk4 == node) {
-        arg0->unk4 = arg0->unk8;
+    if (list->unk4 == node) {
+        list->unk4 = list->unk8;
     }
     free3(node);
 }
 
-void kaj_ll_remove_to_next(Unk_801CCAF4 *arg0) {
+void kaj_ll_remove_to_next(Unk_801CCAF4 *list) {
     LlNode *node;
 
-    node = arg0->unk8;
-    if (arg0->unk0 == arg0->unk4) {
-        arg0->unk0 = NULL;
-        arg0->unk4 = NULL;
-        arg0->unk8 = NULL;
-        arg0->unkC = 0;
+    node = list->unk8;
+    if (list->unk0 == list->unk4) {
+        list->unk0 = NULL;
+        list->unk4 = NULL;
+        list->unk8 = NULL;
+        list->unkC = 0;
     } else {
-        if (arg0->unk4 == node) {
-            arg0->unk8 = node->prev;
-            arg0->unk8->next = NULL;
+        if (list->unk4 == node) {
+            list->unk8 = node->prev;
+            list->unk8->next = NULL;
         } else {
-            arg0->unk8 = node->next;
-            arg0->unk8->prev = node->prev;
+            list->unk8 = node->next;
+            list->unk8->prev = node->prev;
             if (node->prev != NULL) {
                 node->prev->next = node->next;
             }
         }
-        arg0->unkC--;
+        list->unkC--;
     }
     node->prev = NULL;
     node->next = NULL;
     node->data = NULL;
-    if (arg0->unk0 == node) {
-        arg0->unk0 = arg0->unk8;
+    if (list->unk0 == node) {
+        list->unk0 = list->unk8;
     }
-    if (arg0->unk4 == node) {
-        arg0->unk4 = arg0->unk8;
+    if (list->unk4 == node) {
+        list->unk4 = list->unk8;
     }
     free3(node);
 }
 
-s32 kaj_ll_at_head(Unk_801CCAF4 *arg0) {
-    if (arg0 == NULL) {
+s32 kaj_ll_at_head(Unk_801CCAF4 *list) {
+    if (list == NULL) {
         return 0;
     }
-    return arg0->unk0 == arg0->unk8;
+    return list->unk0 == list->unk8;
 }
 
-s32 kaj_ll_at_tail(Unk_801CCAF4 *arg0) {
-    if (arg0 == NULL) {
+s32 kaj_ll_at_tail(Unk_801CCAF4 *list) {
+    if (list == NULL) {
         return 0;
     }
-    return arg0->unk4 == arg0->unk8;
+    return list->unk4 == list->unk8;
 }
 
 INCLUDE_RODATA("asm/nonmatchings/kaj/801CCAF4", D_80172BB4);
@@ -256,10 +256,10 @@ INCLUDE_RODATA("asm/nonmatchings/kaj/801CCAF4", D_80172D28);
 
 INCLUDE_RODATA("asm/nonmatchings/kaj/801CCAF4", D_80172D34);
 
-void kaj_tmd_load(Unk_801CD028 **arg0, u32 *arg1, void *arg2) {
+void kaj_tmd_load(Unk_801CD028 **obj, u32 *tmd_file, void *coord) {
     u32 *tmd;
 
-    if (arg1[0] != 0x41) {
+    if (tmd_file[0] != 0x41) {
         char *msg;
         char *file;
         char *s;
@@ -294,9 +294,9 @@ void kaj_tmd_load(Unk_801CD028 **arg0, u32 *arg1, void *arg2) {
         printf(D_801DFDD8);
         exit(10);
     }
-    if (*arg0 == NULL) {
-        *arg0 = kaj_malloc(0x10);
-        if (*arg0 == NULL) {
+    if (*obj == NULL) {
+        *obj = kaj_malloc(0x10);
+        if (*obj == NULL) {
             char *msg;
             char *file;
             char *s;
@@ -332,11 +332,11 @@ void kaj_tmd_load(Unk_801CD028 **arg0, u32 *arg1, void *arg2) {
             exit(3);
         }
     } else {
-        memset(*arg0, 0, 0x10);
+        memset(*obj, 0, 0x10);
     }
-    GsMapModelingData(arg1 + 1);
-    tmd = arg1 + 3;
-    if (arg1[2] != 1) {
+    GsMapModelingData(tmd_file + 1);
+    tmd = tmd_file + 3;
+    if (tmd_file[2] != 1) {
         char *msg;
         char *file;
         char *s;
@@ -371,18 +371,18 @@ void kaj_tmd_load(Unk_801CD028 **arg0, u32 *arg1, void *arg2) {
         printf(D_801DFDD8);
         exit(10);
     }
-    GsLinkObject4(tmd, *arg0, 0);
-    (*arg0)->unk4 = arg2;
+    GsLinkObject4(tmd, *obj, 0);
+    (*obj)->unk4 = coord;
 }
 
-s32 kaj_tmd_map(u32 *arg0) {
+s32 kaj_tmd_map(u32 *tmd_file) {
     char *msg;
     char *file;
     char *s;
     s32 code;
     s32 i;
 
-    if (arg0[0] != 0x41) {
+    if (tmd_file[0] != 0x41) {
         msg = D_80172D34;
         file = D_801DFDDC;
         code = 10;
@@ -411,41 +411,41 @@ s32 kaj_tmd_map(u32 *arg0) {
         printf(D_801DFDD8);
         exit(10);
     }
-    GsMapModelingData(arg0 + 1);
-    return arg0[2];
+    GsMapModelingData(tmd_file + 1);
+    return tmd_file[2];
 }
 
-void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3) {
+void kaj_abend(s32 code, char *msg, char *file, s32 line) {
     char *s;
     s32 i;
 
-    if (arg2 == NULL) {
+    if (file == NULL) {
         printf(D_80172CA8);
     }
-    if (arg3 < 0) {
-        printf(D_80172CC8, arg3);
+    if (line < 0) {
+        printf(D_80172CC8, line);
     }
     s = D_80172CF0;
     for (i = 0; kaj_error_names[i].unk0 != 15; i++) {
-        if (kaj_error_names[i].unk0 == arg0) {
+        if (kaj_error_names[i].unk0 == code) {
             s = kaj_error_names[i].unk4;
             break;
         }
     }
-    printf(D_80172D00, arg0);
+    printf(D_80172D00, code);
     if (*s != 0) {
         printf(D_801DFDD0);
         printf(D_801DFDD4, s);
     }
     printf(D_80172D10);
-    printf(arg2);
-    printf(D_80172D1C, arg3);
-    if (arg1 != NULL) {
+    printf(file);
+    printf(D_80172D1C, line);
+    if (msg != NULL) {
         printf(D_80172D28);
-        printf(D_801DFDD4, arg1);
+        printf(D_801DFDD4, msg);
     }
     printf(D_801DFDD8);
-    exit(arg0);
+    exit(code);
 }
 
 void kaj_pad_reset(s16 arg0) {
@@ -459,15 +459,15 @@ void kaj_pad_reset(s16 arg0) {
 }
 
 s32 kaj_pad_read(void) {
-    s32 v;
+    s32 buttons;
 
     if (kaj_system.pad_mode != 1) {
         return 0;
     }
-    v = PadRead(1);
+    buttons = PadRead(1);
     kaj_system.pad_prev = kaj_system.pad_now;
-    kaj_system.pad_now = v;
-    return v;
+    kaj_system.pad_now = buttons;
+    return buttons;
 }
 
 void kaj_sound_init(void) {
@@ -484,19 +484,19 @@ void kaj_sound_quit(void) {
     SsQuit();
 }
 
-void kaj_tmd_unmap(Unk_801CD78C *arg0, s32 arg1) {
-    s32 *p;
+void kaj_tmd_unmap(Unk_801CD78C *tmd, s32 base) {
+    s32 *obj;
     s32 n;
     s32 i;
 
-    if (arg0->unk0 == 0x41 && (arg0->unk4 & 1)) {
-        p = arg0->unkC;
-        n = arg0->unk8;
+    if (tmd->unk0 == 0x41 && (tmd->unk4 & 1)) {
+        obj = tmd->unkC;
+        n = tmd->unk8;
         for (i = 0; i < n; i++) {
-            p[0] -= arg1 * 4;
-            p[2] -= arg1 * 4;
-            p[4] -= arg1 * 4;
-            p += 7;
+            obj[0] -= base * 4;
+            obj[2] -= base * 4;
+            obj[4] -= base * 4;
+            obj += 7;
         }
     }
 }

@@ -34,36 +34,36 @@ void kaj_tss_finish(TssSlot *arg0);
 extern s32 D_801E6DB4[];
 
 void kaj_event_queue_grow(void) {
-    u32 q;
-    s32 n;
+    u32 buf;
+    s32 capacity;
 
-    n = kaj_event_queue.unk10 << 1;
-    q = (u32)kaj_malloc(n * sizeof(KajEvent));
-    if (q == 0) {
+    capacity = kaj_event_queue.unk10 << 1;
+    buf = (u32)kaj_malloc(capacity * sizeof(KajEvent));
+    if (buf == 0) {
         kaj_abend(3, "Error Reallocating EVENT Queue", D_801DFDB4, 0x27);
     }
     if (kaj_event_queue.unk4 != 0) {
-        memcpy((void *)((kaj_event_queue.unk10 - kaj_event_queue.unk8) * sizeof(KajEvent) + q), kaj_event_queue.unk0, kaj_event_queue.unk4 * sizeof(KajEvent));
+        memcpy((void *)((kaj_event_queue.unk10 - kaj_event_queue.unk8) * sizeof(KajEvent) + buf), kaj_event_queue.unk0, kaj_event_queue.unk4 * sizeof(KajEvent));
     }
-    memcpy((void *)q, (void *)(kaj_event_queue.unk4 * sizeof(KajEvent) + (u32)kaj_event_queue.unk0), (kaj_event_queue.unk10 - kaj_event_queue.unk8) * sizeof(KajEvent));
+    memcpy((void *)buf, (void *)(kaj_event_queue.unk4 * sizeof(KajEvent) + (u32)kaj_event_queue.unk0), (kaj_event_queue.unk10 - kaj_event_queue.unk8) * sizeof(KajEvent));
     kaj_event_queue.unk8 = 0;
     kaj_event_queue.unk4 = kaj_event_queue.unk10;
     free3(kaj_event_queue.unk0);
-    kaj_event_queue.unk0 = (void *)q;
-    kaj_event_queue.unk10 = n;
+    kaj_event_queue.unk0 = (void *)buf;
+    kaj_event_queue.unk10 = capacity;
 }
 
-void kaj_event_run_tss(s32 *arg0) {
+void kaj_event_run_tss(s32 *event) {
     Unk_801DFAD4 *q;
     KajEvent *e;
     TssSlot *t;
     TssTable *p = &kaj_tss_table;
-    s32 n = arg0[2];
+    s32 tss_id = event[2];
     s32 i;
     s32 ok;
 
-    if (n > 0 && n < p->count + 1) {
-        t = &p->slots[n - 1];
+    if (tss_id > 0 && tss_id < p->count + 1) {
+        t = &p->slots[tss_id - 1];
         if ((t->step > 0 && t->cur >= t->target) || (t->step < 0 && t->cur <= t->target)) {
             t->cur = t->target;
             t->on_end(t);
@@ -80,7 +80,7 @@ void kaj_event_run_tss(s32 *arg0) {
             e->type = 0x100;
             e->ticks = kaj_timer_ticks[0];
             if (e != NULL) {
-                e->unk8 = n - 1;
+                e->unk8 = tss_id - 1;
                 e->unkC = 0;
                 e->unk10 = t->type;
                 ok = 1;
@@ -98,21 +98,21 @@ void kaj_event_run_tss(s32 *arg0) {
             } else {
                 t->cur += t->step;
             }
-            kaj_event_set_alarm(t->delay, n, 0);
+            kaj_event_set_alarm(t->delay, tss_id, 0);
         }
-        arg0[0] = 0;
+        event[0] = 0;
     }
 }
 
-s32 kaj_event_pop(s32 *arg0) {
+s32 kaj_event_pop(s32 *event) {
     KajEvent *e;
     KajEvent *p;
     Unk_801DFAD4 *q;
 
     EnterCriticalSection();
     if (kaj_event_pending == 1) {
-        arg0[1] = kaj_event_pending_data;
-        arg0[0] = kaj_event_pending;
+        event[1] = kaj_event_pending_data;
+        event[0] = kaj_event_pending;
         kaj_event_pending = 0;
         ExitCriticalSection();
         return 1;
@@ -131,24 +131,24 @@ loop:
     e = NULL;
 found:
     if (e != NULL) {
-        *(KajEvent *)arg0 = *e;
+        *(KajEvent *)event = *e;
         if (e == &((KajEvent *)kaj_event_queue.unk0)[kaj_event_queue.unk8]) {
             kaj_event_queue.unk8 = (kaj_event_queue.unk8 + 1) % kaj_event_queue.unk10;
             kaj_event_queue.unkC--;
         } else {
             e->type = 0;
         }
-        if (arg0[0] == 0) {
+        if (event[0] == 0) {
             goto loop;
         }
     } else {
-        arg0[0] = 0;
+        event[0] = 0;
     }
     ExitCriticalSection();
-    return arg0[0];
+    return event[0];
 }
 
-KajEvent *kaj_event_push(s32 arg0) {
+KajEvent *kaj_event_push(s32 type) {
     KajEvent *e;
     s32 i;
 
@@ -159,12 +159,12 @@ KajEvent *kaj_event_push(s32 arg0) {
     kaj_event_queue.unkC++;
     kaj_event_queue.unk4 = (i + 1) % kaj_event_queue.unk10;
     e = &((KajEvent *)kaj_event_queue.unk0)[i];
-    e->type = arg0;
+    e->type = type;
     e->ticks = kaj_timer_ticks[0];
     return e;
 }
 
-KajEvent *kaj_event_push_front(s32 arg0) {
+KajEvent *kaj_event_push_front(s32 type) {
     KajEvent *e;
     s32 i;
 
@@ -175,37 +175,37 @@ KajEvent *kaj_event_push_front(s32 arg0) {
     kaj_event_queue.unkC++;
     kaj_event_queue.unk8 = i;
     e = &((KajEvent *)kaj_event_queue.unk0)[i];
-    e->type = arg0;
+    e->type = type;
     e->ticks = kaj_timer_ticks[0];
     return e;
 }
 
-s32 kaj_event_get(s32 *arg0) {
-    if (kaj_event_pop(arg0) == 0) {
+s32 kaj_event_get(s32 *event) {
+    if (kaj_event_pop(event) == 0) {
         return 0;
     }
-    if (*arg0 == 2) {
-        kaj_event_run_tss(arg0);
-        if (*arg0 == 0) {
-            return kaj_event_get(arg0);
+    if (*event == 2) {
+        kaj_event_run_tss(event);
+        if (*event == 0) {
+            return kaj_event_get(event);
         }
     }
-    return *arg0;
+    return *event;
 }
 
-s32 kaj_event_set_alarm(s32 arg0, s32 arg1, s32 arg2) {
+s32 kaj_event_set_alarm(s32 delay, s32 id, s32 data) {
     Unk_801DFAD4 *q;
     KajEvent *e;
     s32 i;
 
     EnterCriticalSection();
-    if (arg1 == 0) {
-        arg1 = kaj_event_alarm_id--;
+    if (id == 0) {
+        id = kaj_event_alarm_id--;
         if (kaj_event_alarm_id < 0) {
             kaj_event_alarm_id = 0x3E9;
         }
     }
-    if (arg0 == 0) {
+    if (delay == 0) {
         q = &kaj_event_queue;
         if (q->unk10 == q->unkC) {
             kaj_event_queue_grow();
@@ -217,46 +217,46 @@ s32 kaj_event_set_alarm(s32 arg0, s32 arg1, s32 arg2) {
         e->type = 2;
         e->ticks = kaj_timer_ticks[0];
         if (e != NULL) {
-            e->unk8 = arg1;
-            e->unkC = arg2;
+            e->unk8 = id;
+            e->unkC = data;
         } else {
-            arg1 = -1;
+            id = -1;
         }
     } else {
-        kaj_timer_add_alarm(arg0, arg1, arg2);
+        kaj_timer_add_alarm(delay, id, data);
     }
     ExitCriticalSection();
-    return arg1;
+    return id;
 }
 
-void kaj_event_flush(s32 arg0, s32 arg1) {
+void kaj_event_flush(s32 type_mask, s32 id) {
     Unk_801DFAD4 *q;
     s32 n;
     s32 i;
-    s32 t;
+    s32 type;
 
     q = &kaj_event_queue;
-    if (arg0 & 1) {
+    if (type_mask & 1) {
         kaj_event_pending = 0;
     }
     n = 0;
     EnterCriticalSection();
     i = q->unk8;
     for (; n < q->unkC; n++) {
-        t = ((KajEvent *)q->unk0)[i].type;
-        if (t & arg0) {
-            if (t == 0x100) {
-                kaj_tss_release(((KajEvent *)q->unk0)[arg1].unk8);
+        type = ((KajEvent *)q->unk0)[i].type;
+        if (type & type_mask) {
+            if (type == 0x100) {
+                kaj_tss_release(((KajEvent *)q->unk0)[id].unk8);
             }
-            if (t != 2 || arg1 == 0 || ((KajEvent *)q->unk0)[i].unk8 == arg1) {
+            if (type != 2 || id == 0 || ((KajEvent *)q->unk0)[i].unk8 == id) {
                 ((KajEvent *)q->unk0)[i].type = 0;
             }
         }
         i = (i + 1) % q->unk10;
     }
     ExitCriticalSection();
-    if (arg0 & 2) {
-        kaj_timer_cancel(arg1);
+    if (type_mask & 2) {
+        kaj_timer_cancel(id);
     }
 }
 
@@ -279,8 +279,8 @@ void kaj_event_quit(void) {
     }
 }
 
-void kaj_event_done(s32 *arg0) {
-    if (arg0[0] == 0x100) {
-        kaj_tss_release(arg0[2]);
+void kaj_event_done(s32 *event) {
+    if (event[0] == 0x100) {
+        kaj_tss_release(event[2]);
     }
 }

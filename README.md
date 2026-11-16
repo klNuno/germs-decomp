@@ -32,13 +32,15 @@ Twenty findings in [docs/discoveries.md](docs/discoveries.md), twelve of them ch
   bytes) stay as Sony shipped them.
 - The map is regenerated after each wave with `tools/progress_map.py` (after `make check`); open it to hover
   each function, `docs/progress/progress.json` holds the same data.
-- Names: 650 of the 655 functions, 95 of Sony's 109 unnamed internals and 221 globals carry names, each
+- Names: 650 of the 655 functions, 95 of Sony's 109 unnamed internals and 237 globals carry names, each
   with its evidence in `config/symbol_addrs.txt` (`tools/xref.py` builds the cross-references, `tools/rename.py`
   applies a batch and rechecks the sha1). The structs each source file used to declare on its own are merged
-  into one header, `include/game/types.h` (88 types, the game's main records named: `PlayerStatus`, `Player`,
-  `Inventory`, `GameVars`, `SceneTables`, `Npc`), with 68 fields named from their readers and from emulator runs.
-  36 functions are fully read: no address name, `unk` field, `Unk` type or compiler-made local left in their
-  body. The rules and the glossary are in [docs/naming.md](docs/naming.md).
+  into one header, `include/game/types.h`: 70 of its 83 types are named (`PlayerStatus`, `Player`, `Inventory`,
+  `GameVars`, `Npc`, `Door`, `Model`, `Block`, `Thing`, `ActionSet` and the developer library's lists, timers
+  and tasks), with about 480 fields named from their readers and from emulator runs. Parameters and locals
+  carry about 2,300 names in place of the compiler's. 142 functions are fully read: no address name, `unk`
+  field, `Unk` type or compiler-made local left in their body. The rules and the glossary are in
+  [docs/naming.md](docs/naming.md).
 - Compiler: GCC 2.8.1 with ASPSX 2.56, `-O2 -G8 -funsigned-char`, found by compiling small functions until
   they matched.
 

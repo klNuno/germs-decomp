@@ -321,142 +321,142 @@ s32 rsin(s32 a);
 s32 rcos(s32 a);
 s32 ratan2(s32 y, s32 x);
 
-void block_setup(Block *arg0, u16 arg1) {
-    s32 sp10[5];
-    Player *m;
-    Unk_80179848 *d;
-    Unk_8017CAC8 *s;
-    Arena **p;
+void block_setup(Block *block, u16 mode) {
+    s32 offsets[5];
+    Player *player;
+    Unk_80179848 *hdr;
+    Unk_8017CAC8 *src;
+    Arena **arena;
     s32 i;
 
-    m = player_status_player[0];
-    memset(sp10, 0, 0x14);
-    if (arg1 == 2) {
-        d = arg0->data;
-        arg0->pos_x = d->unk4 * 100;
-        arg0->pos_y = 0;
-        arg0->pos_z = d->unk0 * 100;
-        arg0->size_x = d->unkC.s.unkC * 100;
-        arg0->size_y = 0;
-        arg0->size_z = d->unk8 * 100;
-        arg0->far = 1;
-        for (i = 0; i < d->unkC.s.unk10; i++) {
-            sp10[d->unk14[i].unk0] = d->unk14[i].unk4;
+    player = player_status_player[0];
+    memset(offsets, 0, 0x14);
+    if (mode == 2) {
+        hdr = block->data;
+        block->pos_x = hdr->unk4 * 100;
+        block->pos_y = 0;
+        block->pos_z = hdr->unk0 * 100;
+        block->size_x = hdr->unkC.s.unkC * 100;
+        block->size_y = 0;
+        block->size_z = hdr->unk8 * 100;
+        block->far = 1;
+        for (i = 0; i < hdr->unkC.s.unk10; i++) {
+            offsets[hdr->unk14[i].unk0] = hdr->unk14[i].unk4;
         }
     } else {
-        d = arg0->data;
-        arg0->visible = 1;
-        arg0->player_inside = 1;
-        arg0->pos_x = d->unk0;
-        arg0->pos_y = d->unk4;
-        arg0->pos_z = d->unk8;
-        arg0->size_x = d->unkC.h.unkC;
-        arg0->size_y = d->unkC.h.unkE;
-        arg0->size_z = d->unkC.h.unk10;
-        arg0->far = 0;
-        for (i = 0; i < d->unkC.h.unk12; i++) {
-            sp10[d->unk14[i].unk0] = d->unk14[i].unk4;
+        hdr = block->data;
+        block->visible = 1;
+        block->player_inside = 1;
+        block->pos_x = hdr->unk0;
+        block->pos_y = hdr->unk4;
+        block->pos_z = hdr->unk8;
+        block->size_x = hdr->unkC.h.unkC;
+        block->size_y = hdr->unkC.h.unkE;
+        block->size_z = hdr->unkC.h.unk10;
+        block->far = 0;
+        for (i = 0; i < hdr->unkC.h.unk12; i++) {
+            offsets[hdr->unk14[i].unk0] = hdr->unk14[i].unk4;
         }
     }
-    arg0->model_flags = 0;
-    if (sp10[0] != 0) {
-        kaj_tmd_load(&arg0->floor_model, (u8 *)arg0->data + sp10[0], &arg0->coord_flg);
-        arg0->model_flags |= 1;
+    block->model_flags = 0;
+    if (offsets[0] != 0) {
+        kaj_tmd_load(&block->floor_model, (u8 *)block->data + offsets[0], &block->coord_flg);
+        block->model_flags |= 1;
     }
-    if (sp10[1] != 0) {
-        kaj_tmd_load(&arg0->model1, (u8 *)arg0->data + sp10[1], &arg0->coord_flg);
-        arg0->model_flags |= 2;
+    if (offsets[1] != 0) {
+        kaj_tmd_load(&block->model1, (u8 *)block->data + offsets[1], &block->coord_flg);
+        block->model_flags |= 2;
     }
-    if (sp10[2] != 0) {
-        kaj_tmd_load(&arg0->model2, (u8 *)arg0->data + sp10[2], &arg0->coord_flg);
-        arg0->model_flags |= 4;
+    if (offsets[2] != 0) {
+        kaj_tmd_load(&block->model2, (u8 *)block->data + offsets[2], &block->coord_flg);
+        block->model_flags |= 4;
     }
-    if (sp10[3] != 0) {
-        kaj_tmd_load(&arg0->model3, (u8 *)arg0->data + sp10[3], &arg0->coord_flg);
-        arg0->model_flags |= 8;
+    if (offsets[3] != 0) {
+        kaj_tmd_load(&block->model3, (u8 *)block->data + offsets[3], &block->coord_flg);
+        block->model_flags |= 8;
     }
-    if (sp10[4] != 0) {
-        p = &arg0->arena;
-        s = (Unk_8017CAC8 *)((u8 *)arg0->data + sp10[4]);
-        if (*p == NULL) {
-            *p = kaj_malloc(0x10);
-            if (*p == NULL) {
+    if (offsets[4] != 0) {
+        arena = &block->arena;
+        src = (Unk_8017CAC8 *)((u8 *)block->data + offsets[4]);
+        if (*arena == NULL) {
+            *arena = kaj_malloc(0x10);
+            if (*arena == NULL) {
                 kaj_abend(3, "Error Allocating Arena Buffer", D_801DFC84, 0x49);
             }
         } else {
-            memset(*p, 0, 0x10);
+            memset(*arena, 0, 0x10);
         }
-        (*p)->unk0 = s->unk0;
-        (*p)->unk2 = s->unk2;
-        (*p)->unk4 = s->unk4;
-        (*p)->unk6 = s->unk6;
-        (*p)->data = s + 1;
-        (*p)->cells = s;
-        arg0->model_flags |= 0x10;
+        (*arena)->unk0 = src->unk0;
+        (*arena)->unk2 = src->unk2;
+        (*arena)->unk4 = src->unk4;
+        (*arena)->unk6 = src->unk6;
+        (*arena)->data = src + 1;
+        (*arena)->cells = src;
+        block->model_flags |= 0x10;
     }
-    GsInitCoordinate2(NULL, &arg0->coord_flg);
-    arg0->coord_tx = arg0->pos_x - m->cell_x * 12500;
-    arg0->coord_ty = arg0->pos_y + m->cell_y * 32000;
-    arg0->coord_tz = arg0->pos_z - m->cell_z * 12500;
-    arg0->coord_flg = 0;
-    arg0->active = 1;
+    GsInitCoordinate2(NULL, &block->coord_flg);
+    block->coord_tx = block->pos_x - player->cell_x * 12500;
+    block->coord_ty = block->pos_y + player->cell_y * 32000;
+    block->coord_tz = block->pos_z - player->cell_z * 12500;
+    block->coord_flg = 0;
+    block->active = 1;
 }
 
 INCLUDE_ASM("asm/nonmatchings/game/80179848", block_draw_all);
 
-s32 block_test_player_inside(Player *arg0, u16 arg1, Block *arg2, s32 *arg3, s32 *arg4) {
+s32 block_test_player_inside(Player *player, u16 mode, Block *block, s32 *lo, s32 *hi) {
     s32 a;
     s32 sp10[2];
     s32 b;
-    s32 d;
+    s32 dist;
     s32 f;
     s32 x;
     s32 z;
     s32 w;
     s32 h;
-    Arena *p;
-    s32 *v3 = arg3;
+    Arena *arena;
+    s32 *lo_p = lo;
 
-    v3[0] = arg2->coord_tx - arg0->pos_x;
-    arg4[0] = arg2->size_x + v3[0];
-    v3[1] = arg0->pos_y - arg0->unk78 - arg2->coord_ty;
-    arg4[1] = arg2->size_y + v3[1];
-    v3[2] = arg2->coord_tz - arg0->pos_z;
-    arg4[2] = arg2->size_z + v3[2];
-    if (arg1 == 2) {
-        a = arg4[0] >> 1;
-        b = arg4[2] >> 1;
-        d = SquareRoot0(a * a + b * b);
-        arg2->far = 1;
-        if (arg2->size_x < 5001 && arg2->size_z < 5001) {
-            f = d < 3537;
+    lo_p[0] = block->coord_tx - player->pos_x;
+    hi[0] = block->size_x + lo_p[0];
+    lo_p[1] = player->pos_y - player->unk78 - block->coord_ty;
+    hi[1] = block->size_y + lo_p[1];
+    lo_p[2] = block->coord_tz - player->pos_z;
+    hi[2] = block->size_z + lo_p[2];
+    if (mode == 2) {
+        a = hi[0] >> 1;
+        b = hi[2] >> 1;
+        dist = SquareRoot0(a * a + b * b);
+        block->far = 1;
+        if (block->size_x < 5001 && block->size_z < 5001) {
+            f = dist < 3537;
         } else {
-            f = d < 7073;
+            f = dist < 7073;
         }
         if (f) {
-            arg2->far = 0;
+            block->far = 0;
         }
     } else {
-        arg2->far = 0;
+        block->far = 0;
     }
-    if (arg2->model_flags & 0x10) {
-        p = arg2->arena;
-        x = arg0->pos_x + arg0->cell_x * 12500 - arg2->pos_x;
-        z = arg0->pos_z + arg0->cell_z * 12500 - arg2->pos_z;
+    if (block->model_flags & 0x10) {
+        arena = block->arena;
+        x = player->pos_x + player->cell_x * 12500 - block->pos_x;
+        z = player->pos_z + player->cell_z * 12500 - block->pos_z;
         h = x >> 8;
-        w = p->unk0;
+        w = arena->unk0;
         x = (x & 0xFF) ? (f = w + 1, h + f) : h + w;
         h = z >> 8;
-        w = p->unk2;
+        w = arena->unk2;
         z = (z & 0xFF) ? (f = w + 1, h + f) : h + w;
-        if (x >= 0 && x < p->unk4 && z >= 0 && z < p->unk6) {
-            arg2->in_arena = 1;
+        if (x >= 0 && x < arena->unk4 && z >= 0 && z < arena->unk6) {
+            block->in_arena = 1;
         }
     }
-    if (v3[0] > 0 || arg4[0] <= 0 || v3[2] > 0 || arg4[2] <= 0) {
+    if (lo_p[0] > 0 || hi[0] <= 0 || lo_p[2] > 0 || hi[2] <= 0) {
         return 0;
     }
-    if (arg1 == 1 && (s16)arg0->unk40 != 0 && (v3[1] > 0 || arg4[1] < 0)) {
+    if (mode == 1 && (s16)player->unk40 != 0 && (lo_p[1] > 0 || hi[1] < 0)) {
         return 0;
     }
     return 1;
@@ -470,17 +470,17 @@ INCLUDE_RODATA("asm/nonmatchings/game/80179848", D_801702B0);
 
 INCLUDE_RODATA("asm/nonmatchings/game/80179848", D_801702C8);
 
-static inline s32 func_8017A108_1(Player *o, s32 *lo, s32 *hi) {
-    CarState *q = &vehicle_car_state;
-    s32 sp38[4];
-    s32 sp48;
+static inline s32 func_8017A108_1(Player *player, s32 *lo, s32 *hi) {
+    CarState *car = &vehicle_car_state;
+    s32 pos[4];
+    s32 flag;
     s32 i;
     GsSetLsMatrix(D_801E032C[0]->unk1C);
     for (i = 0; i < 4; i++) {
-        RotTrans(&q->corners[i], sp38, &sp48);
-        sp38[0] -= o->pos_x;
-        sp38[2] -= o->pos_z;
-        if (sp38[0] >= lo[0] && sp38[0] < hi[0] && sp38[2] >= lo[2] && sp38[2] < hi[2]) {
+        RotTrans(&car->corners[i], pos, &flag);
+        pos[0] -= player->pos_x;
+        pos[2] -= player->pos_z;
+        if (pos[0] >= lo[0] && pos[0] < hi[0] && pos[2] >= lo[2] && pos[2] < hi[2]) {
             return 1;
         }
     }
@@ -533,30 +533,30 @@ static inline s16 func_8017A108_2(s32 dir, s32 *lo, s32 *hi) {
     return 1;
 }
 
-void block_update_visibility(u16 arg0) {
+void block_update_visibility(u16 mode) {
     BlockList *list = block_list;
-    Player *o = player_status_player[0];
-    Block *e;
-    s32 sp18[4];
-    s32 sp28[4];
+    Player *player = player_status_player[0];
+    Block *block;
+    s32 lo[4];
+    s32 hi[4];
 
     if (list->count == 0) {
         return;
     }
     list->cursor = list->head;
     while (1) {
-        e = list->cursor->data;
-        if (e != NULL && e->active != 0) {
-            e->in_arena = 0;
-            e->player_inside = block_test_player_inside(o, arg0, e, sp18, sp28);
-            if (e->player_inside != 0) {
-                e->visible = 1;
-            } else if (arg0 == 2) {
-                if (o->vehicle_mode == 1 && func_8017A108_1(o, sp18, sp28) && e->player_inside == 0) {
-                    e->player_inside = 1;
-                    e->visible = 1;
+        block = list->cursor->data;
+        if (block != NULL && block->active != 0) {
+            block->in_arena = 0;
+            block->player_inside = block_test_player_inside(player, mode, block, lo, hi);
+            if (block->player_inside != 0) {
+                block->visible = 1;
+            } else if (mode == 2) {
+                if (player->vehicle_mode == 1 && func_8017A108_1(player, lo, hi) && block->player_inside == 0) {
+                    block->player_inside = 1;
+                    block->visible = 1;
                 } else {
-                    e->visible = func_8017A108_2((s16)mail_angle_to_dir8(o->yaw), sp18, sp28);
+                    block->visible = func_8017A108_2((s16)mail_angle_to_dir8(player->yaw), lo, hi);
                 }
             }
         }
@@ -591,99 +591,99 @@ void block_create_all(void) {
         block_slots[i]->active = 0;
         block_slots[i]->model_flags = 0;
         {
-            Block *e = block_slots[i];
+            Block *block = block_slots[i];
 
             if (block_list->count == 0) {
-                kaj_ll_insert_before(block_list, (s32)e);
+                kaj_ll_insert_before(block_list, (s32)block);
             } else {
                 block_list->cursor = block_list->tail;
-                kaj_ll_insert_after(block_list, (s32)e);
+                kaj_ll_insert_after(block_list, (s32)block);
             }
         }
     }
 }
 
-void block_load_all(u16 arg0) {
-    s32 sp10[12];
-    s16 sp40;
+void block_load_all(u16 mode) {
+    s32 res_ids[12];
+    s16 count;
     s32 i;
-    Block *e;
-    s32 r;
-    s32 t;
-    void **p;
+    Block *block;
+    s32 fresh;
+    s32 type;
+    void **res;
 
     D_801DFC80 = 1;
-    sp40 = 12;
-    if (arg0 == 2) {
-        kaj_map_cell_slots(&sp40, sp10);
+    count = 12;
+    if (mode == 2) {
+        kaj_map_cell_slots(&count, res_ids);
     } else {
-        kaj_map_room_slots(&sp40, sp10);
+        kaj_map_room_slots(&count, res_ids);
     }
     for (i = 0; i < 12; i++) {
-        e = block_slots[i];
-        e->active = 0;
-        e->data = NULL;
-        if (i < sp40) {
-            r = (s16)kaj_cdmgr_is_fresh(sp10[i]);
-            t = kaj_cdmgr_get_type(sp10[i]);
-            p = kaj_cdmgr_get(sp10[i]);
-            if (t == 5) {
-                if (p != NULL && r != 0) {
-                    mod_create(*p);
-                    kaj_cdmgr_mark_used(sp10[i]);
+        block = block_slots[i];
+        block->active = 0;
+        block->data = NULL;
+        if (i < count) {
+            fresh = (s16)kaj_cdmgr_is_fresh(res_ids[i]);
+            type = kaj_cdmgr_get_type(res_ids[i]);
+            res = kaj_cdmgr_get(res_ids[i]);
+            if (type == 5) {
+                if (res != NULL && fresh != 0) {
+                    mod_create(*res);
+                    kaj_cdmgr_mark_used(res_ids[i]);
                     continue;
                 }
-            } else if (t == 6) {
-                if (p != NULL && r != 0) {
-                    kaj_tim_upload_hdr(*p);
-                    kaj_cdmgr_mark_used(sp10[i]);
-                    kaj_map_room_release(sp10[i]);
+            } else if (type == 6) {
+                if (res != NULL && fresh != 0) {
+                    kaj_tim_upload_hdr(*res);
+                    kaj_cdmgr_mark_used(res_ids[i]);
+                    kaj_map_room_release(res_ids[i]);
                     continue;
                 }
-            } else if (p != NULL) {
-                e->data = *p;
-                block_setup(e, arg0);
+            } else if (res != NULL) {
+                block->data = *res;
+                block_setup(block, mode);
             }
         }
     }
-    if (arg0 == 1) {
+    if (mode == 1) {
         npc_update_blocks();
     }
 }
 
-void block_set_zone_flags(s32 arg0, s32 arg1) {
-    GameVars *p = &action_vars;
+void block_set_zone_flags(s32 x, s32 z) {
+    GameVars *vars = &action_vars;
 
-    p->unk252 = 0;
-    p->unk250 = 0;
-    p->unk254 = 0;
-    if (arg0 >= 0x3CF && arg0 < 0x433 && arg1 > 0x8B0 && arg1 < 0xA0F) {
-        p->unk252 = 1;
-        p->unk250 = 1;
-        p->unk254 = 1;
+    vars->unk252 = 0;
+    vars->unk250 = 0;
+    vars->unk254 = 0;
+    if (x >= 0x3CF && x < 0x433 && z > 0x8B0 && z < 0xA0F) {
+        vars->unk252 = 1;
+        vars->unk250 = 1;
+        vars->unk254 = 1;
         return;
     }
-    if ((arg0 >= 0x3CF && arg0 < 0x4C9 && arg1 >= -0x19 && arg1 < 0x8B1) ||
-        (arg0 >= 0x36B && arg0 < 0x3CF && arg1 >= 0x23F && arg1 < 0x307) ||
-        (arg0 >= 0x433 && arg0 < 0x497 && arg1 >= -0x1A9 && arg1 < -0xE1) ||
-        (arg0 >= 0x81B && arg0 < 0x9AB && arg1 >= 0x1A9 && arg1 < 0x401) ||
-        (arg0 >= -0x4FB && arg0 < -0x401 && arg1 >= 0x5F5 && arg1 < 0x9DD) ||
-        (arg0 >= -0x591 && arg0 < -0x4C9 && arg1 >= -0x4B && arg1 < 0x1A9) ||
-        (arg0 >= -0x591 && arg0 < -0x497 && arg1 >= -0x4C9 && arg1 < -0x23F) ||
-        (arg0 >= 0x2D5 && arg0 < 0x433 && arg1 < -0x4C9) ||
-        (arg0 >= 0x2D5 && arg0 < 0x433 && arg1 < -0x23F) ||
-        arg1 < -0x4C9) {
-        p->unk254 = 1;
+    if ((x >= 0x3CF && x < 0x4C9 && z >= -0x19 && z < 0x8B1) ||
+        (x >= 0x36B && x < 0x3CF && z >= 0x23F && z < 0x307) ||
+        (x >= 0x433 && x < 0x497 && z >= -0x1A9 && z < -0xE1) ||
+        (x >= 0x81B && x < 0x9AB && z >= 0x1A9 && z < 0x401) ||
+        (x >= -0x4FB && x < -0x401 && z >= 0x5F5 && z < 0x9DD) ||
+        (x >= -0x591 && x < -0x4C9 && z >= -0x4B && z < 0x1A9) ||
+        (x >= -0x591 && x < -0x497 && z >= -0x4C9 && z < -0x23F) ||
+        (x >= 0x2D5 && x < 0x433 && z < -0x4C9) ||
+        (x >= 0x2D5 && x < 0x433 && z < -0x23F) ||
+        z < -0x4C9) {
+        vars->unk254 = 1;
     }
 }
 
-void block_set_mode(u16 arg0) {
-    s32 sp10[4];
-    SceneRequest_u80179848 *g = &scene_request;
-    Player *o = player_status_player[0];
-    GameVars *p;
+void block_set_mode(u16 mode) {
+    s32 pos[4];
+    SceneRequest_u80179848 *req = &scene_request;
+    Player *player = player_status_player[0];
+    GameVars *vars;
 
-    if (arg0 == 2) {
+    if (mode == 2) {
         if (kaj_map_open_city() != 0) {
             kaj_abend(4, D_801702B0, D_801DFC84, 0x2EC);
         }
@@ -691,39 +691,39 @@ void block_set_mode(u16 arg0) {
             kaj_cdmgr_poll();
         }
         while (kaj_map_city_ready() == 0) {
-            kaj_map_update_city(o->unk68, o->unk60);
+            kaj_map_update_city(player->unk68, player->unk60);
             if (kaj_cdmgr_poll() != 0) {
                 kaj_map_set_cell_ready();
             }
         }
-        block_set_zone_flags(o->unk60, o->unk68);
+        block_set_zone_flags(player->unk60, player->unk68);
     } else {
-        if (kaj_map_open_place(g->unk16, g->unk20) != 0) {
+        if (kaj_map_open_place(req->unk16, req->unk20) != 0) {
             kaj_abend(4, D_801702C8, D_801DFC84, 0x2F8);
         }
         while (kaj_map_load_place_dir() == 0) {
             kaj_cdmgr_poll();
         }
-        block_building_id = g->unk18;
-        kaj_map_get_entry(block_building_id, sp10, &D_801DFC8C);
-        p = &action_vars;
-        p->unk252 = 0;
-        p->unk250 = 0;
+        block_building_id = req->unk18;
+        kaj_map_get_entry(block_building_id, pos, &D_801DFC8C);
+        vars = &action_vars;
+        vars->unk252 = 0;
+        vars->unk250 = 0;
         switch (D_801DFC8D[0]) {
         case 1:
-            p->unk252 = 1;
+            vars->unk252 = 1;
             break;
         case 2:
-            p->unk250 = 1;
+            vars->unk250 = 1;
             break;
         case 3:
-            p->unk252 = 1;
-            p->unk250 = 1;
+            vars->unk252 = 1;
+            vars->unk250 = 1;
             break;
         }
-        o->pos_x = sp10[0];
-        o->pos_y = sp10[1];
-        o->pos_z = sp10[2];
+        player->pos_x = pos[0];
+        player->pos_y = pos[1];
+        player->pos_z = pos[2];
         player_place_for_scene(1);
         while (kaj_map_place_ready() == 0) {
             kaj_map_update_place(block_building_id, &D_801DFC8C);
@@ -732,67 +732,67 @@ void block_set_mode(u16 arg0) {
             }
         }
     }
-    block_load_all(arg0);
+    block_load_all(mode);
     door_refresh_all();
     sprite_thing_refresh_all();
     D_801DFC80 = 0;
 }
 
-void block_stream_update(u16 arg0) {
-    s32 sp10[12];
-    s16 sp40;
-    Player *o = player_status_player[0];
-    s32 r;
+void block_stream_update(u16 mode) {
+    s32 res_ids[12];
+    s16 count;
+    Player *player = player_status_player[0];
+    s32 status;
     s32 i;
-    Block *e;
-    void **p;
+    Block *block;
+    void **res;
 
     D_801DFC80 = 0;
-    if (arg0 == 2) {
-        r = kaj_map_update_city(o->unk68, o->unk60);
-        block_set_zone_flags(o->unk60, o->unk68);
+    if (mode == 2) {
+        status = kaj_map_update_city(player->unk68, player->unk60);
+        block_set_zone_flags(player->unk60, player->unk68);
     } else {
-        r = kaj_map_update_place(block_building_id, &D_801DFC8C);
+        status = kaj_map_update_place(block_building_id, &D_801DFC8C);
     }
-    if (r == 3) {
+    if (status == 3) {
         D_801DFC80 = 1;
-        sp40 = 12;
-        if (arg0 == 2) {
-            kaj_map_cell_loaded_slots(&sp40, sp10);
+        count = 12;
+        if (mode == 2) {
+            kaj_map_cell_loaded_slots(&count, res_ids);
         } else {
-            kaj_map_room_loaded_slots(&sp40, sp10);
+            kaj_map_room_loaded_slots(&count, res_ids);
         }
         for (i = 0; i < 12; i++) {
-            e = block_slots[i];
-            e->active = 0;
-            e->data = NULL;
-            if (i < sp40) {
-                s32 t = kaj_cdmgr_get_type(sp10[i]);
-                if (t != 5 && t != 6) {
-                    p = kaj_cdmgr_get(sp10[i]);
-                    if (p != NULL) {
-                        e->data = *p;
-                        block_setup(e, arg0);
+            block = block_slots[i];
+            block->active = 0;
+            block->data = NULL;
+            if (i < count) {
+                s32 type = kaj_cdmgr_get_type(res_ids[i]);
+                if (type != 5 && type != 6) {
+                    res = kaj_cdmgr_get(res_ids[i]);
+                    if (res != NULL) {
+                        block->data = *res;
+                        block_setup(block, mode);
                     }
                 }
             }
         }
-        if (arg0 == 1) {
+        if (mode == 1) {
             npc_update_blocks();
         }
         kaj_cdmgr_poll();
-    } else if (r == 1 || kaj_cdmgr_poll() != 0) {
-        if (arg0 == 2) {
+    } else if (status == 1 || kaj_cdmgr_poll() != 0) {
+        if (mode == 2) {
             kaj_map_set_cell_ready();
         } else {
             kaj_map_set_room_ready();
         }
-        block_load_all(arg0);
+        block_load_all(mode);
     }
 }
 
-s16 block_point_in_poly(Unk_8017AC88 *arg0, s32 arg1, s32 arg2, s32 arg3) {
-    double sp10[2];
+s16 block_point_in_poly(Unk_8017AC88 *verts, s32 count, s32 x, s32 z) {
+    double cross_x[2];
     double x0;
     double z0;
     double x1;
@@ -802,143 +802,143 @@ s16 block_point_in_poly(Unk_8017AC88 *arg0, s32 arg1, s32 arg2, s32 arg3) {
     double t;
     s32 i;
     s32 j;
-    s32 n;
+    s32 crossings;
 
-    px = arg2;
-    pz = arg3;
-    n = 0;
-    for (i = 0; i < arg1; i++) {
-        j = (i + 1) % arg1;
-        x0 = arg0[i].unk0;
-        z0 = arg0[i].unk8;
-        x1 = arg0[j].unk0;
-        z1 = arg0[j].unk8;
+    px = x;
+    pz = z;
+    crossings = 0;
+    for (i = 0; i < count; i++) {
+        j = (i + 1) % count;
+        x0 = verts[i].unk0;
+        z0 = verts[i].unk8;
+        x1 = verts[j].unk0;
+        z1 = verts[j].unk8;
         if (func_801BDC30(z0, z1)) {
             t = (pz - z0) / (z1 - z0);
             if (!(t < 0.0) && !(t > 1.0)) {
-                sp10[n] = (x1 - x0) * t + x0;
-                if (n != 1 || func_801BDC30(sp10[0], sp10[1])) {
-                    if (px < sp10[n]) {
-                        n++;
+                cross_x[crossings] = (x1 - x0) * t + x0;
+                if (crossings != 1 || func_801BDC30(cross_x[0], cross_x[1])) {
+                    if (px < cross_x[crossings]) {
+                        crossings++;
                     }
-                    if (n == 2) {
+                    if (crossings == 2) {
                         break;
                     }
                 }
             }
         }
     }
-    return n % 2;
+    return crossings % 2;
 }
 
-s32 block_poly_height(Unk_8017AC88 *arg0, SVector *arg1, s32 arg2, s32 arg3, s32 arg4) {
+s32 block_poly_height(Unk_8017AC88 *verts, SVector *normal, s32 count, s32 x, s32 z) {
     s32 maxx;
     s32 minx;
     s32 maxz;
     s32 minz;
 
-    if (arg2 == 4) {
-        if (arg0[0].unk0 > arg0[1].unk0) {
-            maxx = arg0[0].unk0;
-            minx = arg0[1].unk0;
+    if (count == 4) {
+        if (verts[0].unk0 > verts[1].unk0) {
+            maxx = verts[0].unk0;
+            minx = verts[1].unk0;
         } else {
-            minx = arg0[0].unk0;
-            maxx = arg0[1].unk0;
+            minx = verts[0].unk0;
+            maxx = verts[1].unk0;
         }
-        if (maxx < arg0[2].unk0) {
-            maxx = arg0[2].unk0;
-        } else if (arg0[2].unk0 < minx) {
-            minx = arg0[2].unk0;
+        if (maxx < verts[2].unk0) {
+            maxx = verts[2].unk0;
+        } else if (verts[2].unk0 < minx) {
+            minx = verts[2].unk0;
         }
-        if (maxx < arg0[3].unk0) {
-            maxx = arg0[3].unk0;
-        } else if (arg0[3].unk0 < minx) {
-            minx = arg0[3].unk0;
+        if (maxx < verts[3].unk0) {
+            maxx = verts[3].unk0;
+        } else if (verts[3].unk0 < minx) {
+            minx = verts[3].unk0;
         }
-        if (arg0[0].unk8 > arg0[1].unk8) {
-            maxz = arg0[0].unk8;
-            minz = arg0[1].unk8;
+        if (verts[0].unk8 > verts[1].unk8) {
+            maxz = verts[0].unk8;
+            minz = verts[1].unk8;
         } else {
-            minz = arg0[0].unk8;
-            maxz = arg0[1].unk8;
+            minz = verts[0].unk8;
+            maxz = verts[1].unk8;
         }
-        if (maxz < arg0[2].unk8) {
-            maxz = arg0[2].unk8;
-        } else if (arg0[2].unk8 < minz) {
-            minz = arg0[2].unk8;
+        if (maxz < verts[2].unk8) {
+            maxz = verts[2].unk8;
+        } else if (verts[2].unk8 < minz) {
+            minz = verts[2].unk8;
         }
-        if (maxz < arg0[3].unk8) {
-            maxz = arg0[3].unk8;
-        } else if (arg0[3].unk8 < minz) {
-            minz = arg0[3].unk8;
+        if (maxz < verts[3].unk8) {
+            maxz = verts[3].unk8;
+        } else if (verts[3].unk8 < minz) {
+            minz = verts[3].unk8;
         }
     } else {
-        if (arg0[0].unk0 > arg0[1].unk0) {
-            maxx = arg0[0].unk0;
-            minx = arg0[1].unk0;
+        if (verts[0].unk0 > verts[1].unk0) {
+            maxx = verts[0].unk0;
+            minx = verts[1].unk0;
         } else {
-            minx = arg0[0].unk0;
-            maxx = arg0[1].unk0;
+            minx = verts[0].unk0;
+            maxx = verts[1].unk0;
         }
-        if (maxx < arg0[2].unk0) {
-            maxx = arg0[2].unk0;
-        } else if (arg0[2].unk0 < minx) {
-            minx = arg0[2].unk0;
+        if (maxx < verts[2].unk0) {
+            maxx = verts[2].unk0;
+        } else if (verts[2].unk0 < minx) {
+            minx = verts[2].unk0;
         }
-        if (arg0[0].unk8 > arg0[1].unk8) {
-            maxz = arg0[0].unk8;
-            minz = arg0[1].unk8;
+        if (verts[0].unk8 > verts[1].unk8) {
+            maxz = verts[0].unk8;
+            minz = verts[1].unk8;
         } else {
-            minz = arg0[0].unk8;
-            maxz = arg0[1].unk8;
+            minz = verts[0].unk8;
+            maxz = verts[1].unk8;
         }
-        if (maxz < arg0[2].unk8) {
-            maxz = arg0[2].unk8;
-        } else if (arg0[2].unk8 < minz) {
-            minz = arg0[2].unk8;
+        if (maxz < verts[2].unk8) {
+            maxz = verts[2].unk8;
+        } else if (verts[2].unk8 < minz) {
+            minz = verts[2].unk8;
         }
     }
-    if (arg3 < minx || maxx < arg3 || arg4 < minz || maxz < arg4) {
+    if (x < minx || maxx < x || z < minz || maxz < z) {
         return 99999999;
     }
-    if (block_point_in_poly(arg0, arg2, arg3, arg4) == 0) {
+    if (block_point_in_poly(verts, count, x, z) == 0) {
         return 99999999;
     }
-    if (arg1->vy == 0) {
+    if (normal->vy == 0) {
         return 99999999;
     }
-    return (arg0[2].unk0 * arg1->vx + arg0[2].unk4 * arg1->vy + arg0[2].unk8 * arg1->vz
-            - (arg1->vx * arg3 + arg1->vz * arg4)) / arg1->vy;
+    return (verts[2].unk0 * normal->vx + verts[2].unk4 * normal->vy + verts[2].unk8 * normal->vz
+            - (normal->vx * x + normal->vz * z)) / normal->vy;
 }
 
-s32 block_hit_tris(TmdTri *arg0, s32 arg1, s32 arg2, Vec3 *arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7) {
-    Unk_8017AC88 sp18[3];
+s32 block_hit_tris(TmdTri *prims, s32 verts, s32 normals, Vec3 *offset, s32 count, s32 x, s32 z, s32 height_out) {
+    Unk_8017AC88 poly[3];
     s32 i;
-    TmdTri *e;
-    s32 r;
+    TmdTri *prim;
+    s32 height;
 
-    e = arg0;
-    for (i = 0; i < arg4; i++, e++) {
-        sp18[0].unk0 = ((SVector *)arg1)[e->vert0].vx + arg3->x;
-        sp18[0].unk4 = ((SVector *)arg1)[e->vert0].vy + arg3->y;
-        sp18[0].unk8 = ((SVector *)arg1)[e->vert0].vz + arg3->z;
-        sp18[1].unk0 = ((SVector *)arg1)[e->vert1].vx + arg3->x;
-        sp18[1].unk4 = ((SVector *)arg1)[e->vert1].vy + arg3->y;
-        sp18[1].unk8 = ((SVector *)arg1)[e->vert1].vz + arg3->z;
-        sp18[2].unk0 = ((SVector *)arg1)[e->vert2].vx + arg3->x;
-        sp18[2].unk4 = ((SVector *)arg1)[e->vert2].vy + arg3->y;
-        sp18[2].unk8 = ((SVector *)arg1)[e->vert2].vz + arg3->z;
-        r = block_poly_height(sp18, (SVector *)arg2 + e->normal, 3, arg5, arg6);
-        *(s32 *)arg7 = r;
-        if (r != 99999999) {
-            return (e->code_r << 16) | (e->code_g << 8) | e->code_b;
+    prim = prims;
+    for (i = 0; i < count; i++, prim++) {
+        poly[0].unk0 = ((SVector *)verts)[prim->vert0].vx + offset->x;
+        poly[0].unk4 = ((SVector *)verts)[prim->vert0].vy + offset->y;
+        poly[0].unk8 = ((SVector *)verts)[prim->vert0].vz + offset->z;
+        poly[1].unk0 = ((SVector *)verts)[prim->vert1].vx + offset->x;
+        poly[1].unk4 = ((SVector *)verts)[prim->vert1].vy + offset->y;
+        poly[1].unk8 = ((SVector *)verts)[prim->vert1].vz + offset->z;
+        poly[2].unk0 = ((SVector *)verts)[prim->vert2].vx + offset->x;
+        poly[2].unk4 = ((SVector *)verts)[prim->vert2].vy + offset->y;
+        poly[2].unk8 = ((SVector *)verts)[prim->vert2].vz + offset->z;
+        height = block_poly_height(poly, (SVector *)normals + prim->normal, 3, x, z);
+        *(s32 *)height_out = height;
+        if (height != 99999999) {
+            return (prim->code_r << 16) | (prim->code_g << 8) | prim->code_b;
         }
     }
     return 0;
 }
 
-s32 block_hit_quads(TmdTri *arg0, s32 arg1, s32 arg2, Vec3 *arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7) {
-    Unk_8017AC88 sp18[4];
+s32 block_hit_quads(TmdTri *prims, s32 verts, s32 normals, Vec3 *offset, s32 count, s32 x, s32 z, s32 height_out) {
+    Unk_8017AC88 poly[4];
     struct {
         u16 unk0;
         u8 unk2;
@@ -953,85 +953,85 @@ s32 block_hit_quads(TmdTri *arg0, s32 arg1, s32 arg2, Vec3 *arg3, s32 arg4, s32 
         u16 unkE;
         u16 unk10;
         u8 pad12[0x2];
-    } *e;
+    } *prim;
     s32 i;
-    s32 r;
-    s32 ret;
+    s32 height;
+    s32 code;
     s32 minx;
     s32 maxx;
     s32 minz;
     s32 maxz;
-    Player *m;
-    Unk_8017AC88 *p;
+    Player *player;
+    Unk_8017AC88 *centre;
 
-    e = (void *)arg0;
-    for (i = 0; i < arg4; i++, e++) {
-        sp18[0].unk0 = ((SVector *)arg1)[e->unkA].vx + arg3->x;
-        sp18[0].unk4 = ((SVector *)arg1)[e->unkA].vy + arg3->y;
-        sp18[0].unk8 = ((SVector *)arg1)[e->unkA].vz + arg3->z;
-        sp18[1].unk0 = ((SVector *)arg1)[e->unkC].vx + arg3->x;
-        sp18[1].unk4 = ((SVector *)arg1)[e->unkC].vy + arg3->y;
-        sp18[1].unk8 = ((SVector *)arg1)[e->unkC].vz + arg3->z;
-        sp18[3].unk0 = ((SVector *)arg1)[e->unkE].vx + arg3->x;
-        sp18[3].unk4 = ((SVector *)arg1)[e->unkE].vy + arg3->y;
-        sp18[3].unk8 = ((SVector *)arg1)[e->unkE].vz + arg3->z;
-        sp18[2].unk0 = ((SVector *)arg1)[e->unk10].vx + arg3->x;
-        sp18[2].unk4 = ((SVector *)arg1)[e->unk10].vy + arg3->y;
-        sp18[2].unk8 = ((SVector *)arg1)[e->unk10].vz + arg3->z;
-        r = block_poly_height(sp18, (SVector *)arg2 + e->unk8, 4, arg5, arg6);
-        *(s32 *)arg7 = r;
-        if (r != 99999999) {
-            ret = (e->unk4 << 16) | (e->unk5 << 8) | e->unk6;
-            if (e->unk4 == 0xFF) {
-                m = player_status_player[0];
-                p = (Unk_8017AC88 *)&m->unk18; /* this unit reads +0x18 as two quads */
-                if (sp18[0].unk0 > sp18[1].unk0) {
-                    maxx = sp18[0].unk0;
-                    minx = sp18[1].unk0;
+    prim = (void *)prims;
+    for (i = 0; i < count; i++, prim++) {
+        poly[0].unk0 = ((SVector *)verts)[prim->unkA].vx + offset->x;
+        poly[0].unk4 = ((SVector *)verts)[prim->unkA].vy + offset->y;
+        poly[0].unk8 = ((SVector *)verts)[prim->unkA].vz + offset->z;
+        poly[1].unk0 = ((SVector *)verts)[prim->unkC].vx + offset->x;
+        poly[1].unk4 = ((SVector *)verts)[prim->unkC].vy + offset->y;
+        poly[1].unk8 = ((SVector *)verts)[prim->unkC].vz + offset->z;
+        poly[3].unk0 = ((SVector *)verts)[prim->unkE].vx + offset->x;
+        poly[3].unk4 = ((SVector *)verts)[prim->unkE].vy + offset->y;
+        poly[3].unk8 = ((SVector *)verts)[prim->unkE].vz + offset->z;
+        poly[2].unk0 = ((SVector *)verts)[prim->unk10].vx + offset->x;
+        poly[2].unk4 = ((SVector *)verts)[prim->unk10].vy + offset->y;
+        poly[2].unk8 = ((SVector *)verts)[prim->unk10].vz + offset->z;
+        height = block_poly_height(poly, (SVector *)normals + prim->unk8, 4, x, z);
+        *(s32 *)height_out = height;
+        if (height != 99999999) {
+            code = (prim->unk4 << 16) | (prim->unk5 << 8) | prim->unk6;
+            if (prim->unk4 == 0xFF) {
+                player = player_status_player[0];
+                centre = (Unk_8017AC88 *)&player->unk18; /* this unit reads +0x18 as two quads */
+                if (poly[0].unk0 > poly[1].unk0) {
+                    maxx = poly[0].unk0;
+                    minx = poly[1].unk0;
                 } else {
-                    minx = sp18[0].unk0;
-                    maxx = sp18[1].unk0;
+                    minx = poly[0].unk0;
+                    maxx = poly[1].unk0;
                 }
-                if (maxx < sp18[2].unk0) {
-                    maxx = sp18[2].unk0;
-                } else if (sp18[2].unk0 < minx) {
-                    minx = sp18[2].unk0;
+                if (maxx < poly[2].unk0) {
+                    maxx = poly[2].unk0;
+                } else if (poly[2].unk0 < minx) {
+                    minx = poly[2].unk0;
                 }
-                if (maxx < sp18[3].unk0) {
-                    maxx = sp18[3].unk0;
-                } else if (sp18[3].unk0 < minx) {
-                    minx = sp18[3].unk0;
+                if (maxx < poly[3].unk0) {
+                    maxx = poly[3].unk0;
+                } else if (poly[3].unk0 < minx) {
+                    minx = poly[3].unk0;
                 }
-                if (sp18[0].unk8 > sp18[1].unk8) {
-                    maxz = sp18[0].unk8;
-                    minz = sp18[1].unk8;
+                if (poly[0].unk8 > poly[1].unk8) {
+                    maxz = poly[0].unk8;
+                    minz = poly[1].unk8;
                 } else {
-                    minz = sp18[0].unk8;
-                    maxz = sp18[1].unk8;
+                    minz = poly[0].unk8;
+                    maxz = poly[1].unk8;
                 }
-                if (maxz < sp18[2].unk8) {
-                    maxz = sp18[2].unk8;
-                } else if (sp18[2].unk8 < minz) {
-                    minz = sp18[2].unk8;
+                if (maxz < poly[2].unk8) {
+                    maxz = poly[2].unk8;
+                } else if (poly[2].unk8 < minz) {
+                    minz = poly[2].unk8;
                 }
-                if (maxz < sp18[3].unk8) {
-                    maxz = sp18[3].unk8;
-                } else if (sp18[3].unk8 < minz) {
-                    minz = sp18[3].unk8;
+                if (maxz < poly[3].unk8) {
+                    maxz = poly[3].unk8;
+                } else if (poly[3].unk8 < minz) {
+                    minz = poly[3].unk8;
                 }
-                p[1].unk0 = m->cell_x * 12500 + ((minx + maxx) >> 1);
-                p[1].unk8 = m->cell_z * 12500 + ((minz + maxz) >> 1);
+                centre[1].unk0 = player->cell_x * 12500 + ((minx + maxx) >> 1);
+                centre[1].unk8 = player->cell_z * 12500 + ((minz + maxz) >> 1);
             }
-            return ret;
+            return code;
         }
     }
     return 0;
 }
 
-s16 block_point_on_model(void *arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
-    Unk_8017AC88 sp18[4];
+s16 block_point_on_model(void *obj, s32 x, s32 y, s32 z, u16 mode) {
+    Unk_8017AC88 poly[4];
     s32 flag;
-    Unk_8017BBB0 *q;
+    Unk_8017BBB0 *model;
     struct {
         u16 unk0;
         u8 unk2;
@@ -1046,113 +1046,113 @@ s16 block_point_on_model(void *arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
         u16 unkE;
         u16 unk10;
         u8 pad12[0x2];
-    } *e;
-    Player *m;
-    SVector *v;
-    SVector *b;
-    s32 n;
+    } *prim;
+    Player *player;
+    SVector *verts;
+    SVector *normals;
+    s32 left;
     s32 cnt;
     s32 i;
     s32 min;
     s32 max;
 
-    q = arg0;
-    e = (void *)q->unk8->unk10;
-    n = q->unk8->unk14;
-    m = player_status_player[0];
-    v = (SVector *)q->unk8->unk0;
-    b = (SVector *)q->unk8->unk8;
-    while (n != 0) {
-        cnt = e->unk0;
-        if ((e->unk3 & 0xFD) == 0x20) {
-            for (i = 0; i < cnt; e = (void *)((TmdTri *)e + 1), i++) {
-                RotTrans(&v[e->unkA], &sp18[0].unk0, &flag);
+    model = obj;
+    prim = (void *)model->unk8->unk10;
+    left = model->unk8->unk14;
+    player = player_status_player[0];
+    verts = (SVector *)model->unk8->unk0;
+    normals = (SVector *)model->unk8->unk8;
+    while (left != 0) {
+        cnt = prim->unk0;
+        if ((prim->unk3 & 0xFD) == 0x20) {
+            for (i = 0; i < cnt; prim = (void *)((TmdTri *)prim + 1), i++) {
+                RotTrans(&verts[prim->unkA], &poly[0].unk0, &flag);
                 if (flag < 0) {
                     return 0;
                 }
-                RotTrans(&v[e->unkC], &sp18[1].unk0, &flag);
+                RotTrans(&verts[prim->unkC], &poly[1].unk0, &flag);
                 if (flag < 0) {
                     return 0;
                 }
-                RotTrans(&v[e->unkE], &sp18[2].unk0, &flag);
+                RotTrans(&verts[prim->unkE], &poly[2].unk0, &flag);
                 if (flag < 0) {
                     return 0;
                 }
-                if (block_poly_height(sp18, &b[e->unk8], 3, arg1, arg3) != 99999999) {
-                    if (arg4 != 1) {
+                if (block_poly_height(poly, &normals[prim->unk8], 3, x, z) != 99999999) {
+                    if (mode != 1) {
                         return 1;
                     }
-                    if (sp18[0].unk4 > sp18[1].unk4) {
-                        max = sp18[0].unk4;
-                        min = sp18[1].unk4;
+                    if (poly[0].unk4 > poly[1].unk4) {
+                        max = poly[0].unk4;
+                        min = poly[1].unk4;
                     } else {
-                        min = sp18[0].unk4;
-                        max = sp18[1].unk4;
+                        min = poly[0].unk4;
+                        max = poly[1].unk4;
                     }
-                    if (max < sp18[2].unk4) {
-                        max = sp18[2].unk4;
-                    } else if (sp18[2].unk4 < min) {
-                        min = sp18[2].unk4;
+                    if (max < poly[2].unk4) {
+                        max = poly[2].unk4;
+                    } else if (poly[2].unk4 < min) {
+                        min = poly[2].unk4;
                     }
                     if (min == max) {
-                        if (arg2 >= max + m->unk78 && arg2 <= max - m->unk78) {
+                        if (y >= max + player->unk78 && y <= max - player->unk78) {
                             return 1;
                         }
-                    } else if (arg2 >= min && arg2 <= max) {
+                    } else if (y >= min && y <= max) {
                         return 1;
                     }
                 }
             }
-            n -= cnt;
-        } else if ((e->unk3 & 0xFD) == 0x28) {
-            for (i = 0; i < cnt; e++, i++) {
-                RotTrans(&v[e->unkA], &sp18[0].unk0, &flag);
+            left -= cnt;
+        } else if ((prim->unk3 & 0xFD) == 0x28) {
+            for (i = 0; i < cnt; prim++, i++) {
+                RotTrans(&verts[prim->unkA], &poly[0].unk0, &flag);
                 if (flag < 0) {
                     return 0;
                 }
-                RotTrans(&v[e->unkC], &sp18[1].unk0, &flag);
+                RotTrans(&verts[prim->unkC], &poly[1].unk0, &flag);
                 if (flag < 0) {
                     return 0;
                 }
-                RotTrans(&v[e->unkE], &sp18[3].unk0, &flag);
+                RotTrans(&verts[prim->unkE], &poly[3].unk0, &flag);
                 if (flag < 0) {
                     return 0;
                 }
-                RotTrans(&v[e->unk10], &sp18[2].unk0, &flag);
+                RotTrans(&verts[prim->unk10], &poly[2].unk0, &flag);
                 if (flag < 0) {
                     return 0;
                 }
-                if (block_poly_height(sp18, &b[e->unk8], 4, arg1, arg3) != 99999999) {
-                    if (arg4 != 1) {
+                if (block_poly_height(poly, &normals[prim->unk8], 4, x, z) != 99999999) {
+                    if (mode != 1) {
                         return 1;
                     }
-                    if (sp18[0].unk4 > sp18[1].unk4) {
-                        max = sp18[0].unk4;
-                        min = sp18[1].unk4;
+                    if (poly[0].unk4 > poly[1].unk4) {
+                        max = poly[0].unk4;
+                        min = poly[1].unk4;
                     } else {
-                        min = sp18[0].unk4;
-                        max = sp18[1].unk4;
+                        min = poly[0].unk4;
+                        max = poly[1].unk4;
                     }
-                    if (max < sp18[2].unk4) {
-                        max = sp18[2].unk4;
-                    } else if (sp18[2].unk4 < min) {
-                        min = sp18[2].unk4;
+                    if (max < poly[2].unk4) {
+                        max = poly[2].unk4;
+                    } else if (poly[2].unk4 < min) {
+                        min = poly[2].unk4;
                     }
-                    if (max < sp18[3].unk4) {
-                        max = sp18[3].unk4;
-                    } else if (sp18[3].unk4 < min) {
-                        min = sp18[3].unk4;
+                    if (max < poly[3].unk4) {
+                        max = poly[3].unk4;
+                    } else if (poly[3].unk4 < min) {
+                        min = poly[3].unk4;
                     }
                     if (min == max) {
-                        if (arg2 >= max + m->unk78 && arg2 <= max - m->unk78) {
+                        if (y >= max + player->unk78 && y <= max - player->unk78) {
                             return 1;
                         }
-                    } else if (arg2 >= min && arg2 <= max) {
+                    } else if (y >= min && y <= max) {
                         return 1;
                     }
                 }
             }
-            n -= cnt;
+            left -= cnt;
         } else {
             return 0;
         }
@@ -1160,257 +1160,257 @@ s16 block_point_on_model(void *arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
     return 0;
 }
 
-s32 func_8017BBB0(s32 arg0, s32 arg1, s32 arg2) {
-    Vec3 sp20;
-    TmdTri *e;
-    s32 n;
-    s32 a;
-    s32 b;
+s32 func_8017BBB0(s32 x, s32 z, s32 height_out) {
+    Vec3 offset;
+    TmdTri *prim;
+    s32 left;
+    s32 verts;
+    s32 normals;
     s32 cnt;
-    s32 r;
-    s32 t;
-    Unk_8017BBB0 *q;
+    s32 code;
+    s32 hit;
+    Unk_8017BBB0 *model;
 
-    q = D_801E032C[0]->unkBC;
-    sp20.x = q->unk4->unk18;
-    sp20.y = q->unk4->unk1C;
-    sp20.z = q->unk4->unk20;
-    e = q->unk8->unk10;
-    n = q->unk8->unk14;
-    a = q->unk8->unk0;
-    b = q->unk8->unk8;
-    while (n != 0) {
-        cnt = e->unk0;
-        switch (e->mode & 0xFD) {
+    model = D_801E032C[0]->unkBC;
+    offset.x = model->unk4->unk18;
+    offset.y = model->unk4->unk1C;
+    offset.z = model->unk4->unk20;
+    prim = model->unk8->unk10;
+    left = model->unk8->unk14;
+    verts = model->unk8->unk0;
+    normals = model->unk8->unk8;
+    while (left != 0) {
+        cnt = prim->unk0;
+        switch (prim->mode & 0xFD) {
         case 0x20:
-            t = block_hit_tris(e, a, b, &sp20, cnt, arg0, arg1, arg2);
-            if (t != 0) {
-                r = t;
+            hit = block_hit_tris(prim, verts, normals, &offset, cnt, x, z, height_out);
+            if (hit != 0) {
+                code = hit;
                 goto end;
             }
-            n -= cnt;
-            e = (TmdTri *)((u8 *)e + cnt * 0x10);
+            left -= cnt;
+            prim = (TmdTri *)((u8 *)prim + cnt * 0x10);
             break;
         case 0x28:
-            t = block_hit_quads(e, a, b, &sp20, cnt, arg0, arg1, arg2);
-            if (t != 0) {
-                r = t;
+            hit = block_hit_quads(prim, verts, normals, &offset, cnt, x, z, height_out);
+            if (hit != 0) {
+                code = hit;
                 goto end;
             }
-            n -= cnt;
-            e = (TmdTri *)((u8 *)e + cnt * 0x14);
+            left -= cnt;
+            prim = (TmdTri *)((u8 *)prim + cnt * 0x14);
             break;
         default:
-            r = 0;
+            code = 0;
             goto end;
         }
     }
-    r = 0;
+    code = 0;
 end:
-    if (r != 0) {
-        return r;
+    if (code != 0) {
+        return code;
     }
     return 0;
 }
 
-s32 block_find_surface(s32 arg0, s32 arg1, s32 *arg2, s16 arg3) {
-    BlockList *p = block_list;
-    Vec3 sp20;
-    TmdTri *e;
-    s32 n;
-    s32 a;
-    s32 b;
+s32 block_find_surface(s32 x, s32 z, s32 *height_out, s16 all) {
+    BlockList *list = block_list;
+    Vec3 offset;
+    TmdTri *prim;
+    s32 left;
+    s32 verts;
+    s32 normals;
     s32 cnt;
-    s32 r;
-    s32 t;
-    s32 f;
-    Unk_8017BBB0 *q;
+    s32 code;
+    s32 hit;
+    s32 all_blocks;
+    Unk_8017BBB0 *model;
 
-    if (p->count == 0) {
+    if (list->count == 0) {
         return 0;
     }
-    *arg2 = 0;
-    f = arg3;
-    p->cursor = p->head;
+    *height_out = 0;
+    all_blocks = all;
+    list->cursor = list->head;
     while (1) {
-        Block *o = p->cursor->data;
-        if (o != NULL && o->active != 0 && (o->model_flags & 1) && (f != 0 || o->player_inside != 0)) {
-            q = o->floor_model;
-            sp20.x = q->unk4->unk18;
-            sp20.y = q->unk4->unk1C;
-            sp20.z = q->unk4->unk20;
-            e = q->unk8->unk10;
-            n = q->unk8->unk14;
-            a = q->unk8->unk0;
-            b = q->unk8->unk8;
-            while (n != 0) {
-                cnt = e->unk0;
-                switch (e->mode & 0xFD) {
+        Block *block = list->cursor->data;
+        if (block != NULL && block->active != 0 && (block->model_flags & 1) && (all_blocks != 0 || block->player_inside != 0)) {
+            model = block->floor_model;
+            offset.x = model->unk4->unk18;
+            offset.y = model->unk4->unk1C;
+            offset.z = model->unk4->unk20;
+            prim = model->unk8->unk10;
+            left = model->unk8->unk14;
+            verts = model->unk8->unk0;
+            normals = model->unk8->unk8;
+            while (left != 0) {
+                cnt = prim->unk0;
+                switch (prim->mode & 0xFD) {
                 case 0x20:
-                    t = block_hit_tris(e, a, b, &sp20, cnt, arg0, arg1, (s32)arg2);
-                    if (t != 0) {
-                        r = t;
+                    hit = block_hit_tris(prim, verts, normals, &offset, cnt, x, z, (s32)height_out);
+                    if (hit != 0) {
+                        code = hit;
                         goto found;
                     }
-                    n -= cnt;
-                    e = (TmdTri *)((u8 *)e + cnt * 0x10);
+                    left -= cnt;
+                    prim = (TmdTri *)((u8 *)prim + cnt * 0x10);
                     break;
                 case 0x28:
-                    t = block_hit_quads(e, a, b, &sp20, cnt, arg0, arg1, (s32)arg2);
-                    if (t != 0) {
-                        r = t;
+                    hit = block_hit_quads(prim, verts, normals, &offset, cnt, x, z, (s32)height_out);
+                    if (hit != 0) {
+                        code = hit;
                         goto found;
                     }
-                    n -= cnt;
-                    e = (TmdTri *)((u8 *)e + cnt * 0x14);
+                    left -= cnt;
+                    prim = (TmdTri *)((u8 *)prim + cnt * 0x14);
                     break;
                 default:
-                    r = 0;
+                    code = 0;
                     goto found;
                 }
             }
-            r = 0;
+            code = 0;
         found:
-            if (r != 0) {
-                return r;
+            if (code != 0) {
+                return code;
             }
         }
-        if (kaj_ll_at_tail(p) != 0) {
+        if (kaj_ll_at_tail(list) != 0) {
             return 0;
         }
-        p->cursor = p->cursor->next;
+        list->cursor = list->cursor->next;
     }
 }
 
-s32 block_find_surface_nearest(s32 arg0, s32 arg1, s32 arg2, s32 *arg3) {
-    BlockList *p = block_list;
+s32 block_find_surface_nearest(s32 x, s32 y, s32 z, s32 *height_out) {
+    BlockList *list = block_list;
     Vec3 hits[12];
-    Vec3 sp20;
-    s32 h;
-    s32 *hp;
-    TmdTri *e;
-    s32 n;
-    s32 a;
-    s32 b;
+    Vec3 offset;
+    s32 height;
+    s32 *height_p;
+    TmdTri *prim;
+    s32 left;
+    s32 verts;
+    s32 normals;
     s32 cnt;
-    s32 r;
-    s32 t;
-    s32 k;
+    s32 code;
+    s32 hit;
+    s32 n_hits;
     s32 i;
-    s32 best;
-    Unk_8017BBB0 *q;
+    s32 best_dy;
+    Unk_8017BBB0 *model;
 
-    if (p->count == 0) {
+    if (list->count == 0) {
         return 0;
     }
-    *arg3 = 0;
-    k = 0;
-    p->cursor = p->head;
+    *height_out = 0;
+    n_hits = 0;
+    list->cursor = list->head;
     while (1) {
-        Block *o = p->cursor->data;
-        if (o != NULL && o->active != 0 && o->player_inside != 0 && (o->model_flags & 1)) {
-            q = o->floor_model;
-            sp20.x = q->unk4->unk18;
-            sp20.y = q->unk4->unk1C;
-            sp20.z = q->unk4->unk20;
-            e = q->unk8->unk10;
-            n = q->unk8->unk14;
-            a = q->unk8->unk0;
-            b = q->unk8->unk8;
-            hp = &h;
-            while (n != 0) {
-                cnt = e->unk0;
-                switch (e->mode & 0xFD) {
+        Block *block = list->cursor->data;
+        if (block != NULL && block->active != 0 && block->player_inside != 0 && (block->model_flags & 1)) {
+            model = block->floor_model;
+            offset.x = model->unk4->unk18;
+            offset.y = model->unk4->unk1C;
+            offset.z = model->unk4->unk20;
+            prim = model->unk8->unk10;
+            left = model->unk8->unk14;
+            verts = model->unk8->unk0;
+            normals = model->unk8->unk8;
+            height_p = &height;
+            while (left != 0) {
+                cnt = prim->unk0;
+                switch (prim->mode & 0xFD) {
                 case 0x20:
-                    t = block_hit_tris(e, a, b, &sp20, cnt, arg0, arg2, (s32)hp);
-                    if (t != 0) {
-                        r = t;
+                    hit = block_hit_tris(prim, verts, normals, &offset, cnt, x, z, (s32)height_p);
+                    if (hit != 0) {
+                        code = hit;
                         goto found;
                     }
-                    n -= cnt;
-                    e = (TmdTri *)((u8 *)e + cnt * 0x10);
+                    left -= cnt;
+                    prim = (TmdTri *)((u8 *)prim + cnt * 0x10);
                     break;
                 case 0x28:
-                    t = block_hit_quads(e, a, b, &sp20, cnt, arg0, arg2, (s32)hp);
-                    if (t != 0) {
-                        r = t;
+                    hit = block_hit_quads(prim, verts, normals, &offset, cnt, x, z, (s32)height_p);
+                    if (hit != 0) {
+                        code = hit;
                         goto found;
                     }
-                    n -= cnt;
-                    e = (TmdTri *)((u8 *)e + cnt * 0x14);
+                    left -= cnt;
+                    prim = (TmdTri *)((u8 *)prim + cnt * 0x14);
                     break;
                 default:
-                    r = 0;
+                    code = 0;
                     goto found;
                 }
             }
-            r = 0;
+            code = 0;
         found:
-            if (r != 0) {
-                hits[k].x = r;
-                hits[k].y = h;
-                hits[k].z = abs(arg1 - h);
-                k++;
+            if (code != 0) {
+                hits[n_hits].x = code;
+                hits[n_hits].y = height;
+                hits[n_hits].z = abs(y - height);
+                n_hits++;
             }
         }
-        if (kaj_ll_at_tail(p) != 0) {
+        if (kaj_ll_at_tail(list) != 0) {
             break;
         }
-        p->cursor = p->cursor->next;
+        list->cursor = list->cursor->next;
     }
-    if (k == 0) {
+    if (n_hits == 0) {
         return 0;
     }
-    if (k == 1) {
-        *arg3 = hits[0].y;
+    if (n_hits == 1) {
+        *height_out = hits[0].y;
         return hits[0].x;
     }
-    if (k != 0) {
-        best = 1600;
-        for (i = 0; i < k; i++) {
-            if (hits[i].z < best) {
-                r = hits[i].x;
-                *arg3 = hits[i].y;
-                best = hits[i].z;
+    if (n_hits != 0) {
+        best_dy = 1600;
+        for (i = 0; i < n_hits; i++) {
+            if (hits[i].z < best_dy) {
+                code = hits[i].x;
+                *height_out = hits[i].y;
+                best_dy = hits[i].z;
             }
         }
-        return r;
+        return code;
     }
     return 0;
 }
 
-static inline s32 func_8017C234_inl(Unk_8017BBB0 *q, Vec3 *sp, s32 x, s32 z, s32 w) {
-    TmdTri *e;
-    s32 n;
-    s32 a;
-    s32 b;
+static inline s32 func_8017C234_inl(Unk_8017BBB0 *model, Vec3 *offset, s32 x, s32 z, s32 height_out) {
+    TmdTri *prim;
+    s32 left;
+    s32 verts;
+    s32 normals;
     s32 cnt;
-    s32 t;
-    sp->x = q->unk4->unk18;
-    sp->y = q->unk4->unk1C;
-    sp->z = q->unk4->unk20;
-    e = q->unk8->unk10;
-    n = q->unk8->unk14;
-    a = q->unk8->unk0;
-    b = q->unk8->unk8;
-    while (n != 0) {
-        cnt = e->unk0;
-        switch (e->mode & 0xFD) {
+    s32 hit;
+    offset->x = model->unk4->unk18;
+    offset->y = model->unk4->unk1C;
+    offset->z = model->unk4->unk20;
+    prim = model->unk8->unk10;
+    left = model->unk8->unk14;
+    verts = model->unk8->unk0;
+    normals = model->unk8->unk8;
+    while (left != 0) {
+        cnt = prim->unk0;
+        switch (prim->mode & 0xFD) {
         case 0x20:
-            t = block_hit_tris(e, a, b, sp, cnt, x, z, w);
-            if (t != 0) {
-                return t;
+            hit = block_hit_tris(prim, verts, normals, offset, cnt, x, z, height_out);
+            if (hit != 0) {
+                return hit;
             }
-            n -= cnt;
-            e = (TmdTri *)((u8 *)e + cnt * 0x10);
+            left -= cnt;
+            prim = (TmdTri *)((u8 *)prim + cnt * 0x10);
             break;
         case 0x28:
-            t = block_hit_quads(e, a, b, sp, cnt, x, z, w);
-            if (t != 0) {
-                return t;
+            hit = block_hit_quads(prim, verts, normals, offset, cnt, x, z, height_out);
+            if (hit != 0) {
+                return hit;
             }
-            n -= cnt;
-            e = (TmdTri *)((u8 *)e + cnt * 0x14);
+            left -= cnt;
+            prim = (TmdTri *)((u8 *)prim + cnt * 0x14);
             break;
         default:
             return 0;
@@ -1419,18 +1419,18 @@ static inline s32 func_8017C234_inl(Unk_8017BBB0 *q, Vec3 *sp, s32 x, s32 z, s32
     return 0;
 }
 
-s32 block_fit_ground_tilt(s32 *arg0, s16 arg1) {
-    Unk_8017AC88 sp20[4];
-    Unk_8017AC88 sp60;
-    SVector sp70;
-    s32 res[5];
-    Vec3 sp90;
+s32 block_fit_ground_tilt(s32 *height_out, s16 all) {
+    Unk_8017AC88 corners[4];
+    Unk_8017AC88 centre;
+    SVector origin;
+    s32 codes[5];
+    Vec3 offset;
     s32 flag;
-    BlockList *p = block_list;
+    BlockList *list = block_list;
     Unk_801E032C *m = D_801E032C[0];
-    CarState *g = &vehicle_car_state;
-    Unk_8017BBB0 *q;
-    Block *o;
+    CarState *car = &vehicle_car_state;
+    Unk_8017BBB0 *model;
+    Block *block;
     s32 i;
     s16 c1;
     s16 c2;
@@ -1440,45 +1440,45 @@ s32 block_fit_ground_tilt(s32 *arg0, s16 arg1) {
     s32 dz2;
     s32 sn;
     s32 cs;
-    s32 ax;
-    s32 az;
+    s32 tilt_x;
+    s32 tilt_z;
 
-    if (p->count == 0) {
+    if (list->count == 0) {
         return 0;
     }
     GsSetLsMatrix(&m->unk1C);
     for (i = 0; i < 4; i++) {
-        res[i] = 0;
-        RotTrans(&g->corners[i], &sp20[i].unk0, &flag);
+        codes[i] = 0;
+        RotTrans(&car->corners[i], &corners[i].unk0, &flag);
         if (flag >= 0) {
-            p->cursor = p->head;
+            list->cursor = list->head;
             while (1) {
-                o = p->cursor->data;
-                if (o != NULL && o->active != 0 && (q = o->floor_model) != NULL && (arg1 != 0 || o->player_inside != 0)) {
-                    res[i] = func_8017C234_inl(q, &sp90, sp20[i].unk0, sp20[i].unk8, (s32)&sp20[i].unk4);
-                    if (res[i] != 0) {
+                block = list->cursor->data;
+                if (block != NULL && block->active != 0 && (model = block->floor_model) != NULL && (all != 0 || block->player_inside != 0)) {
+                    codes[i] = func_8017C234_inl(model, &offset, corners[i].unk0, corners[i].unk8, (s32)&corners[i].unk4);
+                    if (codes[i] != 0) {
                         break;
                     }
                 }
-                if (kaj_ll_at_tail(p) != 0) {
+                if (kaj_ll_at_tail(list) != 0) {
                     break;
                 }
-                p->cursor = p->cursor->next;
+                list->cursor = list->cursor->next;
             }
         }
     }
-    if (res[0] == 0 || res[1] == 0 || res[2] == 0 || res[3] == 0) {
+    if (codes[0] == 0 || codes[1] == 0 || codes[2] == 0 || codes[3] == 0) {
         return 0;
     }
     c2 = c1 = 0;
     for (i = 0; i < 4; i++) {
-        switch (res[i]) {
+        switch (codes[i]) {
         case 0xFFFF:
             c1++;
             break;
         case 0xFF00:
-            if (g->unk2 == 0) {
-                g->unk2 = 1;
+            if (car->unk2 == 0) {
+                car->unk2 = 1;
             }
             break;
         default:
@@ -1486,336 +1486,336 @@ s32 block_fit_ground_tilt(s32 *arg0, s16 arg1) {
         }
         c2++;
     }
-    if (c1 == 4 && g->unk2 != 0) {
-        g->unk2 = 0;
-        g->throttle /= 4;
-        g->brake /= 4;
+    if (c1 == 4 && car->unk2 != 0) {
+        car->unk2 = 0;
+        car->throttle /= 4;
+        car->brake /= 4;
     }
     if (c2 == 0) {
         return 0;
     }
-    p->cursor = p->head;
-    sp70.vx = 0;
-    sp70.vy = 0;
-    sp70.vz = 0;
-    RotTrans(&sp70, &sp60.unk0, &flag);
+    list->cursor = list->head;
+    origin.vx = 0;
+    origin.vy = 0;
+    origin.vz = 0;
+    RotTrans(&origin, &centre.unk0, &flag);
     if (flag < 0) {
         return 0;
     }
     while (1) {
-        o = p->cursor->data;
-        if (o != NULL && o->active != 0 && (q = o->floor_model) != NULL && (arg1 != 0 || o->player_inside != 0)) {
-            res[4] = func_8017C234_inl(q, &sp90, sp60.unk0, sp60.unk8, (s32)arg0);
-            if (res[4] != 0) {
+        block = list->cursor->data;
+        if (block != NULL && block->active != 0 && (model = block->floor_model) != NULL && (all != 0 || block->player_inside != 0)) {
+            codes[4] = func_8017C234_inl(model, &offset, centre.unk0, centre.unk8, (s32)height_out);
+            if (codes[4] != 0) {
                 m->unk14 = 0;
                 m->unk10 = 0;
-                dx1 = sp20[1].unk4 - sp20[0].unk4;
-                dx2 = sp20[3].unk4 - sp20[2].unk4;
-                dz1 = sp20[2].unk4 - sp20[0].unk4;
-                dz2 = sp20[3].unk4 - sp20[1].unk4;
+                dx1 = corners[1].unk4 - corners[0].unk4;
+                dx2 = corners[3].unk4 - corners[2].unk4;
+                dz1 = corners[2].unk4 - corners[0].unk4;
+                dz2 = corners[3].unk4 - corners[1].unk4;
                 if (dx1 != 0 || dx2 != 0 || dz1 != 0 || dz2 != 0) {
                     sn = rsin((m->unk12 << 12) / 360);
                     cs = rcos((m->unk12 << 12) / 360);
-                    ax = 0;
-                    az = 0;
+                    tilt_x = 0;
+                    tilt_z = 0;
                     if (dx1 != 0) {
-                        ax = ratan2(dx1, 300);
+                        tilt_x = ratan2(dx1, 300);
                     }
                     if (abs(dz1) >= abs(dz2)) {
                         if (dz1 != 0) {
-                            az = ratan2(dz1, 508);
+                            tilt_z = ratan2(dz1, 508);
                         }
                     } else if (dz2 != 0) {
-                        az = ratan2(dz2, 508);
+                        tilt_z = ratan2(dz2, 508);
                     }
                     {
-                        s32 t0 = ax * cs;
-                        s32 t1 = ax * sn;
-                        s32 t2 = az * cs;
-                        s32 t3 = az * sn;
+                        s32 t0 = tilt_x * cs;
+                        s32 t1 = tilt_x * sn;
+                        s32 t2 = tilt_z * cs;
+                        s32 t3 = tilt_z * sn;
                         m->unk10 = ((t1 + t2) >> 12) * 45 >> 9;
                         m->unk14 = ((t0 - t3) >> 12) * 45 >> 9;
                     }
                 }
-                *arg0 += 370;
-                return res[4];
+                *height_out += 370;
+                return codes[4];
             }
         }
-        if (kaj_ll_at_tail(p) != 0) {
+        if (kaj_ll_at_tail(list) != 0) {
             break;
         }
-        p->cursor = p->cursor->next;
+        list->cursor = list->cursor->next;
     }
     return 0;
 }
 
-void block_replace_arena(Unk_8017CAC8 *arg0, Unk_8017CAC8 *arg1) {
-    BlockList *p = block_list;
-    Arena *q;
+void block_replace_arena(Unk_8017CAC8 *old_cells, Unk_8017CAC8 *new_cells) {
+    BlockList *list = block_list;
+    Arena *arena;
 
-    if (p->count != 0) {
-        p->cursor = p->head;
+    if (list->count != 0) {
+        list->cursor = list->head;
         while (1) {
-            Block *e = p->cursor->data;
-            if (e != NULL && (e->model_flags & 0x10)) {
-                q = e->arena;
-                if (q->cells == arg0) {
+            Block *block = list->cursor->data;
+            if (block != NULL && (block->model_flags & 0x10)) {
+                arena = block->arena;
+                if (arena->cells == old_cells) {
                     break;
                 }
             }
-            if (kaj_ll_at_tail(p) != 0) {
-                q = NULL;
+            if (kaj_ll_at_tail(list) != 0) {
+                arena = NULL;
                 break;
             }
-            p->cursor = p->cursor->next;
+            list->cursor = list->cursor->next;
         }
     } else {
-        q = NULL;
+        arena = NULL;
     }
-    if (q != NULL) {
-        q->cells = arg1;
-        q->data = arg1 + 1;
+    if (arena != NULL) {
+        arena->cells = new_cells;
+        arena->data = new_cells + 1;
     }
 }
 
-void block_arena_init(Arena **arg0, Unk_8017CAC8 *arg1) {
-    if (*arg0 == NULL) {
-        *arg0 = kaj_malloc(0x10);
-        if (*arg0 == NULL) {
+void block_arena_init(Arena **arena_p, Unk_8017CAC8 *src) {
+    if (*arena_p == NULL) {
+        *arena_p = kaj_malloc(0x10);
+        if (*arena_p == NULL) {
             kaj_abend(3, "Error Allocating Arena Buffer", D_801DFC84, 0x49);
         }
     } else {
-        memset(*arg0, 0, 0x10);
+        memset(*arena_p, 0, 0x10);
     }
-    (*arg0)->unk0 = arg1->unk0;
-    (*arg0)->unk2 = arg1->unk2;
-    (*arg0)->unk4 = arg1->unk4;
-    (*arg0)->unk6 = arg1->unk6;
-    (*arg0)->data = arg1 + 1;
-    (*arg0)->cells = arg1;
+    (*arena_p)->unk0 = src->unk0;
+    (*arena_p)->unk2 = src->unk2;
+    (*arena_p)->unk4 = src->unk4;
+    (*arena_p)->unk6 = src->unk6;
+    (*arena_p)->data = src + 1;
+    (*arena_p)->cells = src;
 }
 
-void block_create(Block **arg0, s32 arg1) {
-    *arg0 = kaj_malloc(0x90);
-    if (*arg0 == NULL) {
+void block_create(Block **block_p, s32 size) {
+    *block_p = kaj_malloc(0x90);
+    if (*block_p == NULL) {
         kaj_abend(3, D_80170270, D_801DFC84, 0x5D);
     }
-    (*arg0)->active = 0;
-    (*arg0)->owns_data = 0;
-    (*arg0)->visible = 0;
-    (*arg0)->player_inside = 0;
-    (*arg0)->in_arena = 0;
-    (*arg0)->far = 1;
-    (*arg0)->model_flags = 0;
-    (*arg0)->model3 = NULL;
-    (*arg0)->model2 = NULL;
-    (*arg0)->model1 = NULL;
-    (*arg0)->floor_model = NULL;
-    (*arg0)->arena = NULL;
-    (*arg0)->data = NULL;
-    if (arg1 != 0) {
-        (*arg0)->data = kaj_malloc(arg1);
-        if ((*arg0)->data == NULL) {
+    (*block_p)->active = 0;
+    (*block_p)->owns_data = 0;
+    (*block_p)->visible = 0;
+    (*block_p)->player_inside = 0;
+    (*block_p)->in_arena = 0;
+    (*block_p)->far = 1;
+    (*block_p)->model_flags = 0;
+    (*block_p)->model3 = NULL;
+    (*block_p)->model2 = NULL;
+    (*block_p)->model1 = NULL;
+    (*block_p)->floor_model = NULL;
+    (*block_p)->arena = NULL;
+    (*block_p)->data = NULL;
+    if (size != 0) {
+        (*block_p)->data = kaj_malloc(size);
+        if ((*block_p)->data == NULL) {
             kaj_abend(3, D_80170290, D_801DFC84, 0x70);
         }
-        (*arg0)->owns_data = 1;
+        (*block_p)->owns_data = 1;
     }
 }
 
-void block_free(Block *arg0) {
-    if (arg0 != NULL) {
-        if (arg0->model3 != NULL) {
-            free3(arg0->model3);
+void block_free(Block *block) {
+    if (block != NULL) {
+        if (block->model3 != NULL) {
+            free3(block->model3);
         }
-        if (arg0->model2 != NULL) {
-            free3(arg0->model2);
+        if (block->model2 != NULL) {
+            free3(block->model2);
         }
-        if (arg0->model1 != NULL) {
-            free3(arg0->model1);
+        if (block->model1 != NULL) {
+            free3(block->model1);
         }
-        if (arg0->floor_model != NULL) {
-            free3(arg0->floor_model);
+        if (block->floor_model != NULL) {
+            free3(block->floor_model);
         }
-        if (arg0->arena != NULL) {
-            free3(arg0->arena);
+        if (block->arena != NULL) {
+            free3(block->arena);
         }
-        if (arg0->owns_data != 0) {
-            free3(arg0->data);
+        if (block->owns_data != 0) {
+            free3(block->data);
         }
-        free3(arg0);
+        free3(block);
     }
 }
 
-Block *block_find_at(s32 arg0, s32 arg1, s32 arg2) {
-    BlockList *p = block_list;
-    SceneRequest_u80179848 *g = &scene_request;
+Block *block_find_at(s32 x, s32 y, s32 z) {
+    BlockList *list = block_list;
+    SceneRequest_u80179848 *req = &scene_request;
 
-    if (p->count == 0) {
+    if (list->count == 0) {
         return NULL;
     }
-    p->cursor = p->head;
+    list->cursor = list->head;
     while (1) {
-        Block *e = p->cursor->data;
-        if (e != NULL && e->active != 0 && arg0 >= e->pos_x && arg0 < e->pos_x + e->size_x && arg2 >= e->pos_z && arg2 < e->pos_z + e->size_z) {
-            if (g->unk0[0] != 1) {
-                return e;
+        Block *block = list->cursor->data;
+        if (block != NULL && block->active != 0 && x >= block->pos_x && x < block->pos_x + block->size_x && z >= block->pos_z && z < block->pos_z + block->size_z) {
+            if (req->unk0[0] != 1) {
+                return block;
             }
-            if (e->size_y == 0) {
-                if (arg1 == e->pos_y) {
-                    return e;
+            if (block->size_y == 0) {
+                if (y == block->pos_y) {
+                    return block;
                 }
-            } else if (e->pos_y >= arg1 && arg1 >= e->pos_y - e->size_y) {
-                return e;
+            } else if (block->pos_y >= y && y >= block->pos_y - block->size_y) {
+                return block;
             }
         }
-        if (kaj_ll_at_tail(p) != 0) {
+        if (kaj_ll_at_tail(list) != 0) {
             return NULL;
         }
-        p->cursor = p->cursor->next;
+        list->cursor = list->cursor->next;
     }
 }
 
-void block_set_origin(s32 arg0, s32 arg1, s32 arg2) {
-    BlockList *p = block_list;
+void block_set_origin(s32 x, s32 y, s32 z) {
+    BlockList *list = block_list;
 
-    if (p->count != 0) {
-        p->cursor = p->head;
+    if (list->count != 0) {
+        list->cursor = list->head;
         while (1) {
-            Block *e = p->cursor->data;
-            if (e != NULL && e->active != 0) {
-                e->coord_flg = 0;
-                e->coord_tx = e->pos_x - arg0;
-                e->coord_ty = e->pos_y - arg1;
-                e->coord_tz = e->pos_z - arg2;
+            Block *block = list->cursor->data;
+            if (block != NULL && block->active != 0) {
+                block->coord_flg = 0;
+                block->coord_tx = block->pos_x - x;
+                block->coord_ty = block->pos_y - y;
+                block->coord_tz = block->pos_z - z;
             }
-            if (kaj_ll_at_tail(p) != 0) {
+            if (kaj_ll_at_tail(list) != 0) {
                 break;
             }
-            p->cursor = p->cursor->next;
+            list->cursor = list->cursor->next;
         }
     }
 }
 
-s32 func_8017CFE4(s32 arg0, s32 arg1, s32 arg2) {
-    BlockList *p = block_list;
-    s32 r;
+s32 func_8017CFE4(s32 x, s32 height_out, s32 z) {
+    BlockList *list = block_list;
+    s32 code;
     s32 ret;
 
-    if (p->cursor == NULL) {
+    if (list->cursor == NULL) {
         return 0;
     }
-    p->cursor = p->head;
+    list->cursor = list->head;
     while (1) {
-        Block *e = p->cursor->data;
-        if (e != NULL && e->active != 0 && (e->model_flags & 1)) {
-            r = block_model_surface(e->floor_model, arg0, arg2, arg1);
-            if (r != 0 && r != 0xC8 && (r & 0xFF0000) != 0xFF0000) {
+        Block *block = list->cursor->data;
+        if (block != NULL && block->active != 0 && (block->model_flags & 1)) {
+            code = block_model_surface(block->floor_model, x, z, height_out);
+            if (code != 0 && code != 0xC8 && (code & 0xFF0000) != 0xFF0000) {
                 ret = 1;
                 break;
             }
         }
-        if (kaj_ll_at_tail(p) != 0) {
+        if (kaj_ll_at_tail(list) != 0) {
             ret = 0;
             break;
         }
-        p->cursor = p->cursor->next;
+        list->cursor = list->cursor->next;
     }
     return ret;
 }
 
 void block_hide_all(void) {
-    BlockList *p = block_list;
+    BlockList *list = block_list;
 
-    if (p->count != 0) {
-        p->cursor = p->head;
+    if (list->count != 0) {
+        list->cursor = list->head;
         while (1) {
-            if (p->cursor->data != NULL && p->cursor->data->active != 0) {
-                p->cursor->data->visible = 0;
+            if (list->cursor->data != NULL && list->cursor->data->active != 0) {
+                list->cursor->data->visible = 0;
             }
-            if (kaj_ll_at_tail(p) != 0) {
+            if (kaj_ll_at_tail(list) != 0) {
                 break;
             }
-            p->cursor = p->cursor->next;
+            list->cursor = list->cursor->next;
         }
     }
 }
 
-void block_list_add(s32 arg0) {
+void block_list_add(s32 block) {
     if (block_list->count == 0) {
-        kaj_ll_insert_before(block_list, arg0);
+        kaj_ll_insert_before(block_list, block);
     } else {
         block_list->cursor = block_list->tail;
-        kaj_ll_insert_after(block_list, arg0);
+        kaj_ll_insert_after(block_list, block);
     }
 }
 
 void block_free_all(void) {
-    BlockList *p = block_list;
-    Block *e;
+    BlockList *list = block_list;
+    Block *block;
 
     while (1) {
-        if (p->count == 0) {
+        if (list->count == 0) {
             break;
         }
-        e = p->cursor->data;
-        if (e != NULL) {
-            if (e->model3 != NULL) {
-                free3(e->model3);
+        block = list->cursor->data;
+        if (block != NULL) {
+            if (block->model3 != NULL) {
+                free3(block->model3);
             }
-            if (e->model2 != NULL) {
-                free3(e->model2);
+            if (block->model2 != NULL) {
+                free3(block->model2);
             }
-            if (e->model1 != NULL) {
-                free3(e->model1);
+            if (block->model1 != NULL) {
+                free3(block->model1);
             }
-            if (e->floor_model != NULL) {
-                free3(e->floor_model);
+            if (block->floor_model != NULL) {
+                free3(block->floor_model);
             }
-            if (e->arena != NULL) {
-                free3(e->arena);
+            if (block->arena != NULL) {
+                free3(block->arena);
             }
-            if (e->owns_data != 0) {
-                free3(e->data);
+            if (block->owns_data != 0) {
+                free3(block->data);
             }
-            free3(e);
+            free3(block);
         }
-        kaj_ll_remove_to_prev(p);
+        kaj_ll_remove_to_prev(list);
     }
 }
 
 void block_free_owned(void) {
-    BlockList *p = block_list;
+    BlockList *list = block_list;
 
-    if (p->count != 0) {
-        p->cursor = p->head;
+    if (list->count != 0) {
+        list->cursor = list->head;
         while (1) {
-            Block *e = p->cursor->data;
-            if (e != NULL && e->owns_data != 0) {
-                if (e->model3 != NULL) {
-                    free3(e->model3);
+            Block *block = list->cursor->data;
+            if (block != NULL && block->owns_data != 0) {
+                if (block->model3 != NULL) {
+                    free3(block->model3);
                 }
-                if (e->model2 != NULL) {
-                    free3(e->model2);
+                if (block->model2 != NULL) {
+                    free3(block->model2);
                 }
-                if (e->model1 != NULL) {
-                    free3(e->model1);
+                if (block->model1 != NULL) {
+                    free3(block->model1);
                 }
-                if (e->floor_model != NULL) {
-                    free3(e->floor_model);
+                if (block->floor_model != NULL) {
+                    free3(block->floor_model);
                 }
-                if (e->arena != NULL) {
-                    free3(e->arena);
+                if (block->arena != NULL) {
+                    free3(block->arena);
                 }
-                if (e->owns_data != 0) {
-                    free3(e->data);
+                if (block->owns_data != 0) {
+                    free3(block->data);
                 }
-                free3(e);
-                kaj_ll_remove_to_prev(p);
+                free3(block);
+                kaj_ll_remove_to_prev(list);
             }
-            if (kaj_ll_at_tail(p) != 0) {
+            if (kaj_ll_at_tail(list) != 0) {
                 break;
             }
-            p->cursor = p->cursor->next;
+            list->cursor = list->cursor->next;
         }
     }
 }
@@ -1825,41 +1825,41 @@ void block_stream_stop(void) {
     kaj_cdmgr_free_all();
 }
 
-s32 block_model_surface(void *arg0, s32 arg1, s32 arg2, s32 arg3) {
-    Vec3 sp20;
-    TmdTri *e;
-    s32 n;
-    s32 a;
-    s32 b;
+s32 block_model_surface(void *obj, s32 x, s32 z, s32 height_out) {
+    Vec3 offset;
+    TmdTri *prim;
+    s32 left;
+    s32 verts;
+    s32 normals;
     s32 cnt;
-    s32 t;
-    Unk_8017BBB0 *q = arg0;
+    s32 hit;
+    Unk_8017BBB0 *model = obj;
 
-    sp20.x = q->unk4->unk18;
-    sp20.y = q->unk4->unk1C;
-    sp20.z = q->unk4->unk20;
-    e = q->unk8->unk10;
-    n = q->unk8->unk14;
-    a = q->unk8->unk0;
-    b = q->unk8->unk8;
-    while (n != 0) {
-        cnt = e->unk0;
-        switch (e->mode & 0xFD) {
+    offset.x = model->unk4->unk18;
+    offset.y = model->unk4->unk1C;
+    offset.z = model->unk4->unk20;
+    prim = model->unk8->unk10;
+    left = model->unk8->unk14;
+    verts = model->unk8->unk0;
+    normals = model->unk8->unk8;
+    while (left != 0) {
+        cnt = prim->unk0;
+        switch (prim->mode & 0xFD) {
         case 0x20:
-            t = block_hit_tris(e, a, b, &sp20, cnt, arg1, arg2, arg3);
-            if (t != 0) {
-                return t;
+            hit = block_hit_tris(prim, verts, normals, &offset, cnt, x, z, height_out);
+            if (hit != 0) {
+                return hit;
             }
-            n -= cnt;
-            e = (TmdTri *)((u8 *)e + cnt * 0x10);
+            left -= cnt;
+            prim = (TmdTri *)((u8 *)prim + cnt * 0x10);
             break;
         case 0x28:
-            t = block_hit_quads(e, a, b, &sp20, cnt, arg1, arg2, arg3);
-            if (t != 0) {
-                return t;
+            hit = block_hit_quads(prim, verts, normals, &offset, cnt, x, z, height_out);
+            if (hit != 0) {
+                return hit;
             }
-            n -= cnt;
-            e = (TmdTri *)((u8 *)e + cnt * 0x14);
+            left -= cnt;
+            prim = (TmdTri *)((u8 *)prim + cnt * 0x14);
             break;
         default:
             return 0;
@@ -1872,15 +1872,15 @@ s32 func_8017D564(void) {
     return D_801E71C8 == 0;
 }
 
-void block_enter_area(u32 arg0) {
-    s32 t = (arg0 >> 16) & 0xFF;
+void block_enter_area(u32 code) {
+    s32 kind = (code >> 16) & 0xFF;
 
-    D_801DFC8C = t;
-    if (t != 0x80) {
+    D_801DFC8C = kind;
+    if (kind != 0x80) {
         return;
     }
-    D_801DFC8D[0] = arg0 >> 8;
-    D_801DFC8E = arg0;
+    D_801DFC8D[0] = code >> 8;
+    D_801DFC8E = code;
     action_vars.unk252 = 0;
     action_vars.unk250 = 0;
     switch (D_801DFC8D[0]) {
@@ -1897,19 +1897,19 @@ void block_enter_area(u32 arg0) {
     }
 }
 
-s32 block_on_effect_done(KajEvent *arg0) {
-    GameVars *a = &action_vars;
-    SceneRequest_u80179848 *b = &scene_request;
-    Player *m = player_status_player[0];
-    TrainState *c = &vehicle_train_state;
+s32 block_on_effect_done(KajEvent *ev) {
+    GameVars *vars = &action_vars;
+    SceneRequest_u80179848 *req = &scene_request;
+    Player *player = player_status_player[0];
+    TrainState *train = &vehicle_train_state;
     Unk_801E1058 *d = D_801E1058;
-    EventState *e = &event_state;
-    s32 k = arg0->unk10;
-    s16 r;
-    void *p;
+    EventState *event = &event_state;
+    s32 effect_id = ev->unk10;
+    s16 set_id;
+    void *set;
     u16 f;
 
-    if (k == 0) {
+    if (effect_id == 0) {
         switch (block_building_state.building) {
         case 7:
             break;
@@ -1925,50 +1925,50 @@ s32 block_on_effect_done(KajEvent *arg0) {
         } else {
             sound_se_play_note(10, 0x29, 0, 0x3C, 0x7F, 0x7F, 1);
         }
-    } else if (k == 7) {
-        if (arg0->unkC == 0) {
-            a->unk244 = -1;
+    } else if (effect_id == 7) {
+        if (ev->unkC == 0) {
+            vars->unk244 = -1;
         }
-        if (c->door_state == 3) {
-            c->door_state = 1;
+        if (train->door_state == 3) {
+            train->door_state = 1;
             sprite_station_show_prompt(1);
-        } else if (c->door_state == 2) {
-            c->door_state = 0;
-            c->motion = 1;
+        } else if (train->door_state == 2) {
+            train->door_state = 0;
+            train->motion = 1;
             thing_set_animate(2, 0, 1);
         }
-    } else if (k == 11) {
-        if (!(m->flags & 0x4000)) {
+    } else if (effect_id == 11) {
+        if (!(player->flags & 0x4000)) {
             text_show(*d->unk1C, 3, -1, 0, -1, 0, 1);
         }
-    } else if (k == 12) {
-        if (!(m->flags & 0x4000)) {
-            r = roadmap_shop_finish(block_building_state.building);
+    } else if (effect_id == 12) {
+        if (!(player->flags & 0x4000)) {
+            set_id = roadmap_shop_finish(block_building_state.building);
             if (block_building_state.building == 8 && D_801DFF78 >= 0) {
-                if (r >= 0) {
-                    p = action_find_set(r);
-                    if (p != NULL) {
-                        e->trigger_type = 0;
-                        e->trigger = 0;
-                        e->cross_set = -1;
-                        e->circle_set = -1;
-                        e->cross_flags = 0;
-                        e->circle_flags = 0;
-                        e->state = 1;
+                if (set_id >= 0) {
+                    set = action_find_set(set_id);
+                    if (set != NULL) {
+                        event->trigger_type = 0;
+                        event->trigger = 0;
+                        event->cross_set = -1;
+                        event->circle_set = -1;
+                        event->cross_flags = 0;
+                        event->circle_flags = 0;
+                        event->state = 1;
                         do {
-                            p = action_run_set(p, 0, 0);
-                        } while (p != NULL);
+                            set = action_run_set(set, 0, 0);
+                        } while (set != NULL);
                     }
                 } else {
                     roadmap_shop_open_menu(block_building_state.building, 0);
                 }
             }
         }
-    } else if (k == 4) {
-        f = m->flags;
+    } else if (effect_id == 4) {
+        f = player->flags;
         if (f & 0x80) {
-            m->flags = f & ~4;
-            b->unkA = 1;
+            player->flags = f & ~4;
+            req->unkA = 1;
         } else if (f & 0x20) {
             /*  横になると、深い眠りについた */
             text_show(" \211\241\202\311\202\310\202\351\202\306\201\101\220\133\202\242\226\260\202\350\202\311\202\302\202\242\202\275", 1, -1, 0, -1, 0, 0);
@@ -1985,11 +1985,11 @@ s32 block_on_effect_done(KajEvent *arg0) {
         } else if ((block_building_state.building == 3 || block_building_state.building == 6) && d->unk8 != 0) {
             roadmap_shop_open_menu(block_building_state.building, 0);
         }
-    } else if (k == 10) {
-        if (arg0->unkC == 0) {
-            a->unk244 = -1;
+    } else if (effect_id == 10) {
+        if (ev->unkC == 0) {
+            vars->unk244 = -1;
         }
-        f = m->flags;
+        f = player->flags;
         if (f & 0x20) {
             player_rest(1, block_wake_positions[block_wake_index * 3], block_wake_positions[block_wake_index * 3 + 1], block_wake_positions[block_wake_index * 3 + 2]);
             text_close();
@@ -2002,17 +2002,17 @@ s32 block_on_effect_done(KajEvent *arg0) {
         }
         mail_wait(1, 1, 1, 4);
         effect_start_fade(9, 3);
-    } else if (k == 9) {
-        if (arg0->unkC == 0) {
-            a->unk244 = -1;
+    } else if (effect_id == 9) {
+        if (ev->unkC == 0) {
+            vars->unk244 = -1;
         }
-        f = m->flags;
+        f = player->flags;
         if (f & 0x20) {
-            m->flags = f & ~0x20;
+            player->flags = f & ~0x20;
         } else if (f & 8) {
-            m->flags = f & ~8;
+            player->flags = f & ~8;
         }
-    } else if (k == 13) {
+    } else if (effect_id == 13) {
         if (block_building_state.building == 0) {
             sound_bgm_play(1);
         }
@@ -2020,26 +2020,26 @@ s32 block_on_effect_done(KajEvent *arg0) {
     return 0;
 }
 
-void block_on_action(PlayerStatus *arg0) {
-    EventState *q = &event_state;
-    BuildingState *r;
-    void *item;
-    s16 m = q->state;
+void block_on_action(PlayerStatus *status) {
+    EventState *event = &event_state;
+    BuildingState *bstate;
+    void *set;
+    s16 state = event->state;
 
-    if (m == 3) {
-        text_next_page((Unk_80184100 *)q);
+    if (state == 3) {
+        text_next_page((Unk_80184100 *)event);
         return;
     }
-    if (m != 2) {
+    if (state != 2) {
         return;
     }
     D_801DFE60 = 0;
-    if (!(q->circle_flags & 8)) {
+    if (!(event->circle_flags & 8)) {
         return;
     }
     sound_se_play(0x11);
     text_close();
-    switch (q->trigger_type) {
+    switch (event->trigger_type) {
     case 0xFC:
         text_show_profile(event_state.trigger);
         break;
@@ -2052,9 +2052,9 @@ void block_on_action(PlayerStatus *arg0) {
             sprite_station_board_train(0);
             break;
         default:
-            if ((q->trigger & 0xFFFF00) == 0x104000) {
+            if ((event->trigger & 0xFFFF00) == 0x104000) {
                 D_801DFE60 = 1;
-                effect_elevator_init((u8)q->trigger);
+                effect_elevator_init((u8)event->trigger);
                 goto loop;
             }
             break;
@@ -2064,8 +2064,8 @@ void block_on_action(PlayerStatus *arg0) {
         if (block_building_state.building == 2) {
             sprite_station_exit_to_town();
         } else if (block_building_state.building >= 3 && block_building_state.building < 8) {
-            r = &block_building_state;
-            roadmap_shop_exit_to_town(block_building_state.building, r->unk2);
+            bstate = &block_building_state;
+            roadmap_shop_exit_to_town(block_building_state.building, bstate->unk2);
         } else {
             goto loop;
         }
@@ -2076,60 +2076,60 @@ void block_on_action(PlayerStatus *arg0) {
             break;
         }
     default:
-        if (q->trigger >= 0xF02150 && q->trigger < 0xF02155) {
-            if (arg0->hours_awake < 6) {
+        if (event->trigger >= 0xF02150 && event->trigger < 0xF02155) {
+            if (status->hours_awake < 6) {
                 text_show(" \202\275\202\301\202\325\202\350\202\306\201A\220\207\226\260\202\315\202\306\202\352\202\304\202\242\202\351", 1, -1, 0, -1, 0, 4);
                 break;
             }
-            block_wake_index = q->trigger & 0xF;
+            block_wake_index = event->trigger & 0xF;
         }
     loop:
-        item = action_find_set(q->circle_set);
-        if (item != NULL) {
-            while ((item = action_run_set(item, 0, 0)) != NULL) {
+        set = action_find_set(event->circle_set);
+        if (set != NULL) {
+            while ((set = action_run_set(set, 0, 0)) != NULL) {
             }
         }
         break;
     }
-    q->state = 1;
-    q->circle_flags &= ~8;
+    event->state = 1;
+    event->circle_flags &= ~8;
 }
 
 void block_update_input(void) {
-    PlayerStatus *p = &player_status;
-    Player *o = p->player;
-    s32 t;
+    PlayerStatus *status = &player_status;
+    Player *player = status->player;
+    s32 pad;
 
     if (kaj_system.pad_mode != 1) {
         return;
     }
-    if (*(u32 *)&o->unk40 & 0x2A0000) {
+    if (*(u32 *)&player->unk40 & 0x2A0000) {
         return;
     }
-    t = kaj_pad_read();
-    if (block_building_state.building < 3 && effect_item_input(p, 1) != 0) {
+    pad = kaj_pad_read();
+    if (block_building_state.building < 3 && effect_item_input(status, 1) != 0) {
         return;
     }
-    if (roadmap_shop_update_input(p) != 0) {
+    if (roadmap_shop_update_input(status) != 0) {
         return;
     }
-    if (effect_weapon_input(p) != 0) {
+    if (effect_weapon_input(status) != 0) {
         return;
     }
-    if (o->flags & 4) {
+    if (player->flags & 4) {
         if (!(kaj_system.pad_prev & 0x20) && (kaj_system.pad_now & 0x20)) {
-            block_on_action(p);
+            block_on_action(status);
             return;
         }
         if (!(kaj_system.pad_prev & 0x40) && (kaj_system.pad_now & 0x40)) {
-            EventState *q = &event_state;
+            EventState *event = &event_state;
             Unk_801E1058 *r = D_801E1058;
-            void *item;
+            void *set;
 
-            if (q->state == 2 && (q->cross_flags & 2)) {
+            if (event->state == 2 && (event->cross_flags & 2)) {
                 sound_se_play(8);
                 text_close();
-                if (q->trigger_type == 0x30) {
+                if (event->trigger_type == 0x30) {
                     switch (block_building_state.building) {
                     case 4:
                     case 5:
@@ -2138,46 +2138,46 @@ void block_update_input(void) {
                         break;
                     }
                 } else {
-                    item = action_find_set(q->cross_set);
-                    if (item != NULL) {
+                    set = action_find_set(event->cross_set);
+                    if (set != NULL) {
                         sound_se_play(8);
-                        while ((item = action_run_set(item, 0, 0)) != NULL) {
+                        while ((set = action_run_set(set, 0, 0)) != NULL) {
                         }
                     }
                 }
-                q->state = 1;
-                q->cross_flags &= ~2;
+                event->state = 1;
+                event->cross_flags &= ~2;
             }
             return;
         }
     }
-    player_handle_pad(p, 1, t);
+    player_handle_pad(status, 1, pad);
 }
 
 void block_building_load(void) {
-    char sp10[16];
-    SceneRequest_u80179848 *g = &scene_request;
-    BuildingState *p;
+    char path[16];
+    SceneRequest_u80179848 *req = &scene_request;
+    BuildingState *bstate;
 
     action_reset(1);
     D_801DFED4 = block_on_effect_done;
-    p = &block_building_state;
-    p->unk2 = g->unk12;
+    bstate = &block_building_state;
+    bstate->unk2 = req->unk12;
     block_scene_daylight = 0;
-    block_building_state.building = g->unk10;
+    block_building_state.building = req->unk10;
     if (D_801DFE60 == 1) {
         return;
     }
     sprite_set_visible(0x410, 1);
     block_set_mode(1);
-    memset(sp10, 0, 0x10);
-    sprintf(sp10, "\\S\\%s.S;1", g->unk20);
-    g->unkC = sp10;
+    memset(path, 0, 0x10);
+    sprintf(path, "\\S\\%s.S;1", req->unk20);
+    req->unkC = path;
     object_load_scene();
     effect_weapon_load_models();
     switch (block_building_state.building) {
     case 0:
-        switch (p->unk2) {
+        switch (bstate->unk2) {
         case 4:
             thing_set_active(3, 8, 1);
             thing_set_animate(3, 8, 1);
@@ -2229,10 +2229,10 @@ void block_building_load(void) {
         sprite_station_init();
         break;
     default:
-        roadmap_shop_init(p->building);
+        roadmap_shop_init(bstate->building);
         break;
     }
-    if (g->unk14 != 0) {
+    if (req->unk14 != 0) {
         sound_se_play(0x21);
     }
     event_show_clock(block_scene_daylight);
@@ -2240,7 +2240,7 @@ void block_building_load(void) {
 }
 
 void block_building_run(void) {
-    s32 sp10[6];
+    s32 ev[6];
     s16 done;
 
     block_building_load();
@@ -2253,21 +2253,21 @@ void block_building_run(void) {
         kaj_pad_reset(1);
     }
     while (done == 0) {
-        switch (kaj_event_get(sp10)) {
+        switch (kaj_event_get(ev)) {
         case 0x10:
-            event_handle_enter(sp10);
+            event_handle_enter(ev);
             continue;
         case 0x400:
             roadmap_shop_close_topic();
             continue;
         case 0x20:
-            event_handle_leave(sp10);
+            event_handle_leave(ev);
             continue;
         case 0x4:
             event_handle_tick(block_scene_daylight);
             continue;
         case 0x200:
-            event_handle_mod_finish(sp10);
+            event_handle_mod_finish(ev);
             continue;
         case 0x0:
             block_update_input();
@@ -2281,10 +2281,10 @@ void block_building_run(void) {
             }
             break;
         case 0x100:
-            done = event_handle_effect_done(sp10);
+            done = event_handle_effect_done(ev);
             continue;
         default:
-            kaj_event_done(sp10);
+            kaj_event_done(ev);
             continue;
         }
         mail_step_frame(1, 1, 1);
@@ -2320,14 +2320,14 @@ void block_building_run(void) {
     }
 }
 
-s32 block_on_enter(KajEvent *arg0) {
-    s32 v = arg0->unkC;
+s32 block_on_enter(KajEvent *ev) {
+    s32 code = ev->unkC;
 
-    if (v == 0xF0233C) {
+    if (code == 0xF0233C) {
         block_wake_index = 5;
-    } else if (v == 0xF02350) {
+    } else if (code == 0xF02350) {
         block_wake_index = 6;
-    } else if (v == 0xF0235A) {
+    } else if (code == 0xF0235A) {
         block_wake_index = 7;
     }
     return 0;
@@ -2345,138 +2345,138 @@ void block_building_main(void) {
     }
 }
 
-void block_elevator_input(s16 arg0, s16 arg1, s16 *arg2) {
-    s32 snd;
+void block_elevator_input(s16 building, s16 start_floor, s16 *floor) {
+    s32 se;
     s16 played;
     s32 i;
-    s32 idx;
+    s32 stop;
 
     if (kaj_system.pad_mode == 1) {
         played = 0;
         kaj_pad_read();
         if (!(kaj_system.pad_prev & 0x20) && (kaj_system.pad_now & 0x20)) {
             played = 1;
-            snd = 0x18;
-            if (*arg2 == arg1) {
-                snd = 0x11;
+            se = 0x18;
+            if (*floor == start_floor) {
+                se = 0x11;
             }
-            idx = (arg0 * 11 + *arg2 - 12) * 3;
-            mail_goto_twn(block_elevator_stops[idx] * 10, 0, block_elevator_stops[idx + 1] * 10, block_elevator_stops[idx + 2], 0);
+            stop = (building * 11 + *floor - 12) * 3;
+            mail_goto_twn(block_elevator_stops[stop] * 10, 0, block_elevator_stops[stop + 1] * 10, block_elevator_stops[stop + 2], 0);
         } else if (!(kaj_system.pad_prev & 0x40) && (kaj_system.pad_now & 0x40)) {
             played = 1;
-            snd = 8;
-            *arg2 = arg1;
-            idx = (arg0 * 11 + arg1 - 12) * 3;
-            mail_goto_twn(block_elevator_stops[idx] * 10, 0, block_elevator_stops[idx + 1] * 10, block_elevator_stops[idx + 2], 0);
+            se = 8;
+            *floor = start_floor;
+            stop = (building * 11 + start_floor - 12) * 3;
+            mail_goto_twn(block_elevator_stops[stop] * 10, 0, block_elevator_stops[stop + 1] * 10, block_elevator_stops[stop + 2], 0);
         } else if (!(kaj_system.pad_prev & 0x1000) && (kaj_system.pad_now & 0x1000)) {
             played = 1;
-            snd = 0xF;
-            (*arg2)--;
-            if (arg0 != 3) {
-                if (*arg2 >= 12) {
-                    *arg2 = 1;
+            se = 0xF;
+            (*floor)--;
+            if (building != 3) {
+                if (*floor >= 12) {
+                    *floor = 1;
                 }
-                if (*arg2 <= 0) {
-                    *arg2 = 11;
+                if (*floor <= 0) {
+                    *floor = 11;
                 }
             } else {
-                if (*arg2 >= 6) {
-                    *arg2 = 1;
+                if (*floor >= 6) {
+                    *floor = 1;
                 }
-                if (*arg2 <= 0) {
-                    *arg2 = 5;
+                if (*floor <= 0) {
+                    *floor = 5;
                 }
             }
             for (i = 1; i < 12; i++) {
-                sprite_set_clut_entry(0, (arg0 << 4) + i, 0x5BBD);
+                sprite_set_clut_entry(0, (building << 4) + i, 0x5BBD);
                 sprite_set_clut_entry(0, i, 0x1D40);
             }
-            sprite_set_clut_entry(0, (arg0 << 4) + *arg2, 0x29F);
-            sprite_set_clut_entry(0, *arg2, 0x1D5F);
+            sprite_set_clut_entry(0, (building << 4) + *floor, 0x29F);
+            sprite_set_clut_entry(0, *floor, 0x1D5F);
         } else if (!(kaj_system.pad_prev & 0x4000) && (kaj_system.pad_now & 0x4000)) {
             played = 1;
-            snd = 0xF;
-            (*arg2)++;
-            if (arg0 != 3) {
-                if (*arg2 >= 12) {
-                    *arg2 = 1;
+            se = 0xF;
+            (*floor)++;
+            if (building != 3) {
+                if (*floor >= 12) {
+                    *floor = 1;
                 }
-                if (*arg2 <= 0) {
-                    *arg2 = 11;
+                if (*floor <= 0) {
+                    *floor = 11;
                 }
             } else {
-                if (*arg2 >= 6) {
-                    *arg2 = 1;
+                if (*floor >= 6) {
+                    *floor = 1;
                 }
-                if (*arg2 <= 0) {
-                    *arg2 = 5;
+                if (*floor <= 0) {
+                    *floor = 5;
                 }
             }
             for (i = 1; i < 12; i++) {
-                sprite_set_clut_entry(0, (arg0 << 4) + i, 0x5BBD);
+                sprite_set_clut_entry(0, (building << 4) + i, 0x5BBD);
                 sprite_set_clut_entry(0, i, 0x1D40);
             }
-            sprite_set_clut_entry(0, (arg0 << 4) + *arg2, 0x29F);
-            sprite_set_clut_entry(0, *arg2, 0x1D5F);
+            sprite_set_clut_entry(0, (building << 4) + *floor, 0x29F);
+            sprite_set_clut_entry(0, *floor, 0x1D5F);
         }
         if (played) {
-            sound_se_play(snd);
+            sound_se_play(se);
         }
     }
 }
 
-void block_elevator_run(s16 arg0, s16 arg1) {
-    s32 sp10[6];
-    s16 sp28;
+void block_elevator_run(s16 building, s16 start_floor) {
+    s32 ev[6];
+    s16 floor;
     s16 done;
     s32 i;
-    s32 d;
-    s16 v;
+    s32 moved;
+    s16 last_floor;
 
     done = 0;
-    sp28 = arg1;
+    floor = start_floor;
     D_801DFED4 = 0;
     sprite_set_visible(0x400, 0);
     sprite_set_visible(0x409, 0);
     sprite_set_visible(0x40E, 0);
     sprite_set_visible(0, 1);
-    sprite_set_visible((u16)arg0, 1);
-    sprite_set_clut_entry(0, (arg0 << 4) + arg1, 0x29F);
-    sprite_set_clut_entry(0, arg1, 0x1D5F);
+    sprite_set_visible((u16)building, 1);
+    sprite_set_clut_entry(0, (building << 4) + start_floor, 0x29F);
+    sprite_set_clut_entry(0, start_floor, 0x1D5F);
     mail_wait(3, 0, 0, 2);
     kaj_pad_reset(1);
     kaj_timer_enable();
     do {
-        switch (kaj_event_get(sp10)) {
+        switch (kaj_event_get(ev)) {
         case 0x4:
             event_handle_tick(1);
             continue;
         case 0x0:
-            block_elevator_input(arg0, arg1, &sp28);
+            block_elevator_input(building, start_floor, &floor);
             if (mail_take_scene_change() != 0) {
                 effect_start_fade(1, 3);
             }
             break;
         case 0x100:
-            done = event_handle_effect_done(sp10);
+            done = event_handle_effect_done(ev);
             continue;
         default:
-            kaj_event_done(sp10);
+            kaj_event_done(ev);
             continue;
         }
         roadmap_draw_frame(2);
     } while (done == 0);
     kaj_timer_disable();
-    v = sp28;
+    last_floor = floor;
     for (i = 1; i < 12; i++) {
-        sprite_set_clut_entry(0, (arg0 << 4) + i, 0x5BBD);
+        sprite_set_clut_entry(0, (building << 4) + i, 0x5BBD);
         sprite_set_clut_entry(0, i, 0x1D40);
     }
     sprite_set_visible(0x400, 1);
     sprite_set_visible(0x409, 1);
     sprite_set_visible(0x40E, 1);
     sprite_set_visible(0, 0);
-    sprite_set_visible((u16)arg0, 0);
-    d = v - arg1;
-    event_advance_clock((d < 0 ? -d : d) * 5, 0);
+    sprite_set_visible((u16)building, 0);
+    moved = last_floor - start_floor;
+    event_advance_clock((moved < 0 ? -moved : moved) * 5, 0);
 }

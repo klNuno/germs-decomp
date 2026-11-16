@@ -229,51 +229,51 @@ s16 mail_menu_move(s16 a);
 u16 roadmap_get_state(void);
 s16 effect_item_input(PlayerStatus *arg0, s16 arg1);
 
-void effect_start_sprite_slide(s32 arg0, u16 arg1, s32 arg2) {
-    GameVars *g = &action_vars;
+void effect_start_sprite_slide(s32 kind, u16 sprite_id, s32 seconds) {
+    GameVars *game = &action_vars;
     Unk_80186884_0 *spr;
     Unk_80185A60 *node;
 
-    spr = sprite_find(arg1);
+    spr = sprite_find(sprite_id);
     if (spr == NULL) {
         kaj_abend(5, D_80170544, effect_str_file, 0x97);
     }
     effect_slide_y = spr->unkC;
     effect_slide_height = spr->unk12;
     node = kaj_tss_alloc(4);
-    arg2 *= 30;
-    node->unk22 = arg0;
-    if (arg0 == 2 || arg0 == 3) {
-        node->unk24 = (arg0 == 2) ? 0xF0 : spr->unkC;
-        node->unk26 = (arg0 == 2) ? spr->unkC : 0xF0;
+    seconds *= 30;
+    node->unk22 = kind;
+    if (kind == 2 || kind == 3) {
+        node->unk24 = (kind == 2) ? 0xF0 : spr->unkC;
+        node->unk26 = (kind == 2) ? spr->unkC : 0xF0;
     } else {
-        node->unk24 = (arg0 == 0xB) ? 0xF0 : spr->unkC;
-        node->unk26 = (arg0 == 0xB) ? spr->unkC : 0xF0;
+        node->unk24 = (kind == 0xB) ? 0xF0 : spr->unkC;
+        node->unk26 = (kind == 0xB) ? spr->unkC : 0xF0;
     }
-    kaj_tss_set_steps(node, arg2);
+    kaj_tss_set_steps(node, seconds);
     node->unk30 = effect_sprite_slide_step;
     node->unk34 = effect_sprite_slide_end;
     node->unk38 = effect_sprite_slide_end;
     *node->unk3C = spr;
-    if (arg0 == 2 || arg0 == 0xB) {
+    if (kind == 2 || kind == 0xB) {
         spr->unk4 = 1;
         spr->unkC = 0xF0;
         spr->unk12 = 0;
     }
-    g->unk244 = kaj_tss_start(node);
+    game->unk244 = kaj_tss_start(node);
 }
 
-void effect_flame_make_clut(s16 arg0) {
-    s16 r[4];
+void effect_flame_make_clut(s16 kind) {
+    s16 rect[4];
     u16 buf[0x100];
     s32 i;
     s32 v;
 
-    r[1] = 0x1EE;
-    r[2] = 0x100;
-    r[3] = 1;
-    r[0] = 0;
-    switch (arg0) {
+    rect[1] = 0x1EE;
+    rect[2] = 0x100;
+    rect[3] = 1;
+    rect[0] = 0;
+    switch (kind) {
     case 0:
         for (i = 0; i < 0x40; i++) {
             buf[i] = ((i / 4) << 10) | 0x8000;
@@ -303,14 +303,14 @@ void effect_flame_make_clut(s16 arg0) {
         }
         break;
     }
-    LoadImage2(r, buf);
+    LoadImage2(rect, buf);
 }
 
 void effect_flame_small_update(void) {
-    void **p = &effect_flame_small_bufs;
-    u8 *src = p[effect_flame_small_cur];
-    s16 n = effect_flame_small_cur ^ 1;
-    u8 *dst = p[n];
+    void **bufs = &effect_flame_small_bufs;
+    u8 *src = bufs[effect_flame_small_cur];
+    s16 next = effect_flame_small_cur ^ 1;
+    u8 *dst = bufs[next];
     u8 *pal;
     s32 i;
     s32 j;
@@ -323,7 +323,7 @@ void effect_flame_small_update(void) {
         if (effect_flame_small_kind == 1) {
             pal = effect_flame_small_cluts[effect_flame_small_cur];
         }
-        effect_flame_small_cur = n;
+        effect_flame_small_cur = next;
         v = 0;
         for (i = 0; i < 0x10; i++) {
             if (rand() % 100 < 50) {
@@ -355,15 +355,15 @@ void effect_flame_small_update(void) {
 }
 
 void effect_flame_large_update(void) {
-    void **p = &effect_flame_large_bufs;
-    u8 *src = p[effect_flame_large_cur];
-    s16 n = effect_flame_large_cur ^ 1;
-    u8 *dst = p[n];
+    void **bufs = &effect_flame_large_bufs;
+    u8 *src = bufs[effect_flame_large_cur];
+    s16 next = effect_flame_large_cur ^ 1;
+    u8 *dst = bufs[next];
     s32 i;
     s32 j;
 
     if (src != 0 && dst != 0) {
-        effect_flame_large_cur = n;
+        effect_flame_large_cur = next;
         for (i = 0; i < 0x20; i++) {
             *(dst + i + 0x3E0) = rand() % 256;
         }
@@ -376,15 +376,15 @@ void effect_flame_large_update(void) {
     }
 }
 
-void effect_start_fade(s32 arg0, s32 arg1) {
-    GameVars *g = &action_vars;
-    ScreenLight *h = &screen_light;
+void effect_start_fade(s32 kind, s32 seconds) {
+    GameVars *game = &action_vars;
+    ScreenLight *light = &screen_light;
     Unk_80185918 *node;
 
     node = kaj_tss_alloc(4);
-    arg1 *= 30;
-    node->unk22 = arg0;
-    switch (arg0) {
+    seconds *= 30;
+    node->unk22 = kind;
+    switch (kind) {
     case 0:
     case 9:
         node->unk24 = 0;
@@ -396,45 +396,45 @@ void effect_start_fade(s32 arg0, s32 arg1) {
         node->unk26 = 0;
         break;
     }
-    h->fade_level = node->unk24;
-    h->fade_active = 1;
-    kaj_tss_set_steps(node, arg1);
+    light->fade_level = node->unk24;
+    light->fade_active = 1;
+    kaj_tss_set_steps(node, seconds);
     node->unk30 = door_fade_step;
     node->unk34 = door_fade_step;
-    *node->unk3C = arg0;
-    g->unk244 = kaj_tss_start(node);
+    *node->unk3C = kind;
+    game->unk244 = kaj_tss_start(node);
 }
 
 void effect_fade_reset(void) {
-    ScreenLight *p = &screen_light;
-    if (p->fade_active != 0) {
-        p->fade_level = 0x1000;
-        p->fade_active = 0;
+    ScreenLight *light = &screen_light;
+    if (light->fade_active != 0) {
+        light->fade_level = 0x1000;
+        light->fade_active = 0;
     }
 }
 
 void effect_fade_set_black(void) {
-    ScreenLight *p = &screen_light;
-    if (p->fade_active == 0) {
-        p->fade_level = 0;
-        p->fade_active = 1;
+    ScreenLight *light = &screen_light;
+    if (light->fade_active == 0) {
+        light->fade_level = 0;
+        light->fade_active = 1;
     }
 }
 
 void effect_fade_set_dim(void) {
-    ScreenLight *p = &screen_light;
-    if (p->fade_active == 0) {
-        p->fade_level = 0x400;
-        p->fade_active = 1;
+    ScreenLight *light = &screen_light;
+    if (light->fade_active == 0) {
+        light->fade_level = 0x400;
+        light->fade_active = 1;
     }
 }
 
-void effect_start_sprite_anim(u16 arg0, s32 arg1) {
-    GameVars *g = &action_vars;
+void effect_start_sprite_anim(u16 sprite_id, s32 seconds) {
+    GameVars *game = &action_vars;
     Unk_80186884_0 *spr;
     Unk_80186884 *node;
 
-    spr = sprite_find(arg0);
+    spr = sprite_find(sprite_id);
     if (spr == NULL) {
         kaj_abend(5, D_80170544, effect_str_file, 0xCC);
     }
@@ -445,13 +445,13 @@ void effect_start_sprite_anim(u16 arg0, s32 arg1) {
     node->unk28 = 1;
     node->unk30 = effect_sprite_anim_step;
     node->unk34 = effect_sprite_anim_step;
-    arg1 *= 30;
-    node->unk2C = arg1 / node->unk26;
+    seconds *= 30;
+    node->unk2C = seconds / node->unk26;
     *node->unk3C = spr;
     spr->unk18 = 0;
     spr->unk1A = 0;
     spr->unk4 = 1;
-    g->unk244 = kaj_tss_start(node);
+    game->unk244 = kaj_tss_start(node);
 }
 
 void effect_clear_alarms(void) {
@@ -464,107 +464,107 @@ void effect_clear_alarms(void) {
     }
 }
 
-void effect_start_alarm(s32 arg0, s32 arg1, s32 arg2) {
-    EffectAlarm *p = &effect_alarms[arg0];
+void effect_start_alarm(s32 slot, s32 arg1, s32 delay) {
+    EffectAlarm *alarm_slot = &effect_alarms[slot];
 
-    if (p->active == 0) {
-        p->alarm = kaj_event_set_alarm(arg2 * 60, arg0 + 0x64, arg1);
-        if (p->alarm >= 0) {
-            p->active = 1;
+    if (alarm_slot->active == 0) {
+        alarm_slot->alarm = kaj_event_set_alarm(delay * 60, slot + 0x64, arg1);
+        if (alarm_slot->alarm >= 0) {
+            alarm_slot->active = 1;
         }
     }
 }
 
-void effect_flame_small_init(s16 arg0) {
-    void *a;
-    void *b;
-    Unk_801DFE90 *r = &effect_flame_small_rect;
-    Unk_801DFE98 *t;
+void effect_flame_small_init(s16 kind) {
+    void *buf0;
+    void *buf1;
+    Unk_801DFE90 *rect = &effect_flame_small_rect;
+    Unk_801DFE98 *clut_rect;
 
-    r->unk0 = 0x1B0;
-    r->unk2 = 0xE0;
-    r->unk4 = 8;
-    r->unk6 = 0x20;
-    t = &effect_flame_small_clut_rect;
-    t->unk0 = 0x100;
-    t->unk2 = 0x1ED;
-    t->unk4 = 0x10;
-    t->unk6 = 1;
-    effect_flame_make_clut(arg0);
-    a = kaj_malloc(0x200);
-    b = kaj_malloc(0x200);
-    if (a == 0 || b == 0) {
+    rect->unk0 = 0x1B0;
+    rect->unk2 = 0xE0;
+    rect->unk4 = 8;
+    rect->unk6 = 0x20;
+    clut_rect = &effect_flame_small_clut_rect;
+    clut_rect->unk0 = 0x100;
+    clut_rect->unk2 = 0x1ED;
+    clut_rect->unk4 = 0x10;
+    clut_rect->unk6 = 1;
+    effect_flame_make_clut(kind);
+    buf0 = kaj_malloc(0x200);
+    buf1 = kaj_malloc(0x200);
+    if (buf0 == 0 || buf1 == 0) {
         kaj_abend(3, D_8017056C, effect_str_file, 0x16E);
     }
-    effect_flame_small_kind = arg0;
-    effect_flame_small_bufs = a;
-    effect_flame_small_bufs_1 = b;
+    effect_flame_small_kind = kind;
+    effect_flame_small_bufs = buf0;
+    effect_flame_small_bufs_1 = buf1;
     effect_flame_small_cur = 0;
 }
 
 void effect_flame_small_free(void) {
     s32 i;
-    void **p = &effect_flame_small_bufs;
+    void **bufs = &effect_flame_small_bufs;
 
     D_801E05BA[0] = 0;
     for (i = 0; i < 2; i++) {
-        if (p[i] != 0) {
-            free3(p[i]);
-            p[i] = 0;
+        if (bufs[i] != 0) {
+            free3(bufs[i]);
+            bufs[i] = 0;
         }
     }
 }
 
 void effect_clut_cycle_update(void) {
     s32 i;
-    u16 t = effect_clut_cycle_buf[1];
+    u16 first = effect_clut_cycle_buf[1];
 
     for (i = 1; i < 14; i++) {
         effect_clut_cycle_buf[i] = effect_clut_cycle_buf[i + 1];
     }
-    effect_clut_cycle_buf[14] = t;
+    effect_clut_cycle_buf[14] = first;
     LoadImage2(&effect_clut_cycle_rect, effect_clut_cycle_buf);
 }
 
 void effect_clut_cycle_init(void) {
-    Unk_801DFEA0 *r = &effect_clut_cycle_rect;
+    Unk_801DFEA0 *rect = &effect_clut_cycle_rect;
 
-    r->unk0 = 0x60;
-    r->unk2 = 0x1E6;
-    r->unk4 = 0x10;
-    r->unk6 = 1;
-    StoreImage2(r, effect_clut_cycle_buf);
+    rect->unk0 = 0x60;
+    rect->unk2 = 0x1E6;
+    rect->unk4 = 0x10;
+    rect->unk6 = 1;
+    StoreImage2(rect, effect_clut_cycle_buf);
     D_801E05BC[0] = 0;
 }
 
 void effect_flame_large_init(void) {
-    void *a;
-    void *b;
-    Unk_801DFEB0 *r = &effect_flame_large_rect;
+    void *buf0;
+    void *buf1;
+    Unk_801DFEB0 *rect = &effect_flame_large_rect;
 
-    r->unk0 = 0x1B0;
-    r->unk2 = 0xC0;
-    r->unk4 = 0x10;
-    r->unk6 = 0x20;
-    a = kaj_malloc(0x400);
-    b = kaj_malloc(0x400);
-    if (a == 0 || b == 0) {
+    rect->unk0 = 0x1B0;
+    rect->unk2 = 0xC0;
+    rect->unk4 = 0x10;
+    rect->unk6 = 0x20;
+    buf0 = kaj_malloc(0x400);
+    buf1 = kaj_malloc(0x400);
+    if (buf0 == 0 || buf1 == 0) {
         kaj_abend(3, D_8017056C, effect_str_file, 0x1CA);
     }
-    effect_flame_large_bufs = a;
-    effect_flame_large_bufs_1 = b;
+    effect_flame_large_bufs = buf0;
+    effect_flame_large_bufs_1 = buf1;
     effect_flame_large_cur = 0;
 }
 
 void effect_flame_large_free(void) {
     s32 i;
-    void **p = &effect_flame_large_bufs;
+    void **bufs = &effect_flame_large_bufs;
 
     D_801E05B8[0] = 0;
     for (i = 0; i < 2; i++) {
-        if (p[i] != 0) {
-            free3(p[i]);
-            p[i] = 0;
+        if (bufs[i] != 0) {
+            free3(bufs[i]);
+            bufs[i] = 0;
         }
     }
 }
@@ -572,114 +572,114 @@ void effect_flame_large_free(void) {
 void effect_clut_rotate(void) {
     u16 buf[16];
     s32 i;
-    u16 t;
+    u16 last;
 
     StoreImage2(&effect_clut_rotate_rect, buf);
-    t = buf[15];
+    last = buf[15];
     for (i = 15; i > 0; i--) {
         buf[i] = buf[i - 1];
     }
-    buf[0] = t;
+    buf[0] = last;
     LoadImage2(&effect_clut_rotate_rect, buf);
 }
 
-void effect_sprite_slide_step(Unk_801867E8 *arg0) {
-    Unk_801867E8_0 *p = *arg0->unk3C;
-    s16 v;
+void effect_sprite_slide_step(Unk_801867E8 *task) {
+    Unk_801867E8_0 *sprite = *task->unk3C;
+    s16 height;
 
-    p->unkC = arg0->unk24;
-    v = 0xF0 - arg0->unk24;
-    p->unk12 = v;
-    if (effect_slide_height < v) {
-        p->unk12 = effect_slide_height;
+    sprite->unkC = task->unk24;
+    height = 0xF0 - task->unk24;
+    sprite->unk12 = height;
+    if (effect_slide_height < height) {
+        sprite->unk12 = effect_slide_height;
     }
 }
 
-void effect_sprite_slide_end(Unk_80186838 *arg0) {
-    Unk_80186838_0 *p = *arg0->unk3C;
-    GameVars *q = &action_vars;
+void effect_sprite_slide_end(Unk_80186838 *task) {
+    Unk_80186838_0 *sprite = *task->unk3C;
+    GameVars *game = &action_vars;
 
-    p->unkC = effect_slide_y;
-    p->unk12 = effect_slide_height;
-    if (arg0->unk22 == 3 || arg0->unk22 == 0xC) {
-        p->unk4 = 0;
+    sprite->unkC = effect_slide_y;
+    sprite->unk12 = effect_slide_height;
+    if (task->unk22 == 3 || task->unk22 == 0xC) {
+        sprite->unk4 = 0;
     }
-    q->unk244 = -1;
+    game->unk244 = -1;
 }
 
-void effect_sprite_anim_step(Unk_80186884 *arg0) {
-    Unk_80186884_0 *p = *arg0->unk3C;
+void effect_sprite_anim_step(Unk_80186884 *task) {
+    Unk_80186884_0 *sprite = *task->unk3C;
 
-    p->unk18 = (arg0->unk24 - 1) / p->unk16;
-    p->unk1A = (arg0->unk24 - 1) % p->unk16;
+    sprite->unk18 = (task->unk24 - 1) / sprite->unk16;
+    sprite->unk1A = (task->unk24 - 1) % sprite->unk16;
 }
 
-s32 effect_elevator_on_task_end(s32 *arg0) {
-    Player *p = player_status_player[0];
-    Unk_801DFEB8 *q = &effect_elevator;
-    Door *e;
+s32 effect_elevator_on_task_end(s32 *ev) {
+    Player *player = player_status_player[0];
+    Unk_801DFEB8 *elevator = &effect_elevator;
+    Door *door;
     s32 i;
 
-    if (arg0[4] != 4) {
+    if (ev[4] != 4) {
         return 0;
     }
-    if (p->flags & 0x80) {
+    if (player->flags & 0x80) {
         kaj_pad_reset(1);
         sprite_set_visible(2, 1);
         text_show(D_80170590, 3, -1, 0, -1, 0, 1);
         return 0;
     }
     for (i = 0; i < 2; i++) {
-        e = door_find(((u16)q->unk2 - 1) * 2 + i);
-        if (e != NULL) {
-            e->state = 0;
-            switch ((u16)e->axis) {
+        door = door_find(((u16)elevator->unk2 - 1) * 2 + i);
+        if (door != NULL) {
+            door->state = 0;
+            switch ((u16)door->axis) {
             case 1:
-                e->pos_x = e->move_from;
+                door->pos_x = door->move_from;
                 break;
             case 2:
-                e->pos_y = e->move_from;
+                door->pos_y = door->move_from;
                 break;
             case 3:
-                e->pos_z = e->move_from;
+                door->pos_z = door->move_from;
                 break;
             }
-            e->coord_tx = e->pos_x - p->cell_x * 0x30D4;
-            e->coord_ty = e->pos_y + p->cell_y * 0x7D00;
-            e->coord_tz = e->pos_z - p->cell_z * 0x30D4;
-            e->coord_flg = 0;
+            door->coord_tx = door->pos_x - player->cell_x * 0x30D4;
+            door->coord_ty = door->pos_y + player->cell_y * 0x7D00;
+            door->coord_tz = door->pos_z - player->cell_z * 0x30D4;
+            door->coord_flg = 0;
         }
     }
     return 1;
 }
 
 void effect_elevator_exit(void) {
-    Player *p = player_status_player[0];
+    Player *player = player_status_player[0];
     s32 x;
     s32 z;
 
     sprite_set_visible(2, 0);
     kaj_pad_reset(0);
-    x = rsin((p->yaw << 12) / 360) * 0x1194 >> 12;
-    z = rcos((p->yaw << 12) / 360) * 0x1194 >> 12;
-    x += p->pos_x + p->cell_x * 0x30D4;
-    z += p->pos_z + p->cell_z * 0x30D4;
-    player_start_move_to(2, 0x80, x, p->pos_y - p->cell_y * 0x7D00 - p->unk78, z, p->pitch, p->yaw, p->unk70, 2);
+    x = rsin((player->yaw << 12) / 360) * 0x1194 >> 12;
+    z = rcos((player->yaw << 12) / 360) * 0x1194 >> 12;
+    x += player->pos_x + player->cell_x * 0x30D4;
+    z += player->pos_z + player->cell_z * 0x30D4;
+    player_start_move_to(2, 0x80, x, player->pos_y - player->cell_y * 0x7D00 - player->unk78, z, player->pitch, player->yaw, player->unk70, 2);
 }
 
-void effect_elevator_move_doors(Unk_801DFEB8 *arg0, s16 arg1) {
-    SceneRequest *p = scene_request;
-    Door *e;
+void effect_elevator_move_doors(Unk_801DFEB8 *elevator, s16 open) {
+    SceneRequest *request = scene_request;
+    Door *door;
     s16 v;
     s32 i;
 
     kaj_pad_reset(0);
     for (i = 0; i < 2; i++) {
-        e = door_find((arg0->unk2 - 1) * 2 + i);
-        if (e == NULL) {
+        door = door_find((elevator->unk2 - 1) * 2 + i);
+        if (door == NULL) {
             continue;
         }
-        if (arg1 != 0) {
+        if (open != 0) {
             if (block_building_state.building == 0) {
                 switch (D_801DFE6A.unk0) {
                 case 28:
@@ -693,40 +693,40 @@ void effect_elevator_move_doors(Unk_801DFEB8 *arg0, s16 arg1) {
                     break;
                 }
             }
-            door_start_open(e, v, 3, 0);
-            arg0->unk6 = 2;
+            door_start_open(door, v, 3, 0);
+            elevator->unk6 = 2;
         } else {
-            memset(&p[1], 0, 4);
-            ((s16 *)&p->pos_x)[1] = 0x41;
-            ((s16 *)&p->pos_y)[0] = arg0->unk0;
+            memset(&request[1], 0, 4);
+            ((s16 *)&request->pos_x)[1] = 0x41;
+            ((s16 *)&request->pos_y)[0] = elevator->unk0;
             if (block_building_state.building == 0) {
                 switch (D_801DFE6A.unk0) {
                 case 28:
-                    strncpy((char *)&p[1], effect_str_scene_idc, 3);
-                    ((s16 *)&p->pos_y)[1] = 0xB4;
-                    v = (e->move_from - e->pos_x) / 10;
+                    strncpy((char *)&request[1], effect_str_scene_idc, 3);
+                    ((s16 *)&request->pos_y)[1] = 0xB4;
+                    v = (door->move_from - door->pos_x) / 10;
                     break;
                 case 7:
-                    strncpy((char *)&p[1], effect_str_scene_htl, 3);
-                    ((s16 *)&p->pos_y)[1] = 0x5A;
-                    v = (e->move_from - e->pos_z) / 10;
+                    strncpy((char *)&request[1], effect_str_scene_htl, 3);
+                    ((s16 *)&request->pos_y)[1] = 0x5A;
+                    v = (door->move_from - door->pos_z) / 10;
                     break;
                 case 15:
-                    strncpy((char *)&p[1], effect_str_scene_cmn, 3);
-                    ((s16 *)&p->pos_y)[1] = 0xB4;
-                    v = (e->move_from - e->pos_x) / 10;
+                    strncpy((char *)&request[1], effect_str_scene_cmn, 3);
+                    ((s16 *)&request->pos_y)[1] = 0xB4;
+                    v = (door->move_from - door->pos_x) / 10;
                     break;
                 }
             }
-            door_start_close(e, v, 3);
-            arg0->unk6 = 1;
+            door_start_close(door, v, 3);
+            elevator->unk6 = 1;
         }
     }
     sound_se_play(0xB);
 }
 
 void effect_elevator_input(void) {
-    Unk_801DFEB8 *p = &effect_elevator;
+    Unk_801DFEB8 *elevator = &effect_elevator;
 
     if (kaj_system.pad_mode != 1) {
         return;
@@ -739,108 +739,108 @@ void effect_elevator_input(void) {
             effect_elevator.unk0 = 1;
         }
         sprite_fill_clut(2, 1, 8, 0x421);
-        if (p->unk2 == effect_elevator.unk0) {
+        if (elevator->unk2 == effect_elevator.unk0) {
             sprite_set_clut_entry(2, effect_elevator.unk0, 0x16BF);
         } else {
             sprite_set_clut_entry(2, effect_elevator.unk0, 0x17FF);
-            sprite_set_clut_entry(2, p->unk2, 0x14BF);
+            sprite_set_clut_entry(2, elevator->unk2, 0x14BF);
         }
     } else if (!(kaj_system.pad_prev & 0x4000) && (kaj_system.pad_now & 0x4000)) {
-        Unk_801DFEB8 *q = &effect_elevator;
+        Unk_801DFEB8 *elevator2 = &effect_elevator;
 
         sound_se_play(0xF);
         effect_elevator.unk0--;
         if (effect_elevator.unk0 == 0) {
-            effect_elevator.unk0 = q->unk4;
+            effect_elevator.unk0 = elevator2->unk4;
         }
         sprite_fill_clut(2, 1, 8, 0x421);
-        if (q->unk2 == effect_elevator.unk0) {
+        if (elevator2->unk2 == effect_elevator.unk0) {
             sprite_set_clut_entry(2, effect_elevator.unk0, 0x16BF);
         } else {
             sprite_set_clut_entry(2, effect_elevator.unk0, 0x17FF);
-            sprite_set_clut_entry(2, q->unk2, 0x14BF);
+            sprite_set_clut_entry(2, elevator2->unk2, 0x14BF);
         }
     } else if (!(kaj_system.pad_prev & 0x40) && (kaj_system.pad_now & 0x40)) {
         sound_se_play(8);
         text_close();
         effect_elevator_exit();
     } else if (!(kaj_system.pad_prev & 0x20) && (kaj_system.pad_now & 0x20)) {
-        if (p->unk2 != p->unk0) {
+        if (elevator->unk2 != elevator->unk0) {
             mod_free_pooled();
             sound_se_play(0x11);
             text_close();
-            effect_elevator_move_doors(p, 0);
+            effect_elevator_move_doors(elevator, 0);
         }
     }
 }
 
 void effect_elevator_enter(void) {
-    Player *p;
-    Unk_801DFEB8 *q;
+    Player *player;
+    Unk_801DFEB8 *elevator;
     s32 x;
     s32 y;
     s32 z;
 
     D_801DFED4 = (s32)effect_elevator_on_task_end;
-    p = player_status_player[0];
+    player = player_status_player[0];
     sprite_fill_clut(2, 1, 8, 0x421);
-    q = &effect_elevator;
-    if ((u16)q->unk2 == (u16)effect_elevator.unk0) {
+    elevator = &effect_elevator;
+    if ((u16)elevator->unk2 == (u16)effect_elevator.unk0) {
         sprite_set_clut_entry(2, (u16)effect_elevator.unk0, 0x16BF);
     } else {
         sprite_set_clut_entry(2, (u16)effect_elevator.unk0, 0x17FF);
-        sprite_set_clut_entry(2, (u16)q->unk2, 0x14BF);
+        sprite_set_clut_entry(2, (u16)elevator->unk2, 0x14BF);
     }
-    x = p->pos_x + p->cell_x * 0x30D4;
-    y = p->pos_y - p->cell_y * 0x7D00 - p->unk78;
-    z = p->pos_z + p->cell_z * 0x30D4;
+    x = player->pos_x + player->cell_x * 0x30D4;
+    y = player->pos_y - player->cell_y * 0x7D00 - player->unk78;
+    z = player->pos_z + player->cell_z * 0x30D4;
     kaj_timer_enable();
-    player_start_move_to(0, 0, x, y, z, p->pitch, (s16)(p->yaw + 0xB4), p->unk70, 2);
+    player_start_move_to(0, 0, x, y, z, player->pitch, (s16)(player->yaw + 0xB4), player->unk70, 2);
 }
 
-static inline u16 func_801872D4_inl(s32 a) {
-    Door *e = door_find(((a - 1) * 2) | 1);
-    if (e == NULL) {
+static inline u16 func_801872D4_inl(s32 floor) {
+    Door *door = door_find(((floor - 1) * 2) | 1);
+    if (door == NULL) {
         return 5;
     }
-    return e->state;
+    return door->state;
 }
 
 void effect_elevator_update(void) {
-    Player *p = player_status_player[0];
-    Unk_801DFEB8 *q = &effect_elevator;
-    u16 v;
+    Player *player = player_status_player[0];
+    Unk_801DFEB8 *elevator = &effect_elevator;
+    u16 door_state;
 
-    switch ((u16)q->unk6) {
+    switch ((u16)elevator->unk6) {
     case 0:
         break;
     case 3:
         block_set_mode(1);
-        p->flags |= 0x80;
-        q->unk6 = 4;
+        player->flags |= 0x80;
+        elevator->unk6 = 4;
         break;
     case 4:
         sound_se_stop(0x12);
-        effect_elevator_move_doors(q, 1);
+        effect_elevator_move_doors(elevator, 1);
         D_801E6DB4[0] = 0;
         break;
     default:
-        v = func_801872D4_inl((u16)q->unk2);
-        if ((u16)v == 1 && (u16)q->unk6 == 2) {
-            q->unk6 = 0;
+        door_state = func_801872D4_inl((u16)elevator->unk2);
+        if ((u16)door_state == 1 && (u16)elevator->unk6 == 2) {
+            elevator->unk6 = 0;
             kaj_pad_reset(1);
-            text_show(D_80170590, 3, -1, 0, -1, 0, (u16)v);
+            text_show(D_80170590, 3, -1, 0, -1, 0, (u16)door_state);
         }
-        if ((u16)v == 0 && (u16)q->unk6 == 1) {
-            q->unk2 = q->unk0;
+        if ((u16)door_state == 0 && (u16)elevator->unk6 == 1) {
+            elevator->unk2 = elevator->unk0;
             sprite_fill_clut(2, 1, 8, 0x421);
-            if ((u16)q->unk2 == (u16)q->unk0) {
-                sprite_set_clut_entry(2, (u16)q->unk0, 0x16BF);
+            if ((u16)elevator->unk2 == (u16)elevator->unk0) {
+                sprite_set_clut_entry(2, (u16)elevator->unk0, 0x16BF);
             } else {
-                sprite_set_clut_entry(2, (u16)q->unk0, 0x17FF);
-                sprite_set_clut_entry(2, (u16)q->unk2, 0x14BF);
+                sprite_set_clut_entry(2, (u16)elevator->unk0, 0x17FF);
+                sprite_set_clut_entry(2, (u16)elevator->unk2, 0x14BF);
             }
-            q->unk6 = 3;
+            elevator->unk6 = 3;
             sound_se_play(0x12);
         }
         break;
@@ -874,55 +874,55 @@ void effect_elevator_run(void) {
     D_801DFED4 = 0;
 }
 
-void effect_elevator_init(s16 arg0) {
-    Unk_801DFEB8 *p = &effect_elevator;
-    BuildingState *q;
+void effect_elevator_init(s16 floor) {
+    Unk_801DFEB8 *elevator = &effect_elevator;
+    BuildingState *bstate;
 
-    p->unk0 = arg0;
-    p->unk2 = arg0;
-    p->unk6 = 0;
+    elevator->unk0 = floor;
+    elevator->unk2 = floor;
+    elevator->unk6 = 0;
     if (block_building_state.building == 0) {
-        q = &block_building_state;
-        switch (q->unk2) {
+        bstate = &block_building_state;
+        switch (bstate->unk2) {
         case 28:
-            p->unk4 = 3;
+            elevator->unk4 = 3;
             break;
         case 7:
-            p->unk4 = 4;
+            elevator->unk4 = 4;
             break;
         case 15:
-            p->unk4 = 3;
+            elevator->unk4 = 3;
             break;
         }
     }
 }
 
-s32 effect_weapon_unequip(s16 arg0) {
-    PlayerStatus *g = &player_status;
-    Inventory *p = g->inventory;
-    Player *q = g->player;
-    void *r;
+s32 effect_weapon_unequip(s16 weapon_id) {
+    PlayerStatus *status = &player_status;
+    Inventory *inv = status->inventory;
+    Player *player = status->player;
+    void *model;
     s32 i;
 
     for (i = 0; i < 2; i++) {
-        if (p->weapon_ids[i] == arg0) {
-            mod_free_by_id(arg0 + 0x400);
-            p->unk0--;
-            p->weapon_ids[i] = -1;
-            p->weapon_rate[i] = 0;
-            if (p->weapon_slot == 0 && i == 0) {
-                p->weapon_slot = 1;
-            } else if (p->weapon_slot == 1 && i == 1) {
-                p->weapon_slot = 0;
+        if (inv->weapon_ids[i] == weapon_id) {
+            mod_free_by_id(weapon_id + 0x400);
+            inv->unk0--;
+            inv->weapon_ids[i] = -1;
+            inv->weapon_rate[i] = 0;
+            if (inv->weapon_slot == 0 && i == 0) {
+                inv->weapon_slot = 1;
+            } else if (inv->weapon_slot == 1 && i == 1) {
+                inv->weapon_slot = 0;
             } else {
                 return 1;
             }
-            r = mod_find(p->weapon_ids[p->weapon_slot] + 0x400);
-            p->weapon_model = (s32)r;
-            if (r != 0) {
-                mod_setup(r, q->coord, 1, 0);
+            model = mod_find(inv->weapon_ids[inv->weapon_slot] + 0x400);
+            inv->weapon_model = (s32)model;
+            if (model != 0) {
+                mod_setup(model, player->coord, 1, 0);
             }
-            effect_weapon_calc_rate(p->weapon_slot);
+            effect_weapon_calc_rate(inv->weapon_slot);
             return 1;
         }
     }
@@ -937,34 +937,34 @@ INCLUDE_RODATA("asm/nonmatchings/game/80185A60", D_8017056C);
 
 INCLUDE_RODATA("asm/nonmatchings/game/80185A60", D_80170590);
 
-void effect_weapon_draw_panel(s16 arg0, s16 arg1) {
-    Inventory *p = player_status_inventory[0];
-    Unk_80188FEC *e;
+void effect_weapon_draw_panel(s16 show, s16 with_text) {
+    Inventory *inv = player_status_inventory[0];
+    Unk_80188FEC *weapon;
     s16 id;
-    s16 v;
+    s16 bar;
 
-    if (arg1 != 0) {
-        sprite_set_visible(0x401, arg0);
-        sprite_set_visible(0x402, arg0);
+    if (with_text != 0) {
+        sprite_set_visible(0x401, show);
+        sprite_set_visible(0x402, show);
     }
-    if (arg0 != 0) {
-        id = p->weapon_ids[p->weapon_slot];
-        e = effect_weapon_find(id);
-        if (e != NULL) {
-            v = (s16)e->unk30 >> 3;
-            sprite_fill_clut(0x401, 0x10, v + 0x10, 0x67FF);
-            sprite_fill_clut(0x401, v + 0x11, 0x2F, 0x3D40);
-            v = e->unk52 >> 3;
-            sprite_fill_clut(0x401, 0x40, v + 0x40, 0x67FF);
-            sprite_fill_clut(0x401, v + 0x41, 0x5F, 0x3D40);
-            v = e->unk50 / 3 - 1;
-            if (v < 0) {
-                v = 0;
+    if (show != 0) {
+        id = inv->weapon_ids[inv->weapon_slot];
+        weapon = effect_weapon_find(id);
+        if (weapon != NULL) {
+            bar = (s16)weapon->unk30 >> 3;
+            sprite_fill_clut(0x401, 0x10, bar + 0x10, 0x67FF);
+            sprite_fill_clut(0x401, bar + 0x11, 0x2F, 0x3D40);
+            bar = weapon->unk52 >> 3;
+            sprite_fill_clut(0x401, 0x40, bar + 0x40, 0x67FF);
+            sprite_fill_clut(0x401, bar + 0x41, 0x5F, 0x3D40);
+            bar = weapon->unk50 / 3 - 1;
+            if (bar < 0) {
+                bar = 0;
             }
-            sprite_fill_clut(0x401, 0x70, v + 0x70, 0x67FF);
-            sprite_fill_clut(0x401, v + 0x71, 0x8F, 0x3D40);
+            sprite_fill_clut(0x401, 0x70, bar + 0x70, 0x67FF);
+            sprite_fill_clut(0x401, bar + 0x71, 0x8F, 0x3D40);
             sprite_fill_clut(0x401, 0xC, 0xE, 0xD20);
-            switch (e->unk2) {
+            switch (weapon->unk2) {
             case 0:
                 sprite_set_clut_entry(0x401, 0xC, 0xD3F);
                 break;
@@ -977,7 +977,7 @@ void effect_weapon_draw_panel(s16 arg0, s16 arg1) {
                 break;
             }
             sprite_set_cell(0x402, (s16)(id / 9), (s16)(id % 9));
-            if (arg1 != 0) {
+            if (with_text != 0) {
                 /* "  8武器1を方向キー上下で,  選んで下さい,    武装 3○ 1武装解除 4×" */
                 text_show("  8\225\220\212\3551\202\360\225\373\214\374\203L\201[\217\343\211\272\202\305,  \221I\202\361\202\305\211\272\202\263\202\242,    \225\220\221\225 3\201\233 1\225\220\221\225\211\360\217\234 4\201~", 3, -1, 0, -1, 0, 1);
             }
@@ -1013,116 +1013,116 @@ INCLUDE_RODATA("asm/nonmatchings/game/80185A60", D_801707F4);
 
 INCLUDE_RODATA("asm/nonmatchings/game/80185A60", D_8017080C);
 
-void effect_weapon_calc_rate(s32 arg0) {
-    PlayerStatus *g = &player_status;
-    Inventory *p = g->inventory;
-    Unk_80188FEC *e = effect_weapon_find(p->weapon_ids[arg0]);
-    s32 a, b, c, v;
+void effect_weapon_calc_rate(s32 slot) {
+    PlayerStatus *status = &player_status;
+    Inventory *inv = status->inventory;
+    Unk_80188FEC *weapon = effect_weapon_find(inv->weapon_ids[slot]);
+    s32 level_part, stat_part, skill_part, rate;
     s32 val;
 
-    if (e == NULL) {
+    if (weapon == NULL) {
         return;
     }
-    a = 0x2000;
-    if (e->unk28 != 0 && g->level < (s16)e->unk30) {
-        a = (g->level << 13) / (s16)e->unk30;
+    level_part = 0x2000;
+    if (weapon->unk28 != 0 && status->level < (s16)weapon->unk30) {
+        level_part = (status->level << 13) / (s16)weapon->unk30;
     }
-    b = 0x1000;
-    if (e->unk34 != 0) {
-        switch (e->unk38) {
+    stat_part = 0x1000;
+    if (weapon->unk34 != 0) {
+        switch (weapon->unk38) {
         case 0:
-            val = g->stat0;
+            val = status->stat0;
             break;
         case 1:
-            val = g->stat1;
+            val = status->stat1;
             break;
         case 2:
-            val = g->stat2;
+            val = status->stat2;
             break;
         case 3:
-            val = g->stat3;
+            val = status->stat3;
             break;
         }
-        if (val < e->unk3C) {
-            b = (val << 12) / e->unk3C;
+        if (val < weapon->unk3C) {
+            stat_part = (val << 12) / weapon->unk3C;
         }
     }
-    c = 0x1000;
-    if (e->unk40 != 0) {
-        switch (e->unk2) {
+    skill_part = 0x1000;
+    if (weapon->unk40 != 0) {
+        switch (weapon->unk2) {
         case 0:
-            val = g->weapon0_level;
+            val = status->weapon0_level;
             break;
         case 1:
-            val = g->weapon1_level;
+            val = status->weapon1_level;
             break;
         case 2:
-            val = g->weapon2_level;
+            val = status->weapon2_level;
             break;
         case 3:
-            val = g->weapon3_level;
+            val = status->weapon3_level;
             break;
         case 4:
-            val = g->weapon4_level;
+            val = status->weapon4_level;
             break;
         }
-        if (val < e->unk48) {
-            c = (val << 12) / e->unk48;
+        if (val < weapon->unk48) {
+            skill_part = (val << 12) / weapon->unk48;
         }
     }
-    val = (e->unk50 * (a + b + c)) >> 14;
-    v = (val < 20) ? 20 : (val > 100) ? 100 : val;
-    p->weapon_rate[arg0] = v;
-    g->weapon_redraw = 1;
+    val = (weapon->unk50 * (level_part + stat_part + skill_part)) >> 14;
+    rate = (val < 20) ? 20 : (val > 100) ? 100 : val;
+    inv->weapon_rate[slot] = rate;
+    status->weapon_redraw = 1;
 }
 
-void effect_weapon_swap_stock(s16 arg0, s16 arg1) {
-    Inventory *p = player_status_inventory[0];
-    PlayerStatus *g;
-    Inventory *e;
-    Player *q;
-    void *r;
+void effect_weapon_swap_stock(s16 to_stock, s16 weapon_id) {
+    Inventory *inv = player_status_inventory[0];
+    PlayerStatus *status;
+    Inventory *inv2;
+    Player *player;
+    void *model;
     s32 i;
     s32 j;
 
-    p->unk0 = 0;
+    inv->unk0 = 0;
     for (j = 0; j < 2; j++) {
-        if (p->weapon_ids[j] >= 0) {
-            p->unk0++;
+        if (inv->weapon_ids[j] >= 0) {
+            inv->unk0++;
         }
     }
-    if (arg0 != 0) {
-        effect_weapon_unequip(arg1);
-        p->unkC[arg1]++;
+    if (to_stock != 0) {
+        effect_weapon_unequip(weapon_id);
+        inv->unkC[weapon_id]++;
     } else {
-        g = &player_status;
-        e = g->inventory;
-        q = g->player;
+        status = &player_status;
+        inv2 = status->inventory;
+        player = status->player;
         for (i = 0; i < 2; i++) {
-            if (e->weapon_ids[i] < 0) {
-                e->weapon_ids[i] = arg1;
-                r = mod_find(arg1 + 0x400);
-                if (r != 0) {
-                    mod_setup(r, q->coord, 1, 0);
+            if (inv2->weapon_ids[i] < 0) {
+                inv2->weapon_ids[i] = weapon_id;
+                model = mod_find(weapon_id + 0x400);
+                if (model != 0) {
+                    mod_setup(model, player->coord, 1, 0);
                 }
                 effect_weapon_calc_rate(i);
                 break;
             }
         }
-        p->unkC[arg1]--;
+        inv->unkC[weapon_id]--;
     }
-    p->unk0 = 0;
+    inv->unk0 = 0;
 }
 
-s32 effect_inventory_has_room(s16 arg0) {
-    Inventory *p = player_status_inventory[0];
+s32 effect_inventory_has_room(s16 kind) {
+    Inventory *inv = player_status_inventory[0];
     s32 i;
     s16 n;
 
-    switch (arg0) {
+    switch (kind) {
     case 0:
         for (i = 0, n = 0; i < 8; i++) {
-            if ((u16)p->item_ids[i] < 100) {
+            if ((u16)inv->item_ids[i] < 100) {
                 n++;
             }
         }
@@ -1130,7 +1130,7 @@ s32 effect_inventory_has_room(s16 arg0) {
             break;
         }
         for (i = 0; i < 8; i++) {
-            if (p->item_ids[i] < 0) {
+            if (inv->item_ids[i] < 0) {
                 return 1;
             }
         }
@@ -1138,14 +1138,14 @@ s32 effect_inventory_has_room(s16 arg0) {
     case 1:
     case 3:
         for (i = 0; i < 8; i++) {
-            if (p->item_ids[i] < 0) {
+            if (inv->item_ids[i] < 0) {
                 return 1;
             }
         }
         return 0;
     case 4:
         for (i = 0; i < 2; i++) {
-            if (p->weapon_ids[i] < 0) {
+            if (inv->weapon_ids[i] < 0) {
                 return 1;
             }
         }
@@ -1156,46 +1156,46 @@ s32 effect_inventory_has_room(s16 arg0) {
     return 0;
 }
 
-static inline void func_80187E38_inl(s32 d) {
-    Inventory *g;
-    s32 k;
-    void *r;
+static inline void func_80187E38_inl(s32 step) {
+    Inventory *inv;
+    s32 slot;
+    void *model;
     s32 id;
-    g = player_status_inventory[0];
-    if (g->unk0 != 2) {
+    inv = player_status_inventory[0];
+    if (inv->unk0 != 2) {
         return;
     }
     sound_se_play(0xF);
-    k = g->weapon_slot;
-    k += d;
-    if (k >= 2) {
-        k = 0;
-    } else if (k < 0) {
-        k = 1;
+    slot = inv->weapon_slot;
+    slot += step;
+    if (slot >= 2) {
+        slot = 0;
+    } else if (slot < 0) {
+        slot = 1;
     }
-    g->weapon_slot = k;
-    id = g->weapon_ids[k];
-    r = mod_find(id + 0x400);
+    inv->weapon_slot = slot;
+    id = inv->weapon_ids[slot];
+    model = mod_find(id + 0x400);
     effect_weapon_draw_panel(1, 0);
-    effect_weapon_calc_rate(k);
-    if (r == NULL) {
+    effect_weapon_calc_rate(slot);
+    if (model == NULL) {
         return;
     }
-    g->weapon_model = (s32)r;
-    mod_set_anim(r, 5, 0);
+    inv->weapon_model = (s32)model;
+    mod_set_anim(model, 5, 0);
 }
 
-s32 effect_weapon_input(PlayerStatus *arg0) {
-    GameVars *q = &action_vars;
-    Player *b = arg0->player;
-    Inventory *a = arg0->inventory;
+s32 effect_weapon_input(PlayerStatus *status) {
+    GameVars *game = &action_vars;
+    Player *player = status->player;
+    Inventory *inv = status->inventory;
 
-    if (b->flags & 0x8000) {
-        if (a->weapon_shown == 0) {
-            b->flags &= 0x7FFF;
-            a->weapon_state = 0;
+    if (player->flags & 0x8000) {
+        if (inv->weapon_shown == 0) {
+            player->flags &= 0x7FFF;
+            inv->weapon_state = 0;
         }
-        if ((u16)a->weapon_state != 2) {
+        if ((u16)inv->weapon_state != 2) {
             return 1;
         }
         if (!(kaj_system.pad_prev & 0x1000) && (kaj_system.pad_now & 0x1000)) {
@@ -1205,123 +1205,123 @@ s32 effect_weapon_input(PlayerStatus *arg0) {
         } else if (!(kaj_system.pad_prev & 0x40) && (kaj_system.pad_now & 0x40)) {
             sound_se_play(8);
             effect_weapon_draw_panel(0, 1);
-            a->weapon_state = 1;
-            mod_set_anim((void *)a->weapon_model, 6, 0);
+            inv->weapon_state = 1;
+            mod_set_anim((void *)inv->weapon_model, 6, 0);
         } else if ((!(kaj_system.pad_prev & 0x100) && (kaj_system.pad_now & 0x100)) ||
                    (!(kaj_system.pad_prev & 0x20) && (kaj_system.pad_now & 0x20))) {
             sound_se_play(0x11);
             effect_weapon_draw_panel(0, 1);
-            b->flags &= 0x7FFF;
-            a->weapon_state = 3;
-            mod_set_anim((void *)a->weapon_model, 0, 0);
+            player->flags &= 0x7FFF;
+            inv->weapon_state = 3;
+            mod_set_anim((void *)inv->weapon_model, 0, 0);
         }
         return 1;
     }
-    if ((u16)a->weapon_state == 2 && a->weapon_shown == 0) {
-        a->weapon_state = 0;
+    if ((u16)inv->weapon_state == 2 && inv->weapon_shown == 0) {
+        inv->weapon_state = 0;
     }
     if (!(kaj_system.pad_prev & 0x100) && (kaj_system.pad_now & 0x100)) {
-        if (*(s32 *)&q->menu_busy != 0) { /* this unit reads one word at 0x24C */
+        if (*(s32 *)&game->menu_busy != 0) { /* this unit reads one word at 0x24C */
             return 0;
         }
-        if ((u16)a->weapon_state == 0) {
+        if ((u16)inv->weapon_state == 0) {
             sound_se_play(0x13);
-            b->flags |= 0x8000;
+            player->flags |= 0x8000;
             effect_weapon_draw_panel(1, 1);
-            a->weapon_shown = 1;
-            mod_set_anim((void *)a->weapon_model, 4, 0);
-        } else if ((u16)a->weapon_state == 3) {
+            inv->weapon_shown = 1;
+            mod_set_anim((void *)inv->weapon_model, 4, 0);
+        } else if ((u16)inv->weapon_state == 3) {
             sound_se_play(0x13);
-            b->flags |= 0x8000;
+            player->flags |= 0x8000;
             effect_weapon_draw_panel(1, 1);
-            a->weapon_state = 2;
+            inv->weapon_state = 2;
         }
     } else if ((!(kaj_system.pad_prev & 2) && (kaj_system.pad_now & 2)) ||
                (!(kaj_system.pad_prev & 1) && (kaj_system.pad_now & 1))) {
-        if (a->armed != 0) {
-            if ((u16)a->weapon_state == 3) {
-                a->weapon_state = 4;
-                mod_set_anim((void *)a->weapon_model, 1, 0);
-            } else if ((u16)a->weapon_state == 5) {
-                a->weapon_state = 6;
-                mod_set_anim((void *)a->weapon_model, 2, 0);
+        if (inv->armed != 0) {
+            if ((u16)inv->weapon_state == 3) {
+                inv->weapon_state = 4;
+                mod_set_anim((void *)inv->weapon_model, 1, 0);
+            } else if ((u16)inv->weapon_state == 5) {
+                inv->weapon_state = 6;
+                mod_set_anim((void *)inv->weapon_model, 2, 0);
             }
         }
     }
     return 0;
 }
 
-s16 effect_item_use(PlayerStatus *a, s16 b, s16 c, s16 d, s16 e) {
+s16 effect_item_use(PlayerStatus *status, s16 b, s16 item_id, s16 full, s16 close_text) {
     char buf[0x80];
-    SceneTables *p = &object_scene_tables;
-    GameVars *q = &action_vars;
-    ItemRecord *ent;
-    ItemRecord *e2;
-    s32 n;
+    SceneTables *tables = &object_scene_tables;
+    GameVars *game = &action_vars;
+    ItemRecord *item;
+    ItemRecord *rec;
+    s32 count;
     s32 i;
     s32 j;
     s16 ret;
-    s16 flag;
+    s16 drink;
     s16 kind;
-    s16 v;
-    s32 r;
+    s16 value;
+    s32 injured;
 
-    n = p->unk2C;
-    e2 = (ItemRecord *)p->unk48;
-    if (n != 0) {
-        if (c < 0) {
-            ent = NULL;
+    count = tables->unk2C;
+    rec = (ItemRecord *)tables->unk48;
+    if (count != 0) {
+        if (item_id < 0) {
+            item = NULL;
             goto done;
         }
-        for (j = 0; j < n; j++, e2++) {
-            if (e2->id == c) {
-                ent = e2;
+        for (j = 0; j < count; j++, rec++) {
+            if (rec->id == item_id) {
+                item = rec;
                 goto done;
             }
         }
     }
-    ent = NULL;
+    item = NULL;
 done:
-    if (ent == NULL) {
+    if (item == NULL) {
         return -1;
     }
     memset(buf, 0, 0x80);
     ret = 0;
     kind = 3;
-    flag = 0;
-    if ((u16)(c - 0x27) < 4 || (u16)(c - 0x2F) < 4) {
-        flag = 1;
+    drink = 0;
+    if ((u16)(item_id - 0x27) < 4 || (u16)(item_id - 0x2F) < 4) {
+        drink = 1;
     }
-    switch (ent->kind) {
+    switch (item->kind) {
     case 0:
-        v = ent->value;
-        if (v < 0) {
-            if (a->mutant != 0) {
-                player_add_hp(-v, 0);
-                if (flag) {
+        value = item->value;
+        if (value < 0) {
+            if (status->mutant != 0) {
+                player_add_hp(-value, 0);
+                if (drink) {
                     /* " 8%s, 1を飲んで、8Ｖｉｔａｌｉｔｙ1が, 回復した" */
-                    sprintf(buf, D_80170618, ent->name);
+                    sprintf(buf, D_80170618, item->name);
                 } else {
                     /* " 8%s, 1を食べて、8Ｖｉｔａｌｉｔｙ1が, 回復した" */
-                    sprintf(buf, D_80170648, ent->name);
+                    sprintf(buf, D_80170648, item->name);
                 }
             } else {
                 kind = 4;
-                player_add_hp(v, 0);
-                player_heal_part(3, 2, ent->value);
-                if (flag) {
+                player_add_hp(value, 0);
+                player_heal_part(3, 2, item->value);
+                if (drink) {
                     /* " 8%s, 1を飲んで、8Ｖｉｔａｌｉｔｙ1が, 減少し猛烈な腹痛が襲ってきた" */
-                    sprintf(buf, D_80170678, ent->name);
+                    sprintf(buf, D_80170678, item->name);
                 } else {
                     /* " 8%s, 1を食べて、8Ｖｉｔａｌｉｔｙ1が, 減少し猛烈な腹痛が襲ってきた" */
-                    sprintf(buf, D_801706BC, ent->name);
+                    sprintf(buf, D_801706BC, item->name);
                 }
             }
-        } else if (d != 0) {
+        } else if (full != 0) {
             kind = 4;
-            player_add_hp(-(v / 2), 0);
-            player_heal_part(3, 2, -ent->value);
-            if (flag) {
+            player_add_hp(-(value / 2), 0);
+            player_heal_part(3, 2, -item->value);
+            if (drink) {
                 /* " 1飲み過ぎ、ハラをこわして, 8Ｖｉｔａｌｉｔｙ1が減少した" */
                 strncpy(buf, D_80170700, 0x38);
             } else {
@@ -1329,15 +1329,15 @@ done:
                 strncpy(buf, D_8017073C, 0x38);
             }
         } else {
-            player_add_hp(v, 0);
-            if (flag) {
+            player_add_hp(value, 0);
+            if (drink) {
                 /* " 8%s, 1を飲んで、8Ｖｉｔａｌｉｔｙ1が, 回復した" */
-                sprintf(buf, D_80170618, ent->name);
+                sprintf(buf, D_80170618, item->name);
             } else {
                 /* " 8%s, 1を食べて、8Ｖｉｔａｌｉｔｙ1が, 回復した" */
-                sprintf(buf, D_80170648, ent->name);
+                sprintf(buf, D_80170648, item->name);
             }
-            if (a->energy == 0xFF && d == 0) {
+            if (status->energy == 0xFF && full == 0) {
                 ret = 1;
                 text_show_timed(b, 1, buf, kind, 2);
                 memset(buf, 0, 0x80);
@@ -1348,20 +1348,20 @@ done:
         text_show_timed(b, 1, buf, kind, 2);
         break;
     case 3:
-        r = player_is_injured();
-        if ((s16)r != 0) {
+        injured = player_is_injured();
+        if ((s16)injured != 0) {
             for (i = 0; i < 5; i++) {
-                (q->vars + 0x5A)[i] -= ent->value;
-                if ((s16)(q->vars + 0x5A)[i] < 0) {
-                    (q->vars + 0x5A)[i] = 0;
+                (game->vars + 0x5A)[i] -= item->value;
+                if ((s16)(game->vars + 0x5A)[i] < 0) {
+                    (game->vars + 0x5A)[i] = 0;
                 }
             }
-            event_draw_limb_status(a);
+            event_draw_limb_status(status);
         }
         memset(buf, 0, 0x80);
-        switch (ent->value) {
+        switch (item->value) {
         case 60:
-            if ((s16)r != 0) {
+            if ((s16)injured != 0) {
                 /* " 傷が多少回復した" */
                 strncpy(buf, D_801707A4, 0x11);
             } else {
@@ -1370,7 +1370,7 @@ done:
             }
             break;
         case 180:
-            if ((s16)r != 0) {
+            if ((s16)injured != 0) {
                 /* " 傷がかなり回復した" */
                 strncpy(buf, D_801707CC, 0x13);
             } else {
@@ -1379,7 +1379,7 @@ done:
             }
             break;
         case 360:
-            if ((s16)r != 0) {
+            if ((s16)injured != 0) {
                 /* " 傷が完全に回復した" */
                 strncpy(buf, D_801707E0, 0x13);
             } else {
@@ -1388,7 +1388,7 @@ done:
             }
             break;
         }
-        event_advance_clock(ent->value, 1);
+        event_advance_clock(item->value, 1);
         text_show(buf, 1, -1, 0, -1, 0, kind);
         break;
     case 1:
@@ -1396,32 +1396,32 @@ done:
     default:
         return -1;
     }
-    if (e != 0) {
+    if (close_text != 0) {
         text_close();
     }
     return ret;
 }
 
 void effect_item_use_selected(void) {
-    PlayerStatus *g = &player_status;
-    Inventory *p;
+    PlayerStatus *status = &player_status;
+    Inventory *inv;
     s16 id;
-    s16 r;
+    s16 result;
     s32 i;
 
     if (effect_item_sel >= 0) {
         id = effect_item_menu_list[effect_item_sel];
-        r = effect_item_use(g, scene_request[0].unk0[0], id, effect_item_full, 1);
-        if (r >= 0) {
-            if (r != 0) {
+        result = effect_item_use(status, scene_request[0].unk0[0], id, effect_item_full, 1);
+        if (result >= 0) {
+            if (result != 0) {
                 effect_item_full = 1;
             }
-            p = g->inventory;
-            if (p->unk30 != 0) {
+            inv = status->inventory;
+            if (inv->unk30 != 0) {
                 for (i = 0; i < 8; i++) {
-                    if (p->item_ids[i] == id) {
-                        p->item_ids[i] = -1;
-                        p->unk30--;
+                    if (inv->item_ids[i] == id) {
+                        inv->item_ids[i] = -1;
+                        inv->unk30--;
                         return;
                     }
                 }
@@ -1430,41 +1430,41 @@ void effect_item_use_selected(void) {
     }
 }
 
-s16 effect_item_menu_show(PlayerStatus *arg0, s16 arg1, s16 arg2) {
-    Inventory *p = arg0->inventory;
+s16 effect_item_menu_show(PlayerStatus *status, s16 arg1, s16 open) {
+    Inventory *inv = status->inventory;
     s32 i;
     s32 n;
 
-    if (arg2 != 0) {
+    if (open != 0) {
         sound_se_play(0x13);
         effect_item_sel = -1;
         effect_item_prompt_shown = 0;
         D_801DFEC2 = arg1;
         effect_item_full = 0;
-        if (arg0->energy == 0xFF) {
+        if (status->energy == 0xFF) {
             effect_item_full = 1;
         }
         for (i = 0; i < 8; i++) {
             effect_item_menu_list[i] = -1;
         }
         for (i = 0, n = 0; i < 8; i++) {
-            if (p->item_ids[i] >= 0) {
-                effect_item_menu_list[n++] = p->item_ids[i];
+            if (inv->item_ids[i] >= 0) {
+                effect_item_menu_list[n++] = inv->item_ids[i];
             }
         }
-        return mail_menu_open(1, 0x40B, -2, p->unk30, 6, effect_item_menu_list, 4, 0x2969, 0x2BFF);
+        return mail_menu_open(1, 0x40B, -2, inv->unk30, 6, effect_item_menu_list, 4, 0x2969, 0x2BFF);
     }
     sound_se_play(effect_item_sel < 0 ? 8 : 0x11);
     return mail_menu_close();
 }
 
-s16 effect_item_input(PlayerStatus *arg0, s16 arg1) {
+s16 effect_item_input(PlayerStatus *status, s16 arg1) {
     s16 n = arg1;
-    Player *q = arg0->player;
-    GameVars *g = &action_vars;
-    Inventory *p = arg0->inventory;
+    Player *player = status->player;
+    GameVars *game = &action_vars;
+    Inventory *inv = status->inventory;
 
-    if (q->flags & 0x4000) {
+    if (player->flags & 0x4000) {
         if (mail_menu_get_state() == 1) {
             if (effect_item_prompt_shown == 0) {
                 effect_item_prompt_shown = 1;
@@ -1475,12 +1475,12 @@ s16 effect_item_input(PlayerStatus *arg0, s16 arg1) {
                 if (effect_item_sel < 0) {
                     effect_item_sel = 0;
                 }
-                effect_item_menu_show(arg0, n, 0);
+                effect_item_menu_show(status, n, 0);
             } else if (!(kaj_system.pad_prev & 0x40) && (kaj_system.pad_now & 0x40)) {
                 if (effect_item_sel >= 0) {
                     effect_item_sel = -1;
                 }
-                effect_item_menu_show(arg0, n, 0);
+                effect_item_menu_show(status, n, 0);
             } else if (!(kaj_system.pad_prev & 0x1000) && (kaj_system.pad_now & 0x1000)) {
                 effect_item_sel = mail_menu_move(1);
             } else if (!(kaj_system.pad_prev & 0x4000) && (kaj_system.pad_now & 0x4000)) {
@@ -1489,18 +1489,18 @@ s16 effect_item_input(PlayerStatus *arg0, s16 arg1) {
         }
         return 1;
     }
-    if (p->unk30 == 0) {
+    if (inv->unk30 == 0) {
         return 0;
     }
     if (roadmap_get_state() != 0) {
         return 0;
     }
     if (!(kaj_system.pad_prev & 0x800) && (kaj_system.pad_now & 0x800)) {
-        if (*(s32 *)&g->menu_busy != 0) {
+        if (*(s32 *)&game->menu_busy != 0) {
             return 0;
         }
-        if (effect_item_menu_show(arg0, n, 1) != 0) {
-            q->flags |= 0x4000;
+        if (effect_item_menu_show(status, n, 1) != 0) {
+            player->flags |= 0x4000;
         }
     }
     if (effect_item_prompt_shown != 0 && mail_menu_get_state() == 0) {
@@ -1510,51 +1510,51 @@ s16 effect_item_input(PlayerStatus *arg0, s16 arg1) {
     return 0;
 }
 
-s32 effect_weapon_add(s16 arg0, s16 arg1) {
-    PlayerStatus *g = &player_status;
-    Inventory *p = g->inventory;
-    Player *q = g->player;
-    void *r;
+s32 effect_weapon_add(s16 weapon_id, s16 stock) {
+    PlayerStatus *status = &player_status;
+    Inventory *inv = status->inventory;
+    Player *player = status->player;
+    void *model;
     s32 i;
 
     for (i = 0; i < 2; i++) {
-        if (p->weapon_ids[i] < 0) {
-            p->weapon_ids[i] = arg0;
-            r = mod_find(arg0 + 0x400);
-            if (r != 0) {
-                mod_setup(r, q->coord, 1, 0);
+        if (inv->weapon_ids[i] < 0) {
+            inv->weapon_ids[i] = weapon_id;
+            model = mod_find(weapon_id + 0x400);
+            if (model != 0) {
+                mod_setup(model, player->coord, 1, 0);
             }
             effect_weapon_calc_rate(i);
             return 1;
         }
     }
-    if (arg1 != 0) {
-        p->unkC[arg0]++;
+    if (stock != 0) {
+        inv->unkC[weapon_id]++;
     }
     return 0;
 }
 
 void effect_weapon_load_models(void) {
-    PlayerStatus *g = &player_status;
-    Inventory *p = g->inventory;
-    Player *q = g->player;
-    GameVars *s = &action_vars;
-    void *r;
+    PlayerStatus *status = &player_status;
+    Inventory *inv = status->inventory;
+    Player *player = status->player;
+    GameVars *game = &action_vars;
+    void *model;
     s32 i;
     u16 id;
 
-    p->armed = 1;
+    inv->armed = 1;
     object_load_weapon_mods();
-    s->vars[0x3C] = 2;
+    game->vars[0x3C] = 2;
     for (i = 0; i < 2; i++) {
-        if (p->weapon_ids[i] >= 0) {
-            id = p->weapon_ids[i] + 0x400;
-            s->vars[0x3C]--;
-            r = mod_find(id);
-            if (r != 0) {
-                mod_setup(r, q->coord, 1, 0);
-                if (p->weapon_slot == i) {
-                    p->weapon_model = (s32)r;
+        if (inv->weapon_ids[i] >= 0) {
+            id = inv->weapon_ids[i] + 0x400;
+            game->vars[0x3C]--;
+            model = mod_find(id);
+            if (model != 0) {
+                mod_setup(model, player->coord, 1, 0);
+                if (inv->weapon_slot == i) {
+                    inv->weapon_model = (s32)model;
                 }
             }
             effect_weapon_calc_rate(i);
@@ -1565,127 +1565,127 @@ void effect_weapon_load_models(void) {
 }
 
 void effect_weapon_reset(void) {
-    Inventory *p = player_status_inventory[0];
+    Inventory *inv = player_status_inventory[0];
 
-    p->weapon_shown = 0;
-    p->weapon_state = 0;
-    p->unk0 = 0;
-    p->weapon_model = 0;
-    p->armed = 0;
+    inv->weapon_shown = 0;
+    inv->weapon_state = 0;
+    inv->unk0 = 0;
+    inv->weapon_model = 0;
+    inv->armed = 0;
 }
 
-void effect_weapon_check_fire_frame(s32 arg0) {
-    PlayerStatus *g = &player_status;
-    Inventory *p = g->inventory;
-    Player *q = g->player;
-    Unk_80188FEC *e = effect_weapon_find(p->weapon_ids[p->weapon_slot]);
+void effect_weapon_check_fire_frame(s32 frame) {
+    PlayerStatus *status = &player_status;
+    Inventory *inv = status->inventory;
+    Player *player = status->player;
+    Unk_80188FEC *weapon = effect_weapon_find(inv->weapon_ids[inv->weapon_slot]);
 
-    if (e != NULL && e->unk4C == arg0) {
-        if (g->target_npc != 0) {
-            if (!(q->flags & 0x400)) {
-                q->flags |= 0x400;
+    if (weapon != NULL && weapon->unk4C == frame) {
+        if (status->target_npc != 0) {
+            if (!(player->flags & 0x400)) {
+                player->flags |= 0x400;
             }
         }
-        player_weapon_sound(e->unk0, 1);
+        player_weapon_sound(weapon->unk0, 1);
     }
 }
 
-s32 effect_weapon_list(s16 arg0, s16 *arg1, s16 *arg2) {
-    Inventory *p = player_status_inventory[0];
+s32 effect_weapon_list(s16 equipped, s16 *count_out, s16 *ids_out) {
+    Inventory *inv = player_status_inventory[0];
     s32 i;
-    s32 n;
-    s32 m;
+    s32 n_equipped;
+    s32 n_stocked;
 
-    for (i = 0, n = 0; i < 2; i++) {
-        if (p->weapon_ids[i] >= 0) {
-            if (arg0 != 0) {
-                arg2[n] = p->weapon_ids[i];
+    for (i = 0, n_equipped = 0; i < 2; i++) {
+        if (inv->weapon_ids[i] >= 0) {
+            if (equipped != 0) {
+                ids_out[n_equipped] = inv->weapon_ids[i];
             }
-            n++;
+            n_equipped++;
         }
     }
-    for (i = 0, m = 0; i < 0x12; i++) {
-        if (p->unkC[i] != 0) {
-            if (arg0 == 0) {
-                arg2[m] = i;
+    for (i = 0, n_stocked = 0; i < 0x12; i++) {
+        if (inv->unkC[i] != 0) {
+            if (equipped == 0) {
+                ids_out[n_stocked] = i;
             }
-            m++;
+            n_stocked++;
         }
     }
-    if (arg0 != 0) {
-        if (n != 2) {
+    if (equipped != 0) {
+        if (n_equipped != 2) {
             return 0;
         }
-        *arg1 = n;
+        *count_out = n_equipped;
         return 1;
     }
-    *arg1 = m;
-    if (n < 2 && m != 0) {
+    *count_out = n_stocked;
+    if (n_equipped < 2 && n_stocked != 0) {
         return 1;
     }
     return 0;
 }
 
 void effect_weapon_free_records(void) {
-    SceneTables *p = &object_scene_tables;
-    if (p->unk30 != 0) {
-        if (p->unk58 != NULL) {
-            free3(p->unk58);
+    SceneTables *tables = &object_scene_tables;
+    if (tables->unk30 != 0) {
+        if (tables->unk58 != NULL) {
+            free3(tables->unk58);
         }
-        p->unk30 = 0;
-        p->unk58 = NULL;
+        tables->unk30 = 0;
+        tables->unk58 = NULL;
     }
 }
 
-Unk_80188FEC *effect_weapon_find(s16 arg0) {
-    SceneTables *p = &object_scene_tables;
-    s32 n = p->unk30;
-    Unk_80188FEC *e = p->unk58;
+Unk_80188FEC *effect_weapon_find(s16 id) {
+    SceneTables *tables = &object_scene_tables;
+    s32 n = tables->unk30;
+    Unk_80188FEC *rec = tables->unk58;
     s32 i;
-    if (n == 0 || arg0 < 0) {
+    if (n == 0 || id < 0) {
         return NULL;
     }
-    for (i = 0; i < p->unk30; i++, e++) {
-        if (e->unk0 == arg0) {
-            return e;
+    for (i = 0; i < tables->unk30; i++, rec++) {
+        if (rec->unk0 == id) {
+            return rec;
         }
     }
     return NULL;
 }
 
-s32 effect_item_add(s16 arg0, s16 arg1) {
-    Inventory *p = player_status_inventory[0];
+s32 effect_item_add(s16 item_id, s16 kind) {
+    Inventory *inv = player_status_inventory[0];
     s32 i;
 
-    if (arg1 == 2) {
-        p->unk42 = arg0 - 0x64;
+    if (kind == 2) {
+        inv->unk42 = item_id - 0x64;
         return 1;
     }
     for (i = 0; i < 8; i++) {
-        if (p->item_ids[i] < 0) {
-            p->item_ids[i] = arg0;
-            p->unk30++;
+        if (inv->item_ids[i] < 0) {
+            inv->item_ids[i] = item_id;
+            inv->unk30++;
             return 1;
         }
     }
     return 0;
 }
 
-s32 effect_item_remove(s16 arg0, s16 arg1) {
-    Inventory *p = player_status_inventory[0];
+s32 effect_item_remove(s16 item_id, s16 kind) {
+    Inventory *inv = player_status_inventory[0];
     s32 i;
 
-    if (arg1 == 2) {
-        p->unk42 = 0xF;
+    if (kind == 2) {
+        inv->unk42 = 0xF;
         return 1;
     }
-    if (p->unk30 == 0) {
+    if (inv->unk30 == 0) {
         return 0;
     }
     for (i = 0; i < 8; i++) {
-        if (p->item_ids[i] == arg0) {
-            p->item_ids[i] = -1;
-            p->unk30--;
+        if (inv->item_ids[i] == item_id) {
+            inv->item_ids[i] = -1;
+            inv->unk30--;
             return 1;
         }
     }
@@ -1693,27 +1693,27 @@ s32 effect_item_remove(s16 arg0, s16 arg1) {
 }
 
 void effect_item_free_records(void) {
-    SceneTables *p = &object_scene_tables;
-    if (p->unk2C != 0) {
-        if (p->unk48 != 0) {
-            free3((void *)p->unk48);
+    SceneTables *tables = &object_scene_tables;
+    if (tables->unk2C != 0) {
+        if (tables->unk48 != 0) {
+            free3((void *)tables->unk48);
         }
-        p->unk2C = 0;
-        p->unk48 = 0;
+        tables->unk2C = 0;
+        tables->unk48 = 0;
     }
 }
 
-ItemRecord *effect_item_find(s16 arg0) {
-    SceneTables *p = &object_scene_tables;
-    s32 n = p->unk2C;
-    ItemRecord *e = (ItemRecord *)p->unk48;
+ItemRecord *effect_item_find(s16 id) {
+    SceneTables *tables = &object_scene_tables;
+    s32 n = tables->unk2C;
+    ItemRecord *rec = (ItemRecord *)tables->unk48;
     s32 i;
-    if (n == 0 || arg0 < 0) {
+    if (n == 0 || id < 0) {
         return NULL;
     }
-    for (i = 0; i < p->unk2C; i++, e++) {
-        if (e->id == arg0) {
-            return e;
+    for (i = 0; i < tables->unk2C; i++, rec++) {
+        if (rec->id == id) {
+            return rec;
         }
     }
     return NULL;

@@ -206,170 +206,170 @@ INCLUDE_RODATA("asm/nonmatchings/game/801A7560", D_801719DC);
 
 void thing_update_all(void) {
     SVector sv;
-    Unk_801DFFA0 *p = D_801DFFA0;
-    PlayerStatus *g = &player_status;
-    Inventory *a = g->inventory;
-    Player *e = g->player;
-    Thing *o;
+    Unk_801DFFA0 *list = D_801DFFA0;
+    PlayerStatus *status = &player_status;
+    Inventory *inv = status->inventory;
+    Player *player = status->player;
+    Thing *thing;
 
-    if (p->unkC == 0) {
+    if (list->unkC == 0) {
         return;
     }
-    p->unk8 = p->unk0;
+    list->unk8 = list->unk0;
     while (1) {
-        o = p->unk8->unk8;
-        if (o != NULL && o->type != 4) {
-            if (*(s32 *)o == 0x30007) {
-                if (g->target_npc != 0 && a->weapon_state >= 3) {
-                    if (o->active == 0) {
-                        o->active = 1;
+        thing = list->unk8->unk8;
+        if (thing != NULL && thing->type != 4) {
+            if (*(s32 *)thing == 0x30007) {
+                if (status->target_npc != 0 && inv->weapon_state >= 3) {
+                    if (thing->active == 0) {
+                        thing->active = 1;
                     }
-                } else if (o->active != 0) {
-                    o->active = 0;
+                } else if (thing->active != 0) {
+                    thing->active = 0;
                 }
             }
-            if (o->active == 0) {
-                o->block = 0;
+            if (thing->active == 0) {
+                thing->block = 0;
             } else {
-                if (o->animate != 0) {
-                    switch (o->type) {
+                if (thing->animate != 0) {
+                    switch (thing->type) {
                     case 2:
-                        if (o->id == 0) {
-                            vehicle_train_update(o);
+                        if (thing->id == 0) {
+                            vehicle_train_update(thing);
                         }
                         break;
                     case 3:
-                        switch (o->id) {
+                        switch (thing->id) {
                         case 0:
                         case 2:
                         case 6:
-                            o->rot_y = -kaj_system.vsync_delta + o->rot_y;
-                            if (o->rot_y < 0) {
-                                o->rot_y += 360;
-                            } else if (o->rot_y > 360) {
-                                o->rot_y -= 360;
+                            thing->rot_y = -kaj_system.vsync_delta + thing->rot_y;
+                            if (thing->rot_y < 0) {
+                                thing->rot_y += 360;
+                            } else if (thing->rot_y > 360) {
+                                thing->rot_y -= 360;
                             }
-                            sv.vx = (o->rot_x << 12) / 360;
-                            sv.vy = (o->rot_y << 12) / 360;
-                            sv.vz = (o->rot_z << 12) / 360;
-                            RotMatrix(&sv, o->coord_m);
-                            o->coord_flg = 0;
+                            sv.vx = (thing->rot_x << 12) / 360;
+                            sv.vy = (thing->rot_y << 12) / 360;
+                            sv.vz = (thing->rot_z << 12) / 360;
+                            RotMatrix(&sv, thing->coord_m);
+                            thing->coord_flg = 0;
                             break;
                         case 1:
-                            o->rot_y -= -kaj_system.vsync_delta;
-                            if (o->rot_y < 0) {
-                                o->rot_y += 360;
-                            } else if (o->rot_y > 360) {
-                                o->rot_y -= 360;
+                            thing->rot_y -= -kaj_system.vsync_delta;
+                            if (thing->rot_y < 0) {
+                                thing->rot_y += 360;
+                            } else if (thing->rot_y > 360) {
+                                thing->rot_y -= 360;
                             }
-                            sv.vx = (o->rot_x << 12) / 360;
-                            sv.vy = (o->rot_y << 12) / 360;
-                            sv.vz = (o->rot_z << 12) / 360;
-                            RotMatrixZYX(&sv, o->coord_m);
-                            o->coord_flg = 0;
+                            sv.vx = (thing->rot_x << 12) / 360;
+                            sv.vy = (thing->rot_y << 12) / 360;
+                            sv.vz = (thing->rot_z << 12) / 360;
+                            RotMatrixZYX(&sv, thing->coord_m);
+                            thing->coord_flg = 0;
                             break;
                         case 3:
                         case 4:
                         case 5:
-                            o->rot_y += ~(kaj_system.vsync_delta / 4);
-                            if (o->rot_y < 0) {
-                                o->rot_y += 360;
-                            } else if (o->rot_y > 360) {
-                                o->rot_y -= 360;
+                            thing->rot_y += ~(kaj_system.vsync_delta / 4);
+                            if (thing->rot_y < 0) {
+                                thing->rot_y += 360;
+                            } else if (thing->rot_y > 360) {
+                                thing->rot_y -= 360;
                             }
-                            sv.vx = (o->rot_x << 12) / 360;
-                            sv.vy = (o->rot_y << 12) / 360;
-                            sv.vz = (o->rot_z << 12) / 360;
-                            RotMatrix(&sv, o->coord_m);
-                            o->coord_flg = 0;
+                            sv.vx = (thing->rot_x << 12) / 360;
+                            sv.vy = (thing->rot_y << 12) / 360;
+                            sv.vz = (thing->rot_z << 12) / 360;
+                            RotMatrix(&sv, thing->coord_m);
+                            thing->coord_flg = 0;
                             break;
                         case 7:
-                            sprite_thing_update_marker(e, o, g->target_npc);
+                            sprite_thing_update_marker(player, thing, status->target_npc);
                             break;
                         case 8:
-                            o->rot_y += kaj_system.vsync_delta * 5 / 2;
-                            if (o->rot_y < 0) {
-                                o->rot_y += 360;
-                            } else if (o->rot_y > 360) {
-                                o->rot_y -= 360;
+                            thing->rot_y += kaj_system.vsync_delta * 5 / 2;
+                            if (thing->rot_y < 0) {
+                                thing->rot_y += 360;
+                            } else if (thing->rot_y > 360) {
+                                thing->rot_y -= 360;
                             }
-                            sv.vx = (o->rot_x << 12) / 360;
-                            sv.vy = (o->rot_y << 12) / 360;
-                            sv.vz = (o->rot_z << 12) / 360;
-                            RotMatrix(&sv, o->coord_m);
-                            o->coord_flg = 0;
+                            sv.vx = (thing->rot_x << 12) / 360;
+                            sv.vy = (thing->rot_y << 12) / 360;
+                            sv.vz = (thing->rot_z << 12) / 360;
+                            RotMatrix(&sv, thing->coord_m);
+                            thing->coord_flg = 0;
                             break;
                         case 9:
-                            o->rot_y -= kaj_system.vsync_delta * 5;
-                            if (o->rot_y < 0) {
-                                o->rot_y += 360;
-                            } else if (o->rot_y > 360) {
-                                o->rot_y -= 360;
+                            thing->rot_y -= kaj_system.vsync_delta * 5;
+                            if (thing->rot_y < 0) {
+                                thing->rot_y += 360;
+                            } else if (thing->rot_y > 360) {
+                                thing->rot_y -= 360;
                             }
-                            sv.vx = (o->rot_x << 12) / 360;
-                            sv.vy = (o->rot_y << 12) / 360;
-                            sv.vz = (o->rot_z << 12) / 360;
-                            RotMatrix(&sv, o->coord_m);
-                            o->coord_flg = 0;
+                            sv.vx = (thing->rot_x << 12) / 360;
+                            sv.vy = (thing->rot_y << 12) / 360;
+                            sv.vz = (thing->rot_z << 12) / 360;
+                            RotMatrix(&sv, thing->coord_m);
+                            thing->coord_flg = 0;
                             break;
                         case 10:
-                            sprite_thing_update_fly_in(o);
+                            sprite_thing_update_fly_in(thing);
                             break;
                         }
                         break;
                     }
                 }
-                if (o->block_fixed == 0 && D_801DFC80 != 0) {
-                    o->block = block_find_at(o->pos_x, o->pos_y, o->pos_z);
-                    if (*(s32 *)o == 0) {
-                        vehicle_car_follow_player(o, 0);
+                if (thing->block_fixed == 0 && D_801DFC80 != 0) {
+                    thing->block = block_find_at(thing->pos_x, thing->pos_y, thing->pos_z);
+                    if (*(s32 *)thing == 0) {
+                        vehicle_car_follow_player(thing, 0);
                     }
                 }
             }
         }
-        if (kaj_ll_at_tail(p) != 0) {
+        if (kaj_ll_at_tail(list) != 0) {
             break;
         }
-        p->unk8 = p->unk8->unk4;
+        list->unk8 = list->unk8->unk4;
     }
 }
 
-void thing_create(Thing **arg0, u32 arg1) {
-    *arg0 = kaj_malloc(0x88);
-    if (*arg0 == NULL) {
+void thing_create(Thing **out, u32 record_size) {
+    *out = kaj_malloc(0x88);
+    if (*out == NULL) {
         kaj_abend(3, D_801719BC, thing_str_file, 0x26);
     }
-    (*arg0)->active = 0;
-    (*arg0)->animate = 0;
-    (*arg0)->unk8 = 0;
-    (*arg0)->block_fixed = 0;
-    (*arg0)->block = 0;
-    (*arg0)->tmd_objects = NULL;
-    (*arg0)->hit_model = NULL;
-    (*arg0)->record = NULL;
-    (*arg0)->record = kaj_malloc(arg1);
-    if ((*arg0)->record == NULL) {
+    (*out)->active = 0;
+    (*out)->animate = 0;
+    (*out)->unk8 = 0;
+    (*out)->block_fixed = 0;
+    (*out)->block = 0;
+    (*out)->tmd_objects = NULL;
+    (*out)->hit_model = NULL;
+    (*out)->record = NULL;
+    (*out)->record = kaj_malloc(record_size);
+    if ((*out)->record == NULL) {
         kaj_abend(3, D_801719DC, thing_str_file, 0x33);
     }
 }
 
-void thing_free(Thing *arg0) {
-    if (arg0 != NULL) {
-        free3(arg0->tmd_objects);
-        if (arg0->hit_model != NULL) {
-            free3(arg0->hit_model);
+void thing_free(Thing *thing) {
+    if (thing != NULL) {
+        free3(thing->tmd_objects);
+        if (thing->hit_model != NULL) {
+            free3(thing->hit_model);
         }
-        free3(arg0->record);
-        free3(arg0);
+        free3(thing->record);
+        free3(thing);
     }
 }
 
-void thing_list_add(s32 arg0) {
+void thing_list_add(s32 thing) {
     if (D_801DFFA0->unkC == 0) {
-        kaj_ll_insert_before(D_801DFFA0, arg0);
+        kaj_ll_insert_before(D_801DFFA0, thing);
     } else {
         D_801DFFA0->unk8 = D_801DFFA0->unk4;
-        kaj_ll_insert_after(D_801DFFA0, arg0);
+        kaj_ll_insert_after(D_801DFFA0, thing);
     }
 }
 
@@ -394,21 +394,21 @@ void thing_free_all(void) {
     }
 }
 
-Thing *thing_find(s32 arg0, s32 arg1) {
+Thing *thing_find(s32 type, s32 id) {
     Unk_801DFFA0 *list = D_801DFFA0;
     Thing *item;
-    s32 a;
-    s32 b;
+    s32 type16;
+    s32 id16;
 
     if (list->unkC == 0) {
         return NULL;
     }
-    a = arg0 & 0xFFFF;
-    b = arg1 & 0xFFFF;
+    type16 = type & 0xFFFF;
+    id16 = id & 0xFFFF;
     list->unk8 = list->unk0;
     while (1) {
         item = list->unk8->unk8;
-        if (item != NULL && item->type == a && item->id == b) {
+        if (item != NULL && item->type == type16 && item->id == id16) {
             return item;
         }
         if (kaj_ll_at_tail(list) != 0) {
@@ -419,7 +419,7 @@ Thing *thing_find(s32 arg0, s32 arg1) {
     return NULL;
 }
 
-u16 thing_hit_test(s32 arg0, s32 arg1, s32 arg2, u16 arg3) {
+u16 thing_hit_test(s32 x, s32 y, s32 z, u16 arg3) {
     Unk_801DFFA0 *list = D_801DFFA0;
     Thing *item;
 
@@ -431,7 +431,7 @@ u16 thing_hit_test(s32 arg0, s32 arg1, s32 arg2, u16 arg3) {
         item = list->unk8->unk8;
         if (item != NULL && item->active != 0 && item->hit_model != NULL) {
             GsSetLsMatrix(item->coord_m);
-            if (block_point_on_model(item->hit_model, arg0, arg1, arg2, arg3) != 0) {
+            if (block_point_on_model(item->hit_model, x, y, z, arg3) != 0) {
                 return item->id + (item->type << 12);
             }
         }
@@ -443,7 +443,7 @@ u16 thing_hit_test(s32 arg0, s32 arg1, s32 arg2, u16 arg3) {
     return 0xFFFF;
 }
 
-void thing_set_origin(s32 arg0, s32 arg1, s32 arg2) {
+void thing_set_origin(s32 origin_x, s32 origin_y, s32 origin_z) {
     Unk_801DFFA0 *list = D_801DFFA0;
     Thing *item;
 
@@ -455,9 +455,9 @@ void thing_set_origin(s32 arg0, s32 arg1, s32 arg2) {
         item = list->unk8->unk8;
         if (item != NULL) {
             item->coord_flg = 0;
-            item->coord_tx = item->pos_x - arg0;
-            item->coord_ty = item->pos_y - arg1;
-            item->coord_tz = item->pos_z - arg2;
+            item->coord_tx = item->pos_x - origin_x;
+            item->coord_ty = item->pos_y - origin_y;
+            item->coord_tz = item->pos_z - origin_z;
         }
         if (kaj_ll_at_tail(list) != 0) {
             break;
@@ -466,23 +466,23 @@ void thing_set_origin(s32 arg0, s32 arg1, s32 arg2) {
     }
 }
 
-s32 thing_run_script(s32 arg0, s32 arg1, s16 arg2) {
+s32 thing_run_script(s32 type, s32 id, s16 entering) {
     Unk_801DFFA0 *list = D_801DFFA0;
     Thing *item;
     Thing *found;
-    ActionSet *p;
-    s32 a;
-    s32 b;
+    ActionSet *set;
+    s32 type16;
+    s32 id16;
 
     if (list->unkC == 0) {
         found = NULL;
     } else {
-        a = arg0 & 0xFFFF;
-        b = arg1 & 0xFFFF;
+        type16 = type & 0xFFFF;
+        id16 = id & 0xFFFF;
         list->unk8 = list->unk0;
         while (1) {
             item = list->unk8->unk8;
-            if (item != NULL && item->type == a && item->id == b) {
+            if (item != NULL && item->type == type16 && item->id == id16) {
                 found = item;
                 break;
             }
@@ -496,30 +496,30 @@ s32 thing_run_script(s32 arg0, s32 arg1, s16 arg2) {
     if (found == NULL || found->unk8 == 0) {
         return 0;
     }
-    if (found->active == 0 || (p = arg2 != 0 ? action_find_set(found->unkC) : action_find_set(found->unkE)) == NULL) {
+    if (found->active == 0 || (set = entering != 0 ? action_find_set(found->unkC) : action_find_set(found->unkE)) == NULL) {
         return 0;
     }
-    while ((p = action_run_set(p, 0, 0)) != NULL) {
+    while ((set = action_run_set(set, 0, 0)) != NULL) {
     }
     return 1;
 }
 
-void thing_set_active(s32 arg0, s32 arg1, s16 arg2) {
+void thing_set_active(s32 type, s32 id, s16 active) {
     Unk_801DFFA0 *list = D_801DFFA0;
     Thing *item;
     Thing *found;
-    s32 a;
-    s32 b;
+    s32 type16;
+    s32 id16;
 
     if (list->unkC == 0) {
         found = NULL;
     } else {
-        a = arg0 & 0xFFFF;
-        b = arg1 & 0xFFFF;
+        type16 = type & 0xFFFF;
+        id16 = id & 0xFFFF;
         list->unk8 = list->unk0;
         while (1) {
             item = list->unk8->unk8;
-            if (item != NULL && item->type == a && item->id == b) {
+            if (item != NULL && item->type == type16 && item->id == id16) {
                 found = item;
                 break;
             }
@@ -531,26 +531,26 @@ void thing_set_active(s32 arg0, s32 arg1, s16 arg2) {
         }
     }
     if (found != NULL) {
-        found->active = arg2;
+        found->active = active;
     }
 }
 
-void thing_set_animate(s32 arg0, s32 arg1, s16 arg2) {
+void thing_set_animate(s32 type, s32 id, s16 animate) {
     Unk_801DFFA0 *list = D_801DFFA0;
     Thing *item;
     Thing *found;
-    s32 a;
-    s32 b;
+    s32 type16;
+    s32 id16;
 
     if (list->unkC == 0) {
         found = NULL;
     } else {
-        a = arg0 & 0xFFFF;
-        b = arg1 & 0xFFFF;
+        type16 = type & 0xFFFF;
+        id16 = id & 0xFFFF;
         list->unk8 = list->unk0;
         while (1) {
             item = list->unk8->unk8;
-            if (item != NULL && item->type == a && item->id == b) {
+            if (item != NULL && item->type == type16 && item->id == id16) {
                 found = item;
                 break;
             }
@@ -562,26 +562,26 @@ void thing_set_animate(s32 arg0, s32 arg1, s16 arg2) {
         }
     }
     if (found != NULL) {
-        found->animate = arg2;
+        found->animate = animate;
     }
 }
 
-void thing_set_flag10(s32 arg0, s32 arg1, s16 arg2) {
+void thing_set_flag10(s32 type, s32 id, s16 block_fixed) {
     Unk_801DFFA0 *list = D_801DFFA0;
     Thing *item;
     Thing *found;
-    s32 a;
-    s32 b;
+    s32 type16;
+    s32 id16;
 
     if (list->unkC == 0) {
         found = NULL;
     } else {
-        a = arg0 & 0xFFFF;
-        b = arg1 & 0xFFFF;
+        type16 = type & 0xFFFF;
+        id16 = id & 0xFFFF;
         list->unk8 = list->unk0;
         while (1) {
             item = list->unk8->unk8;
-            if (item != NULL && item->type == a && item->id == b) {
+            if (item != NULL && item->type == type16 && item->id == id16) {
                 found = item;
                 break;
             }
@@ -593,29 +593,29 @@ void thing_set_flag10(s32 arg0, s32 arg1, s16 arg2) {
         }
     }
     if (found != NULL) {
-        found->block_fixed = arg2;
+        found->block_fixed = block_fixed;
     }
 }
 
-void thing_cmd_set_active(Unk_801A8264 *arg0) {
-    Unk_801A8264_0 *p = arg0->unk0;
+void thing_cmd_set_active(Unk_801A8264 *cmd) {
+    Unk_801A8264_0 *p = cmd->unk0;
     Unk_801DFFA0 *list = D_801DFFA0;
     Thing *item;
     Thing *found;
-    s32 x = p->unk5;
-    s32 y = p->unk4;
-    s32 a;
-    s32 b;
+    s32 type = p->unk5;
+    s32 id = p->unk4;
+    s32 type16;
+    s32 id16;
 
     if (list->unkC == 0) {
         found = NULL;
     } else {
-        a = x & 0xFFFF;
-        b = y & 0xFFFF;
+        type16 = type & 0xFFFF;
+        id16 = id & 0xFFFF;
         list->unk8 = list->unk0;
         while (1) {
             item = list->unk8->unk8;
-            if (item != NULL && item->type == a && item->id == b) {
+            if (item != NULL && item->type == type16 && item->id == id16) {
                 found = item;
                 break;
             }
@@ -627,150 +627,150 @@ void thing_cmd_set_active(Unk_801A8264 *arg0) {
         }
     }
     if (found != NULL && p->unk2 == 2) {
-        found->active = atoi(arg0->unk8[0]);
+        found->active = atoi(cmd->unk8[0]);
     }
 }
 
-s32 thing_field_task_hook(Unk_801A8EFC *arg0) {
-    GameVars *g = &action_vars;
-    Player *o = player_status_player[0];
-    TrainState *p = &vehicle_train_state;
-    RoadMap *c = &roadmap_state;
-    s16 *q = vehicle_navi;
-    s32 v = arg0->unk10;
+s32 thing_field_task_hook(Unk_801A8EFC *ev) {
+    GameVars *game = &action_vars;
+    Player *player = player_status_player[0];
+    TrainState *train = &vehicle_train_state;
+    RoadMap *roadmap = &roadmap_state;
+    s16 *navi = vehicle_navi;
+    s32 kind = ev->unk10;
 
-    if (v == 2) {
-        if (arg0->unkC == 0) {
-            g->unk244 = -1;
+    if (kind == 2) {
+        if (ev->unkC == 0) {
+            game->unk244 = -1;
         }
-        c->mode = 1;
-    } else if (v == 3) {
-        if (arg0->unkC == 0) {
-            g->unk244 = -1;
+        roadmap->mode = 1;
+    } else if (kind == 3) {
+        if (ev->unkC == 0) {
+            game->unk244 = -1;
         }
-        c->mode = 0;
-        if (q[0] != 0) {
-            vehicle_navi_show(o, 1, 0);
+        roadmap->mode = 0;
+        if (navi[0] != 0) {
+            vehicle_navi_show(player, 1, 0);
         }
-    } else if (v == 11) {
+    } else if (kind == 11) {
         /* " 8カーナビ1の3目的地1を, 方向キー上下で選んで下さい,      設定 3○ 1解除 4×" */
         text_show(" 8\203J\201[\203i\203r1\202\3143\226\332\223I\222n1\202\360, \225\373\214\374\203L\201[\217\343\211\272\202\305\221I\202\361\202\305\211\272\202\263\202\242,      \220\335\222\350 3\201\233 1\211\360\217\234 4\201~", 3, -1, 0, -1, 0, 1);
-    } else if (v == 12) {
+    } else if (kind == 12) {
         text_close();
-        vehicle_navi_show(o, q[0], 1);
-    } else if (v == 7) {
-        if (p->door_state == 3) {
-            p->door_state = 1;
+        vehicle_navi_show(player, navi[0], 1);
+    } else if (kind == 7) {
+        if (train->door_state == 3) {
+            train->door_state = 1;
             thing_next_vehicle_mode = vehicle_train_end_of_line(thing_next_vehicle_mode);
             if (thing_next_vehicle_mode != 0) {
                 vehicle_train_exit_prompt(1);
             }
-        } else if (p->door_state == 2) {
-            p->door_state = 0;
-            p->motion = 1;
+        } else if (train->door_state == 2) {
+            train->door_state = 0;
+            train->motion = 1;
             sound_se_play(0x1F);
         }
-    } else if (v == 0) {
+    } else if (kind == 0) {
         sound_bgm_play(0);
     }
     return 0;
 }
 
-void thing_field_do_action(Player *arg0) {
-    SceneRequest *s = &scene_request;
-    EventState *d = &event_state;
-    ActionSet *p;
-    s32 hi;
-    s32 lo;
+void thing_field_do_action(Player *player) {
+    SceneRequest *request = &scene_request;
+    EventState *ev_state = &event_state;
+    ActionSet *set;
+    s32 type_bits;
+    s32 thing_id;
 
-    if (d->state == 2 && (d->circle_flags & 8)) {
+    if (ev_state->state == 2 && (ev_state->circle_flags & 8)) {
         text_close();
-        switch (d->trigger_type) {
+        switch (ev_state->trigger_type) {
         case 0xFD:
-            hi = d->trigger & 0xF000;
-            lo = (u16)d->trigger & 0xFFF;
-            if (hi == 0 && lo == 0) {
+            type_bits = ev_state->trigger & 0xF000;
+            thing_id = (u16)ev_state->trigger & 0xFFF;
+            if (type_bits == 0 && thing_id == 0) {
                 sound_se_play(0x16);
-                s->change = 1;
-                s->pos_x = arg0->pos_x + arg0->cell_x * 12500;
-                s->pos_y = 0;
-                s->pos_z = arg0->pos_z + arg0->cell_z * 12500;
+                request->change = 1;
+                request->pos_x = player->pos_x + player->cell_x * 12500;
+                request->pos_y = 0;
+                request->pos_z = player->pos_z + player->cell_z * 12500;
                 thing_field_exit_code = 3;
                 thing_next_vehicle_mode = 1;
-                s->yaw = arg0->yaw;
-                s->unk10 = 0;
+                request->yaw = player->yaw;
+                request->unk10 = 0;
             } else {
                 sound_se_play(0x11);
-                for (p = action_find_set(d->circle_set); p != 0; p = action_run_set(p, 0, 0)) {
+                for (set = action_find_set(ev_state->circle_set); set != 0; set = action_run_set(set, 0, 0)) {
                 }
             }
             break;
         case 0xFE:
             sound_se_play(0xD);
-            s->change = 1;
+            request->change = 1;
             thing_field_exit_code = 2;
-            thing_field_exit_arg_hi = ((u32)d->trigger & 0xFF00) >> 8; /* unk0 is read unsigned here (srl): the cast keeps the bytes */
-            thing_field_exit_arg_lo = d->trigger & 0xFF;
+            thing_field_exit_arg_hi = ((u32)ev_state->trigger & 0xFF00) >> 8; /* unk0 is read unsigned here (srl): the cast keeps the bytes */
+            thing_field_exit_arg_lo = ev_state->trigger & 0xFF;
             break;
         case 0xFF:
             sound_se_play(0xD);
             thing_field_exit_code = 1;
-            s->change = 1;
-            sprite_phone_save_exit(d->trigger);
+            request->change = 1;
+            sprite_phone_save_exit(ev_state->trigger);
             break;
         case 0x20:
             sound_se_play(0x11);
             thing_next_vehicle_mode = vehicle_train_get_off(thing_next_vehicle_mode);
             break;
         default:
-            for (p = action_find_set(d->circle_set); p != 0; p = action_run_set(p, 0, 0)) {
+            for (set = action_find_set(ev_state->circle_set); set != 0; set = action_run_set(set, 0, 0)) {
             }
             break;
         }
-        d->state = 1;
-        d->circle_flags &= ~8;
+        ev_state->state = 1;
+        ev_state->circle_flags &= ~8;
     }
 }
 
 void thing_field_input(void) {
-    SceneRequest *s = &scene_request;
-    PlayerStatus *m = &player_status;
+    SceneRequest *request = &scene_request;
+    PlayerStatus *status = &player_status;
     KajSystem *pad = &kaj_system;
     s16 mode = pad->pad_mode;
-    Player *o = m->player;
-    s32 id;
-    s32 t;
+    Player *player = status->player;
+    s32 vmode;
+    s32 buttons;
 
-    if (mode == 1 && !(o->flags & 2)) {
-        t = kaj_pad_read();
-        id = o->vehicle_mode;
-        if (id == mode) {
-            if (vehicle_car_input(m, t) != 0) {
+    if (mode == 1 && !(player->flags & 2)) {
+        buttons = kaj_pad_read();
+        vmode = player->vehicle_mode;
+        if (vmode == mode) {
+            if (vehicle_car_input(status, buttons) != 0) {
                 thing_field_exit_code = 4;
                 thing_next_vehicle_mode = 0;
-                s->change = id;
+                request->change = vmode;
             }
-        } else if (effect_item_input(m, 2) == 0) {
-            player_update_map(m);
-            if ((o->flags & 4) && !(pad->pad_prev & 0x20) && (pad->pad_now & 0x20)) {
-                thing_field_do_action(o);
+        } else if (effect_item_input(status, 2) == 0) {
+            player_update_map(status);
+            if ((player->flags & 4) && !(pad->pad_prev & 0x20) && (pad->pad_now & 0x20)) {
+                thing_field_do_action(player);
                 return;
             }
-            player_handle_pad(m, 2, t);
+            player_handle_pad(status, 2, buttons);
         }
     }
 }
 
 void thing_field_enter(void) {
-    Inventory *p;
-    Player *o;
-    TrainState *q;
+    Inventory *inv;
+    Player *player;
+    TrainState *train;
 
     thing_next_vehicle_mode = -1;
     D_801DFFAC = 1;
-    p = player_status.inventory;
-    o = player_status.player;
-    q = &vehicle_train_state;
+    inv = player_status.inventory;
+    player = player_status.player;
+    train = &vehicle_train_state;
     sprite_set_visible(0x410, 1);
     action_reset(1);
     if (thing_field_exit_code != 3) {
@@ -782,9 +782,9 @@ void thing_field_enter(void) {
     switch (thing_field_exit_code) {
     case 0:
         object_load_scene();
-        if (thing_field_loaded_id != p->unk42) {
-            object_load_res12_by_id(p->unk42);
-            thing_field_loaded_id = p->unk42;
+        if (thing_field_loaded_id != inv->unk42) {
+            object_load_res12_by_id(inv->unk42);
+            thing_field_loaded_id = inv->unk42;
         }
         effect_flame_small_init(2);
         effect_clut_cycle_init();
@@ -796,7 +796,7 @@ void thing_field_enter(void) {
         block_set_mode(2);
         break;
     }
-    switch (o->vehicle_mode) {
+    switch (player->vehicle_mode) {
     case 0:
         vehicle_car_place();
         sound_se_play(0x15);
@@ -808,7 +808,7 @@ void thing_field_enter(void) {
         thing_set_animate(3, 3, 1);
         thing_set_animate(3, 4, 1);
         sprite_set_visible(0x40E, 1);
-        if (o->vehicle_mode == 1) {
+        if (player->vehicle_mode == 1) {
             sound_se_play(0x19);
             sound_se_play(0x1A);
         }
@@ -821,9 +821,9 @@ void thing_field_enter(void) {
         D_801DFEE4 = (s32)thing_train_enter_hook;
         D_801DFEE0 = (s32)thing_train_leave_hook;
         D_801DFEDC = (s32)thing_train_tick_hook;
-        q->unkC = 0;
-        q->trigger = 0;
-        q->stop_timer = 0;
+        train->unkC = 0;
+        train->trigger = 0;
+        train->stop_timer = 0;
         break;
     }
     if (thing_field_exit_code != 0) {
@@ -836,7 +836,7 @@ void thing_field_enter(void) {
 }
 
 void thing_field_leave(void) {
-    Player *o = player_status_player[0];
+    Player *player = player_status_player[0];
     s32 i;
 
     effect_clear_alarms();
@@ -884,30 +884,30 @@ void thing_field_leave(void) {
     }
     block_stream_stop();
     if (thing_next_vehicle_mode != -1) {
-        o->vehicle_mode = thing_next_vehicle_mode;
+        player->vehicle_mode = thing_next_vehicle_mode;
     }
 }
 
 void thing_field_loop(void) {
-    s32 sp10[6];
-    s16 flag;
+    s32 ev[6];
+    s16 elevator_wait;
     s16 done;
 
-    flag = 0;
+    elevator_wait = 0;
     done = 0;
     thing_field_enter();
     kaj_timer_enable();
     effect_start_fade(0, 3);
     while (done == 0) {
-        switch (kaj_event_get(sp10)) {
+        switch (kaj_event_get(ev)) {
         case 2:
-            func_80189928(sp10);
+            func_80189928(ev);
             continue;
         case 0x10:
-            event_handle_enter(sp10);
+            event_handle_enter(ev);
             continue;
         case 0x20:
-            event_handle_leave(sp10);
+            event_handle_leave(ev);
             continue;
         case 4:
             event_handle_tick(D_801DFFAC);
@@ -917,22 +917,22 @@ void thing_field_loop(void) {
             if ((s16)mail_take_scene_change() != 0) {
                 if (thing_field_exit_code == 2) {
                     kaj_pad_reset(0);
-                    flag = 1;
+                    elevator_wait = 1;
                 } else {
                     effect_start_fade(1, 3);
                 }
             }
             break;
         case 0x100:
-            done = event_handle_effect_done(sp10);
+            done = event_handle_effect_done(ev);
             continue;
         default:
-            kaj_event_done(sp10);
+            kaj_event_done(ev);
             continue;
         }
         effect_start_alarm(0, 0x404, rand() % 30 + 30);
         mail_step_frame(2, 1, 1);
-        if (flag != 0 && func_8017D564() != 0) {
+        if (elevator_wait != 0 && func_8017D564() != 0) {
             done = 1;
         }
     }
@@ -940,19 +940,19 @@ void thing_field_loop(void) {
     thing_field_leave();
 }
 
-void thing_field_timer_hook(Unk_801A8EFC *arg0) {
-    if (arg0->unkC == 0x404) {
+void thing_field_timer_hook(Unk_801A8EFC *ev) {
+    if (ev->unkC == 0x404) {
         sound_se_play(0x17);
     }
 }
 
-s32 thing_train_enter_hook(Unk_801A8EFC *arg0) {
-    TrainState *p = &vehicle_train_state;
-    s32 v = arg0->unkC;
+s32 thing_train_enter_hook(Unk_801A8EFC *ev) {
+    TrainState *train = &vehicle_train_state;
+    s32 trigger = ev->unkC;
 
-    if (v == 0x200010 || v == 0x200020) {
-        p->trigger = v;
-        if (p->door_state == 1) {
+    if (trigger == 0x200010 || trigger == 0x200020) {
+        train->trigger = trigger;
+        if (train->door_state == 1) {
             vehicle_train_exit_prompt(1);
         }
         return 1;
@@ -960,17 +960,17 @@ s32 thing_train_enter_hook(Unk_801A8EFC *arg0) {
     return 0;
 }
 
-s32 thing_train_leave_hook(Unk_801A8EFC *arg0) {
-    TrainState *p = &vehicle_train_state;
-    s32 v = arg0->unkC;
+s32 thing_train_leave_hook(Unk_801A8EFC *ev) {
+    TrainState *train = &vehicle_train_state;
+    s32 trigger = ev->unkC;
 
-    if (v == 0x200010 || v == 0x200020) {
-        p->trigger = 0;
+    if (trigger == 0x200010 || trigger == 0x200020) {
+        train->trigger = 0;
         vehicle_train_exit_prompt(0);
         return 1;
     }
-    if (p->unkC != 0) {
-        p->unkC = 0;
+    if (train->unkC != 0) {
+        train->unkC = 0;
     }
     return 0;
 }
@@ -1006,113 +1006,113 @@ void thing_game_loop(void) {
     }
 }
 
-void thing_train_calc_stops(TrainState *arg0) {
-    arg0->unkA = 0;
-    if (arg0->direction != 0) {
-        arg0->mark_start = (arg0->station - 1) * 100000 - 195000;
-        arg0->mark_cruise = (arg0->station - 1) * 100000 - 175000;
-        arg0->mark_brake = (arg0->station - 1) * 100000 - 115000;
-        arg0->mark_stop = (arg0->station - 1) * 100000 - 95000;
+void thing_train_calc_stops(TrainState *train) {
+    train->unkA = 0;
+    if (train->direction != 0) {
+        train->mark_start = (train->station - 1) * 100000 - 195000;
+        train->mark_cruise = (train->station - 1) * 100000 - 175000;
+        train->mark_brake = (train->station - 1) * 100000 - 115000;
+        train->mark_stop = (train->station - 1) * 100000 - 95000;
     } else {
-        arg0->mark_start = (arg0->station - 1) * 100000 - 200000;
-        arg0->mark_cruise = (arg0->station - 1) * 100000 - 220000;
-        arg0->mark_brake = (arg0->station - 1) * 100000 - 280000;
-        arg0->mark_stop = (arg0->station - 1) * 100000 - 300000;
+        train->mark_start = (train->station - 1) * 100000 - 200000;
+        train->mark_cruise = (train->station - 1) * 100000 - 220000;
+        train->mark_brake = (train->station - 1) * 100000 - 280000;
+        train->mark_stop = (train->station - 1) * 100000 - 300000;
     }
 }
 
-void thing_car_init(Unk_801E032C *arg0, Player *arg1) {
+void thing_car_init(Unk_801E032C *car, Player *player) {
     s32 v[3];
     SVector sv;
     s32 flag;
-    Unk_801A9BF4 *h = arg0->unkC0;
-    Thing *o = D_801E0764[0];
-    CarState *q = &vehicle_car_state;
-    CarNavi *r = (CarNavi *)vehicle_navi;
-    GameVars *g = &action_vars;
+    Unk_801A9BF4 *hdr = car->unkC0;
+    Thing *car_thing = D_801E0764[0];
+    CarState *state = &vehicle_car_state;
+    CarNavi *navi = (CarNavi *)vehicle_navi;
+    GameVars *game = &action_vars;
 
-    arg0->unk0 = h->unk0;
-    arg0->unk2 = 0;
-    GsSetLsMatrix(o->coord_m);
-    q->unk1C.vx = -180;
-    q->unk1C.vy = -120;
-    q->look_pitch = 0;
-    q->look_yaw = 0;
-    q->unk28 = 0;
-    q->unk1C.vz = 200;
-    RotTrans(&q->unk1C, v, &flag);
-    if (h->unk18 != 0) {
-        kaj_tmd_load(&arg0->unkB8, (u8 *)arg0->unkC0 + h->unk18, &arg0->unk18);
+    car->unk0 = hdr->unk0;
+    car->unk2 = 0;
+    GsSetLsMatrix(car_thing->coord_m);
+    state->unk1C.vx = -180;
+    state->unk1C.vy = -120;
+    state->look_pitch = 0;
+    state->look_yaw = 0;
+    state->unk28 = 0;
+    state->unk1C.vz = 200;
+    RotTrans(&state->unk1C, v, &flag);
+    if (hdr->unk18 != 0) {
+        kaj_tmd_load(&car->unkB8, (u8 *)car->unkC0 + hdr->unk18, &car->unk18);
     }
-    GsInitCoordinate2(NULL, &arg0->unk18);
-    arg0->unk4 = o->pos_x;
-    arg0->unk8 = o->pos_y + 370;
-    arg0->unkC = o->pos_z;
-    arg0->unk10 = o->rot_x;
-    arg0->unk12 = o->rot_y;
-    arg0->unk14 = o->rot_z;
-    arg0->unk30 = arg0->unk4 - arg1->cell_x * 12500;
-    arg0->unk34 = arg0->unk8 + arg1->cell_y * 32000;
-    arg0->unk38 = arg0->unkC - arg1->cell_z * 12500;
-    sv.vx = (arg0->unk10 << 12) / 360;
-    sv.vy = (arg0->unk12 << 12) / 360;
-    sv.vz = (arg0->unk14 << 12) / 360;
-    RotMatrix(&sv, arg0->unk1C);
-    if (h->unk1C != 0) {
-        kaj_tmd_load(&arg0->unkBC, (u8 *)arg0->unkC0 + h->unk1C, &arg0->unk68);
+    GsInitCoordinate2(NULL, &car->unk18);
+    car->unk4 = car_thing->pos_x;
+    car->unk8 = car_thing->pos_y + 370;
+    car->unkC = car_thing->pos_z;
+    car->unk10 = car_thing->rot_x;
+    car->unk12 = car_thing->rot_y;
+    car->unk14 = car_thing->rot_z;
+    car->unk30 = car->unk4 - player->cell_x * 12500;
+    car->unk34 = car->unk8 + player->cell_y * 32000;
+    car->unk38 = car->unkC - player->cell_z * 12500;
+    sv.vx = (car->unk10 << 12) / 360;
+    sv.vy = (car->unk12 << 12) / 360;
+    sv.vz = (car->unk14 << 12) / 360;
+    RotMatrix(&sv, car->unk1C);
+    if (hdr->unk1C != 0) {
+        kaj_tmd_load(&car->unkBC, (u8 *)car->unkC0 + hdr->unk1C, &car->unk68);
     }
-    GsInitCoordinate2(&arg0->unk18, &arg0->unk68);
-    arg0->unk80 = -180;
-    arg0->unk84 = -360;
-    arg0->unk88 = 412;
+    GsInitCoordinate2(&car->unk18, &car->unk68);
+    car->unk80 = -180;
+    car->unk84 = -360;
+    car->unk88 = 412;
     sv.vx = 56;
     sv.vy = 0;
     sv.vz = 0;
-    RotMatrix(&sv, arg0->unk6C);
-    arg1->pos_x = v[0] + arg1->cell_x * 12500;
-    arg1->pos_y = v[1] - arg1->cell_y * 32000;
-    arg1->pos_z = v[2] + arg1->cell_z * 12500;
-    arg1->pitch = 0;
-    arg1->yaw = arg0->unk12;
-    arg1->unk70 = 0;
-    player_set_view(arg1, 1);
-    q->stopped = 0;
-    q->unk2 = 0;
+    RotMatrix(&sv, car->unk6C);
+    player->pos_x = v[0] + player->cell_x * 12500;
+    player->pos_y = v[1] - player->cell_y * 32000;
+    player->pos_z = v[2] + player->cell_z * 12500;
+    player->pitch = 0;
+    player->yaw = car->unk12;
+    player->unk70 = 0;
+    player_set_view(player, 1);
+    state->stopped = 0;
+    state->unk2 = 0;
     thing_car_exit_prompt_on = 0;
-    q->steer = 0;
-    q->brake = 0;
-    q->throttle = 0;
-    q->gear = 0;
-    q->speed = 0;
-    q->unk14 = 0;
-    q->unk18 = 0;
-    q->corners[0].vx = -75;
-    q->corners[0].vy = 0;
-    q->corners[0].vz = 102;
-    q->corners[1].vx = 75;
-    q->corners[1].vy = 0;
-    q->corners[1].vz = 102;
-    q->corners[2].vx = -75;
-    q->corners[2].vy = 0;
-    q->corners[2].vz = -152;
-    q->corners[3].vx = 75;
-    q->corners[3].vy = 0;
-    q->corners[3].vz = -152;
-    q->unk4C = 0;
-    q->unk50 = 0;
-    q->unk54 = 0;
-    q->unk5C = 0;
-    q->unk60 = 0;
-    q->unk64 = 0;
-    arg0->unk18 = 0;
-    arg0->unk68 = 0;
-    r->active = 0;
-    r->unk2 = 1;
-    r->dest = 0;
-    r->start_dist = 0;
-    r->dest_sprite = 0;
-    r->unk10 = 0;
-    switch ((s16)g->car_speed_setting) { /* read signed in this unit */
+    state->steer = 0;
+    state->brake = 0;
+    state->throttle = 0;
+    state->gear = 0;
+    state->speed = 0;
+    state->unk14 = 0;
+    state->unk18 = 0;
+    state->corners[0].vx = -75;
+    state->corners[0].vy = 0;
+    state->corners[0].vz = 102;
+    state->corners[1].vx = 75;
+    state->corners[1].vy = 0;
+    state->corners[1].vz = 102;
+    state->corners[2].vx = -75;
+    state->corners[2].vy = 0;
+    state->corners[2].vz = -152;
+    state->corners[3].vx = 75;
+    state->corners[3].vy = 0;
+    state->corners[3].vz = -152;
+    state->unk4C = 0;
+    state->unk50 = 0;
+    state->unk54 = 0;
+    state->unk5C = 0;
+    state->unk60 = 0;
+    state->unk64 = 0;
+    car->unk18 = 0;
+    car->unk68 = 0;
+    navi->active = 0;
+    navi->unk2 = 1;
+    navi->dest = 0;
+    navi->start_dist = 0;
+    navi->dest_sprite = 0;
+    navi->unk10 = 0;
+    switch ((s16)game->car_speed_setting) { /* read signed in this unit */
     case 2:
         thing_car_speed_div = 500;
         break;
@@ -1125,13 +1125,13 @@ void thing_car_init(Unk_801E032C *arg0, Player *arg1) {
     }
 }
 
-static inline s32 func_801A968C_inline(Unk_801E032C *arg0, Player *o, s32 *px, s32 *py, s32 *pz, s32 ang) {
+static inline s32 func_801A968C_inline(Unk_801E032C *car, Player *player, s32 *px, s32 *py, s32 *pz, s32 ang) {
     s32 x;
     s32 z;
-    x = arg0->unk4 + ((*px * rcos(ang) + *pz * rsin(ang)) >> 12);
-    z = arg0->unkC + ((*pz * rcos(ang) - *px * rsin(ang)) >> 12);
-    *px = x - o->cell_x * 12500;
-    *pz = z - o->cell_z * 12500;
+    x = car->unk4 + ((*px * rcos(ang) + *pz * rsin(ang)) >> 12);
+    z = car->unkC + ((*pz * rcos(ang) - *px * rsin(ang)) >> 12);
+    *px = x - player->cell_x * 12500;
+    *pz = z - player->cell_z * 12500;
     if ((s16)func_8017CFE4(*px, py, *pz)) {
         *px = x;
         *pz = z;
@@ -1140,32 +1140,32 @@ static inline s32 func_801A968C_inline(Unk_801E032C *arg0, Player *o, s32 *px, s
     return 0;
 }
 
-void thing_car_get_out(Unk_801E032C *arg0) {
+void thing_car_get_out(Unk_801E032C *car) {
     s32 x;
     s32 y;
     s32 z;
     s32 ang;
-    Player *o = player_status_player[0];
+    Player *player = player_status_player[0];
 
-    o->unk0 = arg0->unk4;
-    o->unk4 = arg0->unk8 - 370;
-    o->unk8 = arg0->unkC;
-    o->unk10 = arg0->unk10;
-    o->unk12 = arg0->unk12;
-    o->unk14 = arg0->unk14;
-    ang = (arg0->unk12 << 12) / 360;
+    player->unk0 = car->unk4;
+    player->unk4 = car->unk8 - 370;
+    player->unk8 = car->unkC;
+    player->unk10 = car->unk10;
+    player->unk12 = car->unk12;
+    player->unk14 = car->unk14;
+    ang = (car->unk12 << 12) / 360;
     x = -245;
     z = 0;
-    if (!func_801A968C_inline(arg0, o, &x, &y, &z, ang)) {
+    if (!func_801A968C_inline(car, player, &x, &y, &z, ang)) {
         x = 245;
         z = 0;
-        if (!func_801A968C_inline(arg0, o, &x, &y, &z, ang)) {
+        if (!func_801A968C_inline(car, player, &x, &y, &z, ang)) {
             x = 0;
             z = -490;
-            if (!func_801A968C_inline(arg0, o, &x, &y, &z, ang)) {
+            if (!func_801A968C_inline(car, player, &x, &y, &z, ang)) {
                 x = 0;
                 z = 490;
-                if (!func_801A968C_inline(arg0, o, &x, &y, &z, ang)) {
+                if (!func_801A968C_inline(car, player, &x, &y, &z, ang)) {
                     z = 0;
                     y = 0;
                     x = 0;
@@ -1177,136 +1177,136 @@ void thing_car_get_out(Unk_801E032C *arg0) {
     vehicle_navi_show(NULL, 0, 1);
     sprite_delete(4);
     vehicle_navi[0] = 0;
-    mail_goto_twn(x, y, z, arg0->unk12, 0);
+    mail_goto_twn(x, y, z, car->unk12, 0);
 }
 
-void thing_train_init(Unk_801E032C *arg0, Player *arg1) {
+void thing_train_init(Unk_801E032C *car, Player *player) {
     SVector sv;
-    Unk_801A9BF4 *h = arg0->unkC0;
-    TrainState *q = &vehicle_train_state;
+    Unk_801A9BF4 *hdr = car->unkC0;
+    TrainState *train = &vehicle_train_state;
 
-    arg0->unk0 = h->unk0;
-    arg0->unk2 = 0;
-    thing_train_calc_stops(q);
-    if (h->unk18 != 0) {
-        kaj_tmd_load(&arg0->unkB8, (u8 *)arg0->unkC0 + h->unk18, &arg0->unk18);
+    car->unk0 = hdr->unk0;
+    car->unk2 = 0;
+    thing_train_calc_stops(train);
+    if (hdr->unk18 != 0) {
+        kaj_tmd_load(&car->unkB8, (u8 *)car->unkC0 + hdr->unk18, &car->unk18);
     }
-    if (h->unk1C != 0) {
-        kaj_tmd_load(&arg0->unkBC, (u8 *)arg0->unkC0 + h->unk1C, &arg0->unk18);
+    if (hdr->unk1C != 0) {
+        kaj_tmd_load(&car->unkBC, (u8 *)car->unkC0 + hdr->unk1C, &car->unk18);
     }
-    GsInitCoordinate2(NULL, &arg0->unk18);
-    arg0->unk4 = arg1->cell_x * 12500 + arg1->pos_x;
-    arg0->unk8 = -(arg1->cell_y * 32000) + 75;
-    arg0->unkC = arg1->cell_z * 12500 + arg1->pos_z;
-    arg0->unk10 = 0;
-    arg0->unk12 = 0;
-    arg0->unk14 = 0;
-    if (q->direction == 0) {
-        arg0->unk12 = 180;
-        arg1->yaw -= 180;
+    GsInitCoordinate2(NULL, &car->unk18);
+    car->unk4 = player->cell_x * 12500 + player->pos_x;
+    car->unk8 = -(player->cell_y * 32000) + 75;
+    car->unkC = player->cell_z * 12500 + player->pos_z;
+    car->unk10 = 0;
+    car->unk12 = 0;
+    car->unk14 = 0;
+    if (train->direction == 0) {
+        car->unk12 = 180;
+        player->yaw -= 180;
     }
-    q->carry_vx = 0;
-    q->carry_vy = 0;
-    q->carry_vz = 0;
-    q->view_pitch = arg1->pitch;
-    q->view_yaw = arg1->yaw;
-    q->unk38 = arg1->unk70;
-    arg0->unk30 = arg0->unk4 - arg1->cell_x * 12500;
-    arg0->unk34 = arg0->unk8 + arg1->cell_y * 32000;
-    arg0->unk38 = arg0->unkC - arg1->cell_z * 12500;
-    sv.vx = (arg0->unk10 << 12) / 360;
-    sv.vy = (arg0->unk12 << 12) / 360;
-    sv.vz = (arg0->unk14 << 12) / 360;
-    RotMatrix(&sv, arg0->unk1C);
-    arg0->unk18 = 0;
+    train->carry_vx = 0;
+    train->carry_vy = 0;
+    train->carry_vz = 0;
+    train->view_pitch = player->pitch;
+    train->view_yaw = player->yaw;
+    train->unk38 = player->unk70;
+    car->unk30 = car->unk4 - player->cell_x * 12500;
+    car->unk34 = car->unk8 + player->cell_y * 32000;
+    car->unk38 = car->unkC - player->cell_z * 12500;
+    sv.vx = (car->unk10 << 12) / 360;
+    sv.vy = (car->unk12 << 12) / 360;
+    sv.vz = (car->unk14 << 12) / 360;
+    RotMatrix(&sv, car->unk1C);
+    car->unk18 = 0;
 }
 
-void thing_train_update(Player *arg0) {
+void thing_train_update(Player *player) {
     s32 v[4];
     s32 flag;
-    Unk_801E032C *p = D_801E032C[0];
-    TrainState *q = &vehicle_train_state;
-    GameVars *g = &action_vars;
+    Unk_801E032C *car = D_801E032C[0];
+    TrainState *train = &vehicle_train_state;
+    GameVars *game = &action_vars;
 
-    if (q->motion != 0) {
-        arg0->unk3C = 1;
+    if (train->motion != 0) {
+        player->unk3C = 1;
     }
-    if (q->direction != 0) {
-        if (q->motion == 3) {
-            q->speed = (q->mark_stop - p->unkC) / 300 + 7;
-            p->unkC += q->speed * D_801E6DB4[0];
-            if (p->unkC >= q->mark_stop) {
+    if (train->direction != 0) {
+        if (train->motion == 3) {
+            train->speed = (train->mark_stop - car->unkC) / 300 + 7;
+            car->unkC += train->speed * D_801E6DB4[0];
+            if (car->unkC >= train->mark_stop) {
                 sound_se_stop(0x1F);
-                q->speed = 0;
-                p->unkC = q->mark_stop;
-                q->motion = 0;
-                q->stop_timer = 2;
-                if (++q->station >= 7) {
-                    q->station = 6;
+                train->speed = 0;
+                car->unkC = train->mark_stop;
+                train->motion = 0;
+                train->stop_timer = 2;
+                if (++train->station >= 7) {
+                    train->station = 6;
                 }
-                thing_train_calc_stops(q);
+                thing_train_calc_stops(train);
                 vehicle_train_set_doors(1);
-                q->unk18 = (s16)g->vars[0x3F] % 10;
-                if (q->unk18 >= 5) {
-                    q->unk1A = q->unk18 - 5;
+                train->unk18 = (s16)game->vars[0x3F] % 10;
+                if (train->unk18 >= 5) {
+                    train->unk1A = train->unk18 - 5;
                 } else {
-                    q->unk1A = q->unk18 + 5;
+                    train->unk1A = train->unk18 + 5;
                 }
             }
-        } else if (q->motion == 1) {
-            q->speed = (p->unkC - q->mark_start) / 300 + 7;
-            p->unkC += q->speed * D_801E6DB4[0];
-            if (p->unkC >= q->mark_cruise) {
-                q->motion = 2;
+        } else if (train->motion == 1) {
+            train->speed = (car->unkC - train->mark_start) / 300 + 7;
+            car->unkC += train->speed * D_801E6DB4[0];
+            if (car->unkC >= train->mark_cruise) {
+                train->motion = 2;
             }
-        } else if (q->motion == 2) {
-            p->unkC += q->speed * D_801E6DB4[0];
-            if (p->unkC >= q->mark_brake) {
-                q->motion = 3;
+        } else if (train->motion == 2) {
+            car->unkC += train->speed * D_801E6DB4[0];
+            if (car->unkC >= train->mark_brake) {
+                train->motion = 3;
             }
         }
     } else {
-        if (q->motion == 3) {
-            q->speed = (p->unkC - q->mark_stop) / 300 + 7;
-            p->unkC -= q->speed * D_801E6DB4[0];
-            if (p->unkC <= q->mark_stop) {
+        if (train->motion == 3) {
+            train->speed = (car->unkC - train->mark_stop) / 300 + 7;
+            car->unkC -= train->speed * D_801E6DB4[0];
+            if (car->unkC <= train->mark_stop) {
                 sound_se_stop(0x1F);
-                q->speed = 0;
-                p->unkC = q->mark_stop;
-                q->motion = 0;
-                q->stop_timer = 2;
-                if (--q->station == 0) {
-                    q->station = 1;
+                train->speed = 0;
+                car->unkC = train->mark_stop;
+                train->motion = 0;
+                train->stop_timer = 2;
+                if (--train->station == 0) {
+                    train->station = 1;
                 }
-                thing_train_calc_stops(q);
+                thing_train_calc_stops(train);
                 vehicle_train_set_doors(1);
-                q->unk1A = (s16)g->vars[0x3F] % 10;
-                if (q->unk1A >= 5) {
-                    q->unk18 = q->unk1A - 5;
+                train->unk1A = (s16)game->vars[0x3F] % 10;
+                if (train->unk1A >= 5) {
+                    train->unk18 = train->unk1A - 5;
                 } else {
-                    q->unk18 = q->unk1A + 5;
+                    train->unk18 = train->unk1A + 5;
                 }
             }
-        } else if (q->motion == 1) {
-            q->speed = (q->mark_start - p->unkC) / 300 + 7;
-            p->unkC -= q->speed * D_801E6DB4[0];
-            if (p->unkC <= q->mark_cruise) {
-                q->motion = 2;
+        } else if (train->motion == 1) {
+            train->speed = (train->mark_start - car->unkC) / 300 + 7;
+            car->unkC -= train->speed * D_801E6DB4[0];
+            if (car->unkC <= train->mark_cruise) {
+                train->motion = 2;
             }
-        } else if (q->motion == 2) {
-            p->unkC -= q->speed * D_801E6DB4[0];
-            if (p->unkC <= q->mark_brake) {
-                q->motion = 3;
+        } else if (train->motion == 2) {
+            car->unkC -= train->speed * D_801E6DB4[0];
+            if (car->unkC <= train->mark_brake) {
+                train->motion = 3;
             }
         }
     }
-    p->unk38 = p->unkC - arg0->cell_z * 12500;
-    p->unk18 = 0;
-    GsSetLsMatrix(p->unk1C);
-    RotTrans(&q->carry_vx, v, &flag);
-    arg0->pos_x = v[0];
-    arg0->pos_z = v[2];
-    arg0->pitch = q->view_pitch + p->unk10;
-    arg0->yaw = q->view_yaw + p->unk12;
-    arg0->unk70 = q->unk38 + p->unk14;
+    car->unk38 = car->unkC - player->cell_z * 12500;
+    car->unk18 = 0;
+    GsSetLsMatrix(car->unk1C);
+    RotTrans(&train->carry_vx, v, &flag);
+    player->pos_x = v[0];
+    player->pos_z = v[2];
+    player->pitch = train->view_pitch + car->unk10;
+    player->yaw = train->view_yaw + car->unk12;
+    player->unk70 = train->unk38 + car->unk14;
 }

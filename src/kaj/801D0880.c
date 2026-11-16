@@ -56,40 +56,40 @@ void ScaleMatrix(Unk_801D0880_38 *m, Unk_801D0880 *v);
 void TransMatrix(Unk_801D0880_38 *m, s32 *v);
 void GsLinkObject4(void *a, void *b, s32 c);
 
-static inline TodObj *func_801D0EB8_inl(TodObjTable *arg0, s32 arg1) {
+static inline TodObj *func_801D0EB8_inl(TodObjTable *table, s32 id) {
     TodObj *p;
     s32 i;
-    p = arg0->top;
-    for (i = 0; i < arg0->nobj; i++, p++) {
-        if (arg1 == p->id) {
+    p = table->top;
+    for (i = 0; i < table->nobj; i++, p++) {
+        if (id == p->id) {
             break;
         }
     }
-    if (i == arg0->nobj) {
+    if (i == table->nobj) {
         return NULL;
     }
     return p;
 }
 
-static inline TodObj *func_801D0F04_inl(TodObjTable *arg0, s32 arg1) {
+static inline TodObj *func_801D0F04_inl(TodObjTable *table, s32 id) {
     TodObj *p;
     s32 i;
-    p = arg0->top;
-    for (i = 0; i < arg0->nobj; i++, p++) {
+    p = table->top;
+    for (i = 0; i < table->nobj; i++, p++) {
         if (p->id == -1) {
             break;
         }
     }
-    if (i < arg0->nobj) {
-        p->id = arg1;
+    if (i < table->nobj) {
+        p->id = id;
         p->attribute = 0;
         GsInitCoordinate2(NULL, p->coord2);
         p->tmd = 0;
         return p;
     }
-    if (i < arg0->maxobj) {
-        p = &arg0->top[arg0->nobj++];
-        p->id = arg1;
+    if (i < table->maxobj) {
+        p = &table->top[table->nobj++];
+        p->id = id;
         p->attribute = 0;
         GsInitCoordinate2(NULL, p->coord2);
         p->tmd = 0;
@@ -98,21 +98,21 @@ static inline TodObj *func_801D0F04_inl(TodObjTable *arg0, s32 arg1) {
     return NULL;
 }
 
-static inline TodObj *func_801D0FB8_inl(TodObjTable *arg0, s32 arg1) {
+static inline TodObj *func_801D0FB8_inl(TodObjTable *table, s32 id) {
     TodObj *p;
     s32 i;
-    p = arg0->top;
-    for (i = 0; i < arg0->nobj; i++, p++) {
-        if (p->id == arg1) {
+    p = table->top;
+    for (i = 0; i < table->nobj; i++, p++) {
+        if (p->id == id) {
             break;
         }
     }
-    if (i < arg0->nobj) {
+    if (i < table->nobj) {
         p->id = -1;
-        if (i == arg0->nobj - 1) {
+        if (i == table->nobj - 1) {
             do {
                 p--;
-                arg0->nobj--;
+                table->nobj--;
             } while (p->id == -1);
         }
         return p;
@@ -120,16 +120,16 @@ static inline TodObj *func_801D0FB8_inl(TodObjTable *arg0, s32 arg1) {
     return NULL;
 }
 
-static inline s32 *func_801D1044_inl(Unk_801D1044 *arg0, s32 *arg1, s32 arg2) {
+static inline s32 *func_801D1044_inl(Unk_801D1044 *tmd, s32 *ids, s32 id) {
     s32 *p;
     s32 n;
-    p = arg0->unkC[0];
-    for (n = arg0->unk8; n > 0; n--) {
-        if (arg2 == *arg1) {
+    p = tmd->unkC[0];
+    for (n = tmd->unk8; n > 0; n--) {
+        if (id == *ids) {
             break;
         }
         p += 7;
-        arg1++;
+        ids++;
     }
     if (n == 0) {
         return NULL;
@@ -137,187 +137,187 @@ static inline s32 *func_801D1044_inl(Unk_801D1044 *arg0, s32 *arg1, s32 arg2) {
     return p;
 }
 
-void *kaj_tod_set_packet(void *arg0, void *arg1, s32 *arg2, void *arg3, s32 arg4, s32 arg5) {
+void *kaj_tod_set_packet(void *packet, void *table, s32 *ids, void *tmd, s32 mode, s32 root_coord) {
     s32 unused[6];
     TodObj tmp;
     Unk_801D0880_38 mtx;
     Unk_801D0880 prm;
-    s32 *d = (s32 *)arg0 + 1;
-    TodObj *e;
-    TodObj *f;
-    Unk_801D0E58 *c;
-    Unk_801D0880 *r;
-    Unk_801D0880_38 *m;
-    s32 *q;
-    u32 h;
+    s32 *data = (s32 *)packet + 1;
+    TodObj *obj;
+    TodObj *parent;
+    Unk_801D0E58 *coord;
+    Unk_801D0880 *param;
+    Unk_801D0880_38 *matrix;
+    s32 *model;
+    u32 header;
     s32 id;
     s32 type;
     s32 flags;
     s32 len;
     s32 rot;
 
-    h = *(u32 *)arg0;
-    id = h & 0xFFFF;
-    type = (h >> 16) & 0xF;
-    flags = (h >> 20) & 0xF;
-    len = (h >> 24) & 0xF;
+    header = *(u32 *)packet;
+    id = header & 0xFFFF;
+    type = (header >> 16) & 0xF;
+    flags = (header >> 20) & 0xF;
+    len = (header >> 24) & 0xF;
 
-    e = func_801D0EB8_inl(arg1, id);
-    m = &mtx;
-    if (e == NULL) {
-        e = &tmp;
-        r = &prm;
+    obj = func_801D0EB8_inl(table, id);
+    matrix = &mtx;
+    if (obj == NULL) {
+        obj = &tmp;
+        param = &prm;
     } else {
-        c = e->coord2;
-        r = c->unk44;
-        m = &c->unk4;
-        c->unk0 = 0;
+        coord = obj->coord2;
+        param = coord->unk44;
+        matrix = &coord->unk4;
+        coord->unk0 = 0;
     }
 
     switch (type) {
     case 0:
-        e->attribute = (e->attribute & d[0]) | d[1];
+        obj->attribute = (obj->attribute & data[0]) | data[1];
         break;
     case 1:
         if (flags & 1) {
             if (flags & 2) {
-                r->unk10 += d[0] / 360;
-                r->unk12 += d[1] / 360;
-                r->unk14 += d[2] / 360;
-                d += 3;
+                param->unk10 += data[0] / 360;
+                param->unk12 += data[1] / 360;
+                param->unk14 += data[2] / 360;
+                data += 3;
             }
             if (flags & 4) {
-                r->unk0 = r->unk0 * ((s16 *)d)[0] >> 12;
-                r->unk4 = r->unk4 * ((s16 *)d)[1] >> 12;
-                r->unk8 = r->unk8 * ((s16 *)d)[2] >> 12;
-                d += 2;
+                param->unk0 = param->unk0 * ((s16 *)data)[0] >> 12;
+                param->unk4 = param->unk4 * ((s16 *)data)[1] >> 12;
+                param->unk8 = param->unk8 * ((s16 *)data)[2] >> 12;
+                data += 2;
             }
             if (flags & 8) {
-                r->unk18 += d[0];
-                r->unk1C += d[1];
-                r->unk20 += d[2];
+                param->unk18 += data[0];
+                param->unk1C += data[1];
+                param->unk20 += data[2];
             }
-            RotMatrix(&r->unk10, m);
-            ScaleMatrix(m, r);
-            TransMatrix(m, &r->unk18);
+            RotMatrix(&param->unk10, matrix);
+            ScaleMatrix(matrix, param);
+            TransMatrix(matrix, &param->unk18);
         } else {
             rot = flags & 2;
             if (rot) {
-                r->unk10 = d[0] / 360;
-                r->unk12 = d[1] / 360;
-                r->unk14 = d[2] / 360;
-                d += 3;
-                RotMatrix(&r->unk10, m);
+                param->unk10 = data[0] / 360;
+                param->unk12 = data[1] / 360;
+                param->unk14 = data[2] / 360;
+                data += 3;
+                RotMatrix(&param->unk10, matrix);
             }
             if (flags & 4) {
-                r->unk0 = ((s16 *)d)[0];
-                r->unk4 = ((s16 *)d)[1];
-                r->unk8 = ((s16 *)d)[2];
-                d += 2;
+                param->unk0 = ((s16 *)data)[0];
+                param->unk4 = ((s16 *)data)[1];
+                param->unk8 = ((s16 *)data)[2];
+                data += 2;
                 if (!rot) {
-                    RotMatrix(&r->unk10, m);
+                    RotMatrix(&param->unk10, matrix);
                 }
-                ScaleMatrix(m, r);
+                ScaleMatrix(matrix, param);
             }
             if (flags & 8) {
-                r->unk18 = d[0];
-                r->unk1C = d[1];
-                r->unk20 = d[2];
-                TransMatrix(m, &r->unk18);
+                param->unk18 = data[0];
+                param->unk1C = data[1];
+                param->unk20 = data[2];
+                TransMatrix(matrix, &param->unk18);
             }
         }
         break;
     case 2:
-        if (arg3 != NULL) {
-            q = func_801D1044_inl(arg3, arg2, (u16)d[0]);
-            if (q != NULL) {
-                GsLinkObject4(q, e, 0);
+        if (tmd != NULL) {
+            model = func_801D1044_inl(tmd, ids, (u16)data[0]);
+            if (model != NULL) {
+                GsLinkObject4(model, obj, 0);
             }
         }
         break;
     case 3:
-        if (arg4 != 2) {
-            if (d[0] == 0 || d[0] == 0xFFFF) {
-                ((Unk_801D0E58 *)e->coord2)->unk48 = (void *)arg5;
-            } else if ((f = func_801D0EB8_inl(arg1, d[0])) == NULL) {
-                ((Unk_801D0E58 *)e->coord2)->unk48 = (void *)arg5;
+        if (mode != 2) {
+            if (data[0] == 0 || data[0] == 0xFFFF) {
+                ((Unk_801D0E58 *)obj->coord2)->unk48 = (void *)root_coord;
+            } else if ((parent = func_801D0EB8_inl(table, data[0])) == NULL) {
+                ((Unk_801D0E58 *)obj->coord2)->unk48 = (void *)root_coord;
             } else {
-                ((Unk_801D0E58 *)e->coord2)->unk48 = f->coord2;
+                ((Unk_801D0E58 *)obj->coord2)->unk48 = parent->coord2;
             }
         }
         break;
     case 8:
-        if (arg1 != NULL) {
+        if (table != NULL) {
             switch (flags) {
             case 0:
-                func_801D0F04_inl(arg1, id);
+                func_801D0F04_inl(table, id);
                 break;
             case 1:
-                func_801D0FB8_inl(arg1, id);
+                func_801D0FB8_inl(table, id);
                 break;
             }
             rot = flags;
         }
         break;
     }
-    return (s32 *)arg0 + len;
+    return (s32 *)packet + len;
 }
 
-void kaj_tod_init_table(TodObjTable *arg0, TodObj *arg1, Unk_801D0E58 *arg2, u8 *arg3, s32 arg4) {
+void kaj_tod_init_table(TodObjTable *table, TodObj *objs, Unk_801D0E58 *coords, u8 *params, s32 count) {
     s32 i;
 
-    arg0->nobj = 0;
-    arg0->top = arg1;
-    arg0->maxobj = arg4;
-    for (i = 0; i < arg4;) {
+    table->nobj = 0;
+    table->top = objs;
+    table->maxobj = count;
+    for (i = 0; i < count;) {
         i++;
-        arg1->attribute = 0x80000000;
-        arg1->id = -1;
-        arg1->coord2 = arg2;
-        arg2->unk44 = arg3;
-        arg1->tmd = 0;
-        arg1++;
-        arg2++;
-        arg3 += 0x28;
+        objs->attribute = 0x80000000;
+        objs->id = -1;
+        objs->coord2 = coords;
+        coords->unk44 = params;
+        objs->tmd = 0;
+        objs++;
+        coords++;
+        params += 0x28;
     }
 }
 
-TodObj *kaj_tod_find_obj(TodObjTable *arg0, s32 arg1) {
+TodObj *kaj_tod_find_obj(TodObjTable *table, s32 id) {
     TodObj *p;
     s32 i;
 
-    p = arg0->top;
-    for (i = 0; i < arg0->nobj; i++, p++) {
-        if (arg1 == p->id) {
+    p = table->top;
+    for (i = 0; i < table->nobj; i++, p++) {
+        if (id == p->id) {
             break;
         }
     }
-    if (i == arg0->nobj) {
+    if (i == table->nobj) {
         return NULL;
     }
     return p;
 }
 
-TodObj *kaj_tod_create_obj(TodObjTable *arg0, s32 arg1) {
+TodObj *kaj_tod_create_obj(TodObjTable *table, s32 id) {
     TodObj *p;
     s32 i;
 
-    p = arg0->top;
-    for (i = 0; i < arg0->nobj; i++, p++) {
+    p = table->top;
+    for (i = 0; i < table->nobj; i++, p++) {
         if (p->id == -1) {
             break;
         }
     }
-    if (i < arg0->nobj) {
-        p->id = arg1;
+    if (i < table->nobj) {
+        p->id = id;
         p->attribute = 0;
         GsInitCoordinate2(NULL, p->coord2);
         p->tmd = 0;
         return p;
     }
-    if (i < arg0->maxobj) {
-        p = &arg0->top[arg0->nobj++];
-        p->id = arg1;
+    if (i < table->maxobj) {
+        p = &table->top[table->nobj++];
+        p->id = id;
         p->attribute = 0;
         GsInitCoordinate2(NULL, p->coord2);
         p->tmd = 0;
@@ -326,22 +326,22 @@ TodObj *kaj_tod_create_obj(TodObjTable *arg0, s32 arg1) {
     return NULL;
 }
 
-TodObj *kaj_tod_remove_obj(TodObjTable *arg0, s32 arg1) {
+TodObj *kaj_tod_remove_obj(TodObjTable *table, s32 id) {
     TodObj *p;
     s32 i;
 
-    p = arg0->top;
-    for (i = 0; i < arg0->nobj; i++, p++) {
-        if (p->id == arg1) {
+    p = table->top;
+    for (i = 0; i < table->nobj; i++, p++) {
+        if (p->id == id) {
             break;
         }
     }
-    if (i < arg0->nobj) {
+    if (i < table->nobj) {
         p->id = -1;
-        if (i == arg0->nobj - 1) {
+        if (i == table->nobj - 1) {
             do {
                 p--;
-                arg0->nobj--;
+                table->nobj--;
             } while (p->id == -1);
         }
         return p;
@@ -349,17 +349,17 @@ TodObj *kaj_tod_remove_obj(TodObjTable *arg0, s32 arg1) {
     return NULL;
 }
 
-s32 *kaj_tod_find_tmd(Unk_801D1044 *arg0, s32 *arg1, s32 arg2) {
+s32 *kaj_tod_find_tmd(Unk_801D1044 *tmd, s32 *ids, s32 id) {
     s32 *p;
     s32 n;
 
-    p = arg0->unkC[0];
-    for (n = arg0->unk8; n > 0; n--) {
-        if (arg2 == *arg1) {
+    p = tmd->unkC[0];
+    for (n = tmd->unk8; n > 0; n--) {
+        if (id == *ids) {
             break;
         }
         p += 7;
-        arg1++;
+        ids++;
     }
     if (n == 0) {
         return NULL;
@@ -367,19 +367,19 @@ s32 *kaj_tod_find_tmd(Unk_801D1044 *arg0, s32 *arg1, s32 arg2) {
     return p;
 }
 
-void *kaj_tod_set_frame(u32 arg0, TodFrame *arg1, void *arg2, s32 *arg3, void *arg4, s32 arg5, s32 arg6) {
-    void *p;
+void *kaj_tod_set_frame(u32 frame, TodFrame *tod, void *table, s32 *ids, void *tmd, s32 mode, s32 root_coord) {
+    void *packet;
     u32 n;
     u32 i;
 
-    p = arg1;
-    n = arg1->packet_count;
-    if (arg0 < arg1->frame) {
-        return p;
+    packet = tod;
+    n = tod->packet_count;
+    if (frame < tod->frame) {
+        return packet;
     }
-    p = arg1 + 1;
+    packet = tod + 1;
     for (i = 0; i < n; i++) {
-        p = kaj_tod_set_packet(p, arg2, arg3, arg4, arg5, arg6);
+        packet = kaj_tod_set_packet(packet, table, ids, tmd, mode, root_coord);
     }
-    return p;
+    return packet;
 }

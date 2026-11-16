@@ -63,87 +63,87 @@ static inline void func_801CF790_inline(Unk_801CFB4C *tim, void **buf) {
     }
 }
 
-void kaj_tim_load(Unk_801CFAE8 **arg0, u32 *arg1, u16 arg2, s16 arg3) {
+void kaj_tim_load(Unk_801CFAE8 **handle, u32 *tim_file, u16 mode, s16 keep_clut) {
     Unk_801CFB4C tim;
     s16 x;
     s16 y;
 
-    *arg0 = kaj_malloc(0x24);
-    if (*arg0 == NULL) {
+    *handle = kaj_malloc(0x24);
+    if (*handle == NULL) {
         kaj_abend(3, "Error Allocating TIM Handle", D_801DFDE4, 47);
     }
-    (*arg0)->unk1C = NULL;
-    (*arg0)->unk20 = NULL;
-    GsGetTimInfo(arg1 + 1, &tim);
-    if (arg2 != 2) {
+    (*handle)->unk1C = NULL;
+    (*handle)->unk20 = NULL;
+    GsGetTimInfo(tim_file + 1, &tim);
+    if (mode != 2) {
         LoadImage(&tim.unk4, tim.unkC);
     }
     x = tim.unk4 >> 6;
     y = tim.unk6 >> 8;
-    (*arg0)->unk0 = tim.unk4;
-    (*arg0)->unk2 = tim.unk6;
-    (*arg0)->unk6 = tim.unkA;
-    (*arg0)->unk4 = tim.unk8;
-    (*arg0)->unk10 = tim.unk4 - (x << 6);
-    (*arg0)->unk12 = tim.unk6 - (y << 8);
-    (*arg0)->unk14 = 0;
-    (*arg0)->unk18 = -1;
-    (*arg0)->unk1A = GetTPage(tim.unk0 & 7, 0, x << 6, y << 8);
+    (*handle)->unk0 = tim.unk4;
+    (*handle)->unk2 = tim.unk6;
+    (*handle)->unk6 = tim.unkA;
+    (*handle)->unk4 = tim.unk8;
+    (*handle)->unk10 = tim.unk4 - (x << 6);
+    (*handle)->unk12 = tim.unk6 - (y << 8);
+    (*handle)->unk14 = 0;
+    (*handle)->unk18 = -1;
+    (*handle)->unk1A = GetTPage(tim.unk0 & 7, 0, x << 6, y << 8);
     if ((tim.unk0 >> 3) & 1) {
-        if (arg2 != 2) {
+        if (mode != 2) {
             LoadImage(&tim.unk10, tim.unk18);
         }
-        (*arg0)->unk18 = GetClut(tim.unk10, tim.unk12);
-        (*arg0)->unk8 = tim.unk10;
-        (*arg0)->unkA = tim.unk12;
-        (*arg0)->unkC = tim.unk14;
-        (*arg0)->unkE = tim.unk16;
-        if (arg3 != 0) {
-            func_801CF790_inline(&tim, &(*arg0)->unk1C);
-            func_801CF790_inline(&tim, &(*arg0)->unk20);
+        (*handle)->unk18 = GetClut(tim.unk10, tim.unk12);
+        (*handle)->unk8 = tim.unk10;
+        (*handle)->unkA = tim.unk12;
+        (*handle)->unkC = tim.unk14;
+        (*handle)->unkE = tim.unk16;
+        if (keep_clut != 0) {
+            func_801CF790_inline(&tim, &(*handle)->unk1C);
+            func_801CF790_inline(&tim, &(*handle)->unk20);
         }
         switch (tim.unk0 & 7) {
         case 0:
-            (*arg0)->unk14 = 2;
+            (*handle)->unk14 = 2;
             break;
         case 1:
-            (*arg0)->unk14 = 1;
+            (*handle)->unk14 = 1;
             break;
         }
     }
 }
 
-void kaj_tim_free(Unk_801CFAE8 *arg0) {
-    if (arg0 != NULL) {
-        if (arg0->unk1C != NULL) {
-            free3(arg0->unk1C);
-            arg0->unk1C = NULL;
+void kaj_tim_free(Unk_801CFAE8 *handle) {
+    if (handle != NULL) {
+        if (handle->unk1C != NULL) {
+            free3(handle->unk1C);
+            handle->unk1C = NULL;
         }
-        if (arg0->unk20 != NULL) {
-            free3(arg0->unk20);
-            arg0->unk20 = NULL;
+        if (handle->unk20 != NULL) {
+            free3(handle->unk20);
+            handle->unk20 = NULL;
         }
-        free3(arg0);
+        free3(handle);
     }
 }
 
-void kaj_tim_upload(u32 *arg0, s16 arg1) {
+void kaj_tim_upload(u32 *tim_file, s16 with_clut) {
     Unk_801CFB4C tim;
 
-    GsGetTimInfo(arg0 + 1, &tim);
+    GsGetTimInfo(tim_file + 1, &tim);
     LoadImage(&tim.unk4, tim.unkC);
-    if (arg1 != 0 && ((tim.unk0 >> 3) & 1)) {
+    if (with_clut != 0 && ((tim.unk0 >> 3) & 1)) {
         LoadImage(&tim.unk10, tim.unk18);
     }
 }
 
-void kaj_tim_upload_hdr(u16 *arg0) {
+void kaj_tim_upload_hdr(u16 *hdr) {
     Unk_801CFB4C tim;
-    s16 v = arg0[1];
+    s16 with_clut = hdr[1];
 
-    GsGetTimInfo((u32 *)(arg0 + 4), &tim);
+    GsGetTimInfo((u32 *)(hdr + 4), &tim);
     LoadImage(&tim.unk4, tim.unkC);
-    if (v != 0 && ((tim.unk0 >> 3) & 1)) {
+    if (with_clut != 0 && ((tim.unk0 >> 3) & 1)) {
         LoadImage(&tim.unk10, tim.unk18);
     }
 }

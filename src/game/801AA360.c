@@ -100,111 +100,111 @@ INCLUDE_RODATA("asm/nonmatchings/game/801AA360", vehicle_str_file);
 
 INCLUDE_RODATA("asm/nonmatchings/game/801AA360", D_80171AA8);
 
-void vehicle_car_drive(Player *arg0) {
+void vehicle_car_drive(Player *player) {
     Unk_801AA8DC_10 sv;
     s32 flag;
-    Unk_801E032C *p = D_801E032C[0];
-    CarState *q = &vehicle_car_state;
-    s32 k;
-    s32 v;
-    s32 s;
+    Unk_801E032C *car = D_801E032C[0];
+    CarState *state = &vehicle_car_state;
+    s32 speed_div;
+    s32 revs;
+    s32 speed;
     s16 sgn;
-    s16 a;
+    s16 steer_abs;
     s32 sn;
     s32 cs;
     s32 t;
     s32 ang;
 
-    q->stopped = 0;
-    vehicle_navi_update((Player *)p, (Unk_801AC578 *)arg0);
+    state->stopped = 0;
+    vehicle_navi_update((Player *)car, (Unk_801AC578 *)player);
     sv.unk0 = 0;
     sv.unk2 = 0;
-    sv.unk4 = (q->steer << 12) / 360;
-    RotMatrix(&sv, p->unk6C);
-    p->unk68 = 0;
-    k = thing_car_speed_div;
-    if (q->unk2 != 0) {
-        k = thing_car_speed_div * 3;
+    sv.unk4 = (state->steer << 12) / 360;
+    RotMatrix(&sv, car->unk6C);
+    car->unk68 = 0;
+    speed_div = thing_car_speed_div;
+    if (state->unk2 != 0) {
+        speed_div = thing_car_speed_div * 3;
     }
-    if (q->gear == 1) {
-        v = q->brake * 30 + 800;
-        if (v > 6500) {
-            v = 6500;
+    if (state->gear == 1) {
+        revs = state->brake * 30 + 800;
+        if (revs > 6500) {
+            revs = 6500;
         }
-        if (q->throttle != 0) {
-            v -= q->throttle * 45;
+        if (state->throttle != 0) {
+            revs -= state->throttle * 45;
         }
-        if (v < 800) {
-            v = 800;
+        if (revs < 800) {
+            revs = 800;
         }
-        s = (v - 800) * 347436 / (k * 55086);
-    } else if (q->gear == -1) {
-        v = q->throttle * 30 + 800;
-        if (v > 6500) {
-            v = 6500;
+        speed = (revs - 800) * 347436 / (speed_div * 55086);
+    } else if (state->gear == -1) {
+        revs = state->throttle * 30 + 800;
+        if (revs > 6500) {
+            revs = 6500;
         }
-        if (q->brake != 0) {
-            v -= q->brake * 45;
+        if (state->brake != 0) {
+            revs -= state->brake * 45;
         }
-        if (v < 800) {
-            v = 800;
+        if (revs < 800) {
+            revs = 800;
         }
-        s = -((v - 800) * 347436) / (k * 72566);
+        speed = -((revs - 800) * 347436) / (speed_div * 72566);
     } else {
-        s = 0;
+        speed = 0;
     }
-    s = ((s << 12) / 4) >> 12;
+    speed = ((speed << 12) / 4) >> 12;
     sgn = 0;
-    q->speed = s * D_801E6DB4[0];
-    if (q->steer != 0) {
-        if (q->steer > 0) {
+    state->speed = speed * D_801E6DB4[0];
+    if (state->steer != 0) {
+        if (state->steer > 0) {
             sgn = 1;
         } else {
             sgn = -1;
         }
     }
-    a = q->steer < 0 ? -q->steer : q->steer;
-    ang = (a << 12) / 360;
+    steer_abs = state->steer < 0 ? -state->steer : state->steer;
+    ang = (steer_abs << 12) / 360;
     sn = rsin(ang);
     cs = rcos(ang);
     t = (sn << 12) / cs;
     if (t == 0) {
-        q->unk18 = 0;
+        state->unk18 = 0;
     } else {
-        q->unk18 = 0xFE000 / t;
+        state->unk18 = 0xFE000 / t;
     }
-    if (q->speed == 0) {
-        q->stopped = 1;
-        q->unk18 = 0;
-        q->unk14 = 0;
+    if (state->speed == 0) {
+        state->stopped = 1;
+        state->unk18 = 0;
+        state->unk14 = 0;
         vehicle_car_turn_sfx_on = 0;
     } else {
-        arg0->unk3C = 1;
-        t = (sgn * q->unk18 * cs) >> 12;
-        GsSetLsMatrix(&p->unk1C);
+        player->unk3C = 1;
+        t = (sgn * state->unk18 * cs) >> 12;
+        GsSetLsMatrix(&car->unk1C);
         sv.unk0 = t;
         sv.unk2 = 0;
         sv.unk4 = -0x98;
-        RotTrans(&sv, &q->unk5C, &flag);
+        RotTrans(&sv, &state->unk5C, &flag);
         sv.unk0 = 0;
         sv.unk2 = 0;
         sv.unk4 = -0x98;
-        RotTrans(&sv, &q->unk4C, &flag);
-        q->unk14 = 0;
-        if (q->unk18 != 0) {
-            q->unk14 = (sgn * ratan2(s, q->unk18) * 360) >> 12;
-            if (q->unk14 == 0) {
-                q->unk14 = 1;
+        RotTrans(&sv, &state->unk4C, &flag);
+        state->unk14 = 0;
+        if (state->unk18 != 0) {
+            state->unk14 = (sgn * ratan2(speed, state->unk18) * 360) >> 12;
+            if (state->unk14 == 0) {
+                state->unk14 = 1;
             }
         }
-        if (s >= 25 && a >= 40 && vehicle_car_turn_sfx_on == 0) {
+        if (speed >= 25 && steer_abs >= 40 && vehicle_car_turn_sfx_on == 0) {
             vehicle_car_turn_sfx_on = 1;
             sound_se_play(0x1B);
         } else {
             vehicle_car_turn_sfx_on = 0;
         }
     }
-    if (q->stopped != 0) {
+    if (state->stopped != 0) {
         if (roadmap_get_state() != 0 || mail_menu_get_state() != 0) {
             if (thing_car_exit_prompt_on != 0) {
                 thing_car_exit_prompt_on = 0;
@@ -222,84 +222,84 @@ void vehicle_car_drive(Player *arg0) {
 
 void vehicle_train_place(void) {
     Unk_801AA8DC_10 sv;
-    Player *q = player_status_player[0];
-    TrainState *g = &vehicle_train_state;
-    Thing *p = thing_find(2, 0);
+    Player *player = player_status_player[0];
+    TrainState *train = &vehicle_train_state;
+    Thing *thing = thing_find(2, 0);
 
-    if (p != NULL) {
-        p->active = 1;
-        p->pos_x = 0xF0A;
-        p->animate = 0;
-        p->pos_y = 0;
-        p->pos_z = 0x3E80;
-        p->rot_x = 0;
-        p->rot_y = 0;
-        p->rot_z = 0;
-        if (g->direction == 0) {
-            p->pos_x = -0xF0A;
-            p->rot_y = 180;
+    if (thing != NULL) {
+        thing->active = 1;
+        thing->pos_x = 0xF0A;
+        thing->animate = 0;
+        thing->pos_y = 0;
+        thing->pos_z = 0x3E80;
+        thing->rot_x = 0;
+        thing->rot_y = 0;
+        thing->rot_z = 0;
+        if (train->direction == 0) {
+            thing->pos_x = -0xF0A;
+            thing->rot_y = 180;
         }
-        p->coord_tx = p->pos_x - q->cell_x * 12500;
-        p->coord_ty = p->pos_y + q->cell_y * 32000;
-        p->coord_tz = p->pos_z - q->cell_z * 12500;
-        sv.unk0 = (p->rot_x << 12) / 360;
-        sv.unk2 = (p->rot_y << 12) / 360;
-        sv.unk4 = (p->rot_z << 12) / 360;
-        RotMatrix(&sv, p->coord_m);
-        p->coord_flg = 0;
+        thing->coord_tx = thing->pos_x - player->cell_x * 12500;
+        thing->coord_ty = thing->pos_y + player->cell_y * 32000;
+        thing->coord_tz = thing->pos_z - player->cell_z * 12500;
+        sv.unk0 = (thing->rot_x << 12) / 360;
+        sv.unk2 = (thing->rot_y << 12) / 360;
+        sv.unk4 = (thing->rot_z << 12) / 360;
+        RotMatrix(&sv, thing->coord_m);
+        thing->coord_flg = 0;
     }
-    g->unkA = 1;
-    g->motion = 0;
-    g->door_state = 1;
+    train->unkA = 1;
+    train->motion = 0;
+    train->door_state = 1;
 }
 
-void vehicle_train_arrive(s16 arg0, s16 arg1) {
+void vehicle_train_arrive(s16 direction, s16 station) {
     Unk_801AA8DC_10 sv;
     Rect rect;
-    Player *q = player_status_player[0];
-    TrainState *g = &vehicle_train_state;
-    Thing *p = thing_find(2, 0);
-    VehicleSprite *a;
-    Unk_801AC55C_1C *r;
+    Player *player = player_status_player[0];
+    TrainState *train = &vehicle_train_state;
+    Thing *thing = thing_find(2, 0);
+    VehicleSprite *sprite;
+    Unk_801AC55C_1C *tim;
     s16 w;
     u16 h;
 
-    if (p != NULL && p->active == 0) {
-        p->animate = 1;
-        p->active = 1;
-        p->pos_x = 0xF0A;
-        p->pos_z = -0x3E80;
-        p->pos_y = 0;
-        p->rot_x = 0;
-        p->rot_y = 0;
-        p->rot_z = 0;
-        if (arg0 == 0) {
-            p->pos_x = -0xF0A;
-            p->pos_z = 0xBB80;
-            p->rot_y = 180;
+    if (thing != NULL && thing->active == 0) {
+        thing->animate = 1;
+        thing->active = 1;
+        thing->pos_x = 0xF0A;
+        thing->pos_z = -0x3E80;
+        thing->pos_y = 0;
+        thing->rot_x = 0;
+        thing->rot_y = 0;
+        thing->rot_z = 0;
+        if (direction == 0) {
+            thing->pos_x = -0xF0A;
+            thing->pos_z = 0xBB80;
+            thing->rot_y = 180;
         }
-        p->coord_tx = p->pos_x - q->cell_x * 12500;
-        p->coord_ty = p->pos_y + q->cell_y * 32000;
-        p->coord_tz = p->pos_z - q->cell_z * 12500;
-        sv.unk0 = (p->rot_x << 12) / 360;
-        sv.unk2 = (p->rot_y << 12) / 360;
-        sv.unk4 = (p->rot_z << 12) / 360;
-        RotMatrix(&sv, p->coord_m);
-        p->coord_flg = 0;
-        g->motion = 3;
-        g->direction = arg0;
-        g->door_state = 0;
-        g->station = arg1;
-        g->speed = 0;
-        g->stop_timer = -1;
+        thing->coord_tx = thing->pos_x - player->cell_x * 12500;
+        thing->coord_ty = thing->pos_y + player->cell_y * 32000;
+        thing->coord_tz = thing->pos_z - player->cell_z * 12500;
+        sv.unk0 = (thing->rot_x << 12) / 360;
+        sv.unk2 = (thing->rot_y << 12) / 360;
+        sv.unk4 = (thing->rot_z << 12) / 360;
+        RotMatrix(&sv, thing->coord_m);
+        thing->coord_flg = 0;
+        train->motion = 3;
+        train->direction = direction;
+        train->door_state = 0;
+        train->station = station;
+        train->speed = 0;
+        train->stop_timer = -1;
     }
-    a = sprite_find(0x408);
-    if (a != NULL) {
-        r = a->tim;
-        w = a->cell_w >> r->unk14;
-        h = a->cell_h;
-        rect.x = r->unk0;
-        rect.y = a->tim->unk2;
+    sprite = sprite_find(0x408);
+    if (sprite != NULL) {
+        tim = sprite->tim;
+        w = sprite->cell_w >> tim->unk14;
+        h = sprite->cell_h;
+        rect.x = tim->unk0;
+        rect.y = sprite->tim->unk2;
         rect.w = w;
         rect.h = h;
         MoveImage(&rect, 0x2F0, 0x20);
@@ -307,254 +307,254 @@ void vehicle_train_arrive(s16 arg0, s16 arg1) {
     sound_se_play(0x1E);
 }
 
-void vehicle_train_update(Thing *arg0) {
-    Player *q = player_status_player[0];
-    TrainState *g = &vehicle_train_state;
-    VehicleSprite *p;
-    u16 m;
-    s32 d;
+void vehicle_train_update(Thing *thing) {
+    Player *player = player_status_player[0];
+    TrainState *train = &vehicle_train_state;
+    VehicleSprite *sprite;
+    u16 motion;
+    s32 step;
 
-    if (g->direction != 0) {
-        m = g->motion;
-        if (m == 3) {
-            d = (16000 - arg0->pos_z) / 100 + 5;
-            arg0->pos_z += d * D_801E6DB4[0];
-            if (arg0->pos_z >= 16000) {
-                arg0->animate = 0;
-                arg0->pos_z = 16000;
-                g->motion = 0;
-                g->stop_timer = 2;
-                p = sprite_find(0x408);
-                if (p == NULL) {
-                    g->door_state = 1;
+    if (train->direction != 0) {
+        motion = train->motion;
+        if (motion == 3) {
+            step = (16000 - thing->pos_z) / 100 + 5;
+            thing->pos_z += step * D_801E6DB4[0];
+            if (thing->pos_z >= 16000) {
+                thing->animate = 0;
+                thing->pos_z = 16000;
+                train->motion = 0;
+                train->stop_timer = 2;
+                sprite = sprite_find(0x408);
+                if (sprite == NULL) {
+                    train->door_state = 1;
                 } else {
-                    Unk_801AC70C *e;
-                    s32 n;
+                    Unk_801AC70C *task;
+                    s32 frames;
 
-                    e = kaj_tss_alloc(4);
-                    e->unk22 = 7;
-                    e->unk24 = 0;
-                    n = p->columns * p->rows;
-                    e->unk28 = 1;
-                    e->unk26 = n - 1;
-                    g->door_state = 3;
-                    e->unk2C = 0x19;
-                    e->unk30 = vehicle_train_door_frame;
-                    e->unk34 = vehicle_train_door_last;
-                    e->unk38 = vehicle_train_door_last;
-                    *e->unk3C = p;
-                    g->door_task = kaj_tss_start(e);
+                    task = kaj_tss_alloc(4);
+                    task->unk22 = 7;
+                    task->unk24 = 0;
+                    frames = sprite->columns * sprite->rows;
+                    task->unk28 = 1;
+                    task->unk26 = frames - 1;
+                    train->door_state = 3;
+                    task->unk2C = 0x19;
+                    task->unk30 = vehicle_train_door_frame;
+                    task->unk34 = vehicle_train_door_last;
+                    task->unk38 = vehicle_train_door_last;
+                    *task->unk3C = sprite;
+                    train->door_task = kaj_tss_start(task);
                     sound_se_play(0xB);
                 }
             }
-        } else if (m == 1) {
-            d = (arg0->pos_z - 16000) / 100 + 5;
-            arg0->pos_z += d * D_801E6DB4[0];
-            if (arg0->pos_z > 47999) {
-                arg0->animate = 0;
-                arg0->active = 0;
-                g->motion = 2;
+        } else if (motion == 1) {
+            step = (thing->pos_z - 16000) / 100 + 5;
+            thing->pos_z += step * D_801E6DB4[0];
+            if (thing->pos_z > 47999) {
+                thing->animate = 0;
+                thing->active = 0;
+                train->motion = 2;
             }
         }
     } else {
-        m = g->motion;
-        if (m == 3) {
-            d = (arg0->pos_z - 16000) / 100 + 5;
-            arg0->pos_z -= d * D_801E6DB4[0];
-            if (arg0->pos_z <= 16000) {
-                arg0->pos_z = 16000;
-                arg0->animate = 0;
-                g->motion = 0;
-                g->stop_timer = 2;
-                p = sprite_find(0x408);
-                if (p == NULL) {
-                    g->door_state = 1;
+        motion = train->motion;
+        if (motion == 3) {
+            step = (thing->pos_z - 16000) / 100 + 5;
+            thing->pos_z -= step * D_801E6DB4[0];
+            if (thing->pos_z <= 16000) {
+                thing->pos_z = 16000;
+                thing->animate = 0;
+                train->motion = 0;
+                train->stop_timer = 2;
+                sprite = sprite_find(0x408);
+                if (sprite == NULL) {
+                    train->door_state = 1;
                 } else {
-                    Unk_801AC70C *e;
-                    s32 n;
+                    Unk_801AC70C *task;
+                    s32 frames;
 
-                    e = kaj_tss_alloc(4);
-                    e->unk22 = 7;
-                    e->unk24 = 0;
-                    n = p->columns * p->rows;
-                    e->unk28 = 1;
-                    e->unk26 = n - 1;
-                    g->door_state = 3;
-                    e->unk2C = 0x19;
-                    e->unk30 = vehicle_train_door_frame;
-                    e->unk34 = vehicle_train_door_last;
-                    e->unk38 = vehicle_train_door_last;
-                    *e->unk3C = p;
-                    g->door_task = kaj_tss_start(e);
+                    task = kaj_tss_alloc(4);
+                    task->unk22 = 7;
+                    task->unk24 = 0;
+                    frames = sprite->columns * sprite->rows;
+                    task->unk28 = 1;
+                    task->unk26 = frames - 1;
+                    train->door_state = 3;
+                    task->unk2C = 0x19;
+                    task->unk30 = vehicle_train_door_frame;
+                    task->unk34 = vehicle_train_door_last;
+                    task->unk38 = vehicle_train_door_last;
+                    *task->unk3C = sprite;
+                    train->door_task = kaj_tss_start(task);
                     sound_se_play(0xB);
                 }
             }
-        } else if (m == 1) {
-            d = (16000 - arg0->pos_z) / 100 + 5;
-            arg0->pos_z -= d * D_801E6DB4[0];
-            if (arg0->pos_z < -15999) {
-                arg0->animate = 0;
-                arg0->active = 0;
-                g->motion = 2;
+        } else if (motion == 1) {
+            step = (16000 - thing->pos_z) / 100 + 5;
+            thing->pos_z -= step * D_801E6DB4[0];
+            if (thing->pos_z < -15999) {
+                thing->animate = 0;
+                thing->active = 0;
+                train->motion = 2;
             }
         }
     }
-    arg0->coord_tx = arg0->pos_x - q->cell_x * 12500;
-    arg0->coord_ty = arg0->pos_y + q->cell_y * 32000;
-    arg0->coord_tz = arg0->pos_z - q->cell_z * 12500;
-    arg0->coord_flg = 0;
+    thing->coord_tx = thing->pos_x - player->cell_x * 12500;
+    thing->coord_ty = thing->pos_y + player->cell_y * 32000;
+    thing->coord_tz = thing->pos_z - player->cell_z * 12500;
+    thing->coord_flg = 0;
 }
 
-void vehicle_train_exit_prompt(s16 arg0) {
-    Player *q = player_status_player[0];
-    EventState *d = &event_state;
-    TrainState *p = &vehicle_train_state;
+void vehicle_train_exit_prompt(s16 show) {
+    Player *player = player_status_player[0];
+    EventState *ev_state = &event_state;
+    TrainState *train = &vehicle_train_state;
 
-    if (arg0 != 0) {
-        if (p->unkC == 0) {
-            if ((p->direction != 0 && p->trigger == 0x200010) || (p->direction == 0 && p->trigger == 0x200020)) {
-                p->unkC = 1;
-                d->trigger = p->trigger;
-                d->trigger_type = (u8)(p->trigger >> 16);
-                if (d->state != 2) {
-                    d->state = 2;
+    if (show != 0) {
+        if (train->unkC == 0) {
+            if ((train->direction != 0 && train->trigger == 0x200010) || (train->direction == 0 && train->trigger == 0x200020)) {
+                train->unkC = 1;
+                ev_state->trigger = train->trigger;
+                ev_state->trigger_type = (u8)(train->trigger >> 16);
+                if (ev_state->state != 2) {
+                    ev_state->state = 2;
                 }
-                if (!(q->flags & 4)) {
-                    q->flags |= 4;
+                if (!(player->flags & 4)) {
+                    player->flags |= 4;
                 }
-                if (q->vehicle_mode == 2) {
+                if (player->vehicle_mode == 2) {
                     /* " 7電車1から降りる      3○" */
                     text_show(" 7\223d\216\3241\202\251\202\347\215~\202\350\202\351      3\201\233", 1, -1, 8, -1, 0, 1);
-                } else if (q->vehicle_mode == 3) {
+                } else if (player->vehicle_mode == 3) {
                     /* " 7地下鉄1から降りる     3○" */
                     text_show(" 7\222n\211\272\223S1\202\251\202\347\215~\202\350\202\351     3\201\233", 1, -1, 8, -1, 0, 1);
                 }
             }
         }
-    } else if (p->unkC != 0) {
+    } else if (train->unkC != 0) {
         text_close();
         action_reset(1);
-        p->unkC = 0;
-        if (q->flags & 4) {
-            q->flags &= ~4;
+        train->unkC = 0;
+        if (player->flags & 4) {
+            player->flags &= ~4;
         }
     }
 }
 
-s16 vehicle_train_get_off(s16 arg0) {
-    TrainState *p;
-    u16 v = player_status_player[0]->vehicle_mode;
+s16 vehicle_train_get_off(s16 result) {
+    TrainState *train;
+    u16 mode = player_status_player[0]->vehicle_mode;
 
-    p = &vehicle_train_state;
+    train = &vehicle_train_state;
 
-    if (v == 3) {
-        arg0 = 0;
-        if (p->direction != 0) {
-            mail_goto_building(1, vehicle_str_sb1, 9, 0x41, 1, 0x5A, 6, p->station + 0xF90000, 0);
+    if (mode == 3) {
+        result = 0;
+        if (train->direction != 0) {
+            mail_goto_building(1, vehicle_str_sb1, 9, 0x41, 1, 0x5A, 6, train->station + 0xF90000, 0);
         } else {
-            mail_goto_building(1, vehicle_str_sb1, 9, 0x41, 2, -0x5A, 6, p->station + 0xF90000, 0);
+            mail_goto_building(1, vehicle_str_sb1, 9, 0x41, 2, -0x5A, 6, train->station + 0xF90000, 0);
         }
-    } else if (v == 2) {
-        arg0 = 0;
-        if (p->direction != 0) {
-            mail_goto_building(1, vehicle_str_rw1, 9, 0x41, (s16)(p->station * 2 - 1), 0x5A, 0x11, p->station + 0xF60000, 0);
+    } else if (mode == 2) {
+        result = 0;
+        if (train->direction != 0) {
+            mail_goto_building(1, vehicle_str_rw1, 9, 0x41, (s16)(train->station * 2 - 1), 0x5A, 0x11, train->station + 0xF60000, 0);
         } else {
-            mail_goto_building(1, vehicle_str_rw1, 9, 0x41, (s16)(p->station * 2), -0x5A, 0x11, p->station + 0xF60000, 0);
-        }
-    }
-    return arg0;
-}
-
-s16 vehicle_train_end_of_line(s16 arg0) {
-    SceneRequest *r = &scene_request;
-    TrainState *p;
-    u16 v = player_status_player[0]->vehicle_mode;
-
-    p = &vehicle_train_state;
-    if (v == 3) {
-        if (p->direction != 0) {
-            if (p->station == 6) {
-                mail_goto_building(1, vehicle_str_sb1, 9, 0x41, 1, 0x5A, 6, p->station + 0xF90000, 0);
-                arg0 = 0;
-                r->change = 1;
-            }
-        } else {
-            if (p->station == 1) {
-                mail_goto_building(1, vehicle_str_sb1, 9, 0x41, 2, -0x5A, 6, p->station + 0xF90000, 0);
-                arg0 = 0;
-                r->change = 1;
-            }
-        }
-    } else if (v == 2) {
-        if (p->direction != 0) {
-            if (p->station == 3) {
-                mail_goto_building(1, vehicle_str_rw1, 9, 0x41, 5, 0x5A, 0x11, p->station + 0xF60000, 0);
-                arg0 = 0;
-                r->change = 1;
-            }
-        } else {
-            if (p->station == 1) {
-                mail_goto_building(1, vehicle_str_rw1, 9, 0x41, 2, -0x5A, 0x11, p->station + 0xF60000, 0);
-                arg0 = 0;
-                r->change = 1;
-            }
+            mail_goto_building(1, vehicle_str_rw1, 9, 0x41, (s16)(train->station * 2), -0x5A, 0x11, train->station + 0xF60000, 0);
         }
     }
-    return arg0;
+    return result;
 }
 
-void vehicle_car_follow_player(Thing *arg0, s32 arg1) {
+s16 vehicle_train_end_of_line(s16 result) {
+    SceneRequest *request = &scene_request;
+    TrainState *train;
+    u16 mode = player_status_player[0]->vehicle_mode;
+
+    train = &vehicle_train_state;
+    if (mode == 3) {
+        if (train->direction != 0) {
+            if (train->station == 6) {
+                mail_goto_building(1, vehicle_str_sb1, 9, 0x41, 1, 0x5A, 6, train->station + 0xF90000, 0);
+                result = 0;
+                request->change = 1;
+            }
+        } else {
+            if (train->station == 1) {
+                mail_goto_building(1, vehicle_str_sb1, 9, 0x41, 2, -0x5A, 6, train->station + 0xF90000, 0);
+                result = 0;
+                request->change = 1;
+            }
+        }
+    } else if (mode == 2) {
+        if (train->direction != 0) {
+            if (train->station == 3) {
+                mail_goto_building(1, vehicle_str_rw1, 9, 0x41, 5, 0x5A, 0x11, train->station + 0xF60000, 0);
+                result = 0;
+                request->change = 1;
+            }
+        } else {
+            if (train->station == 1) {
+                mail_goto_building(1, vehicle_str_rw1, 9, 0x41, 2, -0x5A, 0x11, train->station + 0xF60000, 0);
+                result = 0;
+                request->change = 1;
+            }
+        }
+    }
+    return result;
+}
+
+void vehicle_car_follow_player(Thing *car, s32 force) {
     Unk_801AA8DC_10 sv;
     s32 y;
     s16 found = 0;
-    s16 f = arg1;
-    PlayerStatus *g = &player_status;
-    Player *q = g->player;
+    s16 f = force;
+    PlayerStatus *status = &player_status;
+    Player *player = status->player;
 
-    if (q->unk4 == 9999) {
+    if (player->unk4 == 9999) {
         y = 0;
-        if (block_find_surface(q->unk0 - q->cell_x * 12500, q->unk8 - q->cell_z * 12500, &y, 1) != 0) {
+        if (block_find_surface(player->unk0 - player->cell_x * 12500, player->unk8 - player->cell_z * 12500, &y, 1) != 0) {
             found = 1;
-            y -= q->cell_y * 32000;
-            q->unk4 = y;
+            y -= player->cell_y * 32000;
+            player->unk4 = y;
         }
     }
     if (found || f != 0) {
-        arg0->pos_x = q->unk0;
-        arg0->pos_y = q->unk4;
-        arg0->pos_z = q->unk8;
-        arg0->rot_x = q->unk10;
-        arg0->rot_y = q->unk12;
-        arg0->rot_z = q->unk14;
-        arg0->coord_tx = arg0->pos_x - q->cell_x * 12500;
-        arg0->coord_ty = arg0->pos_y + q->cell_y * 32000;
-        arg0->coord_tz = arg0->pos_z - q->cell_z * 12500;
-        sv.unk0 = (arg0->rot_x << 12) / 360;
-        sv.unk2 = (arg0->rot_y << 12) / 360;
-        sv.unk4 = (arg0->rot_z << 12) / 360;
-        RotMatrixZXY(&sv, arg0->coord_m);
-        arg0->coord_flg = 0;
+        car->pos_x = player->unk0;
+        car->pos_y = player->unk4;
+        car->pos_z = player->unk8;
+        car->rot_x = player->unk10;
+        car->rot_y = player->unk12;
+        car->rot_z = player->unk14;
+        car->coord_tx = car->pos_x - player->cell_x * 12500;
+        car->coord_ty = car->pos_y + player->cell_y * 32000;
+        car->coord_tz = car->pos_z - player->cell_z * 12500;
+        sv.unk0 = (car->rot_x << 12) / 360;
+        sv.unk2 = (car->rot_y << 12) / 360;
+        sv.unk4 = (car->rot_z << 12) / 360;
+        RotMatrixZXY(&sv, car->coord_m);
+        car->coord_flg = 0;
         if (f != 0) {
-            arg0->active = 1;
-            arg0->block = block_find_at(arg0->pos_x, arg0->pos_y, arg0->pos_z);
-            g->vehicle = (VehicleSprite *)arg0;
+            car->active = 1;
+            car->block = block_find_at(car->pos_x, car->pos_y, car->pos_z);
+            status->vehicle = (VehicleSprite *)car;
         }
     }
 }
 
-void vehicle_navi_update(Player *arg0, Unk_801AC578 *arg1) {
-    CarNavi *p = (CarNavi *)vehicle_navi;
+void vehicle_navi_update(Player *car, Unk_801AC578 *player) {
+    CarNavi *navi = (CarNavi *)vehicle_navi;
     s32 dx;
     s32 dz;
-    s32 d;
-    s16 a;
-    s32 n;
+    s32 dist;
+    s16 dest_angle;
+    s32 arrow;
 
-    if (mail_menu_get_state() == 0 && p->active != 0 && p->dest_sprite != NULL && p->unk10 != NULL) {
-        dx = vehicle_navi_dest_xz[p->dest * 2] - arg1->unk60;
-        dz = vehicle_navi_dest_xz[p->dest * 2 + 1] - arg1->unk68;
-        d = SquareRoot0(dx * dx + dz * dz);
-        if (d < 25) {
+    if (mail_menu_get_state() == 0 && navi->active != 0 && navi->dest_sprite != NULL && navi->unk10 != NULL) {
+        dx = vehicle_navi_dest_xz[navi->dest * 2] - player->unk60;
+        dz = vehicle_navi_dest_xz[navi->dest * 2 + 1] - player->unk68;
+        dist = SquareRoot0(dx * dx + dz * dz);
+        if (dist < 25) {
             if (vehicle_navi_blink != 0) {
                 sprite_set_clut_entry(4, 0xE, 0x14F);
             } else {
@@ -564,47 +564,47 @@ void vehicle_navi_update(Player *arg0, Unk_801AC578 *arg1) {
         } else if (vehicle_navi_blink != 0) {
             sprite_set_clut_entry(4, 0xE, 0x14F);
         }
-        if (d >= p->start_dist) {
-            d = 12;
+        if (dist >= navi->start_dist) {
+            dist = 12;
         } else {
-            d = ((u32)(d * 0xB000) / p->start_dist + 1) >> 12;
+            dist = ((u32)(dist * 0xB000) / navi->start_dist + 1) >> 12;
         }
         sprite_fill_clut(4, 1, 12, 0);
-        sprite_fill_clut(4, 1, d, 0x1F);
-        a = mail_wrap_angle(ratan2(dx, dz) * 0x1680 >> 16);
-        n = (mail_wrap_angle(a - mail_wrap_angle(arg0->unk12)) + 23) / 45;
-        if (n >= 8) {
-            n = 0;
+        sprite_fill_clut(4, 1, dist, 0x1F);
+        dest_angle = mail_wrap_angle(ratan2(dx, dz) * 0x1680 >> 16);
+        arrow = (mail_wrap_angle(dest_angle - mail_wrap_angle(car->unk12)) + 23) / 45;
+        if (arrow >= 8) {
+            arrow = 0;
         }
-        p->unk10->cell_col = n % 4;
-        p->unk10->cell_row = n / 4;
+        navi->unk10->cell_col = arrow % 4;
+        navi->unk10->cell_row = arrow / 4;
     }
 }
 
 void vehicle_navi_open_menu(void) {
-    CarNavi *p = (CarNavi *)vehicle_navi;
+    CarNavi *navi = (CarNavi *)vehicle_navi;
 
     sound_se_play(0x13);
-    if (p->unk10 != NULL) {
-        p->unk10->visible = 0;
-        p->unk10 = NULL;
+    if (navi->unk10 != NULL) {
+        navi->unk10->visible = 0;
+        navi->unk10 = NULL;
     }
-    if (p->dest_sprite != NULL) {
-        p->dest_sprite->visible = 0;
-        p->dest_sprite = NULL;
+    if (navi->dest_sprite != NULL) {
+        navi->dest_sprite->visible = 0;
+        navi->dest_sprite = NULL;
     }
-    mail_menu_open(p->unk2, 0x40B, 0x40C, 0xF, 6, NULL, 4, 0x2969, 0x2BFF);
-    if (p->unk2 != 0) {
-        p->unk2 = 0;
+    mail_menu_open(navi->unk2, 0x40B, 0x40C, 0xF, 6, NULL, 4, 0x2969, 0x2BFF);
+    if (navi->unk2 != 0) {
+        navi->unk2 = 0;
     }
 }
 
 s16 vehicle_car_stopped_input(void) {
-    RoadMap *q = &roadmap_state;
-    CarNavi *p = (CarNavi *)vehicle_navi;
-    s16 r = mail_menu_get_state();
+    RoadMap *roadmap = &roadmap_state;
+    CarNavi *navi = (CarNavi *)vehicle_navi;
+    s16 menu_state = mail_menu_get_state();
 
-    if (r == 1) {
+    if (menu_state == 1) {
         if (!(kaj_system.pad_prev & 0x20) && (kaj_system.pad_now & 0x20)) {
             vehicle_navi[0] = 1;
             sound_se_play(0x11);
@@ -614,18 +614,18 @@ s16 vehicle_car_stopped_input(void) {
             sound_se_play(8);
             mail_menu_close();
         } else if (!(kaj_system.pad_prev & 0x1000) && (kaj_system.pad_now & 0x1000)) {
-            p->dest = mail_menu_move(1);
+            navi->dest = mail_menu_move(1);
         } else if (!(kaj_system.pad_prev & 0x4000) && (kaj_system.pad_now & 0x4000)) {
-            p->dest = mail_menu_move(0);
+            navi->dest = mail_menu_move(0);
         }
         return 0;
     }
-    if (r == 0) {
+    if (menu_state == 0) {
         if (!(kaj_system.pad_prev & 0x20) && (kaj_system.pad_now & 0x20)) {
             sound_se_play(0x11);
             return 1;
         }
-        if (q->mode == 0 && !(kaj_system.pad_prev & 0x800) && (kaj_system.pad_now & 0x800)) {
+        if (roadmap->mode == 0 && !(kaj_system.pad_prev & 0x800) && (kaj_system.pad_now & 0x800)) {
             text_close();
             vehicle_navi_open_menu();
         }
@@ -634,131 +634,131 @@ s16 vehicle_car_stopped_input(void) {
     return 0;
 }
 
-s16 vehicle_car_input(PlayerStatus *arg0, s32 arg1) {
-    CarState *q = &vehicle_car_state;
-    Player *o = arg0->player;
-    s16 r;
-    s16 f0;
-    s16 f1;
-    s16 f2;
-    s16 f3;
+s16 vehicle_car_input(PlayerStatus *status, s32 pad) {
+    CarState *state = &vehicle_car_state;
+    Player *player = status->player;
+    s16 result;
+    s16 steer_plus;
+    s16 steer_minus;
+    s16 brake_held;
+    s16 throttle_held;
 
     if (vehicle_car_state.stopped != 0) {
-        if ((s16)player_update_map(arg0) != 0) {
+        if ((s16)player_update_map(status) != 0) {
             return 0;
         }
-        r = vehicle_car_stopped_input();
-        if (r >= 0) {
-            return r;
+        result = vehicle_car_stopped_input();
+        if (result >= 0) {
+            return result;
         }
     }
-    f0 = 0;
-    f1 = 0;
-    f3 = 0;
-    f2 = 0;
-    if (arg1 & 0x1000) {
-        if (q->look_pitch < 20) {
-            o->unk3C = 1;
-            q->look_pitch += D_801E6DB4[0];
-            if (q->look_pitch > 20) {
-                q->look_pitch = 20;
+    steer_plus = 0;
+    steer_minus = 0;
+    throttle_held = 0;
+    brake_held = 0;
+    if (pad & 0x1000) {
+        if (state->look_pitch < 20) {
+            player->unk3C = 1;
+            state->look_pitch += D_801E6DB4[0];
+            if (state->look_pitch > 20) {
+                state->look_pitch = 20;
             }
         }
-    } else if (arg1 & 0x4000) {
-        if (q->look_pitch > -20) {
-            o->unk3C = 1;
-            q->look_pitch -= D_801E6DB4[0];
-            if (q->look_pitch < -20) {
-                q->look_pitch = -20;
+    } else if (pad & 0x4000) {
+        if (state->look_pitch > -20) {
+            player->unk3C = 1;
+            state->look_pitch -= D_801E6DB4[0];
+            if (state->look_pitch < -20) {
+                state->look_pitch = -20;
             }
         }
-    } else if (arg1 & 0x8000) {
-        if (q->look_yaw > -65) {
-            o->unk3C = 1;
-            q->look_yaw -= D_801E6DB4[0];
-            if (q->look_yaw < -65) {
-                q->look_yaw = -65;
+    } else if (pad & 0x8000) {
+        if (state->look_yaw > -65) {
+            player->unk3C = 1;
+            state->look_yaw -= D_801E6DB4[0];
+            if (state->look_yaw < -65) {
+                state->look_yaw = -65;
             }
         }
-    } else if (arg1 & 0x2000) {
-        if (q->look_yaw < 65) {
-            o->unk3C = 1;
-            q->look_yaw += D_801E6DB4[0];
-            if (q->look_yaw > 65) {
-                q->look_yaw = 65;
+    } else if (pad & 0x2000) {
+        if (state->look_yaw < 65) {
+            player->unk3C = 1;
+            state->look_yaw += D_801E6DB4[0];
+            if (state->look_yaw > 65) {
+                state->look_yaw = 65;
             }
         }
     }
-    if (arg1 & 4) {
-        f1 = 1;
-    } else if (arg1 & 8) {
-        f0 = 1;
+    if (pad & 4) {
+        steer_minus = 1;
+    } else if (pad & 8) {
+        steer_plus = 1;
     }
-    if (arg1 & 0x10) {
-        f2 = 1;
-        if (q->speed == 0 && q->gear != 1) {
-            q->gear = 1;
-            q->brake = 0;
-            q->throttle = 0;
+    if (pad & 0x10) {
+        brake_held = 1;
+        if (state->speed == 0 && state->gear != 1) {
+            state->gear = 1;
+            state->brake = 0;
+            state->throttle = 0;
         }
-    } else if (arg1 & 0x40) {
-        f3 = 1;
-        if (q->speed == 0 && q->gear != -1) {
-            q->gear = -1;
-            q->brake = 0;
-            q->throttle = 0;
+    } else if (pad & 0x40) {
+        throttle_held = 1;
+        if (state->speed == 0 && state->gear != -1) {
+            state->gear = -1;
+            state->brake = 0;
+            state->throttle = 0;
         }
     }
-    if (f1) {
-        if (q->steer > -45) {
-            q->steer -= D_801E6DB4[0];
-            if (q->steer < -45) {
-                q->steer = -45;
+    if (steer_minus) {
+        if (state->steer > -45) {
+            state->steer -= D_801E6DB4[0];
+            if (state->steer < -45) {
+                state->steer = -45;
             }
         }
-    } else if (!f0 && q->speed != 0 && q->steer < 0) {
-        q->steer += D_801E6DB4[0];
-        if (q->steer > 0) {
-            q->steer = 0;
+    } else if (!steer_plus && state->speed != 0 && state->steer < 0) {
+        state->steer += D_801E6DB4[0];
+        if (state->steer > 0) {
+            state->steer = 0;
         }
     }
-    if (f0) {
-        if (q->steer < 45) {
-            q->steer += D_801E6DB4[0];
-            if (q->steer > 45) {
-                q->steer = 45;
+    if (steer_plus) {
+        if (state->steer < 45) {
+            state->steer += D_801E6DB4[0];
+            if (state->steer > 45) {
+                state->steer = 45;
             }
         }
-    } else if (!f1 && q->speed != 0 && q->steer > 0) {
-        q->steer -= D_801E6DB4[0];
-        if (q->steer < 0) {
-            q->steer = 0;
+    } else if (!steer_minus && state->speed != 0 && state->steer > 0) {
+        state->steer -= D_801E6DB4[0];
+        if (state->steer < 0) {
+            state->steer = 0;
         }
     }
-    if (f2) {
-        if (q->brake < 256) {
-            q->brake += D_801E6DB4[0];
-            if (q->brake > 256) {
-                q->brake = 256;
+    if (brake_held) {
+        if (state->brake < 256) {
+            state->brake += D_801E6DB4[0];
+            if (state->brake > 256) {
+                state->brake = 256;
             }
         }
-    } else if (q->brake > 0) {
-        q->brake -= D_801E6DB4[0];
-        if (q->brake < 0) {
-            q->brake = 0;
+    } else if (state->brake > 0) {
+        state->brake -= D_801E6DB4[0];
+        if (state->brake < 0) {
+            state->brake = 0;
         }
     }
-    if (f3) {
-        if (q->throttle < 256) {
-            q->throttle += D_801E6DB4[0];
-            if (q->throttle > 256) {
-                q->throttle = 256;
+    if (throttle_held) {
+        if (state->throttle < 256) {
+            state->throttle += D_801E6DB4[0];
+            if (state->throttle > 256) {
+                state->throttle = 256;
             }
         }
-    } else if (q->throttle > 0) {
-        q->throttle -= D_801E6DB4[0];
-        if (q->throttle < 0) {
-            q->throttle = 0;
+    } else if (state->throttle > 0) {
+        state->throttle -= D_801E6DB4[0];
+        if (state->throttle < 0) {
+            state->throttle = 0;
         }
     }
     return 0;
@@ -778,126 +778,126 @@ void vehicle_load_data(void) {
     }
 }
 
-void vehicle_create(Vehicle **arg0, u32 arg1) {
-    *arg0 = kaj_malloc(0xC4);
-    if (*arg0 == NULL) {
+void vehicle_create(Vehicle **out, u32 size) {
+    *out = kaj_malloc(0xC4);
+    if (*out == NULL) {
         kaj_abend(3, D_80171A78, vehicle_str_file, 0x64);
     }
-    (*arg0)->model0 = NULL;
-    (*arg0)->model1 = NULL;
-    (*arg0)->data = NULL;
-    (*arg0)->data = kaj_malloc(arg1);
-    if ((*arg0)->data == NULL) {
+    (*out)->model0 = NULL;
+    (*out)->model1 = NULL;
+    (*out)->data = NULL;
+    (*out)->data = kaj_malloc(size);
+    if ((*out)->data == NULL) {
         kaj_abend(3, D_80171AA8, vehicle_str_file, 0x6C);
     }
 }
 
-void vehicle_init(Unk_801E032C *arg0) {
+void vehicle_init(Unk_801E032C *car) {
     switch (player_status_player[0]->vehicle_mode) {
     case 1:
-        thing_car_init(arg0, player_status_player[0]);
+        thing_car_init(car, player_status_player[0]);
         break;
     case 2:
     case 3:
-        thing_train_init(arg0, player_status_player[0]);
+        thing_train_init(car, player_status_player[0]);
         break;
     }
-    D_801E032C[0] = arg0;
+    D_801E032C[0] = car;
 }
 
 void vehicle_free(void) {
-    SceneTables *p = &object_scene_tables;
-    Vehicle *e = p->unk54;
-    if (e != NULL) {
-        if (e->unk0 == 1) {
-            thing_car_get_out(e);
+    SceneTables *tables = &object_scene_tables;
+    Vehicle *vehicle = tables->unk54;
+    if (vehicle != NULL) {
+        if (vehicle->unk0 == 1) {
+            thing_car_get_out(vehicle);
         }
-        free3(e->model0);
-        if (e->model1 != NULL) {
-            free3(e->model1);
+        free3(vehicle->model0);
+        if (vehicle->model1 != NULL) {
+            free3(vehicle->model1);
         }
-        free3(e->data);
-        free3(e);
-        p->unk54 = NULL;
+        free3(vehicle->data);
+        free3(vehicle);
+        tables->unk54 = NULL;
         sound_se_pop();
     }
 }
 
 INCLUDE_ASM("asm/nonmatchings/game/801AA360", vehicle_draw);
 
-void vehicle_set_origin(s32 arg0, s32 arg1, s32 arg2) {
-    Unk_801E032C *p = D_801E032C[0];
-    if (p != NULL) {
-        p->unk18 = 0;
-        p->unk30 = p->unk4 - arg0;
-        p->unk34 = p->unk8 - arg1;
-        p->unk38 = p->unkC - arg2;
+void vehicle_set_origin(s32 origin_x, s32 origin_y, s32 origin_z) {
+    Unk_801E032C *car = D_801E032C[0];
+    if (car != NULL) {
+        car->unk18 = 0;
+        car->unk30 = car->unk4 - origin_x;
+        car->unk34 = car->unk8 - origin_y;
+        car->unk38 = car->unkC - origin_z;
     }
 }
 
 void vehicle_update(void) {
-    s32 v = player_status_player[0]->vehicle_mode;
-    if (v == 1) {
+    s32 mode = player_status_player[0]->vehicle_mode;
+    if (mode == 1) {
         vehicle_car_drive(player_status_player[0]);
-    } else if (v >= 2) {
-        if (v < 4) {
+    } else if (mode >= 2) {
+        if (mode < 4) {
             thing_train_update(player_status_player[0]);
         }
     }
 }
 
 void vehicle_car_place(void) {
-    Thing *p = thing_find(0, 0);
-    if (p == NULL) {
+    Thing *car = thing_find(0, 0);
+    if (car == NULL) {
         kaj_abend(5, "My Car Object not Found", vehicle_str_file, 0x421);
     }
-    vehicle_car_follow_player(p, 1);
+    vehicle_car_follow_player(car, 1);
 }
 
 void vehicle_car_release(void) {
-    PlayerStatus *p = &player_status;
-    p->vehicle->visible = 0;
-    p->vehicle = NULL;
+    PlayerStatus *status = &player_status;
+    status->vehicle->visible = 0;
+    status->vehicle = NULL;
 }
 
-void vehicle_navi_show(Unk_801AC578 *arg0, s16 arg1, s16 arg2) {
-    CarNavi *p = (CarNavi *)vehicle_navi;
+void vehicle_navi_show(Unk_801AC578 *player, s16 show, s16 reset_dist) {
+    CarNavi *navi = (CarNavi *)vehicle_navi;
     s32 dx;
     s32 dz;
 
-    if (arg1 != 0) {
-        p->dest_sprite = sprite_find(4);
-        p->unk10 = sprite_find(0x406);
-        if (p->unk10 != NULL) {
-            p->unk10->x = 0x90;
-            p->unk10->y = 0x68;
-            p->unk10->visible = 1;
+    if (show != 0) {
+        navi->dest_sprite = sprite_find(4);
+        navi->unk10 = sprite_find(0x406);
+        if (navi->unk10 != NULL) {
+            navi->unk10->x = 0x90;
+            navi->unk10->y = 0x68;
+            navi->unk10->visible = 1;
         }
-        if (p->dest_sprite != NULL) {
-            p->dest_sprite->visible = 1;
-            p->dest_sprite->cell_col = 0;
-            p->dest_sprite->cell_row = p->dest;
+        if (navi->dest_sprite != NULL) {
+            navi->dest_sprite->visible = 1;
+            navi->dest_sprite->cell_col = 0;
+            navi->dest_sprite->cell_row = navi->dest;
         }
-        dx = vehicle_navi_dest_xz[p->dest * 2] - arg0->unk60;
-        dz = vehicle_navi_dest_xz[p->dest * 2 + 1] - arg0->unk68;
-        if (arg2 != 0) {
-            p->start_dist = SquareRoot0(dx * dx + dz * dz);
+        dx = vehicle_navi_dest_xz[navi->dest * 2] - player->unk60;
+        dz = vehicle_navi_dest_xz[navi->dest * 2 + 1] - player->unk68;
+        if (reset_dist != 0) {
+            navi->start_dist = SquareRoot0(dx * dx + dz * dz);
         }
     } else {
-        if (p->unk10 != NULL) {
-            p->unk10->visible = 0;
-            p->unk10 = NULL;
+        if (navi->unk10 != NULL) {
+            navi->unk10->visible = 0;
+            navi->unk10 = NULL;
         }
-        if (p->dest_sprite != NULL) {
-            p->dest_sprite->visible = 0;
-            p->dest_sprite = NULL;
+        if (navi->dest_sprite != NULL) {
+            navi->dest_sprite->visible = 0;
+            navi->dest_sprite = NULL;
         }
     }
 }
 
-void vehicle_navi_set_enabled(s16 arg0) {
-    vehicle_navi[0] = arg0;
-    if (arg0 != 0) {
+void vehicle_navi_set_enabled(s16 enabled) {
+    vehicle_navi[0] = enabled;
+    if (enabled != 0) {
         sound_se_play(0x11);
     } else {
         sound_se_play(8);
@@ -905,73 +905,73 @@ void vehicle_navi_set_enabled(s16 arg0) {
     mail_menu_close();
 }
 
-void vehicle_train_set_doors(s16 arg0) {
-    TrainState *g = &vehicle_train_state;
-    VehicleSprite *p;
-    Unk_801AC70C *e;
-    s32 n;
+void vehicle_train_set_doors(s16 opening) {
+    TrainState *train = &vehicle_train_state;
+    VehicleSprite *sprite;
+    Unk_801AC70C *task;
+    s32 frames;
 
-    p = sprite_find(0x408);
-    if (p == NULL) {
-        if (arg0 != 0) {
-            g->door_state = 1;
+    sprite = sprite_find(0x408);
+    if (sprite == NULL) {
+        if (opening != 0) {
+            train->door_state = 1;
         } else {
-            g->door_state = 0;
-            g->motion = 1;
+            train->door_state = 0;
+            train->motion = 1;
             thing_set_animate(2, 0, 1);
         }
         return;
     }
-    e = kaj_tss_alloc(4);
-    e->unk22 = 7;
-    if (arg0 != 0) {
-        e->unk24 = 0;
-        n = p->columns * p->rows;
-        e->unk28 = 1;
-        e->unk26 = n - 1;
-        g->door_state = 3;
+    task = kaj_tss_alloc(4);
+    task->unk22 = 7;
+    if (opening != 0) {
+        task->unk24 = 0;
+        frames = sprite->columns * sprite->rows;
+        task->unk28 = 1;
+        task->unk26 = frames - 1;
+        train->door_state = 3;
     } else {
-        n = p->columns * p->rows;
-        e->unk26 = 0;
-        e->unk28 = -1;
-        e->unk24 = n - 1;
-        g->door_state = 2;
+        frames = sprite->columns * sprite->rows;
+        task->unk26 = 0;
+        task->unk28 = -1;
+        task->unk24 = frames - 1;
+        train->door_state = 2;
     }
-    e->unk2C = 0x19;
-    e->unk30 = vehicle_train_door_frame;
-    e->unk34 = vehicle_train_door_last;
-    e->unk38 = vehicle_train_door_last;
-    *e->unk3C = p;
-    g->door_task = kaj_tss_start(e);
+    task->unk2C = 0x19;
+    task->unk30 = vehicle_train_door_frame;
+    task->unk34 = vehicle_train_door_last;
+    task->unk38 = vehicle_train_door_last;
+    *task->unk3C = sprite;
+    train->door_task = kaj_tss_start(task);
     sound_se_play(0xB);
 }
 
 void vehicle_train_hide(void) {
-    TrainState *q = &vehicle_train_state;
-    Thing *p = thing_find(2, 0);
-    if (p != NULL) {
-        p->animate = 0;
-        p->active = 0;
+    TrainState *train = &vehicle_train_state;
+    Thing *thing = thing_find(2, 0);
+    if (thing != NULL) {
+        thing->animate = 0;
+        thing->active = 0;
     }
-    q->stop_timer = -1;
+    train->stop_timer = -1;
 }
 
-void vehicle_train_door_frame(Unk_801AC70C *arg0) {
+void vehicle_train_door_frame(Unk_801AC70C *task) {
     Rect rect;
-    VehicleSprite *a;
-    s32 n;
-    Unk_801AC55C_1C *b;
+    VehicleSprite *sprite;
+    s32 frame;
+    Unk_801AC55C_1C *tim;
     s32 w;
     s32 h;
     s16 x;
     s16 y;
-    a = *arg0->unk3C;
-    b = a->tim;
-    w = a->cell_w >> b->unk14;
-    h = a->cell_h;
-    n = arg0->unk24;
-    x = b->unk0 + w * (n / 4);
-    y = b->unk2 + h * (n % 4);
+    sprite = *task->unk3C;
+    tim = sprite->tim;
+    w = sprite->cell_w >> tim->unk14;
+    h = sprite->cell_h;
+    frame = task->unk24;
+    x = tim->unk0 + w * (frame / 4);
+    y = tim->unk2 + h * (frame % 4);
     rect.x = x;
     rect.y = y;
     rect.w = w;
@@ -979,26 +979,26 @@ void vehicle_train_door_frame(Unk_801AC70C *arg0) {
     MoveImage(&rect, 0x2F0, 0x20);
 }
 
-void vehicle_train_door_last(Unk_801AC70C *arg0) {
-    TrainState *p = &vehicle_train_state;
+void vehicle_train_door_last(Unk_801AC70C *task) {
+    TrainState *train = &vehicle_train_state;
     Rect rect;
-    VehicleSprite *a = *arg0->unk3C;
-    s32 n = arg0->unk24;
-    Unk_801AC55C_1C *b = a->tim;
-    s32 w = a->cell_w >> b->unk14;
-    s32 h = a->cell_h;
-    s16 x = b->unk0 + w * (n / 4);
-    s16 y = b->unk2 + h * (n % 4);
+    VehicleSprite *sprite = *task->unk3C;
+    s32 frame = task->unk24;
+    Unk_801AC55C_1C *tim = sprite->tim;
+    s32 w = sprite->cell_w >> tim->unk14;
+    s32 h = sprite->cell_h;
+    s16 x = tim->unk0 + w * (frame / 4);
+    s16 y = tim->unk2 + h * (frame % 4);
     rect.x = x;
     rect.y = y;
     rect.w = w;
     rect.h = h;
     MoveImage(&rect, 0x2F0, 0x20);
-    p->door_task = -1;
+    train->door_task = -1;
 }
 
 void vehicle_train_init_state(void) {
-    TrainState *p = &vehicle_train_state;
-    p->unk18 = 2;
-    p->unk1A = 7;
+    TrainState *train = &vehicle_train_state;
+    train->unk18 = 2;
+    train->unk1A = 7;
 }

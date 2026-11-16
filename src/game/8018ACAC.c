@@ -163,212 +163,212 @@ void block_building_main(void);
 void object_room_run(void);
 void thing_game_loop(void);
 
-void mail_create(Unk_801E0324 **arg0, Unk_8018ACAC *arg1, s16 arg2) {
-    *arg0 = kaj_malloc(0x20);
-    if (*arg0 == NULL) {
+void mail_create(Unk_801E0324 **out, Unk_8018ACAC *rec, s16 list_index) {
+    *out = kaj_malloc(0x20);
+    if (*out == NULL) {
         kaj_abend(3, "Error Allocating MAIL Handler", mail_str_file, 0x3B);
     }
-    (*arg0)->unk0 = arg1->unk0;
-    (*arg0)->unk2 = arg2;
-    (*arg0)->unk4 = arg1->unk2;
-    (*arg0)->unk6 = 0;
+    (*out)->unk0 = rec->unk0;
+    (*out)->unk2 = list_index;
+    (*out)->unk4 = rec->unk2;
+    (*out)->unk6 = 0;
 
-    sprite_create(&(*arg0)->unk10, (u8 *)arg1 + arg1->unk4);
-    sprite_add((s32)(*arg0)->unk10);
-    (*arg0)->unk10->unk4 = 1;
-    (*arg0)->unk10->unkC = 0x43;
-    (*arg0)->unk10->unkE = 1;
-    mail_page_tex_v_0 = (*arg0)->unk10->unk1C->unk12;
-    mail_page_height_0 = (*arg0)->unk10->unk12;
+    sprite_create(&(*out)->unk10, (u8 *)rec + rec->unk4);
+    sprite_add((s32)(*out)->unk10);
+    (*out)->unk10->unk4 = 1;
+    (*out)->unk10->unkC = 0x43;
+    (*out)->unk10->unkE = 1;
+    mail_page_tex_v_0 = (*out)->unk10->unk1C->unk12;
+    mail_page_height_0 = (*out)->unk10->unk12;
 
-    if ((*arg0)->unk4 >= 2) {
-        sprite_create(&(*arg0)->unk14, (u8 *)arg1 + arg1->unk8);
-        sprite_add((s32)(*arg0)->unk14);
-        (*arg0)->unk14->unk4 = 0;
-        (*arg0)->unk14->unkC = 0x43;
-        (*arg0)->unk14->unkE = 1;
-        mail_page_tex_v_1 = (*arg0)->unk14->unk1C->unk12;
-        mail_page_height_1 = (*arg0)->unk14->unk12;
+    if ((*out)->unk4 >= 2) {
+        sprite_create(&(*out)->unk14, (u8 *)rec + rec->unk8);
+        sprite_add((s32)(*out)->unk14);
+        (*out)->unk14->unk4 = 0;
+        (*out)->unk14->unkC = 0x43;
+        (*out)->unk14->unkE = 1;
+        mail_page_tex_v_1 = (*out)->unk14->unk1C->unk12;
+        mail_page_height_1 = (*out)->unk14->unk12;
     }
-    if ((*arg0)->unk4 >= 3) {
-        sprite_create(&(*arg0)->unk18, (u8 *)arg1 + arg1->unkC);
-        sprite_add((s32)(*arg0)->unk18);
-        (*arg0)->unk18->unk4 = 0;
-        (*arg0)->unk18->unkC = 0x43;
-        (*arg0)->unk18->unkE = 1;
-        mail_page_tex_v_2 = (*arg0)->unk18->unk1C->unk12;
-        mail_page_height_2 = (*arg0)->unk18->unk12;
+    if ((*out)->unk4 >= 3) {
+        sprite_create(&(*out)->unk18, (u8 *)rec + rec->unkC);
+        sprite_add((s32)(*out)->unk18);
+        (*out)->unk18->unk4 = 0;
+        (*out)->unk18->unkC = 0x43;
+        (*out)->unk18->unkE = 1;
+        mail_page_tex_v_2 = (*out)->unk18->unk1C->unk12;
+        mail_page_height_2 = (*out)->unk18->unk12;
     }
-    if ((*arg0)->unk4 >= 4) {
-        sprite_create(&(*arg0)->unk1C, (u8 *)arg1 + arg1->unk10);
-        sprite_add((s32)(*arg0)->unk1C);
-        (*arg0)->unk1C->unk4 = 0;
-        (*arg0)->unk1C->unkC = 0x43;
-        (*arg0)->unk1C->unkE = 1;
-        mail_page_tex_v_3 = (*arg0)->unk1C->unk1C->unk12;
-        mail_page_height_3 = (*arg0)->unk1C->unk12;
+    if ((*out)->unk4 >= 4) {
+        sprite_create(&(*out)->unk1C, (u8 *)rec + rec->unk10);
+        sprite_add((s32)(*out)->unk1C);
+        (*out)->unk1C->unk4 = 0;
+        (*out)->unk1C->unkC = 0x43;
+        (*out)->unk1C->unkE = 1;
+        mail_page_tex_v_3 = (*out)->unk1C->unk1C->unk12;
+        mail_page_height_3 = (*out)->unk1C->unk12;
     }
 
-    (*arg0)->unk8 = sprite_find((*arg0)->unk0 + 0x217);
-    if ((*arg0)->unk8 != NULL) {
-        sprite_set_clut_entry((u16)((*arg0)->unk0 + 0x217), 7, 0x4D44);
-        sprite_set_clut_entry((u16)((*arg0)->unk0 + 0x217), 9, 0x6358);
-        mail_entry_saved_y = (*arg0)->unk8[6];
-        (*arg0)->unk8[6] = 0x33;
-        (*arg0)->unk8[7] = 1;
+    (*out)->unk8 = sprite_find((*out)->unk0 + 0x217);
+    if ((*out)->unk8 != NULL) {
+        sprite_set_clut_entry((u16)((*out)->unk0 + 0x217), 7, 0x4D44);
+        sprite_set_clut_entry((u16)((*out)->unk0 + 0x217), 9, 0x6358);
+        mail_entry_saved_y = (*out)->unk8[6];
+        (*out)->unk8[6] = 0x33;
+        (*out)->unk8[7] = 1;
     }
-    (*arg0)->unkC = sprite_find(0x20C);
+    (*out)->unkC = sprite_find(0x20C);
     if (mail_scrollbar != NULL) {
         mail_scrollbar_saved_y = mail_scrollbar[6];
     }
-    if ((*arg0)->unkC != NULL) {
-        (*arg0)->unkC[6] = 0x29;
+    if ((*out)->unkC != NULL) {
+        (*out)->unkC[6] = 0x29;
     }
 }
 
-void mail_scroll(s16 arg0) {
-    Unk_801E0324 *p = D_801E0324[0];
-    s32 v;
-    s32 n;
+void mail_scroll(s16 forward) {
+    Unk_801E0324 *mail = D_801E0324[0];
+    s32 offset;
+    s32 last_page;
     s32 max;
 
-    if (p == NULL || p->unk4 < 2) {
+    if (mail == NULL || mail->unk4 < 2) {
         return;
     }
-    v = p->unk6;
-    if (arg0 != 0) {
-        v++;
+    offset = mail->unk6;
+    if (forward != 0) {
+        offset++;
     } else {
-        v--;
+        offset--;
     }
-    n = p->unk4 - 1;
-    max = n << 7;
-    if (max < v) {
-        v = max;
+    last_page = mail->unk4 - 1;
+    max = last_page << 7;
+    if (max < offset) {
+        offset = max;
     }
-    if (v < 0) {
-        v = 0;
+    if (offset < 0) {
+        offset = 0;
     }
-    if (p->unkC != NULL) {
-        p->unkC[6] = ((v * 114 / n) >> 7) + 41;
+    if (mail->unkC != NULL) {
+        mail->unkC[6] = ((offset * 114 / last_page) >> 7) + 41;
     }
-    if (v == 0) {
-        p->unk10->unk4 = 1;
-        p->unk10->unkC = 0x43;
-        p->unk10->unk12 = mail_page_height_0;
-        p->unk10->unk1C->unk12 = mail_page_tex_v_0;
-        p->unk14->unk4 = 0;
-        if (p->unk18 != NULL) {
-            p->unk18->unk4 = 0;
+    if (offset == 0) {
+        mail->unk10->unk4 = 1;
+        mail->unk10->unkC = 0x43;
+        mail->unk10->unk12 = mail_page_height_0;
+        mail->unk10->unk1C->unk12 = mail_page_tex_v_0;
+        mail->unk14->unk4 = 0;
+        if (mail->unk18 != NULL) {
+            mail->unk18->unk4 = 0;
         }
-        if (p->unk1C != NULL) {
-            p->unk1C->unk4 = 0;
+        if (mail->unk1C != NULL) {
+            mail->unk1C->unk4 = 0;
         }
-    } else if (v > 0 && v < 128) {
-        p->unk10->unk4 = 1;
-        p->unk10->unk12 = mail_page_height_0 - v;
-        p->unk10->unk1C->unk12 = mail_page_tex_v_0 + v;
-        p->unk14->unk4 = 1;
-        p->unk14->unkC = p->unk10->unkC + p->unk10->unk12 - 1;
-        p->unk14->unk12 = v;
-        if (p->unk18 != NULL) {
-            p->unk18->unk4 = 0;
+    } else if (offset > 0 && offset < 128) {
+        mail->unk10->unk4 = 1;
+        mail->unk10->unk12 = mail_page_height_0 - offset;
+        mail->unk10->unk1C->unk12 = mail_page_tex_v_0 + offset;
+        mail->unk14->unk4 = 1;
+        mail->unk14->unkC = mail->unk10->unkC + mail->unk10->unk12 - 1;
+        mail->unk14->unk12 = offset;
+        if (mail->unk18 != NULL) {
+            mail->unk18->unk4 = 0;
         }
-        if (p->unk1C != NULL) {
-            p->unk1C->unk4 = 0;
+        if (mail->unk1C != NULL) {
+            mail->unk1C->unk4 = 0;
         }
-    } else if (v == 128) {
-        p->unk10->unk4 = 0;
-        p->unk14->unk4 = 1;
-        p->unk14->unkC = 0x43;
-        p->unk14->unk12 = mail_page_height_1;
-        p->unk14->unk1C->unk12 = mail_page_tex_v_1;
-        if (p->unk18 != NULL) {
-            p->unk18->unk4 = 0;
+    } else if (offset == 128) {
+        mail->unk10->unk4 = 0;
+        mail->unk14->unk4 = 1;
+        mail->unk14->unkC = 0x43;
+        mail->unk14->unk12 = mail_page_height_1;
+        mail->unk14->unk1C->unk12 = mail_page_tex_v_1;
+        if (mail->unk18 != NULL) {
+            mail->unk18->unk4 = 0;
         }
-        if (p->unk1C != NULL) {
-            p->unk1C->unk4 = 0;
+        if (mail->unk1C != NULL) {
+            mail->unk1C->unk4 = 0;
         }
-    } else if (v > 128 && v < 256) {
-        p->unk10->unk4 = 0;
-        p->unk14->unk4 = 1;
-        p->unk14->unk12 = mail_page_height_1 + 128 - v;
-        p->unk14->unk1C->unk12 = mail_page_tex_v_1 - 128 + v;
-        p->unk18->unk4 = 1;
-        p->unk18->unkC = p->unk14->unkC + p->unk14->unk12 - 1;
-        p->unk18->unk12 = v - 128;
-        if (p->unk1C != NULL) {
-            p->unk1C->unk4 = 0;
+    } else if (offset > 128 && offset < 256) {
+        mail->unk10->unk4 = 0;
+        mail->unk14->unk4 = 1;
+        mail->unk14->unk12 = mail_page_height_1 + 128 - offset;
+        mail->unk14->unk1C->unk12 = mail_page_tex_v_1 - 128 + offset;
+        mail->unk18->unk4 = 1;
+        mail->unk18->unkC = mail->unk14->unkC + mail->unk14->unk12 - 1;
+        mail->unk18->unk12 = offset - 128;
+        if (mail->unk1C != NULL) {
+            mail->unk1C->unk4 = 0;
         }
-    } else if (v == 256) {
-        p->unk10->unk4 = 0;
-        p->unk14->unk4 = 0;
-        p->unk18->unk4 = 1;
-        p->unk18->unkC = 0x43;
-        p->unk18->unk12 = mail_page_height_2;
-        p->unk18->unk1C->unk12 = mail_page_tex_v_2;
-    } else if (v > 256 && v < 384) {
-        p->unk10->unk4 = 0;
-        p->unk14->unk4 = 0;
-        p->unk18->unk4 = 1;
-        p->unk18->unk12 = mail_page_height_2 + 256 - v;
-        p->unk18->unk1C->unk12 = mail_page_tex_v_2 - 256 + v;
-        p->unk1C->unk4 = 1;
-        p->unk1C->unkC = p->unk18->unkC + p->unk18->unk12 - 1;
-        p->unk1C->unk12 = v - 256;
-    } else if (v == 384) {
-        p->unk10->unk4 = 0;
-        p->unk14->unk4 = 0;
-        p->unk18->unk4 = 0;
-        p->unk1C->unk4 = 1;
-        p->unk1C->unkC = 0x43;
-        p->unk1C->unk12 = mail_page_height_3;
-        p->unk1C->unk1C->unk12 = mail_page_tex_v_3;
+    } else if (offset == 256) {
+        mail->unk10->unk4 = 0;
+        mail->unk14->unk4 = 0;
+        mail->unk18->unk4 = 1;
+        mail->unk18->unkC = 0x43;
+        mail->unk18->unk12 = mail_page_height_2;
+        mail->unk18->unk1C->unk12 = mail_page_tex_v_2;
+    } else if (offset > 256 && offset < 384) {
+        mail->unk10->unk4 = 0;
+        mail->unk14->unk4 = 0;
+        mail->unk18->unk4 = 1;
+        mail->unk18->unk12 = mail_page_height_2 + 256 - offset;
+        mail->unk18->unk1C->unk12 = mail_page_tex_v_2 - 256 + offset;
+        mail->unk1C->unk4 = 1;
+        mail->unk1C->unkC = mail->unk18->unkC + mail->unk18->unk12 - 1;
+        mail->unk1C->unk12 = offset - 256;
+    } else if (offset == 384) {
+        mail->unk10->unk4 = 0;
+        mail->unk14->unk4 = 0;
+        mail->unk18->unk4 = 0;
+        mail->unk1C->unk4 = 1;
+        mail->unk1C->unkC = 0x43;
+        mail->unk1C->unk12 = mail_page_height_3;
+        mail->unk1C->unk1C->unk12 = mail_page_tex_v_3;
     }
-    p->unk6 = v;
+    mail->unk6 = offset;
 }
 
-void mail_list_refresh(GameVars *a, s16 b) {
+void mail_list_refresh(GameVars *game, s16 selected) {
     s32 i;
-    s32 n;
-    u16 *q;
-    Unk_801DFD30 *e;
+    s32 row;
+    u16 *sprite;
+    Unk_801DFD30 *entry;
 
-    n = 0;
-    e = mail_list;
-    for (i = 0; i < (s16)a->vars[0x5F]; i++, e++) {
-        q = sprite_find(e->unk0 + 0x217);
-        if (q != NULL) {
+    row = 0;
+    entry = mail_list;
+    for (i = 0; i < (s16)game->vars[0x5F]; i++, entry++) {
+        sprite = sprite_find(entry->unk0 + 0x217);
+        if (sprite != NULL) {
             if (i >= mail_list_top && i < mail_list_top + 9) {
-                q[2] = 1;
-                q[5] = 0x30;
-                q[6] = n * 16 + 0x33;
-                n++;
-                if (i == b) {
-                    sprite_set_clut_entry((u16)(e->unk0 + 0x217), 9, 0x1F);
+                sprite[2] = 1;
+                sprite[5] = 0x30;
+                sprite[6] = row * 16 + 0x33;
+                row++;
+                if (i == selected) {
+                    sprite_set_clut_entry((u16)(entry->unk0 + 0x217), 9, 0x1F);
                 } else {
-                    sprite_set_clut_entry((u16)(e->unk0 + 0x217), 9, 0x6358);
+                    sprite_set_clut_entry((u16)(entry->unk0 + 0x217), 9, 0x6358);
                 }
-                if (e->unk4 != 0) {
-                    sprite_set_clut_entry((u16)(e->unk0 + 0x217), 7, 0x2C1F);
+                if (entry->unk4 != 0) {
+                    sprite_set_clut_entry((u16)(entry->unk0 + 0x217), 7, 0x2C1F);
                 } else {
-                    sprite_set_clut_entry((u16)(e->unk0 + 0x217), 7, 0x4D44);
+                    sprite_set_clut_entry((u16)(entry->unk0 + 0x217), 7, 0x4D44);
                 }
             } else {
-                q[2] = 0;
+                sprite[2] = 0;
             }
         }
     }
 }
 
-s32 mail_list_move(s16 a, s16 b) {
-    GameVars *p = &action_vars;
-    if ((s16)p->vars[0x5F] == 0) {
+s32 mail_list_move(s16 up, s16 index) {
+    GameVars *game = &action_vars;
+    if ((s16)game->vars[0x5F] == 0) {
         return -1;
     }
-    if (a != 0) {
-        b--;
-        if (b < 0) {
+    if (up != 0) {
+        index--;
+        if (index < 0) {
             return 0;
         }
         mail_list_row--;
@@ -379,86 +379,86 @@ s32 mail_list_move(s16 a, s16 b) {
             }
         }
     } else {
-        b++;
-        if (b >= (s16)p->vars[0x5F]) {
-            return (s16)(p->vars[0x5F] - 1);
+        index++;
+        if (index >= (s16)game->vars[0x5F]) {
+            return (s16)(game->vars[0x5F] - 1);
         }
         mail_list_row++;
         if (mail_list_row >= 9) {
             mail_list_row = 8;
-            if (mail_list_top != b - 8) {
-                mail_list_top = b - 8;
+            if (mail_list_top != index - 8) {
+                mail_list_top = index - 8;
             }
         }
     }
-    mail_list_refresh(p, b);
+    mail_list_refresh(game, index);
     if (mail_scrollbar != NULL) {
-        mail_scrollbar[6] = b * 114 / ((s16)p->vars[0x5F] - 1) + 0x29;
+        mail_scrollbar[6] = index * 114 / ((s16)game->vars[0x5F] - 1) + 0x29;
     }
     sound_se_play(0xF);
-    return b;
+    return index;
 }
 
 void mail_list_open(void) {
-    s32 i;
-    s32 j;
-    u16 v;
-    Unk_801DFD30 *e;
-    GameVars *p = &action_vars;
-    if ((s16)p->vars[0x5F] != 0) {
+    s32 id;
+    s32 word;
+    u16 code;
+    Unk_801DFD30 *entry;
+    GameVars *game = &action_vars;
+    if ((s16)game->vars[0x5F] != 0) {
         mail_list_row = 0;
         mail_list_top = 0;
         mail_scrollbar = sprite_find(0x20C);
         if (mail_scrollbar != NULL) {
             mail_scrollbar[6] = 0x29;
         }
-        mail_list = kaj_malloc((s16)p->vars[0x5F] * 8);
+        mail_list = kaj_malloc((s16)game->vars[0x5F] * 8);
         if (mail_list == NULL) {
             kaj_abend(3, "Error Allocating Mail List", mail_str_file, 0x16A);
         }
-        for (i = 0; i < 0x20; i++) {
-            j = i / 2 + 0x60;
-            if (i & 1) {
-                v = (u8)*(p->vars + j);
+        for (id = 0; id < 0x20; id++) {
+            word = id / 2 + 0x60;
+            if (id & 1) {
+                code = (u8)*(game->vars + word);
             } else {
-                v = *(p->vars + j) >> 8;
+                code = *(game->vars + word) >> 8;
             }
-            if (v & 0x80) {
-                e = &mail_list[v & 0x3F];
-                e->unk0 = i;
-                e->unk2 = v;
-                e->unk4 = (v & 0x40) >> 6;
+            if (code & 0x80) {
+                entry = &mail_list[code & 0x3F];
+                entry->unk0 = id;
+                entry->unk2 = code;
+                entry->unk4 = (code & 0x40) >> 6;
             }
         }
-        mail_list_refresh(p, 0);
+        mail_list_refresh(game, 0);
     }
 }
 
 void mail_list_close(void) {
     s32 i;
-    s32 j;
-    s32 v;
-    s32 t;
-    Unk_801DFD30 *e;
-    GameVars *p = &action_vars;
-    if ((s16)p->vars[0x5F] != 0) {
+    s32 word;
+    s32 code;
+    s32 old;
+    Unk_801DFD30 *entry;
+    GameVars *game = &action_vars;
+    if ((s16)game->vars[0x5F] != 0) {
         if (mail_scrollbar != NULL) {
             mail_scrollbar[6] = 0x29;
             mail_scrollbar = NULL;
         }
-        e = mail_list;
-        for (i = 0; i < (s16)p->vars[0x5F]; i++, e++) {
-            v = 0x80;
-            if (e->unk4 != 0) {
-                v = 0xC0;
+        entry = mail_list;
+        for (i = 0; i < (s16)game->vars[0x5F]; i++, entry++) {
+            code = 0x80;
+            if (entry->unk4 != 0) {
+                code = 0xC0;
             }
-            v += i & 0x3F;
-            j = e->unk0 / 2 + 0x60;
-            if (e->unk0 % 2) {
-                t = *(p->vars + j);
-                *(p->vars + j) = v | (t & ~0xFF);
+            code += i & 0x3F;
+            word = entry->unk0 / 2 + 0x60;
+            if (entry->unk0 % 2) {
+                old = *(game->vars + word);
+                *(game->vars + word) = code | (old & ~0xFF);
             } else {
-                *(p->vars + j) = (u8)*(p->vars + j) | (v << 8);
+                *(game->vars + word) = (u8)*(game->vars + word) | (code << 8);
             }
         }
         free3(mail_list);
@@ -469,67 +469,67 @@ void mail_list_close(void) {
     }
 }
 
-void mail_receive(u16 a) {
-    s32 v;
-    s32 i;
+void mail_receive(u16 id) {
+    s32 received;
+    s32 word;
     s16 odd;
-    u16 n;
-    GameVars *p = &action_vars;
-    if (a < 0x20) {
-        i = a / 2 + 0x60;
-        odd = a % 2;
+    u16 code;
+    GameVars *game = &action_vars;
+    if (id < 0x20) {
+        word = id / 2 + 0x60;
+        odd = id % 2;
         if (odd) {
-            v = (u8)*(p->vars + i) & 0x80;
+            received = (u8)*(game->vars + word) & 0x80;
         } else {
-            v = (*(p->vars + i) >> 8) & 0x80;
+            received = (*(game->vars + word) >> 8) & 0x80;
         }
-        if (v == 0) {
-            n = p->vars[0x5F]++ | 0x80;
+        if (received == 0) {
+            code = game->vars[0x5F]++ | 0x80;
             if (odd) {
-                *(p->vars + i) = n | (*(p->vars + i) & 0xFF00);
+                *(game->vars + word) = code | (*(game->vars + word) & 0xFF00);
             } else {
-                *(p->vars + i) = (u8)*(p->vars + i) | (n << 8);
+                *(game->vars + word) = (u8)*(game->vars + word) | (code << 8);
             }
         }
     }
 }
 
-void mail_check_schedule(s32 a, s32 b) {
-    GameVars *p = &action_vars;
-    if ((s16)p->vars[0x30] == 0) {
-        if (a == 0) {
-            if (b == 10) {
+void mail_check_schedule(s32 day, s32 hour) {
+    GameVars *game = &action_vars;
+    if ((s16)game->vars[0x30] == 0) {
+        if (day == 0) {
+            if (hour == 10) {
                 mail_receive(0xE);
-            } else if (b == 0x11) {
+            } else if (hour == 0x11) {
                 mail_receive(8);
-            } else if (b == 0x15) {
+            } else if (hour == 0x15) {
                 mail_receive(0x17);
             }
-        } else if (a == 1) {
-            if (b == 10) {
+        } else if (day == 1) {
+            if (hour == 10) {
                 mail_receive(0xF);
-            } else if (b == 0x10) {
+            } else if (hour == 0x10) {
                 mail_receive(0x1C);
             }
-        } else if (a == 2) {
-            if (b == 10) {
-                if ((s16)p->vars[0xB] == 100 && (s16)p->vars[1] == 0) {
+        } else if (day == 2) {
+            if (hour == 10) {
+                if ((s16)game->vars[0xB] == 100 && (s16)game->vars[1] == 0) {
                     mail_receive(2);
                 }
                 mail_receive(0x11);
-                if ((s16)p->vars[0x13] == 100) {
+                if ((s16)game->vars[0x13] == 100) {
                     mail_receive(0x14);
                 }
-            } else if (b == 0xE) {
-                if ((s16)p->vars[0x11] == 10) {
+            } else if (hour == 0xE) {
+                if ((s16)game->vars[0x11] == 10) {
                     mail_receive(0x15);
                 }
                 mail_receive(0x1A);
             }
-        } else if (a == 3) {
-            if (b == 0xC) {
+        } else if (day == 3) {
+            if (hour == 0xC) {
                 mail_receive(0x1D);
-                if ((s16)p->vars[0x4D] == 0) {
+                if ((s16)game->vars[0x4D] == 0) {
                     mail_receive(0x1F);
                 }
             }
@@ -538,53 +538,53 @@ void mail_check_schedule(s32 a, s32 b) {
 }
 
 void mail_free(void) {
-    SceneTables *p = &object_scene_tables;
-    Unk_8018BC50 *e = p->unk4C;
-    if (e != NULL) {
-        mail_list[e->unk2].unk4 = 1;
-        if (e->unk8 != NULL) {
-            sprite_set_clut_entry((u16)(e->unk0 + 0x217), 7, 0x2C1F);
-            sprite_set_clut_entry((u16)(e->unk0 + 0x217), 9, 0x1F);
-            e->unk8->unkC = mail_entry_saved_y;
-            e->unk8->unkE = 2;
+    SceneTables *tables = &object_scene_tables;
+    Unk_8018BC50 *mail = tables->unk4C;
+    if (mail != NULL) {
+        mail_list[mail->unk2].unk4 = 1;
+        if (mail->unk8 != NULL) {
+            sprite_set_clut_entry((u16)(mail->unk0 + 0x217), 7, 0x2C1F);
+            sprite_set_clut_entry((u16)(mail->unk0 + 0x217), 9, 0x1F);
+            mail->unk8->unkC = mail_entry_saved_y;
+            mail->unk8->unkE = 2;
         }
-        if (e->unkC != NULL) {
-            e->unkC->unkC = mail_scrollbar_saved_y;
+        if (mail->unkC != NULL) {
+            mail->unkC->unkC = mail_scrollbar_saved_y;
         }
         sprite_delete(0x213);
         sprite_delete(0x214);
         sprite_delete(0x215);
         sprite_delete(0x216);
-        free3(e);
-        p->unk4C = NULL;
+        free3(mail);
+        tables->unk4C = NULL;
     }
 }
 
 s16 mail_list_get_id(s16 i) { return mail_list[i].unk0; }
 
-void mail_cmd_receive(Unk_8018BD60 *a) {
-    mail_receive(a->unk0->unk4);
+void mail_cmd_receive(Unk_8018BD60 *cmd) {
+    mail_receive(cmd->unk0->unk4);
 }
 
-s32 mail_is_read(s16 a) {
+s32 mail_is_read(s16 id) {
     s32 v;
-    GameVars *p = &action_vars;
-    s32 i = a / 2 + 0x60;
-    if (a & 1) {
-        v = (u8)p->vars[i] & 0x40;
+    GameVars *game = &action_vars;
+    s32 word = id / 2 + 0x60;
+    if (id & 1) {
+        v = (u8)game->vars[word] & 0x40;
     } else {
-        v = (p->vars[i] >> 8) & 0x40;
+        v = (game->vars[word] >> 8) & 0x40;
     }
     return v != 0;
 }
 
 void main(void) {
-    SceneRequest *p;
-    SceneRequest *q;
-    GameVars *r;
-    s16 f;
-    u16 a;
-    u16 b;
+    SceneRequest *request;
+    SceneRequest *request_init;
+    GameVars *game;
+    s16 restarted;
+    u16 car_speed;
+    u16 text_speed;
 
     kaj_init();
     memset(&object_scene_tables, 0, 0x64);
@@ -604,52 +604,52 @@ void main(void) {
     event_open();
     roadmap_init_draw();
     object_load_res(1, 0);
-    r = &action_vars;
+    game = &action_vars;
     while (1) {
-        q = &scene_request;
-        f = mail_main_restarted;
-        if (f != 0) {
-            a = r->car_speed_setting;
-            b = r->text_speed_setting;
+        request_init = &scene_request;
+        restarted = mail_main_restarted;
+        if (restarted != 0) {
+            car_speed = game->car_speed_setting;
+            text_speed = game->text_speed_setting;
         }
-        memset(r, 0, sizeof(action_vars));
-        memset(q, 0, 0x24);
-        if (f != 0) {
-            r->car_speed_setting = a;
-            r->text_speed_setting = b;
+        memset(game, 0, sizeof(action_vars));
+        memset(request_init, 0, 0x24);
+        if (restarted != 0) {
+            game->car_speed_setting = car_speed;
+            game->text_speed_setting = text_speed;
         } else {
-            r->car_speed_setting = 1;
-            r->text_speed_setting = 1;
+            game->car_speed_setting = 1;
+            game->text_speed_setting = 1;
         }
-        q->unk0[0] = -1;
-        q->unk0[1] = -1;
+        request_init->unk0[0] = -1;
+        request_init->unk0[1] = -1;
         player_init();
-        r->vars[0x5F] = 3;
-        r->unkC0 = -0x7E80;
-        r->unkC2[4] = 0x82;
-        r->vars[0xA] = 100;
-        r->vars[0xB] = 100;
-        r->vars[0xC] = 100;
-        r->vars[0xD] = 100;
-        r->vars[0x1B] = 100;
-        r->vars[0x3E] = 5;
-        r->vars[0x3F] = 0;
-        r->vars[0x30] = 0;
-        r->drain_minute = 0;
-        r->drain_count = 0;
+        game->vars[0x5F] = 3;
+        game->unkC0 = -0x7E80;
+        game->unkC2[4] = 0x82;
+        game->vars[0xA] = 100;
+        game->vars[0xB] = 100;
+        game->vars[0xC] = 100;
+        game->vars[0xD] = 100;
+        game->vars[0x1B] = 100;
+        game->vars[0x3E] = 5;
+        game->vars[0x3F] = 0;
+        game->vars[0x30] = 0;
+        game->drain_minute = 0;
+        game->drain_count = 0;
         effect_clear_alarms();
-        p = &scene_request;
+        request = &scene_request;
         vehicle_train_init_state();
         sprite_title_run(mail_main_restarted);
         kaj_srand_ticks();
         sprite_set_visible(0x400, 1);
         sprite_set_visible(0x409, 1);
         event_draw_hud();
-        while (p->unk0[4] == 0) {
-            if (p->unk0[0] != p->unk0[1]) {
-                p->unk0[0] = p->unk0[1];
+        while (request->unk0[4] == 0) {
+            if (request->unk0[0] != request->unk0[1]) {
+                request->unk0[0] = request->unk0[1];
             }
-            switch (p->unk0[0]) {
+            switch (request->unk0[0]) {
             case 1:
                 block_building_main();
                 break;
@@ -661,7 +661,7 @@ void main(void) {
                 break;
             }
         }
-        p->unk0[4] = 0;
+        request->unk0[4] = 0;
         sprite_set_visible(0x400, 0);
         sprite_set_visible(0x409, 0);
         if (mail_main_restarted == 0) {
@@ -670,14 +670,14 @@ void main(void) {
     }
 }
 
-s32 mail_angle_to_dir8(s16 a) {
+s32 mail_angle_to_dir8(s16 angle) {
     s32 b;
 
 loop:
-    if (a < 0) a += 360;
-    if (a >= 360) a -= 360;
-    if ((u16)a >= 360) goto loop;
-    b = a;
+    if (angle < 0) angle += 360;
+    if (angle >= 360) angle -= 360;
+    if ((u16)angle >= 360) goto loop;
+    b = angle;
     if (b >= 23 && b < 68) return 1;
     if (b >= 68 && b < 113) return 0;
     if (b >= 113 && b < 158) return 7;
@@ -698,10 +698,10 @@ s32 mail_take_scene_change(void) {
     return 1;
 }
 
-void mail_wait(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+void mail_wait(s32 mode, s32 arg1, s32 arg2, s32 seconds) {
     s32 buf[6];
-    s32 n;
-    for (n = arg3 * 30; n > 0;) {
+    s32 frames;
+    for (frames = seconds * 30; frames > 0;) {
             switch (kaj_event_get(buf)) {
             case 2:
                 func_80189928(buf);
@@ -713,7 +713,7 @@ void mail_wait(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
                 event_handle_mod_finish(buf);
                 continue;
             case 0:
-                n -= kaj_system.vsync_delta;
+                frames -= kaj_system.vsync_delta;
                 break;
             case 0x100:
                 event_handle_effect_done(buf);
@@ -722,214 +722,214 @@ void mail_wait(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
                 kaj_event_done(buf);
                 continue;
             }
-            if ((u16)arg0 == 3) {
+            if ((u16)mode == 3) {
                 thing_update_all();
                 roadmap_draw_frame(3);
             } else {
-                do { mail_step_frame(arg0, arg1, arg2); } while (0);
+                do { mail_step_frame(mode, arg1, arg2); } while (0);
             }
     }
 }
 
-void mail_step_frame(u16 a, s16 b, s16 c) {
-    GameVars *p = &action_vars;
+void mail_step_frame(u16 mode, s16 b, s16 c) {
+    GameVars *game = &action_vars;
     action_update();
-    if (a < 2) {
+    if (mode < 2) {
         npc_update_all();
         door_update_all();
         mod_npcrec_update_all();
-    } else if (a == 2) {
+    } else if (mode == 2) {
         vehicle_update();
     }
     mod_update_all();
     thing_update_all();
-    player_update(a, b, c);
-    if ((u16)(a - 1) < 2) {
-        if (p->unk252 != 0) {
+    player_update(mode, b, c);
+    if ((u16)(mode - 1) < 2) {
+        if (game->unk252 != 0) {
             effect_flame_small_update();
         }
-        if (p->unk254 != 0) {
+        if (game->unk254 != 0) {
             effect_clut_cycle_update();
         }
-        if (p->unk250 != 0) {
+        if (game->unk250 != 0) {
             effect_flame_large_update();
         }
     }
-    roadmap_draw_frame(a);
+    roadmap_draw_frame(mode);
 }
 
-void mail_goto_ofc(s16 a, s16 b, s16 c, s16 d) {
-    SceneRequest *p = &scene_request;
-    PlayerStatus *g = &player_status;
-    GameVars *q = &action_vars;
-    p->yaw = b;
-    ((s16 *)&p->pos_x)[0] = c;
-    ((s16 *)&p->pos_x)[1] = d;
-    p->unk0[1] = 0;
-    p->change = 1;
-    p->path = "\\S\\OFC.S;1";
-    p->unk0[3] = 0;
-    p->unk0[2] = 0;
-    p->unk10 = a;
+void mail_goto_ofc(s16 a, s16 yaw, s16 c, s16 d) {
+    SceneRequest *request = &scene_request;
+    PlayerStatus *status = &player_status;
+    GameVars *game = &action_vars;
+    request->yaw = yaw;
+    ((s16 *)&request->pos_x)[0] = c;
+    ((s16 *)&request->pos_x)[1] = d;
+    request->unk0[1] = 0;
+    request->change = 1;
+    request->path = "\\S\\OFC.S;1";
+    request->unk0[3] = 0;
+    request->unk0[2] = 0;
+    request->unk10 = a;
     if (d == 2) {
         return;
     }
-    if ((s16)q->vars[0x30] != 0 || g->mutant != 0) {
+    if ((s16)game->vars[0x30] != 0 || status->mutant != 0) {
         return;
     }
-    switch (g->unk30) {
+    switch (status->unk30) {
     case 0:
-        if (g->unk2E >= 3) {
-            p->unk0[3] = 1;
-            g->unk30 = 1;
-            g->unk2E = 0;
+        if (status->unk2E >= 3) {
+            request->unk0[3] = 1;
+            status->unk30 = 1;
+            status->unk2E = 0;
         }
         break;
     case 1:
-        if (g->unk2E >= 5 && (s16)q->vars[0x11] != 100) {
-            q->vars[0x11] = 100;
-            p->unk0[3] = 1;
-            g->unk30 = 2;
-            g->unk2E = 0;
+        if (status->unk2E >= 5 && (s16)game->vars[0x11] != 100) {
+            game->vars[0x11] = 100;
+            request->unk0[3] = 1;
+            status->unk30 = 2;
+            status->unk2E = 0;
         }
         break;
     }
 }
 
-void mail_goto_twn(s32 a, s32 b, s32 c, s16 d, s16 e) {
-    SceneRequest *p = &scene_request;
-    p->change = 1;
-    p->unk0[1] = 2;
-    p->unk0[3] = 0;
-    p->unk0[2] = 1;
-    p->path = "\\S\\TWN.S;1";
-    p->pos_x = a;
-    p->pos_y = b;
-    p->pos_z = c;
-    p->yaw = d;
-    p->unk10 = e;
+void mail_goto_twn(s32 x, s32 y, s32 z, s16 yaw, s16 e) {
+    SceneRequest *request = &scene_request;
+    request->change = 1;
+    request->unk0[1] = 2;
+    request->unk0[3] = 0;
+    request->unk0[2] = 1;
+    request->path = "\\S\\TWN.S;1";
+    request->pos_x = x;
+    request->pos_y = y;
+    request->pos_z = z;
+    request->yaw = yaw;
+    request->unk10 = e;
 }
 
-void mail_goto_building(u16 arg0, char *arg1, s16 arg2, s16 arg3, u16 arg4, u16 arg5, u16 arg6, u32 arg7, u16 arg8) {
-    Unk_8018C554 *p = (Unk_8018C554 *)&scene_request;
-    GameVars *g = &action_vars;
+void mail_goto_building(u16 arg0, char *name, s16 var, s16 arg3, u16 arg4, u16 arg5, u16 arg6, u32 arg7, u16 arg8) {
+    Unk_8018C554 *request = (Unk_8018C554 *)&scene_request;
+    GameVars *game = &action_vars;
 
-    p->unkA = 1;
-    switch ((s16)g->vars[arg2]) {
+    request->unkA = 1;
+    switch ((s16)game->vars[var]) {
     case 0:
-        p->unk0[3] = 0;
+        request->unk0[3] = 0;
         break;
     case 10:
-        p->unk0[3] = 2;
+        request->unk0[3] = 2;
         break;
     case 1000:
-        p->unk0[3] = 3;
+        request->unk0[3] = 3;
         break;
     case 2000:
-        p->unk0[3] = 4;
+        request->unk0[3] = 4;
         break;
     default:
-        p->unk0[3] = 1;
+        request->unk0[3] = 1;
         break;
     }
-    p->unk0[1] = 1;
-    p->unkC = NULL;
-    p->unk0[2] = arg6;
-    memset(p->unk20, 0, 4);
-    strncpy(p->unk20, arg1, 3);
-    p->unk16 = arg3;
-    p->unk18 = arg4;
-    p->unk1A = arg5;
-    p->unk14 = 0;
-    p->unk1C = arg8;
-    if (arg2 != 13 && (u16)(arg2 - 11) < 16 && (u32)(*(g->vars + arg2) - 11) < 90) {
-        p->unk14 = 1;
+    request->unk0[1] = 1;
+    request->unkC = NULL;
+    request->unk0[2] = arg6;
+    memset(request->unk20, 0, 4);
+    strncpy(request->unk20, name, 3);
+    request->unk16 = arg3;
+    request->unk18 = arg4;
+    request->unk1A = arg5;
+    request->unk14 = 0;
+    request->unk1C = arg8;
+    if (var != 13 && (u16)(var - 11) < 16 && (u32)(*(game->vars + var) - 11) < 90) {
+        request->unk14 = 1;
     }
     if (arg0 == 1) {
         switch ((arg7 >> 16) & 0xFF) {
         case 0xF6:
-            p->unk10 = 1;
-            p->unk12 = arg7 & 0xFF;
+            request->unk10 = 1;
+            request->unk12 = arg7 & 0xFF;
             break;
         case 0xF9:
-            p->unk10 = 2;
-            p->unk12 = arg7 & 0xFF;
+            request->unk10 = 2;
+            request->unk12 = arg7 & 0xFF;
             break;
         default:
-            p->unk10 = 0;
-            p->unk12 = (s8)(arg7 >> 8);
+            request->unk10 = 0;
+            request->unk12 = (s8)(arg7 >> 8);
             break;
         }
     } else {
-        p->unk10 = ((arg7 & 0xFF00) >> 8) + 2;
-        p->unk12 = arg7 & 0xFF;
+        request->unk10 = ((arg7 & 0xFF00) >> 8) + 2;
+        request->unk12 = arg7 & 0xFF;
     }
 }
 
-s16 mail_wrap_angle(s16 a) {
+s16 mail_wrap_angle(s16 angle) {
     do {
-        if (a < 0) a += 360;
-        if (a >= 360) a -= 360;
-    } while ((u16)a >= 360);
-    return a;
+        if (angle < 0) angle += 360;
+        if (angle >= 360) angle -= 360;
+    } while ((u16)angle >= 360);
+    return angle;
 }
 
-s32 mail_angle_to_dir4(s16 a) {
+s32 mail_angle_to_dir4(s16 angle) {
     s32 b;
 
 loop:
-    if (a < 0) a += 360;
-    if (a >= 360) a -= 360;
-    if ((u16)a >= 360) goto loop;
-    b = a;
+    if (angle < 0) angle += 360;
+    if (angle >= 360) angle -= 360;
+    if ((u16)angle >= 360) goto loop;
+    b = angle;
     if (b >= 45 && b < 135) return 0;
     if (b >= 135 && b < 225) return 6;
     if (b >= 225 && b < 315) return 4;
     return 2;
 }
 
-s32 mail_exp_for_level(s32 a) {
+s32 mail_exp_for_level(s32 level) {
     s32 i;
-    s32 r;
-    if (a == 1) return 0;
-    if (a == 2) return 0x144;
-    r = 0x144;
-    for (i = 3; i <= a; i++) {
-        r += 0x195 + (i - 3) * 0xA2;
+    s32 exp;
+    if (level == 1) return 0;
+    if (level == 2) return 0x144;
+    exp = 0x144;
+    for (i = 3; i <= level; i++) {
+        exp += 0x195 + (i - 3) * 0xA2;
     }
-    return r;
+    return exp;
 }
 
-void mail_menu_draw_item_name(s32 a, s32 b, s32 c) {
-    s16 r[4];
+void mail_menu_draw_item_name(s32 sprite_id, s32 y, s32 item_id) {
+    s16 rect[4];
     u16 buf[0x20];
-    Unk_8018C864 *p;
-    ItemRecord *e;
-    u16 *d;
-    u16 *f;
+    Unk_8018C864 *sprite;
+    ItemRecord *item;
+    u16 *dst;
+    u16 *glyph;
     s32 i;
     s32 t;
-    s32 j;
-    s32 n;
+    s32 line;
+    s32 len;
     s32 x;
 
-    p = (Unk_8018C864 *)sprite_find(a);
-    e = effect_item_find(c);
-    if (p == NULL || e == NULL) {
+    sprite = (Unk_8018C864 *)sprite_find(sprite_id);
+    item = effect_item_find(item_id);
+    if (sprite == NULL || item == NULL) {
         return;
     }
-    x = p->unk1C->unk0;
-    b += p->unk1C->unk2;
-    r[2] = 2;
-    r[3] = 15;
-    r[0] = x;
-    r[1] = b;
-    n = strlen((char *)e->name);
+    x = sprite->unk1C->unk0;
+    y += sprite->unk1C->unk2;
+    rect[2] = 2;
+    rect[3] = 15;
+    rect[0] = x;
+    rect[1] = y;
+    len = strlen((char *)item->name);
     for (i = 0; i < 24; i += 2) {
-        d = buf;
-        if (i < n) {
-            f = Krom2RawAdd2((e->name[i] << 8) | e->name[i + 1]);
-            for (j = 0; j < 15; j++, f++) {
+        dst = buf;
+        if (i < len) {
+            glyph = Krom2RawAdd2((item->name[i] << 8) | item->name[i + 1]);
+            for (line = 0; line < 15; line++, glyph++) {
                 {
                     u16 v;
                     s32 k;
@@ -943,9 +943,9 @@ void mail_menu_draw_item_name(s32 a, s32 b, s32 c) {
                     k = 7;
                     sh = 0;
                     do {
-                        c1 = (*f >> k) & 1 ? 2 : 14;
+                        c1 = (*glyph >> k) & 1 ? 2 : 14;
                         k--;
-                        c2 = (*f >> k) & 1 ? 2 : 14;
+                        c2 = (*glyph >> k) & 1 ? 2 : 14;
                         k--;
                         if (c1 == c2) {
                             v |= c1 << sh;
@@ -954,7 +954,7 @@ void mail_menu_draw_item_name(s32 a, s32 b, s32 c) {
                         }
                         sh += 4;
                     } while (k > m);
-                    d[0] = v;
+                    dst[0] = v;
                 }
                 {
                     u16 v;
@@ -969,9 +969,9 @@ void mail_menu_draw_item_name(s32 a, s32 b, s32 c) {
                     k = 3;
                     sh = 0;
                     do {
-                        c1 = (*f >> k) & 1 ? 2 : 14;
+                        c1 = (*glyph >> k) & 1 ? 2 : 14;
                         k--;
-                        c2 = (*f >> k) & 1 ? 2 : 14;
+                        c2 = (*glyph >> k) & 1 ? 2 : 14;
                         k--;
                         if (c1 == c2) {
                             v |= c1 << sh;
@@ -980,10 +980,10 @@ void mail_menu_draw_item_name(s32 a, s32 b, s32 c) {
                         }
                         sh += 4;
                     } while (k > m);
-                    t = d[0];
+                    t = dst[0];
                     t |= (u16)(v << 8);
-                    d[0] = t;
-                    d++;
+                    dst[0] = t;
+                    dst++;
                 }
                 {
                     u16 v;
@@ -998,9 +998,9 @@ void mail_menu_draw_item_name(s32 a, s32 b, s32 c) {
                     k = 15;
                     sh = 0;
                     do {
-                        c1 = (*f >> k) & 1 ? 2 : 14;
+                        c1 = (*glyph >> k) & 1 ? 2 : 14;
                         k--;
-                        c2 = (*f >> k) & 1 ? 2 : 14;
+                        c2 = (*glyph >> k) & 1 ? 2 : 14;
                         k--;
                         if (c1 == c2) {
                             v |= c1 << sh;
@@ -1009,7 +1009,7 @@ void mail_menu_draw_item_name(s32 a, s32 b, s32 c) {
                         }
                         sh += 4;
                     } while (k > m);
-                    d[0] = v;
+                    dst[0] = v;
                 }
                 {
                     u16 v;
@@ -1024,9 +1024,9 @@ void mail_menu_draw_item_name(s32 a, s32 b, s32 c) {
                     k = 11;
                     sh = 0;
                     do {
-                        c1 = (*f >> k) & 1 ? 2 : 14;
+                        c1 = (*glyph >> k) & 1 ? 2 : 14;
                         k--;
-                        c2 = (*f >> k) & 1 ? 2 : 14;
+                        c2 = (*glyph >> k) & 1 ? 2 : 14;
                         k--;
                         if (c1 == c2) {
                             v |= c1 << sh;
@@ -1035,136 +1035,136 @@ void mail_menu_draw_item_name(s32 a, s32 b, s32 c) {
                         }
                         sh += 4;
                     } while (k > m);
-                    t = d[0];
+                    t = dst[0];
                     t |= (u16)(v << 8);
-                    d[0] = t;
-                    d++;
+                    dst[0] = t;
+                    dst++;
                 }
             }
         } else {
-            memset(d, 0xEE, 0x40);
+            memset(dst, 0xEE, 0x40);
         }
-        LoadImage2(r, buf);
-        r[0] += 2;
+        LoadImage2(rect, buf);
+        rect[0] += 2;
     }
 }
 
-void mail_menu_draw(MailMenu *p, s32 b) {
+void mail_menu_draw(MailMenu *menu, s32 draw_icons) {
     s32 i;
     s16 start;
     s16 end;
-    s32 j;
+    s32 line;
     u16 col;
     u16 row;
 
-    sprite_fill_clut(p->sprite, p->first_entry, p->first_entry + p->rows - 1, p->color);
-    sprite_set_clut_entry(p->sprite, p->cursor_entry, (u16)p->cursor_color);
-    start = p->scroll;
-    if (p->rows < p->count) {
-        end = start + p->rows;
+    sprite_fill_clut(menu->sprite, menu->first_entry, menu->first_entry + menu->rows - 1, menu->color);
+    sprite_set_clut_entry(menu->sprite, menu->cursor_entry, (u16)menu->cursor_color);
+    start = menu->scroll;
+    if (menu->rows < menu->count) {
+        end = start + menu->rows;
     } else {
-        end = start + p->count;
+        end = start + menu->count;
     }
-    if ((s16)b != 0 && p->draw_rows != 0) {
-        for (i = start, j = 0; i < end; i++, j++) {
-            if (p->icon_sprite >= 0) {
-                if (p->list == NULL) {
-                    col = i / p->icon_rows;
-                    row = i % p->icon_rows;
+    if ((s16)draw_icons != 0 && menu->draw_rows != 0) {
+        for (i = start, line = 0; i < end; i++, line++) {
+            if (menu->icon_sprite >= 0) {
+                if (menu->list == NULL) {
+                    col = i / menu->icon_rows;
+                    row = i % menu->icon_rows;
                 } else {
-                    col = p->list[i] / p->icon_rows;
-                    row = p->list[i] % p->icon_rows;
+                    col = menu->list[i] / menu->icon_rows;
+                    row = menu->list[i] % menu->icon_rows;
                 }
-                sprite_copy_cell((u16)p->icon_sprite, col, row, p->sprite, 0x10, (u16)(j * 0x11 + 0xC));
-            } else if (p->icon_sprite == -2) {
-                mail_menu_draw_item_name((s16)p->sprite, j * 0x11 + 0xC, p->list[i]);
+                sprite_copy_cell((u16)menu->icon_sprite, col, row, menu->sprite, 0x10, (u16)(line * 0x11 + 0xC));
+            } else if (menu->icon_sprite == -2) {
+                mail_menu_draw_item_name((s16)menu->sprite, line * 0x11 + 0xC, menu->list[i]);
             }
         }
     }
 }
 
-void mail_menu_clear_rows(MailMenu *p) {
-    s16 r[4];
-    Unk_8018CD4C *a;
-    Unk_8018CD4C *b;
+void mail_menu_clear_rows(MailMenu *menu) {
+    s16 rect[4];
+    Unk_8018CD4C *sprite;
+    Unk_8018CD4C *icons;
     u8 *buf;
-    s32 n;
+    s32 size;
     s32 i;
 
-    a = (Unk_8018CD4C *)sprite_find(p->sprite);
-    b = (Unk_8018CD4C *)sprite_find(p->icon_sprite);
-    if (a != NULL) {
-        r[0] = a->unk1C->unk0;
-        r[1] = a->unk1C->unk2 + 0xC;
-        r[2] = 0x18;
-        r[3] = 0x10;
-        if (b != NULL) {
-            r[0] = a->unk1C->unk0 + (0x10 >> a->unk1C->unk14);
-            r[1] = a->unk1C->unk2 + 0xC;
-            r[2] = b->unk10 >> b->unk1C->unk14;
-            r[3] = b->unk12;
-            p->icon_rows = b->unk16;
+    sprite = (Unk_8018CD4C *)sprite_find(menu->sprite);
+    icons = (Unk_8018CD4C *)sprite_find(menu->icon_sprite);
+    if (sprite != NULL) {
+        rect[0] = sprite->unk1C->unk0;
+        rect[1] = sprite->unk1C->unk2 + 0xC;
+        rect[2] = 0x18;
+        rect[3] = 0x10;
+        if (icons != NULL) {
+            rect[0] = sprite->unk1C->unk0 + (0x10 >> sprite->unk1C->unk14);
+            rect[1] = sprite->unk1C->unk2 + 0xC;
+            rect[2] = icons->unk10 >> icons->unk1C->unk14;
+            rect[3] = icons->unk12;
+            menu->icon_rows = icons->unk16;
         }
-        n = r[2] * r[3] * 2;
-        buf = kaj_malloc(n);
+        size = rect[2] * rect[3] * 2;
+        buf = kaj_malloc(size);
         if (buf != NULL) {
-            memset(buf, 0xEE, n);
+            memset(buf, 0xEE, size);
             for (i = 0; i < 6; i++) {
-                LoadImage2(r, buf);
-                r[1] += 0x11;
+                LoadImage2(rect, buf);
+                rect[1] += 0x11;
             }
             free3(buf);
         }
     }
 }
 
-s16 mail_menu_move(s16 a) {
+s16 mail_menu_move(s16 up) {
     s16 snd = 1;
-    s32 flag = 0;
-    MailMenu *p = &mail_menu;
+    s32 scrolled = 0;
+    MailMenu *menu = &mail_menu;
 
-    if (a != 0) {
-        p->index--;
-        if (p->wrap != 0) {
-            p->cursor_entry--;
-            if (p->index < 0) {
-                p->index = p->count - 1;
-                p->cursor_entry = p->first_entry + p->index;
+    if (up != 0) {
+        menu->index--;
+        if (menu->wrap != 0) {
+            menu->cursor_entry--;
+            if (menu->index < 0) {
+                menu->index = menu->count - 1;
+                menu->cursor_entry = menu->first_entry + menu->index;
             }
         } else {
-            if (p->index < 0) {
-                p->index = 0;
+            if (menu->index < 0) {
+                menu->index = 0;
             }
-            p->cursor_entry--;
-            if (p->cursor_entry < p->first_entry) {
-                p->cursor_entry = p->first_entry;
+            menu->cursor_entry--;
+            if (menu->cursor_entry < menu->first_entry) {
+                menu->cursor_entry = menu->first_entry;
                 snd = 0;
-                if (p->scroll > 0) {
-                    p->scroll--;
-                    flag = 1;
+                if (menu->scroll > 0) {
+                    menu->scroll--;
+                    scrolled = 1;
                     snd = 1;
                 }
             }
         }
     } else {
-        p->index++;
-        if (p->wrap != 0) {
-            p->cursor_entry++;
-            if (p->index >= p->count) {
-                p->index = 0;
-                p->cursor_entry = p->first_entry;
+        menu->index++;
+        if (menu->wrap != 0) {
+            menu->cursor_entry++;
+            if (menu->index >= menu->count) {
+                menu->index = 0;
+                menu->cursor_entry = menu->first_entry;
             }
         } else {
-            if (p->index >= p->count) {
-                p->index = p->count - 1;
+            if (menu->index >= menu->count) {
+                menu->index = menu->count - 1;
             }
-            p->cursor_entry++;
-            if (p->cursor_entry >= p->first_entry + p->rows) {
-                p->cursor_entry = p->first_entry + p->rows - 1;
+            menu->cursor_entry++;
+            if (menu->cursor_entry >= menu->first_entry + menu->rows) {
+                menu->cursor_entry = menu->first_entry + menu->rows - 1;
                 snd = 0;
-                if (p->scroll != p->index - p->rows + 1) {
-                    p->scroll = p->index - p->rows + 1;
-                    flag = 1;
+                if (menu->scroll != menu->index - menu->rows + 1) {
+                    menu->scroll = menu->index - menu->rows + 1;
+                    scrolled = 1;
                     snd = 1;
                 }
             }
@@ -1173,79 +1173,79 @@ s16 mail_menu_move(s16 a) {
     if (snd) {
         sound_se_play(0xF);
     }
-    mail_menu_draw(p, flag);
-    return p->index;
+    mail_menu_draw(menu, scrolled);
+    return menu->index;
 }
 
-s32 mail_menu_open(s16 a, s16 b, s16 c, s16 d, s16 e, s16 *f, s16 g, s16 h, s16 i) {
-    GameVars *p = &action_vars;
-    MailMenu *q = &p->mail_menu;
-    if (p->mail_menu.state != 0) {
+s32 mail_menu_open(s16 reset, s16 sprite, s16 icon_sprite, s16 count, s16 rows, s16 *list, s16 first_entry, s16 color, s16 cursor_color) {
+    GameVars *game = &action_vars;
+    MailMenu *menu = &game->mail_menu;
+    if (game->mail_menu.state != 0) {
         return 0;
     }
-    p->menu_busy = 1;
-    p->mail_menu.state = 2;
-    if (a != 0) {
-        q->index = 0;
-        q->cursor_entry = g;
-        q->scroll = 0;
+    game->menu_busy = 1;
+    game->mail_menu.state = 2;
+    if (reset != 0) {
+        menu->index = 0;
+        menu->cursor_entry = first_entry;
+        menu->scroll = 0;
     }
-    q->first_entry = g;
-    q->sprite = b;
-    q->icon_sprite = c;
-    q->color = h;
-    q->cursor_color = i;
-    q->wrap = 1;
-    if (e < d) {
-        q->wrap = 0;
+    menu->first_entry = first_entry;
+    menu->sprite = sprite;
+    menu->icon_sprite = icon_sprite;
+    menu->color = color;
+    menu->cursor_color = cursor_color;
+    menu->wrap = 1;
+    if (rows < count) {
+        menu->wrap = 0;
     }
-    q->draw_rows = 1;
-    if (c == -1) {
-        q->draw_rows = 0;
+    menu->draw_rows = 1;
+    if (icon_sprite == -1) {
+        menu->draw_rows = 0;
     }
-    q->rows = e;
-    q->count = d;
-    q->list = f;
-    if ((c == 0x40C || c == 0x402 || c == -2) && b == 0x40B) {
-        mail_menu_clear_rows(q);
+    menu->rows = rows;
+    menu->count = count;
+    menu->list = list;
+    if ((icon_sprite == 0x40C || icon_sprite == 0x402 || icon_sprite == -2) && sprite == 0x40B) {
+        mail_menu_clear_rows(menu);
     }
-    mail_menu_draw(q, 1);
-    effect_start_sprite_slide(0xB, b, 2);
+    mail_menu_draw(menu, 1);
+    effect_start_sprite_slide(0xB, sprite, 2);
     return 1;
 }
 
 s32 mail_menu_close(void) {
-    MailMenu *p = &mail_menu;
-    if (p->state != 1) {
+    MailMenu *menu = &mail_menu;
+    if (menu->state != 1) {
         return 0;
     }
-    p->state = 2;
-    effect_start_sprite_slide(0xC, p->sprite, 2);
+    menu->state = 2;
+    effect_start_sprite_slide(0xC, menu->sprite, 2);
     return 1;
 }
 
 s16 mail_menu_get_state(void) { return mail_menu.state; }
 
-s32 mail_menu_set_list(u16 a, s16 *b) {
-    MailMenu *p = &mail_menu;
-    if (p->state == 2) {
+s32 mail_menu_set_list(u16 sprite, s16 *list) {
+    MailMenu *menu = &mail_menu;
+    if (menu->state == 2) {
         return 0;
     }
-    p->index = 0;
-    p->scroll = 0;
-    p->list = b;
-    p->cursor_entry = p->first_entry;
-    sprite_set_visible(p->sprite, 0);
-    sprite_set_visible(a, 1);
-    p->sprite = a;
-    mail_menu_draw(p, 0);
+    menu->index = 0;
+    menu->scroll = 0;
+    menu->list = list;
+    menu->cursor_entry = menu->first_entry;
+    sprite_set_visible(menu->sprite, 0);
+    sprite_set_visible(sprite, 1);
+    menu->sprite = sprite;
+    mail_menu_draw(menu, 0);
     return 1;
 }
 
 s16 mail_menu_get_entry(s16 i) {
-    MailMenu *p = &mail_menu;
-    if (i < 0 || p->count < i) {
+    MailMenu *menu = &mail_menu;
+    if (i < 0 || menu->count < i) {
         return -1;
     }
-    return p->list[i];
+    return menu->list[i];
 }

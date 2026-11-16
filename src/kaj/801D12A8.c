@@ -53,21 +53,21 @@ void GsSetProjection(s32 arg0);
 void SetBackColor(s32 r, s32 g, s32 b);
 void SetFarColor(s32 r, s32 g, s32 b);
 
-void kaj_tss_free(TssSlot *arg0) {
+void kaj_tss_free(TssSlot *slot) {
     TssTable *p = &kaj_tss_table;
 
-    if (arg0->data != arg0) {
-        free3(arg0->data);
+    if (slot->data != slot) {
+        free3(slot->data);
     }
-    arg0->data = 0;
-    arg0->next = p->free_list;
-    p->free_list = arg0;
+    slot->data = 0;
+    slot->next = p->free_list;
+    p->free_list = slot;
 }
 
-void kaj_tss_release(s32 arg0) {
+void kaj_tss_release(s32 index) {
     TssTable *p = &kaj_tss_table;
     TssSlot *prev = 0;
-    TssSlot *node = &p->slots[arg0];
+    TssSlot *node = &p->slots[index];
     TssSlot *cur;
 
     for (cur = p->done_list; cur != 0; cur = cur->next) {
@@ -85,22 +85,22 @@ void kaj_tss_release(s32 arg0) {
     }
 }
 
-s32 kaj_tss_kill(s32 arg0) {
+s32 kaj_tss_kill(s32 index) {
     TssTable *p = &kaj_tss_table;
-    TssSlot *node = &p->slots[arg0];
+    TssSlot *node = &p->slots[index];
     KajEvent *e;
 
     if (node->next == 0 || (node->next >= p->slots && node->next < &p->slots[p->count])) {
         return 0;
     }
-    kaj_event_flush(2, arg0 + 1);
+    kaj_event_flush(2, index + 1);
     if (node->on_kill != 0) {
         node->on_kill(node);
     }
     EnterCriticalSection();
     e = kaj_event_push(0x100);
     if (e != 0) {
-        e->unk8 = arg0;
+        e->unk8 = index;
         e->unkC = 1;
         e->unk10 = node->type;
         {
@@ -127,44 +127,44 @@ s32 kaj_tss_kill(s32 arg0) {
     return 1;
 }
 
-s32 kaj_tss_start(Unk_801D14B8 *arg0) {
-    kaj_event_set_alarm(1, arg0->unk20 + 1, 0);
-    return arg0->unk20;
+s32 kaj_tss_start(Unk_801D14B8 *task) {
+    kaj_event_set_alarm(1, task->unk20 + 1, 0);
+    return task->unk20;
 }
 
-void kaj_tss_finish(TssSlot *arg0) {
+void kaj_tss_finish(TssSlot *slot) {
     TssTable *p = &kaj_tss_table;
 
-    if (arg0->data != arg0) {
-        free3(arg0->data);
+    if (slot->data != slot) {
+        free3(slot->data);
     }
-    arg0->data = 0;
-    arg0->next = p->done_list;
-    p->done_list = arg0;
+    slot->data = 0;
+    slot->next = p->done_list;
+    p->done_list = slot;
 }
 
-void *kaj_tss_pool_create(s32 arg0, s32 arg1) {
+void *kaj_tss_pool_create(s32 count, s32 size) {
     u8 *base;
     u8 *p;
     u8 *next;
     s32 i;
 
-    base = kaj_malloc(arg0 * arg1);
+    base = kaj_malloc(count * size);
     if (base == 0) {
         return 0;
     }
     p = base;
-    next = base + arg1;
-    for (i = 1; i < arg0; i++) {
+    next = base + size;
+    for (i = 1; i < count; i++) {
         *(u8 **)p = next;
         p = next;
-        next = p + arg1;
+        next = p + size;
     }
     *(u8 **)p = 0;
     return base;
 }
 
-TssSlot *kaj_tss_alloc(u32 arg0) {
+TssSlot *kaj_tss_alloc(u32 size) {
     TssTable *p = &kaj_tss_table;
     TssSlot *node;
 
@@ -173,8 +173,8 @@ TssSlot *kaj_tss_alloc(u32 arg0) {
     }
     node = p->free_list;
     p->free_list = node->next;
-    if (arg0 > 0x20) {
-        node->data = kaj_malloc(arg0);
+    if (size > 0x20) {
+        node->data = kaj_malloc(size);
         if (node->data == 0) {
             node->data = node;
             kaj_tss_free(node);
@@ -235,26 +235,26 @@ void kaj_tss_quit(void) {
     p->done_list = 0;
 }
 
-void kaj_tss_set_steps(Unk_801D1774 *arg0, s32 arg1) {
-    s32 d = arg0->unk26 - arg0->unk24;
-    s32 t;
-    s32 q;
+void kaj_tss_set_steps(Unk_801D1774 *task, s32 steps) {
+    s32 dist = task->unk26 - task->unk24;
+    s32 abs_dist;
+    s32 step;
 
-    if (arg1 == 0 || d == 0) {
-        arg0->unk28 = d;
-        arg0->unk2C = 0;
+    if (steps == 0 || dist == 0) {
+        task->unk28 = dist;
+        task->unk2C = 0;
         return;
     }
-    t = d;
-    if (d < 0) {
-        t = -d;
+    abs_dist = dist;
+    if (dist < 0) {
+        abs_dist = -dist;
     }
-    q = (t + (arg1 >> 1)) / arg1;
-    if (d < 0) {
-        q = -q;
+    step = (abs_dist + (steps >> 1)) / steps;
+    if (dist < 0) {
+        step = -step;
     }
-    arg0->unk28 = q;
-    arg0->unk2C = 2;
+    task->unk28 = step;
+    task->unk2C = 2;
 }
 
 void kaj_view_init(void) {
@@ -325,53 +325,53 @@ ViewBuffer *kaj_view_begin_frame(void) {
     return kaj_view_current;
 }
 
-void kaj_view_flip(ViewBuffer *arg0) {
-    s32 t;
-    s32 d;
-    s32 v;
+void kaj_view_flip(ViewBuffer *buf) {
+    s32 vsync;
+    s32 delta;
+    s32 frame;
 
-    if (arg0->dfe == 0) {
+    if (buf->dfe == 0) {
         DrawSync(0);
         VSync(2);
-        t = VSync(-1);
+        vsync = VSync(-1);
     } else {
         VSync(2);
-        t = VSync(-1);
+        vsync = VSync(-1);
         ResetGraph(1);
     }
-    PutDispEnv(arg0->disp_env);
-    PutDrawEnv(arg0);
-    v = D_801E2D60 + 1;
-    D_801E2D60 = v;
-    if (v == 0) {
-        v = 1;
+    PutDispEnv(buf->disp_env);
+    PutDrawEnv(buf);
+    frame = D_801E2D60 + 1;
+    D_801E2D60 = frame;
+    if (frame == 0) {
+        frame = 1;
     }
-    D_801E2D60 = v;
+    D_801E2D60 = frame;
     D_801E2D64 = D_801E2D64 == 0;
-    DrawOTag(arg0->ot_tags + 0x1FFF);
+    DrawOTag(buf->ot_tags + 0x1FFF);
     {
         KajSystem *p = &kaj_system;
         s32 last = kaj_view_last_vsync;
 
-        kaj_view_last_vsync = t;
-        d = t - last;
-        p->vsync_delta = d;
-        if (d < 0) {
-            p->vsync_delta = d + 0x7FFFFFFF;
+        kaj_view_last_vsync = vsync;
+        delta = vsync - last;
+        p->vsync_delta = delta;
+        if (delta < 0) {
+            p->vsync_delta = delta + 0x7FFFFFFF;
         }
     }
 }
 
-void kaj_view_set_bg_color(u8 arg0, u8 arg1, u8 arg2) {
+void kaj_view_set_bg_color(u8 r, u8 g, u8 b) {
     ViewBuffer *p = kaj_view_buffers;
 
-    p->bg_r = arg0;
-    p->bg_g = arg1;
-    p->bg_b = arg2;
+    p->bg_r = r;
+    p->bg_g = g;
+    p->bg_b = b;
     p++;
-    p->bg_r = arg0;
-    p->bg_g = arg1;
-    p->bg_b = arg2;
+    p->bg_r = r;
+    p->bg_g = g;
+    p->bg_b = b;
 }
 
 void kaj_view_clear_vram(void) {

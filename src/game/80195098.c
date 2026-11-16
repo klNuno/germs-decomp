@@ -217,167 +217,167 @@ void EnterCriticalSection(void);
 void ExitCriticalSection(void);
 void DeliverEvent(u32 ev, u32 spec);
 
-s16 player_check_ground(Player *arg0, s32 arg1, s16 arg2, s16 arg3) {
-    s32 sp10;
-    u16 s1;
-    SceneTrigger *s3;
-    s16 s2;
-    s16 s6;
-    s32 t;
+s16 player_check_ground(Player *player, s32 col, s16 sidestep, s16 slide) {
+    s32 trigger;
+    u16 trigger_type;
+    SceneTrigger *scene_trigger;
+    s16 walkable;
+    s16 enter_only;
+    s32 kind;
     s32 v;
-    Npc *p;
+    Npc *npc;
 
     v = 0xFFFFFF;
-    s1 = 0;
-    s3 = NULL;
-    s6 = 0;
-    s2 = 1;
-    sp10 = v;
+    trigger_type = 0;
+    scene_trigger = NULL;
+    enter_only = 0;
+    walkable = 1;
+    trigger = v;
     D_801DFD5C = 0;
     D_801DFD5E = 0;
-    switch ((u32)arg1) {
+    switch ((u32)col) {
     case 0x1000000:
     case 0x2000000:
         if (D_801DFF50 != 0) {
-            ((void (*)(s32 *))D_801DFF50)(&sp10);
+            ((void (*)(s32 *))D_801DFF50)(&trigger);
         }
-        s6 = 1;
-        s1 = ((u8 *)&sp10)[2];
-        s2 = 0;
-        arg0->move_state = 0;
-        sp10 &= v;
+        enter_only = 1;
+        trigger_type = ((u8 *)&trigger)[2];
+        walkable = 0;
+        player->move_state = 0;
+        trigger &= v;
         break;
     case 0xFFFF:
     case 0x9600:
     case 0xFF00:
-        if (arg3 == 0) {
-            if (arg2 != 0) {
-                arg0->move_state = 3;
-            } else if (arg0->flags & 0x1000) {
-                arg0->move_state = 2;
+        if (slide == 0) {
+            if (sidestep != 0) {
+                player->move_state = 3;
+            } else if (player->flags & 0x1000) {
+                player->move_state = 2;
             } else {
-                arg0->move_state = 1;
+                player->move_state = 1;
             }
         } else {
-            arg0->move_state = 5;
-            if (arg0->flags & 0x1000) {
-                arg0->flags &= ~0x1000;
-                arg0->speed_step = 4;
+            player->move_state = 5;
+            if (player->flags & 0x1000) {
+                player->flags &= ~0x1000;
+                player->speed_step = 4;
             }
         }
         break;
     default:
-        t = arg1 & 0xFF0000;
-        if (t == 0xFC0000) {
-            s1 = 0xFC;
-            sp10 = arg1 & 0xFFFFFF;
-            p = npc_find(0, arg1);
-            if (p != NULL && p->unkF == 6) {
-                if (arg2 != 0) {
-                    arg0->move_state = 3;
-                } else if (arg0->flags & 0x1000) {
-                    arg0->move_state = 2;
+        kind = col & 0xFF0000;
+        if (kind == 0xFC0000) {
+            trigger_type = 0xFC;
+            trigger = col & 0xFFFFFF;
+            npc = npc_find(0, col);
+            if (npc != NULL && npc->unkF == 6) {
+                if (sidestep != 0) {
+                    player->move_state = 3;
+                } else if (player->flags & 0x1000) {
+                    player->move_state = 2;
                 } else {
-                    arg0->move_state = 1;
+                    player->move_state = 1;
                 }
             } else {
-                arg0->move_state = 0;
-                if (arg0->flags & 0x1000) {
-                    arg0->flags &= ~0x1000;
-                    arg0->speed_step = 4;
+                player->move_state = 0;
+                if (player->flags & 0x1000) {
+                    player->flags &= ~0x1000;
+                    player->speed_step = 4;
                 }
-                s2 = 0;
+                walkable = 0;
             }
-        } else if (t == 0xF70000) {
-            s1 = 0xF7;
-            sp10 = arg1 & 0xFFFFFF;
-            arg0->move_state = 0;
-            if (arg0->flags & 0x1000) {
-                arg0->flags &= ~0x1000;
-                arg0->speed_step = 4;
+        } else if (kind == 0xF70000) {
+            trigger_type = 0xF7;
+            trigger = col & 0xFFFFFF;
+            player->move_state = 0;
+            if (player->flags & 0x1000) {
+                player->flags &= ~0x1000;
+                player->speed_step = 4;
             }
-            s2 = 0;
-        } else if (t == 0xFD0000) {
-            s1 = 0xFD;
-            sp10 = arg1 & 0xFFFFFF;
-            arg0->move_state = 0;
-            if (arg0->flags & 0x1000) {
-                arg0->flags &= ~0x1000;
-                arg0->speed_step = 4;
+            walkable = 0;
+        } else if (kind == 0xFD0000) {
+            trigger_type = 0xFD;
+            trigger = col & 0xFFFFFF;
+            player->move_state = 0;
+            if (player->flags & 0x1000) {
+                player->flags &= ~0x1000;
+                player->speed_step = 4;
             }
-            s2 = 0;
-        } else if (t != 0) {
-            if (arg3 == 0) {
-                if (arg0->flags & 0x1000) {
-                    arg0->move_state = 2;
+            walkable = 0;
+        } else if (kind != 0) {
+            if (slide == 0) {
+                if (player->flags & 0x1000) {
+                    player->move_state = 2;
                 } else {
-                    arg0->move_state = 1;
+                    player->move_state = 1;
                 }
             } else {
-                arg0->move_state = 5;
-                if (arg0->flags & 0x1000) {
-                    arg0->flags &= ~0x1000;
-                    arg0->speed_step = 4;
+                player->move_state = 5;
+                if (player->flags & 0x1000) {
+                    player->flags &= ~0x1000;
+                    player->speed_step = 4;
                 }
             }
-            s1 = ((u32)arg1 >> 16) & 0xFF;
-            sp10 = arg1;
-            s3 = action_find_trigger(arg1);
-            if (s3 == NULL) {
-                if (s1 == 0xFF) {
+            trigger_type = ((u32)col >> 16) & 0xFF;
+            trigger = col;
+            scene_trigger = action_find_trigger(col);
+            if (scene_trigger == NULL) {
+                if (trigger_type == 0xFF) {
                     D_801DFD5C = 1;
-                    arg0->move_state = 0;
-                    if (arg0->flags & 0x1000) {
-                        arg0->flags &= ~0x1000;
-                        arg0->speed_step = 4;
+                    player->move_state = 0;
+                    if (player->flags & 0x1000) {
+                        player->flags &= ~0x1000;
+                        player->speed_step = 4;
                     }
-                    s2 = 0;
+                    walkable = 0;
                 }
             } else {
-                if (s3->unk8 == 0) {
+                if (scene_trigger->unk8 == 0) {
                     D_801DFD5E = 1;
-                    arg0->move_state = 0;
-                    if (arg0->flags & 0x1000) {
-                        arg0->flags &= ~0x1000;
-                        arg0->speed_step = 4;
+                    player->move_state = 0;
+                    if (player->flags & 0x1000) {
+                        player->flags &= ~0x1000;
+                        player->speed_step = 4;
                     }
-                    s2 = 0;
+                    walkable = 0;
                 }
-                if (s3->enabled == 0) {
-                    s1 = 0;
-                    sp10 = 0xFFFFFF;
-                    s3 = NULL;
+                if (scene_trigger->enabled == 0) {
+                    trigger_type = 0;
+                    trigger = 0xFFFFFF;
+                    scene_trigger = NULL;
                 }
             }
         } else {
-            arg0->move_state = 4;
-            if (arg0->flags & 0x1000) {
-                arg0->flags &= ~0x1000;
-                arg0->speed_step = 4;
+            player->move_state = 4;
+            if (player->flags & 0x1000) {
+                player->flags &= ~0x1000;
+                player->speed_step = 4;
             }
-            s6 = 1;
-            s2 = 0;
+            enter_only = 1;
+            walkable = 0;
         }
         break;
     }
-    if (s6 != 0) {
-        if (sp10 != D_801DFF48 && sp10 != 0xFFFFFF) {
+    if (enter_only != 0) {
+        if (trigger != D_801DFF48 && trigger != 0xFFFFFF) {
             EnterCriticalSection();
-            object_area_current.trigger_type = s1;
-            object_area_current.scene_trigger = (s32)s3;
-            object_area_current.trigger = sp10;
+            object_area_current.trigger_type = trigger_type;
+            object_area_current.scene_trigger = (s32)scene_trigger;
+            object_area_current.trigger = trigger;
             DeliverEvent(0xF3000000, 2);
-            D_801DFF48 = sp10;
+            D_801DFF48 = trigger;
             ExitCriticalSection();
         }
-    } else if (sp10 != D_801DFF48) {
+    } else if (trigger != D_801DFF48) {
         EnterCriticalSection();
         if (D_801DFF48 != 0xFFFFFF) {
-            if (sp10 != 0xFFFFFF) {
+            if (trigger != 0xFFFFFF) {
                 D_801DFF4C = 1;
-                object_area_current.trigger_type = s1;
-                object_area_current.trigger = sp10;
-                object_area_current.scene_trigger = (s32)s3;
+                object_area_current.trigger_type = trigger_type;
+                object_area_current.trigger = trigger;
+                object_area_current.scene_trigger = (s32)scene_trigger;
                 DeliverEvent(0xF3000000, 2);
             } else {
                 object_area_current.trigger_type = object_area_previous.trigger_type;
@@ -386,90 +386,90 @@ s16 player_check_ground(Player *arg0, s32 arg1, s16 arg2, s16 arg3) {
                 DeliverEvent(0xF3000001, 2);
             }
         } else {
-            object_area_current.trigger_type = s1;
-            object_area_current.scene_trigger = (s32)s3;
-            object_area_current.trigger = sp10;
+            object_area_current.trigger_type = trigger_type;
+            object_area_current.scene_trigger = (s32)scene_trigger;
+            object_area_current.trigger = trigger;
             DeliverEvent(0xF3000000, 2);
         }
-        D_801DFF48 = sp10;
+        D_801DFF48 = trigger;
         ExitCriticalSection();
     }
-    return s2;
+    return walkable;
 }
 
 INCLUDE_ASM("asm/nonmatchings/game/80195098", player_set_view);
 
-void player_wrap_cell(Player *arg0) {
+void player_wrap_cell(Player *player) {
     s32 x;
     s32 y;
     s32 z;
 
-    if (arg0->pos_x >= -12500 && arg0->pos_x <= 12500 && arg0->pos_y <= 32000 && arg0->pos_y >= -32000
-        && arg0->pos_z <= 12500 && arg0->pos_z >= -12500) {
+    if (player->pos_x >= -12500 && player->pos_x <= 12500 && player->pos_y <= 32000 && player->pos_y >= -32000
+        && player->pos_z <= 12500 && player->pos_z >= -12500) {
         return;
     }
-    if (arg0->pos_x > 12500) {
-        arg0->cell_x++;
-        arg0->pos_x -= 12500;
+    if (player->pos_x > 12500) {
+        player->cell_x++;
+        player->pos_x -= 12500;
     }
-    if (arg0->pos_x < -12500) {
-        arg0->cell_x--;
-        arg0->pos_x += 12500;
+    if (player->pos_x < -12500) {
+        player->cell_x--;
+        player->pos_x += 12500;
     }
-    if (arg0->pos_y < -32000) {
-        arg0->cell_y++;
-        arg0->pos_y += 32000;
+    if (player->pos_y < -32000) {
+        player->cell_y++;
+        player->pos_y += 32000;
     }
-    if (arg0->pos_y > 32000) {
-        arg0->cell_y--;
-        arg0->pos_y -= 32000;
+    if (player->pos_y > 32000) {
+        player->cell_y--;
+        player->pos_y -= 32000;
     }
-    if (arg0->pos_z > 12500) {
-        arg0->cell_z++;
-        arg0->pos_z -= 12500;
+    if (player->pos_z > 12500) {
+        player->cell_z++;
+        player->pos_z -= 12500;
     }
-    if (arg0->pos_z < -12500) {
-        arg0->cell_z--;
-        arg0->pos_z += 12500;
+    if (player->pos_z < -12500) {
+        player->cell_z--;
+        player->pos_z += 12500;
     }
-    x = arg0->cell_x * 12500;
-    y = -(arg0->cell_y * 32000);
-    z = arg0->cell_z * 12500;
-    arg0->unk60 = (arg0->pos_x + x) / 100;
-    arg0->unk64 = (arg0->pos_y + y) / 100;
-    arg0->unk68 = (arg0->pos_z + x) / 100;
+    x = player->cell_x * 12500;
+    y = -(player->cell_y * 32000);
+    z = player->cell_z * 12500;
+    player->unk60 = (player->pos_x + x) / 100;
+    player->unk64 = (player->pos_y + y) / 100;
+    player->unk68 = (player->pos_z + x) / 100;
     npc_rebase_all(x, y, z);
     block_set_origin(x, y, z);
     door_rebase_all(x, y, z);
     mod_npcrec_rebase_all(x, y, z);
     thing_set_origin(x, y, z);
-    if (arg0->vehicle_mode != 0) {
+    if (player->vehicle_mode != 0) {
         vehicle_set_origin(x, y, z);
     }
 }
 
-void player_update_view(Player *arg0, s16 *arg1, u16 arg2) {
+void player_update_view(Player *player, s16 *view_rot, u16 mode) {
     s16 rot[3];
 
-    arg0->unk90[0] = -arg0->pos_x;
-    arg0->unk60 = (arg0->pos_x + arg0->cell_x * 12500) / 100;
-    arg0->unk64 = (arg0->pos_y - arg0->cell_y * 32000) / 100;
-    arg0->unk68 = (arg0->pos_z + arg0->cell_z * 12500) / 100;
-    arg0->unk90[1] = -arg0->pos_y;
-    arg0->unk90[2] = -arg0->pos_z;
-    MatrixNormal(arg0->unk7C, arg0->unk7C);
-    RotMatrix(arg1, arg0->unk7C);
-    ApplyMatrixLV(arg0->unk7C, arg0->unk90, arg0->unk90);
-    GsSetView2(arg0->unk7C);
-    if (arg2 == 1) {
-        arg0->coord[0].coord_tx = arg0->pos_x;
-        arg0->coord[0].coord_ty = arg0->pos_y - arg0->unk4C + 320;
-        arg0->coord[0].coord_tz = arg0->pos_z;
-        rot[0] = (arg0->pitch << 12) / 360;
-        rot[1] = (arg0->yaw << 12) / 360;
-        rot[2] = (arg0->unk70 << 12) / 360;
-        RotMatrixZYX(rot, arg0->coord[0].coord_m);
-        arg0->coord[0].flg = 0;
+    player->unk90[0] = -player->pos_x;
+    player->unk60 = (player->pos_x + player->cell_x * 12500) / 100;
+    player->unk64 = (player->pos_y - player->cell_y * 32000) / 100;
+    player->unk68 = (player->pos_z + player->cell_z * 12500) / 100;
+    player->unk90[1] = -player->pos_y;
+    player->unk90[2] = -player->pos_z;
+    MatrixNormal(player->unk7C, player->unk7C);
+    RotMatrix(view_rot, player->unk7C);
+    ApplyMatrixLV(player->unk7C, player->unk90, player->unk90);
+    GsSetView2(player->unk7C);
+    if (mode == 1) {
+        player->coord[0].coord_tx = player->pos_x;
+        player->coord[0].coord_ty = player->pos_y - player->unk4C + 320;
+        player->coord[0].coord_tz = player->pos_z;
+        rot[0] = (player->pitch << 12) / 360;
+        rot[1] = (player->yaw << 12) / 360;
+        rot[2] = (player->unk70 << 12) / 360;
+        RotMatrixZYX(rot, player->coord[0].coord_m);
+        player->coord[0].flg = 0;
     }
-    arg0->unk3C = 0;
+    player->unk3C = 0;
 }

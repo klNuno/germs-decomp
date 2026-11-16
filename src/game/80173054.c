@@ -101,14 +101,14 @@ void kaj_abend(s32 a, char *b, char *c, s32 d);
 void *memcpy(void *dst, void *src, s32 n);
 s32 strlen(char *s);
 
-void action_cmd_change_scene(Unk_80173054 *arg0, s32 *arg1) {
-    ActionCmd *cmd = arg0->unk0;
+void action_cmd_change_scene(Unk_80173054 *action, s32 *event) {
+    ActionCmd *cmd = action->unk0;
     s32 a, b, c, d;
     s32 x, y, z;
 
     switch (cmd->sub) {
     case 0:
-        if (atoi(arg0->unk8[0]) != 0) {
+        if (atoi(action->unk8[0]) != 0) {
             mail_goto_ofc(1, 0, 1, 0);
         } else {
             mail_goto_ofc(1, 1, 1, 2);
@@ -116,17 +116,17 @@ void action_cmd_change_scene(Unk_80173054 *arg0, s32 *arg1) {
         break;
     case 1:
     case 3:
-        a = (s16)atoi(arg0->unk8[4]);
-        b = (s16)atoi(arg0->unk8[2]);
-        c = (s16)atoi(arg0->unk8[3]);
-        d = (s16)atoi(arg0->unk8[5]);
-        mail_goto_building(cmd->sub, arg0->unk8[1], a, arg0->unk8[0][0], b, c, d, *arg1, 1);
+        a = (s16)atoi(action->unk8[4]);
+        b = (s16)atoi(action->unk8[2]);
+        c = (s16)atoi(action->unk8[3]);
+        d = (s16)atoi(action->unk8[5]);
+        mail_goto_building(cmd->sub, action->unk8[1], a, action->unk8[0][0], b, c, d, *event, 1);
         break;
     case 2:
-        x = atoi(arg0->unk8[0]) * 10;
-        y = atoi(arg0->unk8[1]) * 10;
-        z = atoi(arg0->unk8[2]) * 10;
-        mail_goto_twn(x, y, z, atoi(arg0->unk8[3]), 1);
+        x = atoi(action->unk8[0]) * 10;
+        y = atoi(action->unk8[1]) * 10;
+        z = atoi(action->unk8[2]) * 10;
+        mail_goto_twn(x, y, z, atoi(action->unk8[3]), 1);
         break;
     }
 }
@@ -145,55 +145,55 @@ INCLUDE_RODATA("asm/nonmatchings/game/80173054", D_8017008C);
 
 INCLUDE_RODATA("asm/nonmatchings/game/80173054", D_801700B0);
 
-void action_cmd_var(Unk_80173054 *arg0) {
+void action_cmd_var(Unk_80173054 *action) {
     u16 *vars = action_vars;
-    ActionCmd *cmd = arg0->unk0;
-    s32 v = atoi(arg0->unk8[0]);
+    ActionCmd *cmd = action->unk0;
+    s32 value = atoi(action->unk8[0]);
 
     switch (cmd->sub) {
     case 0:
-        vars[cmd->target] = v;
+        vars[cmd->target] = value;
         break;
     case 1:
-        vars[cmd->target] -= v;
+        vars[cmd->target] -= value;
         break;
     case 2:
-        vars[cmd->target] += v;
+        vars[cmd->target] += value;
         break;
     case 3:
-        vars[cmd->target] *= v;
+        vars[cmd->target] *= value;
         break;
     case 4:
-        vars[cmd->target] /= (s16)v;
+        vars[cmd->target] /= (s16)value;
         break;
     case 5:
-        vars[cmd->target] = (s16)vars[cmd->target] % (s16)v;
+        vars[cmd->target] = (s16)vars[cmd->target] % (s16)value;
         break;
     case 6:
-        vars[cmd->target] = vars[(s16)v];
+        vars[cmd->target] = vars[(s16)value];
         break;
     case 7:
-        vars[cmd->target] -= vars[(s16)v];
+        vars[cmd->target] -= vars[(s16)value];
         break;
     case 8:
-        vars[cmd->target] += vars[(s16)v];
+        vars[cmd->target] += vars[(s16)value];
         break;
     }
 }
 
 void action_update(void) {
-    EventState *s = &event_state;
+    EventState *event = &event_state;
     LlList *list;
-    Unk_80173054 *cmd;
-    ActionCmd *c;
-    SceneTrigger *e;
-    ActionSet *item;
+    Unk_80173054 *action;
+    ActionCmd *cmd;
+    SceneTrigger *trigger;
+    ActionSet *set;
     Unk_8017345C op;
     s32 flag;
-    s32 a, b, d;
+    s32 red, green, blue;
     s32 n;
 
-    switch (s->state) {
+    switch (event->state) {
     case 0:
     case 2:
         return;
@@ -206,19 +206,19 @@ void action_update(void) {
         }
         return;
     case 4:
-        if ((s16)s->wait_timer == 0) {
+        if ((s16)event->wait_timer == 0) {
             return;
         }
-        s->wait_timer -= D_801E6DB4[0];
-        if ((s16)s->wait_timer > 0) {
+        event->wait_timer -= D_801E6DB4[0];
+        if ((s16)event->wait_timer > 0) {
             return;
         }
-        s->wait_timer = 0;
-        s->wait_flags &= ~1;
-        if (s->wait_flags != 0) {
+        event->wait_timer = 0;
+        event->wait_flags &= ~1;
+        if (event->wait_flags != 0) {
             return;
         }
-        s->state = 1;
+        event->state = 1;
         break;
     }
 
@@ -226,13 +226,13 @@ void action_update(void) {
     n = list->count;
     op.unk0 = -2;
     if (n == 0) {
-        cmd = NULL;
+        action = NULL;
     } else {
-        Unk_80173054 *t;
+        Unk_80173054 *first;
         list->cursor = list->head;
-        t = (Unk_80173054 *)list->cursor->data;
-        op.unk0 = t->unk0->unk0;
-        cmd = t;
+        first = (Unk_80173054 *)list->cursor->data;
+        op.unk0 = first->unk0->unk0;
+        action = first;
         kaj_ll_remove_to_prev(list);
     }
     if (op.unk0 < 0) {
@@ -241,77 +241,77 @@ void action_update(void) {
     }
     switch (op.unk0) {
     case 0:
-        c = cmd->unk0;
-        e = action_find_trigger(c->target);
-        if (e == NULL) {
+        cmd = action->unk0;
+        trigger = action_find_trigger(cmd->target);
+        if (trigger == NULL) {
             return;
         }
-        switch (c->sub) {
+        switch (cmd->sub) {
         case 0:
-            if (atoi(cmd->unk8[0]) != 0) {
-                e->leave_set = atoi(cmd->unk8[1]);
+            if (atoi(action->unk8[0]) != 0) {
+                trigger->leave_set = atoi(action->unk8[1]);
             } else {
-                e->enter_set = atoi(cmd->unk8[1]);
+                trigger->enter_set = atoi(action->unk8[1]);
             }
             break;
         case 1:
-            e->enabled = atoi(cmd->unk8[0]);
+            trigger->enabled = atoi(action->unk8[0]);
             break;
         case 2:
-            e->unk8 = atoi(cmd->unk8[0]);
+            trigger->unk8 = atoi(action->unk8[0]);
             break;
         }
         break;
     case 1:
-        npc_exec_command(cmd);
+        npc_exec_command(action);
         break;
     case 2:
-        thing_cmd_set_active(cmd);
+        thing_cmd_set_active(action);
         break;
     case 3:
-        if (cmd->unk0->sub != 0) {
+        if (action->unk0->sub != 0) {
             sound_bgm_fade_out(3);
         } else {
-            sound_bgm_play(atoi(cmd->unk8[0]));
+            sound_bgm_play(atoi(action->unk8[0]));
         }
         break;
     case 4:
-        door_exec_command(cmd, s);
+        door_exec_command(action, event);
         break;
     case 5:
-        text_exec_command(cmd);
+        text_exec_command(action);
         break;
     case 6:
-        action_cmd_change_scene(cmd, (s32 *)s);
+        action_cmd_change_scene(action, (s32 *)event);
         break;
     case 7:
-        mod_cmd_npcrec(cmd, s);
+        mod_cmd_npcrec(action, event);
         break;
     case 8:
-        player_exec_command(cmd, s);
+        player_exec_command(action, event);
         break;
     case 9:
-        sound_exec_command(cmd);
+        sound_exec_command(action);
         break;
     case 10:
-        action_cmd_var(cmd);
+        action_cmd_var(action);
         break;
     case 11:
         action_queue_front_flag = 1;
         flag = 0;
-        switch (cmd->unk0->sub) {
+        switch (action->unk0->sub) {
         case 0:
-            s->state = 4;
-            s->wait_flags |= 1;
-            s->wait_timer = atoi(cmd->unk8[0]) * 2;
+            event->state = 4;
+            event->wait_flags |= 1;
+            event->wait_timer = atoi(action->unk8[0]) * 2;
             break;
         case 10:
-            cmd->unk0->sub = 1;
+            action->unk0->sub = 1;
             flag = 1;
         case 1:
-            item = action_find_set(atoi(cmd->unk8[0]));
-            while (item != NULL) {
-                item = action_run_set(item, 1, (s16)flag);
+            set = action_find_set(atoi(action->unk8[0]));
+            while (set != NULL) {
+                set = action_run_set(set, 1, (s16)flag);
             }
             break;
         case 2:
@@ -320,57 +320,57 @@ void action_update(void) {
         }
         break;
     case 12:
-        sprite_exec_command(cmd);
+        sprite_exec_command(action);
         break;
     case 13:
-        mail_cmd_receive(cmd);
+        mail_cmd_receive(action);
         break;
     case 14:
-        a = atoi(cmd->unk8[0]) & 0xFF;
-        b = atoi(cmd->unk8[1]) & 0xFF;
-        d = atoi(cmd->unk8[2]) & 0xFF;
-        roadmap_start_flash(a, b, d, (s16)atoi(cmd->unk8[3]));
+        red = atoi(action->unk8[0]) & 0xFF;
+        green = atoi(action->unk8[1]) & 0xFF;
+        blue = atoi(action->unk8[2]) & 0xFF;
+        roadmap_start_flash(red, green, blue, (s16)atoi(action->unk8[3]));
         break;
     }
 }
 
-s16 action_test_inventory(ActionCond *arg0) {
-    Inventory *p = player_status_inventory[0];
+s16 action_test_inventory(ActionCond *cond) {
+    Inventory *inventory = player_status_inventory[0];
     s16 ret;
-    s32 n;
+    s32 misses;
     s32 i;
 
-    if (arg0->used == 0) {
+    if (cond->used == 0) {
         return 2;
     }
-    if (arg0->unk6 == 0) {
-        if (arg0->index != 0) {
+    if (cond->unk6 == 0) {
+        if (cond->index != 0) {
             ret = 1;
-            for (i = 1, n = 0; i < 2; i++) {
-                if (p->weapon_ids[i] < arg0->low || arg0->high < p->weapon_ids[i]) {
-                    n++;
+            for (i = 1, misses = 0; i < 2; i++) {
+                if (inventory->weapon_ids[i] < cond->low || cond->high < inventory->weapon_ids[i]) {
+                    misses++;
                 }
             }
-            if (n != 0) {
+            if (misses != 0) {
                 ret = 0;
             }
         } else {
             ret = 0;
             for (i = 0; i < 8; i++) {
-                if (p->item_ids[i] == arg0->low) {
+                if (inventory->item_ids[i] == cond->low) {
                     ret = 1;
                     break;
                 }
             }
         }
     }
-    if (arg0->invert != 0) {
+    if (cond->invert != 0) {
         ret = 1 - ret;
     }
     return ret;
 }
 
-u8 *action_load_set(u8 *arg0) {
+u8 *action_load_set(u8 *src) {
     ActionSet *set;
     Action *act;
     ActionArgs *args;
@@ -385,36 +385,36 @@ u8 *action_load_set(u8 *arg0) {
     if (set == NULL) {
         kaj_abend(3, D_80170000, D_8017001C, 0x1F1);
     }
-    arg0 += 4;
+    src += 4;
     set->header = kaj_malloc(0x38);
     if (set->header == NULL) {
         kaj_abend(3, D_80170028, D_8017001C, 0x1F9);
     }
-    *set->header = *(ActionSetHeader *)arg0;
-    arg0 += 0x38;
-    set->count = *(s32 *)arg0;
-    arg0 += 4;
+    *set->header = *(ActionSetHeader *)src;
+    src += 0x38;
+    set->count = *(s32 *)src;
+    src += 4;
     act = kaj_malloc(set->count * 0xC);
     if (act == NULL) {
         kaj_abend(3, D_80170050, D_8017001C, 0x204);
     }
     set->actions = act;
     for (i = 0; i < set->count; i++, act++) {
-        size = *(s32 *)arg0;
-        arg0 += 4;
+        size = *(s32 *)src;
+        src += 4;
         act->cmd = kaj_malloc(8);
         len = size - 0xC;
         if (act->cmd == NULL) {
             kaj_abend(3, D_80170068, D_8017001C, 0x210);
         }
-        *(Unk_80173A44 *)act->cmd = *(Unk_80173A44 *)arg0;
-        act->argc = *(s32 *)(arg0 + 8);
+        *(Unk_80173A44 *)act->cmd = *(Unk_80173A44 *)src;
+        act->argc = *(s32 *)(src + 8);
         if (act->argc == 0) {
             len = 0;
         }
         if (len == 0) {
             act->args = NULL;
-            arg0 += size;
+            src += size;
         } else {
             args = kaj_malloc(act->argc * 4);
             if (args == NULL) {
@@ -425,7 +425,7 @@ u8 *action_load_set(u8 *arg0) {
                 kaj_abend(3, D_801700B0, D_8017001C, 0x225);
             }
             act->args = args;
-            memcpy(buf, arg0 + 0xC, len);
+            memcpy(buf, src + 0xC, len);
             do {
                 off = 0;
             } while (0);
@@ -438,7 +438,7 @@ u8 *action_load_set(u8 *arg0) {
                     args[j].unk0 = buf + off;
                 }
             }
-            arg0 += size;
+            src += size;
         }
     }
     if (action_set_list->count == 0) {
@@ -447,125 +447,125 @@ u8 *action_load_set(u8 *arg0) {
         action_set_list->cursor = action_set_list->tail;
         kaj_ll_insert_after(action_set_list, (s32)set);
     }
-    return arg0;
+    return src;
 }
 
-static inline s16 func_80173DE0_var(ActionCond *arg0) {
+static inline s16 func_80173DE0_var(ActionCond *cond) {
     u16 *vars = action_vars;
-    s16 v;
+    s16 value;
     s16 ret;
-    if (arg0->used == 0) {
+    if (cond->used == 0) {
         return 2;
     }
-    v = vars[arg0->index];
+    value = vars[cond->index];
     ret = 1;
-    if (v >= arg0->low && arg0->high >= v) {
-        ret = arg0->invert == 0;
-    } else if (arg0->invert == 0) {
+    if (value >= cond->low && cond->high >= value) {
+        ret = cond->invert == 0;
+    } else if (cond->invert == 0) {
         ret = 0;
     }
     return ret;
 }
 
-static inline s16 func_80173DE0_glob(ActionCond *arg0) {
-    PlayerStatus *g = &player_status;
-    s16 v;
+static inline s16 func_80173DE0_glob(ActionCond *cond) {
+    PlayerStatus *status = &player_status;
+    s16 value;
     s16 ret;
-    if (arg0->used == 0) {
+    if (cond->used == 0) {
         return 2;
     }
     ret = 1;
-    switch (arg0->index) {
+    switch (cond->index) {
     case 0:
-        v = g->stat0;
+        value = status->stat0;
         break;
     case 1:
-        v = g->stat1;
+        value = status->stat1;
         break;
     case 2:
-        v = g->stat2;
+        value = status->stat2;
         break;
     case 3:
-        v = g->stat3;
+        value = status->stat3;
         break;
     }
-    if (v >= arg0->low && arg0->high >= v) {
-        if (arg0->invert != 0) {
+    if (value >= cond->low && cond->high >= value) {
+        if (cond->invert != 0) {
             ret = 0;
         }
-    } else if (arg0->invert == 0) {
+    } else if (cond->invert == 0) {
         ret = 0;
     }
     return ret;
 }
 
-static inline void func_80173DE0_run(ActionSet *arg0, s16 arg1, s16 arg2) {
+static inline void func_80173DE0_run(ActionSet *set, s16 at_cursor, s16 skip_text_wait) {
     LlList *list;
-    Action *e;
-    ActionSetHeader *item;
+    Action *act;
+    ActionSetHeader *cmd;
     s16 first = 1;
     s32 i;
-    if (arg1 != 0) {
-        e = arg0->actions;
+    if (at_cursor != 0) {
+        act = set->actions;
         list = action_queue;
-        for (i = 0; i < arg0->count; i++, e++) {
-            item = e->cmd;
-            if (arg2 != 0) {
-                if (item->unk0 == 5 || *(s32 *)item == 0xB) {
+        for (i = 0; i < set->count; i++, act++) {
+            cmd = act->cmd;
+            if (skip_text_wait != 0) {
+                if (cmd->unk0 == 5 || *(s32 *)cmd == 0xB) {
                     continue;
                 }
-                if (*(s32 *)item == 0x1000B) {
-                    item->unk2 = 10;
+                if (*(s32 *)cmd == 0x1000B) {
+                    cmd->unk2 = 10;
                 }
             }
             if (action_queue_front_flag != 0 && first != 0) {
                 first = 0;
                 action_queue_front_flag = 0;
                 list->cursor = list->head;
-                kaj_ll_insert_before(list, (s32)e);
+                kaj_ll_insert_before(list, (s32)act);
             } else {
-                kaj_ll_insert_after(list, (s32)e);
+                kaj_ll_insert_after(list, (s32)act);
             }
         }
     } else {
         LlList *l2;
-        Action *e2;
-        e2 = arg0->actions;
+        Action *act2;
+        act2 = set->actions;
         l2 = action_queue;
-        for (i = 0; i < arg0->count; i++, e2++) {
-            item = e2->cmd;
-            if (arg2 != 0) {
-                if (item->unk0 == 5 || *(s32 *)item == 0xB) {
+        for (i = 0; i < set->count; i++, act2++) {
+            cmd = act2->cmd;
+            if (skip_text_wait != 0) {
+                if (cmd->unk0 == 5 || *(s32 *)cmd == 0xB) {
                     continue;
                 }
-                if (*(s32 *)item == 0x1000B) {
-                    item->unk2 = 10;
+                if (*(s32 *)cmd == 0x1000B) {
+                    cmd->unk2 = 10;
                 }
             }
             if (l2->count == 0) {
-                kaj_ll_insert_before(l2, (s32)e2);
+                kaj_ll_insert_before(l2, (s32)act2);
             } else {
                 l2->cursor = l2->tail;
-                kaj_ll_insert_after(l2, (s32)e2);
+                kaj_ll_insert_after(l2, (s32)act2);
             }
         }
     }
 }
 
-static inline ActionSet *func_80173DE0_find(s16 arg0) {
+static inline ActionSet *func_80173DE0_find(s16 id) {
     LlList *list = action_set_list;
-    ActionSet *item;
+    ActionSet *set;
     if (list->count == 0) {
         return NULL;
     }
-    if (arg0 < 0) {
+    if (id < 0) {
         return NULL;
     }
     list->cursor = list->head;
     while (1) {
-        item = list->cursor->data;
-        if (item != NULL && item->header->unk0 == arg0) {
-            return item;
+        set = list->cursor->data;
+        if (set != NULL && set->header->unk0 == id) {
+            return set;
         }
         if (kaj_ll_at_tail(list) != 0) {
             break;
@@ -575,91 +575,91 @@ static inline ActionSet *func_80173DE0_find(s16 arg0) {
     return NULL;
 }
 
-ActionSet *action_run_set(ActionSet *arg0, s32 arg1, s32 arg2) {
-    ActionSetHeader *h = arg0->header;
-    s16 st[4];
-    s32 n2;
-    s32 n1;
+ActionSet *action_run_set(ActionSet *set, s32 at_cursor, s32 skip_text_wait) {
+    ActionSetHeader *header = set->header;
+    s16 results[4];
+    s32 n_unused;
+    s32 n_true;
     s32 i;
 
-    st[0] = func_80173DE0_var(&h->cond_var_a);
-    st[1] = func_80173DE0_var(&h->cond_var_b);
-    st[2] = func_80173DE0_glob(&h->cond_status);
-    st[3] = action_test_inventory(&h->cond_inventory);
-    for (i = 0, n2 = 0; i < 4; i++) {
-        if (st[i] == 2) {
-            n2++;
+    results[0] = func_80173DE0_var(&header->cond_var_a);
+    results[1] = func_80173DE0_var(&header->cond_var_b);
+    results[2] = func_80173DE0_glob(&header->cond_status);
+    results[3] = action_test_inventory(&header->cond_inventory);
+    for (i = 0, n_unused = 0; i < 4; i++) {
+        if (results[i] == 2) {
+            n_unused++;
         }
     }
-    if (n2 == 4) {
-        func_80173DE0_run(arg0, arg1, arg2);
-        if (h->next_mode == 1 || h->next_mode == 2) {
-            return func_80173DE0_find(h->next_set);
+    if (n_unused == 4) {
+        func_80173DE0_run(set, at_cursor, skip_text_wait);
+        if (header->next_mode == 1 || header->next_mode == 2) {
+            return func_80173DE0_find(header->next_set);
         }
         return NULL;
     }
-    for (i = 0, n1 = 0; i < 4; i++) {
-        if (st[i] == 1) {
-            n1++;
+    for (i = 0, n_true = 0; i < 4; i++) {
+        if (results[i] == 1) {
+            n_true++;
         }
     }
-    if (h->unk2 == 0) {
-        if (n1 > 0) {
-            func_80173DE0_run(arg0, arg1, arg2);
-            if (h->next_mode == 1 || h->next_mode == 2) {
-                return func_80173DE0_find(h->next_set);
+    if (header->unk2 == 0) {
+        if (n_true > 0) {
+            func_80173DE0_run(set, at_cursor, skip_text_wait);
+            if (header->next_mode == 1 || header->next_mode == 2) {
+                return func_80173DE0_find(header->next_set);
             }
         } else {
-            if (h->next_mode == 0 || h->next_mode == 2) {
-                return func_80173DE0_find(h->next_set);
+            if (header->next_mode == 0 || header->next_mode == 2) {
+                return func_80173DE0_find(header->next_set);
             }
         }
-    } else if (n1 == 4 - n2) {
-        func_80173DE0_run(arg0, arg1, arg2);
-        if (h->next_mode == 1 || h->next_mode == 2) {
-            return func_80173DE0_find(h->next_set);
+    } else if (n_true == 4 - n_unused) {
+        func_80173DE0_run(set, at_cursor, skip_text_wait);
+        if (header->next_mode == 1 || header->next_mode == 2) {
+            return func_80173DE0_find(header->next_set);
         }
     } else {
-        if (h->next_mode == 0 || h->next_mode == 2) {
-            return func_80173DE0_find(h->next_set);
+        if (header->next_mode == 0 || header->next_mode == 2) {
+            return func_80173DE0_find(header->next_set);
         }
     }
     return NULL;
 }
 
-void action_reset(s16 arg0) {
-    EventState *s = &event_state;
-    u16 a = s->state;
-    u16 b = s->wait_flags;
-    u16 c = s->wait_timer;
+void action_reset(s16 flush_all) {
+    EventState *event = &event_state;
+    u16 old_state = event->state;
+    u16 old_flags = event->wait_flags;
+    u16 old_timer = event->wait_timer;
     LlList *list;
-    ActionSetHeader *item;
+    ActionSetHeader *cmd;
 
     text_release_cmd();
-    memset(s, 0, 0x14);
-    s->circle_set = -1;
-    s->cross_set = -1;
-    s->state = 0;
-    if (arg0 == 0) {
-        if (a == 1 || a == 4) {
-            s->state = a;
+    memset(event, 0, 0x14);
+    event->circle_set = -1;
+    event->cross_set = -1;
+    event->state = 0;
+    if (flush_all == 0) {
+        if (old_state == 1 || old_state == 4) {
+            event->state = old_state;
         }
-        if (b & 1) {
-            s->wait_flags = b & ~1;
-            if (s->wait_flags == 0) {
-                s->state = 1;
+        if (old_flags & 1) {
+            event->wait_flags = old_flags & ~1;
+            if (event->wait_flags == 0) {
+                event->state = 1;
             }
-            s->wait_timer = 0;
+            event->wait_timer = 0;
         } else {
-            s->wait_flags = b;
-            s->wait_timer = c;
+            event->wait_flags = old_flags;
+            event->wait_timer = old_timer;
         }
     }
     list = action_queue;
     if (list->count == 0) {
         return;
     }
-    if (arg0 != 0) {
+    if (flush_all != 0) {
         while (1) {
             if (list->count == 0) {
                 break;
@@ -671,12 +671,12 @@ void action_reset(s16 arg0) {
     list->cursor = list->head;
     while (1) {
         if (list->cursor->data != NULL) {
-            item = list->cursor->data->header;
-            if (item->unk0 == 5 || *(s32 *)item == 0xB) {
+            cmd = list->cursor->data->header;
+            if (cmd->unk0 == 5 || *(s32 *)cmd == 0xB) {
                 kaj_ll_remove_to_prev(list);
             }
-            if (*(s32 *)item == 0x1000B) {
-                item->unk2 = 10;
+            if (*(s32 *)cmd == 0x1000B) {
+                cmd->unk2 = 10;
             }
         }
         if (kaj_ll_at_tail(list) != 0) {
@@ -686,19 +686,19 @@ void action_reset(s16 arg0) {
     }
 }
 
-void action_push_front(s32 arg0) {
+void action_push_front(s32 action) {
     action_queue->cursor = action_queue->head;
-    kaj_ll_insert_before(action_queue, arg0);
+    kaj_ll_insert_before(action_queue, action);
 }
 
-void action_flush_queue(s16 arg0) {
+void action_flush_queue(s16 flush_all) {
     LlList *list = action_queue;
-    ActionSetHeader *item;
+    ActionSetHeader *cmd;
 
     if (list->count == 0) {
         return;
     }
-    if (arg0 != 0) {
+    if (flush_all != 0) {
         while (1) {
             if (list->count == 0) {
                 break;
@@ -710,12 +710,12 @@ void action_flush_queue(s16 arg0) {
     list->cursor = list->head;
     while (1) {
         if (list->cursor->data != NULL) {
-            item = list->cursor->data->header;
-            if (item->unk0 == 5 || *(s32 *)item == 0xB) {
+            cmd = list->cursor->data->header;
+            if (cmd->unk0 == 5 || *(s32 *)cmd == 0xB) {
                 kaj_ll_remove_to_prev(list);
             }
-            if (*(s32 *)item == 0x1000B) {
-                item->unk2 = 10;
+            if (*(s32 *)cmd == 0x1000B) {
+                cmd->unk2 = 10;
             }
         }
         if (kaj_ll_at_tail(list) != 0) {
@@ -725,63 +725,63 @@ void action_flush_queue(s16 arg0) {
     }
 }
 
-void action_free_set(ActionSet *arg0) {
-    Action *e = arg0->actions;
+void action_free_set(ActionSet *set) {
+    Action *act = set->actions;
     s32 i;
 
-    for (i = 0; i < arg0->count; i++, e++) {
-        if (e->args != NULL) {
-            free3(e->args->unk0);
-            free3(e->args);
+    for (i = 0; i < set->count; i++, act++) {
+        if (act->args != NULL) {
+            free3(act->args->unk0);
+            free3(act->args);
         }
-        free3(e->cmd);
+        free3(act->cmd);
     }
-    free3(arg0->actions);
-    free3(arg0->header);
-    free3(arg0);
+    free3(set->actions);
+    free3(set->header);
+    free3(set);
 }
 
 void action_free_all_sets(void) {
     LlList *list = action_set_list;
-    ActionSet *item;
-    Action *e;
+    ActionSet *set;
+    Action *act;
     s32 i;
 
     while (1) {
         if (list->count == 0) {
             break;
         }
-        item = list->cursor->data;
-        e = item->actions;
-        for (i = 0; i < item->count; i++, e++) {
-            if (e->args != NULL) {
-                free3(e->args->unk0);
-                free3(e->args);
+        set = list->cursor->data;
+        act = set->actions;
+        for (i = 0; i < set->count; i++, act++) {
+            if (act->args != NULL) {
+                free3(act->args->unk0);
+                free3(act->args);
             }
-            free3(e->cmd);
+            free3(act->cmd);
         }
-        free3(item->actions);
-        free3(item->header);
-        free3(item);
+        free3(set->actions);
+        free3(set->header);
+        free3(set);
         kaj_ll_remove_to_prev(list);
     }
 }
 
-ActionSet *action_find_set(s16 arg0) {
+ActionSet *action_find_set(s16 id) {
     LlList *list = action_set_list;
-    ActionSet *item;
+    ActionSet *set;
 
     if (list->count == 0) {
         return NULL;
     }
-    if (arg0 < 0) {
+    if (id < 0) {
         return NULL;
     }
     list->cursor = list->head;
     while (1) {
-        item = list->cursor->data;
-        if (item != NULL && item->header->unk0 == arg0) {
-            return item;
+        set = list->cursor->data;
+        if (set != NULL && set->header->unk0 == id) {
+            return set;
         }
         if (kaj_ll_at_tail(list) != 0) {
             break;
@@ -791,93 +791,93 @@ ActionSet *action_find_set(s16 arg0) {
     return NULL;
 }
 
-s32 action_run_trigger_enter(SceneTrigger *arg0) {
+s32 action_run_trigger_enter(SceneTrigger *trigger) {
     LlList *list;
-    ActionSet *item;
+    ActionSet *set;
     ActionSet *p;
     s16 id;
 
-    if (arg0 == NULL || arg0->enabled == 0) {
+    if (trigger == NULL || trigger->enabled == 0) {
         return 0;
     }
     list = action_set_list;
-    id = arg0->enter_set;
+    id = trigger->enter_set;
     if (list->count == 0) {
-        item = NULL;
+        set = NULL;
     } else if (id < 0) {
-        item = NULL;
+        set = NULL;
     } else {
         list->cursor = list->head;
         while (1) {
             p = list->cursor->data;
             if (p != NULL && p->header->unk0 == id) {
-                item = p;
+                set = p;
                 break;
             }
             if (kaj_ll_at_tail(list) != 0) {
-                item = NULL;
+                set = NULL;
                 break;
             }
             list->cursor = list->cursor->next;
         }
     }
-    if (item == NULL) {
+    if (set == NULL) {
         return 0;
     }
-    while ((item = action_run_set(item, 0, 0)) != NULL) {
+    while ((set = action_run_set(set, 0, 0)) != NULL) {
     }
     return 1;
 }
 
-s32 action_run_trigger_leave(SceneTrigger *arg0) {
+s32 action_run_trigger_leave(SceneTrigger *trigger) {
     LlList *list;
-    ActionSet *item;
+    ActionSet *set;
     ActionSet *p;
     s16 id;
 
-    if (arg0 == NULL || arg0->enabled == 0) {
+    if (trigger == NULL || trigger->enabled == 0) {
         return 0;
     }
     list = action_set_list;
-    id = arg0->leave_set;
+    id = trigger->leave_set;
     if (list->count == 0) {
-        item = NULL;
+        set = NULL;
     } else if (id < 0) {
-        item = NULL;
+        set = NULL;
     } else {
         list->cursor = list->head;
         while (1) {
             p = list->cursor->data;
             if (p != NULL && p->header->unk0 == id) {
-                item = p;
+                set = p;
                 break;
             }
             if (kaj_ll_at_tail(list) != 0) {
-                item = NULL;
+                set = NULL;
                 break;
             }
             list->cursor = list->cursor->next;
         }
     }
-    if (item == NULL) {
+    if (set == NULL) {
         return 0;
     }
-    while ((item = action_run_set(item, 0, 0)) != NULL) {
+    while ((set = action_run_set(set, 0, 0)) != NULL) {
     }
     return 1;
 }
 
-SceneTrigger *action_find_trigger(s32 arg0) {
+SceneTrigger *action_find_trigger(s32 id) {
     SceneTables *p = &object_scene_tables;
     s32 n = p->trigger_count;
-    SceneTrigger *e = p->triggers;
+    SceneTrigger *trigger = p->triggers;
     s32 i;
     if (n == 0) {
         return NULL;
     }
-    for (i = 0; i < n; i++, e++) {
-        if (e->id == arg0) {
-            return e;
+    for (i = 0; i < n; i++, trigger++) {
+        if (trigger->id == id) {
+            return trigger;
         }
     }
     return NULL;
@@ -894,112 +894,112 @@ void action_free_triggers(void) {
     }
 }
 
-void action_place_npc(Npc *arg0, Model *arg1) {
-    Player *p = player_status_player[0];
-    SVector sv;
+void action_place_npc(Npc *npc, Model *model) {
+    Player *player = player_status_player[0];
+    SVector rot;
 
-    if (arg1->ready == 0) {
-        if (arg0->unkF == 6) {
-            arg0->unkE = 2;
-            mod_setup(arg1, 0, 0, 8);
+    if (model->ready == 0) {
+        if (npc->unkF == 6) {
+            npc->unkE = 2;
+            mod_setup(model, 0, 0, 8);
         } else {
-            mod_setup(arg1, 0, 0, 0);
+            mod_setup(model, 0, 0, 0);
         }
     }
-    arg1->coord_tx = arg0->unk20 - p->cell_x * 12500;
-    arg1->coord_ty = arg0->unk24 + p->cell_y * 32000;
-    arg1->coord_tz = arg0->unk28 - p->cell_z * 12500;
-    sv.vx = (arg0->unk38 << 12) / 360;
-    sv.vy = (arg0->unk3A << 12) / 360;
-    sv.vz = (arg0->unk3C << 12) / 360;
-    RotMatrix(&sv, arg1->coord_m);
-    arg1->coord_flg = 0;
+    model->coord_tx = npc->unk20 - player->cell_x * 12500;
+    model->coord_ty = npc->unk24 + player->cell_y * 32000;
+    model->coord_tz = npc->unk28 - player->cell_z * 12500;
+    rot.vx = (npc->unk38 << 12) / 360;
+    rot.vy = (npc->unk3A << 12) / 360;
+    rot.vz = (npc->unk3C << 12) / 360;
+    RotMatrix(&rot, model->coord_m);
+    model->coord_flg = 0;
 }
 
 void action_init_npcs(void) {
     SceneTables *p = &object_scene_tables;
-    Npc *e = p->npcs;
-    Model *o;
+    Npc *npc = p->npcs;
+    Model *model;
     s32 i;
 
     if (p->npc_count == 0) {
         return;
     }
-    for (i = 0; i < p->npc_count; i++, e++) {
-        e->unk4 = 0;
-        e->unk20 *= 10;
-        e->unk24 *= 10;
-        e->unk28 *= 10;
-        e->unk2C *= 10;
-        e->unk30 *= 10;
-        e->unk34 *= 10;
-        o = mod_find(e->unk16);
-        if (o != NULL) {
-            action_place_npc(e, o);
-        e->unk48 = block_find_at(e->unk20, e->unk24, e->unk28);
-        e->unk10 = -2;
-        e->unk40 = 0;
-        e->unkB = 0;
-        e->unk44 = 0;
-        e->unk45 = 0;
-        e->unk46 = 0;
-        e->unk12 |= 1;
-        e->unk3E = e->unk3A;
-        e->unk4 = 1;
+    for (i = 0; i < p->npc_count; i++, npc++) {
+        npc->unk4 = 0;
+        npc->unk20 *= 10;
+        npc->unk24 *= 10;
+        npc->unk28 *= 10;
+        npc->unk2C *= 10;
+        npc->unk30 *= 10;
+        npc->unk34 *= 10;
+        model = mod_find(npc->unk16);
+        if (model != NULL) {
+            action_place_npc(npc, model);
+        npc->unk48 = block_find_at(npc->unk20, npc->unk24, npc->unk28);
+        npc->unk10 = -2;
+        npc->unk40 = 0;
+        npc->unkB = 0;
+        npc->unk44 = 0;
+        npc->unk45 = 0;
+        npc->unk46 = 0;
+        npc->unk12 |= 1;
+        npc->unk3E = npc->unk3A;
+        npc->unk4 = 1;
         }
     }
 }
 
-s32 action_run_npc_event(u16 arg0, s16 arg1) {
+s32 action_run_npc_event(u16 id, s16 enter) {
     SceneTables *p = &object_scene_tables;
-    ActionSet *item = NULL;
+    ActionSet *set = NULL;
     s32 n = p->npc_count;
-    Npc *q = p->npcs;
-    Npc *e;
+    Npc *cur = p->npcs;
+    Npc *npc;
     s32 i;
 
     if (n == 0) {
-        e = NULL;
+        npc = NULL;
     } else {
-        for (i = 0; i < n; i++, q++) {
-            if (q->unk0 == arg0) {
-                e = q;
+        for (i = 0; i < n; i++, cur++) {
+            if (cur->unk0 == id) {
+                npc = cur;
                 goto found;
             }
         }
-        e = NULL;
+        npc = NULL;
     }
 found:
-    if (e == NULL || e->unk4 == 0) {
+    if (npc == NULL || npc->unk4 == 0) {
         return 0;
     }
-    if (e->unk8 == 0) {
+    if (npc->unk8 == 0) {
         return 0;
     }
-    if (e->unkF == 6) {
-        if (arg1 != 0) {
-            item = action_find_set(0x400);
+    if (npc->unkF == 6) {
+        if (enter != 0) {
+            set = action_find_set(0x400);
         } else {
             text_close();
         }
-    } else if (e->unkE == 1) {
-        if (e->unk12 & 0x20) {
-            e->unk12 &= ~0x20;
+    } else if (npc->unkE == 1) {
+        if (npc->unk12 & 0x20) {
+            npc->unk12 &= ~0x20;
         }
         return 0;
     } else {
-        if (arg1 != 0) {
-            item = action_find_set(e->unk1A);
-            e->unk12 |= 0x20;
+        if (enter != 0) {
+            set = action_find_set(npc->unk1A);
+            npc->unk12 |= 0x20;
         } else {
-            item = action_find_set(e->unk1C);
-            e->unk12 &= ~0x20;
+            set = action_find_set(npc->unk1C);
+            npc->unk12 &= ~0x20;
         }
     }
-    if (item == NULL) {
+    if (set == NULL) {
         return 0;
     }
-    while ((item = action_run_set(item, 0, 0)) != NULL) {
+    while ((set = action_run_set(set, 0, 0)) != NULL) {
     }
     return 1;
 }

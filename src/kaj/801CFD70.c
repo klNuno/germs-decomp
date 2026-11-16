@@ -61,13 +61,13 @@ s32 kaj_timer_handler(void) {
     return 0;
 }
 
-void kaj_timer_add_alarm(s32 arg0, s32 arg1, s32 arg2) {
+void kaj_timer_add_alarm(s32 delay, s32 id, s32 data) {
     TimerHeap *q;
     TimerHeap *p;
     TimerAlarm *e;
     TimerAlarm tmp;
     s32 n;
-    s32 t;
+    s32 due;
     s32 i;
     s32 j;
 
@@ -84,14 +84,14 @@ void kaj_timer_add_alarm(s32 arg0, s32 arg1, s32 arg2) {
         q->capacity = n;
         q->full = 0;
     }
-    q->entries[++q->count].id = (void *)arg1;
-    q->entries[q->count].data = arg2;
-    t = arg0 + kaj_timer_ticks[0];
-    if (t < 0) {
-        q->entries[q->count].due = t + 0x80000001;
+    q->entries[++q->count].id = (void *)id;
+    q->entries[q->count].data = data;
+    due = delay + kaj_timer_ticks[0];
+    if (due < 0) {
+        q->entries[q->count].due = due + 0x80000001;
         q->entries[q->count].wrap = 1;
     } else {
-        q->entries[q->count].due = t;
+        q->entries[q->count].due = due;
         q->entries[q->count].wrap = 0;
     }
     if (q->count == q->capacity) {
@@ -181,7 +181,7 @@ void kaj_timer_init(void) {
     StartRCnt(0xF2000003);
 }
 
-void kaj_timer_cancel(s32 arg0) {
+void kaj_timer_cancel(s32 id) {
     TimerHeap *q;
     TimerHeap *p;
     TimerAlarm tmp;
@@ -193,7 +193,7 @@ void kaj_timer_cancel(s32 arg0) {
     q = &kaj_timer_queue;
     EnterCriticalSection();
     for (k = 1; k <= q->count; k++) {
-        if (arg0 == 0 || (s32)q->entries[k].id == arg0) {
+        if (id == 0 || (s32)q->entries[k].id == id) {
             q->entries[k] = q->entries[q->count--];
             p = &kaj_timer_queue;
             i = k;
