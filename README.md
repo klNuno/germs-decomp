@@ -13,11 +13,11 @@ never shows.
 
 ## What the code taught us so far
 
-Twenty findings in [docs/discoveries.md](docs/discoveries.md), twelve of them checked in an emulator and five in part:
+Thirty-two findings in [docs/discoveries.md](docs/discoveries.md), sixteen of them checked in an emulator and eleven in part:
 
+- [The game has an ending](docs/discoveries.md#-the-game-has-an-ending-a-narration-in-the-office-then-a-town-at-peace), against the "no ending" some players report: a narration in the office, then every building set to "at peace" and free play.
+- [Time alone never spreads the invasion](docs/discoveries.md#-time-alone-never-spreads-the-invasion-buildings-fall-on-a-schedule-when-you-pass-a-door): five buildings fall on a set day and hour, but only when you walk through a door; the rest fall as a chain.
 - [Energy at 0 is death, and only a hit to the head makes you wake up changed](docs/discoveries.md#-energy-at-0-is-death-and-only-a-hit-to-the-head-makes-you-wake-up-changed): starving is always game over, never the mine.
-- [Being changed is one flag](docs/discoveries.md#-being-changed-is-one-flag-a-pink-body-fast-healing-and-no-fatigue): a pink body, wounds that heal four times faster, no fatigue, and every stat set to 100.
-- [The five body parts](docs/discoveries.md#-body-part-damage-heals-by-the-hour-unless-it-is-at-the-worst-level) are head, arm, arm, torso and legs, not the order cheat makers used, and the worst level never heals by itself.
 - [The blue wheel is the weapon's hit rate](docs/discoveries.md#-the-blue-wheel-is-the-weapons-hit-rate-and-the-five-classes-are-levels-up-to-100), not weapon experience, and the cheat value "one point below the maximum" is level 93 of 100.
 - [The burger shop secretly serves changed food](docs/discoveries.md#-the-burger-shop-secretly-serves-changed-food-and-even-days-swap-its-hours) under the same menu, at hours that swap on even days.
 
@@ -52,6 +52,9 @@ Twenty findings in [docs/discoveries.md](docs/discoveries.md), twelve of them ch
 | [docs/mysteries.md](docs/mysteries.md) | The questions this project wants the code to answer, ticked as they are answered |
 | [docs/community-knowledge.md](docs/community-knowledge.md) | What players, wikis, cheat makers and earlier projects already knew, with sources |
 | [docs/naming.md](docs/naming.md) | How names are given, the evidence they need, the tools, and the glossary of modules |
+| [docs/engine/](docs/engine/README.md) | How the engine works, one page per system, for a programmer opening the code: boot and the loop, files and the CD, rendering, sound, menus and the save, scenes and scripts, the town, people and combat, the player |
+| [docs/design-intent.md](docs/design-intent.md) | What the code says about what the creators meant, for players: code facts, the creators' words where they exist, and our reading kept apart |
+| [docs/layout.md](docs/layout.md) | The source files in link order, each cut with its evidence and how sure it is |
 
 ## Building
 
