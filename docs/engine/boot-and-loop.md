@@ -33,7 +33,7 @@ Then an endless loop starts a new game each time round:
 | `sprite_title_run` (0x801A5254) | the title screen, given `mail_main_restarted` |
 | `kaj_srand_ticks` (0x801CD808) | seeds `rand` from the timer ticks; then the HUD: sprites 0x400 and 0x409, `event_draw_hud` (0x8018A24C) |
 
-The inner loop runs while the back-to-title flag `scene_request.unk0[4]` is 0. It copies the
+The inner loop runs while the back-to-title flag `scene_request.quit` is 0. It copies the
 requested loop into the current one and calls one of three scene loops:
 
 | Loop | Function | Place |
@@ -156,10 +156,10 @@ A place change is a request in `scene_request` (0x801E0340):
 
 | Field | Meaning |
 | --- | --- |
-| `unk0[0]`, `unk0[1]` | current and requested scene loop (0, 1, 2) |
-| `unk0[2]` | scene index in SCE.S ([files and CD](files-and-cd.md#sces)) |
-| `unk0[3]` | variant of the scene |
-| `unk0[4]` | back to the title |
+| `loop`, `next_loop` | current and requested scene loop (0, 1, 2) |
+| `scene_index` | scene index in SCE.S ([files and CD](files-and-cd.md#sces)) |
+| `variant` | variant of the scene |
+| `quit` | back to the title |
 | `change` | set by a request, cleared when taken |
 | `path`, `yaw`, `pos_x`, `pos_y`, `pos_z` | a scene file path the loader never opens ([scene files](../discoveries.md#-the-game-still-names-scene-files-the-disc-does-not-have)), arrival angle and position |
 

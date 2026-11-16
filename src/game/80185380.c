@@ -2,13 +2,13 @@
 #include "game/types.h"
 
 void free3(void *ptr);
-void kaj_ll_insert_before(DoorList *arg0, void *arg1);
-void kaj_ll_insert_after(DoorList *arg0, void *arg1);
+void kaj_ll_insert_before(DoorList *list, void *data);
+void kaj_ll_insert_after(DoorList *list, void *data);
 DoorList *door_list;
-void kaj_ll_remove_to_prev(DoorList *arg0);
-s16 kaj_ll_at_tail(DoorList *arg0);
+void kaj_ll_remove_to_prev(DoorList *list);
+s16 kaj_ll_at_tail(DoorList *list);
 void *kaj_malloc(u32 size);
-void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
+void kaj_abend(s32 code, char *msg, char *file, s32 line);
 extern char door_str_file[];
 extern SceneTables object_scene_tables[];
 extern ScreenLight screen_light;
@@ -23,7 +23,7 @@ void door_create(Door **out, u32 record_size) {
     (*out)->axis = 0;
     (*out)->visible = 1;
     (*out)->speed = 0;
-    (*out)->unk8 = 2;
+    (*out)->ot_layer = 2;
     (*out)->state = 0;
     (*out)->move_from = 0;
     (*out)->move_to = 0;
@@ -148,14 +148,14 @@ void door_set_visible(u16 id, s16 visible) {
     }
 }
 
-void door_fade_step(Door *door) {
+void door_fade_step(TssSlot *task) {
     ScreenLight *light = &screen_light;
     BgmSep *bgm = object_scene_tables[0].bgm;
     s32 volume;
     s32 t;
 
-    light->fade_level = door->auto_return;
-    if (door->speed < 2) {
+    light->fade_level = task->cur;
+    if (task->type < 2) {
         if (light->fade_level < 0) {
             light->fade_level = 0;
         }
@@ -165,10 +165,10 @@ void door_fade_step(Door *door) {
     if (light->fade_level > 0x1000) {
         light->fade_level = 0x1000;
     }
-    if (((s16)door->coord_flg > 0 && door->auto_return >= door->unk26) ||
-        ((s16)door->coord_flg < 0 && door->auto_return <= door->unk26)) {
-        if (door->speed != 0 && bgm != NULL && bgm->seq >= 0) {
-            t = door->auto_return >> 5;
+    if (((s16)task->step > 0 && task->cur >= task->target) ||
+        ((s16)task->step < 0 && task->cur <= task->target)) {
+        if (task->type != 0 && bgm != NULL && bgm->seq >= 0) {
+            t = task->cur >> 5;
             volume = 0x7F;
             if (t < 0x80) {
                 volume = (s16)t;
@@ -178,7 +178,7 @@ void door_fade_step(Door *door) {
             }
             SsSepSetVol(bgm->sep, bgm->seq, volume, volume);
         }
-        if (door->speed != 10) {
+        if (task->type != 10) {
             light->fade_active = 0;
         }
     }

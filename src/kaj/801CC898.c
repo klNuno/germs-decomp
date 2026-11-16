@@ -4,7 +4,7 @@
 void *malloc3(u32 size);
 void *memset(void *dst, s32 c, u32 n);
 extern KajSystem kaj_system;
-void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
+void kaj_abend(s32 code, char *msg, char *file, s32 line);
 extern char kaj_str_file[];
 void ResetCallback(void);
 void InitHeap3(void *head, u32 size);

@@ -101,7 +101,7 @@ segments:
       - [0x37D0, .rodata, kaj/801D1E70]
       - [0x3854, c, game/80173054]  # action.c asserts
       - [0x5C6C, c, game/8017546C]  # no assert: jtbl cut
-      - [0x70F8, c, game/801768F8]  # no assert: gp cut (D_801DFC74 is lui before, gp from here)
+      - [0x70F8, c, game/801768F8]  # no assert: gp cut (ai_door_noise is lui before, gp from here)
       - [0xA048, c, game/80179848]  # block.c
       - [0xF3F8, c, game/8017EBF8]  # no assert: jtbl cut
       - [0x15B80, c, game/80185380]  # door.c
@@ -110,7 +110,7 @@ segments:
       - [0x1B4AC, c, game/8018ACAC]  # mail.c
       - [0x1DADC, c, game/8018D2DC]  # mod.c
       - [0x20218, c, game/8018FA18]  # object.c
-      - [0x25898, c, game/80195098]  # no assert: gp cut (D_801DFF50 is lui before, gp from here)
+      - [0x25898, c, game/80195098]  # no assert: gp cut (player_pick_trigger_hook is lui before, gp from here)
       - [0x265F0, c, game/80195DF0]  # no assert: jtbl cut
       - [0x2ADD4, c, game/8019A5D4]  # roadmap.c
       - [0x3297C, c, game/801A217C]  # sound.c

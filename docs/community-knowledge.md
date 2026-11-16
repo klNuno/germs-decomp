@@ -77,7 +77,7 @@ Source keys used in the tables (full URLs in [Sources](#sources)): **fandom** (t
 | Analog pad | With the pad in analog mode no button works, because the BIOS pad routine the game uses only fills its button word for digital pads and neGcon. Our check: the game's side confirmed in the code; it reads the pad only through `PadRead` and never asks the pad type ([the pad](discoveries.md#-the-game-never-asks-what-kind-of-pad-is-plugged-in)) | code | hiddenblur controls.md |
 | Opening fade | The office fades in at an exact narration index (426 bytes for the opening, 386 for the ending); a text that steps over or stops short of it leaves the screen black | code | hiddenblur disc-survey.md |
 | Slowdown | Players advise running DuckStation's CPU at 190 %. Our check: the game measures each frame and scales movement by it, 30 frames a second at best, so a slow emulator makes it choppy ([frame timing](discoveries.md#-the-game-times-every-frame-so-a-slow-machine-makes-it-choppy-not-slow)) | observed | Romhack Plaza comment |
-| Misspelling | The game spells the Hieronymus machine "ヒエロニスム" | observed | jawiki, nico sm1148359 |
+| Misspelling | The game's katakana for the Hieronymus machine swaps two syllables of the name | observed | jawiki, nico sm1148359 |
 | Naomi | She cannot be targeted, yet she has a profile text and a hit animation in the data. Our check: confirmed; she is not one of the scene's people the target picker scans but a stage model the scripts show and move, and her profile can never open for the same reason; the hit animation was not looked at ([the hit roll](discoveries.md#-every-shot-is-a-roll-against-the-hit-chance-and-range-cuts-both-chance-and-damage)) | code | fandom Naomi Scully (model viewed in PSXPrev) |
 
 ## Hidden and cut content

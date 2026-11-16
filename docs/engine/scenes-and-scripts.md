@@ -82,7 +82,7 @@ puts the state back to 0. The opcode of the popped action picks its handler:
 
 | Op | Handler | What it does |
 | --- | --- | --- |
-| 0 | in `action_update` | trigger: sub 0 sets its enter or leave set, 1 `enabled`, 2 the walk flag `unk8` |
+| 0 | in `action_update` | trigger: sub 0 sets its enter or leave set, 1 `enabled`, 2 the walk flag `passable` |
 | 1 | `npc_exec_command` (0x80175CD8) | a person ([commands to people](people-and-combat.md#commands-from-scripts)) |
 | 2 | `thing_cmd_set_active` (0x801A8264) | shows or hides a scene object |
 | 3 | `sound_bgm_play` (0x801A3BCC) or `sound_bgm_fade_out(3)` (0x801A3CC0) | music, see [sound and music](sound-and-music.md) |
@@ -152,7 +152,7 @@ calls `door_start_open(door, distance, speed, auto_return)` (0x80184ECC): for a 
 plus distance times 10 and the step is speed times 10 (one stored unit is ten coordinate units); for a turn both are
 degrees, unscaled; with `auto_return` the door jumps back when it arrives. Sub 1 calls `door_start_close`
 (0x80185034). `door_update_all` (0x80184C6C) moves the doors in state 2 (closing) or 3 (opening). Both start
-functions raise `D_801DFC74`, so enemies notice the player
+functions raise `ai_door_noise`, so enemies notice the player
 ([line of sight](people-and-combat.md#targets-and-line-of-sight)).
 
 ## Game variables

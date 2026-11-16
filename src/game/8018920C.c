@@ -7,76 +7,73 @@ s32 event_enter_id;
 s32 event_leave_id;
 s32 event_mod_finish_id;
 extern s32 player_pick_trigger_hook;
-void event_clock_tick(s16 a);
+void event_clock_tick(s16 daylight);
 void (*event_tick_hook)(void);
-typedef struct { s32 unk0; s16 unk4; s16 unk6; } Unk_801E024C;
-extern Unk_801E024C event_alarm_slots[];
-void (*event_alarm_hook)(s32 *a, Unk_801E024C *b);
-typedef struct { s16 unk0; s16 unk2; s16 unk4; s16 unk6; s16 unk8[1]; } Unk_8018A8CC_58;
-typedef struct { u8 unk0[0x58]; Unk_8018A8CC_58 *unk58; } Unk_8018A8CC;
-void sprite_restore_clut(s32 a, s32 b, s32 c);
-void sprite_set_clut_entry(s32 a, s32 b, s32 c);
+typedef struct { s32 id; s16 active; s16 unk6; } EventAlarmSlot;
+extern EventAlarmSlot event_alarm_slots[];
+void (*event_alarm_hook)(s32 *a, EventAlarmSlot *b);
+void sprite_restore_clut(s32 id, s32 first, s32 last);
+void sprite_set_clut_entry(s32 id, s32 index, s32 color);
 s16 event_blink0_on;
 s16 event_blink1_on;
 s16 event_blink2_on;
 s16 event_blink0_timer;
 s16 event_blink1_timer;
 s16 event_blink2_timer;
-void sprite_fill_clut(s32 a, s32 b, s32 c, s32 d);
+void sprite_fill_clut(s32 id, s32 first, s32 last, s32 color);
 extern GameVars action_vars;
 extern ScreenLight screen_light;
-void event_draw_clock_digits(s32 a, s16 b);
-void event_update_daylight(s32 a);
+void event_draw_clock_digits(s32 field, s16 value);
+void event_update_daylight(s32 force);
 void SetFarColor(s32 r, s32 g, s32 b);
 extern PlayerStatus player_status;
 void (*event_mod_finish_hook)(s32 *a);
-WeaponRecord *effect_weapon_find(s16 arg0);
-void player_weapon_sound(s16 a, s32 b);
-void mod_set_anim(s32 a, s32 b, s32 c);
-void sound_se_stop(s32 a);
-void sound_se_play(s32 arg0);
-void event_clock_add_minute(PlayerStatus *a, GameVars *b, s32 c, s32 d);
-typedef struct { s16 unk0; s16 unk2; s16 unk4; s16 unk6; } Unk_8018AB48_10;
-typedef struct { s16 unk0; s16 unk2; } Unk_8018AB48_1C;
-typedef struct { u8 unk0[0x1C]; Unk_8018AB48_1C *unk1C; } Unk_8018AB48_r;
-typedef struct { u8 unk0[0x6E]; s16 unk6E; } Unk_8018AB48;
-u16 *sprite_find(u16 arg0);
+WeaponRecord *effect_weapon_find(s16 id);
+void player_weapon_sound(s16 kind, s32 start);
+void mod_set_anim(s32 mod, s32 anim, s32 frames);
+void sound_se_stop(s32 id);
+void sound_se_play(s32 id);
+void event_clock_add_minute(PlayerStatus *status, GameVars *game, s32 quiet, s32 no_fatigue);
+typedef struct { s16 x; s16 y; } TimVramPos;
+typedef struct SpriteTimPosView {
+    u8 pad0[0x1C];
+    TimVramPos *tim;
+} SpriteTimPosView;
+u16 *sprite_find(u16 id);
 s32 MoveImage(void *rect, s32 x, s32 y);
 s32 OpenEvent(u32 desc, s32 spec, s32 mode, s32 (*func)(void));
 s32 EnableEvent(s32 event);
 extern char event_str_file[];
-void kaj_abend(s32 a, char *b, char *c, s32 d);
+void kaj_abend(s32 code, char *msg, char *file, s32 line);
 s32 object_deliver_area_events(void);
 s32 player_leave_trigger(void);
 s32 mod_finish_handler(void);
 extern EventState event_state;
-typedef struct { s32 unk0; s32 unk4; s32 unk8; s32 unkC; void *unk10; } Unk_801895E0;
-s16 (*event_leave_hook)(Unk_801895E0 *a);
-void action_reset(s16 arg0);
+s16 (*event_leave_hook)(KajEvent *a);
+void action_reset(s16 flush_all);
 void text_close(void);
-s16 action_run_npc_event(u16 arg0, s16 arg1);
-s16 thing_run_script(s32 a, s32 b, s32 c);
-s16 action_run_trigger_leave(void *arg0);
+s16 action_run_npc_event(u16 id, s16 enter);
+s16 thing_run_script(s32 type, s32 id, s32 entering);
+s16 action_run_trigger_leave(void *trigger);
 extern Player *player_status_player[];
-typedef struct { s32 unk0; s32 unk4; s32 unk8; s32 unkC; s32 unk10; } Unk_8018970C;
-s16 (*event_effect_done_hook)(Unk_8018970C *a);
-void kaj_tss_release(s32 arg0);
-void kaj_pad_reset(s32 a);
+s16 (*event_effect_done_hook)(KajEvent *a);
+void kaj_tss_release(s32 index);
+void kaj_pad_reset(s32 enable);
 void kaj_view_clear_vram(void);
-void mail_menu_clear_rows(MailMenu *p);
+void mail_menu_clear_rows(MailMenu *menu);
 void effect_item_use_selected(void);
 void sound_bgm_stop(void);
-void event_draw_gauge(PlayerStatus *a);
+void event_draw_gauge(PlayerStatus *status);
 extern u8 event_digit_segments[];
-typedef struct { u8 unk0; u8 unk1; u8 unk2; u8 unk3; } Unk_801D7730;
-extern Unk_801D7730 event_limb_colors[];
-void mail_check_schedule(s16 a, s16 b);
-void event_draw_limb_status(PlayerStatus *arg0);
-s16 (*event_enter_hook)(Unk_801895E0 *a);
-s16 action_run_trigger_enter(void *arg0);
-void block_enter_area(u32 arg0);
-void text_show(char *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
-void event_drain_gauge(PlayerStatus *a);
+typedef struct { u8 r; u8 g; u8 b; u8 unk3; } LimbColor;
+extern LimbColor event_limb_colors[];
+void mail_check_schedule(s16 day, s16 hour);
+void event_draw_limb_status(PlayerStatus *status);
+s16 (*event_enter_hook)(KajEvent *a);
+s16 action_run_trigger_enter(void *trigger);
+void block_enter_area(u32 code);
+void text_show(char *str, s32 mode, s32 circle_set, s32 circle_flags, s32 cross_set, s32 cross_flags, s32 se);
+void event_drain_gauge(PlayerStatus *status);
 u16 event_blink0_color;
 u16 event_blink1_color;
 u16 event_blink2_color;
@@ -100,15 +97,15 @@ void event_open(void) {
     player_pick_trigger_hook = 0;
 }
 
-void event_handle_enter(Unk_801895E0 *ev) {
+void event_handle_enter(KajEvent *ev) {
     Player *player = player_status_player[0];
     EventState *state = &event_state;
     GameVars *game = &action_vars;
     s32 thing_type;
     s32 thing_id;
 
-    state->trigger = ev->unkC;
-    state->trigger_type = ev->unk8;
+    state->trigger = ev->param1;
+    state->trigger_type = ev->param0;
     state->cross_flags = 0;
     state->circle_flags = 0;
     state->cross_set = -1;
@@ -116,9 +113,9 @@ void event_handle_enter(Unk_801895E0 *ev) {
     if (event_enter_hook != NULL && event_enter_hook(ev) != 0) {
         return;
     }
-    switch (ev->unk8) {
+    switch (ev->param0) {
     case 0xFC:
-        if (action_run_npc_event(ev->unkC, 1) == 0) {
+        if (action_run_npc_event(ev->param1, 1) == 0) {
             player->flags &= 0xFFFB;
             action_reset(0);
         } else {
@@ -126,11 +123,11 @@ void event_handle_enter(Unk_801895E0 *ev) {
         }
         break;
     case 0xFD:
-        thing_type = ((u8 *)&ev->unkC)[1] >> 4;
-        thing_id = (u16)ev->unkC & 0xFFF;
+        thing_type = ((u8 *)&ev->param1)[1] >> 4;
+        thing_id = (u16)ev->param1 & 0xFFF;
         if (thing_run_script(thing_type, thing_id, 1) == 0) {
             if (thing_type == 0 && thing_id == 0) {
-                /* " 7クルマ1に乗る       3○" */
+                /* car prompt: get in */
                 text_show(" 7\203N\203\213\203}1\202\311\217\346\202\351       3\201\233", 1, -1, 8, -1, 0, 1);
             } else {
                 player->flags &= 0xFFFB;
@@ -142,38 +139,38 @@ void event_handle_enter(Unk_801895E0 *ev) {
         break;
     case 0xFE:
         if ((s16)game->vars[0x3E] < 5) {
-            /* "営業時間 ５：００〜２４：００" */
+            /* shop opening hours sign */
             text_show("\211c\213\306\216\236\212\324 \202T\201F\202O\202O\201`\202Q\202S\201F\202O\202O", 1, -1, 0, -1, 0, 1);
         } else {
-            switch (((u8 *)&ev->unkC)[1]) {
+            switch (((u8 *)&ev->param1)[1]) {
             case 1:
-                /* " 7バス停 Ｃ１０１系統   3○" */
+                /* bus stop prompt, first route */
                 text_show(" 7\203o\203X\222\342 \202b\202P\202O\202P\214n\223\235   3\201\233", 1, -1, 8, -1, 0, 1);
                 break;
             case 2:
-                /* " 7バス停 Ｃ１０２系統   3○" */
+                /* bus stop prompt, second route */
                 text_show(" 7\203o\203X\222\342 \202b\202P\202O\202Q\214n\223\235   3\201\233", 1, -1, 8, -1, 0, 1);
                 break;
             case 3:
-                /* " 7バス停 Ｃ１０３系統   3○" */
+                /* bus stop prompt, third route */
                 text_show(" 7\203o\203X\222\342 \202b\202P\202O\202R\214n\223\235   3\201\233", 1, -1, 8, -1, 0, 1);
                 break;
             default:
-                /* " 7バス停" */
+                /* bus stop sign, no route */
                 text_show(" 7\203o\203X\222\342", 1, -1, 0, -1, 0, 1);
                 break;
             }
         }
         break;
     case 0xFF:
-        /* " 7電話ボックス       3○" */
+        /* phone box prompt */
         text_show(" 7\223d\230b\203{\203b\203N\203X       3\201\233", 1, -1, 8, -1, 0, 1);
         break;
     case 0x80:
-        block_enter_area(ev->unkC);
+        block_enter_area(ev->param1);
         break;
     default:
-        if (action_run_trigger_enter(ev->unk10) == 0) {
+        if (action_run_trigger_enter((void *)ev->param2) == 0) {
             player->flags &= 0xFFFB;
             action_reset(0);
             break;
@@ -184,11 +181,11 @@ void event_handle_enter(Unk_801895E0 *ev) {
     }
 }
 
-void event_handle_leave(Unk_801895E0 *ev) {
+void event_handle_leave(KajEvent *ev) {
     EventState *state = &event_state;
 
-    state->trigger = ev->unkC;
-    state->trigger_type = ev->unk8;
+    state->trigger = ev->param1;
+    state->trigger_type = ev->param0;
     if (state->trigger_type != 0x40) {
         action_reset(0);
         text_close();
@@ -196,23 +193,23 @@ void event_handle_leave(Unk_801895E0 *ev) {
     if (event_leave_hook != NULL && event_leave_hook(ev) != 0) {
         return;
     }
-    switch (ev->unk8) {
+    switch (ev->param0) {
     case 0xFC:
-        if (action_run_npc_event(ev->unkC, 0) == 0) {
+        if (action_run_npc_event(ev->param1, 0) == 0) {
             action_reset(0);
         } else {
             state->state = 1;
         }
         break;
     case 0xFD:
-        if (thing_run_script(((u8 *)&ev->unkC)[1] >> 4, (u16)ev->unkC & 0xFFF, 0) == 0) {
+        if (thing_run_script(((u8 *)&ev->param1)[1] >> 4, (u16)ev->param1 & 0xFFF, 0) == 0) {
             action_reset(0);
         } else {
             state->state = 1;
         }
         break;
     default:
-        if (action_run_trigger_leave(ev->unk10) == 0) {
+        if (action_run_trigger_leave((void *)ev->param2) == 0) {
             action_reset(0);
             break;
         }
@@ -222,36 +219,36 @@ void event_handle_leave(Unk_801895E0 *ev) {
     }
 }
 
-s16 event_handle_effect_done(Unk_8018970C *ev) {
+s16 event_handle_effect_done(KajEvent *ev) {
     GameVars *game = &action_vars;
     Player *player = player_status_player[0];
     MailMenu *menu = &game->mail_menu;
     s16 handled = 0;
 
-    kaj_tss_release(ev->unk8);
-    switch (ev->unk10) {
+    kaj_tss_release(ev->param0);
+    switch (ev->param2) {
     case 0:
-        if (ev->unkC == 0) {
-            game->unk244 = -1;
+        if (ev->param1 == 0) {
+            game->effect_task = -1;
         }
         kaj_pad_reset(1);
         break;
     case 1:
-        if (ev->unkC == 0) {
-            game->unk244 = -1;
+        if (ev->param1 == 0) {
+            game->effect_task = -1;
         }
         handled = 1;
         kaj_view_clear_vram();
         break;
     case 11:
-        if (ev->unkC == 0) {
-            game->unk244 = -1;
+        if (ev->param1 == 0) {
+            game->effect_task = -1;
         }
         menu->state = 1;
         break;
     case 12:
-        if (ev->unkC == 0) {
-            game->unk244 = -1;
+        if (ev->param1 == 0) {
+            game->effect_task = -1;
         }
         menu->state = 0;
         game->menu_busy = 0;
@@ -259,14 +256,14 @@ s16 event_handle_effect_done(Unk_8018970C *ev) {
             mail_menu_clear_rows(menu);
         }
         if (player->flags & 0x4000) {
-            ev->unk8 = 999999;
+            ev->param0 = 999999;
             player->flags &= 0xBFFF;
             effect_item_use_selected();
         }
         break;
     case 13:
-        if (ev->unkC == 0) {
-            game->unk244 = -1;
+        if (ev->param1 == 0) {
+            game->effect_task = -1;
         }
         sound_bgm_stop();
         break;
@@ -288,9 +285,9 @@ void event_close(void) {
 }
 
 void event_handle_alarm(s32 *ev) {
-    Unk_801E024C *p = &event_alarm_slots[ev[2]];
-    p->unk0 = -1;
-    p->unk4 = 0;
+    EventAlarmSlot *p = &event_alarm_slots[ev[2]];
+    p->id = -1;
+    p->active = 0;
     if (event_alarm_hook != NULL) {
         event_alarm_hook(ev, p);
     }
@@ -416,7 +413,7 @@ void event_draw_clock_digits(s32 field, s16 value) {
 
 void event_draw_limb_status(PlayerStatus *status) {
     GameVars *game = &action_vars;
-    Unk_801D7730 *color;
+    LimbColor *color;
     s16 also_head = 0;
     s32 limb;
     s32 level;
@@ -444,9 +441,9 @@ void event_draw_limb_status(PlayerStatus *status) {
             }
         }
         color = &event_limb_colors[level];
-        sprite_set_clut_entry(0x400, limb + 0x40, (color->unk0 | (color->unk1 << 5) | (color->unk2 << 10)) & 0xFFFF);
+        sprite_set_clut_entry(0x400, limb + 0x40, (color->r | (color->g << 5) | (color->b << 10)) & 0xFFFF);
         if (also_head != 0) {
-            sprite_set_clut_entry(0x400, 0x45, (color->unk0 | (color->unk1 << 5) | (color->unk2 << 10)) & 0xFFFF);
+            sprite_set_clut_entry(0x400, 0x45, (color->r | (color->g << 5) | (color->b << 10)) & 0xFFFF);
             also_head = 0;
         }
     }
@@ -534,13 +531,13 @@ void event_draw_hud(void) {
     } else {
         energy_end = status->energy * 0x24 / 255 + 0x10;
         energy_frac = (status->energy << 12) / 255;
-        if (status->unk38 != 0) {
+        if (status->low_energy_alarm != 0) {
             if (energy_frac >= 0x400) {
-                status->unk38 = 0;
+                status->low_energy_alarm = 0;
                 sound_se_stop(4);
             }
         } else if (energy_frac < 0x400) {
-            status->unk38 = 1;
+            status->low_energy_alarm = 1;
             sound_se_play(4);
         }
     }
@@ -569,9 +566,9 @@ void event_update_daylight(s32 force) {
         if ((s16)game->vars[0x3F] == 0 || (s16)force != 0) {
             light->dark = 1;
         }
-        light->unk8[0] = game->vars[0x3F] + 1;
-        if (light->unk0[0] != 0) {
-            step = light->unk8[0];
+        light->daylight_step = game->vars[0x3F] + 1;
+        if (light->daylight_on != 0) {
+            step = light->daylight_step;
             far = step * 0x2A + step * 2 / 3 + 0x600;
             far = far * 0x7A >> 12;
             SetFarColor(far, far, far);
@@ -579,8 +576,8 @@ void event_update_daylight(s32 force) {
     } else if (hour >= 6 && hour < 0x12) {
         if ((hour == 6 && (s16)game->vars[0x3F] == 0) || (s16)force != 0) {
             light->dark = 0;
-            light->unk8[0] = 0;
-            if (light->unk0[0] != 0) {
+            light->daylight_step = 0;
+            if (light->daylight_on != 0) {
                 SetFarColor(0x7A, 0x7A, 0x7A);
             }
         }
@@ -588,17 +585,17 @@ void event_update_daylight(s32 force) {
         if ((s16)game->vars[0x3F] == 0 || (s16)force != 0) {
             light->dark = 1;
         }
-        light->unk8[0] = 0x3C - game->vars[0x3F];
-        if (light->unk0[0] != 0) {
-            step = light->unk8[0];
+        light->daylight_step = 0x3C - game->vars[0x3F];
+        if (light->daylight_on != 0) {
+            step = light->daylight_step;
             far = step * 0x2A + step * 2 / 3 + 0x600;
             far = far * 0x7A >> 12;
             SetFarColor(far, far, far);
         }
     } else if ((hour == 0x13 && (s16)game->vars[0x3F] == 0) || (s16)force != 0) {
         light->dark = 1;
-        light->unk8[0] = 0;
-        if (light->unk0[0] != 0) {
+        light->daylight_step = 0;
+        if (light->daylight_on != 0) {
             SetFarColor(0x2D, 0x2D, 0x2D);
         }
     }
@@ -616,7 +613,7 @@ void event_clock_add_minute(PlayerStatus *status, GameVars *game, s32 quiet, s32
             status->hours_awake++;
         }
         if ((s16)game->vars[0x3E] >= 24) {
-            status->unk34 = 0;
+            status->naps_today = 0;
             game->vars[0x3E] -= 24;
             game->vars[0x3D]++;
             game->vars[0x40] = (s16)game->vars[0x3D] % 2;
@@ -665,13 +662,13 @@ void event_draw_gauge(PlayerStatus *status) {
     } else {
         energy_end = status->energy * 36 / 255 + 0x10;
         energy_frac = (status->energy << 12) / 255;
-        if (status->unk38 != 0) {
+        if (status->low_energy_alarm != 0) {
             if (energy_frac >= 0x400) {
-                status->unk38 = 0;
+                status->low_energy_alarm = 0;
                 sound_se_stop(4);
             }
         } else if (energy_frac < 0x400) {
-            status->unk38 = 1;
+            status->low_energy_alarm = 1;
             sound_se_play(4);
         }
     }
@@ -683,11 +680,11 @@ void event_draw_gauge(PlayerStatus *status) {
     }
 }
 
-void event_draw_percent_gauge(Unk_8018A8CC *a) {
+void event_draw_percent_gauge(PlayerStatus *status) {
     s32 i;
     s32 rate_end;
-    Unk_8018A8CC_58 *p = a->unk58;
-    rate_end = p->unk8[p->unk2] * 16 / 100;
+    Inventory *inv = status->inventory;
+    rate_end = inv->weapon_rate[inv->weapon_slot] * 16 / 100;
     sprite_restore_clut(0x400, 0x50, 0x5F);
     for (i = 0x50; i < rate_end + 0x50; i++) {
         sprite_set_clut_entry(0x400, i, 0x7E8A);
@@ -731,22 +728,22 @@ void event_show_clock(s16 light_on) {
     event_draw_clock_digits(0, game->vars[0x3D] + 1);
     event_draw_clock_digits(1, game->vars[0x3E]);
     event_draw_clock_digits(2, game->vars[0x3F]);
-    screen_light.unk0[0] = light_on;
+    screen_light.daylight_on = light_on;
     SetFarColor(0, 0, 0);
     if (light_on != 0) {
         event_update_daylight(1);
     }
 }
 
-void event_draw_compass(Unk_8018AB48 *player) {
-    Unk_8018AB48_10 rect;
-    Unk_8018AB48_r *sprite = (Unk_8018AB48_r *)sprite_find(0x40E);
+void event_draw_compass(Player *player) {
+    Rect rect;
+    SpriteTimPosView *sprite = (SpriteTimPosView *)sprite_find(0x40E);
     if (sprite != NULL) {
-        rect.unk0 = ((player->unk6E * 0xC0000 / 360) >> 14) + 0x140;
-        rect.unk2 = 0x160;
-        rect.unk4 = 0xC;
-        rect.unk6 = 0x10;
-        MoveImage(&rect, sprite->unk1C->unk0, sprite->unk1C->unk2);
+        rect.x = ((player->yaw * 0xC0000 / 360) >> 14) + 0x140;
+        rect.y = 0x160;
+        rect.w = 0xC;
+        rect.h = 0x10;
+        MoveImage(&rect, sprite->tim->x, sprite->tim->y);
     }
 }
 

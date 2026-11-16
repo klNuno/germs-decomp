@@ -1,134 +1,120 @@
 #include "common.h"
 #include "game/types.h"
 
-typedef struct { s16 unk0; s16 unk2; s16 unk4; s16 unk6; s16 unk8; s16 unkA; s16 unkC; s16 unkE; s16 unk10; s16 unk12; } Unk_801E1078;
-extern Unk_801E1078 sound_voice_table[8];
+typedef struct { s16 from_table; s16 se_id; s16 prog; s16 tone; s16 note; s16 bank_id; s16 voice; s16 keyed_on; s16 priority; s16 pinned; } SoundVoice;
+extern SoundVoice sound_voice_table[8];
 void SsUtKeyOffV(s16 voice);
-typedef struct Unk_801E02DC {
-    s16 unk0;
-    u16 unk2;
-    s16 unk4;
-    s16 unk6;
-    s32 unk8;
-} Unk_801E02DC;
+typedef struct SeBank {
+    s16 vab_id;
+    u16 tone_count;
+    s16 bank_id;
+    s16 scene_bank;
+    s32 vab_head;
+} SeBank;
 extern SceneTables object_scene_tables;
 void sound_se_pop(void);
 void SsSepClose(s16 access_num);
 void free3(void *ptr);
 void sound_bgm_stop(void);
 void SsSepPlay(s16 access_num, s16 seq_num, u8 play_mode, s16 l_count);
-extern s16 D_801E6DB8[];
+extern s16 kaj_system_sep_volume[];
 void SsSepStop(s16 access_num, s16 seq_num);
 void SsSepSetVol(s16 access_num, s16 seq_num, s16 voll, s16 volr);
 typedef struct {
     u8 unk0[0x22];
-    s16 unk22;
-    s16 unk24;
-    s16 unk26;
+    s16 type;
+    s16 cur;
+    s16 target;
     u8 unk28[8];
-    void (*unk30)();
-    void (*unk34)();
+    void (*on_step)();
+    void (*on_end)();
     u8 unk38[4];
-    s32 *unk3C;
-} Unk_801A3D74;
-typedef struct { u8 unk0[0x4C]; s16 unk4C; } Unk_801A3DBC;
+    s32 *data;
+} TssSlot_u801A217C;
 s32 sound_footstep_clock;
 s32 sound_footstep_count;
 s32 sound_footstep_phase;
-extern char D_80171724[];
-extern char D_801716EC[];
-extern s32 D_801E02EC[];
+extern char sound_str_err_vab_head[];
+extern char sound_str_err_stack_full[];
+extern s32 object_scene_se_bank_count[];
 s16 SsVabOpenHead(u8 *addr, s16 vabid);
 extern char sound_str_file[];
-void kaj_abend(s32 a, char *b, char *c, s32 d);
-extern char D_8017173C[];
+void kaj_abend(s32 code, char *msg, char *file, s32 line);
+extern char sound_str_err_vab_transfer[];
 s16 SsVabTransBodyPartly(u8 *addr, u32 bufsize, s16 vabid);
 s16 SsVabTransCompleted(s16 immediateFlag);
 extern GameVars action_vars;
-void *kaj_tss_alloc(u32 arg0);
-void kaj_tss_set_steps(void *arg0, s32 arg1);
-s32 kaj_tss_start(void *arg0);
-void sound_bgm_fade_step(Unk_801A3D74 *arg0);
+void *kaj_tss_alloc(u32 size);
+void kaj_tss_set_steps(void *task, s32 steps);
+s32 kaj_tss_start(void *task);
+void sound_bgm_fade_step(TssSlot_u801A217C *task);
 void *kaj_malloc(u32 size);
-extern char D_80171770[];
-extern char D_8017178C[];
+extern char sound_str_err_alloc_bgm_handle[];
+extern char sound_str_err_alloc_bgm_buf[];
 void SsVabClose(s16 vabid);
-typedef struct { s32 unk0; s32 unk4; char **unk8; } Unk_801A324C;
 s32 atoi(char *s);
-void sound_se_play_note(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6);
+void sound_se_play_note(s16 bank_id, s16 prog, s16 tone_no, s16 note, s16 vol_l, s16 vol_r, s16 pin);
 void sound_bgm_close(void);
 extern KajSystem kaj_system;
 s16 SsSepOpen(u32 *addr, s16 vab_id, s16 seq_num);
-extern char D_80171708[];
-typedef struct { u16 unk0[0xA]; u16 unk14; u8 unk16[0x7DE]; } Unk_801A37E4;
+extern char sound_str_err_alloc_se_header[];
+typedef struct { u16 unk0[0xA]; u16 tone_count; u8 unk16[0x7DE]; } VabHeadCopy;
 void *memset(void *dst, s32 c, u32 n);
-typedef struct { u8 unk0[0x44]; u16 unk44; u8 unk46[6]; s16 unk4C; } Unk_801A358C;
+typedef struct { u8 unk0[0x44]; u16 move_state; u8 unk46[6]; s16 bob_y; } Player_u801A217C;
 s32 sound_footstep_prev_state;
 extern s32 kaj_system_vsync_delta[];
-s16 mail_wrap_angle(s16 a);
+s16 mail_wrap_angle(s16 angle);
 s32 rsin(s32 a);
-void sound_se_play(s32 arg0);
-typedef struct { s16 unk0; s16 unk2; s16 unk4; s16 unk6; s16 unk8; s16 unkA; s16 unkC; s16 unkE; s16 unk10; s16 unk12; } Unk_801D7B58;
-extern Unk_801D7B58 sound_se_table[];
-typedef struct { u8 unk0; u8 unk1; u8 unk2; u8 unk3; u8 unk4; u8 unk5[0xB]; } Unk_801A2678_20;
-typedef struct { u8 unk0; u8 unk1; u8 unk2; u8 unk3; u8 unk4[0x10]; s16 unk14; u8 unk16[0x1EA]; } Unk_801A2678_820;
+void sound_se_play(s32 id);
+typedef struct { s16 unk0; s16 unk2; s16 bank_id; s16 prog; s16 tone; s16 note; s16 vol_l; s16 vol_r; s16 pinned; s16 unk12; } SeTableEntry;
+extern SeTableEntry sound_se_table[];
+typedef struct { u8 unk0; u8 vol; u8 unk2; u8 unk3; u8 pan; u8 unk5[0xB]; } VabProgram;
+typedef struct { u8 unk0; u8 unk1; u8 vol; u8 pan; u8 unk4[0x10]; s16 prog; u8 unk16[0x1EA]; } VabToneBlock;
 typedef struct {
     u8 unk0[0x12];
-    u16 unk12;
+    u16 prog_count;
     u8 unk14[4];
-    u8 unk18;
-    u8 unk19;
+    u8 master_vol;
+    u8 master_pan;
     u8 unk1A[6];
-    Unk_801A2678_20 unk20[128];
-    Unk_801A2678_820 unk820[1];
-} Unk_801A2678;
+    VabProgram progs[128];
+    VabToneBlock tones[1];
+} VabHeader;
 s16 SsUtKeyOnV(s16 voice, s16 vabId, s16 prog, s16 tone, s16 note, s16 fine, s16 voll, s16 volr);
-typedef struct { u8 unk0; u8 unk1; u8 unk2; u8 unk3; u8 unk4; u8 unk5[0xB]; } Unk_801A2C60_20;
-typedef struct { u8 unk0; u8 unk1; u8 unk2; u8 unk3; u8 unk4[0x10]; s16 unk14; u8 unk16[0x1EA]; } Unk_801A2C60_820;
-typedef struct {
-    u8 unk0[0x12];
-    u16 unk12;
-    u8 unk14[4];
-    u8 unk18;
-    u8 unk19;
-    u8 unk1A[6];
-    Unk_801A2C60_20 unk20[128];
-    Unk_801A2C60_820 unk820[1];
-} Unk_801A2C60;
 
-INCLUDE_RODATA("asm/nonmatchings/game/801A217C", D_801716EC);
+INCLUDE_RODATA("asm/nonmatchings/game/801A217C", sound_str_err_stack_full);
 
-INCLUDE_RODATA("asm/nonmatchings/game/801A217C", D_80171708);
+INCLUDE_RODATA("asm/nonmatchings/game/801A217C", sound_str_err_alloc_se_header);
 
-INCLUDE_RODATA("asm/nonmatchings/game/801A217C", D_80171724);
+INCLUDE_RODATA("asm/nonmatchings/game/801A217C", sound_str_err_vab_head);
 
-INCLUDE_RODATA("asm/nonmatchings/game/801A217C", D_8017173C);
+INCLUDE_RODATA("asm/nonmatchings/game/801A217C", sound_str_err_vab_transfer);
 
-void sound_se_push(Unk_801A217C *bank) {
+void sound_se_push(SeVabStream *bank) {
     SceneTables *tables = &object_scene_tables;
-    Unk_801E02DC *se;
+    SeBank *se;
     s32 i;
 
     se = kaj_malloc(0xC);
     if (se == NULL) {
         kaj_abend(3, "Error Allocating SE Pointer", sound_str_file, 0xD1);
     }
-    se->unk0 = bank->unk14;
-    se->unk2 = bank->unk16;
-    se->unk4 = bank->unk18;
-    se->unk6 = bank->unk1A;
-    se->unk8 = bank->unk4;
+    se->vab_id = bank->vab_id;
+    se->tone_count = bank->tone_count;
+    se->bank_id = bank->bank_id;
+    se->scene_bank = bank->scene_bank;
+    se->vab_head = bank->head;
     if (tables->se_bank_count == 0) {
         for (i = 0; i < 8; i++) {
-            sound_voice_table[i].unk2 = -1;
-            sound_voice_table[i].unk4 = -1;
-            sound_voice_table[i].unk6 = -1;
-            sound_voice_table[i].unk8 = -1;
-            sound_voice_table[i].unkA = -1;
-            sound_voice_table[i].unkC = -1;
-            sound_voice_table[i].unkE = 0;
-            sound_voice_table[i].unk12 = 0;
-            sound_voice_table[i].unk10 = 0;
+            sound_voice_table[i].se_id = -1;
+            sound_voice_table[i].prog = -1;
+            sound_voice_table[i].tone = -1;
+            sound_voice_table[i].note = -1;
+            sound_voice_table[i].bank_id = -1;
+            sound_voice_table[i].voice = -1;
+            sound_voice_table[i].keyed_on = 0;
+            sound_voice_table[i].pinned = 0;
+            sound_voice_table[i].priority = 0;
         }
     }
     tables->se_banks[tables->se_bank_count++] = se;
@@ -136,32 +122,32 @@ void sound_se_push(Unk_801A217C *bank) {
 
 void sound_se_pop(void) {
     SceneTables *tables = &object_scene_tables;
-    Unk_801E02DC *se;
+    SeBank *se;
     s32 i;
 
     if (tables->se_bank_count != 0) {
         se = tables->se_banks[--tables->se_bank_count];
         if (se != NULL) {
             for (i = 0; i < 8; i++) {
-                if (sound_voice_table[i].unkA == se->unk4 && sound_voice_table[i].unkC >= 0) {
-                    if (sound_voice_table[i].unkE != 0) {
-                        SsUtKeyOffV(sound_voice_table[i].unkC);
+                if (sound_voice_table[i].bank_id == se->bank_id && sound_voice_table[i].voice >= 0) {
+                    if (sound_voice_table[i].keyed_on != 0) {
+                        SsUtKeyOffV(sound_voice_table[i].voice);
                     }
-                    sound_voice_table[i].unk2 = -1;
-                    sound_voice_table[i].unk4 = -1;
-                    sound_voice_table[i].unk6 = -1;
-                    sound_voice_table[i].unk8 = -1;
-                    sound_voice_table[i].unkA = -1;
-                    sound_voice_table[i].unkC = -1;
-                    sound_voice_table[i].unkE = 0;
-                    sound_voice_table[i].unk12 = 0;
-                    sound_voice_table[i].unk10 = 0;
+                    sound_voice_table[i].se_id = -1;
+                    sound_voice_table[i].prog = -1;
+                    sound_voice_table[i].tone = -1;
+                    sound_voice_table[i].note = -1;
+                    sound_voice_table[i].bank_id = -1;
+                    sound_voice_table[i].voice = -1;
+                    sound_voice_table[i].keyed_on = 0;
+                    sound_voice_table[i].pinned = 0;
+                    sound_voice_table[i].priority = 0;
                 }
             }
-            if (se->unk0 >= 0) {
-                SsVabClose(se->unk0);
+            if (se->vab_id >= 0) {
+                SsVabClose(se->vab_id);
             }
-            free3((void *)se->unk8);
+            free3((void *)se->vab_head);
             free3(se);
             tables->se_banks[tables->se_bank_count] = NULL;
         }
@@ -170,33 +156,33 @@ void sound_se_pop(void) {
 
 void sound_se_pop_scene(void) {
     SceneTables *tables = &object_scene_tables;
-    Unk_801E02DC *se;
+    SeBank *se;
     s32 i;
 
     if (tables->se_bank_count != 0) {
         se = tables->se_banks[tables->se_bank_count - 1];
-        while (se->unk6 > 0) {
+        while (se->scene_bank > 0) {
             if (se != NULL) {
                 for (i = 0; i < 8; i++) {
-                    if (sound_voice_table[i].unkA == se->unk4 && sound_voice_table[i].unkC >= 0) {
-                        if (sound_voice_table[i].unkE != 0) {
-                            SsUtKeyOffV(sound_voice_table[i].unkC);
+                    if (sound_voice_table[i].bank_id == se->bank_id && sound_voice_table[i].voice >= 0) {
+                        if (sound_voice_table[i].keyed_on != 0) {
+                            SsUtKeyOffV(sound_voice_table[i].voice);
                         }
-                        sound_voice_table[i].unk2 = -1;
-                        sound_voice_table[i].unk4 = -1;
-                        sound_voice_table[i].unk6 = -1;
-                        sound_voice_table[i].unk8 = -1;
-                        sound_voice_table[i].unkA = -1;
-                        sound_voice_table[i].unkC = -1;
-                        sound_voice_table[i].unkE = 0;
-                        sound_voice_table[i].unk12 = 0;
-                        sound_voice_table[i].unk10 = 0;
+                        sound_voice_table[i].se_id = -1;
+                        sound_voice_table[i].prog = -1;
+                        sound_voice_table[i].tone = -1;
+                        sound_voice_table[i].note = -1;
+                        sound_voice_table[i].bank_id = -1;
+                        sound_voice_table[i].voice = -1;
+                        sound_voice_table[i].keyed_on = 0;
+                        sound_voice_table[i].pinned = 0;
+                        sound_voice_table[i].priority = 0;
                     }
                 }
-                if (se->unk0 >= 0) {
-                    SsVabClose(se->unk0);
+                if (se->vab_id >= 0) {
+                    SsVabClose(se->vab_id);
                 }
-                free3((void *)se->unk8);
+                free3((void *)se->vab_head);
                 free3(se);
                 tables->se_banks[--tables->se_bank_count] = NULL;
                 se = tables->se_banks[tables->se_bank_count - 1];
@@ -209,14 +195,14 @@ void sound_se_stop_all(void) {
     s32 i;
 
     for (i = 0; i < 8; i++) {
-        if (sound_voice_table[i].unkE != 0) {
-            sound_voice_table[i].unkE = 0;
-            if (sound_voice_table[i].unk12 != 0) {
-                sound_voice_table[i].unk10 = 0;
+        if (sound_voice_table[i].keyed_on != 0) {
+            sound_voice_table[i].keyed_on = 0;
+            if (sound_voice_table[i].pinned != 0) {
+                sound_voice_table[i].priority = 0;
             } else {
-                sound_voice_table[i].unk10--;
+                sound_voice_table[i].priority--;
             }
-            SsUtKeyOffV(sound_voice_table[i].unkC);
+            SsUtKeyOffV(sound_voice_table[i].voice);
         }
     }
 }
@@ -225,31 +211,31 @@ void sound_se_stop(s32 id) {
     s32 voice;
 
     for (voice = 0; voice < 8; voice++) {
-        if (sound_voice_table[voice].unk0 == 1 && sound_voice_table[voice].unk2 == id) {
+        if (sound_voice_table[voice].from_table == 1 && sound_voice_table[voice].se_id == id) {
             break;
         }
     }
     if (voice != 8) {
-        sound_voice_table[voice].unkE = 0;
-        if (sound_voice_table[voice].unk12 != 0) {
-            sound_voice_table[voice].unk10 = 0;
+        sound_voice_table[voice].keyed_on = 0;
+        if (sound_voice_table[voice].pinned != 0) {
+            sound_voice_table[voice].priority = 0;
         } else {
-            sound_voice_table[voice].unk10--;
+            sound_voice_table[voice].priority--;
         }
-        SsUtKeyOffV(sound_voice_table[voice].unkC);
+        SsUtKeyOffV(sound_voice_table[voice].voice);
     }
 }
 
 void sound_se_play(s32 id) {
     SceneTables *tables = &object_scene_tables;
-    Unk_801D7B58 *ent;
-    Unk_801E02DC *se;
-    Unk_801A2678_820 *tone;
+    SeTableEntry *ent;
+    SeBank *se;
+    VabToneBlock *tone;
     s16 vol[2];
     s32 i;
     s16 pan;
     u8 level;
-    Unk_801A2678_20 *prg;
+    VabProgram *prg;
     s16 min;
     s16 oldest;
 
@@ -257,26 +243,26 @@ void sound_se_play(s32 id) {
     ent = &sound_se_table[id];
     for (i = 0; i < tables->se_bank_count; i++) {
         se = tables->se_banks[i];
-        if (se->unk4 == ent->unk4) {
+        if (se->bank_id == ent->bank_id) {
             break;
         }
     }
     if (i == tables->se_bank_count) {
         return;
     }
-    if (ent->unkC != -1) {
-        vol[0] = ent->unkC;
+    if (ent->vol_l != -1) {
+        vol[0] = ent->vol_l;
     } else {
         vol[0] = 0x7F;
     }
-    if (ent->unkE != -1) {
-        vol[1] = ent->unkE;
+    if (ent->vol_r != -1) {
+        vol[1] = ent->vol_r;
     } else {
         vol[1] = 0x7F;
     }
 
-    level = ((Unk_801A2678 *)se->unk8)->unk18;
-    pan = ((Unk_801A2678 *)se->unk8)->unk19;
+    level = ((VabHeader *)se->vab_head)->master_vol;
+    pan = ((VabHeader *)se->vab_head)->master_pan;
     vol[0] = vol[0] * level >> 7;
     vol[1] = vol[1] * level >> 7;
     if (pan < 0x40) {
@@ -285,9 +271,9 @@ void sound_se_play(s32 id) {
         vol[0] = vol[0] / (pan - 0x40);
     }
 
-    prg = &((Unk_801A2678 *)se->unk8)->unk20[ent->unk6];
-    level = prg->unk1;
-    pan = prg->unk4;
+    prg = &((VabHeader *)se->vab_head)->progs[ent->prog];
+    level = prg->vol;
+    pan = prg->pan;
     vol[0] = vol[0] * level >> 7;
     vol[1] = vol[1] * level >> 7;
     if (pan < 0x40) {
@@ -296,15 +282,15 @@ void sound_se_play(s32 id) {
         vol[0] = vol[0] / (pan - 0x40);
     }
 
-    tone = ((Unk_801A2678 *)se->unk8)->unk820;
-    for (i = 0; i < ((Unk_801A2678 *)se->unk8)->unk12; i++, tone++) {
-        if (tone->unk14 == ent->unk6) {
+    tone = ((VabHeader *)se->vab_head)->tones;
+    for (i = 0; i < ((VabHeader *)se->vab_head)->prog_count; i++, tone++) {
+        if (tone->prog == ent->prog) {
             break;
         }
     }
-    if (i < ((Unk_801A2678 *)se->unk8)->unk12) {
-        level = tone->unk2;
-        pan = tone->unk3;
+    if (i < ((VabHeader *)se->vab_head)->prog_count) {
+        level = tone->vol;
+        pan = tone->pan;
         vol[0] = vol[0] * level >> 7;
         vol[1] = vol[1] * level >> 7;
         if (pan < 0x40) {
@@ -315,7 +301,7 @@ void sound_se_play(s32 id) {
     }
 
     for (i = 0; i < 8; i++) {
-        if (sound_voice_table[i].unk0 == 1 && sound_voice_table[i].unk2 == id) {
+        if (sound_voice_table[i].from_table == 1 && sound_voice_table[i].se_id == id) {
             break;
         }
     }
@@ -323,12 +309,12 @@ void sound_se_play(s32 id) {
         min = 0x7FFF;
         oldest = -1;
         for (i = 0; i < 8; i++) {
-            if (sound_voice_table[i].unkC == -1) {
+            if (sound_voice_table[i].voice == -1) {
                 break;
             }
-            if (sound_voice_table[i].unk10 < min) {
+            if (sound_voice_table[i].priority < min) {
                 oldest = i;
-                min = sound_voice_table[i].unk10;
+                min = sound_voice_table[i].priority;
             }
         }
         if (i == 8) {
@@ -336,41 +322,41 @@ void sound_se_play(s32 id) {
             if (oldest != -1) {
                 i = oldest;
             }
-            sound_voice_table[i].unk10 = 0;
-            SsUtKeyOffV(sound_voice_table[i].unkC);
+            sound_voice_table[i].priority = 0;
+            SsUtKeyOffV(sound_voice_table[i].voice);
         }
-        sound_voice_table[i].unk0 = 1;
-        sound_voice_table[i].unk2 = id;
-        sound_voice_table[i].unkA = se->unk4;
-        sound_voice_table[i].unkC = SsUtKeyOnV(i, se->unk0, ent->unk6, ent->unk8, ent->unkA, 0, vol[0], vol[1]);
-        sound_voice_table[i].unkE = 1;
-        sound_voice_table[i].unk12 = ent->unk10;
-        if (ent->unk10 != 0) {
-            sound_voice_table[i].unk10 = 0x7FFF;
+        sound_voice_table[i].from_table = 1;
+        sound_voice_table[i].se_id = id;
+        sound_voice_table[i].bank_id = se->bank_id;
+        sound_voice_table[i].voice = SsUtKeyOnV(i, se->vab_id, ent->prog, ent->tone, ent->note, 0, vol[0], vol[1]);
+        sound_voice_table[i].keyed_on = 1;
+        sound_voice_table[i].pinned = ent->pinned;
+        if (ent->pinned != 0) {
+            sound_voice_table[i].priority = 0x7FFF;
         } else {
-            sound_voice_table[i].unk10++;
+            sound_voice_table[i].priority++;
         }
     } else {
-        if (sound_voice_table[i].unkE != 0) {
-            SsUtKeyOffV(sound_voice_table[i].unkC);
+        if (sound_voice_table[i].keyed_on != 0) {
+            SsUtKeyOffV(sound_voice_table[i].voice);
         }
-        sound_voice_table[i].unkC = SsUtKeyOnV(sound_voice_table[i].unkC, se->unk0, ent->unk6, ent->unk8, ent->unkA, 0, vol[0], vol[1]);
-        if (sound_voice_table[i].unk12 == 0) {
-            sound_voice_table[i].unk10++;
+        sound_voice_table[i].voice = SsUtKeyOnV(sound_voice_table[i].voice, se->vab_id, ent->prog, ent->tone, ent->note, 0, vol[0], vol[1]);
+        if (sound_voice_table[i].pinned == 0) {
+            sound_voice_table[i].priority++;
         }
     }
 }
 
 void sound_se_play_note(s16 bank_id, s16 prog, s16 tone_no, s16 note, s16 vol_l, s16 vol_r, s16 pin) {
     SceneTables *tables = &object_scene_tables;
-    Unk_801E02DC *se;
-    Unk_801A2C60_820 *tone;
+    SeBank *se;
+    VabToneBlock *tone;
     s16 vol[2];
     s16 flag;
     s32 i;
     s16 pan;
     u8 level;
-    Unk_801A2C60_20 *prg;
+    VabProgram *prg;
     s16 min;
     s16 oldest;
 
@@ -380,15 +366,15 @@ void sound_se_play_note(s16 bank_id, s16 prog, s16 tone_no, s16 note, s16 vol_l,
     flag = pin;
     for (i = 0; i < tables->se_bank_count; i++) {
         se = tables->se_banks[i];
-        if (se->unk4 == bank_id) {
+        if (se->bank_id == bank_id) {
             break;
         }
     }
     if (i == tables->se_bank_count) {
         return;
     }
-    level = ((Unk_801A2C60 *)se->unk8)->unk18;
-    pan = ((Unk_801A2C60 *)se->unk8)->unk19;
+    level = ((VabHeader *)se->vab_head)->master_vol;
+    pan = ((VabHeader *)se->vab_head)->master_pan;
     vol[0] = vol[0] * level >> 7;
     vol[1] = vol[1] * level >> 7;
     if (pan < 0x40) {
@@ -397,9 +383,9 @@ void sound_se_play_note(s16 bank_id, s16 prog, s16 tone_no, s16 note, s16 vol_l,
         vol[0] = vol[0] / (pan - 0x40);
     }
 
-    prg = &((Unk_801A2C60 *)se->unk8)->unk20[prog];
-    level = prg->unk1;
-    pan = prg->unk4;
+    prg = &((VabHeader *)se->vab_head)->progs[prog];
+    level = prg->vol;
+    pan = prg->pan;
     vol[0] = vol[0] * level >> 7;
     vol[1] = vol[1] * level >> 7;
     if (pan < 0x40) {
@@ -408,15 +394,15 @@ void sound_se_play_note(s16 bank_id, s16 prog, s16 tone_no, s16 note, s16 vol_l,
         vol[0] = vol[0] / (pan - 0x40);
     }
 
-    tone = ((Unk_801A2C60 *)se->unk8)->unk820;
-    for (i = 0; i < ((Unk_801A2C60 *)se->unk8)->unk12; i++, tone++) {
-        if (tone->unk14 == prog) {
+    tone = ((VabHeader *)se->vab_head)->tones;
+    for (i = 0; i < ((VabHeader *)se->vab_head)->prog_count; i++, tone++) {
+        if (tone->prog == prog) {
             break;
         }
     }
-    if (i < ((Unk_801A2C60 *)se->unk8)->unk12) {
-        level = tone->unk2;
-        pan = tone->unk3;
+    if (i < ((VabHeader *)se->vab_head)->prog_count) {
+        level = tone->vol;
+        pan = tone->pan;
         vol[0] = vol[0] * level >> 7;
         vol[1] = vol[1] * level >> 7;
         if (pan < 0x40) {
@@ -427,7 +413,7 @@ void sound_se_play_note(s16 bank_id, s16 prog, s16 tone_no, s16 note, s16 vol_l,
     }
 
     for (i = 0; i < 8; i++) {
-        if (sound_voice_table[i].unk0 == 0 && sound_voice_table[i].unk4 == prog && sound_voice_table[i].unk6 == tone_no && sound_voice_table[i].unk8 == note) {
+        if (sound_voice_table[i].from_table == 0 && sound_voice_table[i].prog == prog && sound_voice_table[i].tone == tone_no && sound_voice_table[i].note == note) {
             break;
         }
     }
@@ -435,12 +421,12 @@ void sound_se_play_note(s16 bank_id, s16 prog, s16 tone_no, s16 note, s16 vol_l,
         min = 0x7FFF;
         oldest = -1;
         for (i = 0; i < 8; i++) {
-            if (sound_voice_table[i].unkC == -1) {
+            if (sound_voice_table[i].voice == -1) {
                 break;
             }
-            if (sound_voice_table[i].unk10 < min) {
+            if (sound_voice_table[i].priority < min) {
                 oldest = i;
-                min = sound_voice_table[i].unk10;
+                min = sound_voice_table[i].priority;
             }
         }
         if (i == 8) {
@@ -448,49 +434,49 @@ void sound_se_play_note(s16 bank_id, s16 prog, s16 tone_no, s16 note, s16 vol_l,
             if (oldest != -1) {
                 i = oldest;
             }
-            sound_voice_table[i].unk10 = 0;
-            SsUtKeyOffV(sound_voice_table[i].unkC);
+            sound_voice_table[i].priority = 0;
+            SsUtKeyOffV(sound_voice_table[i].voice);
         }
-        sound_voice_table[i].unk0 = 0;
-        sound_voice_table[i].unk4 = prog;
-        sound_voice_table[i].unk6 = tone_no;
-        sound_voice_table[i].unk8 = note;
-        sound_voice_table[i].unkA = se->unk4;
-        sound_voice_table[i].unkC = SsUtKeyOnV(i, se->unk0, prog, tone_no, note, 0, vol[0], vol[1]);
-        sound_voice_table[i].unkE = 1;
-        sound_voice_table[i].unk12 = flag;
+        sound_voice_table[i].from_table = 0;
+        sound_voice_table[i].prog = prog;
+        sound_voice_table[i].tone = tone_no;
+        sound_voice_table[i].note = note;
+        sound_voice_table[i].bank_id = se->bank_id;
+        sound_voice_table[i].voice = SsUtKeyOnV(i, se->vab_id, prog, tone_no, note, 0, vol[0], vol[1]);
+        sound_voice_table[i].keyed_on = 1;
+        sound_voice_table[i].pinned = flag;
         if (flag != 0) {
-            sound_voice_table[i].unk10 = 0x7FFF;
+            sound_voice_table[i].priority = 0x7FFF;
         } else {
-            sound_voice_table[i].unk10++;
+            sound_voice_table[i].priority++;
         }
     } else {
-        if (sound_voice_table[i].unkE != 0) {
-            SsUtKeyOffV(sound_voice_table[i].unkC);
+        if (sound_voice_table[i].keyed_on != 0) {
+            SsUtKeyOffV(sound_voice_table[i].voice);
         }
-        sound_voice_table[i].unkC = SsUtKeyOnV(sound_voice_table[i].unkC, se->unk0, prog, tone_no, note, 0, vol[0], vol[1]);
+        sound_voice_table[i].voice = SsUtKeyOnV(sound_voice_table[i].voice, se->vab_id, prog, tone_no, note, 0, vol[0], vol[1]);
         if (flag == 0) {
-            sound_voice_table[i].unk10++;
+            sound_voice_table[i].priority++;
         }
     }
 }
 
-void sound_exec_command(Unk_801A324C *cmd) {
+void sound_exec_command(Action *cmd) {
     s32 bank_id, prog, tone_no, note, e, vol_l, vol_r, pin;
 
-    if (cmd->unk4 >= 5) {
-        bank_id = atoi(cmd->unk8[0]);
-        prog = atoi(cmd->unk8[1]);
-        tone_no = atoi(cmd->unk8[2]);
-        note = atoi(cmd->unk8[3]);
-        e = atoi(cmd->unk8[4]);
-        if (cmd->unk4 == 8) {
-            vol_l = atoi(cmd->unk8[5]);
-            vol_r = atoi(cmd->unk8[6]);
-            pin = atoi(cmd->unk8[7]);
-        } else if (cmd->unk4 == 7) {
-            vol_l = atoi(cmd->unk8[5]);
-            vol_r = atoi(cmd->unk8[6]);
+    if (cmd->argc >= 5) {
+        bank_id = atoi(cmd->args[0]);
+        prog = atoi(cmd->args[1]);
+        tone_no = atoi(cmd->args[2]);
+        note = atoi(cmd->args[3]);
+        e = atoi(cmd->args[4]);
+        if (cmd->argc == 8) {
+            vol_l = atoi(cmd->args[5]);
+            vol_r = atoi(cmd->args[6]);
+            pin = atoi(cmd->args[7]);
+        } else if (cmd->argc == 7) {
+            vol_l = atoi(cmd->args[5]);
+            vol_r = atoi(cmd->args[6]);
             pin = 0;
         } else {
             vol_l = 0x7F;
@@ -501,13 +487,13 @@ void sound_exec_command(Unk_801A324C *cmd) {
     }
 }
 
-INCLUDE_RODATA("asm/nonmatchings/game/801A217C", D_80171770);
+INCLUDE_RODATA("asm/nonmatchings/game/801A217C", sound_str_err_alloc_bgm_handle);
 
-INCLUDE_RODATA("asm/nonmatchings/game/801A217C", D_8017178C);
+INCLUDE_RODATA("asm/nonmatchings/game/801A217C", sound_str_err_alloc_bgm_buf);
 
 void sound_bgm_open(BgmSep *bgm) {
     SceneTables *tables = &object_scene_tables;
-    Unk_801E02DC *se = NULL;
+    SeBank *se = NULL;
     s32 i;
 
     if (tables->se_bank_count == 0) {
@@ -515,7 +501,7 @@ void sound_bgm_open(BgmSep *bgm) {
     }
     for (i = 0; i < tables->se_bank_count; i++) {
         se = tables->se_banks[i];
-        if (se->unk4 == 2) {
+        if (se->bank_id == 2) {
             break;
         }
         se = NULL;
@@ -530,17 +516,17 @@ void sound_bgm_open(BgmSep *bgm) {
     if (tables->bgm != NULL) {
         sound_bgm_close();
     }
-    bgm->sep = SsSepOpen((u32 *)bgm->data + 1, se->unk0, bgm->seq_count);
+    bgm->sep = SsSepOpen((u32 *)bgm->data + 1, se->vab_id, bgm->seq_count);
     if (bgm->sep < 0) {
         kaj_abend(8, "Can not Open Specified SEP", sound_str_file, 0x268);
     }
     for (i = 0; i < bgm->seq_count; i++) {
-        SsSepSetVol(bgm->sep, i, kaj_system.unk18, kaj_system.unk18);
+        SsSepSetVol(bgm->sep, i, kaj_system.sep_volume, kaj_system.sep_volume);
     }
     tables->bgm = bgm;
 }
 
-void sound_footstep_update(Unk_801A358C *player) {
+void sound_footstep_update(Player_u801A217C *player) {
     s32 dt = kaj_system_vsync_delta[0];
     s16 period;
     s32 period32;
@@ -554,8 +540,8 @@ void sound_footstep_update(Unk_801A358C *player) {
     }
     switch (sound_footstep_prev_state) {
     case 2:
-        if (player->unk44 == 1 || player->unk44 == 3) {
-            player->unk4C = 0;
+        if (player->move_state == 1 || player->move_state == 3) {
+            player->bob_y = 0;
             sound_footstep_clock = 0;
             sound_footstep_count = 0;
             sound_footstep_phase = 0;
@@ -563,16 +549,16 @@ void sound_footstep_update(Unk_801A358C *player) {
         break;
     case 1:
     case 3:
-        if (player->unk44 == 2) {
-            player->unk4C = 0;
+        if (player->move_state == 2) {
+            player->bob_y = 0;
             sound_footstep_clock = 0;
             sound_footstep_count = 0;
             sound_footstep_phase = 0;
         }
         break;
     }
-    sound_footstep_prev_state = player->unk44;
-    switch (player->unk44) {
+    sound_footstep_prev_state = player->move_state;
+    switch (player->move_state) {
     case 2:
         period = 15;
         break;
@@ -591,57 +577,57 @@ void sound_footstep_update(Unk_801A358C *player) {
         sound_footstep_phase = period32;
     }
     wrapped = mail_wrap_angle(angle);
-    player->unk4C = rsin((s16)((wrapped << 12) / 360)) * 25 / 4096 + 25;
+    player->bob_y = rsin((s16)((wrapped << 12) / 360)) * 25 / 4096 + 25;
     if (step != sound_footstep_count) {
         sound_se_play(3);
-        player->unk4C = 0;
+        player->bob_y = 0;
         sound_footstep_phase = 0;
     }
     sound_footstep_count = step;
     return;
 reset:
-    player->unk4C = 0;
+    player->bob_y = 0;
     sound_footstep_clock = 0;
     sound_footstep_count = 0;
     sound_footstep_phase = 0;
-    if (player->unk44 == 4) {
+    if (player->move_state == 4) {
         sound_se_play(0xE);
     }
 }
 
-Unk_801A37E4 *sound_se_alloc_header(u16 *src, s32 size, Unk_801A217C *bank) {
+VabHeadCopy *sound_se_alloc_header(u16 *src, s32 size, SeVabStream *bank) {
     SceneTables *tables = &object_scene_tables;
 
     memset(bank, 0, 0x1C);
     if (tables->se_bank_count == 4) {
-        kaj_abend(0xD, D_801716EC, sound_str_file, 0x99);
+        kaj_abend(0xD, sound_str_err_stack_full, sound_str_file, 0x99);
     }
-    bank->unk18 = src[0];
-    bank->unk1A = src[1];
+    bank->bank_id = src[0];
+    bank->scene_bank = src[1];
     src += 2;
-    bank->unkC = size - 4;
-    bank->unk4 = (s32)kaj_malloc(size - 4);
-    if (bank->unk4 == 0) {
-        kaj_abend(3, D_80171708, sound_str_file, 0xA2);
+    bank->head_size = size - 4;
+    bank->head = (s32)kaj_malloc(size - 4);
+    if (bank->head == 0) {
+        kaj_abend(3, sound_str_err_alloc_se_header, sound_str_file, 0xA2);
     }
-    *(Unk_801A37E4 *)bank->unk4 = *(Unk_801A37E4 *)src;
-    bank->unk16 = ((Unk_801A37E4 *)bank->unk4)->unk14;
-    return (Unk_801A37E4 *)bank->unk4 + 1;
+    *(VabHeadCopy *)bank->head = *(VabHeadCopy *)src;
+    bank->tone_count = ((VabHeadCopy *)bank->head)->tone_count;
+    return (VabHeadCopy *)bank->head + 1;
 }
 
 void sound_vab_open_head(VabStream *vab) {
-    if (D_801E02EC[0] == 4) {
-        kaj_abend(0xD, D_801716EC, sound_str_file, 0xB5);
+    if (object_scene_se_bank_count[0] == 4) {
+        kaj_abend(0xD, sound_str_err_stack_full, sound_str_file, 0xB5);
     }
     vab->vab_id = SsVabOpenHead(vab->head, -1);
     if (vab->vab_id < 0) {
-        kaj_abend(8, D_80171724, sound_str_file, 0xB9);
+        kaj_abend(8, sound_str_err_vab_head, sound_str_file, 0xB9);
     }
 }
 
 void sound_vab_transfer(VabStream *vab) {
     if (SsVabTransBodyPartly(vab->body_buf, vab->body_len, vab->vab_id) == -1) {
-        kaj_abend(8, D_8017173C, sound_str_file, 0xC4);
+        kaj_abend(8, sound_str_err_vab_transfer, sound_str_file, 0xC4);
     }
     SsVabTransCompleted(1);
 }
@@ -657,14 +643,14 @@ void sound_se_pop_all(void) {
 void sound_bgm_create(BgmSep **out, u32 size) {
     *out = kaj_malloc(0xC);
     if (*out == NULL) {
-        kaj_abend(3, D_80171770, sound_str_file, 0x241);
+        kaj_abend(3, sound_str_err_alloc_bgm_handle, sound_str_file, 0x241);
     }
     (*out)->sep = -1;
     (*out)->seq = -1;
     (*out)->seq_count = 0;
     (*out)->data = kaj_malloc(size);
     if ((*out)->data == NULL) {
-        kaj_abend(3, D_8017178C, sound_str_file, 0x249);
+        kaj_abend(3, sound_str_err_alloc_bgm_buf, sound_str_file, 0x249);
     }
 }
 
@@ -700,7 +686,7 @@ void sound_bgm_stop(void) {
 
     if (bgm != NULL && bgm->seq >= 0) {
         SsSepStop(bgm->sep, bgm->seq);
-        SsSepSetVol(bgm->sep, bgm->seq, D_801E6DB8[0], D_801E6DB8[0]);
+        SsSepSetVol(bgm->sep, bgm->seq, kaj_system_sep_volume[0], kaj_system_sep_volume[0]);
         bgm->seq = -1;
     }
 }
@@ -708,30 +694,30 @@ void sound_bgm_stop(void) {
 void sound_bgm_fade_out(s32 seconds) {
     GameVars *game = &action_vars;
     BgmSep *bgm = object_scene_tables.bgm;
-    Unk_801A3D74 *node;
+    TssSlot_u801A217C *node;
 
     if (bgm != NULL && bgm->seq >= 0) {
         node = kaj_tss_alloc(4);
-        node->unk22 = 0xD;
-        node->unk24 = D_801E6DB8[0];
-        node->unk26 = 0;
+        node->type = 0xD;
+        node->cur = kaj_system_sep_volume[0];
+        node->target = 0;
         kaj_tss_set_steps(node, seconds * 30);
-        node->unk30 = sound_bgm_fade_step;
-        node->unk34 = sound_bgm_fade_step;
-        *node->unk3C = node->unk22;
-        game->unk244 = kaj_tss_start(node);
+        node->on_step = sound_bgm_fade_step;
+        node->on_end = sound_bgm_fade_step;
+        *node->data = node->type;
+        game->effect_task = kaj_tss_start(node);
     }
 }
 
-void sound_bgm_fade_step(Unk_801A3D74 *task) {
+void sound_bgm_fade_step(TssSlot_u801A217C *task) {
     BgmSep *bgm = object_scene_tables.bgm;
-    s32 volume = (task->unk24 < task->unk26) ? task->unk26 : task->unk24;
+    s32 volume = (task->cur < task->target) ? task->target : task->cur;
 
     SsSepSetVol(bgm->sep, bgm->seq, volume, volume);
 }
 
-void sound_footstep_reset(Unk_801A3DBC *player) {
-    player->unk4C = 0;
+void sound_footstep_reset(Player_u801A217C *player) {
+    player->bob_y = 0;
     sound_footstep_clock = 0;
     sound_footstep_count = 0;
     sound_footstep_phase = 0;

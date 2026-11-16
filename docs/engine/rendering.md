@@ -124,7 +124,7 @@ screens ([player and survival](player-and-survival.md)).
 ## Fog and the time of day
 
 `event_update_daylight` (0x8018A3F8, event.c) sets the far colour from the hour in
-`action_vars.vars[0x3E]` when the light switch `screen_light.unk0[0]` is on:
+`action_vars.vars[0x3E]` when the light switch `screen_light.daylight_on` is on:
 
 | Hour | Far colour | Dark flag |
 | --- | --- | --- |

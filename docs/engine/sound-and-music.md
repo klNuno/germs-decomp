@@ -12,7 +12,7 @@ Two functions of misc.c in [kaj/801CCAF4.c](../../src/kaj/801CCAF4.c) form the k
 
 | Function | Calls |
 | --- | --- |
-| `kaj_sound_init` (0x801CD70C) | `SsInit`, `SsSetTableSize(kaj_sound_seq_table, 1, 3)`, `SsSetTickMode(1)`, `SsStart`, `SsSetMVol(0x7F, 0x7F)`; sets the music volume `kaj_system.unk18` to 0x7F |
+| `kaj_sound_init` (0x801CD70C) | `SsInit`, `SsSetTableSize(kaj_sound_seq_table, 1, 3)`, `SsSetTickMode(1)`, `SsStart`, `SsSetMVol(0x7F, 0x7F)`; sets the music volume `kaj_system.sep_volume` to 0x7F |
 | `kaj_sound_quit` (0x801CD764) | `SsEnd`, `SsQuit`; nothing in the game calls it |
 
 `SsSetTableSize` with 1 and 3 leaves room for one SEP of three sequences, which is the limit

@@ -57,7 +57,7 @@ resolves the player's shot (`player_shoot_target`, 0x80198720), then for each ac
 | flag 0x400 | 5 | `ai_fire` (0x8017917C) when the animation reaches its fire frame |
 | flag 0x200 / 0x100 | 2 / 1 | stand, or `ai_update_move` with mode 2 |
 
-The flags at 0x100 and above win over the state. A death set numbered 1000 raises `D_801DFC5C` while it runs. At the
+The flags at 0x100 and above win over the state. A death set numbered 1000 raises `npc_death_set_1000` while it runs. At the
 end the frame picks the player's next target (`player_pick_target`, 0x801985AC) and clears the two alert flags
 (below). Talking to a person (trigger kind 0xFC) goes through `action_run_npc_event` (0x801752F4): a dead person
 runs set 0x400, a hostile one never talks, others run the talk set on enter and the leave set on leave.
@@ -78,7 +78,7 @@ Opcode 1 of an action calls `npc_exec_command` (0x80175CD8) on the person whose 
 
 `ai_find_target` (0x8017726C) is the eyes. A person sees the player only if the player is inside its block's arena
 ([town and vehicles](town-and-vehicles.md#the-arena)) and one of three things holds: a door started moving this
-frame (`D_801DFC74`), the player made a weapon sound (`D_801DFC76`, set by `player_weapon_sound`, 0x80199A94), or
+frame (`ai_door_noise`), the player made a weapon sound (`ai_weapon_noise`, set by `player_weapon_sound`, 0x80199A94), or
 the player is in front of it (`ai_player_in_front`, 0x80177110). Then `ai_check_line` tests the line to the player's
 position 1600 units up. It also looks at the other living people on the same height. With the player seen, flag 4 is
 set when another person stands within 10 degrees of the player's direction; in turn mode 1 the person turns toward
@@ -95,7 +95,7 @@ the last fire decision steers it: 2 (flag 4, someone in the way) tries `ai_sides
 
 `ai_decide_fire` refuses unless the target is the player, the player is inside the person's 10 degree aim cone
 (`ai_in_aim_cone`, 0x80179630) and flag 4 is clear. The range is the distance minus the body radius minus 600. The
-chance starts at stats `unk14` and is scaled by the three ranges of the stats (`unk18`, `unk1C`, `unk20`, times 10):
+chance starts at stats `fire_chance` and is scaled by the three ranges of the stats (`range_min`, `range_mid`, `range_max`, times 10):
 between the first two it falls from full to nothing, between the second and the third it is (third minus range)
 divided by (third minus first), beyond the third a random scale below 411/4096 applies, and under the first the
 chance is 10. It fires when the chance is at least a roll of 100.
@@ -137,7 +137,7 @@ coordinate units (`player_shoot_target`, 0x80198720, multiplies each by 10 befor
 
 ## Damage and death
 
-`npc_apply_damage` (0x80175FA8) takes a class, a damage and a miss flag. Stats `unk4` 1 makes the person hostile and
+`npc_apply_damage` (0x80175FA8) takes a class, a damage and a miss flag. Stats `on_hit` 1 makes the person hostile and
 drops a scripted walk, 2 makes it hostile and walking. A miss sets flag 0x1000. Otherwise the defence roll is a
 random number below stats `defence` (0x7FFF means immune), cut to two thirds unless the stats `resist_types` bit for
 the weapon class (1 << class) is set. What is left comes off the hit points and gives twice its value as class

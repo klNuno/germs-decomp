@@ -1,139 +1,111 @@
 #include "common.h"
 #include "game/types.h"
 
-void kaj_ll_insert_before(ModelList *arg0, s32 arg1);
-void kaj_ll_insert_after(ModelList *arg0, s32 arg1);
+void kaj_ll_insert_before(ModelList *list, s32 data);
+void kaj_ll_insert_after(ModelList *list, s32 data);
 ModelList *mod_list;
 extern SceneTables object_scene_tables;
 void free3(void *ptr);
+/* Model seen by mod_finish_handler: id and kind are loaded unsigned here (Model's s16 fields give lh). */
 typedef struct {
-    u16 unk0;
-    u16 unk2;
-    u8 unk4[0xC];
-    s16 unk10;
-    u8 unk12[0x4];
-    s16 unk16;
-} Unk_801DFF08;
+    u16 id;
+    u16 kind;
+    u8 pad4[0xC];
+    s16 loop;
+    u8 pad12[0x4];
+    s16 anim;
+} ModelFinished;
 extern EventState event_state;
-Unk_801DFF08 *mod_finished;
+ModelFinished *mod_finished;
 void UnDeliverEvent(u32 ev, u32 spec);
-KajEvent *kaj_event_push(s32 arg0);
-void mod_set_anim(void *arg0, s16 arg1, s16 arg2);
+KajEvent *kaj_event_push(s32 type);
+void mod_set_anim(void *mod, s16 anim, s16 frames);
 extern NpcRecord *mod_npcrec_table[];
 extern s16 action_vars[];
-Model *mod_find(u16 arg0);
-void mod_setup(Model *arg0, s32 arg1, s32 arg2, s32 arg3);
-void mod_place_npcrec(NpcRecord *arg0, Model *arg1);
+Model *mod_find(u16 id);
+void mod_setup(Model *mod, s32 parent, s32 kind, s32 anim);
+void mod_place_npcrec(NpcRecord *rec, Model *mod);
 void mod_draw(s32 arg0, Model *arg1, u16 arg2);
 typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    u8 unkC[0x4];
-    s32 unk10;
-    s32 unk14;
-    s32 unk18;
-    u8 unk1C[0x4];
-    s32 unk20;
-    s32 unk24;
-    s32 unk28;
-    u8 unk2C[0x4];
-    s16 unk30;
-    s16 unk32;
-    s16 unk34;
-    u8 unk36[0x2];
-    s16 unk38;
-    s16 unk3A;
-    s16 unk3C;
-    u8 unk3E[0x2];
-    s16 unk40;
-    s16 unk42;
-    s16 unk44;
-    u8 unk46[0x2];
-    NpcRecord *unk48;
-} Unk_8018F958_3C;
-typedef struct {
-    u8 unk0[0x22];
-    s16 unk22;
-    s16 unk24;
-    s16 unk26;
-    s16 unk28;
-    u8 unk2A[0x2];
-    s32 unk2C;
-    void *unk30;
-    void *unk34;
-    void *unk38;
-    Unk_8018F958_3C *unk3C;
-} Unk_8018F958;
-s16 kaj_ll_at_tail(ModelList *arg0);
-Npc *npc_find(s16 arg0, u16 arg1);
-NpcRecord *mod_npcrec_find(u16 arg0);
-void mod_free_by_id(u16 arg0);
-void kaj_ll_remove_to_prev(ModelList *arg0);
+    s32 from_x;
+    s32 from_y;
+    s32 from_z;
+    u8 padC[0x4];
+    s32 to_x;
+    s32 to_y;
+    s32 to_z;
+    u8 pad1C[0x4];
+    s32 delta_x;
+    s32 delta_y;
+    s32 delta_z;
+    u8 pad2C[0x4];
+    s16 from_rot_x;
+    s16 from_rot_y;
+    s16 from_rot_z;
+    u8 pad36[0x2];
+    s16 to_rot_x;
+    s16 to_rot_y;
+    s16 to_rot_z;
+    u8 pad3E[0x2];
+    s16 delta_rot_x;
+    s16 delta_rot_y;
+    s16 delta_rot_z;
+    u8 pad46[0x2];
+    NpcRecord *rec;
+} NpcRecMove;
+s16 kaj_ll_at_tail(ModelList *list);
+Npc *npc_find(s16 by_model, u16 id);
+NpcRecord *mod_npcrec_find(u16 id);
+void mod_free_by_id(u16 id);
+void kaj_ll_remove_to_prev(ModelList *list);
 void mod_npcrec_reset_all(void);
-extern char D_80170A80[];
+extern char mod_str_alloc_model[];
 void *kaj_malloc(u32 size);
-void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
+void kaj_abend(s32 code, char *msg, char *file, s32 line);
 extern char mod_str_file[];
-void mod_list_add(s32 arg0);
-extern char D_80170AA0[];
-void kaj_tmd_unmap(s32 arg0, s32 arg1);
+void mod_list_add(s32 mod);
+extern char mod_str_alloc_buffer[];
+void kaj_tmd_unmap(s32 tmd, s32 base);
 extern s32 kaj_system_vsync_delta[];
-void *kaj_tod_set_packet(void *arg0, void *arg1, s32 *arg2, void *arg3, s32 arg4, s32 arg5);
-void effect_weapon_check_fire_frame(s32 arg0);
-void *kaj_tod_set_frame(u32 arg0, TodFrame *arg1, void *arg2, s32 *arg3, void *arg4, s32 arg5, s32 arg6);
+void *kaj_tod_set_packet(void *packet, void *table, s32 *ids, void *tmd, s32 mode, s32 root_coord);
+void effect_weapon_check_fire_frame(s32 frame);
+void *kaj_tod_set_frame(u32 frame, TodFrame *tod, void *table, s32 *ids, void *tmd, s32 mode, s32 root_coord);
 void EnterCriticalSection(void);
 void ExitCriticalSection(void);
 void DeliverEvent(u32 ev, u32 spec);
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-} Unk_8018E8B8;
 extern Player *player_status_player[];
-void RotMatrix(Unk_8018E8B8 *arg0, void *arg1);
+void RotMatrix(SVector *arg0, void *arg1);
 void GsSetLsMatrix(void *m);
-s16 block_point_on_model(void *arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4);
+s16 block_point_on_model(void *obj, s32 x, s32 y, s32 z, u16 mode);
 typedef struct {
-    u16 unk0;
-    u16 unk2;
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-    s32 unk14;
-} Unk_8018D2DC;
+    u16 id;
+    u16 anim_count;
+    s32 obj_count;
+    s32 tmd_ids_offset;
+    s32 tmd_offset;
+    s32 hit_tmd_offset;
+    s32 tod_offset;
+} ModFileHeader;
 void GsInitCoordinate2(void *super, void *base);
-void kaj_tmd_map(void *arg0);
-void kaj_tmd_load(void *arg0, void *arg1, void *arg2);
-void kaj_tod_init_table(void *arg0, void *arg1, void *arg2, void *arg3, s32 arg4);
-void *kaj_tss_alloc(u32 arg0);
-s32 kaj_tss_start(void *arg0);
-void mod_npcrec_move_step(Unk_8018F958 *arg0);
-void mod_npcrec_move_end(Unk_8018F958 *arg0);
-s16 mail_wrap_angle(s16 a);
+void kaj_tmd_map(void *tmd_file);
+void kaj_tmd_load(void *obj, void *tmd_file, void *coord);
+void kaj_tod_init_table(void *table, void *objs, void *coords, void *params, s32 count);
+void *kaj_tss_alloc(u32 size);
+s32 kaj_tss_start(void *task);
+void mod_npcrec_move_step(TssSlot *task);
+void mod_npcrec_move_end(TssSlot *task);
+s16 mail_wrap_angle(s16 angle);
 s32 ratan2(s32 y, s32 x);
-typedef struct {
-    u16 unk0;
-    u16 unk2;
-    u16 unk4;
-} Unk_8018EED4_0;
-typedef struct {
-    Unk_8018EED4_0 *unk0;
-    s32 unk4;
-    char **unk8;
-} Unk_8018EED4;
 s32 atoi(char *s);
-void mod_set_anim_by_id(u16 arg0, s16 arg1, s16 arg2);
-void mod_npcrec_move_to(NpcRecord *arg0, s32 arg1, s32 arg2, s32 arg3, s16 arg4, s16 arg5, s16 arg6, s32 arg7);
+void mod_set_anim_by_id(u16 id, s16 anim, s16 frames);
+void mod_npcrec_move_to(NpcRecord *rec, s32 x, s32 y, s32 z, s16 rot_x, s16 rot_y, s16 rot_z, s32 seconds);
 
-INCLUDE_RODATA("asm/nonmatchings/game/8018D2DC", D_80170A80);
+INCLUDE_RODATA("asm/nonmatchings/game/8018D2DC", mod_str_alloc_model);
 
-INCLUDE_RODATA("asm/nonmatchings/game/8018D2DC", D_80170AA0);
+INCLUDE_RODATA("asm/nonmatchings/game/8018D2DC", mod_str_alloc_buffer);
 
 void mod_setup(Model *mod, s32 parent, s32 kind, s32 anim) {
-    Unk_8018D2DC *hdr;
+    ModFileHeader *hdr;
     s32 count;
     s32 i;
     s32 j;
@@ -143,21 +115,21 @@ void mod_setup(Model *mod, s32 parent, s32 kind, s32 anim) {
     s32 k;
     s32 *tod;
     s32 *packet;
-    Unk_8018E8B8 rot;
+    SVector rot;
 
     if (mod->ready == 0) {
-        hdr = (Unk_8018D2DC *)mod->data;
+        hdr = (ModFileHeader *)mod->data;
         mod->kind = (u8)kind;
         mod->loop = 0;
-        mod->id = hdr->unk0;
-        mod->anim_count = hdr->unk2;
-        mod->tmd_ids = (s32)mod->data + hdr->unk8;
-        mod->tmd = (s32)mod->data + hdr->unkC;
+        mod->id = hdr->id;
+        mod->anim_count = hdr->anim_count;
+        mod->tmd_ids = (s32)mod->data + hdr->tmd_ids_offset;
+        mod->tmd = (s32)mod->data + hdr->tmd_offset;
         mod->tmd_objects = NULL;
-        count = hdr->unk4;
+        count = hdr->obj_count;
         kaj_tmd_map((void *)mod->tmd);
-        if (hdr->unk10 != 0) {
-            kaj_tmd_load(&mod->tmd_objects, (u8 *)mod->data + hdr->unk10, &mod->coord_flg);
+        if (hdr->hit_tmd_offset != 0) {
+            kaj_tmd_load(&mod->tmd_objects, (u8 *)mod->data + hdr->hit_tmd_offset, &mod->coord_flg);
         }
         mod->obj_table = kaj_malloc(0xC);
         if (mod->obj_table == NULL) {
@@ -179,7 +151,7 @@ void mod_setup(Model *mod, s32 parent, s32 kind, s32 anim) {
         if (mod->tod_table == NULL) {
             kaj_abend(3, "Error Allocating TOD Table", mod_str_file, 0xA0);
         }
-        tod = (s32 *)((u8 *)mod->data + hdr->unk14);
+        tod = (s32 *)((u8 *)mod->data + hdr->tod_offset);
         for (i = 0; i < mod->anim_count; i++) {
             len = *tod++;
             ((s32 **)mod->tod_table)[i] = tod;
@@ -196,9 +168,9 @@ void mod_setup(Model *mod, s32 parent, s32 kind, s32 anim) {
             mod->parent_coord = parent;
             GsInitCoordinate2((void *)parent, &mod->coord_flg);
         }
-        rot.unk0 = 0;
-        rot.unk2 = 0;
-        rot.unk4 = 0;
+        rot.vx = 0;
+        rot.vy = 0;
+        rot.vz = 0;
         RotMatrix(&rot, &mod->coord_m);
         packet = ((s32 **)mod->tod_table)[(u16)anim];
         packet++;
@@ -226,21 +198,21 @@ void mod_create(s16 *data) {
 
     *pp = kaj_malloc(0x94);
     if (*pp == NULL) {
-        kaj_abend(3, D_80170A80, mod_str_file, 0x56);
+        kaj_abend(3, mod_str_alloc_model, mod_str_file, 0x56);
     }
     (*pp)->kind = 3;
     (*pp)->loop = 0;
     (*pp)->ready = 0;
     (*pp)->owns_data = 0;
     (*pp)->playing = 0;
-    (*pp)->unkA = 0;
+    (*pp)->tod_mode = 0;
     (*pp)->frame = -1;
     (*pp)->end_frame = -1;
     mod->data = data;
     id = *data;
     if (id < 0x440) {
         npc = npc_find(1, id);
-        if (npc != NULL && npc->unkF == 6) {
+        if (npc != NULL && npc->state == 6) {
             mod_setup(mod, 0, 0, 8);
         } else {
             mod_setup(mod, 0, 0, 0);
@@ -323,7 +295,7 @@ void mod_free_pooled(void) {
             } else {
                 npc = npc_find(1, mod->id);
                 if (npc != NULL) {
-                    npc->unk4 = 0;
+                    npc->placed = 0;
                 }
             }
             if (mod != NULL) {
@@ -369,7 +341,7 @@ void mod_set_anim(void *mod, s16 anim, s16 frames) {
             tod = kaj_tod_set_packet(tod, ((Model *)mod)->obj_table, (s32 *)((Model *)mod)->tmd_ids, (void *)((Model *)mod)->tmd, 2, ((Model *)mod)->parent_coord);
         }
         ((Model *)mod)->tod_ptr = (s32)tod;
-        ((Model *)mod)->unkA = 2;
+        ((Model *)mod)->tod_mode = 2;
         if (((Model *)mod)->end_frame >= 2) {
             if (frames == 0) {
                 ((Model *)mod)->loop = 0;
@@ -415,20 +387,20 @@ again:
                         effect_weapon_check_fire_frame(mod->frame);
                     }
                     mod->frame++;
-                    mod->tod_ptr = (s32)kaj_tod_set_frame(mod->frame, (TodFrame *)mod->tod_ptr, mod->obj_table, (s32 *)mod->tmd_ids, (void *)mod->tmd, (u16)mod->unkA, mod->parent_coord);
+                    mod->tod_ptr = (s32)kaj_tod_set_frame(mod->frame, (TodFrame *)mod->tod_ptr, mod->obj_table, (s32 *)mod->tmd_ids, (void *)mod->tmd, (u16)mod->tod_mode, mod->parent_coord);
                     cnt--;
                     if (cnt > 0) {
                         goto again;
                     }
                 } else {
-                    mod->tod_ptr = (s32)kaj_tod_set_frame(mod->end_frame, (TodFrame *)mod->tod_ptr, mod->obj_table, (s32 *)mod->tmd_ids, (void *)mod->tmd, (u16)mod->unkA, mod->parent_coord);
+                    mod->tod_ptr = (s32)kaj_tod_set_frame(mod->end_frame, (TodFrame *)mod->tod_ptr, mod->obj_table, (s32 *)mod->tmd_ids, (void *)mod->tmd, (u16)mod->tod_mode, mod->parent_coord);
                     kind = (u16)mod->kind;
                     mod->playing = 0;
                     mod->frame = -1;
                     mod->end_frame = -1;
                     if (kind != 0 && (kind != 1 || (u16)mod->anim != 5)) {
                         EnterCriticalSection();
-                        mod_finished = (Unk_801DFF08 *)mod;
+                        mod_finished = (ModelFinished *)mod;
                         DeliverEvent(0xF3000002, 2);
                         ExitCriticalSection();
                     }
@@ -445,20 +417,20 @@ again:
 void mod_alloc(Model **out, u32 data_size) {
     *out = kaj_malloc(0x94);
     if (*out == NULL) {
-        kaj_abend(3, D_80170A80, mod_str_file, 0x56);
+        kaj_abend(3, mod_str_alloc_model, mod_str_file, 0x56);
     }
     (*out)->kind = 3;
     (*out)->loop = 0;
     (*out)->ready = 0;
     (*out)->owns_data = 0;
     (*out)->playing = 0;
-    (*out)->unkA = 0;
+    (*out)->tod_mode = 0;
     (*out)->frame = -1;
     (*out)->end_frame = -1;
     if (data_size != 0) {
         (*out)->data = kaj_malloc(data_size);
         if ((*out)->data == NULL) {
-            kaj_abend(3, D_80170AA0, mod_str_file, 0x64);
+            kaj_abend(3, mod_str_alloc_buffer, mod_str_file, 0x64);
         }
         (*out)->owns_data = 1;
     }
@@ -519,7 +491,7 @@ void mod_on_data_free(s16 *data) {
         } else {
             npc = npc_find(1, id);
             if (npc != NULL) {
-                npc->unk4 = 0;
+                npc->placed = 0;
             }
         }
     }
@@ -657,10 +629,10 @@ s32 mod_finish_handler(void) {
     UnDeliverEvent(0xF3000002, 2);
     e = kaj_event_push(0x200);
     if (e != NULL) {
-        e->param0 = mod_finished->unk0;
-        e->param1 = mod_finished->unk2;
+        e->param0 = mod_finished->id;
+        e->param1 = mod_finished->kind;
     }
-    if (mod_finished->unk2 == 2) {
+    if (mod_finished->kind == 2) {
         if (s->wait_flags & 8) {
             s->wait_flags &= ~8;
             if (s->wait_flags == 0) {
@@ -668,38 +640,38 @@ s32 mod_finish_handler(void) {
             }
         }
     }
-    if (mod_finished->unk10 != 0) {
-        mod_finished->unk10 = 0;
-        mod_set_anim(mod_finished, mod_finished->unk16, -1);
+    if (mod_finished->loop != 0) {
+        mod_finished->loop = 0;
+        mod_set_anim(mod_finished, mod_finished->anim, -1);
     }
     return 0;
 }
 
 void mod_place_npcrec(NpcRecord *rec, Model *mod) {
     Player *player = player_status_player[0];
-    Unk_8018E8B8 rot;
+    SVector rot;
 
     mod->coord_tx = rec->pos_x - player->cell_x * 12500;
     mod->coord_ty = rec->pos_y + player->cell_y * 32000;
     mod->coord_tz = rec->pos_z - player->cell_z * 12500;
-    rot.unk0 = (rec->rot_x << 12) / 360;
-    rot.unk2 = (rec->rot_y << 12) / 360;
-    rot.unk4 = (rec->rot_z << 12) / 360;
+    rot.vx = (rec->rot_x << 12) / 360;
+    rot.vy = (rec->rot_y << 12) / 360;
+    rot.vz = (rec->rot_z << 12) / 360;
     RotMatrix(&rot, mod->coord_m);
     mod->coord_flg = 0;
 }
 
-void mod_npcrec_move_step(Unk_8018F958 *task) {
-    Unk_8018F958_3C *move = task->unk3C;
-    NpcRecord *rec = move->unk48;
+void mod_npcrec_move_step(TssSlot *task) {
+    NpcRecMove *move = task->data;
+    NpcRecord *rec = move->rec;
     Model *mod;
 
-    rec->pos_x = move->unk0 + move->unk20 * task->unk24 / task->unk26;
-    rec->pos_y = move->unk4 + move->unk24 * task->unk24 / task->unk26;
-    rec->pos_z = move->unk8 + move->unk28 * task->unk24 / task->unk26;
-    rec->rot_x = move->unk30 + move->unk40 * task->unk24 / task->unk26;
-    rec->rot_y = move->unk32 + move->unk42 * task->unk24 / task->unk26;
-    rec->rot_z = move->unk34 + move->unk44 * task->unk24 / task->unk26;
+    rec->pos_x = move->from_x + move->delta_x * task->cur / task->target;
+    rec->pos_y = move->from_y + move->delta_y * task->cur / task->target;
+    rec->pos_z = move->from_z + move->delta_z * task->cur / task->target;
+    rec->rot_x = move->from_rot_x + move->delta_rot_x * task->cur / task->target;
+    rec->rot_y = move->from_rot_y + move->delta_rot_y * task->cur / task->target;
+    rec->rot_z = move->from_rot_z + move->delta_rot_z * task->cur / task->target;
     mod = mod_find(rec->model);
     if (mod != NULL) {
         mod_place_npcrec(rec, mod);
@@ -707,64 +679,64 @@ void mod_npcrec_move_step(Unk_8018F958 *task) {
 }
 
 void mod_npcrec_move_to(NpcRecord *rec, s32 x, s32 y, s32 z, s16 rot_x, s16 rot_y, s16 rot_z, s32 seconds) {
-    Unk_8018F958 *task;
-    Unk_8018F958_3C *move;
+    TssSlot *task;
+    NpcRecMove *move;
 
     task = kaj_tss_alloc(0x4C);
-    task->unk22 = 5;
-    task->unk28 = 1;
-    task->unk2C = 2;
-    task->unk30 = mod_npcrec_move_step;
-    task->unk24 = 0;
-    task->unk34 = mod_npcrec_move_end;
-    task->unk38 = mod_npcrec_move_end;
-    task->unk26 = seconds * 30;
+    task->type = 5;
+    task->step = 1;
+    task->delay = 2;
+    task->on_step = mod_npcrec_move_step;
+    task->cur = 0;
+    task->on_end = mod_npcrec_move_end;
+    task->on_kill = mod_npcrec_move_end;
+    task->target = seconds * 30;
     if (rec->pos_x == x && rec->pos_y == y && rec->pos_z == z &&
         rec->rot_x == rot_x && rec->rot_y == rot_y && rec->rot_z == rot_z) {
-        task->unk26 = 0;
+        task->target = 0;
     }
-    move = task->unk3C;
-    move->unk48 = rec;
-    move->unk0 = rec->pos_x;
-    move->unk4 = rec->pos_y;
-    move->unk8 = rec->pos_z;
-    move->unk30 = rec->rot_x;
-    move->unk32 = rec->rot_y;
-    move->unk34 = rec->rot_z;
-    move->unk10 = x;
-    move->unk14 = y;
-    move->unk18 = z;
-    move->unk38 = rot_x;
-    move->unk3A = rot_y;
-    move->unk3C = rot_z;
-    move->unk20 = x - rec->pos_x;
-    move->unk24 = y - rec->pos_y;
-    move->unk28 = z - rec->pos_z;
+    move = task->data;
+    move->rec = rec;
+    move->from_x = rec->pos_x;
+    move->from_y = rec->pos_y;
+    move->from_z = rec->pos_z;
+    move->from_rot_x = rec->rot_x;
+    move->from_rot_y = rec->rot_y;
+    move->from_rot_z = rec->rot_z;
+    move->to_x = x;
+    move->to_y = y;
+    move->to_z = z;
+    move->to_rot_x = rot_x;
+    move->to_rot_y = rot_y;
+    move->to_rot_z = rot_z;
+    move->delta_x = x - rec->pos_x;
+    move->delta_y = y - rec->pos_y;
+    move->delta_z = z - rec->pos_z;
 loop:
-    move->unk40 = rot_x - rec->rot_x;
-    move->unk42 = rot_y - rec->rot_y;
-    move->unk44 = rot_z - rec->rot_z;
-    if (move->unk40 > 180) {
+    move->delta_rot_x = rot_x - rec->rot_x;
+    move->delta_rot_y = rot_y - rec->rot_y;
+    move->delta_rot_z = rot_z - rec->rot_z;
+    if (move->delta_rot_x > 180) {
         rot_x -= 360;
         goto loop;
     }
-    if (move->unk40 < -180) {
+    if (move->delta_rot_x < -180) {
         rot_x += 360;
         goto loop;
     }
-    if (move->unk42 > 180) {
+    if (move->delta_rot_y > 180) {
         rot_y -= 360;
         goto loop;
     }
-    if (move->unk42 < -180) {
+    if (move->delta_rot_y < -180) {
         rot_y += 360;
         goto loop;
     }
-    if (move->unk44 > 180) {
+    if (move->delta_rot_z > 180) {
         rot_z -= 360;
         goto loop;
     }
-    if (move->unk44 < -180) {
+    if (move->delta_rot_z < -180) {
         rot_z += 360;
         goto loop;
     }
@@ -772,11 +744,11 @@ loop:
     rec->moving = 1;
 }
 
-void mod_cmd_npcrec(Unk_8018EED4 *action, Model *event) {
+void mod_cmd_npcrec(Action *action, EventState *event) {
     SceneTables *p = &object_scene_tables;
     NpcRecord *rec = p->npc_records;
-    Unk_8018EED4_0 *cmd = action->unk0;
-    u16 id = cmd->unk4;
+    ActionCmdShort *cmd = (ActionCmdShort *)action->cmd;
+    u16 id = cmd->target;
     NpcRecord *found;
     NpcRecord *shown_rec;
     Model *mod;
@@ -801,16 +773,16 @@ done:
     if (found == NULL) {
         return;
     }
-    switch (cmd->unk2) {
+    switch (cmd->sub) {
     case 0:
-        found->enabled = atoi(action->unk8[0]);
+        found->enabled = atoi(action->args[0]);
         break;
     case 1:
-        found->model = atoi(action->unk8[0]);
+        found->model = atoi(action->args[0]);
         table = mod_npcrec_table[0];
         vars = action_vars;
-        shown_rec = table + cmd->unk4;
-        if (vars[cmd->unk4] == 0) {
+        shown_rec = table + cmd->target;
+        if (vars[cmd->target] == 0) {
             break;
         }
         if (shown_rec->scaled == 0) {
@@ -833,23 +805,23 @@ done:
         shown_rec->shown = 2;
         break;
     case 3:
-        x = atoi(action->unk8[0]) * 10;
-        y = atoi(action->unk8[1]) * 10;
-        z = atoi(action->unk8[2]) * 10;
-        rot_y = atoi(action->unk8[3]);
-        seconds = atoi(action->unk8[4]);
-        if (atoi(action->unk8[5]) == 1) {
-            event->owns_data = 4;
-            event->frame_step |= 0x10;
+        x = atoi(action->args[0]) * 10;
+        y = atoi(action->args[1]) * 10;
+        z = atoi(action->args[2]) * 10;
+        rot_y = atoi(action->args[3]);
+        seconds = atoi(action->args[4]);
+        if (atoi(action->args[5]) == 1) {
+            event->state = 4;
+            event->wait_flags |= 0x10;
         }
         mod_npcrec_move_to(found, x, y, z, 0, rot_y, 0, seconds);
         break;
     case 4:
-        if (atoi(action->unk8[1]) == 1) {
-            event->owns_data = 4;
-            event->frame_step |= 8;
+        if (atoi(action->args[1]) == 1) {
+            event->state = 4;
+            event->wait_flags |= 8;
         }
-        ((void (*)())mod_set_anim_by_id)((s16)found->model, (s16)atoi(action->unk8[0]), (s16)atoi(action->unk8[2]));
+        ((void (*)())mod_set_anim_by_id)((s16)found->model, (s16)atoi(action->args[0]), (s16)atoi(action->args[2]));
         break;
     }
 }
@@ -983,7 +955,7 @@ void mod_npcrec_draw_all(s32 view) {
         if (rec != NULL && rec->scaled != 0 && rec->enabled != 0 && rec->shown == 2) {
             mod = mod_find(rec->model);
             if (mod != NULL && mod->ready != 0) {
-                mod_draw(view, mod, rec->unk4);
+                mod_draw(view, mod, rec->ot_layer);
             }
         }
     }
@@ -1022,18 +994,18 @@ void mod_npcrec_reset_all(void) {
     }
 }
 
-void mod_npcrec_move_end(Unk_8018F958 *task) {
+void mod_npcrec_move_end(TssSlot *task) {
     EventState *s = &event_state;
-    Unk_8018F958_3C *move = task->unk3C;
-    NpcRecord *rec = move->unk48;
+    NpcRecMove *move = task->data;
+    NpcRecord *rec = move->rec;
     Model *mod;
 
-    rec->pos_x = move->unk10;
-    rec->pos_y = move->unk14;
-    rec->pos_z = move->unk18;
-    rec->rot_x = move->unk38;
-    rec->rot_y = move->unk3A;
-    rec->rot_z = move->unk3C;
+    rec->pos_x = move->to_x;
+    rec->pos_y = move->to_y;
+    rec->pos_z = move->to_z;
+    rec->rot_x = move->to_rot_x;
+    rec->rot_y = move->to_rot_y;
+    rec->rot_z = move->to_rot_z;
     rec->moving = 0;
     mod = mod_find(rec->model);
     if (mod != NULL) {

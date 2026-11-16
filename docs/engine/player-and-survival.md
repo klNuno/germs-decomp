@@ -48,7 +48,7 @@ trigger is undone; one with no floor under it falls back on `player_try_slide` (
 2 in a few directions to slide along the wall.
 
 `player_wrap_cell` (0x801958FC) keeps the position inside a cell (12500 on x and z, 32000 on y) and moves the blocks
-and the people with it ([town blocks](town-and-vehicles.md#town-blocks)). In its matching C the map position `unk68`
+and the people with it ([town blocks](town-and-vehicles.md#town-blocks)). In its matching C the map position `world_z`
 adds the x cell shift to z; `player_update_view` (0x80195BC8) recomputes it with the z cell at the end of every mover, so the
 slip likely lasts one step.
 

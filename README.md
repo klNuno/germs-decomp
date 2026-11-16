@@ -32,14 +32,15 @@ Thirty-two findings in [docs/discoveries.md](docs/discoveries.md), sixteen of th
   bytes) stay as Sony shipped them.
 - The map is regenerated after each wave with `tools/progress_map.py` (after `make check`); open it to hover
   each function, `docs/progress/progress.json` holds the same data.
-- Names: 654 of the 655 functions, 95 of Sony's 109 unnamed internals and 265 globals carry names, each
-  with its evidence in `config/symbol_addrs.txt` (`tools/xref.py` builds the cross-references, `tools/rename.py`
-  applies a batch and rechecks the sha1). The structs each source file used to declare on its own are merged
-  into one header, `include/game/types.h`: 77 of its 81 types are named (`PlayerStatus`, `Player`, `Inventory`,
+- Names: all 655 functions, 96 of Sony's 109 unnamed internals and 408 globals carry names, each with its
+  evidence in `config/symbol_addrs.txt` (`tools/xref.py` builds the cross-references, `tools/rename.py` applies a
+  batch and rechecks the sha1). The structs each source file used to declare on its own are merged into one
+  header, `include/game/types.h`, whose 80 types are all named (`PlayerStatus`, `Player`, `Inventory`,
   `GameVars`, `Npc`, `Door`, `Model`, `Block`, `Thing`, `ActionSet`, `WeaponRecord`, `Vehicle` and the developer
-  library's lists, timers and tasks), with about 580 fields named from their readers and from emulator runs. Parameters and locals
-  carry about 2,300 names in place of the compiler's. 203 functions are fully read: no address name, `unk`
-  field, `Unk` type or compiler-made local left in their body. The rules and the glossary are in
+  library's lists, timers and tasks); the types local to one source file are named too, and about 1,250 fields
+  carry names from their readers, their writers and emulator runs. Parameters and locals carry about 2,300
+  names in place of the compiler's. All 635 functions in C are fully read: no address name, `unk` field,
+  `Unk` type or compiler-made local is left in their body. The rules and the glossary are in
   [docs/naming.md](docs/naming.md).
 - Compiler: GCC 2.8.1 with ASPSX 2.56, `-O2 -G8 -funsigned-char`, found by compiling small functions until
   they matched.

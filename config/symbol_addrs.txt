@@ -1,6 +1,7 @@
 // Our own names, with evidence. Sony names live in symbol_addrs.psyq.txt.
-// Address-only splits (no name): a C function reads the second half or the tail as its own symbol.
-D_80171048 = 0x80171048;
+// Address splits (named since wave 4): a C function reads the second half or the tail as its own symbol.
+// one rodata block of Shift-JIS shop lines (order prompts, side offers, topic questions, map and course choices, weapon advice, thanks, purchase confirm); roadmap_shop_texts, roadmap_shop_texts_4 and roadmap_shop_texts_5 point into it
+roadmap_shop_lines = 0x80171048;
 // menu: direction flag of menu_cycle_pos_b; also an address split (a C function reads it as the second half of a pair)
 menu_cycle_dir_b = 0x801DFCA6; // size:0x2
 // its own message "kaj_abend: NULL File Pointer"; prints ERROR CODE, FILE, LINE, MESSAGE, then exit(code)
@@ -2029,3 +2030,289 @@ block_vehicle_surface = 0x8017BBB0; // type:func size:0x174
 block_has_ground_at = 0x8017CFE4; // type:func size:0xFC
 // block.c: returns kaj_cdmgr_state[0] == 0 (no CD read running); thing_field_loop waits on it with elevator_wait
 block_cd_idle = 0x8017D564; // type:func size:0x10
+// string Error Allocating Action Set, kaj_abend in action_load_set
+action_str_err_alloc_set = 0x80170000;
+// string Error Allocating Action Set Property, kaj_abend after the 0x38-byte header allocation
+action_str_err_alloc_set_header = 0x80170028;
+// string Error Allocating Action, kaj_abend after the action array allocation
+action_str_err_alloc_actions = 0x80170050;
+// string Error Allocating Action Property, kaj_abend after the 8-byte command allocation
+action_str_err_alloc_cmd = 0x80170068;
+// string Error Allocating Argument Handle, kaj_abend after the argument pointer array allocation
+action_str_err_alloc_args = 0x8017008C;
+// string Error Allocating Argument Temp Buff, kaj_abend after the argument text allocation
+action_str_err_alloc_arg_buf = 0x801700B0;
+// string Error Allocating BLOCK Pointer, kaj_abend in block_create and block_create_all
+block_str_err_alloc_ptr = 0x80170270;
+// string Error Allocating BLOCK Buffer, kaj_abend in block_create
+block_str_err_alloc_buf = 0x80170290;
+// string Can not set City Mode, kaj_abend when kaj_map_open_city fails
+block_str_err_city_mode = 0x801702B0;
+// string Can not set Building Mode, kaj_abend when kaj_map_open_place fails
+block_str_err_building_mode = 0x801702C8;
+// "Specified Sprite not Found", kaj_abend message of effect_start_sprite_slide and effect_start_sprite_anim
+effect_str_sprite_not_found = 0x80170544;
+// "Error Allocating Flame Image Buffer", kaj_abend message of effect_flame_small_init and effect_flame_large_init
+effect_str_flame_alloc = 0x8017056C;
+// Shift-JIS prompt effect_elevator_update and effect_elevator_on_task_end show: choose the floor with the d-pad
+effect_str_elevator_prompt = 0x80170590;
+// effect_item_use sprintf format (item name) for a drink that restores energy
+effect_str_drank_heal = 0x80170618;
+// effect_item_use sprintf format (item name) for food that restores energy
+effect_str_ate_heal = 0x80170648;
+// effect_item_use sprintf format for a drink with a negative value taken by a human: energy drops
+effect_str_drank_hurt = 0x80170678;
+// same as effect_str_drank_hurt for food
+effect_str_ate_hurt = 0x801706BC;
+// effect_item_use line for a drink taken with the full flag: energy drops
+effect_str_drank_too_much = 0x80170700;
+// effect_item_use line for food taken with the full flag: energy drops
+effect_str_ate_too_much = 0x8017073C;
+// effect_item_use line when energy reaches 255
+effect_str_energy_full = 0x80170778;
+// effect_item_use line for kind 3, value 60, injured: some wounds healed
+effect_str_wound_heal_some = 0x801707A4;
+// effect_item_use line for kind 3, value 60 or 180, not injured
+effect_str_body_lighter = 0x801707B8;
+// effect_item_use line for kind 3, value 180, injured
+effect_str_wound_heal_much = 0x801707CC;
+// effect_item_use line for kind 3, value 360, injured: wounds fully healed
+effect_str_wound_heal_full = 0x801707E0;
+// effect_item_use line for kind 3, value 360, not injured
+effect_str_body_much_lighter = 0x801707F4;
+// Shift-JIS prompt effect_item_input shows when the item menu opens: choose the item with the d-pad
+effect_str_item_prompt = 0x8017080C;
+// "Error Allocating MOD Pointer", kaj_abend message of mod_create and mod_alloc when kaj_malloc(0x94) fails
+mod_str_alloc_model = 0x80170A80;
+// "Error Allocating MOD Buffer", kaj_abend message of mod_alloc when the data buffer allocation fails
+mod_str_alloc_buffer = 0x80170AA0;
+// Shift-JIS prompt text_show displays when the storage box opens (object_room_storage_open, object_room_do_action 0xF0FF14/0xF0FF1E)
+object_room_str_storage = 0x80170E18;
+// the first line player_recover shows: the mutation is cured
+player_str_cured = 0x80170EDC;
+// the second player_recover line, about the body
+player_str_body_light = 0x80170EFC;
+// the third player_recover line, about the wounds
+player_str_wounds_healed = 0x80170F14;
+// Shift-JIS line roadmap_shop_finish (kind 8) and roadmap_shop_say_reply show: points to the owner in the back
+roadmap_shop_ask_owner_line = 0x801715C4;
+// string Error sound stack overflow, kaj_abend when 4 SE banks are already pushed
+sound_str_err_stack_full = 0x801716EC;
+// string Error Allocating SE header, kaj_abend in sound_se_alloc_header
+sound_str_err_alloc_se_header = 0x80171708;
+// string Can not Open VAB Header, kaj_abend when SsVabOpenHead fails
+sound_str_err_vab_head = 0x80171724;
+// string VAB Data Transfer Error, kaj_abend when SsVabTransBodyPartly fails
+sound_str_err_vab_transfer = 0x8017173C;
+// string Error Allocating BGM Handle, kaj_abend in sound_bgm_create
+sound_str_err_alloc_bgm_handle = 0x80171770;
+// string Error Allocating BGM Buffer, kaj_abend in sound_bgm_create
+sound_str_err_alloc_bgm_buf = 0x8017178C;
+// Shift-JIS station line sprite_station_on_enter and sprite_station_show_prompt show on a platform for getting off only
+sprite_station_str_exit_only = 0x80171820;
+// Shift-JIS phone greeting with a d-pad choice that sprite_phone_on_effect_done shows when the phone picture is up
+sprite_phone_str_greeting = 0x8017186C;
+// Shift-JIS confirm line of sprite_phone_update menu choice 1 (move the car)
+sprite_phone_str_move_car = 0x80171900;
+// Shift-JIS confirm line of sprite_phone_update menu choice 2 (someone comes)
+sprite_phone_str_coming = 0x80171938;
+// Shift-JIS follow-up question with a d-pad choice, shown after a choice (sprite_phone_update) and after a save (sprite_phone_run)
+sprite_phone_str_anything_else = 0x8017196C;
+// the string "Error Allocating THING Pointer" thing_create prints
+thing_str_alloc_pointer = 0x801719BC;
+// the string "Error Allocating THING Buffer" thing_create prints
+thing_str_alloc_buffer = 0x801719DC;
+// "Error Allocating VEHICLE Pointer", kaj_abend message of vehicle_create
+vehicle_str_alloc_pointer = 0x80171A78;
+// "Error Allocating VEHICLE Buffer", kaj_abend message of vehicle_create
+vehicle_str_alloc_buffer = 0x80171AA8;
+// "Error Allocating a LL Node", the message kaj_ll_insert_before and kaj_ll_insert_after pass to kaj_abend when kaj_malloc(0xC) fails (the error-name strings of kaj_error_names follow it in the same symbol)
+kaj_ll_str_node_error = 0x80172BB4;
+// "kaj_abend: NULL File Pointer\n", printed by kaj_abend (and its inlined copies in kaj_tmd_load, kaj_tmd_map) when file is NULL
+kaj_misc_str_null_file = 0x80172CA8;
+// "kaj_abend: Illegal Line Number - %d\n", printed by kaj_abend when line < 0
+kaj_misc_str_bad_line = 0x80172CC8;
+// "Undefined Error", the default error name kaj_abend prints when the code is not in kaj_error_names
+kaj_misc_str_undefined_error = 0x80172CF0;
+// "ERROR CODE: %d", the first line kaj_abend prints with the code
+kaj_misc_str_error_code = 0x80172D00;
+// "\n\tFILE: ", printed by kaj_abend before the file name
+kaj_misc_str_file_label = 0x80172D10;
+// "\n\tLINE: %d", printed by kaj_abend with the line
+kaj_misc_str_line_label = 0x80172D1C;
+// "\n\tMESSAGE: ", printed by kaj_abend before the message
+kaj_misc_str_message_label = 0x80172D28;
+// "Crashed TMD or Illegal Data", the message of kaj_tmd_load and kaj_tmd_map when the TMD id is not 0x41
+kaj_misc_str_bad_tmd = 0x80172D34;
+// the string "Assertion failed: file \"%s\", line %d\n" that kaj_cdmgr_init, kaj_cdmgr_load, kaj_cdmgr_load_list, kaj_cdmgr_release and kaj_cdmgr_pool_size printf with kaj_cdmgr_str_file and a line before exit(1)
+kaj_cdmgr_str_assert = 0x80172FD0;
+// shop kind 3 menu list when shop_entry_hour is 8 or 9
+roadmap_shop_list_3_early = 0x801D79F0;
+// shop kind 3 list for hours 10 to 13
+roadmap_shop_list_3_midday = 0x801D79F8;
+// shop kind 3 list for the other hours
+roadmap_shop_list_3_late = 0x801D7A00;
+// shop kind 3 list when var 10 is 2000, with alt_speaker
+roadmap_shop_list_3_changed = 0x801D7A08;
+// shop kind 4 normal list (with roadmap_shop_texts_4)
+roadmap_shop_list_4 = 0x801D7A10;
+// shop kind 4 alt list, used with alt_speaker by var 10 = 2000 or by hour and day parity
+roadmap_shop_list_4_alt = 0x801D7A22;
+// shop kind 5 list
+roadmap_shop_list_5 = 0x801D7A34;
+// shop kind 6 list for hours 11 to 13
+roadmap_shop_list_6_lunch = 0x801D7A48;
+// shop kind 6 list for hours 14 to 16
+roadmap_shop_list_6_afternoon = 0x801D7A50;
+// shop kind 6 list for the other hours
+roadmap_shop_list_6_late = 0x801D7A58;
+// shop kind 6 list when var 10 is 2000, with alt_speaker
+roadmap_shop_list_6_changed = 0x801D7A60;
+// shop kind 8 list, 13 entries, opened on trigger 0x300600
+roadmap_shop_list_8 = 0x801D7A74;
+// roadmap_shop_topic_menu topic 0 list, 14 entries
+roadmap_shop_topic_list_0 = 0x801D7A92;
+// topic 1 list, 15 entries
+roadmap_shop_topic_list_1 = 0x801D7AB0;
+// topic 2 list, 4 entries
+roadmap_shop_topic_list_2 = 0x801D7ACE;
+// menu texts of shop kinds 3, 6 and 7
+roadmap_shop_texts = 0x801D7AEC;
+// menu texts with roadmap_shop_list_4
+roadmap_shop_texts_4 = 0x801D7AF8;
+// menu texts with roadmap_shop_list_4_alt
+roadmap_shop_texts_4_alt = 0x801D7B04;
+// menu texts of shop kind 5
+roadmap_shop_texts_5 = 0x801D7B10;
+// menu texts of shop kind 8
+roadmap_shop_texts_8 = 0x801D7B1C;
+// menu texts of the three topic lists
+roadmap_shop_topic_texts = 0x801D7B20;
+// char *[]: the line shown by roadmap_shop_topic_menu when the topic chooser opens
+roadmap_shop_topic_prompt = 0x801D7B24;
+// menu texts of shop kind 9 (chiropractor, player_recover(500, ...) in block_on_effect_done)
+roadmap_shop_texts_9 = 0x801D7B28;
+// npc_update_all sets it to 1 while it runs a death set numbered 1000 (0 for others); text_exec_command (8017EBF8) tests it, sets player flag 0x100 and clears it
+npc_death_set_1000 = 0x801DFC5C;
+// set by door_start_open and door_start_close; ai_find_target sees the player while it is set (scenes-and-scripts.md)
+ai_door_noise = 0x801DFC74;
+// set by player_weapon_sound, cleared each frame (8017546C); ai_find_target sees the player while it is set (people-and-combat.md)
+ai_weapon_noise = 0x801DFC76;
+// block_load_all and block_stream_update set 1 when the blocks were reloaded; door_update_all and thing_update_all then look up their block again; block_stream_stop clears it
+block_reloaded = 0x801DFC80;
+// block_enter_area stores the area code kind byte (code >> 16); kaj_map_get_entry fills it with the next byte as the place entry's 2 room bytes; kaj_map_update_place reads it
+block_area_kind = 0x801DFC8C;
+// second room byte: 1 small flame, 2 large flame, 3 both (block_set_mode, block_enter_area set GameVars flame_small_on and flame_large_on from it)
+block_area_flames = 0x801DFC8D;
+// block_enter_area stores the low byte of a kind 0x80 area code; no reader in C
+block_area_low = 0x801DFC8E;
+// the string "*" menu_card_scan passes to MemCardGetDirentry
+menu_card_dir_pattern = 0x801DFC90;
+// one fullwidth question mark (Shift-JIS) text_format_number writes for 0 (unknown height or age)
+text_str_unknown = 0x801DFCBC;
+// the text_draw_next result in text_narration_step: 1 when the page is full, then the next step only clears it
+text_narration_page_full = 0x801DFCE6;
+// object_room_init sets it 1 when the scene variant (request unk0[3]) is 1; object_room_quit then calls player_add_hp(0xFF, 0)
+object_room_heal_on_quit = 0x801DFD54;
+// object_room_do_action sets it 1 for computer action 0xFA0002 with a scene change; object_room_on_effect_done clears it on effect 4 and returns 1; object_room_init clears it
+object_room_exit_pending = 0x801DFD56;
+// u16 0x2969, the plain colour of the shop menus (roadmap_shop_open_menu color): the storage yes/no prompt puts it in CLUT entry 5 when it opens and swaps entries 4 and 5 by (&it)[choice]
+object_room_choice_color = 0x801DFD58;
+// u16 0x2BFF, the cursor colour of the shop menus (roadmap_shop_open_menu cursor_color): CLUT entry 4 when the storage prompt opens, read as (&object_room_choice_color)[1] by the choice swap
+object_room_choice_cursor_color = 0x801DFD5A;
+// player_check_ground sets 1 on area code 0xFF with no scene trigger (not walkable); player_move_on_foot then undoes the move
+player_blocked_by_area = 0x801DFD5C;
+// player_check_ground sets 1 on a scene trigger whose passable is 0; player_move_on_foot then undoes the move
+player_blocked_by_trigger = 0x801DFD5E;
+// shop kind 9 list, 3 entries
+roadmap_shop_list_9 = 0x801DFD74;
+// " - ", printed by kaj_abend between the code and the error name
+kaj_misc_str_dash = 0x801DFDD0;
+// "%s", the format kaj_abend prints the error name and the message with
+kaj_misc_str_fmt_s = 0x801DFDD4;
+// "\n", the last printf of kaj_abend
+kaj_misc_str_newline = 0x801DFDD8;
+// kaj_cdmgr_poll stores the CdReadSync(1) result (sectors left) and compares the next one with it; cleared when a seek starts
+kaj_cdmgr_read_left = 0x801DFE1C;
+// kaj_cdmgr_poll counts polls while the sectors left do not change, resets on change; past 0x40000 it breaks the read (CdReadBreak or CdFlush) and seeks again
+kaj_cdmgr_stall_count = 0x801DFE20;
+// set to 1 by kaj_cdmgr_poll when the last slot of a read chain is done (the poll then returns 1); no reader
+kaj_cdmgr_read_done = 0x801DFE24;
+// kaj_cdmgr_relocate writes 1, 2 or 3 after moving a type 1, 3 or 5 file; no reader
+kaj_cdmgr_reloc_kind = 0x801DFE28;
+// thin: written only by func_801D3910 (its second argument), never read
+kaj_heap_unused_value = 0x801DFE2C;
+// thin: cleared only by func_801D3910, never read
+kaj_heap_unused_a = 0x801DFE30;
+// thin: cleared only by func_801D3910, never read
+kaj_heap_unused_b = 0x801DFE34;
+// block_on_action sets 1 when the player takes an elevator (trigger 0x1040xx); block_building_main then runs effect_elevator_run and reloads without freeing the scene
+block_elevator_ride = 0x801DFE60;
+// block_building_state + 2 = BuildingState.entry (base + field form); effect_elevator_move_doors switches on 28, 7, 15 like effect_elevator_init
+block_building_state_entry = 0x801DFE6A;
+// effect_item_menu_show stores its scene_kind (0 rooms, 2 field) when the item menu opens; no reader in C
+effect_item_scene_kind = 0x801DFEC2;
+// object_iff_open sets it 1; the loaders clear it when the entry size is 0; while it is 1 they seek to the entry offset minus one sector (0x800)
+object_iff_past_header = 0x801DFF18;
+// the trigger the player stood on last frame (80195098 compares the new one with it); 0xFFFFFF none, written by player_reset_triggers and player_place_for_scene
+player_last_trigger = 0x801DFF48;
+// player_check_ground sets 1 when the player goes from one trigger straight into another; object_deliver_area_events then pushes the leave event (0x20) for the previous area and clears it
+player_area_leave_pending = 0x801DFF4C;
+// s16 copy of the roadmap_draw_frame mode argument, read by roadmap_draw_ft3/ft4/gt3/gt4 and roadmap_draw_sprite_frame
+roadmap_frame_mode = 0x801DFF5C;
+// s16 set by roadmap_draw_frame: 1 dusk, +2 fog, +4 fade; read by the roadmap primitive handlers, sprite_thing_draw_all and vehicle_draw
+roadmap_draw_flags = 0x801DFF74;
+// 1 on field enter, 0 in vehicle mode 3; passed to event_show_clock and event_handle_tick by thing_field_loop
+thing_field_show_clock = 0x801DFFAC;
+// set to 1 by kaj_map_room_release; kaj_map_update_place returns 1 once and clears it while the room is unchanged (block.c reloads every block on 1)
+kaj_map_room_dirty = 0x801DFFE4;
+// object_scene_tables + 0x14 (SceneTables.se_bank_count) declared as its own array, as object_scene_vehicle; sound_vab_open_head aborts when it is 4
+object_scene_se_bank_count = 0x801E02EC;
+// SceneTables.mail (object_scene_tables + 0x4C) declared as its own array; object_load_mail stores the handler mail_create built, mail_scroll reads it; also used in 80195098.c. Same precedent as object_scene_vehicle
+object_scene_mail = 0x801E0324;
+// SceneTables.texts (object_scene_tables + 0x5C) declared as its own array, as object_scene_vehicle: sprite_title_loop passes texts[0] to text_start_narration, as object_room_main passes object_scene_tables.texts[mode - 1]
+object_scene_texts = 0x801E0334;
+// scene_request + 0xA (SceneRequest.change); menu_card_save writes it (overlap name like player_status_player)
+scene_request_change = 0x801E034A;
+// 0x801E0340 + 0x16, the high half of scene_request.pos_x; object_room_init reads the same word as its arrival mode (2: wake after the ending), object_room_main and object_room_on_effect_done switch on it
+scene_request_arrival = 0x801E0356;
+// 0x801E03E6 is action_vars + 0x7E, vars[0x3F], the minute event_clock_add_minute counts; sprite_station_update takes it % 10, ai_move_toward its low bit as the side to search first
+action_vars_minute = 0x801E03E6;
+// action_vars + 0x248 (GameVars.narration_task above): text_narration_end writes -1, text_narration_cues returns while below 0
+action_vars_narration_task = 0x801E05B0;
+// action_vars + 0x24C = GameVars.menu_busy; sprite_phone_loop sets 1 for the phone scene and 0 after; effect_item_input refuses the item menu while nonzero; alias
+action_vars_menu_busy = 0x801E05B4;
+// action_vars + 0x250 = GameVars.unk250 (flame_large_on, proposed earlier); effect_flame_large_free clears it; alias
+action_vars_flame_large_on = 0x801E05B8;
+// action_vars + 0x252 = GameVars.unk252 (flame_small_on); effect_flame_small_free clears it; alias
+action_vars_flame_small_on = 0x801E05BA;
+// action_vars + 0x254 = GameVars.unk254 (clut_cycle_on); effect_clut_cycle_init clears it; alias
+action_vars_clut_cycle_on = 0x801E05BC;
+// sound_vab_stream + 8 = VabStream.body_buf, declared as its own array (base + field form as player_status_inventory): object_load_vabb reads the VAB body into the buffer it points to
+sound_vab_stream_body_buf = 0x801E05C8;
+// filled by effect_weapon_list, shown by mail_menu_open, indexed by the cursor for effect_weapon_swap_stock
+object_room_storage_list = 0x801E05E0;
+// player_status + 2 (PlayerStatus.level) declared as its own array; roadmap_shop_pick_weapons divides it by 20. Same precedent as object_scene_vehicle
+player_status_level = 0x801E0712;
+// player_status + 0x50 = PlayerStatus.model, declared as its own array (base + field form): object_room_init stores mod_find(0x40) there, object_room_play_call plays animation 2 on it when the call has no action set
+player_status_model = 0x801E0760;
+// player_status + 0x54 (PlayerStatus.vehicle), where 801AA360 stores the car Thing; thing_car_init reads it the same way (overlap name like player_status_player)
+player_status_vehicle = 0x801E0764;
+// screen_light + 6 (ScreenLight.fade_active); player_start_death does nothing while a fade runs
+screen_light_fade_active = 0x801E1046;
+// vehicle_train_state + 0xE = TrainState.door_state (base + field form); sprite_station_board_train boards only when it is 1 (doors open)
+vehicle_train_state_door_state = 0x801E1126;
+// libgs frame counter: kaj_view_flip increments it and keeps it nonzero; GsGetLs and GsGetLw compare it (PSY-Q libgs name)
+PSDCNT = 0x801E2D60;
+// libgs active buffer index: GsGetActiveBuff returns it (lh), GsInitGraph, GsSetDrawBuffClip, GsSetDrawBuffOffset and GsSortClear read it; kaj_view_flip toggles it (PSY-Q libgs name)
+PSDIDX = 0x801E2D64;
+// kaj_system + 0xA (pad_mode); menu_card_handle_input reads it
+kaj_system_pad_mode = 0x801E6DAA;
+// kaj_system + 0x18 = KajSystem.sep_volume (base + field form, as kaj_system_vsync_delta): kaj_sound_init sets 0x7F next to SsSetMVol(0x7F, 0x7F); sound_bgm_stop restores the SEQ volume to it with SsSepSetVol and sound_bgm_fade_out starts its fade from it
+kaj_system_sep_volume = 0x801E6DB8;
+// thin: no caller; stores its second argument into D_801DFE2C and clears D_801DFE30 and D_801DFE34, three words nothing reads; sits between kaj_heap_alloc and kaj_heap_init
+kaj_heap_set_unused = 0x801D3910; // type:func size:0x14
+// the string "Error Allocating Arena Buffer": kaj_abend message of block_setup and block_arena_init (their C passes the literal, the asm loads this symbol)
+block_str_err_alloc_arena = 0x80170250;
+// action_vars + 0x200 = GameVars.car_speed_setting (base + field form): menu_card_save and menu_card_load copy the two settings words (car speed, text speed) from and to it
+action_vars_car_speed_setting = 0x801E0568;

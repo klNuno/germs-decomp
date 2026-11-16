@@ -1,191 +1,190 @@
 #include "common.h"
 #include "game/types.h"
 
-s16 kaj_ll_at_tail(BlockList *arg0);
+s16 kaj_ll_at_tail(BlockList *list);
 BlockList *block_list;
-void kaj_ll_insert_before(BlockList *arg0, s32 arg1);
-void kaj_ll_insert_after(BlockList *arg0, s32 arg1);
+void kaj_ll_insert_before(BlockList *list, s32 data);
+void kaj_ll_insert_after(BlockList *list, s32 data);
 void kaj_cdmgr_free_all(void);
-s16 D_801DFC80;
+s16 block_reloaded;
 extern s16 kaj_cdmgr_state;
-u8 D_801DFC8C;
-u8 D_801DFC8D[1];
-u8 D_801DFC8E;
+u8 block_area_kind;
+u8 block_area_flames[1];
+u8 block_area_low;
 extern GameVars action_vars;
 s16 block_wake_index;
 void block_create_all(void);
 void block_building_run(void);
 void effect_elevator_run(void);
-u16 D_801DFE60;
+u16 block_elevator_ride;
 void text_release_cmd(void);
-void sprite_set_visible(s32 arg0, s32 arg1);
-void sprite_set_clut_entry(s32 arg0, s32 arg1, s32 arg2);
-void sound_se_play(s32 arg0);
+void sprite_set_visible(s32 id, s32 visible);
+void sprite_set_clut_entry(s32 id, s32 index, s32 color);
+void sound_se_play(s32 id);
 TextCmd **text_cmd;
 s16 text_window_sprite;
-void action_push_front(TextCmd **arg0);
+void action_push_front(TextCmd **action);
 s16 text_wait;
 extern s32 kaj_system_vsync_delta[];
 typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
+    s32 x;
+    s32 y;
+    s32 z;
     s32 unkC;
-} Unk_8017AC88;
-extern s32 D_801E05B0[];
+} PolyVert;
+extern s32 action_vars_narration_task[];
 extern Player *player_status_player[];
-extern char D_80170250[];
 void *kaj_malloc(u32 size);
-void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
+void kaj_abend(s32 code, char *msg, char *file, s32 line);
 void *memset(void *dst, s32 c, u32 n);
 extern char block_str_file[];
 void free3(void *ptr);
-void sprite_fill_clut(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
-void sprite_delete(s32 arg0);
+void sprite_fill_clut(s32 id, s32 first, s32 last, s32 color);
+void sprite_delete(s32 id);
 void mail_list_close(void);
 void mail_free(void);
-typedef struct Unk_801A44B8 {
+typedef struct SpriteTimView {
     u8 pad0[0x1C];
     Rect *tim;
-} Unk_801A44B8;
-Unk_801A44B8 *sprite_find(u16 arg0);
+} SpriteTimView;
+SpriteTimView *sprite_find(u16 id);
 s32 ClearImage2(Rect *rect, s32 r, s32 g, s32 b);
-s16 text_draw_next(s32 arg0, s32 arg1);
+s16 text_draw_next(s32 str, s32 prompt);
 s16 text_row;
-s16 D_801DFCE6;
+s16 text_narration_page_full;
 s16 text_pos;
-s32 block_model_surface(void *arg0, s32 arg1, s32 arg2, s32 arg3);
-void kaj_ll_remove_to_prev(BlockList *arg0);
+s32 block_model_surface(void *obj, s32 x, s32 z, s32 height_out);
+void kaj_ll_remove_to_prev(BlockList *list);
 s16 text_cue_fade_done;
 s16 text_cue_bgm_done;
-void sound_bgm_fade_out(s32 arg0);
-void effect_start_fade(s32 arg0, s32 arg1);
+void sound_bgm_fade_out(s32 seconds);
+void effect_start_fade(s32 kind, s32 seconds);
 extern EventState event_state;
-extern char D_80170270[];
+extern char block_str_err_alloc_ptr[];
 extern Block *block_slots[];
 void npc_update_blocks(void);
-void block_setup(Block *arg0, u16 arg1);
-void mod_create(void *arg0);
-void kaj_tim_upload_hdr(void *arg0);
-void **kaj_cdmgr_get(s32 arg0);
-s32 kaj_cdmgr_get_type(s32 arg0);
-s32 kaj_cdmgr_is_fresh(s32 arg0);
-void kaj_cdmgr_mark_used(s32 arg0);
-void kaj_map_cell_slots(s16 *arg0, s32 *arg1);
-void kaj_map_room_slots(s16 *arg0, s32 *arg1);
-void kaj_map_room_release(s32 arg0);
+void block_setup(Block *block, u16 mode);
+void mod_create(void *data);
+void kaj_tim_upload_hdr(void *hdr);
+void **kaj_cdmgr_get(s32 handle);
+s32 kaj_cdmgr_get_type(s32 handle);
+s32 kaj_cdmgr_is_fresh(s32 handle);
+void kaj_cdmgr_mark_used(s32 handle);
+void kaj_map_cell_slots(s16 *count, s32 *handles);
+void kaj_map_room_slots(s16 *count, s32 *handles);
+void kaj_map_room_release(s32 handle);
 u16 block_building_id;
-void block_load_all(u16 arg0);
-void block_set_zone_flags(s32 arg0, s32 arg1);
+void block_load_all(u16 mode);
+void block_set_zone_flags(s32 x, s32 z);
 s32 kaj_cdmgr_poll(void);
-s32 kaj_map_update_city(s32 arg0, s32 arg1);
-s32 kaj_map_update_place(u16 arg0, u8 *arg1);
-void kaj_map_cell_loaded_slots(s16 *arg0, s32 *arg1);
+s32 kaj_map_update_city(s32 x, s32 y);
+s32 kaj_map_update_place(u16 area, u8 *entry);
+void kaj_map_cell_loaded_slots(s16 *count, s32 *handles);
 void kaj_map_set_cell_ready(void);
 void kaj_map_set_room_ready(void);
-void kaj_map_room_loaded_slots(s16 *arg0, s32 *arg1);
+void kaj_map_room_loaded_slots(s16 *count, s32 *handles);
 extern Vehicle *object_scene_vehicle[];
-s32 block_hit_tris(TmdTri *arg0, s32 arg1, s32 arg2, Vec3 *arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7);
-s32 block_hit_quads(TmdTri *arg0, s32 arg1, s32 arg2, Vec3 *arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7);
+s32 block_hit_tris(TmdTri *prims, s32 verts, s32 normals, Vec3 *offset, s32 count, s32 x, s32 z, s32 height_out);
+s32 block_hit_quads(TmdTri *prims, s32 verts, s32 normals, Vec3 *offset, s32 count, s32 x, s32 z, s32 height_out);
 char *strncpy(char *dst, char *src, u32 n);
-extern char D_801DFCBC[];
-extern s16 D_801DFC74;
+extern char text_str_unknown[];
+extern s16 ai_door_noise;
 s16 text_col;
 s16 text_color;
 s16 text_len;
 s32 strlen(char *s);
 /* Local view of SceneRequest: this unit reads 0x14-0x19 as halfwords, the shared type has two s32 there. */
 typedef struct {
-    s16 unk0[5];
-    s16 unkA;
-    char *unkC;
-    s16 unk10;
-    s16 unk12;
-    s16 unk14;
-    s16 unk16;
-    u16 unk18;
+    s16 scene_state[5];
+    s16 change;
+    char *path;
+    s16 building;
+    s16 entry;
+    s16 entry_se;
+    s16 place_letter;
+    u16 place_entry;
     u8 pad1A[0x2];
     s32 unk1C;
-    u8 unk20[0x10];
-} SceneRequest_u80179848;
-extern SceneRequest_u80179848 scene_request;
-void object_load_res(s32 arg0, s32 arg1);
+    u8 name[0x10];
+} SceneRequestBuilding;
+extern SceneRequestBuilding scene_request;
+void object_load_res(s32 index, s32 progress);
 void mail_list_open(void);
-void menu_list_page(PauseMenu *arg0, s32 arg1, s32 arg2);
-void menu_status_page(PauseMenu *arg0, s32 arg1);
-void menu_options_page(PauseMenu *arg0, s32 arg1, s16 arg2);
-void object_load_mail_by_id(s16 arg0);
-void text_narration_step(TssSlot *arg0);
+void menu_list_page(PauseMenu *menu, s32 action, s32 up);
+void menu_status_page(PauseMenu *menu, s32 flip);
+void menu_options_page(PauseMenu *menu, s32 action, s16 decrease);
+void object_load_mail_by_id(s16 list_index);
+void text_narration_step(TssSlot *task);
 void text_narration_end(void);
-void *kaj_tss_alloc(u32 arg0);
-s32 kaj_tss_start(void *arg0);
+void *kaj_tss_alloc(u32 size);
+s32 kaj_tss_start(void *task);
 DoorList *door_list;
 void RotMatrix(SVector *arg0, void *arg1);
-Block *block_find_at(s32 arg0, s32 arg1, s32 arg2);
+Block *block_find_at(s32 x, s32 y, s32 z);
 s32 atoi(char *s);
-void door_start_open(DoorMove *arg0, s16 arg1, s16 arg2, s16 arg3);
-void door_start_close(DoorMove *arg0, s16 arg1, s16 arg2);
-extern char D_80170290[];
-s32 func_801BDC30(double arg0, double arg1);
-s16 block_point_in_poly(Unk_8017AC88 *arg0, s32 arg1, s32 arg2, s32 arg3);
-s32 block_poly_height(Unk_8017AC88 *arg0, SVector *arg1, s32 arg2, s32 arg3, s32 arg4);
+void door_start_open(DoorMove *door, s16 dist, s16 speed, s16 auto_return);
+void door_start_close(DoorMove *door, s16 dist, s16 speed);
+extern char block_str_err_alloc_buf[];
+s32 __nedf2(double arg0, double arg1);
+s16 block_point_in_poly(PolyVert *verts, s32 count, s32 x, s32 z);
+s32 block_poly_height(PolyVert *verts, SVector *normal, s32 count, s32 x, s32 z);
 s32 abs(s32 x);
 BuildingState block_building_state;
-void text_next_page(Unk_80184100 *arg0);
+void text_next_page(EventState *event);
 void text_close(void);
-void text_show_profile(s16 arg0);
-void sprite_station_board_train(s16 arg0);
-void effect_elevator_init(s16 arg0);
+void text_show_profile(s16 npc_id);
+void sprite_station_board_train(s16 direction);
+void effect_elevator_init(s16 floor);
 void sprite_station_exit_to_town(void);
-void roadmap_shop_exit_to_town(s16 arg0, s16 arg1);
-void roadmap_shop_open_menu(s16 arg0, s32 arg1);
-void text_show(char *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
-void *action_find_set(s16 arg0);
-void *action_run_set(void *arg0, s32 arg1, s32 arg2);
+void roadmap_shop_exit_to_town(s16 building, s16 exit_no);
+void roadmap_shop_open_menu(s16 building, s32 trigger);
+void text_show(char *str, s32 mode, s32 circle_set, s32 circle_flags, s32 cross_set, s32 cross_flags, s32 se);
+void *action_find_set(s16 id);
+void *action_run_set(void *set, s32 at_cursor, s32 skip_text_wait);
 extern PlayerStatus player_status;
 extern KajSystem kaj_system;
 extern ShopState roadmap_shop[];
 s32 kaj_pad_read(void);
-s16 effect_item_input(PlayerStatus *arg0, s16 arg1);
-s16 roadmap_shop_update_input(PlayerStatus *arg0);
-s16 effect_weapon_input(PlayerStatus *arg0);
-void block_on_action(PlayerStatus *arg0);
-void player_handle_pad(PlayerStatus *arg0, s32 arg1, s32 arg2);
+s16 effect_item_input(PlayerStatus *status, s16 scene_kind);
+s16 roadmap_shop_update_input(PlayerStatus *status);
+s16 effect_weapon_input(PlayerStatus *status);
+void block_on_action(PlayerStatus *status);
+void player_handle_pad(PlayerStatus *status, s32 mode, s32 buttons);
 s16 block_scene_daylight;
 extern s32 (*event_effect_done_hook)(KajEvent *arg0);
 extern s32 (*event_enter_hook)(KajEvent *arg0);
-s32 block_on_effect_done(KajEvent *arg0);
-s32 block_on_enter(KajEvent *arg0);
-void action_reset(s16 arg0);
-void block_set_mode(u16 arg0);
+s32 block_on_effect_done(KajEvent *ev);
+s32 block_on_enter(KajEvent *ev);
+void action_reset(s16 flush_all);
+void block_set_mode(u16 mode);
 int sprintf(char *buf, const char *fmt, ...);
 void object_load_scene(void);
 void effect_weapon_load_models(void);
-void thing_set_active(s32 arg0, s32 arg1, s16 arg2);
-void thing_set_animate(s32 arg0, s32 arg1, s16 arg2);
-void mod_npcrec_show(u16 arg0, s16 arg1);
-void effect_flame_small_init(s16 arg0);
+void thing_set_active(s32 type, s32 id, s16 active);
+void thing_set_animate(s32 type, s32 id, s16 animate);
+void mod_npcrec_show(u16 id, s16 force);
+void effect_flame_small_init(s16 kind);
 void effect_flame_large_init(void);
 void sprite_station_init(void);
-void roadmap_shop_init(s16 arg0);
-void event_show_clock(s16 arg0);
+void roadmap_shop_init(s16 building);
+void event_show_clock(s16 light_on);
 extern void (*event_tick_hook)(void);
 extern s32 (*event_leave_hook)();
 void block_building_load(void);
 void block_update_input(void);
 void kaj_timer_enable(void);
 void kaj_timer_disable(void);
-void kaj_pad_reset(s32 arg0);
-s32 kaj_event_get(s32 *arg0);
-void kaj_event_done(s32 *arg0);
-void event_handle_enter(s32 *arg0);
+void kaj_pad_reset(s32 enable);
+s32 kaj_event_get(s32 *event);
+void kaj_event_done(s32 *event);
+void event_handle_enter(s32 *ev);
 void roadmap_shop_close_topic(void);
-void event_handle_leave(s32 *arg0);
-void event_handle_tick(s16 arg0);
-void event_handle_mod_finish(s32 *arg0);
+void event_handle_leave(s32 *ev);
+void event_handle_tick(s16 daylight);
+void event_handle_mod_finish(s32 *ev);
 s16 mail_take_scene_change(void);
-s16 event_handle_effect_done(s32 *arg0);
-void mail_step_frame(u16 arg0, s16 arg1, s16 arg2);
+s16 event_handle_effect_done(s32 *ev);
+void mail_step_frame(u16 mode, s16 b, s16 c);
 void block_stream_stop(void);
 void sound_bgm_stop(void);
 void sound_se_stop_all(void);
@@ -203,70 +202,64 @@ void mod_free_all(void);
 void thing_free_all(void);
 void sound_bgm_close(void);
 void sound_se_pop_scene(void);
-void block_elevator_input(s16 arg0, s16 arg1, s16 *arg2);
-void event_handle_tick(s16 a);
-void event_advance_clock(s16 a, s16 b);
-void mail_wait(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
-void roadmap_draw_frame(u16 a);
-extern char D_801702B0[];
-extern char D_801702C8[];
+void block_elevator_input(s16 building, s16 start_floor, s16 *floor);
+void event_handle_tick(s16 daylight);
+void event_advance_clock(s16 minutes, s16 no_fatigue);
+void mail_wait(s32 mode, s32 stream, s32 visibility, s32 seconds);
+void roadmap_draw_frame(u16 mode);
+extern char block_str_err_city_mode[];
+extern char block_str_err_building_mode[];
 s32 kaj_map_open_city(void);
 s16 kaj_map_load_city_dir(void);
 s16 kaj_map_city_ready(void);
-s32 kaj_map_open_place(s16 arg0, void *arg1);
+s32 kaj_map_open_place(s16 letter, void *place_name);
 s16 kaj_map_load_place_dir(void);
-void kaj_map_get_entry(u16 arg0, s32 *arg1, u8 *arg2);
-void player_place_for_scene(s32 arg0);
+void kaj_map_get_entry(u16 area, s32 *pos, u8 *entry);
+void player_place_for_scene(s32 entry);
 s32 kaj_map_place_ready(void);
 void door_refresh_all(void);
 void sprite_thing_refresh_all(void);
 void RotTrans(void *v0, s32 *v1, s32 *flag);
-void mail_goto_twn(s32 a, s32 b, s32 c, s16 d, s16 e);
+void mail_goto_twn(s32 x, s32 y, s32 z, s16 yaw, s16 e);
 extern s32 block_elevator_stops[];
 typedef struct {
-    s32 unk0;
-    s32 unk4;
-} Unk_80179848_14;
+    s32 slot;
+    s32 offset;
+} BlockDataEntry;
 typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
+    s32 room_x_cell_z;
+    s32 room_y_cell_x;
+    s32 room_z_cell_depth;
     union {
         struct {
-            s32 unkC;
-            s32 unk10;
-        } s;
+            s32 width;
+            s32 entry_count;
+        } cell;
         struct {
-            u16 unkC;
-            u16 unkE;
-            u16 unk10;
-            s16 unk12;
-        } h;
-    } unkC;
-    Unk_80179848_14 unk14[1];
-} Unk_80179848;
+            u16 size_x;
+            u16 size_y;
+            u16 size_z;
+            s16 entry_count;
+        } room;
+    } dims;
+    BlockDataEntry entries[1];
+} BlockDataHeader;
 void GsInitCoordinate2(void *super, void *base);
-void kaj_tmd_load(void *arg0, void *arg1, void *arg2);
+void kaj_tmd_load(void *obj, void *tmd_file, void *coord);
 extern TrainState vehicle_train_state;
 extern s16 roadmap_shop_topic;
 extern s32 block_wake_positions[];
-void sound_bgm_play(s32 arg0);
-void sound_se_play_note(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6);
-void sprite_station_show_prompt(s16 arg0);
-s16 roadmap_shop_finish(s16 arg0);
-void player_rest(s16 arg0, s32 arg1, s32 arg2, s32 arg3);
-void player_recover(s32 arg0, s32 arg1, s32 arg2, s16 arg3);
+void sound_bgm_play(s32 seq);
+void sound_se_play_note(s16 bank_id, s16 prog, s16 tone_no, s16 note, s16 vol_l, s16 vol_r, s16 pin);
+void sprite_station_show_prompt(s16 show);
+s16 roadmap_shop_finish(s16 building);
+void player_rest(s16 sleep, s32 x, s32 y, s32 z);
+void player_recover(s32 x, s32 y, s32 z, s16 wake);
 s32 SquareRoot0(s32 arg0);
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-} Unk_8017A108;
 extern CarState vehicle_car_state;
-s32 block_test_player_inside(Player *arg0, u16 arg1, Block *arg2, s32 *arg3, s32 *arg4);
+s32 block_test_player_inside(Player *player, u16 mode, Block *block, s32 *lo, s32 *hi);
 void GsSetLsMatrix(void *m);
-s32 mail_angle_to_dir8(s16 a);
+s32 mail_angle_to_dir8(s16 angle);
 s32 rsin(s32 a);
 s32 rcos(s32 a);
 s32 ratan2(s32 y, s32 x);
@@ -274,7 +267,7 @@ s32 ratan2(s32 y, s32 x);
 void block_setup(Block *block, u16 mode) {
     s32 offsets[5];
     Player *player;
-    Unk_80179848 *hdr;
+    BlockDataHeader *hdr;
     ArenaHeader *src;
     Arena **arena;
     s32 i;
@@ -283,29 +276,29 @@ void block_setup(Block *block, u16 mode) {
     memset(offsets, 0, 0x14);
     if (mode == 2) {
         hdr = block->data;
-        block->pos_x = hdr->unk4 * 100;
+        block->pos_x = hdr->room_y_cell_x * 100;
         block->pos_y = 0;
-        block->pos_z = hdr->unk0 * 100;
-        block->size_x = hdr->unkC.s.unkC * 100;
+        block->pos_z = hdr->room_x_cell_z * 100;
+        block->size_x = hdr->dims.cell.width * 100;
         block->size_y = 0;
-        block->size_z = hdr->unk8 * 100;
+        block->size_z = hdr->room_z_cell_depth * 100;
         block->far = 1;
-        for (i = 0; i < hdr->unkC.s.unk10; i++) {
-            offsets[hdr->unk14[i].unk0] = hdr->unk14[i].unk4;
+        for (i = 0; i < hdr->dims.cell.entry_count; i++) {
+            offsets[hdr->entries[i].slot] = hdr->entries[i].offset;
         }
     } else {
         hdr = block->data;
         block->visible = 1;
         block->player_inside = 1;
-        block->pos_x = hdr->unk0;
-        block->pos_y = hdr->unk4;
-        block->pos_z = hdr->unk8;
-        block->size_x = hdr->unkC.h.unkC;
-        block->size_y = hdr->unkC.h.unkE;
-        block->size_z = hdr->unkC.h.unk10;
+        block->pos_x = hdr->room_x_cell_z;
+        block->pos_y = hdr->room_y_cell_x;
+        block->pos_z = hdr->room_z_cell_depth;
+        block->size_x = hdr->dims.room.size_x;
+        block->size_y = hdr->dims.room.size_y;
+        block->size_z = hdr->dims.room.size_z;
         block->far = 0;
-        for (i = 0; i < hdr->unkC.h.unk12; i++) {
-            offsets[hdr->unk14[i].unk0] = hdr->unk14[i].unk4;
+        for (i = 0; i < hdr->dims.room.entry_count; i++) {
+            offsets[hdr->entries[i].slot] = hdr->entries[i].offset;
         }
     }
     block->model_flags = 0;
@@ -356,7 +349,7 @@ INCLUDE_ASM("asm/nonmatchings/game/80179848", block_draw_all);
 
 s32 block_test_player_inside(Player *player, u16 mode, Block *block, s32 *lo, s32 *hi) {
     s32 a;
-    s32 sp10[2];
+    s32 unused[2];
     s32 b;
     s32 dist;
     s32 f;
@@ -369,7 +362,7 @@ s32 block_test_player_inside(Player *player, u16 mode, Block *block, s32 *lo, s3
 
     lo_p[0] = block->coord_tx - player->pos_x;
     hi[0] = block->size_x + lo_p[0];
-    lo_p[1] = player->pos_y - player->unk78 - block->coord_ty;
+    lo_p[1] = player->pos_y - player->eye_height - block->coord_ty;
     hi[1] = block->size_y + lo_p[1];
     lo_p[2] = block->coord_tz - player->pos_z;
     hi[2] = block->size_z + lo_p[2];
@@ -406,21 +399,21 @@ s32 block_test_player_inside(Player *player, u16 mode, Block *block, s32 *lo, s3
     if (lo_p[0] > 0 || hi[0] <= 0 || lo_p[2] > 0 || hi[2] <= 0) {
         return 0;
     }
-    if (mode == 1 && (s16)player->unk40 != 0 && (lo_p[1] > 0 || hi[1] < 0)) {
+    if (mode == 1 && (s16)player->climbing != 0 && (lo_p[1] > 0 || hi[1] < 0)) {
         return 0;
     }
     return 1;
 }
 
-INCLUDE_RODATA("asm/nonmatchings/game/80179848", D_80170270);
+INCLUDE_RODATA("asm/nonmatchings/game/80179848", block_str_err_alloc_ptr);
 
-INCLUDE_RODATA("asm/nonmatchings/game/80179848", D_80170290);
+INCLUDE_RODATA("asm/nonmatchings/game/80179848", block_str_err_alloc_buf);
 
-INCLUDE_RODATA("asm/nonmatchings/game/80179848", D_801702B0);
+INCLUDE_RODATA("asm/nonmatchings/game/80179848", block_str_err_city_mode);
 
-INCLUDE_RODATA("asm/nonmatchings/game/80179848", D_801702C8);
+INCLUDE_RODATA("asm/nonmatchings/game/80179848", block_str_err_building_mode);
 
-static inline s32 func_8017A108_1(Player *player, s32 *lo, s32 *hi) {
+static inline s32 block_car_corner_inside(Player *player, s32 *lo, s32 *hi) {
     CarState *car = &vehicle_car_state;
     s32 pos[4];
     s32 flag;
@@ -437,7 +430,7 @@ static inline s32 func_8017A108_1(Player *player, s32 *lo, s32 *hi) {
     return 0;
 }
 
-static inline s16 func_8017A108_2(s32 dir, s32 *lo, s32 *hi) {
+static inline s16 block_in_view_dir(s32 dir, s32 *lo, s32 *hi) {
     switch (dir) {
     case 2:
         if (hi[2] >= 0) {
@@ -502,11 +495,11 @@ void block_update_visibility(u16 mode) {
             if (block->player_inside != 0) {
                 block->visible = 1;
             } else if (mode == 2) {
-                if (player->vehicle_mode == 1 && func_8017A108_1(player, lo, hi) && block->player_inside == 0) {
+                if (player->vehicle_mode == 1 && block_car_corner_inside(player, lo, hi) && block->player_inside == 0) {
                     block->player_inside = 1;
                     block->visible = 1;
                 } else {
-                    block->visible = func_8017A108_2((s16)mail_angle_to_dir8(player->yaw), lo, hi);
+                    block->visible = block_in_view_dir((s16)mail_angle_to_dir8(player->yaw), lo, hi);
                 }
             }
         }
@@ -523,7 +516,7 @@ void block_create_all(void) {
     for (i = 0; i < 12; i++) {
         block_slots[i] = kaj_malloc(0x90);
         if (block_slots[i] == NULL) {
-            kaj_abend(3, D_80170270, block_str_file, 0x5D);
+            kaj_abend(3, block_str_err_alloc_ptr, block_str_file, 0x5D);
         }
         block_slots[i]->active = 0;
         block_slots[i]->owns_data = 0;
@@ -562,7 +555,7 @@ void block_load_all(u16 mode) {
     s32 type;
     void **res;
 
-    D_801DFC80 = 1;
+    block_reloaded = 1;
     count = 12;
     if (mode == 2) {
         kaj_map_cell_slots(&count, res_ids);
@@ -604,13 +597,13 @@ void block_load_all(u16 mode) {
 void block_set_zone_flags(s32 x, s32 z) {
     GameVars *vars = &action_vars;
 
-    vars->unk252 = 0;
-    vars->unk250 = 0;
-    vars->unk254 = 0;
+    vars->flame_small_on = 0;
+    vars->flame_large_on = 0;
+    vars->clut_cycle_on = 0;
     if (x >= 0x3CF && x < 0x433 && z > 0x8B0 && z < 0xA0F) {
-        vars->unk252 = 1;
-        vars->unk250 = 1;
-        vars->unk254 = 1;
+        vars->flame_small_on = 1;
+        vars->flame_large_on = 1;
+        vars->clut_cycle_on = 1;
         return;
     }
     if ((x >= 0x3CF && x < 0x4C9 && z >= -0x19 && z < 0x8B1) ||
@@ -623,52 +616,52 @@ void block_set_zone_flags(s32 x, s32 z) {
         (x >= 0x2D5 && x < 0x433 && z < -0x4C9) ||
         (x >= 0x2D5 && x < 0x433 && z < -0x23F) ||
         z < -0x4C9) {
-        vars->unk254 = 1;
+        vars->clut_cycle_on = 1;
     }
 }
 
 void block_set_mode(u16 mode) {
     s32 pos[4];
-    SceneRequest_u80179848 *req = &scene_request;
+    SceneRequestBuilding *req = &scene_request;
     Player *player = player_status_player[0];
     GameVars *vars;
 
     if (mode == 2) {
         if (kaj_map_open_city() != 0) {
-            kaj_abend(4, D_801702B0, block_str_file, 0x2EC);
+            kaj_abend(4, block_str_err_city_mode, block_str_file, 0x2EC);
         }
         while (kaj_map_load_city_dir() == 0) {
             kaj_cdmgr_poll();
         }
         while (kaj_map_city_ready() == 0) {
-            kaj_map_update_city(player->unk68, player->unk60);
+            kaj_map_update_city(player->world_z, player->world_x);
             if (kaj_cdmgr_poll() != 0) {
                 kaj_map_set_cell_ready();
             }
         }
-        block_set_zone_flags(player->unk60, player->unk68);
+        block_set_zone_flags(player->world_x, player->world_z);
     } else {
-        if (kaj_map_open_place(req->unk16, req->unk20) != 0) {
-            kaj_abend(4, D_801702C8, block_str_file, 0x2F8);
+        if (kaj_map_open_place(req->place_letter, req->name) != 0) {
+            kaj_abend(4, block_str_err_building_mode, block_str_file, 0x2F8);
         }
         while (kaj_map_load_place_dir() == 0) {
             kaj_cdmgr_poll();
         }
-        block_building_id = req->unk18;
-        kaj_map_get_entry(block_building_id, pos, &D_801DFC8C);
+        block_building_id = req->place_entry;
+        kaj_map_get_entry(block_building_id, pos, &block_area_kind);
         vars = &action_vars;
-        vars->unk252 = 0;
-        vars->unk250 = 0;
-        switch (D_801DFC8D[0]) {
+        vars->flame_small_on = 0;
+        vars->flame_large_on = 0;
+        switch (block_area_flames[0]) {
         case 1:
-            vars->unk252 = 1;
+            vars->flame_small_on = 1;
             break;
         case 2:
-            vars->unk250 = 1;
+            vars->flame_large_on = 1;
             break;
         case 3:
-            vars->unk252 = 1;
-            vars->unk250 = 1;
+            vars->flame_small_on = 1;
+            vars->flame_large_on = 1;
             break;
         }
         player->pos_x = pos[0];
@@ -676,7 +669,7 @@ void block_set_mode(u16 mode) {
         player->pos_z = pos[2];
         player_place_for_scene(1);
         while (kaj_map_place_ready() == 0) {
-            kaj_map_update_place(block_building_id, &D_801DFC8C);
+            kaj_map_update_place(block_building_id, &block_area_kind);
             if (kaj_cdmgr_poll() != 0) {
                 kaj_map_set_room_ready();
             }
@@ -685,7 +678,7 @@ void block_set_mode(u16 mode) {
     block_load_all(mode);
     door_refresh_all();
     sprite_thing_refresh_all();
-    D_801DFC80 = 0;
+    block_reloaded = 0;
 }
 
 void block_stream_update(u16 mode) {
@@ -697,15 +690,15 @@ void block_stream_update(u16 mode) {
     Block *block;
     void **res;
 
-    D_801DFC80 = 0;
+    block_reloaded = 0;
     if (mode == 2) {
-        status = kaj_map_update_city(player->unk68, player->unk60);
-        block_set_zone_flags(player->unk60, player->unk68);
+        status = kaj_map_update_city(player->world_z, player->world_x);
+        block_set_zone_flags(player->world_x, player->world_z);
     } else {
-        status = kaj_map_update_place(block_building_id, &D_801DFC8C);
+        status = kaj_map_update_place(block_building_id, &block_area_kind);
     }
     if (status == 3) {
-        D_801DFC80 = 1;
+        block_reloaded = 1;
         count = 12;
         if (mode == 2) {
             kaj_map_cell_loaded_slots(&count, res_ids);
@@ -741,7 +734,7 @@ void block_stream_update(u16 mode) {
     }
 }
 
-s16 block_point_in_poly(Unk_8017AC88 *verts, s32 count, s32 x, s32 z) {
+s16 block_point_in_poly(PolyVert *verts, s32 count, s32 x, s32 z) {
     double cross_x[2];
     double x0;
     double z0;
@@ -759,15 +752,15 @@ s16 block_point_in_poly(Unk_8017AC88 *verts, s32 count, s32 x, s32 z) {
     crossings = 0;
     for (i = 0; i < count; i++) {
         j = (i + 1) % count;
-        x0 = verts[i].unk0;
-        z0 = verts[i].unk8;
-        x1 = verts[j].unk0;
-        z1 = verts[j].unk8;
-        if (func_801BDC30(z0, z1)) {
+        x0 = verts[i].x;
+        z0 = verts[i].z;
+        x1 = verts[j].x;
+        z1 = verts[j].z;
+        if (__nedf2(z0, z1)) {
             t = (pz - z0) / (z1 - z0);
             if (!(t < 0.0) && !(t > 1.0)) {
                 cross_x[crossings] = (x1 - x0) * t + x0;
-                if (crossings != 1 || func_801BDC30(cross_x[0], cross_x[1])) {
+                if (crossings != 1 || __nedf2(cross_x[0], cross_x[1])) {
                     if (px < cross_x[crossings]) {
                         crossings++;
                     }
@@ -781,71 +774,71 @@ s16 block_point_in_poly(Unk_8017AC88 *verts, s32 count, s32 x, s32 z) {
     return crossings % 2;
 }
 
-s32 block_poly_height(Unk_8017AC88 *verts, SVector *normal, s32 count, s32 x, s32 z) {
+s32 block_poly_height(PolyVert *verts, SVector *normal, s32 count, s32 x, s32 z) {
     s32 maxx;
     s32 minx;
     s32 maxz;
     s32 minz;
 
     if (count == 4) {
-        if (verts[0].unk0 > verts[1].unk0) {
-            maxx = verts[0].unk0;
-            minx = verts[1].unk0;
+        if (verts[0].x > verts[1].x) {
+            maxx = verts[0].x;
+            minx = verts[1].x;
         } else {
-            minx = verts[0].unk0;
-            maxx = verts[1].unk0;
+            minx = verts[0].x;
+            maxx = verts[1].x;
         }
-        if (maxx < verts[2].unk0) {
-            maxx = verts[2].unk0;
-        } else if (verts[2].unk0 < minx) {
-            minx = verts[2].unk0;
+        if (maxx < verts[2].x) {
+            maxx = verts[2].x;
+        } else if (verts[2].x < minx) {
+            minx = verts[2].x;
         }
-        if (maxx < verts[3].unk0) {
-            maxx = verts[3].unk0;
-        } else if (verts[3].unk0 < minx) {
-            minx = verts[3].unk0;
+        if (maxx < verts[3].x) {
+            maxx = verts[3].x;
+        } else if (verts[3].x < minx) {
+            minx = verts[3].x;
         }
-        if (verts[0].unk8 > verts[1].unk8) {
-            maxz = verts[0].unk8;
-            minz = verts[1].unk8;
+        if (verts[0].z > verts[1].z) {
+            maxz = verts[0].z;
+            minz = verts[1].z;
         } else {
-            minz = verts[0].unk8;
-            maxz = verts[1].unk8;
+            minz = verts[0].z;
+            maxz = verts[1].z;
         }
-        if (maxz < verts[2].unk8) {
-            maxz = verts[2].unk8;
-        } else if (verts[2].unk8 < minz) {
-            minz = verts[2].unk8;
+        if (maxz < verts[2].z) {
+            maxz = verts[2].z;
+        } else if (verts[2].z < minz) {
+            minz = verts[2].z;
         }
-        if (maxz < verts[3].unk8) {
-            maxz = verts[3].unk8;
-        } else if (verts[3].unk8 < minz) {
-            minz = verts[3].unk8;
+        if (maxz < verts[3].z) {
+            maxz = verts[3].z;
+        } else if (verts[3].z < minz) {
+            minz = verts[3].z;
         }
     } else {
-        if (verts[0].unk0 > verts[1].unk0) {
-            maxx = verts[0].unk0;
-            minx = verts[1].unk0;
+        if (verts[0].x > verts[1].x) {
+            maxx = verts[0].x;
+            minx = verts[1].x;
         } else {
-            minx = verts[0].unk0;
-            maxx = verts[1].unk0;
+            minx = verts[0].x;
+            maxx = verts[1].x;
         }
-        if (maxx < verts[2].unk0) {
-            maxx = verts[2].unk0;
-        } else if (verts[2].unk0 < minx) {
-            minx = verts[2].unk0;
+        if (maxx < verts[2].x) {
+            maxx = verts[2].x;
+        } else if (verts[2].x < minx) {
+            minx = verts[2].x;
         }
-        if (verts[0].unk8 > verts[1].unk8) {
-            maxz = verts[0].unk8;
-            minz = verts[1].unk8;
+        if (verts[0].z > verts[1].z) {
+            maxz = verts[0].z;
+            minz = verts[1].z;
         } else {
-            minz = verts[0].unk8;
-            maxz = verts[1].unk8;
+            minz = verts[0].z;
+            maxz = verts[1].z;
         }
-        if (maxz < verts[2].unk8) {
-            maxz = verts[2].unk8;
-        } else if (verts[2].unk8 < minz) {
-            minz = verts[2].unk8;
+        if (maxz < verts[2].z) {
+            maxz = verts[2].z;
+        } else if (verts[2].z < minz) {
+            minz = verts[2].z;
         }
     }
     if (x < minx || maxx < x || z < minz || maxz < z) {
@@ -857,27 +850,27 @@ s32 block_poly_height(Unk_8017AC88 *verts, SVector *normal, s32 count, s32 x, s3
     if (normal->vy == 0) {
         return 99999999;
     }
-    return (verts[2].unk0 * normal->vx + verts[2].unk4 * normal->vy + verts[2].unk8 * normal->vz
+    return (verts[2].x * normal->vx + verts[2].y * normal->vy + verts[2].z * normal->vz
             - (normal->vx * x + normal->vz * z)) / normal->vy;
 }
 
 s32 block_hit_tris(TmdTri *prims, s32 verts, s32 normals, Vec3 *offset, s32 count, s32 x, s32 z, s32 height_out) {
-    Unk_8017AC88 poly[3];
+    PolyVert poly[3];
     s32 i;
     TmdTri *prim;
     s32 height;
 
     prim = prims;
     for (i = 0; i < count; i++, prim++) {
-        poly[0].unk0 = ((SVector *)verts)[prim->vert0].vx + offset->x;
-        poly[0].unk4 = ((SVector *)verts)[prim->vert0].vy + offset->y;
-        poly[0].unk8 = ((SVector *)verts)[prim->vert0].vz + offset->z;
-        poly[1].unk0 = ((SVector *)verts)[prim->vert1].vx + offset->x;
-        poly[1].unk4 = ((SVector *)verts)[prim->vert1].vy + offset->y;
-        poly[1].unk8 = ((SVector *)verts)[prim->vert1].vz + offset->z;
-        poly[2].unk0 = ((SVector *)verts)[prim->vert2].vx + offset->x;
-        poly[2].unk4 = ((SVector *)verts)[prim->vert2].vy + offset->y;
-        poly[2].unk8 = ((SVector *)verts)[prim->vert2].vz + offset->z;
+        poly[0].x = ((SVector *)verts)[prim->vert0].vx + offset->x;
+        poly[0].y = ((SVector *)verts)[prim->vert0].vy + offset->y;
+        poly[0].z = ((SVector *)verts)[prim->vert0].vz + offset->z;
+        poly[1].x = ((SVector *)verts)[prim->vert1].vx + offset->x;
+        poly[1].y = ((SVector *)verts)[prim->vert1].vy + offset->y;
+        poly[1].z = ((SVector *)verts)[prim->vert1].vz + offset->z;
+        poly[2].x = ((SVector *)verts)[prim->vert2].vx + offset->x;
+        poly[2].y = ((SVector *)verts)[prim->vert2].vy + offset->y;
+        poly[2].z = ((SVector *)verts)[prim->vert2].vz + offset->z;
         height = block_poly_height(poly, (SVector *)normals + prim->normal, 3, x, z);
         *(s32 *)height_out = height;
         if (height != 99999999) {
@@ -888,20 +881,20 @@ s32 block_hit_tris(TmdTri *prims, s32 verts, s32 normals, Vec3 *offset, s32 coun
 }
 
 s32 block_hit_quads(TmdTri *prims, s32 verts, s32 normals, Vec3 *offset, s32 count, s32 x, s32 z, s32 height_out) {
-    Unk_8017AC88 poly[4];
+    PolyVert poly[4];
     struct {
-        u16 unk0;
+        u16 run_count;
         u8 unk2;
-        u8 unk3;
-        u8 unk4;
-        u8 unk5;
-        u8 unk6;
+        u8 mode;
+        u8 code_r;
+        u8 code_g;
+        u8 code_b;
         u8 pad7[0x1];
-        u16 unk8;
-        u16 unkA;
-        u16 unkC;
-        u16 unkE;
-        u16 unk10;
+        u16 normal;
+        u16 vert0;
+        u16 vert1;
+        u16 vert2;
+        u16 vert3;
         u8 pad12[0x2];
     } *prim;
     s32 i;
@@ -912,65 +905,65 @@ s32 block_hit_quads(TmdTri *prims, s32 verts, s32 normals, Vec3 *offset, s32 cou
     s32 minz;
     s32 maxz;
     Player *player;
-    Unk_8017AC88 *centre;
+    PolyVert *centre;
 
     prim = (void *)prims;
     for (i = 0; i < count; i++, prim++) {
-        poly[0].unk0 = ((SVector *)verts)[prim->unkA].vx + offset->x;
-        poly[0].unk4 = ((SVector *)verts)[prim->unkA].vy + offset->y;
-        poly[0].unk8 = ((SVector *)verts)[prim->unkA].vz + offset->z;
-        poly[1].unk0 = ((SVector *)verts)[prim->unkC].vx + offset->x;
-        poly[1].unk4 = ((SVector *)verts)[prim->unkC].vy + offset->y;
-        poly[1].unk8 = ((SVector *)verts)[prim->unkC].vz + offset->z;
-        poly[3].unk0 = ((SVector *)verts)[prim->unkE].vx + offset->x;
-        poly[3].unk4 = ((SVector *)verts)[prim->unkE].vy + offset->y;
-        poly[3].unk8 = ((SVector *)verts)[prim->unkE].vz + offset->z;
-        poly[2].unk0 = ((SVector *)verts)[prim->unk10].vx + offset->x;
-        poly[2].unk4 = ((SVector *)verts)[prim->unk10].vy + offset->y;
-        poly[2].unk8 = ((SVector *)verts)[prim->unk10].vz + offset->z;
-        height = block_poly_height(poly, (SVector *)normals + prim->unk8, 4, x, z);
+        poly[0].x = ((SVector *)verts)[prim->vert0].vx + offset->x;
+        poly[0].y = ((SVector *)verts)[prim->vert0].vy + offset->y;
+        poly[0].z = ((SVector *)verts)[prim->vert0].vz + offset->z;
+        poly[1].x = ((SVector *)verts)[prim->vert1].vx + offset->x;
+        poly[1].y = ((SVector *)verts)[prim->vert1].vy + offset->y;
+        poly[1].z = ((SVector *)verts)[prim->vert1].vz + offset->z;
+        poly[3].x = ((SVector *)verts)[prim->vert2].vx + offset->x;
+        poly[3].y = ((SVector *)verts)[prim->vert2].vy + offset->y;
+        poly[3].z = ((SVector *)verts)[prim->vert2].vz + offset->z;
+        poly[2].x = ((SVector *)verts)[prim->vert3].vx + offset->x;
+        poly[2].y = ((SVector *)verts)[prim->vert3].vy + offset->y;
+        poly[2].z = ((SVector *)verts)[prim->vert3].vz + offset->z;
+        height = block_poly_height(poly, (SVector *)normals + prim->normal, 4, x, z);
         *(s32 *)height_out = height;
         if (height != 99999999) {
-            code = (prim->unk4 << 16) | (prim->unk5 << 8) | prim->unk6;
-            if (prim->unk4 == 0xFF) {
+            code = (prim->code_r << 16) | (prim->code_g << 8) | prim->code_b;
+            if (prim->code_r == 0xFF) {
                 player = player_status_player[0];
-                centre = (Unk_8017AC88 *)&player->exit; /* this unit reads +0x18 as two quads */
-                if (poly[0].unk0 > poly[1].unk0) {
-                    maxx = poly[0].unk0;
-                    minx = poly[1].unk0;
+                centre = (PolyVert *)&player->exit; /* this unit reads +0x18 as two quads */
+                if (poly[0].x > poly[1].x) {
+                    maxx = poly[0].x;
+                    minx = poly[1].x;
                 } else {
-                    minx = poly[0].unk0;
-                    maxx = poly[1].unk0;
+                    minx = poly[0].x;
+                    maxx = poly[1].x;
                 }
-                if (maxx < poly[2].unk0) {
-                    maxx = poly[2].unk0;
-                } else if (poly[2].unk0 < minx) {
-                    minx = poly[2].unk0;
+                if (maxx < poly[2].x) {
+                    maxx = poly[2].x;
+                } else if (poly[2].x < minx) {
+                    minx = poly[2].x;
                 }
-                if (maxx < poly[3].unk0) {
-                    maxx = poly[3].unk0;
-                } else if (poly[3].unk0 < minx) {
-                    minx = poly[3].unk0;
+                if (maxx < poly[3].x) {
+                    maxx = poly[3].x;
+                } else if (poly[3].x < minx) {
+                    minx = poly[3].x;
                 }
-                if (poly[0].unk8 > poly[1].unk8) {
-                    maxz = poly[0].unk8;
-                    minz = poly[1].unk8;
+                if (poly[0].z > poly[1].z) {
+                    maxz = poly[0].z;
+                    minz = poly[1].z;
                 } else {
-                    minz = poly[0].unk8;
-                    maxz = poly[1].unk8;
+                    minz = poly[0].z;
+                    maxz = poly[1].z;
                 }
-                if (maxz < poly[2].unk8) {
-                    maxz = poly[2].unk8;
-                } else if (poly[2].unk8 < minz) {
-                    minz = poly[2].unk8;
+                if (maxz < poly[2].z) {
+                    maxz = poly[2].z;
+                } else if (poly[2].z < minz) {
+                    minz = poly[2].z;
                 }
-                if (maxz < poly[3].unk8) {
-                    maxz = poly[3].unk8;
-                } else if (poly[3].unk8 < minz) {
-                    minz = poly[3].unk8;
+                if (maxz < poly[3].z) {
+                    maxz = poly[3].z;
+                } else if (poly[3].z < minz) {
+                    minz = poly[3].z;
                 }
-                centre[1].unk0 = player->cell_x * 12500 + ((minx + maxx) >> 1);
-                centre[1].unk8 = player->cell_z * 12500 + ((minz + maxz) >> 1);
+                centre[1].x = player->cell_x * 12500 + ((minx + maxx) >> 1);
+                centre[1].z = player->cell_z * 12500 + ((minz + maxz) >> 1);
             }
             return code;
         }
@@ -979,22 +972,22 @@ s32 block_hit_quads(TmdTri *prims, s32 verts, s32 normals, Vec3 *offset, s32 cou
 }
 
 s16 block_point_on_model(void *obj, s32 x, s32 y, s32 z, u16 mode) {
-    Unk_8017AC88 poly[4];
+    PolyVert poly[4];
     s32 flag;
     GsDobj2 *model;
     struct {
-        u16 unk0;
+        u16 run_count;
         u8 unk2;
-        u8 unk3;
-        u8 unk4;
-        u8 unk5;
-        u8 unk6;
+        u8 mode;
+        u8 code_r;
+        u8 code_g;
+        u8 code_b;
         u8 pad7[0x1];
-        u16 unk8;
-        u16 unkA;
-        u16 unkC;
-        u16 unkE;
-        u16 unk10;
+        u16 normal;
+        u16 vert0;
+        u16 vert1;
+        u16 vert2;
+        u16 vert3;
         u8 pad12[0x2];
     } *prim;
     Player *player;
@@ -1013,39 +1006,39 @@ s16 block_point_on_model(void *obj, s32 x, s32 y, s32 z, u16 mode) {
     verts = (SVector *)model->tmd->vert_top;
     normals = (SVector *)model->tmd->normal_top;
     while (left != 0) {
-        cnt = prim->unk0;
-        if ((prim->unk3 & 0xFD) == 0x20) {
+        cnt = prim->run_count;
+        if ((prim->mode & 0xFD) == 0x20) {
             for (i = 0; i < cnt; prim = (void *)((TmdTri *)prim + 1), i++) {
-                RotTrans(&verts[prim->unkA], &poly[0].unk0, &flag);
+                RotTrans(&verts[prim->vert0], &poly[0].x, &flag);
                 if (flag < 0) {
                     return 0;
                 }
-                RotTrans(&verts[prim->unkC], &poly[1].unk0, &flag);
+                RotTrans(&verts[prim->vert1], &poly[1].x, &flag);
                 if (flag < 0) {
                     return 0;
                 }
-                RotTrans(&verts[prim->unkE], &poly[2].unk0, &flag);
+                RotTrans(&verts[prim->vert2], &poly[2].x, &flag);
                 if (flag < 0) {
                     return 0;
                 }
-                if (block_poly_height(poly, &normals[prim->unk8], 3, x, z) != 99999999) {
+                if (block_poly_height(poly, &normals[prim->normal], 3, x, z) != 99999999) {
                     if (mode != 1) {
                         return 1;
                     }
-                    if (poly[0].unk4 > poly[1].unk4) {
-                        max = poly[0].unk4;
-                        min = poly[1].unk4;
+                    if (poly[0].y > poly[1].y) {
+                        max = poly[0].y;
+                        min = poly[1].y;
                     } else {
-                        min = poly[0].unk4;
-                        max = poly[1].unk4;
+                        min = poly[0].y;
+                        max = poly[1].y;
                     }
-                    if (max < poly[2].unk4) {
-                        max = poly[2].unk4;
-                    } else if (poly[2].unk4 < min) {
-                        min = poly[2].unk4;
+                    if (max < poly[2].y) {
+                        max = poly[2].y;
+                    } else if (poly[2].y < min) {
+                        min = poly[2].y;
                     }
                     if (min == max) {
-                        if (y >= max + player->unk78 && y <= max - player->unk78) {
+                        if (y >= max + player->eye_height && y <= max - player->eye_height) {
                             return 1;
                         }
                     } else if (y >= min && y <= max) {
@@ -1054,47 +1047,47 @@ s16 block_point_on_model(void *obj, s32 x, s32 y, s32 z, u16 mode) {
                 }
             }
             left -= cnt;
-        } else if ((prim->unk3 & 0xFD) == 0x28) {
+        } else if ((prim->mode & 0xFD) == 0x28) {
             for (i = 0; i < cnt; prim++, i++) {
-                RotTrans(&verts[prim->unkA], &poly[0].unk0, &flag);
+                RotTrans(&verts[prim->vert0], &poly[0].x, &flag);
                 if (flag < 0) {
                     return 0;
                 }
-                RotTrans(&verts[prim->unkC], &poly[1].unk0, &flag);
+                RotTrans(&verts[prim->vert1], &poly[1].x, &flag);
                 if (flag < 0) {
                     return 0;
                 }
-                RotTrans(&verts[prim->unkE], &poly[3].unk0, &flag);
+                RotTrans(&verts[prim->vert2], &poly[3].x, &flag);
                 if (flag < 0) {
                     return 0;
                 }
-                RotTrans(&verts[prim->unk10], &poly[2].unk0, &flag);
+                RotTrans(&verts[prim->vert3], &poly[2].x, &flag);
                 if (flag < 0) {
                     return 0;
                 }
-                if (block_poly_height(poly, &normals[prim->unk8], 4, x, z) != 99999999) {
+                if (block_poly_height(poly, &normals[prim->normal], 4, x, z) != 99999999) {
                     if (mode != 1) {
                         return 1;
                     }
-                    if (poly[0].unk4 > poly[1].unk4) {
-                        max = poly[0].unk4;
-                        min = poly[1].unk4;
+                    if (poly[0].y > poly[1].y) {
+                        max = poly[0].y;
+                        min = poly[1].y;
                     } else {
-                        min = poly[0].unk4;
-                        max = poly[1].unk4;
+                        min = poly[0].y;
+                        max = poly[1].y;
                     }
-                    if (max < poly[2].unk4) {
-                        max = poly[2].unk4;
-                    } else if (poly[2].unk4 < min) {
-                        min = poly[2].unk4;
+                    if (max < poly[2].y) {
+                        max = poly[2].y;
+                    } else if (poly[2].y < min) {
+                        min = poly[2].y;
                     }
-                    if (max < poly[3].unk4) {
-                        max = poly[3].unk4;
-                    } else if (poly[3].unk4 < min) {
-                        min = poly[3].unk4;
+                    if (max < poly[3].y) {
+                        max = poly[3].y;
+                    } else if (poly[3].y < min) {
+                        min = poly[3].y;
                     }
                     if (min == max) {
-                        if (y >= max + player->unk78 && y <= max - player->unk78) {
+                        if (y >= max + player->eye_height && y <= max - player->eye_height) {
                             return 1;
                         }
                     } else if (y >= min && y <= max) {
@@ -1130,7 +1123,7 @@ s32 block_vehicle_surface(s32 x, s32 z, s32 height_out) {
     verts = model->tmd->vert_top;
     normals = model->tmd->normal_top;
     while (left != 0) {
-        cnt = prim->unk0;
+        cnt = prim->run_count;
         switch (prim->mode & 0xFD) {
         case 0x20:
             hit = block_hit_tris(prim, verts, normals, &offset, cnt, x, z, height_out);
@@ -1194,7 +1187,7 @@ s32 block_find_surface(s32 x, s32 z, s32 *height_out, s16 all) {
             verts = model->tmd->vert_top;
             normals = model->tmd->normal_top;
             while (left != 0) {
-                cnt = prim->unk0;
+                cnt = prim->run_count;
                 switch (prim->mode & 0xFD) {
                 case 0x20:
                     hit = block_hit_tris(prim, verts, normals, &offset, cnt, x, z, (s32)height_out);
@@ -1269,7 +1262,7 @@ s32 block_find_surface_nearest(s32 x, s32 y, s32 z, s32 *height_out) {
             normals = model->tmd->normal_top;
             height_p = &height;
             while (left != 0) {
-                cnt = prim->unk0;
+                cnt = prim->run_count;
                 switch (prim->mode & 0xFD) {
                 case 0x20:
                     hit = block_hit_tris(prim, verts, normals, &offset, cnt, x, z, (s32)height_p);
@@ -1329,7 +1322,7 @@ s32 block_find_surface_nearest(s32 x, s32 y, s32 z, s32 *height_out) {
     return 0;
 }
 
-static inline s32 func_8017C234_inl(GsDobj2 *model, Vec3 *offset, s32 x, s32 z, s32 height_out) {
+static inline s32 block_floor_hit(GsDobj2 *model, Vec3 *offset, s32 x, s32 z, s32 height_out) {
     TmdTri *prim;
     s32 left;
     s32 verts;
@@ -1344,7 +1337,7 @@ static inline s32 func_8017C234_inl(GsDobj2 *model, Vec3 *offset, s32 x, s32 z, 
     verts = model->tmd->vert_top;
     normals = model->tmd->normal_top;
     while (left != 0) {
-        cnt = prim->unk0;
+        cnt = prim->run_count;
         switch (prim->mode & 0xFD) {
         case 0x20:
             hit = block_hit_tris(prim, verts, normals, offset, cnt, x, z, height_out);
@@ -1370,8 +1363,8 @@ static inline s32 func_8017C234_inl(GsDobj2 *model, Vec3 *offset, s32 x, s32 z, 
 }
 
 s32 block_fit_ground_tilt(s32 *height_out, s16 all) {
-    Unk_8017AC88 corners[4];
-    Unk_8017AC88 centre;
+    PolyVert corners[4];
+    PolyVert centre;
     SVector origin;
     s32 codes[5];
     Vec3 offset;
@@ -1399,13 +1392,13 @@ s32 block_fit_ground_tilt(s32 *height_out, s16 all) {
     GsSetLsMatrix(&m->coord.coord_m);
     for (i = 0; i < 4; i++) {
         codes[i] = 0;
-        RotTrans(&car->corners[i], &corners[i].unk0, &flag);
+        RotTrans(&car->corners[i], &corners[i].x, &flag);
         if (flag >= 0) {
             list->cursor = list->head;
             while (1) {
                 block = list->cursor->data;
                 if (block != NULL && block->active != 0 && (model = block->floor_model) != NULL && (all != 0 || block->player_inside != 0)) {
-                    codes[i] = func_8017C234_inl(model, &offset, corners[i].unk0, corners[i].unk8, (s32)&corners[i].unk4);
+                    codes[i] = block_floor_hit(model, &offset, corners[i].x, corners[i].z, (s32)&corners[i].y);
                     if (codes[i] != 0) {
                         break;
                     }
@@ -1427,8 +1420,8 @@ s32 block_fit_ground_tilt(s32 *height_out, s16 all) {
             c1++;
             break;
         case 0xFF00:
-            if (car->unk2 == 0) {
-                car->unk2 = 1;
+            if (car->slowed == 0) {
+                car->slowed = 1;
             }
             break;
         default:
@@ -1436,8 +1429,8 @@ s32 block_fit_ground_tilt(s32 *height_out, s16 all) {
         }
         c2++;
     }
-    if (c1 == 4 && car->unk2 != 0) {
-        car->unk2 = 0;
+    if (c1 == 4 && car->slowed != 0) {
+        car->slowed = 0;
         car->throttle /= 4;
         car->brake /= 4;
     }
@@ -1448,21 +1441,21 @@ s32 block_fit_ground_tilt(s32 *height_out, s16 all) {
     origin.vx = 0;
     origin.vy = 0;
     origin.vz = 0;
-    RotTrans(&origin, &centre.unk0, &flag);
+    RotTrans(&origin, &centre.x, &flag);
     if (flag < 0) {
         return 0;
     }
     while (1) {
         block = list->cursor->data;
         if (block != NULL && block->active != 0 && (model = block->floor_model) != NULL && (all != 0 || block->player_inside != 0)) {
-            codes[4] = func_8017C234_inl(model, &offset, centre.unk0, centre.unk8, (s32)height_out);
+            codes[4] = block_floor_hit(model, &offset, centre.x, centre.z, (s32)height_out);
             if (codes[4] != 0) {
                 m->rot_z = 0;
                 m->rot_x = 0;
-                dx1 = corners[1].unk4 - corners[0].unk4;
-                dx2 = corners[3].unk4 - corners[2].unk4;
-                dz1 = corners[2].unk4 - corners[0].unk4;
-                dz2 = corners[3].unk4 - corners[1].unk4;
+                dx1 = corners[1].y - corners[0].y;
+                dx2 = corners[3].y - corners[2].y;
+                dz1 = corners[2].y - corners[0].y;
+                dz2 = corners[3].y - corners[1].y;
                 if (dx1 != 0 || dx2 != 0 || dz1 != 0 || dz2 != 0) {
                     sn = rsin((m->rot_y << 12) / 360);
                     cs = rcos((m->rot_y << 12) / 360);
@@ -1548,7 +1541,7 @@ void block_arena_init(Arena **arena_p, ArenaHeader *src) {
 void block_create(Block **block_p, s32 size) {
     *block_p = kaj_malloc(0x90);
     if (*block_p == NULL) {
-        kaj_abend(3, D_80170270, block_str_file, 0x5D);
+        kaj_abend(3, block_str_err_alloc_ptr, block_str_file, 0x5D);
     }
     (*block_p)->active = 0;
     (*block_p)->owns_data = 0;
@@ -1566,7 +1559,7 @@ void block_create(Block **block_p, s32 size) {
     if (size != 0) {
         (*block_p)->data = kaj_malloc(size);
         if ((*block_p)->data == NULL) {
-            kaj_abend(3, D_80170290, block_str_file, 0x70);
+            kaj_abend(3, block_str_err_alloc_buf, block_str_file, 0x70);
         }
         (*block_p)->owns_data = 1;
     }
@@ -1598,7 +1591,7 @@ void block_free(Block *block) {
 
 Block *block_find_at(s32 x, s32 y, s32 z) {
     BlockList *list = block_list;
-    SceneRequest_u80179848 *req = &scene_request;
+    SceneRequestBuilding *req = &scene_request;
 
     if (list->count == 0) {
         return NULL;
@@ -1607,7 +1600,7 @@ Block *block_find_at(s32 x, s32 y, s32 z) {
     while (1) {
         Block *block = list->cursor->data;
         if (block != NULL && block->active != 0 && x >= block->pos_x && x < block->pos_x + block->size_x && z >= block->pos_z && z < block->pos_z + block->size_z) {
-            if (req->unk0[0] != 1) {
+            if (req->scene_state[0] != 1) {
                 return block;
             }
             if (block->size_y == 0) {
@@ -1771,7 +1764,7 @@ void block_free_owned(void) {
 }
 
 void block_stream_stop(void) {
-    D_801DFC80 = 0;
+    block_reloaded = 0;
     kaj_cdmgr_free_all();
 }
 
@@ -1793,7 +1786,7 @@ s32 block_model_surface(void *obj, s32 x, s32 z, s32 height_out) {
     verts = model->tmd->vert_top;
     normals = model->tmd->normal_top;
     while (left != 0) {
-        cnt = prim->unk0;
+        cnt = prim->run_count;
         switch (prim->mode & 0xFD) {
         case 0x20:
             hit = block_hit_tris(prim, verts, normals, &offset, cnt, x, z, height_out);
@@ -1825,31 +1818,31 @@ s32 block_cd_idle(void) {
 void block_enter_area(u32 code) {
     s32 kind = (code >> 16) & 0xFF;
 
-    D_801DFC8C = kind;
+    block_area_kind = kind;
     if (kind != 0x80) {
         return;
     }
-    D_801DFC8D[0] = code >> 8;
-    D_801DFC8E = code;
-    action_vars.unk252 = 0;
-    action_vars.unk250 = 0;
-    switch (D_801DFC8D[0]) {
+    block_area_flames[0] = code >> 8;
+    block_area_low = code;
+    action_vars.flame_small_on = 0;
+    action_vars.flame_large_on = 0;
+    switch (block_area_flames[0]) {
     case 1:
-        action_vars.unk252 = 1;
+        action_vars.flame_small_on = 1;
         break;
     case 2:
-        action_vars.unk250 = 1;
+        action_vars.flame_large_on = 1;
         break;
     case 3:
-        action_vars.unk252 = 1;
-        action_vars.unk250 = 1;
+        action_vars.flame_small_on = 1;
+        action_vars.flame_large_on = 1;
         break;
     }
 }
 
 s32 block_on_effect_done(KajEvent *ev) {
     GameVars *vars = &action_vars;
-    SceneRequest_u80179848 *req = &scene_request;
+    SceneRequestBuilding *req = &scene_request;
     Player *player = player_status_player[0];
     TrainState *train = &vehicle_train_state;
     ShopState *d = roadmap_shop;
@@ -1877,7 +1870,7 @@ s32 block_on_effect_done(KajEvent *ev) {
         }
     } else if (effect_id == 7) {
         if (ev->param1 == 0) {
-            vars->unk244 = -1;
+            vars->effect_task = -1;
         }
         if (train->door_state == 3) {
             train->door_state = 1;
@@ -1918,26 +1911,26 @@ s32 block_on_effect_done(KajEvent *ev) {
         f = player->flags;
         if (f & 0x80) {
             player->flags = f & ~4;
-            req->unkA = 1;
+            req->change = 1;
         } else if (f & 0x20) {
-            /*  横になると、深い眠りについた */
+            /* sleep narration, first line */
             text_show(" \211\241\202\311\202\310\202\351\202\306\201\101\220\133\202\242\226\260\202\350\202\311\202\302\202\242\202\275", 1, -1, 0, -1, 0, 0);
             effect_start_fade(10, 3);
         } else if (f & 8) {
             if (block_building_state.building == 9) {
-                /*  6目を閉じて・・・ */
+                /* sleep narration, second line */
                 text_show(" 6\226\332\202\360\225\302\202\266\202\304\201\105\201\105\201\105", 1, -1, 0, -1, 0, 0);
             } else {
-                /*  意識が遠ざかっていく */
+                /* sleep narration, third line */
                 text_show(" \210\323\216\257\202\252\211\223\202\264\202\251\202\301\202\304\202\242\202\255", 1, -1, 0, -1, 0, 0);
             }
             effect_start_fade(10, 3);
-        } else if ((block_building_state.building == 3 || block_building_state.building == 6) && d->unk8 != 0) {
+        } else if ((block_building_state.building == 3 || block_building_state.building == 6) && d->at_counter != 0) {
             roadmap_shop_open_menu(block_building_state.building, 0);
         }
     } else if (effect_id == 10) {
         if (ev->param1 == 0) {
-            vars->unk244 = -1;
+            vars->effect_task = -1;
         }
         f = player->flags;
         if (f & 0x20) {
@@ -1954,7 +1947,7 @@ s32 block_on_effect_done(KajEvent *ev) {
         effect_start_fade(9, 3);
     } else if (effect_id == 9) {
         if (ev->param1 == 0) {
-            vars->unk244 = -1;
+            vars->effect_task = -1;
         }
         f = player->flags;
         if (f & 0x20) {
@@ -1977,13 +1970,13 @@ void block_on_action(PlayerStatus *status) {
     s16 state = event->state;
 
     if (state == 3) {
-        text_next_page((Unk_80184100 *)event);
+        text_next_page(event);
         return;
     }
     if (state != 2) {
         return;
     }
-    D_801DFE60 = 0;
+    block_elevator_ride = 0;
     if (!(event->circle_flags & 8)) {
         return;
     }
@@ -2003,7 +1996,7 @@ void block_on_action(PlayerStatus *status) {
             break;
         default:
             if ((event->trigger & 0xFFFF00) == 0x104000) {
-                D_801DFE60 = 1;
+                block_elevator_ride = 1;
                 effect_elevator_init((u8)event->trigger);
                 goto loop;
             }
@@ -2015,7 +2008,7 @@ void block_on_action(PlayerStatus *status) {
             sprite_station_exit_to_town();
         } else if (block_building_state.building >= 3 && block_building_state.building < 8) {
             bstate = &block_building_state;
-            roadmap_shop_exit_to_town(block_building_state.building, bstate->unk2);
+            roadmap_shop_exit_to_town(block_building_state.building, bstate->entry);
         } else {
             goto loop;
         }
@@ -2053,7 +2046,7 @@ void block_update_input(void) {
     if (kaj_system.pad_mode != 1) {
         return;
     }
-    if (*(u32 *)&player->unk40 & 0x2A0000) {
+    if (*(u32 *)&player->climbing & 0x2A0000) {
         return;
     }
     pad = kaj_pad_read();
@@ -2083,7 +2076,7 @@ void block_update_input(void) {
                     switch (block_building_state.building) {
                     case 4:
                     case 5:
-                        r->unk4 = 1;
+                        r->to_inventory = 1;
                         roadmap_shop_open_menu(block_building_state.building, event_state.trigger);
                         break;
                     }
@@ -2106,28 +2099,28 @@ void block_update_input(void) {
 
 void block_building_load(void) {
     char path[16];
-    SceneRequest_u80179848 *req = &scene_request;
+    SceneRequestBuilding *req = &scene_request;
     BuildingState *bstate;
 
     action_reset(1);
     event_effect_done_hook = block_on_effect_done;
     bstate = &block_building_state;
-    bstate->unk2 = req->unk12;
+    bstate->entry = req->entry;
     block_scene_daylight = 0;
-    block_building_state.building = req->unk10;
-    if (D_801DFE60 == 1) {
+    block_building_state.building = req->building;
+    if (block_elevator_ride == 1) {
         return;
     }
     sprite_set_visible(0x410, 1);
     block_set_mode(1);
     memset(path, 0, 0x10);
-    sprintf(path, "\\S\\%s.S;1", req->unk20);
-    req->unkC = path;
+    sprintf(path, "\\S\\%s.S;1", req->name);
+    req->path = path;
     object_load_scene();
     effect_weapon_load_models();
     switch (block_building_state.building) {
     case 0:
-        switch (bstate->unk2) {
+        switch (bstate->entry) {
         case 4:
             thing_set_active(3, 8, 1);
             thing_set_animate(3, 8, 1);
@@ -2182,7 +2175,7 @@ void block_building_load(void) {
         roadmap_shop_init(bstate->building);
         break;
     }
-    if (req->unk14 != 0) {
+    if (req->entry_se != 0) {
         sound_se_play(0x21);
     }
     event_show_clock(block_scene_daylight);
@@ -2196,10 +2189,10 @@ void block_building_run(void) {
     block_building_load();
     done = 0;
     kaj_timer_enable();
-    if (D_801DFE60 == 0) {
+    if (block_elevator_ride == 0) {
         effect_start_fade(0, 3);
     } else {
-        D_801DFE60 = 0;
+        block_elevator_ride = 0;
         kaj_pad_reset(1);
     }
     while (done == 0) {
@@ -2222,7 +2215,7 @@ void block_building_run(void) {
         case 0x0:
             block_update_input();
             if (mail_take_scene_change() != 0) {
-                if (D_801DFE60 == 0) {
+                if (block_elevator_ride == 0) {
                     effect_start_fade(1, 3);
                 } else {
                     kaj_pad_reset(0);
@@ -2246,7 +2239,7 @@ void block_building_run(void) {
     event_tick_hook = 0;
     action_reset(1);
     text_close();
-    if (D_801DFE60 != 1) {
+    if (block_elevator_ride != 1) {
         block_stream_stop();
         sound_bgm_stop();
         sound_se_stop_all();
@@ -2284,11 +2277,11 @@ s32 block_on_enter(KajEvent *ev) {
 }
 
 void block_building_main(void) {
-    D_801DFE60 = 0;
+    block_elevator_ride = 0;
     block_create_all();
     while (1) {
         block_building_run();
-        if (D_801DFE60 != 1) {
+        if (block_elevator_ride != 1) {
             break;
         }
         effect_elevator_run();

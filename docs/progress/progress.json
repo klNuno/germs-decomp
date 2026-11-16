@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "commit": "d940e52",
+ "commit": "22cf59e",
  "tracked_tree_dirty": true,
  "exe_sha1": "178e728643d9b456436f4d19c9e07db11ab8aa2c",
  "metric": "Code bytes of each function (.text of the link map). asm: still INCLUDE_ASM; c: matching C whose body still carries names we did not choose; read: matching C with only our names.",
@@ -15,12 +15,12 @@
     "bytes": 26708
    },
    "c": {
-    "functions": 432,
-    "bytes": 195040
+    "functions": 0,
+    "bytes": 0
    },
    "read": {
-    "functions": 203,
-    "bytes": 50528
+    "functions": 635,
+    "bytes": 245568
    }
   },
   "libraries": {
@@ -34,10 +34,10 @@
    }
   },
   "unknowns": {
-   "unk_fields": 1685,
-   "m2c_names": 20,
-   "unk_types": 228,
-   "d_globals": 217
+   "unk_fields": 0,
+   "m2c_names": 0,
+   "unk_types": 0,
+   "d_globals": 0
   },
   "sony_symbols": 643,
   "sony_bytes": 138048
@@ -73,21 +73,21 @@
      "name": "action_update",
      "address": "0x8017345C",
      "bytes": 1272,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "action_test_inventory",
      "address": "0x80173954",
      "bytes": 240,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "action_load_set",
@@ -95,29 +95,29 @@
      "bytes": 924,
      "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
-     "d_globals": 6,
-     "level": "c"
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "action_run_set",
      "address": "0x80173DE0",
      "bytes": 2656,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "action_reset",
      "address": "0x80174840",
      "bytes": 424,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "action_push_front",
@@ -133,11 +133,11 @@
      "name": "action_flush_queue",
      "address": "0x80174A14",
      "bytes": 252,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "action_free_set",
@@ -163,31 +163,31 @@
      "name": "action_find_set",
      "address": "0x80174CB8",
      "bytes": 180,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "action_run_trigger_enter",
      "address": "0x80174D6C",
      "bytes": 244,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "action_run_trigger_leave",
      "address": "0x80174E60",
      "bytes": 244,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "action_find_trigger",
@@ -213,31 +213,31 @@
      "name": "action_place_npc",
      "address": "0x80174FFC",
      "bytes": 416,
-     "unk_fields": 8,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "action_init_npcs",
      "address": "0x8017519C",
      "bytes": 344,
-     "unk_fields": 17,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "action_run_npc_event",
      "address": "0x801752F4",
      "bytes": 376,
-     "unk_fields": 8,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     }
    ]
   },
@@ -251,41 +251,41 @@
      "name": "npc_update_anim",
      "address": "0x8017546C",
      "bytes": 1348,
-     "unk_fields": 5,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "npc_update_all",
      "address": "0x801759B0",
      "bytes": 808,
-     "unk_fields": 18,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 3,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "npc_exec_command",
      "address": "0x80175CD8",
      "bytes": 720,
-     "unk_fields": 9,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "npc_apply_damage",
      "address": "0x80175FA8",
      "bytes": 760,
-     "unk_fields": 10,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "npc_free_all",
@@ -301,61 +301,61 @@
      "name": "npc_find",
      "address": "0x801762F4",
      "bytes": 124,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "npc_draw_all",
      "address": "0x80176370",
      "bytes": 244,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "npc_find_at_point",
      "address": "0x80176464",
      "bytes": 344,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "npc_update_blocks",
      "address": "0x801765BC",
      "bytes": 152,
-     "unk_fields": 5,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "npc_rebase_all",
      "address": "0x80176654",
      "bytes": 224,
-     "unk_fields": 5,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "npc_get_radius",
      "address": "0x80176734",
      "bytes": 76,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "npc_free_bodies",
@@ -371,11 +371,11 @@
      "name": "npc_find_body",
      "address": "0x801767D4",
      "bytes": 104,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "npc_free_stats",
@@ -391,11 +391,11 @@
      "name": "npc_find_stats",
      "address": "0x80176890",
      "bytes": 104,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     }
    ]
   },
@@ -409,161 +409,161 @@
      "name": "ai_check_line",
      "address": "0x801768F8",
      "bytes": 1332,
-     "unk_fields": 9,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "ai_turn_step",
      "address": "0x80176E2C",
      "bytes": 400,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "ai_heading_to",
      "address": "0x80176FBC",
      "bytes": 340,
-     "unk_fields": 5,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "ai_player_in_front",
      "address": "0x80177110",
      "bytes": 348,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "ai_find_target",
      "address": "0x8017726C",
      "bytes": 924,
-     "unk_fields": 15,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 2,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "ai_try_move",
      "address": "0x80177608",
      "bytes": 944,
-     "unk_fields": 10,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "ai_move_toward",
      "address": "0x801779B8",
      "bytes": 2780,
-     "unk_fields": 8,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "ai_walk",
      "address": "0x80178494",
      "bytes": 524,
-     "unk_fields": 9,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "ai_step_back",
      "address": "0x801786A0",
      "bytes": 300,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "ai_sidestep",
      "address": "0x801787CC",
      "bytes": 300,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "ai_decide_fire",
      "address": "0x801788F8",
      "bytes": 652,
-     "unk_fields": 8,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "ai_face_player",
      "address": "0x80178B84",
      "bytes": 384,
-     "unk_fields": 5,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "ai_update_stand",
      "address": "0x80178D04",
      "bytes": 308,
-     "unk_fields": 5,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "ai_update_move",
      "address": "0x80178E38",
      "bytes": 836,
-     "unk_fields": 6,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "ai_fire",
      "address": "0x8017917C",
      "bytes": 1204,
-     "unk_fields": 11,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "ai_in_aim_cone",
      "address": "0x80179630",
      "bytes": 536,
-     "unk_fields": 5,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     }
    ]
   },
@@ -577,11 +577,11 @@
      "name": "block_setup",
      "address": "0x80179848",
      "bytes": 1032,
-     "unk_fields": 11,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "block_draw_all",
@@ -593,11 +593,11 @@
      "name": "block_test_player_inside",
      "address": "0x80179E50",
      "bytes": 696,
-     "unk_fields": 2,
-     "m2c_names": 1,
+     "unk_fields": 0,
+     "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "block_update_visibility",
@@ -616,8 +616,8 @@
      "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "block_load_all",
@@ -626,128 +626,128 @@
      "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "block_set_zone_flags",
      "address": "0x8017A6E8",
      "bytes": 388,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "block_set_mode",
      "address": "0x8017A86C",
      "bytes": 584,
-     "unk_fields": 7,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 5,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "block_stream_update",
      "address": "0x8017AAB4",
      "bytes": 468,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 2,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "block_point_in_poly",
      "address": "0x8017AC88",
      "bytes": 656,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "block_poly_height",
      "address": "0x8017AF18",
      "bytes": 720,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "block_hit_tris",
      "address": "0x8017B1E8",
      "bytes": 512,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "block_hit_quads",
      "address": "0x8017B3E8",
      "bytes": 996,
-     "unk_fields": 11,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "block_point_on_model",
      "address": "0x8017B7CC",
      "bytes": 996,
-     "unk_fields": 10,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "block_vehicle_surface",
      "address": "0x8017BBB0",
      "bytes": 372,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "block_find_surface",
      "address": "0x8017BD24",
      "bytes": 556,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "block_find_surface_nearest",
      "address": "0x8017BF50",
      "bytes": 740,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "block_fit_ground_tilt",
      "address": "0x8017C234",
      "bytes": 1988,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "block_replace_arena",
@@ -776,8 +776,8 @@
      "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 2,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "block_free",
@@ -793,11 +793,11 @@
      "name": "block_find_at",
      "address": "0x8017CDA4",
      "bytes": 364,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "block_set_origin",
@@ -866,18 +866,18 @@
      "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "block_model_surface",
      "address": "0x8017D414",
      "bytes": 336,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "block_cd_idle",
@@ -893,51 +893,51 @@
      "name": "block_enter_area",
      "address": "0x8017D574",
      "bytes": 144,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 3,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "block_on_effect_done",
      "address": "0x8017D604",
      "bytes": 1252,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "block_on_action",
      "address": "0x8017DAE8",
      "bytes": 648,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
-     "d_globals": 1,
-     "level": "c"
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "block_update_input",
      "address": "0x8017DD70",
      "bytes": 564,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "block_building_load",
      "address": "0x8017DFA4",
      "bytes": 696,
-     "unk_fields": 6,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "block_building_run",
@@ -946,8 +946,8 @@
      "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "block_on_enter",
@@ -966,8 +966,8 @@
      "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "block_elevator_input",
@@ -1001,111 +1001,111 @@
      "name": "menu_card_init_slots",
      "address": "0x8017EBF8",
      "bytes": 564,
-     "unk_fields": 12,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "menu_card_set_message",
      "address": "0x8017EE2C",
      "bytes": 448,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "menu_card_load",
      "address": "0x8017EFEC",
      "bytes": 1800,
-     "unk_fields": 15,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 2,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "menu_card_save",
      "address": "0x8017F6F4",
      "bytes": 2072,
-     "unk_fields": 11,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 2,
-     "d_globals": 1,
-     "level": "c"
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "menu_card_scan",
      "address": "0x8017FF0C",
      "bytes": 916,
-     "unk_fields": 7,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
-     "d_globals": 1,
-     "level": "c"
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "menu_card_move_cursor",
      "address": "0x801802A0",
      "bytes": 284,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "menu_card_handle_input",
      "address": "0x801803BC",
      "bytes": 896,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "menu_card_process",
      "address": "0x8018073C",
      "bytes": 436,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "menu_card_run",
      "address": "0x801808F0",
      "bytes": 532,
-     "unk_fields": 5,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "menu_list_page",
      "address": "0x80180B04",
      "bytes": 648,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "menu_status_page",
      "address": "0x80180D8C",
      "bytes": 2240,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "menu_options_page",
@@ -1121,21 +1121,21 @@
      "name": "menu_move_cursor",
      "address": "0x80181818",
      "bytes": 588,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "menu_confirm",
      "address": "0x80181A64",
      "bytes": 428,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "menu_back",
@@ -1151,31 +1151,31 @@
      "name": "menu_handle_input",
      "address": "0x80181D2C",
      "bytes": 624,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "menu_animate",
      "address": "0x80181F9C",
      "bytes": 868,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "menu_run",
      "address": "0x80182300",
      "bytes": 536,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "text_draw_string",
@@ -1183,9 +1183,9 @@
      "bytes": 840,
      "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "text_draw_next",
@@ -1193,9 +1193,9 @@
      "bytes": 1236,
      "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "text_draw_line",
@@ -1203,9 +1203,9 @@
      "bytes": 876,
      "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "text_format_number",
@@ -1214,88 +1214,88 @@
      "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "text_show_timed",
      "address": "0x801831EC",
      "bytes": 704,
-     "unk_fields": 1,
-     "m2c_names": 1,
-     "unk_types": 1,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "text_start_typing",
      "address": "0x801834AC",
      "bytes": 364,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "text_show_profile",
      "address": "0x80183618",
      "bytes": 472,
-     "unk_fields": 9,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "text_exec_command",
      "address": "0x801837F0",
      "bytes": 1292,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
-     "d_globals": 1,
-     "level": "c"
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "text_start_narration",
      "address": "0x80183CFC",
      "bytes": 396,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "text_show",
      "address": "0x80183E88",
      "bytes": 524,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "text_close",
      "address": "0x80184094",
      "bytes": 108,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "text_next_page",
      "address": "0x80184100",
      "bytes": 96,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "text_release_cmd",
@@ -1323,9 +1323,9 @@
      "bytes": 264,
      "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "text_narration_step",
@@ -1333,9 +1333,9 @@
      "bytes": 208,
      "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
-     "d_globals": 1,
-     "level": "c"
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "text_narration_end",
@@ -1344,28 +1344,28 @@
      "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "text_narration_cues",
      "address": "0x80184434",
      "bytes": 160,
      "unk_fields": 0,
-     "m2c_names": 1,
+     "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "door_setup",
      "address": "0x801844D4",
      "bytes": 452,
-     "unk_fields": 9,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "door_refresh_all",
@@ -1424,8 +1424,8 @@
      "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "door_start_open",
@@ -1434,8 +1434,8 @@
      "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "door_start_close",
@@ -1444,8 +1444,8 @@
      "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "door_exec_command",
@@ -1469,11 +1469,11 @@
      "name": "door_create",
      "address": "0x80185380",
      "bytes": 312,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "door_free",
@@ -1545,11 +1545,11 @@
      "name": "door_fade_step",
      "address": "0x80185918",
      "bytes": 328,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     }
    ]
   },
@@ -1563,11 +1563,11 @@
      "name": "effect_start_sprite_slide",
      "address": "0x80185A60",
      "bytes": 384,
-     "unk_fields": 11,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 2,
-     "d_globals": 1,
-     "level": "c"
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "effect_flame_make_clut",
@@ -1603,11 +1603,11 @@
      "name": "effect_start_fade",
      "address": "0x80186128",
      "bytes": 264,
-     "unk_fields": 7,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "effect_fade_reset",
@@ -1643,11 +1643,11 @@
      "name": "effect_start_sprite_anim",
      "address": "0x801862AC",
      "bytes": 264,
-     "unk_fields": 14,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 2,
-     "d_globals": 1,
-     "level": "c"
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "effect_clear_alarms",
@@ -1664,20 +1664,20 @@
      "address": "0x80186414",
      "bytes": 104,
      "unk_fields": 0,
-     "m2c_names": 1,
+     "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "effect_flame_small_init",
      "address": "0x8018647C",
      "bytes": 224,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 2,
-     "d_globals": 1,
-     "level": "c"
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "effect_flame_small_free",
@@ -1686,8 +1686,8 @@
      "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "effect_clut_cycle_update",
@@ -1703,21 +1703,21 @@
      "name": "effect_clut_cycle_init",
      "address": "0x80186630",
      "bytes": 80,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
-     "d_globals": 1,
-     "level": "c"
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "effect_flame_large_init",
      "address": "0x80186680",
      "bytes": 152,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
-     "d_globals": 1,
-     "level": "c"
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "effect_flame_large_free",
@@ -1726,8 +1726,8 @@
      "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "effect_clut_rotate",
@@ -1743,91 +1743,91 @@
      "name": "effect_sprite_slide_step",
      "address": "0x801867E8",
      "bytes": 80,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "effect_sprite_slide_end",
      "address": "0x80186838",
      "bytes": 76,
-     "unk_fields": 6,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "effect_sprite_anim_step",
      "address": "0x80186884",
      "bytes": 140,
-     "unk_fields": 5,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "effect_elevator_on_task_end",
      "address": "0x80186910",
      "bytes": 476,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
-     "d_globals": 1,
-     "level": "c"
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "effect_elevator_exit",
      "address": "0x80186AEC",
      "bytes": 404,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "effect_elevator_move_doors",
      "address": "0x80186C80",
      "bytes": 632,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "effect_elevator_input",
      "address": "0x80186EF8",
      "bytes": 612,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "effect_elevator_enter",
      "address": "0x8018715C",
      "bytes": 376,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "effect_elevator_update",
      "address": "0x801872D4",
      "bytes": 440,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
-     "d_globals": 1,
-     "level": "c"
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "effect_elevator_run",
@@ -1843,21 +1843,21 @@
      "name": "effect_elevator_init",
      "address": "0x80187560",
      "bytes": 132,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "effect_weapon_unequip",
      "address": "0x801875E4",
      "bytes": 308,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "effect_weapon_draw_panel",
@@ -1883,11 +1883,11 @@
      "name": "effect_weapon_swap_stock",
      "address": "0x80187BE4",
      "bytes": 320,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "effect_inventory_has_room",
@@ -1916,48 +1916,48 @@
      "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 12,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "effect_item_use_selected",
      "address": "0x80188760",
      "bytes": 236,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "effect_item_menu_show",
      "address": "0x8018884C",
      "bytes": 320,
-     "unk_fields": 1,
-     "m2c_names": 1,
+     "unk_fields": 0,
+     "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "effect_item_input",
      "address": "0x8018898C",
      "bytes": 664,
-     "unk_fields": 1,
-     "m2c_names": 1,
+     "unk_fields": 0,
+     "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "effect_weapon_add",
      "address": "0x80188C24",
      "bytes": 192,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "effect_weapon_load_models",
@@ -1973,11 +1973,11 @@
      "name": "effect_weapon_reset",
      "address": "0x80188DE8",
      "bytes": 36,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "effect_weapon_check_fire_frame",
@@ -1993,11 +1993,11 @@
      "name": "effect_weapon_list",
      "address": "0x80188EB8",
      "bytes": 224,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "effect_weapon_free_records",
@@ -2023,21 +2023,21 @@
      "name": "effect_item_add",
      "address": "0x80189054",
      "bytes": 112,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "effect_item_remove",
      "address": "0x801890C4",
      "bytes": 140,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "effect_item_free_records",
@@ -2081,31 +2081,31 @@
      "name": "event_handle_enter",
      "address": "0x80189350",
      "bytes": 656,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "event_handle_leave",
      "address": "0x801895E0",
      "bytes": 300,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "event_handle_effect_done",
      "address": "0x8018970C",
      "bytes": 436,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "event_close",
@@ -2121,11 +2121,11 @@
      "name": "event_handle_alarm",
      "address": "0x80189928",
      "bytes": 72,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "event_handle_tick",
@@ -2171,11 +2171,11 @@
      "name": "event_draw_limb_status",
      "address": "0x80189DE8",
      "bytes": 360,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "event_update_hud",
@@ -2191,51 +2191,51 @@
      "name": "event_draw_hud",
      "address": "0x8018A24C",
      "bytes": 428,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "event_update_daylight",
      "address": "0x8018A3F8",
      "bytes": 504,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "event_clock_add_minute",
      "address": "0x8018A5F0",
      "bytes": 464,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "event_draw_gauge",
      "address": "0x8018A7C0",
      "bytes": 268,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "event_draw_percent_gauge",
      "address": "0x8018A8CC",
      "bytes": 156,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "event_set_blink",
@@ -2261,21 +2261,21 @@
      "name": "event_show_clock",
      "address": "0x8018AABC",
      "bytes": 140,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "event_draw_compass",
      "address": "0x8018AB48",
      "bytes": 160,
-     "unk_fields": 8,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 2,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "event_advance_clock",
@@ -2299,31 +2299,31 @@
      "name": "mail_create",
      "address": "0x8018ACAC",
      "bytes": 1136,
-     "unk_fields": 12,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "mail_scroll",
      "address": "0x8018B11C",
      "bytes": 1096,
-     "unk_fields": 8,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
-     "d_globals": 1,
-     "level": "c"
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "mail_list_refresh",
      "address": "0x8018B564",
      "bytes": 312,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "mail_list_move",
@@ -2339,21 +2339,21 @@
      "name": "mail_list_open",
      "address": "0x8018B810",
      "bytes": 276,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "mail_list_close",
      "address": "0x8018B924",
      "bytes": 292,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "mail_receive",
@@ -2379,31 +2379,31 @@
      "name": "mail_free",
      "address": "0x8018BC50",
      "bytes": 244,
-     "unk_fields": 6,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "mail_list_get_id",
      "address": "0x8018BD44",
      "bytes": 28,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "mail_cmd_receive",
      "address": "0x8018BD60",
      "bytes": 44,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "mail_is_read",
@@ -2419,11 +2419,11 @@
      "name": "main",
      "address": "0x8018BDE8",
      "bytes": 696,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "mail_angle_to_dir8",
@@ -2450,50 +2450,50 @@
      "address": "0x8018C1B0",
      "bytes": 332,
      "unk_fields": 0,
-     "m2c_names": 2,
+     "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "mail_step_frame",
      "address": "0x8018C2FC",
      "bytes": 280,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "mail_goto_ofc",
      "address": "0x8018C414",
      "bytes": 248,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "mail_goto_twn",
      "address": "0x8018C50C",
      "bytes": 72,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "mail_goto_building",
      "address": "0x8018C554",
      "bytes": 508,
-     "unk_fields": 11,
-     "m2c_names": 7,
-     "unk_types": 1,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "mail_wrap_angle",
@@ -2529,11 +2529,11 @@
      "name": "mail_menu_draw_item_name",
      "address": "0x8018C864",
      "bytes": 780,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "mail_menu_draw",
@@ -2549,11 +2549,11 @@
      "name": "mail_menu_clear_rows",
      "address": "0x8018CD4C",
      "bytes": 340,
-     "unk_fields": 7,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "mail_menu_move",
@@ -2627,21 +2627,21 @@
      "name": "mod_setup",
      "address": "0x8018D2DC",
      "bytes": 796,
-     "unk_fields": 10,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 2,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "mod_create",
      "address": "0x8018D5F8",
      "bytes": 228,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "mod_relocate",
@@ -2657,21 +2657,21 @@
      "name": "mod_free_pooled",
      "address": "0x8018D8B8",
      "bytes": 372,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "mod_set_anim",
      "address": "0x8018DA2C",
      "bytes": 376,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "mod_draw_player",
@@ -2683,21 +2683,21 @@
      "name": "mod_update_all",
      "address": "0x8018DE58",
      "bytes": 484,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "mod_alloc",
      "address": "0x8018E03C",
      "bytes": 264,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 2,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "mod_free",
@@ -2713,11 +2713,11 @@
      "name": "mod_on_data_free",
      "address": "0x8018E1F0",
      "bytes": 264,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "mod_list_add",
@@ -2779,51 +2779,51 @@
      "name": "mod_finish_handler",
      "address": "0x8018E7EC",
      "bytes": 204,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "mod_place_npcrec",
      "address": "0x8018E8B8",
      "bytes": 328,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "mod_npcrec_move_step",
      "address": "0x8018EA00",
      "bytes": 580,
-     "unk_fields": 15,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "mod_npcrec_move_to",
      "address": "0x8018EC44",
      "bytes": 656,
-     "unk_fields": 22,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 2,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "mod_cmd_npcrec",
      "address": "0x8018EED4",
      "bytes": 864,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "mod_npcrec_update_all",
@@ -2879,11 +2879,11 @@
      "name": "mod_npcrec_draw_all",
      "address": "0x8018F6E8",
      "bytes": 232,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "mod_npcrec_find_at_point",
@@ -2909,11 +2909,11 @@
      "name": "mod_npcrec_move_end",
      "address": "0x8018F958",
      "bytes": 192,
-     "unk_fields": 7,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     }
    ]
   },
@@ -2960,8 +2960,8 @@
      "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "object_load_midi",
@@ -3029,9 +3029,9 @@
      "bytes": 580,
      "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "object_load_vabh",
@@ -3049,9 +3049,9 @@
      "bytes": 748,
      "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
-     "d_globals": 1,
-     "level": "c"
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "object_load_vecl",
@@ -3067,81 +3067,81 @@
      "name": "object_read_chunks",
      "address": "0x80191AB0",
      "bytes": 2256,
-     "unk_fields": 6,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "object_iff_open",
      "address": "0x80192380",
      "bytes": 820,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "object_load_scene",
      "address": "0x801926B4",
      "bytes": 600,
-     "unk_fields": 5,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "object_load_weapon_mods",
      "address": "0x8019290C",
      "bytes": 312,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "object_load_mail_by_id",
      "address": "0x80192A44",
      "bytes": 328,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "object_load_res",
      "address": "0x80192B8C",
      "bytes": 324,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "object_load_res12_by_id",
      "address": "0x80192CD0",
      "bytes": 328,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "object_iff_seek_entry",
      "address": "0x80192E18",
      "bytes": 264,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "object_iff_close",
@@ -3167,41 +3167,41 @@
      "name": "object_room_on_effect_done",
      "address": "0x80193068",
      "bytes": 656,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 2,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "object_room_check_calls",
      "address": "0x801932F8",
      "bytes": 1416,
-     "unk_fields": 7,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "object_room_storage_input",
      "address": "0x80193880",
      "bytes": 1320,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 4,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "object_room_do_action",
      "address": "0x80193DA8",
      "bytes": 920,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 4,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "object_room_update_input",
@@ -3217,11 +3217,11 @@
      "name": "object_room_init",
      "address": "0x8019430C",
      "bytes": 724,
-     "unk_fields": 5,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 2,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "object_room_quit",
@@ -3230,8 +3230,8 @@
      "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "object_room_main",
@@ -3240,8 +3240,8 @@
      "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "object_room_storage_open",
@@ -3250,18 +3250,18 @@
      "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 3,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "object_room_pick_desk_action",
      "address": "0x80194B50",
      "bytes": 212,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "object_room_on_alarm",
@@ -3300,8 +3300,8 @@
      "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "object_deliver_area_events",
@@ -3310,8 +3310,8 @@
      "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     }
    ]
   },
@@ -3325,11 +3325,11 @@
      "name": "player_check_ground",
      "address": "0x80195098",
      "bytes": 1220,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 4,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "player_set_view",
@@ -3341,21 +3341,21 @@
      "name": "player_wrap_cell",
      "address": "0x801958FC",
      "bytes": 716,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "player_update_view",
      "address": "0x80195BC8",
      "bytes": 552,
-     "unk_fields": 7,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     }
    ]
   },
@@ -3379,91 +3379,91 @@
      "name": "player_move_in_train",
      "address": "0x80196048",
      "bytes": 1036,
-     "unk_fields": 5,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "player_place_in_car",
      "address": "0x80196454",
      "bytes": 608,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "player_move_in_car",
      "address": "0x801966B4",
      "bytes": 1068,
-     "unk_fields": 12,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "player_move_on_foot",
      "address": "0x80196AE0",
      "bytes": 1780,
-     "unk_fields": 7,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 2,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "player_init",
      "address": "0x801971D4",
      "bytes": 412,
-     "unk_fields": 14,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "player_place_for_scene",
      "address": "0x80197370",
      "bytes": 792,
-     "unk_fields": 7,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "player_finish_death",
      "address": "0x80197688",
      "bytes": 432,
-     "unk_fields": 5,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "player_start_death",
      "address": "0x80197838",
      "bytes": 380,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "player_update",
      "address": "0x801979B4",
      "bytes": 508,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "player_add_skill_exp",
@@ -3499,81 +3499,81 @@
      "name": "player_take_hit",
      "address": "0x801981D0",
      "bytes": 988,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "player_pick_target",
      "address": "0x801985AC",
      "bytes": 372,
-     "unk_fields": 5,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "player_shoot_target",
      "address": "0x80198720",
      "bytes": 956,
-     "unk_fields": 5,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "player_move_to_step",
      "address": "0x80198ADC",
      "bytes": 544,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "player_start_move_to",
      "address": "0x80198CFC",
      "bytes": 824,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "player_exec_command",
      "address": "0x80199034",
      "bytes": 828,
-     "unk_fields": 5,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "player_recover",
      "address": "0x80199370",
      "bytes": 472,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 3,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "player_handle_pad",
      "address": "0x80199548",
      "bytes": 1356,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "player_weapon_sound",
@@ -3582,18 +3582,18 @@
      "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "player_reset_triggers",
      "address": "0x80199C68",
      "bytes": 88,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "player_set_item",
@@ -3639,11 +3639,11 @@
      "name": "player_rest",
      "address": "0x80199EB4",
      "bytes": 236,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "player_is_injured",
@@ -3669,31 +3669,31 @@
      "name": "player_move_to_done",
      "address": "0x8019A07C",
      "bytes": 296,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "player_update_map_cursor",
      "address": "0x8019A1A4",
      "bytes": 580,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "player_update_map",
      "address": "0x8019A3E8",
      "bytes": 492,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     }
    ]
   },
@@ -3707,21 +3707,21 @@
      "name": "roadmap_init",
      "address": "0x8019A5D4",
      "bytes": 144,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "roadmap_quit",
      "address": "0x8019A664",
      "bytes": 64,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "roadmap_get_state",
@@ -3797,11 +3797,11 @@
      "name": "roadmap_add_sprite",
      "address": "0x8019FDD8",
      "bytes": 788,
-     "unk_fields": 21,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "roadmap_draw_flash",
@@ -3813,21 +3813,21 @@
      "name": "roadmap_init_draw",
      "address": "0x801A02C8",
      "bytes": 336,
-     "unk_fields": 8,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "roadmap_draw_frame",
      "address": "0x801A0418",
      "bytes": 468,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 2,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "roadmap_draw_sprite_frame",
@@ -3839,51 +3839,51 @@
      "name": "roadmap_start_flash",
      "address": "0x801A0690",
      "bytes": 48,
-     "unk_fields": 5,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "roadmap_add_flash_tile",
      "address": "0x801A06C0",
      "bytes": 352,
-     "unk_fields": 13,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "roadmap_shop_pick_weapons",
      "address": "0x801A0820",
      "bytes": 344,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
-     "d_globals": 1,
-     "level": "c"
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "roadmap_shop_topic_menu",
      "address": "0x801A0978",
      "bytes": 464,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 5,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "roadmap_shop_say_reply",
      "address": "0x801A0B48",
      "bytes": 528,
      "unk_fields": 0,
-     "m2c_names": 2,
+     "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "roadmap_fade_screen_music",
@@ -3899,41 +3899,41 @@
      "name": "roadmap_shop_finish",
      "address": "0x801A0EDC",
      "bytes": 1476,
-     "unk_fields": 11,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
-     "d_globals": 1,
-     "level": "c"
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "roadmap_shop_update_input",
      "address": "0x801A14A0",
      "bytes": 1560,
-     "unk_fields": 7,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "roadmap_shop_open_menu",
      "address": "0x801A1AB8",
      "bytes": 1032,
-     "unk_fields": 12,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
-     "d_globals": 19,
-     "level": "c"
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "roadmap_shop_init",
      "address": "0x801A1EC0",
      "bytes": 276,
-     "unk_fields": 11,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "roadmap_shop_exit_to_town",
@@ -3959,31 +3959,31 @@
      "name": "roadmap_shop_on_enter",
      "address": "0x801A20CC",
      "bytes": 80,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "roadmap_shop_on_leave",
      "address": "0x801A211C",
      "bytes": 80,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "roadmap_cmp_weapon_level",
      "address": "0x801A216C",
      "bytes": 16,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     }
    ]
   },
@@ -3997,111 +3997,111 @@
      "name": "sound_se_push",
      "address": "0x801A217C",
      "bytes": 268,
-     "unk_fields": 18,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "sound_se_pop",
      "address": "0x801A2288",
      "bytes": 300,
-     "unk_fields": 12,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "sound_se_pop_scene",
      "address": "0x801A23B4",
      "bytes": 376,
-     "unk_fields": 13,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "sound_se_stop_all",
      "address": "0x801A252C",
      "bytes": 136,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "sound_se_stop",
      "address": "0x801A25B4",
      "bytes": 196,
-     "unk_fields": 6,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "sound_se_play",
      "address": "0x801A2678",
      "bytes": 1512,
-     "unk_fields": 24,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 5,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "sound_se_play_note",
      "address": "0x801A2C60",
      "bytes": 1516,
-     "unk_fields": 21,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 4,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "sound_exec_command",
      "address": "0x801A324C",
      "bytes": 412,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "sound_bgm_open",
      "address": "0x801A33E8",
      "bytes": 420,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "sound_footstep_update",
      "address": "0x801A358C",
      "bytes": 600,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "sound_se_alloc_header",
      "address": "0x801A37E4",
      "bytes": 396,
-     "unk_fields": 6,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
-     "d_globals": 2,
-     "level": "c"
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "sound_vab_open_head",
@@ -4110,8 +4110,8 @@
      "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 3,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "sound_vab_transfer",
@@ -4120,8 +4120,8 @@
      "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "sound_se_pop_all",
@@ -4140,8 +4140,8 @@
      "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 2,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "sound_bgm_close",
@@ -4170,38 +4170,38 @@
      "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "sound_bgm_fade_out",
      "address": "0x801A3CC0",
      "bytes": 180,
-     "unk_fields": 7,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
-     "d_globals": 1,
-     "level": "c"
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "sound_bgm_fade_step",
      "address": "0x801A3D74",
      "bytes": 72,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "sound_footstep_reset",
      "address": "0x801A3DBC",
      "bytes": 24,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     }
    ]
   },
@@ -4215,31 +4215,31 @@
      "name": "sprite_create",
      "address": "0x801A3DD4",
      "bytes": 444,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "sprite_copy_cell",
      "address": "0x801A3F90",
      "bytes": 492,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 2,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "sprite_exec_command",
      "address": "0x801A417C",
      "bytes": 500,
-     "unk_fields": 6,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 3,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "sprite_free",
@@ -4267,9 +4267,9 @@
      "bytes": 196,
      "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "sprite_find",
@@ -4277,9 +4277,9 @@
      "bytes": 156,
      "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "sprite_draw_all",
@@ -4291,41 +4291,41 @@
      "name": "sprite_set_clut_entry",
      "address": "0x801A461C",
      "bytes": 236,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 2,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "sprite_reset_clut",
      "address": "0x801A4708",
      "bytes": 284,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 2,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "sprite_fill_clut",
      "address": "0x801A4824",
      "bytes": 288,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 2,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "sprite_restore_clut",
      "address": "0x801A4944",
      "bytes": 292,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 2,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "sprite_set_visible",
@@ -4333,9 +4333,9 @@
      "bytes": 176,
      "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "sprite_set_color",
@@ -4343,9 +4343,9 @@
      "bytes": 176,
      "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "sprite_set_cell",
@@ -4353,9 +4353,9 @@
      "bytes": 192,
      "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "sprite_title_handle_input",
@@ -4384,8 +4384,8 @@
      "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "sprite_title_run",
@@ -4401,11 +4401,11 @@
      "name": "sprite_title_on_effect_done",
      "address": "0x801A533C",
      "bytes": 48,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "sprite_title_show_menu",
@@ -4421,101 +4421,101 @@
      "name": "sprite_station_on_enter",
      "address": "0x801A540C",
      "bytes": 328,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "sprite_station_update",
      "address": "0x801A5554",
      "bytes": 252,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "sprite_station_show_prompt",
      "address": "0x801A5650",
      "bytes": 864,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "sprite_station_copy_signs",
      "address": "0x801A59B0",
      "bytes": 352,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "sprite_station_board_train",
      "address": "0x801A5B10",
      "bytes": 292,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "sprite_station_init",
      "address": "0x801A5C34",
      "bytes": 160,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "sprite_station_exit_to_town",
      "address": "0x801A5CD4",
      "bytes": 204,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "sprite_station_on_leave",
      "address": "0x801A5DA0",
      "bytes": 108,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "sprite_phone_update",
      "address": "0x801A5E0C",
      "bytes": 1820,
-     "unk_fields": 8,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 3,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "sprite_phone_loop",
      "address": "0x801A6528",
      "bytes": 968,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "sprite_phone_pick_trigger",
@@ -4531,31 +4531,31 @@
      "name": "sprite_phone_on_enter",
      "address": "0x801A6968",
      "bytes": 120,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "sprite_phone_on_alarm",
      "address": "0x801A69E0",
      "bytes": 60,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "sprite_phone_on_effect_done",
      "address": "0x801A6A1C",
      "bytes": 168,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "sprite_phone_run",
@@ -4564,28 +4564,28 @@
      "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "sprite_phone_save_exit",
      "address": "0x801A6B50",
      "bytes": 228,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "sprite_thing_init",
      "address": "0x801A6C34",
      "bytes": 640,
-     "unk_fields": 15,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "sprite_thing_refresh_all",
@@ -4593,9 +4593,9 @@
      "bytes": 464,
      "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "sprite_thing_draw_all",
@@ -4607,21 +4607,21 @@
      "name": "sprite_thing_update_marker",
      "address": "0x801A727C",
      "bytes": 432,
-     "unk_fields": 11,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "sprite_thing_update_fly_in",
      "address": "0x801A742C",
      "bytes": 308,
-     "unk_fields": 8,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     }
    ]
   },
@@ -4635,21 +4635,21 @@
      "name": "thing_update_all",
      "address": "0x801A7560",
      "bytes": 1188,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
-     "d_globals": 1,
-     "level": "c"
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "thing_create",
      "address": "0x801A7A04",
      "bytes": 248,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 2,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "thing_free",
@@ -4665,121 +4665,121 @@
      "name": "thing_list_add",
      "address": "0x801A7B58",
      "bytes": 76,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "thing_free_all",
      "address": "0x801A7BA4",
      "bytes": 152,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "thing_find",
      "address": "0x801A7C3C",
      "bytes": 180,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "thing_hit_test",
      "address": "0x801A7CF0",
      "bytes": 288,
-     "unk_fields": 4,
-     "m2c_names": 1,
-     "unk_types": 1,
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "thing_set_origin",
      "address": "0x801A7E10",
      "bytes": 196,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "thing_run_script",
      "address": "0x801A7ED4",
      "bytes": 300,
-     "unk_fields": 5,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "thing_set_active",
      "address": "0x801A8000",
      "bytes": 204,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "thing_set_animate",
      "address": "0x801A80CC",
      "bytes": 204,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "thing_set_flag10",
      "address": "0x801A8198",
      "bytes": 204,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "thing_cmd_set_active",
      "address": "0x801A8264",
      "bytes": 268,
-     "unk_fields": 6,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 2,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "thing_field_task_hook",
      "address": "0x801A8370",
      "bytes": 412,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "thing_field_do_action",
      "address": "0x801A850C",
      "bytes": 604,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "thing_field_input",
@@ -4795,11 +4795,11 @@
      "name": "thing_field_enter",
      "address": "0x801A88B4",
      "bytes": 644,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "thing_field_leave",
@@ -4818,38 +4818,38 @@
      "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "thing_field_timer_hook",
      "address": "0x801A8EFC",
      "bytes": 48,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "thing_train_enter_hook",
      "address": "0x801A8F2C",
      "bytes": 96,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "thing_train_leave_hook",
      "address": "0x801A8F8C",
      "bytes": 108,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "thing_train_tick_hook",
@@ -4875,51 +4875,51 @@
      "name": "thing_train_calc_stops",
      "address": "0x801A910C",
      "bytes": 304,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "thing_car_init",
      "address": "0x801A923C",
      "bytes": 1104,
-     "unk_fields": 13,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
-     "d_globals": 1,
-     "level": "c"
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "thing_car_get_out",
      "address": "0x801A968C",
      "bytes": 1384,
-     "unk_fields": 6,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "thing_train_init",
      "address": "0x801A9BF4",
      "bytes": 688,
-     "unk_fields": 5,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "thing_train_update",
      "address": "0x801A9EA4",
      "bytes": 1212,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     }
    ]
   },
@@ -4933,51 +4933,51 @@
      "name": "vehicle_car_drive",
      "address": "0x801AA360",
      "bytes": 1404,
-     "unk_fields": 9,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 2,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "vehicle_train_place",
      "address": "0x801AA8DC",
      "bytes": 448,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "vehicle_train_arrive",
      "address": "0x801AAA9C",
      "bytes": 600,
-     "unk_fields": 6,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 2,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "vehicle_train_update",
      "address": "0x801AACF4",
      "bytes": 844,
-     "unk_fields": 9,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "vehicle_train_exit_prompt",
      "address": "0x801AB040",
      "bytes": 352,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "vehicle_train_get_off",
@@ -5003,31 +5003,31 @@
      "name": "vehicle_car_follow_player",
      "address": "0x801AB4D4",
      "bytes": 672,
-     "unk_fields": 9,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "vehicle_navi_update",
      "address": "0x801AB774",
      "bytes": 620,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "vehicle_navi_open_menu",
      "address": "0x801AB9E0",
      "bytes": 168,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "vehicle_car_stopped_input",
@@ -5043,11 +5043,11 @@
      "name": "vehicle_car_input",
      "address": "0x801ABC70",
      "bytes": 1140,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "vehicle_load_data",
@@ -5066,8 +5066,8 @@
      "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 2,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "vehicle_init",
@@ -5139,11 +5139,11 @@
      "name": "vehicle_navi_show",
      "address": "0x801AC578",
      "bytes": 336,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "vehicle_navi_set_enabled",
@@ -5159,11 +5159,11 @@
      "name": "vehicle_train_set_doors",
      "address": "0x801AC70C",
      "bytes": 312,
-     "unk_fields": 9,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "vehicle_train_hide",
@@ -5179,31 +5179,31 @@
      "name": "vehicle_train_door_frame",
      "address": "0x801AC88C",
      "bytes": 144,
-     "unk_fields": 5,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "vehicle_train_door_last",
      "address": "0x801AC91C",
      "bytes": 152,
-     "unk_fields": 5,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "vehicle_train_init_state",
      "address": "0x801AC9B4",
      "bytes": 28,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     }
    ]
   },
@@ -7122,7 +7122,7 @@
      "level": "sony"
     },
     {
-     "name": "func_801BDC30",
+     "name": "__nedf2",
      "address": "0x801BDC30",
      "bytes": 80,
      "level": "sony"
@@ -8736,51 +8736,51 @@
      "name": "kaj_event_queue_grow",
      "address": "0x801CBCE0",
      "bytes": 272,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_event_run_tss",
      "address": "0x801CBDF0",
      "bytes": 572,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_event_pop",
      "address": "0x801CC02C",
      "bytes": 444,
-     "unk_fields": 8,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_event_push",
      "address": "0x801CC1E8",
      "bytes": 196,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_event_push_front",
      "address": "0x801CC2AC",
      "bytes": 204,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_event_get",
@@ -8796,41 +8796,41 @@
      "name": "kaj_event_set_alarm",
      "address": "0x801CC3DC",
      "bytes": 312,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_event_flush",
      "address": "0x801CC514",
      "bytes": 376,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_event_init",
      "address": "0x801CC68C",
      "bytes": 124,
-     "unk_fields": 5,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_event_quit",
      "address": "0x801CC708",
      "bytes": 44,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_event_done",
@@ -8954,121 +8954,121 @@
      "name": "kaj_ll_create",
      "address": "0x801CCAF4",
      "bytes": 124,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_ll_destroy",
      "address": "0x801CCB70",
      "bytes": 132,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_ll_insert_before",
      "address": "0x801CCBF4",
      "bytes": 256,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "kaj_ll_insert_after",
      "address": "0x801CCCF4",
      "bytes": 260,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "kaj_ll_remove_to_prev",
      "address": "0x801CCDF8",
      "bytes": 240,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_ll_remove_to_next",
      "address": "0x801CCEE8",
      "bytes": 240,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_ll_at_head",
      "address": "0x801CCFD8",
      "bytes": 40,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_ll_at_tail",
      "address": "0x801CD000",
      "bytes": 40,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_tmd_load",
      "address": "0x801CD028",
      "bytes": 968,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 10,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "kaj_tmd_map",
      "address": "0x801CD3F0",
      "bytes": 348,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 10,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "kaj_abend",
      "address": "0x801CD54C",
      "bytes": 316,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 10,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "kaj_pad_reset",
      "address": "0x801CD688",
      "bytes": 44,
      "unk_fields": 0,
-     "m2c_names": 1,
+     "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_pad_read",
@@ -9087,8 +9087,8 @@
      "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "kaj_sound_quit",
@@ -9104,11 +9104,11 @@
      "name": "kaj_tmd_unmap",
      "address": "0x801CD78C",
      "bytes": 124,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_srand_ticks",
@@ -9333,41 +9333,41 @@
      "name": "kaj_tim_load",
      "address": "0x801CF790",
      "bytes": 856,
-     "unk_fields": 26,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_tim_free",
      "address": "0x801CFAE8",
      "bytes": 100,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_tim_upload",
      "address": "0x801CFB4C",
      "bytes": 104,
-     "unk_fields": 5,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_tim_upload_hdr",
      "address": "0x801CFBB4",
      "bytes": 108,
-     "unk_fields": 5,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     }
    ]
   },
@@ -9533,21 +9533,21 @@
      "name": "kaj_tod_set_packet",
      "address": "0x801D0880",
      "bytes": 1496,
-     "unk_fields": 11,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 3,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_tod_init_table",
      "address": "0x801D0E58",
      "bytes": 96,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_tod_find_obj",
@@ -9583,11 +9583,11 @@
      "name": "kaj_tod_find_tmd",
      "address": "0x801D1044",
      "bytes": 68,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_tod_set_frame",
@@ -9662,11 +9662,11 @@
      "name": "kaj_tss_start",
      "address": "0x801D14B8",
      "bytes": 56,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_tss_finish",
@@ -9722,11 +9722,11 @@
      "name": "kaj_tss_set_steps",
      "address": "0x801D1774",
      "bytes": 124,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_view_init",
@@ -9775,8 +9775,8 @@
      "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 2,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "kaj_view_set_bg_color",
@@ -9873,131 +9873,131 @@
      "name": "kaj_cdmgr_init",
      "address": "0x801D1E70",
      "bytes": 256,
-     "unk_fields": 13,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 3,
-     "d_globals": 1,
-     "level": "c"
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "kaj_cdmgr_poll",
      "address": "0x801D1F70",
      "bytes": 672,
-     "unk_fields": 7,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 2,
-     "d_globals": 3,
-     "level": "c"
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "kaj_cdmgr_load",
      "address": "0x801D2210",
      "bytes": 492,
-     "unk_fields": 13,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 4,
-     "d_globals": 1,
-     "level": "c"
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "kaj_cdmgr_count_refs",
      "address": "0x801D23FC",
      "bytes": 336,
-     "unk_fields": 7,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 2,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_cdmgr_load_list",
      "address": "0x801D254C",
      "bytes": 884,
-     "unk_fields": 14,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 7,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_cdmgr_release",
      "address": "0x801D28C0",
      "bytes": 392,
-     "unk_fields": 5,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 3,
-     "d_globals": 1,
-     "level": "c"
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "kaj_cdmgr_dir_entries",
      "address": "0x801D2A48",
      "bytes": 280,
-     "unk_fields": 5,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 2,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_cdmgr_relocate",
      "address": "0x801D2B60",
      "bytes": 744,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
-     "d_globals": 1,
-     "level": "c"
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "kaj_cdmgr_pool_size",
      "address": "0x801D2E48",
      "bytes": 104,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 1,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "kaj_cdmgr_pool_free",
      "address": "0x801D2EB0",
      "bytes": 104,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_cdmgr_rebase_dir",
      "address": "0x801D2F18",
      "bytes": 328,
-     "unk_fields": 8,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 2,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_cdmgr_find_file",
      "address": "0x801D3060",
      "bytes": 132,
-     "unk_fields": 6,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_cdmgr_dir_entry",
      "address": "0x801D30E4",
      "bytes": 212,
-     "unk_fields": 6,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_cdmgr_is_idle",
@@ -10013,131 +10013,131 @@
      "name": "kaj_cdmgr_is_ready",
      "address": "0x801D31C8",
      "bytes": 116,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_cdmgr_compact",
      "address": "0x801D323C",
      "bytes": 180,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 3,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_cdmgr_get",
      "address": "0x801D32F0",
      "bytes": 116,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_cdmgr_get_type",
      "address": "0x801D3364",
      "bytes": 64,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_cdmgr_get_size",
      "address": "0x801D33A4",
      "bytes": 64,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_cdmgr_is_fresh",
      "address": "0x801D33E4",
      "bytes": 132,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_cdmgr_mark_used",
      "address": "0x801D3468",
      "bytes": 116,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_cdmgr_seek",
      "address": "0x801D34DC",
      "bytes": 60,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_cdmgr_read",
      "address": "0x801D3518",
      "bytes": 120,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_cdmgr_find_slot",
      "address": "0x801D3590",
      "bytes": 92,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_cdmgr_save_addrs",
      "address": "0x801D35EC",
      "bytes": 100,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_cdmgr_free_all",
      "address": "0x801D3650",
      "bytes": 116,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_cdmgr_is_loaded",
      "address": "0x801D36C4",
      "bytes": 96,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_cdmgr_clear_dirty",
@@ -10163,141 +10163,141 @@
      "name": "kaj_heap_alloc",
      "address": "0x801D3764",
      "bytes": 428,
-     "unk_fields": 7,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
-     "name": "func_801D3910",
+     "name": "kaj_heap_set_unused",
      "address": "0x801D3910",
      "bytes": 20,
      "unk_fields": 0,
-     "m2c_names": 1,
+     "m2c_names": 0,
      "unk_types": 0,
-     "d_globals": 3,
-     "level": "c"
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "kaj_heap_init",
      "address": "0x801D3924",
      "bytes": 36,
-     "unk_fields": 7,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_heap_set_mode",
      "address": "0x801D3948",
      "bytes": 8,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_heap_get_mode",
      "address": "0x801D3950",
      "bytes": 12,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_heap_has_gaps",
      "address": "0x801D395C",
      "bytes": 68,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_heap_compact",
      "address": "0x801D39A0",
      "bytes": 116,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_heap_free",
      "address": "0x801D3A14",
      "bytes": 192,
-     "unk_fields": 5,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_heap_free_space",
      "address": "0x801D3AD4",
      "bytes": 92,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_heap_free_all",
      "address": "0x801D3B30",
      "bytes": 76,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_map_load_city_dir",
      "address": "0x801D3B7C",
      "bytes": 212,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_map_load_place_dir",
      "address": "0x801D3C50",
      "bytes": 460,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_map_cell_exists",
      "address": "0x801D3E1C",
      "bytes": 208,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_map_cell_flags",
      "address": "0x801D3EEC",
      "bytes": 520,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_map_cell_link",
@@ -10323,11 +10323,11 @@
      "name": "kaj_map_world_to_cell",
      "address": "0x801D4D24",
      "bytes": 636,
-     "unk_fields": 6,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_map_update_city",
@@ -10343,91 +10343,91 @@
      "name": "kaj_map_set_room",
      "address": "0x801D50F4",
      "bytes": 560,
-     "unk_fields": 12,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 3,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_map_list_room_files",
      "address": "0x801D5324",
      "bytes": 1552,
-     "unk_fields": 11,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 4,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_map_update_place",
      "address": "0x801D5934",
      "bytes": 688,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
-     "d_globals": 1,
-     "level": "c"
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "kaj_map_fix_place",
      "address": "0x801D5BE4",
      "bytes": 376,
-     "unk_fields": 7,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 4,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_map_reset_cells",
      "address": "0x801D5D5C",
      "bytes": 204,
-     "unk_fields": 9,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_map_list_cell_files",
      "address": "0x801D5E28",
      "bytes": 760,
-     "unk_fields": 7,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_map_stream_cell",
      "address": "0x801D6120",
      "bytes": 1068,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_map_cell_slots",
      "address": "0x801D654C",
      "bytes": 296,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_map_cell_loaded_slots",
      "address": "0x801D6674",
      "bytes": 364,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_map_open_city",
@@ -10435,19 +10435,19 @@
      "bytes": 112,
      "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_map_city_ready",
      "address": "0x801D6850",
      "bytes": 68,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_map_open_place",
@@ -10455,49 +10455,49 @@
      "bytes": 172,
      "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_map_get_entry",
      "address": "0x801D6940",
      "bytes": 196,
-     "unk_fields": 6,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 2,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_map_set_cell_ready",
      "address": "0x801D6A04",
      "bytes": 40,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_map_set_room_ready",
      "address": "0x801D6A2C",
      "bytes": 44,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_map_reset_rooms",
      "address": "0x801D6A58",
      "bytes": 188,
-     "unk_fields": 8,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_map_get_city",
@@ -10533,81 +10533,81 @@
      "name": "kaj_map_in_bounds",
      "address": "0x801D6BA8",
      "bytes": 256,
-     "unk_fields": 4,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_map_cell_file",
      "address": "0x801D6CA8",
      "bytes": 288,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_map_cmp_index",
      "address": "0x801D6DC8",
      "bytes": 16,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_map_room_slot_count",
      "address": "0x801D6DD8",
      "bytes": 68,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_map_place_ready",
      "address": "0x801D6E1C",
      "bytes": 68,
-     "unk_fields": 1,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_map_room_slots",
      "address": "0x801D6E60",
      "bytes": 276,
-     "unk_fields": 3,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_map_room_loaded_slots",
      "address": "0x801D6F74",
      "bytes": 348,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_map_room_release",
      "address": "0x801D70D0",
      "bytes": 152,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
-     "d_globals": 1,
-     "level": "c"
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "kaj_map_get_cell_state",
@@ -10623,21 +10623,21 @@
      "name": "kaj_map_cell_slot_count",
      "address": "0x801D718C",
      "bytes": 68,
-     "unk_fields": 2,
+     "unk_fields": 0,
      "m2c_names": 0,
-     "unk_types": 1,
+     "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_map_set_cell",
      "address": "0x801D71D0",
      "bytes": 292,
-     "unk_fields": 9,
+     "unk_fields": 0,
      "m2c_names": 0,
      "unk_types": 0,
      "d_globals": 0,
-     "level": "c"
+     "level": "read"
     },
     {
      "name": "kaj_map_cell_changed",

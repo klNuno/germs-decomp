@@ -22,7 +22,7 @@ the header, a chunk buffer of 0x800, the size and the position ("Error Allocatio
 | Entry | Counts it gives | Read when |
 | --- | --- | --- |
 | 0 | npc bodies, npc records, weapons, items (each only when not 0) | always: the common part of the scene |
-| variant + 1 | npcs, area triggers, action sets (`object_aset_count`), enemy stats | the variant in `scene_request.unk0[3]` |
+| variant + 1 | npcs, area triggers, action sets (`object_aset_count`), enemy stats | the variant in `scene_request.variant` |
 
 Each entry is read with `object_read_chunks(ctx, request, 2, 0)`. The path the request carries
 ("\S\OFC.S;1" and others) is never opened

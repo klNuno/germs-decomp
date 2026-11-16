@@ -2,18 +2,18 @@
 #include "game/types.h"
 
 typedef struct {
-    s16 unk0[9];
+    s16 m[9];
     u8 pad12[0x2];
-    s32 unk14[3];
-} Unk_801D0880_38;
+    s32 t[3];
+} TodMatrix;
 typedef struct {
-    s32 unk0;
-    Unk_801D0880_38 unk4;
-    Unk_801D0880_38 unk24;
-    void *unk44;
-    void *unk48;
-    void *unk4C;
-} Unk_801D0E58;
+    s32 flg;
+    TodMatrix coord;
+    TodMatrix workm;
+    void *param;
+    void *super;
+    void *sub;
+} TodCoord;
 /* PSY-Q GsDOBJ2 as the TOD player reads it: kaj_tod_init_table sets attribute 0x80000000 (GsDOFF),
    coordinate arg2[i], tmd 0 and id -1; kaj_tod_find_obj matches id. Not TodObj: same size, other roles. */
 typedef struct TodObj {
@@ -32,31 +32,31 @@ typedef struct TodObjTable {
 typedef struct {
     s32 unk0;
     s32 unk4;
-    s32 unk8;
-    s32 unkC[1][7];
-} Unk_801D1044;
+    s32 nobj;
+    s32 objects[1][7];
+} TodTmd;
 void GsInitCoordinate2(void *super, void *base);
-void *kaj_tod_set_packet(void *arg0, void *arg1, s32 *arg2, void *arg3, s32 arg4, s32 arg5);
+void *kaj_tod_set_packet(void *packet, void *table, s32 *ids, void *tmd, s32 mode, s32 root_coord);
 typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
+    s32 scale_x;
+    s32 scale_y;
+    s32 scale_z;
     s32 unkC;
-    s16 unk10;
-    s16 unk12;
-    s16 unk14;
+    s16 rot_x;
+    s16 rot_y;
+    s16 rot_z;
     s16 unk16;
-    s32 unk18;
-    s32 unk1C;
-    s32 unk20;
+    s32 trans_x;
+    s32 trans_y;
+    s32 trans_z;
     s32 unk24;
-} Unk_801D0880;
-void RotMatrix(s16 *r, Unk_801D0880_38 *m);
-void ScaleMatrix(Unk_801D0880_38 *m, Unk_801D0880 *v);
-void TransMatrix(Unk_801D0880_38 *m, s32 *v);
+} TodCoordParam;
+void RotMatrix(s16 *r, TodMatrix *m);
+void ScaleMatrix(TodMatrix *m, TodCoordParam *v);
+void TransMatrix(TodMatrix *m, s32 *v);
 void GsLinkObject4(void *a, void *b, s32 c);
 
-static inline TodObj *func_801D0EB8_inl(TodObjTable *table, s32 id) {
+static inline TodObj *kaj_tod_find_obj_inl(TodObjTable *table, s32 id) {
     TodObj *p;
     s32 i;
     p = table->top;
@@ -71,7 +71,7 @@ static inline TodObj *func_801D0EB8_inl(TodObjTable *table, s32 id) {
     return p;
 }
 
-static inline TodObj *func_801D0F04_inl(TodObjTable *table, s32 id) {
+static inline TodObj *kaj_tod_create_obj_inl(TodObjTable *table, s32 id) {
     TodObj *p;
     s32 i;
     p = table->top;
@@ -98,7 +98,7 @@ static inline TodObj *func_801D0F04_inl(TodObjTable *table, s32 id) {
     return NULL;
 }
 
-static inline TodObj *func_801D0FB8_inl(TodObjTable *table, s32 id) {
+static inline TodObj *kaj_tod_remove_obj_inl(TodObjTable *table, s32 id) {
     TodObj *p;
     s32 i;
     p = table->top;
@@ -120,11 +120,11 @@ static inline TodObj *func_801D0FB8_inl(TodObjTable *table, s32 id) {
     return NULL;
 }
 
-static inline s32 *func_801D1044_inl(Unk_801D1044 *tmd, s32 *ids, s32 id) {
+static inline s32 *kaj_tod_find_tmd_inl(TodTmd *tmd, s32 *ids, s32 id) {
     s32 *p;
     s32 n;
-    p = tmd->unkC[0];
-    for (n = tmd->unk8; n > 0; n--) {
+    p = tmd->objects[0];
+    for (n = tmd->nobj; n > 0; n--) {
         if (id == *ids) {
             break;
         }
@@ -140,14 +140,14 @@ static inline s32 *func_801D1044_inl(Unk_801D1044 *tmd, s32 *ids, s32 id) {
 void *kaj_tod_set_packet(void *packet, void *table, s32 *ids, void *tmd, s32 mode, s32 root_coord) {
     s32 unused[6];
     TodObj tmp;
-    Unk_801D0880_38 mtx;
-    Unk_801D0880 prm;
+    TodMatrix mtx;
+    TodCoordParam prm;
     s32 *data = (s32 *)packet + 1;
     TodObj *obj;
     TodObj *parent;
-    Unk_801D0E58 *coord;
-    Unk_801D0880 *param;
-    Unk_801D0880_38 *matrix;
+    TodCoord *coord;
+    TodCoordParam *param;
+    TodMatrix *matrix;
     s32 *model;
     u32 header;
     s32 id;
@@ -162,16 +162,16 @@ void *kaj_tod_set_packet(void *packet, void *table, s32 *ids, void *tmd, s32 mod
     flags = (header >> 20) & 0xF;
     len = (header >> 24) & 0xF;
 
-    obj = func_801D0EB8_inl(table, id);
+    obj = kaj_tod_find_obj_inl(table, id);
     matrix = &mtx;
     if (obj == NULL) {
         obj = &tmp;
         param = &prm;
     } else {
         coord = obj->coord2;
-        param = coord->unk44;
-        matrix = &coord->unk4;
-        coord->unk0 = 0;
+        param = coord->param;
+        matrix = &coord->coord;
+        coord->flg = 0;
     }
 
     switch (type) {
@@ -181,55 +181,55 @@ void *kaj_tod_set_packet(void *packet, void *table, s32 *ids, void *tmd, s32 mod
     case 1:
         if (flags & 1) {
             if (flags & 2) {
-                param->unk10 += data[0] / 360;
-                param->unk12 += data[1] / 360;
-                param->unk14 += data[2] / 360;
+                param->rot_x += data[0] / 360;
+                param->rot_y += data[1] / 360;
+                param->rot_z += data[2] / 360;
                 data += 3;
             }
             if (flags & 4) {
-                param->unk0 = param->unk0 * ((s16 *)data)[0] >> 12;
-                param->unk4 = param->unk4 * ((s16 *)data)[1] >> 12;
-                param->unk8 = param->unk8 * ((s16 *)data)[2] >> 12;
+                param->scale_x = param->scale_x * ((s16 *)data)[0] >> 12;
+                param->scale_y = param->scale_y * ((s16 *)data)[1] >> 12;
+                param->scale_z = param->scale_z * ((s16 *)data)[2] >> 12;
                 data += 2;
             }
             if (flags & 8) {
-                param->unk18 += data[0];
-                param->unk1C += data[1];
-                param->unk20 += data[2];
+                param->trans_x += data[0];
+                param->trans_y += data[1];
+                param->trans_z += data[2];
             }
-            RotMatrix(&param->unk10, matrix);
+            RotMatrix(&param->rot_x, matrix);
             ScaleMatrix(matrix, param);
-            TransMatrix(matrix, &param->unk18);
+            TransMatrix(matrix, &param->trans_x);
         } else {
             rot = flags & 2;
             if (rot) {
-                param->unk10 = data[0] / 360;
-                param->unk12 = data[1] / 360;
-                param->unk14 = data[2] / 360;
+                param->rot_x = data[0] / 360;
+                param->rot_y = data[1] / 360;
+                param->rot_z = data[2] / 360;
                 data += 3;
-                RotMatrix(&param->unk10, matrix);
+                RotMatrix(&param->rot_x, matrix);
             }
             if (flags & 4) {
-                param->unk0 = ((s16 *)data)[0];
-                param->unk4 = ((s16 *)data)[1];
-                param->unk8 = ((s16 *)data)[2];
+                param->scale_x = ((s16 *)data)[0];
+                param->scale_y = ((s16 *)data)[1];
+                param->scale_z = ((s16 *)data)[2];
                 data += 2;
                 if (!rot) {
-                    RotMatrix(&param->unk10, matrix);
+                    RotMatrix(&param->rot_x, matrix);
                 }
                 ScaleMatrix(matrix, param);
             }
             if (flags & 8) {
-                param->unk18 = data[0];
-                param->unk1C = data[1];
-                param->unk20 = data[2];
-                TransMatrix(matrix, &param->unk18);
+                param->trans_x = data[0];
+                param->trans_y = data[1];
+                param->trans_z = data[2];
+                TransMatrix(matrix, &param->trans_x);
             }
         }
         break;
     case 2:
         if (tmd != NULL) {
-            model = func_801D1044_inl(tmd, ids, (u16)data[0]);
+            model = kaj_tod_find_tmd_inl(tmd, ids, (u16)data[0]);
             if (model != NULL) {
                 GsLinkObject4(model, obj, 0);
             }
@@ -238,11 +238,11 @@ void *kaj_tod_set_packet(void *packet, void *table, s32 *ids, void *tmd, s32 mod
     case 3:
         if (mode != 2) {
             if (data[0] == 0 || data[0] == 0xFFFF) {
-                ((Unk_801D0E58 *)obj->coord2)->unk48 = (void *)root_coord;
-            } else if ((parent = func_801D0EB8_inl(table, data[0])) == NULL) {
-                ((Unk_801D0E58 *)obj->coord2)->unk48 = (void *)root_coord;
+                ((TodCoord *)obj->coord2)->super = (void *)root_coord;
+            } else if ((parent = kaj_tod_find_obj_inl(table, data[0])) == NULL) {
+                ((TodCoord *)obj->coord2)->super = (void *)root_coord;
             } else {
-                ((Unk_801D0E58 *)obj->coord2)->unk48 = parent->coord2;
+                ((TodCoord *)obj->coord2)->super = parent->coord2;
             }
         }
         break;
@@ -250,10 +250,10 @@ void *kaj_tod_set_packet(void *packet, void *table, s32 *ids, void *tmd, s32 mod
         if (table != NULL) {
             switch (flags) {
             case 0:
-                func_801D0F04_inl(table, id);
+                kaj_tod_create_obj_inl(table, id);
                 break;
             case 1:
-                func_801D0FB8_inl(table, id);
+                kaj_tod_remove_obj_inl(table, id);
                 break;
             }
             rot = flags;
@@ -263,7 +263,7 @@ void *kaj_tod_set_packet(void *packet, void *table, s32 *ids, void *tmd, s32 mod
     return (s32 *)packet + len;
 }
 
-void kaj_tod_init_table(TodObjTable *table, TodObj *objs, Unk_801D0E58 *coords, u8 *params, s32 count) {
+void kaj_tod_init_table(TodObjTable *table, TodObj *objs, TodCoord *coords, u8 *params, s32 count) {
     s32 i;
 
     table->nobj = 0;
@@ -274,7 +274,7 @@ void kaj_tod_init_table(TodObjTable *table, TodObj *objs, Unk_801D0E58 *coords, 
         objs->attribute = 0x80000000;
         objs->id = -1;
         objs->coord2 = coords;
-        coords->unk44 = params;
+        coords->param = params;
         objs->tmd = 0;
         objs++;
         coords++;
@@ -349,12 +349,12 @@ TodObj *kaj_tod_remove_obj(TodObjTable *table, s32 id) {
     return NULL;
 }
 
-s32 *kaj_tod_find_tmd(Unk_801D1044 *tmd, s32 *ids, s32 id) {
+s32 *kaj_tod_find_tmd(TodTmd *tmd, s32 *ids, s32 id) {
     s32 *p;
     s32 n;
 
-    p = tmd->unkC[0];
-    for (n = tmd->unk8; n > 0; n--) {
+    p = tmd->objects[0];
+    for (n = tmd->nobj; n > 0; n--) {
         if (id == *ids) {
             break;
         }

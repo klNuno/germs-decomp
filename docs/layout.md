@@ -22,7 +22,7 @@ The evidence words:
   jump table at 4 mod 8 from its unit's .rodata start proves that a new object starts before it. The real file start
   may be a few functions earlier, where no function uses .rodata.
 - **gp**: the same small global is read with `lui` before the cut and through `gp` after it, as the comments of
-  `config/splat.yaml` record at both gp cuts (`D_801DFC74` at 0x801768F8, `D_801DFF50` at 0x80195098). That change is
+  `config/splat.yaml` record at both gp cuts (`ai_door_noise` at 0x801768F8, `player_pick_trigger_hook` at 0x80195098). That change is
   read as a likely file change, not a proven one; the file start may still be a few functions before the cut.
 - **rodata**: each .rodata symbol is referenced by one unit only, and .rodata follows the unit order, so a cut can
   only fall where the .rodata order allows.
@@ -33,7 +33,7 @@ The evidence words:
 | --- | --- | --- | --- | --- |
 | [game/80173054](../src/game/80173054.c) | action.c | `action_cmd_change_scene..action_run_npc_event` @0x801752F4 (19) | likely | start of .text; assert in `action_load_set` (0x80173A44) |
 | [game/8017546C](../src/game/8017546C.c) | unknown | `npc_update_anim..npc_find_stats` @0x80176890 (15) | likely | jtbl cut |
-| [game/801768F8](../src/game/801768F8.c) | unknown | `ai_check_line..ai_in_aim_cone` @0x80179630 (16) | likely | gp cut: `D_801DFC74` is read with `lui` before, through `gp` from here |
+| [game/801768F8](../src/game/801768F8.c) | unknown | `ai_check_line..ai_in_aim_cone` @0x80179630 (16) | likely | gp cut: `ai_door_noise` is read with `lui` before, through `gp` from here |
 | [game/80179848](../src/game/80179848.c) | block.c | `block_setup..block_elevator_run` @0x8017E99C (42) | likely | assert from `block_setup` to `block_create` (0x8017CB98) |
 | [game/8017EBF8](../src/game/8017EBF8.c) | unknown | `menu_card_init_slots..door_exec_command` @0x8018519C (46) | likely | jtbl cut |
 | [game/80185380](../src/game/80185380.c) | door.c | `door_create..door_fade_step` @0x80185918 (9) | guess | assert in `door_create`; the file may start at `door_setup` (0x801844D4) or before (below) |
@@ -42,7 +42,7 @@ The evidence words:
 | [game/8018ACAC](../src/game/8018ACAC.c) | mail.c | `mail_create..mail_menu_get_entry` @0x8018D294 (32) | likely | assert in `mail_create` and `mail_list_open` (0x8018B810) |
 | [game/8018D2DC](../src/game/8018D2DC.c) | mod.c | `mod_setup..mod_npcrec_move_end` @0x8018F958 (30) | likely | assert from `mod_setup` to `mod_create` (0x8018D5F8) |
 | [game/8018FA18](../src/game/8018FA18.c) | object.c | `object_load_aset..object_deliver_area_events` @0x80194FAC (39) | likely | assert from `object_load_aset` to `object_iff_open` (0x80192380) |
-| [game/80195098](../src/game/80195098.c) | unknown | `player_check_ground..player_update_view` @0x80195BC8 (4) | likely | gp cut: `D_801DFF50` is read with `lui` before, through `gp` from here |
+| [game/80195098](../src/game/80195098.c) | unknown | `player_check_ground..player_update_view` @0x80195BC8 (4) | likely | gp cut: `player_pick_trigger_hook` is read with `lui` before, through `gp` from here |
 | [game/80195DF0](../src/game/80195DF0.c) | unknown | `player_try_slide..player_update_map` @0x8019A3E8 (33) | likely | jtbl cut |
 | [game/8019A5D4](../src/game/8019A5D4.c) | roadmap.c | `roadmap_init..roadmap_cmp_weapon_level` @0x801A216C (33) | likely | assert in `roadmap_init` |
 | [game/801A217C](../src/game/801A217C.c) | sound.c | `sound_se_push..sound_footstep_reset` @0x801A3DBC (21) | likely | assert from `sound_se_push` to `sound_bgm_create` (0x801A3AA0) |

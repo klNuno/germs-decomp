@@ -44,9 +44,9 @@ map gives instead. `mail_step_frame` (0x8018C2FC) runs the effects while they ar
 
 | Field | Effect it turns on | Town area |
 | --- | --- | --- |
-| `unk252` | `effect_flame_small_update` (0x80185E38) | one rectangle |
-| `unk250` | `effect_flame_large_update` (0x80186010) | the same rectangle |
-| `unk254` | `effect_clut_cycle_update` (0x801865C0) | that rectangle and nine more, and everything south of z -1225 |
+| `flame_small_on` | `effect_flame_small_update` (0x80185E38) | one rectangle |
+| `flame_large_on` | `effect_flame_large_update` (0x80186010) | the same rectangle |
+| `clut_cycle_on` | `effect_clut_cycle_update` (0x801865C0) | that rectangle and nine more, and everything south of z -1225 |
 
 ## Visibility
 
@@ -110,7 +110,7 @@ effect 0x21 on arrival.
 runs `thing_field_enter` (0x801A88B4), polls kaj events, calls `thing_field_input` (0x801A8768) and
 `mail_step_frame` each frame, and ends with `thing_field_leave` (0x801A8B38). The exit code it leaves decides what
 comes next: 0 quit, 1 the phone (`sprite_phone_run`, 0x801A6AC4, after a 0xFF trigger), 2 the bus (below), 3 get
-into the car, 4 get out. The vehicle mode the player is in is player `unk46`: 0 on foot, 1 the car, 2 the train, 3
+into the car, 4 get out. The vehicle mode the player is in is player `vehicle_mode`: 0 on foot, 1 the car, 2 the train, 3
 the subway. `vehicle_update` (0x801AC4A8) runs `vehicle_car_drive` (0x801AA360) in mode 1 and `thing_train_update`
 (0x801A9EA4) in modes 2 and 3.
 
@@ -132,7 +132,7 @@ computes:
 | revs, forward gear | 800 + 30 times the `brake` counter, at most 6500, minus 45 times the `throttle` counter, at least 800 |
 | revs, reverse | the same with the two counters swapped |
 | speed | (revs - 800) x 347436 / (divisor x 55086), or / (divisor x 72566) backward, then a quarter of it, times the frame time |
-| divisor | `thing_car_speed_div`: 300, 400 or 500 from the car speed setting (`thing_car_init`, 0x801A923C); three times more while `unk2` is set |
+| divisor | `thing_car_speed_div`: 300, 400 or 500 from the car speed setting (`thing_car_init`, 0x801A923C); three times more while `vehicle_car_state.slowed` is set |
 
 (The two counter names look swapped by their use.)  Sound effect 0x1B plays when speed is 25 or more with steering
 40 or more. When the car stands, the prompt to get out shows and CIRCLE leaves (`vehicle_car_stopped_input`,
@@ -165,5 +165,5 @@ the player at the counter. `roadmap_shop_open_menu` (0x801A1AB8) opens the first
 5 to 10 by the player's level band (level / 20, at most 2). `roadmap_shop_finish` (0x801A0EDC) ends a deal: kind 7
 gives level advice, kind 9 uses the bought item at once between screen fades (`effect_item_use`, 0x801882AC), and
 the food shops either hand over up to three items or eat them at once with `effect_item_use` (a meal adds 1 to
-`GameVars` `unk92`). `roadmap_shop_exit_to_town` (0x801A1FD4) puts the player back in the town at the shop's exit
+`meal_count`, GameVars + 0x92). `roadmap_shop_exit_to_town` (0x801A1FD4) puts the player back in the town at the shop's exit
 point. What the food and the clinics do is in [player and survival](player-and-survival.md#food-and-healing).

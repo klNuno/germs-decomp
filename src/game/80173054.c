@@ -2,44 +2,44 @@
 #include "game/types.h"
 
 LlList *action_queue;
-void kaj_ll_insert_before(LlList *a0, s32 a1);
+void kaj_ll_insert_before(LlList *list, s32 data);
 extern SceneTables object_scene_tables;
 void free3(void *ptr);
-s32 block_find_at(s32 a0, s32 a1, s32 a2);
-NpcBody *npc_find_body(s16 arg0);
+s32 block_find_at(s32 x, s32 y, s32 z);
+NpcBody *npc_find_body(s16 id);
 extern Inventory *player_status_inventory[];
-Model *mod_find(u16 arg0);
+Model *mod_find(u16 id);
 void mod_draw(s32 arg0, Model *arg1, u16 arg2);
-void kaj_ll_remove_to_prev(LlList *arg0);
-s16 kaj_ll_at_tail(LlList *arg0);
+void kaj_ll_remove_to_prev(LlList *list);
+s16 kaj_ll_at_tail(LlList *list);
 LlList *action_set_list;
-ActionSet *action_run_set(ActionSet *arg0, s32 arg1, s32 arg2);
+ActionSet *action_run_set(ActionSet *set, s32 at_cursor, s32 skip_text_wait);
 extern EventState event_state;
 void text_release_cmd(void);
 void *memset(void *dst, s32 c, u32 n);
 extern Player *player_status_player[];
-void mod_setup(Model *arg0, s32 arg1, s32 arg2, s32 arg3);
+void mod_setup(Model *mod, s32 parent, s32 kind, s32 anim);
 void RotMatrix(SVector *arg0, void *arg1);
-void action_place_npc(Npc *arg0, Model *arg1);
-ActionSet *action_find_set(s16 arg0);
+void action_place_npc(Npc *npc, Model *model);
+ActionSet *action_find_set(s16 id);
 void text_close(void);
 void GsSetLsMatrix(void *m);
-s16 block_point_on_model(void *arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4);
-Npc *npc_find(s16 arg0, u16 arg1);
-s16 mail_wrap_angle(s16 a);
+s16 block_point_on_model(void *obj, s32 x, s32 y, s32 z, u16 mode);
+Npc *npc_find(s16 by_model, u16 id);
+s16 mail_wrap_angle(s16 angle);
 s32 ratan2(s32 y, s32 x);
-s32 mail_angle_to_dir4(s16 a);
+s32 mail_angle_to_dir4(s16 angle);
 extern s16 ai_probe_angle[];
 s32 rsin(s32 a);
 s32 rcos(s32 a);
-s16 ai_check_line(Npc *arg0, SceneTrigger *arg1, s32 arg2);
-s16 ai_try_move(Npc *arg0, SceneTrigger *arg1, s16 arg2);
+s16 ai_check_line(Npc *npc, SceneTrigger *point, s32 flags);
+s16 ai_try_move(Npc *npc, SceneTrigger *delta, s16 angle);
 extern s32 kaj_system_vsync_delta[];
 Model *ai_cur_model;
-NpcStats *npc_find_stats(s16 arg0);
-s16 ai_find_target(Npc *arg0, s32 arg1);
-s16 ai_decide_fire(Npc *arg0);
-void ai_face_player(Npc *arg0);
+NpcStats *npc_find_stats(s16 id);
+s16 ai_find_target(Npc *npc, s32 turn_mode);
+s16 ai_decide_fire(Npc *npc);
+void ai_face_player(Npc *npc);
 extern NpcStats ai_default_stats;
 extern NpcBody ai_default_body;
 Block *ai_cur_block;
@@ -47,52 +47,52 @@ s32 ai_cur_grid;
 NpcStats *ai_cur_stats;
 NpcBody *ai_cur_body;
 s32 atoi(char *s);
-void mail_goto_ofc(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
-void mail_goto_twn(s32 a, s32 b, s32 c, s16 d, s16 e);
-void mail_goto_building(s32 arg0, char *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
+void mail_goto_ofc(s32 a, s32 yaw, s32 c, s32 d);
+void mail_goto_twn(s32 x, s32 y, s32 z, s16 yaw, s16 e);
+void mail_goto_building(s32 form, char *name, s32 var, s32 map_letter, s32 map_entry, s32 yaw, s32 scene_index, s32 trigger, s32 script_entry);
 extern u16 action_vars[];
 typedef struct {
-    s16 unk0;
+    s16 opcode;
     s16 unk2;
-} Unk_8017345C;
-void action_cmd_change_scene(Action *arg0, s32 *arg1);
-void action_cmd_var(Action *arg0);
-void action_reset(s16 arg0);
-SceneTrigger *action_find_trigger(s32 arg0);
+} ActionQueueOp;
+void action_cmd_change_scene(Action *action, s32 *event);
+void action_cmd_var(Action *action);
+void action_reset(s16 flush_all);
+SceneTrigger *action_find_trigger(s32 id);
 s16 action_queue_front_flag;
 s16 action_blink_count;
-void sprite_set_clut_entry(s32 arg0, s32 arg1, s32 arg2);
-void npc_exec_command(Action *arg0);
-void thing_cmd_set_active(Action *arg0);
-void sound_bgm_fade_out(s32 arg0);
-void sound_bgm_play(s16 arg0);
-void door_exec_command(Action *arg0, EventState *arg1);
-void text_exec_command(Action *arg0);
-void mod_cmd_npcrec(Action *arg0, EventState *arg1);
-void player_exec_command(Action *arg0, EventState *arg1);
-void sound_exec_command(Action *arg0);
-void kaj_event_push(s32 arg0);
-void sprite_exec_command(Action *arg0);
-void mail_cmd_receive(Action *arg0);
-void roadmap_start_flash(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
-void kaj_ll_insert_after(LlList *a0, s32 a1);
+void sprite_set_clut_entry(s32 id, s32 index, s32 color);
+void npc_exec_command(Action *action);
+void thing_cmd_set_active(Action *action);
+void sound_bgm_fade_out(s32 seconds);
+void sound_bgm_play(s16 seq);
+void door_exec_command(Action *action, EventState *event);
+void text_exec_command(Action *action);
+void mod_cmd_npcrec(Action *action, EventState *event);
+void player_exec_command(Action *action, EventState *event);
+void sound_exec_command(Action *cmd);
+void kaj_event_push(s32 type);
+void sprite_exec_command(Action *cmd);
+void mail_cmd_receive(Action *action);
+void roadmap_start_flash(s32 red, s32 green, s32 blue, s32 duration);
+void kaj_ll_insert_after(LlList *list, s32 data);
 extern PlayerStatus player_status;
-s16 action_test_inventory(ActionCond *arg0);
-extern char D_80170000[];
+s16 action_test_inventory(ActionCond *cond);
+extern char action_str_err_alloc_set[];
 extern char action_str_file[];
-extern char D_80170028[];
-extern char D_80170050[];
-extern char D_80170068[];
-extern char D_8017008C[];
-extern char D_801700B0[];
+extern char action_str_err_alloc_set_header[];
+extern char action_str_err_alloc_actions[];
+extern char action_str_err_alloc_cmd[];
+extern char action_str_err_alloc_args[];
+extern char action_str_err_alloc_arg_buf[];
 typedef struct {
-    u16 unk0;
-    u16 unk2;
-    u16 unk4;
-    u16 unk6;
-} Unk_80173A44;
+    u16 opcode;
+    u16 sub;
+    u16 target_lo;
+    u16 target_hi;
+} ActionCmdCopy;
 void *kaj_malloc(s32 size);
-void kaj_abend(s32 a, char *b, char *c, s32 d);
+void kaj_abend(s32 code, char *msg, char *file, s32 line);
 void *memcpy(void *dst, void *src, s32 n);
 s32 strlen(char *s);
 
@@ -126,19 +126,19 @@ void action_cmd_change_scene(Action *action, s32 *event) {
     }
 }
 
-INCLUDE_RODATA("asm/nonmatchings/game/80173054", D_80170000);
+INCLUDE_RODATA("asm/nonmatchings/game/80173054", action_str_err_alloc_set);
 
 INCLUDE_RODATA("asm/nonmatchings/game/80173054", action_str_file);
 
-INCLUDE_RODATA("asm/nonmatchings/game/80173054", D_80170028);
+INCLUDE_RODATA("asm/nonmatchings/game/80173054", action_str_err_alloc_set_header);
 
-INCLUDE_RODATA("asm/nonmatchings/game/80173054", D_80170050);
+INCLUDE_RODATA("asm/nonmatchings/game/80173054", action_str_err_alloc_actions);
 
-INCLUDE_RODATA("asm/nonmatchings/game/80173054", D_80170068);
+INCLUDE_RODATA("asm/nonmatchings/game/80173054", action_str_err_alloc_cmd);
 
-INCLUDE_RODATA("asm/nonmatchings/game/80173054", D_8017008C);
+INCLUDE_RODATA("asm/nonmatchings/game/80173054", action_str_err_alloc_args);
 
-INCLUDE_RODATA("asm/nonmatchings/game/80173054", D_801700B0);
+INCLUDE_RODATA("asm/nonmatchings/game/80173054", action_str_err_alloc_arg_buf);
 
 void action_cmd_var(Action *action) {
     u16 *vars = action_vars;
@@ -183,7 +183,7 @@ void action_update(void) {
     ActionCmd *cmd;
     SceneTrigger *trigger;
     ActionSet *set;
-    Unk_8017345C op;
+    ActionQueueOp op;
     s32 flag;
     s32 red, green, blue;
     s32 n;
@@ -219,22 +219,22 @@ void action_update(void) {
 
     list = action_queue;
     n = list->count;
-    op.unk0 = -2;
+    op.opcode = -2;
     if (n == 0) {
         action = NULL;
     } else {
         Action *first;
         list->cursor = list->head;
         first = (Action *)list->cursor->data;
-        op.unk0 = first->cmd->opcode;
+        op.opcode = first->cmd->opcode;
         action = first;
         kaj_ll_remove_to_prev(list);
     }
-    if (op.unk0 < 0) {
+    if (op.opcode < 0) {
         action_reset(1);
         return;
     }
-    switch (op.unk0) {
+    switch (op.opcode) {
     case 0:
         cmd = action->cmd;
         trigger = action_find_trigger(cmd->target);
@@ -253,7 +253,7 @@ void action_update(void) {
             trigger->enabled = atoi(action->args[0]);
             break;
         case 2:
-            trigger->unk8 = atoi(action->args[0]);
+            trigger->passable = atoi(action->args[0]);
             break;
         }
         break;
@@ -338,7 +338,7 @@ s16 action_test_inventory(ActionCond *cond) {
     if (cond->used == 0) {
         return 2;
     }
-    if (cond->unk6 == 0) {
+    if (cond->skip_test == 0) {
         if (cond->index != 0) {
             ret = 1;
             for (i = 1, misses = 0; i < 2; i++) {
@@ -378,12 +378,12 @@ u8 *action_load_set(u8 *src) {
 
     set = kaj_malloc(0xC);
     if (set == NULL) {
-        kaj_abend(3, D_80170000, action_str_file, 0x1F1);
+        kaj_abend(3, action_str_err_alloc_set, action_str_file, 0x1F1);
     }
     src += 4;
     set->header = kaj_malloc(0x38);
     if (set->header == NULL) {
-        kaj_abend(3, D_80170028, action_str_file, 0x1F9);
+        kaj_abend(3, action_str_err_alloc_set_header, action_str_file, 0x1F9);
     }
     *set->header = *(ActionSetHeader *)src;
     src += 0x38;
@@ -391,7 +391,7 @@ u8 *action_load_set(u8 *src) {
     src += 4;
     act = kaj_malloc(set->count * 0xC);
     if (act == NULL) {
-        kaj_abend(3, D_80170050, action_str_file, 0x204);
+        kaj_abend(3, action_str_err_alloc_actions, action_str_file, 0x204);
     }
     set->actions = act;
     for (i = 0; i < set->count; i++, act++) {
@@ -400,9 +400,9 @@ u8 *action_load_set(u8 *src) {
         act->cmd = kaj_malloc(8);
         len = size - 0xC;
         if (act->cmd == NULL) {
-            kaj_abend(3, D_80170068, action_str_file, 0x210);
+            kaj_abend(3, action_str_err_alloc_cmd, action_str_file, 0x210);
         }
-        *(Unk_80173A44 *)act->cmd = *(Unk_80173A44 *)src;
+        *(ActionCmdCopy *)act->cmd = *(ActionCmdCopy *)src;
         act->argc = *(s32 *)(src + 8);
         if (act->argc == 0) {
             len = 0;
@@ -413,11 +413,11 @@ u8 *action_load_set(u8 *src) {
         } else {
             args = kaj_malloc(act->argc * 4);
             if (args == NULL) {
-                kaj_abend(3, D_8017008C, action_str_file, 0x220);
+                kaj_abend(3, action_str_err_alloc_args, action_str_file, 0x220);
             }
             buf = kaj_malloc(len);
             if (buf == NULL) {
-                kaj_abend(3, D_801700B0, action_str_file, 0x225);
+                kaj_abend(3, action_str_err_alloc_arg_buf, action_str_file, 0x225);
             }
             act->args = args;
             memcpy(buf, src + 0xC, len);
@@ -445,7 +445,7 @@ u8 *action_load_set(u8 *src) {
     return src;
 }
 
-static inline s16 func_80173DE0_var(ActionCond *cond) {
+static inline s16 action_run_set_test_var(ActionCond *cond) {
     u16 *vars = action_vars;
     s16 value;
     s16 ret;
@@ -462,7 +462,7 @@ static inline s16 func_80173DE0_var(ActionCond *cond) {
     return ret;
 }
 
-static inline s16 func_80173DE0_glob(ActionCond *cond) {
+static inline s16 action_run_set_test_status(ActionCond *cond) {
     PlayerStatus *status = &player_status;
     s16 value;
     s16 ret;
@@ -494,10 +494,10 @@ static inline s16 func_80173DE0_glob(ActionCond *cond) {
     return ret;
 }
 
-static inline void func_80173DE0_run(ActionSet *set, s16 at_cursor, s16 skip_text_wait) {
+static inline void action_run_set_queue(ActionSet *set, s16 at_cursor, s16 skip_text_wait) {
     LlList *list;
     Action *act;
-    ActionSetHeader *cmd;
+    ActionCmd *cmd;
     s16 first = 1;
     s32 i;
     if (at_cursor != 0) {
@@ -506,11 +506,11 @@ static inline void func_80173DE0_run(ActionSet *set, s16 at_cursor, s16 skip_tex
         for (i = 0; i < set->count; i++, act++) {
             cmd = act->cmd;
             if (skip_text_wait != 0) {
-                if (cmd->unk0 == 5 || *(s32 *)cmd == 0xB) {
+                if (cmd->opcode == 5 || *(s32 *)cmd == 0xB) {
                     continue;
                 }
                 if (*(s32 *)cmd == 0x1000B) {
-                    cmd->unk2 = 10;
+                    cmd->sub = 10;
                 }
             }
             if (action_queue_front_flag != 0 && first != 0) {
@@ -530,11 +530,11 @@ static inline void func_80173DE0_run(ActionSet *set, s16 at_cursor, s16 skip_tex
         for (i = 0; i < set->count; i++, act2++) {
             cmd = act2->cmd;
             if (skip_text_wait != 0) {
-                if (cmd->unk0 == 5 || *(s32 *)cmd == 0xB) {
+                if (cmd->opcode == 5 || *(s32 *)cmd == 0xB) {
                     continue;
                 }
                 if (*(s32 *)cmd == 0x1000B) {
-                    cmd->unk2 = 10;
+                    cmd->sub = 10;
                 }
             }
             if (l2->count == 0) {
@@ -547,7 +547,7 @@ static inline void func_80173DE0_run(ActionSet *set, s16 at_cursor, s16 skip_tex
     }
 }
 
-static inline ActionSet *func_80173DE0_find(s16 id) {
+static inline ActionSet *action_run_set_find(s16 id) {
     LlList *list = action_set_list;
     ActionSet *set;
     if (list->count == 0) {
@@ -559,7 +559,7 @@ static inline ActionSet *func_80173DE0_find(s16 id) {
     list->cursor = list->head;
     while (1) {
         set = list->cursor->data;
-        if (set != NULL && set->header->unk0 == id) {
+        if (set != NULL && set->header->id == id) {
             return set;
         }
         if (kaj_ll_at_tail(list) != 0) {
@@ -577,9 +577,9 @@ ActionSet *action_run_set(ActionSet *set, s32 at_cursor, s32 skip_text_wait) {
     s32 n_true;
     s32 i;
 
-    results[0] = func_80173DE0_var(&header->cond_var_a);
-    results[1] = func_80173DE0_var(&header->cond_var_b);
-    results[2] = func_80173DE0_glob(&header->cond_status);
+    results[0] = action_run_set_test_var(&header->cond_var_a);
+    results[1] = action_run_set_test_var(&header->cond_var_b);
+    results[2] = action_run_set_test_status(&header->cond_status);
     results[3] = action_test_inventory(&header->cond_inventory);
     for (i = 0, n_unused = 0; i < 4; i++) {
         if (results[i] == 2) {
@@ -587,9 +587,9 @@ ActionSet *action_run_set(ActionSet *set, s32 at_cursor, s32 skip_text_wait) {
         }
     }
     if (n_unused == 4) {
-        func_80173DE0_run(set, at_cursor, skip_text_wait);
+        action_run_set_queue(set, at_cursor, skip_text_wait);
         if (header->next_mode == 1 || header->next_mode == 2) {
-            return func_80173DE0_find(header->next_set);
+            return action_run_set_find(header->next_set);
         }
         return NULL;
     }
@@ -598,25 +598,25 @@ ActionSet *action_run_set(ActionSet *set, s32 at_cursor, s32 skip_text_wait) {
             n_true++;
         }
     }
-    if (header->unk2 == 0) {
+    if (header->match_all == 0) {
         if (n_true > 0) {
-            func_80173DE0_run(set, at_cursor, skip_text_wait);
+            action_run_set_queue(set, at_cursor, skip_text_wait);
             if (header->next_mode == 1 || header->next_mode == 2) {
-                return func_80173DE0_find(header->next_set);
+                return action_run_set_find(header->next_set);
             }
         } else {
             if (header->next_mode == 0 || header->next_mode == 2) {
-                return func_80173DE0_find(header->next_set);
+                return action_run_set_find(header->next_set);
             }
         }
     } else if (n_true == 4 - n_unused) {
-        func_80173DE0_run(set, at_cursor, skip_text_wait);
+        action_run_set_queue(set, at_cursor, skip_text_wait);
         if (header->next_mode == 1 || header->next_mode == 2) {
-            return func_80173DE0_find(header->next_set);
+            return action_run_set_find(header->next_set);
         }
     } else {
         if (header->next_mode == 0 || header->next_mode == 2) {
-            return func_80173DE0_find(header->next_set);
+            return action_run_set_find(header->next_set);
         }
     }
     return NULL;
@@ -628,7 +628,7 @@ void action_reset(s16 flush_all) {
     u16 old_flags = event->wait_flags;
     u16 old_timer = event->wait_timer;
     LlList *list;
-    ActionSetHeader *cmd;
+    ActionCmd *cmd;
 
     text_release_cmd();
     memset(event, 0, 0x14);
@@ -666,12 +666,12 @@ void action_reset(s16 flush_all) {
     list->cursor = list->head;
     while (1) {
         if (list->cursor->data != NULL) {
-            cmd = list->cursor->data->header;
-            if (cmd->unk0 == 5 || *(s32 *)cmd == 0xB) {
+            cmd = (ActionCmd *)list->cursor->data->header;
+            if (cmd->opcode == 5 || *(s32 *)cmd == 0xB) {
                 kaj_ll_remove_to_prev(list);
             }
             if (*(s32 *)cmd == 0x1000B) {
-                cmd->unk2 = 10;
+                cmd->sub = 10;
             }
         }
         if (kaj_ll_at_tail(list) != 0) {
@@ -688,7 +688,7 @@ void action_push_front(s32 action) {
 
 void action_flush_queue(s16 flush_all) {
     LlList *list = action_queue;
-    ActionSetHeader *cmd;
+    ActionCmd *cmd;
 
     if (list->count == 0) {
         return;
@@ -705,12 +705,12 @@ void action_flush_queue(s16 flush_all) {
     list->cursor = list->head;
     while (1) {
         if (list->cursor->data != NULL) {
-            cmd = list->cursor->data->header;
-            if (cmd->unk0 == 5 || *(s32 *)cmd == 0xB) {
+            cmd = (ActionCmd *)list->cursor->data->header;
+            if (cmd->opcode == 5 || *(s32 *)cmd == 0xB) {
                 kaj_ll_remove_to_prev(list);
             }
             if (*(s32 *)cmd == 0x1000B) {
-                cmd->unk2 = 10;
+                cmd->sub = 10;
             }
         }
         if (kaj_ll_at_tail(list) != 0) {
@@ -775,7 +775,7 @@ ActionSet *action_find_set(s16 id) {
     list->cursor = list->head;
     while (1) {
         set = list->cursor->data;
-        if (set != NULL && set->header->unk0 == id) {
+        if (set != NULL && set->header->id == id) {
             return set;
         }
         if (kaj_ll_at_tail(list) != 0) {
@@ -805,7 +805,7 @@ s32 action_run_trigger_enter(SceneTrigger *trigger) {
         list->cursor = list->head;
         while (1) {
             p = list->cursor->data;
-            if (p != NULL && p->header->unk0 == id) {
+            if (p != NULL && p->header->id == id) {
                 set = p;
                 break;
             }
@@ -843,7 +843,7 @@ s32 action_run_trigger_leave(SceneTrigger *trigger) {
         list->cursor = list->head;
         while (1) {
             p = list->cursor->data;
-            if (p != NULL && p->header->unk0 == id) {
+            if (p != NULL && p->header->id == id) {
                 set = p;
                 break;
             }
@@ -894,19 +894,19 @@ void action_place_npc(Npc *npc, Model *model) {
     SVector rot;
 
     if (model->ready == 0) {
-        if (npc->unkF == 6) {
-            npc->unkE = 2;
+        if (npc->state == 6) {
+            npc->mode = 2;
             mod_setup(model, 0, 0, 8);
         } else {
             mod_setup(model, 0, 0, 0);
         }
     }
-    model->coord_tx = npc->unk20 - player->cell_x * 12500;
-    model->coord_ty = npc->unk24 + player->cell_y * 32000;
-    model->coord_tz = npc->unk28 - player->cell_z * 12500;
-    rot.vx = (npc->unk38 << 12) / 360;
-    rot.vy = (npc->unk3A << 12) / 360;
-    rot.vz = (npc->unk3C << 12) / 360;
+    model->coord_tx = npc->pos_x - player->cell_x * 12500;
+    model->coord_ty = npc->pos_y + player->cell_y * 32000;
+    model->coord_tz = npc->pos_z - player->cell_z * 12500;
+    rot.vx = (npc->pitch << 12) / 360;
+    rot.vy = (npc->yaw << 12) / 360;
+    rot.vz = (npc->roll << 12) / 360;
     RotMatrix(&rot, model->coord_m);
     model->coord_flg = 0;
 }
@@ -921,26 +921,26 @@ void action_init_npcs(void) {
         return;
     }
     for (i = 0; i < p->npc_count; i++, npc++) {
-        npc->unk4 = 0;
-        npc->unk20 *= 10;
-        npc->unk24 *= 10;
-        npc->unk28 *= 10;
-        npc->unk2C *= 10;
-        npc->unk30 *= 10;
-        npc->unk34 *= 10;
-        model = mod_find(npc->unk16);
+        npc->placed = 0;
+        npc->pos_x *= 10;
+        npc->pos_y *= 10;
+        npc->pos_z *= 10;
+        npc->dest_x *= 10;
+        npc->dest_y *= 10;
+        npc->dest_z *= 10;
+        model = mod_find(npc->model_id);
         if (model != NULL) {
             action_place_npc(npc, model);
-        npc->block = block_find_at(npc->unk20, npc->unk24, npc->unk28);
-        npc->unk10 = -2;
-        npc->unk40 = 0;
-        npc->unkB = 0;
-        npc->unk44 = 0;
-        npc->unk45 = 0;
-        npc->unk46 = 0;
-        npc->unk12 |= 1;
-        npc->unk3E = npc->unk3A;
-        npc->unk4 = 1;
+        npc->block = block_find_at(npc->pos_x, npc->pos_y, npc->pos_z);
+        npc->target = -2;
+        npc->target_dist = 0;
+        npc->fire_decision = 0;
+        npc->aim_pitch_diff = 0;
+        npc->aim_elevation = 0;
+        npc->aim_timer = 0;
+        npc->flags |= 1;
+        npc->target_yaw = npc->yaw;
+        npc->placed = 1;
         }
     }
 }
@@ -957,7 +957,7 @@ s32 action_run_npc_event(u16 id, s16 enter) {
         npc = NULL;
     } else {
         for (i = 0; i < n; i++, cur++) {
-            if (cur->unk0 == id) {
+            if (cur->id == id) {
                 npc = cur;
                 goto found;
             }
@@ -965,30 +965,30 @@ s32 action_run_npc_event(u16 id, s16 enter) {
         npc = NULL;
     }
 found:
-    if (npc == NULL || npc->unk4 == 0) {
+    if (npc == NULL || npc->placed == 0) {
         return 0;
     }
-    if (npc->unk8 == 0) {
+    if (npc->talkable == 0) {
         return 0;
     }
-    if (npc->unkF == 6) {
+    if (npc->state == 6) {
         if (enter != 0) {
             set = action_find_set(0x400);
         } else {
             text_close();
         }
-    } else if (npc->unkE == 1) {
-        if (npc->unk12 & 0x20) {
-            npc->unk12 &= ~0x20;
+    } else if (npc->mode == 1) {
+        if (npc->flags & 0x20) {
+            npc->flags &= ~0x20;
         }
         return 0;
     } else {
         if (enter != 0) {
-            set = action_find_set(npc->unk1A);
-            npc->unk12 |= 0x20;
+            set = action_find_set(npc->talk_set);
+            npc->flags |= 0x20;
         } else {
-            set = action_find_set(npc->unk1C);
-            npc->unk12 &= ~0x20;
+            set = action_find_set(npc->leave_set);
+            npc->flags &= ~0x20;
         }
     }
     if (set == NULL) {

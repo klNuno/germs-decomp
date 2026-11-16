@@ -11,7 +11,7 @@ extern s16 kaj_timer_enabled[];
 extern KajSystem kaj_system;
 extern char kaj_timer_str_file[];
 void *calloc3(s32 n, s32 size);
-void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
+void kaj_abend(s32 code, char *msg, char *file, s32 line);
 s32 kaj_timer_handler(void);
 s32 OpenEvent(u32 desc, s32 spec, s32 mode, s32 (*func)(void));
 s32 EnableEvent(s32 event);
@@ -21,14 +21,14 @@ s32 kaj_timer_last_tick;
 extern s32 kaj_timer_period[];
 s16 kaj_timer_pop_due(void);
 void kaj_timer_clear_wrap(void);
-KajEvent *kaj_event_push(s32 arg0);
-KajEvent *kaj_event_push_front(s32 arg0);
+KajEvent *kaj_event_push(s32 type);
+KajEvent *kaj_event_push_front(s32 type);
 extern u32 kaj_timer_ticks[];
 void EnterCriticalSection(void);
 void ExitCriticalSection(void);
-void kaj_timer_cancel(s32 arg0);
+void kaj_timer_cancel(s32 id);
 void *realloc3(void *ptr, s32 size);
-void kaj_timer_add_alarm(s32 arg0, s32 arg1, s32 arg2);
+void kaj_timer_add_alarm(s32 delay, s32 id, s32 data);
 
 s32 kaj_timer_handler(void) {
     TimerHeap *q;

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Rename struct fields with evidence, everywhere the compiler says they are used.
 
-    tools/field_rename.py FIELDS.tsv [--dry-run]
+    tools/field_rename.py FIELDS.tsv [--dry-run] [--units src/game/X.c ...]
 
 FIELDS.tsv: one rename per line, tab separated: FILE, STRUCT, OLD, NEW, evidence.
 FILE is the header or unit that defines `typedef struct STRUCT { ... } STRUCT;` (or `struct STRUCT {`).
@@ -15,6 +15,10 @@ error is left. A line where OLD appears more than once is searched by subsets of
 until it compiles, unless NEW is already a member of some struct (then a wrong subset could
 compile, so it stops). An error it cannot place stops it with a report, leaving the tree as it was. Field names never change the code, so after it:
 tools/unit_check.sh on every unit, then make check.
+
+--units limits the compiles to the units given, for types defined in those units only (a struct
+local to a .c file cannot be reached from another unit), so several workers can rename local
+types in different units at once. A FILE outside the units given is refused.
 """
 import argparse
 import pathlib
@@ -108,6 +112,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("fields")
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--units", nargs="+", metavar="UNIT", help="compile only these .c units (local types)")
     args = ap.parse_args()
 
     rows = []
@@ -123,6 +128,14 @@ def main():
         rows.append((f, st, old, new, ev))
 
     units = sorted(str(p.relative_to(ROOT)) for p in (ROOT / "src").rglob("*.c"))
+    if args.units:
+        given = sorted({str((ROOT / u).resolve().relative_to(ROOT)) for u in args.units})
+        if not set(given) <= set(units):
+            sys.exit(f"--units: not a C unit of src/: {sorted(set(given) - set(units))}")
+        outside = sorted({r[0] for r in rows} - set(given))
+        if outside:
+            sys.exit(f"--units: a FILE of the batch is not among the units given: {outside}")
+        units = given
     cmds = (make_var("CPP"), make_var("CPPFLAGS"), make_var("CC1"), make_var("CFLAGS"))
     before = compile_errors(units, cmds)
     if before:

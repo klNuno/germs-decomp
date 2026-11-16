@@ -1,14 +1,8 @@
 #include "common.h"
 #include "game/types.h"
 
-typedef struct Unk_801CCAF4 {
-    LlNode *unk0;
-    LlNode *unk4;
-    LlNode *unk8;
-    s32 unkC;
-} Unk_801CCAF4;
 void *kaj_malloc(u32 size);
-void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
+void kaj_abend(s32 code, char *msg, char *file, s32 line);
 extern char kaj_ll_str_file[];
 void free3(void *ptr);
 extern KajSystem kaj_system;
@@ -19,64 +13,64 @@ void SsSetTickMode(s32 tick_mode);
 void SsStart(void);
 void SsSetMVol(s16 voll, s16 volr);
 extern char kaj_sound_seq_table[];
-extern s32 D_801E6DB8[];
+extern s32 kaj_system_sep_volume[];
 void SsEnd(void);
 void SsQuit(void);
-typedef struct Unk_801CD78C {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    s32 unkC[1];
-} Unk_801CD78C;
+typedef struct TmdFileHeader {
+    s32 id;
+    s32 flags;
+    s32 n_obj;
+    s32 objects[1];
+} TmdFileHeader;
 void srand(u32 seed);
 extern u32 kaj_timer_ticks[];
-extern char D_80172BB4[];
-typedef struct Unk_801DFAF8 {
-    s32 unk0;
-    char *unk4;
-} Unk_801DFAF8;
-extern Unk_801DFAF8 kaj_error_names[];
-extern char D_80172CA8[];
-extern char D_80172CF0[];
-extern char D_80172D00[];
-extern char D_80172D10[];
-extern char D_80172D1C[];
-extern char D_80172D28[];
-extern char D_80172D34[];
-extern char D_801DFDD0[];
-extern char D_801DFDD4[];
-extern char D_801DFDD8[];
+extern char kaj_ll_str_node_error[];
+typedef struct KajErrorName {
+    s32 code;
+    char *name;
+} KajErrorName;
+extern KajErrorName kaj_error_names[];
+extern char kaj_misc_str_null_file[];
+extern char kaj_misc_str_undefined_error[];
+extern char kaj_misc_str_error_code[];
+extern char kaj_misc_str_file_label[];
+extern char kaj_misc_str_line_label[];
+extern char kaj_misc_str_message_label[];
+extern char kaj_misc_str_bad_tmd[];
+extern char kaj_misc_str_dash[];
+extern char kaj_misc_str_fmt_s[];
+extern char kaj_misc_str_newline[];
 extern char kaj_misc_str_file[];
 int printf(const char *fmt, ...);
 void exit(s32 code);
 void GsMapModelingData(u32 *p);
-extern char D_80172CC8[];
-typedef struct Unk_801CD028 {
-    u32 unk0;
-    void *unk4;
-    void *unk8;
-    u32 unkC;
-} Unk_801CD028;
+extern char kaj_misc_str_bad_line[];
+typedef struct GsDobj2Handle {
+    u32 attribute;
+    void *coord2;
+    void *tmd;
+    u32 id;
+} GsDobj2Handle;
 void *memset(void *dst, s32 c, u32 n);
-void GsLinkObject4(u32 *tmd, Unk_801CD028 *obj, s32 n);
+void GsLinkObject4(u32 *tmd, GsDobj2Handle *obj, s32 n);
 
-void kaj_ll_create(Unk_801CCAF4 **list) {
+void kaj_ll_create(LlList **list) {
     *list = kaj_malloc(0x10);
     if (*list == NULL) {
         kaj_abend(3, "Error Allocating LL Handle", kaj_ll_str_file, 0x15);
     }
-    (*list)->unk0 = NULL;
-    (*list)->unk4 = NULL;
-    (*list)->unk8 = NULL;
-    (*list)->unkC = 0;
+    (*list)->head = NULL;
+    (*list)->tail = NULL;
+    (*list)->cursor = NULL;
+    (*list)->count = 0;
 }
 
-void kaj_ll_destroy(Unk_801CCAF4 *list) {
+void kaj_ll_destroy(LlList *list) {
     LlNode *node;
 
-    while (list->unk0 != NULL) {
-        node = list->unk0;
-        list->unk0 = node->next;
+    while (list->head != NULL) {
+        node = list->head;
+        list->head = node->next;
         if (node != NULL) {
             if (node->data != NULL) {
                 free3(node->data);
@@ -84,179 +78,179 @@ void kaj_ll_destroy(Unk_801CCAF4 *list) {
             free3(node);
         }
     }
-    list->unk4 = NULL;
-    list->unk8 = NULL;
-    list->unkC = 0;
+    list->tail = NULL;
+    list->cursor = NULL;
+    list->count = 0;
     free3(list);
 }
 
-void kaj_ll_insert_before(Unk_801CCAF4 *list, void *data) {
+void kaj_ll_insert_before(LlList *list, void *data) {
     LlNode *node;
 
     node = kaj_malloc(0xC);
     if (node == NULL) {
-        kaj_abend(3, D_80172BB4, kaj_ll_str_file, 0x3C);
+        kaj_abend(3, kaj_ll_str_node_error, kaj_ll_str_file, 0x3C);
     }
     node->data = data;
     node->prev = NULL;
     node->next = NULL;
-    if (list->unk0 == NULL) {
-        list->unk0 = node;
-        list->unk4 = node;
-        list->unk8 = node;
-        list->unkC = 1;
+    if (list->head == NULL) {
+        list->head = node;
+        list->tail = node;
+        list->cursor = node;
+        list->count = 1;
     } else {
-        if (list->unk0 == list->unk8) {
-            node->next = list->unk8;
-            list->unk0->prev = node;
-            list->unk0 = node;
-            list->unk8 = node;
-            list->unkC++;
+        if (list->head == list->cursor) {
+            node->next = list->cursor;
+            list->head->prev = node;
+            list->head = node;
+            list->cursor = node;
+            list->count++;
         } else {
-            node->next = list->unk8;
-            node->prev = list->unk8->prev;
-            list->unk8->prev = node;
-            list->unk8 = node;
+            node->next = list->cursor;
+            node->prev = list->cursor->prev;
+            list->cursor->prev = node;
+            list->cursor = node;
             node->prev->next = node;
-            list->unkC++;
+            list->count++;
         }
     }
 }
 
-void kaj_ll_insert_after(Unk_801CCAF4 *list, void *data) {
+void kaj_ll_insert_after(LlList *list, void *data) {
     LlNode *node;
 
     node = kaj_malloc(0xC);
     if (node == NULL) {
-        kaj_abend(3, D_80172BB4, kaj_ll_str_file, 0x61);
+        kaj_abend(3, kaj_ll_str_node_error, kaj_ll_str_file, 0x61);
     }
     node->data = data;
     node->prev = NULL;
     node->next = NULL;
-    if (list->unk0 == NULL) {
-        list->unk0 = node;
-        list->unk4 = node;
-        list->unk8 = node;
-        list->unkC = 1;
+    if (list->head == NULL) {
+        list->head = node;
+        list->tail = node;
+        list->cursor = node;
+        list->count = 1;
     } else {
-        if (list->unk4 == list->unk8) {
-            node->prev = list->unk8;
-            list->unk4->next = node;
-            list->unk4 = node;
-            list->unk8 = node;
-            list->unkC++;
+        if (list->tail == list->cursor) {
+            node->prev = list->cursor;
+            list->tail->next = node;
+            list->tail = node;
+            list->cursor = node;
+            list->count++;
         } else {
-            node->prev = list->unk8;
-            node->next = list->unk8->next;
-            list->unk8->next = node;
-            list->unk8 = node;
+            node->prev = list->cursor;
+            node->next = list->cursor->next;
+            list->cursor->next = node;
+            list->cursor = node;
             node->next->prev = node;
-            list->unkC++;
+            list->count++;
         }
     }
 }
 
-void kaj_ll_remove_to_prev(Unk_801CCAF4 *list) {
+void kaj_ll_remove_to_prev(LlList *list) {
     LlNode *node;
 
-    node = list->unk8;
-    if (list->unk0 == list->unk4) {
-        list->unk0 = NULL;
-        list->unk4 = NULL;
-        list->unk8 = NULL;
-        list->unkC = 0;
+    node = list->cursor;
+    if (list->head == list->tail) {
+        list->head = NULL;
+        list->tail = NULL;
+        list->cursor = NULL;
+        list->count = 0;
     } else {
-        if (list->unk0 == node) {
-            list->unk8 = node->next;
-            list->unk8->prev = NULL;
+        if (list->head == node) {
+            list->cursor = node->next;
+            list->cursor->prev = NULL;
         } else {
-            list->unk8 = node->prev;
-            list->unk8->next = node->next;
+            list->cursor = node->prev;
+            list->cursor->next = node->next;
             if (node->next != NULL) {
                 node->next->prev = node->prev;
             }
         }
-        list->unkC--;
+        list->count--;
     }
     node->prev = NULL;
     node->next = NULL;
     node->data = NULL;
-    if (list->unk0 == node) {
-        list->unk0 = list->unk8;
+    if (list->head == node) {
+        list->head = list->cursor;
     }
-    if (list->unk4 == node) {
-        list->unk4 = list->unk8;
+    if (list->tail == node) {
+        list->tail = list->cursor;
     }
     free3(node);
 }
 
-void kaj_ll_remove_to_next(Unk_801CCAF4 *list) {
+void kaj_ll_remove_to_next(LlList *list) {
     LlNode *node;
 
-    node = list->unk8;
-    if (list->unk0 == list->unk4) {
-        list->unk0 = NULL;
-        list->unk4 = NULL;
-        list->unk8 = NULL;
-        list->unkC = 0;
+    node = list->cursor;
+    if (list->head == list->tail) {
+        list->head = NULL;
+        list->tail = NULL;
+        list->cursor = NULL;
+        list->count = 0;
     } else {
-        if (list->unk4 == node) {
-            list->unk8 = node->prev;
-            list->unk8->next = NULL;
+        if (list->tail == node) {
+            list->cursor = node->prev;
+            list->cursor->next = NULL;
         } else {
-            list->unk8 = node->next;
-            list->unk8->prev = node->prev;
+            list->cursor = node->next;
+            list->cursor->prev = node->prev;
             if (node->prev != NULL) {
                 node->prev->next = node->next;
             }
         }
-        list->unkC--;
+        list->count--;
     }
     node->prev = NULL;
     node->next = NULL;
     node->data = NULL;
-    if (list->unk0 == node) {
-        list->unk0 = list->unk8;
+    if (list->head == node) {
+        list->head = list->cursor;
     }
-    if (list->unk4 == node) {
-        list->unk4 = list->unk8;
+    if (list->tail == node) {
+        list->tail = list->cursor;
     }
     free3(node);
 }
 
-s32 kaj_ll_at_head(Unk_801CCAF4 *list) {
+s32 kaj_ll_at_head(LlList *list) {
     if (list == NULL) {
         return 0;
     }
-    return list->unk0 == list->unk8;
+    return list->head == list->cursor;
 }
 
-s32 kaj_ll_at_tail(Unk_801CCAF4 *list) {
+s32 kaj_ll_at_tail(LlList *list) {
     if (list == NULL) {
         return 0;
     }
-    return list->unk4 == list->unk8;
+    return list->tail == list->cursor;
 }
 
-INCLUDE_RODATA("asm/nonmatchings/kaj/801CCAF4", D_80172BB4);
+INCLUDE_RODATA("asm/nonmatchings/kaj/801CCAF4", kaj_ll_str_node_error);
 
-INCLUDE_RODATA("asm/nonmatchings/kaj/801CCAF4", D_80172CA8);
+INCLUDE_RODATA("asm/nonmatchings/kaj/801CCAF4", kaj_misc_str_null_file);
 
-INCLUDE_RODATA("asm/nonmatchings/kaj/801CCAF4", D_80172CC8);
+INCLUDE_RODATA("asm/nonmatchings/kaj/801CCAF4", kaj_misc_str_bad_line);
 
-INCLUDE_RODATA("asm/nonmatchings/kaj/801CCAF4", D_80172CF0);
+INCLUDE_RODATA("asm/nonmatchings/kaj/801CCAF4", kaj_misc_str_undefined_error);
 
-INCLUDE_RODATA("asm/nonmatchings/kaj/801CCAF4", D_80172D00);
+INCLUDE_RODATA("asm/nonmatchings/kaj/801CCAF4", kaj_misc_str_error_code);
 
-INCLUDE_RODATA("asm/nonmatchings/kaj/801CCAF4", D_80172D10);
+INCLUDE_RODATA("asm/nonmatchings/kaj/801CCAF4", kaj_misc_str_file_label);
 
-INCLUDE_RODATA("asm/nonmatchings/kaj/801CCAF4", D_80172D1C);
+INCLUDE_RODATA("asm/nonmatchings/kaj/801CCAF4", kaj_misc_str_line_label);
 
-INCLUDE_RODATA("asm/nonmatchings/kaj/801CCAF4", D_80172D28);
+INCLUDE_RODATA("asm/nonmatchings/kaj/801CCAF4", kaj_misc_str_message_label);
 
-INCLUDE_RODATA("asm/nonmatchings/kaj/801CCAF4", D_80172D34);
+INCLUDE_RODATA("asm/nonmatchings/kaj/801CCAF4", kaj_misc_str_bad_tmd);
 
-void kaj_tmd_load(Unk_801CD028 **obj, u32 *tmd_file, void *coord) {
+void kaj_tmd_load(GsDobj2Handle **obj, u32 *tmd_file, void *coord) {
     u32 *tmd;
 
     if (tmd_file[0] != 0x41) {
@@ -266,32 +260,32 @@ void kaj_tmd_load(Unk_801CD028 **obj, u32 *tmd_file, void *coord) {
         s32 code;
         s32 i;
 
-        msg = D_80172D34;
+        msg = kaj_misc_str_bad_tmd;
         file = kaj_misc_str_file;
         code = 10;
         if (file == NULL) {
-            printf(D_80172CA8);
+            printf(kaj_misc_str_null_file);
         }
-        s = D_80172CF0;
-        for (i = 0; kaj_error_names[i].unk0 != 15; i++) {
-            if (kaj_error_names[i].unk0 == code) {
-                s = kaj_error_names[i].unk4;
+        s = kaj_misc_str_undefined_error;
+        for (i = 0; kaj_error_names[i].code != 15; i++) {
+            if (kaj_error_names[i].code == code) {
+                s = kaj_error_names[i].name;
                 break;
             }
         }
-        printf(D_80172D00, 10);
+        printf(kaj_misc_str_error_code, 10);
         if (*s != 0) {
-            printf(D_801DFDD0);
-            printf(D_801DFDD4, s);
+            printf(kaj_misc_str_dash);
+            printf(kaj_misc_str_fmt_s, s);
         }
-        printf(D_80172D10);
+        printf(kaj_misc_str_file_label);
         printf(file);
-        printf(D_80172D1C, 0x8A);
+        printf(kaj_misc_str_line_label, 0x8A);
         if (msg != NULL) {
-            printf(D_80172D28);
-            printf(D_801DFDD4, msg);
+            printf(kaj_misc_str_message_label);
+            printf(kaj_misc_str_fmt_s, msg);
         }
-        printf(D_801DFDD8);
+        printf(kaj_misc_str_newline);
         exit(10);
     }
     if (*obj == NULL) {
@@ -307,28 +301,28 @@ void kaj_tmd_load(Unk_801CD028 **obj, u32 *tmd_file, void *coord) {
             file = kaj_misc_str_file;
             code = 3;
             if (file == NULL) {
-                printf(D_80172CA8);
+                printf(kaj_misc_str_null_file);
             }
-            s = D_80172CF0;
-            for (i = 0; kaj_error_names[i].unk0 != 15; i++) {
-                if (kaj_error_names[i].unk0 == code) {
-                    s = kaj_error_names[i].unk4;
+            s = kaj_misc_str_undefined_error;
+            for (i = 0; kaj_error_names[i].code != 15; i++) {
+                if (kaj_error_names[i].code == code) {
+                    s = kaj_error_names[i].name;
                     break;
                 }
             }
-            printf(D_80172D00, 3);
+            printf(kaj_misc_str_error_code, 3);
             if (*s != 0) {
-                printf(D_801DFDD0);
-                printf(D_801DFDD4, s);
+                printf(kaj_misc_str_dash);
+                printf(kaj_misc_str_fmt_s, s);
             }
-            printf(D_80172D10);
+            printf(kaj_misc_str_file_label);
             printf(file);
-            printf(D_80172D1C, 0x8F);
+            printf(kaj_misc_str_line_label, 0x8F);
             if (msg != NULL) {
-                printf(D_80172D28);
-                printf(D_801DFDD4, msg);
+                printf(kaj_misc_str_message_label);
+                printf(kaj_misc_str_fmt_s, msg);
             }
-            printf(D_801DFDD8);
+            printf(kaj_misc_str_newline);
             exit(3);
         }
     } else {
@@ -347,32 +341,32 @@ void kaj_tmd_load(Unk_801CD028 **obj, u32 *tmd_file, void *coord) {
         file = kaj_misc_str_file;
         code = 10;
         if (file == NULL) {
-            printf(D_80172CA8);
+            printf(kaj_misc_str_null_file);
         }
-        s = D_80172CF0;
-        for (i = 0; kaj_error_names[i].unk0 != 15; i++) {
-            if (kaj_error_names[i].unk0 == code) {
-                s = kaj_error_names[i].unk4;
+        s = kaj_misc_str_undefined_error;
+        for (i = 0; kaj_error_names[i].code != 15; i++) {
+            if (kaj_error_names[i].code == code) {
+                s = kaj_error_names[i].name;
                 break;
             }
         }
-        printf(D_80172D00, 10);
+        printf(kaj_misc_str_error_code, 10);
         if (*s != 0) {
-            printf(D_801DFDD0);
-            printf(D_801DFDD4, s);
+            printf(kaj_misc_str_dash);
+            printf(kaj_misc_str_fmt_s, s);
         }
-        printf(D_80172D10);
+        printf(kaj_misc_str_file_label);
         printf(file);
-        printf(D_80172D1C, 0x99);
+        printf(kaj_misc_str_line_label, 0x99);
         if (msg != NULL) {
-            printf(D_80172D28);
-            printf(D_801DFDD4, msg);
+            printf(kaj_misc_str_message_label);
+            printf(kaj_misc_str_fmt_s, msg);
         }
-        printf(D_801DFDD8);
+        printf(kaj_misc_str_newline);
         exit(10);
     }
     GsLinkObject4(tmd, *obj, 0);
-    (*obj)->unk4 = coord;
+    (*obj)->coord2 = coord;
 }
 
 s32 kaj_tmd_map(u32 *tmd_file) {
@@ -383,32 +377,32 @@ s32 kaj_tmd_map(u32 *tmd_file) {
     s32 i;
 
     if (tmd_file[0] != 0x41) {
-        msg = D_80172D34;
+        msg = kaj_misc_str_bad_tmd;
         file = kaj_misc_str_file;
         code = 10;
         if (file == NULL) {
-            printf(D_80172CA8);
+            printf(kaj_misc_str_null_file);
         }
-        s = D_80172CF0;
-        for (i = 0; kaj_error_names[i].unk0 != 15; i++) {
-            if (kaj_error_names[i].unk0 == code) {
-                s = kaj_error_names[i].unk4;
+        s = kaj_misc_str_undefined_error;
+        for (i = 0; kaj_error_names[i].code != 15; i++) {
+            if (kaj_error_names[i].code == code) {
+                s = kaj_error_names[i].name;
                 break;
             }
         }
-        printf(D_80172D00, 10);
+        printf(kaj_misc_str_error_code, 10);
         if (*s != 0) {
-            printf(D_801DFDD0);
-            printf(D_801DFDD4, s);
+            printf(kaj_misc_str_dash);
+            printf(kaj_misc_str_fmt_s, s);
         }
-        printf(D_80172D10);
+        printf(kaj_misc_str_file_label);
         printf(file);
-        printf(D_80172D1C, 0xA6);
+        printf(kaj_misc_str_line_label, 0xA6);
         if (msg != NULL) {
-            printf(D_80172D28);
-            printf(D_801DFDD4, msg);
+            printf(kaj_misc_str_message_label);
+            printf(kaj_misc_str_fmt_s, msg);
         }
-        printf(D_801DFDD8);
+        printf(kaj_misc_str_newline);
         exit(10);
     }
     GsMapModelingData(tmd_file + 1);
@@ -420,38 +414,38 @@ void kaj_abend(s32 code, char *msg, char *file, s32 line) {
     s32 i;
 
     if (file == NULL) {
-        printf(D_80172CA8);
+        printf(kaj_misc_str_null_file);
     }
     if (line < 0) {
-        printf(D_80172CC8, line);
+        printf(kaj_misc_str_bad_line, line);
     }
-    s = D_80172CF0;
-    for (i = 0; kaj_error_names[i].unk0 != 15; i++) {
-        if (kaj_error_names[i].unk0 == code) {
-            s = kaj_error_names[i].unk4;
+    s = kaj_misc_str_undefined_error;
+    for (i = 0; kaj_error_names[i].code != 15; i++) {
+        if (kaj_error_names[i].code == code) {
+            s = kaj_error_names[i].name;
             break;
         }
     }
-    printf(D_80172D00, code);
+    printf(kaj_misc_str_error_code, code);
     if (*s != 0) {
-        printf(D_801DFDD0);
-        printf(D_801DFDD4, s);
+        printf(kaj_misc_str_dash);
+        printf(kaj_misc_str_fmt_s, s);
     }
-    printf(D_80172D10);
+    printf(kaj_misc_str_file_label);
     printf(file);
-    printf(D_80172D1C, line);
+    printf(kaj_misc_str_line_label, line);
     if (msg != NULL) {
-        printf(D_80172D28);
-        printf(D_801DFDD4, msg);
+        printf(kaj_misc_str_message_label);
+        printf(kaj_misc_str_fmt_s, msg);
     }
-    printf(D_801DFDD8);
+    printf(kaj_misc_str_newline);
     exit(code);
 }
 
-void kaj_pad_reset(s16 arg0) {
+void kaj_pad_reset(s16 enable) {
     kaj_system.pad_now = 0;
     kaj_system.pad_prev = 0;
-    if (arg0 != 0) {
+    if (enable != 0) {
         kaj_system.pad_mode = 2;
     } else {
         kaj_system.pad_mode = 0;
@@ -476,7 +470,7 @@ void kaj_sound_init(void) {
     SsSetTickMode(1);
     SsStart();
     SsSetMVol(0x7F, 0x7F);
-    D_801E6DB8[0] = 0x7F;
+    kaj_system_sep_volume[0] = 0x7F;
 }
 
 void kaj_sound_quit(void) {
@@ -484,14 +478,14 @@ void kaj_sound_quit(void) {
     SsQuit();
 }
 
-void kaj_tmd_unmap(Unk_801CD78C *tmd, s32 base) {
+void kaj_tmd_unmap(TmdFileHeader *tmd, s32 base) {
     s32 *obj;
     s32 n;
     s32 i;
 
-    if (tmd->unk0 == 0x41 && (tmd->unk4 & 1)) {
-        obj = tmd->unkC;
-        n = tmd->unk8;
+    if (tmd->id == 0x41 && (tmd->flags & 1)) {
+        obj = tmd->objects;
+        n = tmd->n_obj;
         for (i = 0; i < n; i++) {
             obj[0] -= base * 4;
             obj[2] -= base * 4;

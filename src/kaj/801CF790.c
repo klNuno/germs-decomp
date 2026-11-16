@@ -1,50 +1,50 @@
 #include "common.h"
 
-typedef struct Unk_801CFAE8 {
-    u16 unk0;
-    u16 unk2;
-    u16 unk4;
-    u16 unk6;
-    u16 unk8;
-    u16 unkA;
-    u16 unkC;
-    u16 unkE;
-    u16 unk10;
-    u16 unk12;
-    u16 unk14;
+typedef struct TimHandle {
+    u16 x;
+    u16 y;
+    u16 w;
+    u16 h;
+    u16 clut_x;
+    u16 clut_y;
+    u16 clut_w;
+    u16 clut_h;
+    u16 u;
+    u16 v;
+    u16 pixel_shift;
     u16 unk16;
-    u16 unk18;
-    u16 unk1A;
-    void *unk1C;
-    void *unk20;
-} Unk_801CFAE8;
+    u16 clut;
+    u16 tpage;
+    void *clut_orig;
+    void *clut_work;
+} TimHandle;
 void free3(void *ptr);
-typedef struct Unk_801CFB4C {
-    u32 unk0;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    s16 unkA;
-    u32 *unkC;
-    s16 unk10;
-    s16 unk12;
-    s16 unk14;
-    s16 unk16;
-    u32 *unk18;
-} Unk_801CFB4C;
-void GsGetTimInfo(u32 *im, Unk_801CFB4C *tim);
+typedef struct GsImage {
+    u32 pmode;
+    s16 px;
+    s16 py;
+    s16 pw;
+    s16 ph;
+    u32 *pixel;
+    s16 cx;
+    s16 cy;
+    s16 cw;
+    s16 ch;
+    u32 *clut;
+} GsImage;
+void GsGetTimInfo(u32 *im, GsImage *tim);
 s32 LoadImage(void *rect, u32 *p);
 s32 StoreImage(void *rect, u32 *p);
 u16 GetTPage(s32 tp, s32 abr, s32 x, s32 y);
 u16 GetClut(s32 x, s32 y);
 void *kaj_malloc(u32 size);
-void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
+void kaj_abend(s32 code, char *msg, char *file, s32 line);
 extern char kaj_tim_str_file[];
 
-static inline void func_801CF790_inline(Unk_801CFB4C *tim, void **buf) {
+static inline void kaj_tim_save_clut(GsImage *tim, void **buf) {
     s32 size;
-    if ((tim->unk0 >> 3) & 1) {
-        switch (tim->unk0 & 7) {
+    if ((tim->pmode >> 3) & 1) {
+        switch (tim->pmode & 7) {
         case 0:
             size = 0x20;
             break;
@@ -59,12 +59,12 @@ static inline void func_801CF790_inline(Unk_801CFB4C *tim, void **buf) {
         if (*buf == NULL) {
             kaj_abend(3, "Error Allocating CLUT Buffer", kaj_tim_str_file, 33);
         }
-        StoreImage(&tim->unk10, *buf);
+        StoreImage(&tim->cx, *buf);
     }
 }
 
-void kaj_tim_load(Unk_801CFAE8 **handle, u32 *tim_file, u16 mode, s16 keep_clut) {
-    Unk_801CFB4C tim;
+void kaj_tim_load(TimHandle **handle, u32 *tim_file, u16 mode, s16 keep_clut) {
+    GsImage tim;
     s16 x;
     s16 y;
 
@@ -72,78 +72,78 @@ void kaj_tim_load(Unk_801CFAE8 **handle, u32 *tim_file, u16 mode, s16 keep_clut)
     if (*handle == NULL) {
         kaj_abend(3, "Error Allocating TIM Handle", kaj_tim_str_file, 47);
     }
-    (*handle)->unk1C = NULL;
-    (*handle)->unk20 = NULL;
+    (*handle)->clut_orig = NULL;
+    (*handle)->clut_work = NULL;
     GsGetTimInfo(tim_file + 1, &tim);
     if (mode != 2) {
-        LoadImage(&tim.unk4, tim.unkC);
+        LoadImage(&tim.px, tim.pixel);
     }
-    x = tim.unk4 >> 6;
-    y = tim.unk6 >> 8;
-    (*handle)->unk0 = tim.unk4;
-    (*handle)->unk2 = tim.unk6;
-    (*handle)->unk6 = tim.unkA;
-    (*handle)->unk4 = tim.unk8;
-    (*handle)->unk10 = tim.unk4 - (x << 6);
-    (*handle)->unk12 = tim.unk6 - (y << 8);
-    (*handle)->unk14 = 0;
-    (*handle)->unk18 = -1;
-    (*handle)->unk1A = GetTPage(tim.unk0 & 7, 0, x << 6, y << 8);
-    if ((tim.unk0 >> 3) & 1) {
+    x = tim.px >> 6;
+    y = tim.py >> 8;
+    (*handle)->x = tim.px;
+    (*handle)->y = tim.py;
+    (*handle)->h = tim.ph;
+    (*handle)->w = tim.pw;
+    (*handle)->u = tim.px - (x << 6);
+    (*handle)->v = tim.py - (y << 8);
+    (*handle)->pixel_shift = 0;
+    (*handle)->clut = -1;
+    (*handle)->tpage = GetTPage(tim.pmode & 7, 0, x << 6, y << 8);
+    if ((tim.pmode >> 3) & 1) {
         if (mode != 2) {
-            LoadImage(&tim.unk10, tim.unk18);
+            LoadImage(&tim.cx, tim.clut);
         }
-        (*handle)->unk18 = GetClut(tim.unk10, tim.unk12);
-        (*handle)->unk8 = tim.unk10;
-        (*handle)->unkA = tim.unk12;
-        (*handle)->unkC = tim.unk14;
-        (*handle)->unkE = tim.unk16;
+        (*handle)->clut = GetClut(tim.cx, tim.cy);
+        (*handle)->clut_x = tim.cx;
+        (*handle)->clut_y = tim.cy;
+        (*handle)->clut_w = tim.cw;
+        (*handle)->clut_h = tim.ch;
         if (keep_clut != 0) {
-            func_801CF790_inline(&tim, &(*handle)->unk1C);
-            func_801CF790_inline(&tim, &(*handle)->unk20);
+            kaj_tim_save_clut(&tim, &(*handle)->clut_orig);
+            kaj_tim_save_clut(&tim, &(*handle)->clut_work);
         }
-        switch (tim.unk0 & 7) {
+        switch (tim.pmode & 7) {
         case 0:
-            (*handle)->unk14 = 2;
+            (*handle)->pixel_shift = 2;
             break;
         case 1:
-            (*handle)->unk14 = 1;
+            (*handle)->pixel_shift = 1;
             break;
         }
     }
 }
 
-void kaj_tim_free(Unk_801CFAE8 *handle) {
+void kaj_tim_free(TimHandle *handle) {
     if (handle != NULL) {
-        if (handle->unk1C != NULL) {
-            free3(handle->unk1C);
-            handle->unk1C = NULL;
+        if (handle->clut_orig != NULL) {
+            free3(handle->clut_orig);
+            handle->clut_orig = NULL;
         }
-        if (handle->unk20 != NULL) {
-            free3(handle->unk20);
-            handle->unk20 = NULL;
+        if (handle->clut_work != NULL) {
+            free3(handle->clut_work);
+            handle->clut_work = NULL;
         }
         free3(handle);
     }
 }
 
 void kaj_tim_upload(u32 *tim_file, s16 with_clut) {
-    Unk_801CFB4C tim;
+    GsImage tim;
 
     GsGetTimInfo(tim_file + 1, &tim);
-    LoadImage(&tim.unk4, tim.unkC);
-    if (with_clut != 0 && ((tim.unk0 >> 3) & 1)) {
-        LoadImage(&tim.unk10, tim.unk18);
+    LoadImage(&tim.px, tim.pixel);
+    if (with_clut != 0 && ((tim.pmode >> 3) & 1)) {
+        LoadImage(&tim.cx, tim.clut);
     }
 }
 
 void kaj_tim_upload_hdr(u16 *hdr) {
-    Unk_801CFB4C tim;
+    GsImage tim;
     s16 with_clut = hdr[1];
 
     GsGetTimInfo((u32 *)(hdr + 4), &tim);
-    LoadImage(&tim.unk4, tim.unkC);
-    if (with_clut != 0 && ((tim.unk0 >> 3) & 1)) {
-        LoadImage(&tim.unk10, tim.unk18);
+    LoadImage(&tim.px, tim.pixel);
+    if (with_clut != 0 && ((tim.pmode >> 3) & 1)) {
+        LoadImage(&tim.cx, tim.clut);
     }
 }

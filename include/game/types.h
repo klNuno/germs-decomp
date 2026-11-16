@@ -11,7 +11,7 @@ typedef struct KajSystem {
     s32 timer_ticks;
     s32 timer_period;
     s32 vsync_delta;
-    s16 unk18;
+    s16 sep_volume;
     u8 unk1A[0x2];
 } KajSystem;
 
@@ -29,65 +29,65 @@ typedef struct PlayerExit {
     s32 pos_x;
     s32 pos_y;
     s32 pos_z;
-    s32 unk10;
+    s32 centre_x;
     u8 unk14[0x4];
-    s32 unk18;
+    s32 centre_z;
     s16 direction;
     s16 facing;
     u16 yaw;
 } PlayerExit;
 
 typedef struct Player {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
+    s32 car_x;
+    s32 car_y;
+    s32 car_z;
     u8 unkC[0x4];
-    s16 unk10;
-    s16 unk12;
-    s16 unk14;
+    s16 car_rot_x;
+    s16 car_rot_y;
+    s16 car_rot_z;
     u8 unk16[0x2];
     PlayerExit exit;
-    s16 unk3C;
-    s16 unk3E;
-    s16 unk40;
+    s16 view_dirty;
+    s16 reground;
+    s16 climbing;
     u16 flags;
     s16 move_state;
     u16 vehicle_mode;
-    s16 unk48;
+    s16 move_task;
     s16 speed_step;
-    s16 unk4C;
-    s16 unk4E;
-    s16 unk50;
+    s16 bob_y;
+    s16 strafe_speed;
+    s16 walk_speed;
     u8 unk52[0x2];
     s32 pos_x;
     s32 pos_y;
     s32 pos_z;
-    s32 unk60;
-    s32 unk64;
-    s32 unk68;
+    s32 world_x;
+    s32 world_y;
+    s32 world_z;
     s16 pitch;
     s16 yaw;
     s16 roll;
     s16 cell_x;
     s16 cell_y;
     s16 cell_z;
-    s16 unk78;
+    s16 eye_height;
     u8 unk7A[0x2];
-    u8 unk7C[0x14];
-    s32 unk90[3];
-    s32 unk9C;
+    u8 view_matrix[0x14];
+    s32 view_trans[3];
+    s32 view_super;
     GsCoordinate2 coord[1];
 } Player;
 
 typedef struct Inventory {
-    s16 unk0;
+    s16 weapon_count;
     s16 weapon_slot;
     s16 weapon_ids[2];
     s16 weapon_rate[2];
-    s16 unkC[0x12];
-    s16 unk30;
+    s16 weapon_stock[0x12];
+    s16 item_count;
     s16 item_ids[8];
-    s16 unk42;
+    s16 kind2_item;
     s16 weapon_shown;
     s16 armed;
     u16 weapon_state;
@@ -96,39 +96,39 @@ typedef struct Inventory {
 } Inventory;
 
 typedef struct Npc {
-    u16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    u8 unkA;
-    u8 unkB;
-    s16 unkC;
-    u8 unkE;
-    u8 unkF;
-    s16 unk10;
-    u16 unk12;
-    s16 unk14;
-    s16 unk16;
-    s16 unk18;
-    s16 unk1A;
-    s16 unk1C;
-    s16 unk1E;
-    s32 unk20;
-    s32 unk24;
-    s32 unk28;
-    s32 unk2C;
-    s32 unk30;
-    s32 unk34;
-    s16 unk38;
-    s16 unk3A;
-    s16 unk3C;
-    s16 unk3E;
-    s16 unk40;
-    s16 unk42;
-    u8 unk44;
-    u8 unk45;
-    s16 unk46;
+    u16 id;
+    s16 kind;
+    s16 placed;
+    s16 active;
+    s16 talkable;
+    u8 ot_layer;
+    u8 fire_decision;
+    s16 hp;
+    u8 mode;
+    u8 state;
+    s16 target;
+    u16 flags;
+    s16 body_id;
+    s16 model_id;
+    s16 stats_id;
+    s16 talk_set;
+    s16 leave_set;
+    s16 death_set;
+    s32 pos_x;
+    s32 pos_y;
+    s32 pos_z;
+    s32 dest_x;
+    s32 dest_y;
+    s32 dest_z;
+    s16 pitch;
+    s16 yaw;
+    s16 roll;
+    s16 target_yaw;
+    s16 target_dist;
+    s16 exp;
+    u8 aim_pitch_diff;
+    u8 aim_elevation;
+    s16 aim_timer;
     s32 block;
 } Npc;
 
@@ -138,7 +138,7 @@ typedef struct Model {
     s16 ready;
     s16 owns_data;
     s16 playing;
-    s16 unkA;
+    s16 tod_mode;
     s16 frame;
     s16 end_frame;
     s16 loop;
@@ -186,12 +186,12 @@ typedef struct PlayerStatus {
     u16 defense_level;
     s16 defense_exp;
     s16 mutant;
-    s16 unk2E;
-    s16 unk30;
-    s16 unk32;
-    s16 unk34;
+    s16 kills_since_arrest;
+    s16 arrests;
+    s16 humans_killed;
+    s16 naps_today;
     s16 hours_awake;
-    s16 unk38;
+    s16 low_energy_alarm;
     s16 limb_state[5];
     s16 drain_pending;
     s16 limb_redraw;
@@ -209,7 +209,7 @@ typedef struct Door {
     s16 axis;
     s16 active;
     s16 visible;
-    s16 unk8;
+    s16 ot_layer;
     s16 state;
     s16 move_from;
     s16 move_to;
@@ -242,10 +242,10 @@ typedef struct Thing {
     u16 type;
     s16 active;
     s16 animate;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
-    s16 unkE;
+    s16 script_enabled;
+    s16 ot_layer;
+    s16 enter_set;
+    s16 leave_set;
     s16 block_fixed;
     u8 unk12[0x2];
     s32 block;
@@ -347,7 +347,7 @@ typedef struct WeaponRecord {
 
 typedef struct SceneTables {
     struct BgmSep *bgm;
-    struct Unk_801E02DC *se_banks[4];
+    struct SeBank *se_banks[4];
     s32 se_bank_count;
     s32 trigger_count;
     s32 npc_count;
@@ -362,7 +362,7 @@ typedef struct SceneTables {
     struct NpcBody *npc_bodies;
     struct NpcStats *npc_stats;
     void *items;
-    struct Unk_8018BC50 *mail;
+    struct MailHandler *mail;
     struct NpcRecord *npc_records;
     struct Vehicle *vehicle;
     WeaponRecord *weapons;
@@ -396,34 +396,35 @@ typedef struct GameVars {
     u16 vars[0x5A];
     s16 limb_damage[5];
     u8 unkBE[0x2];
-    s16 unkC0;
-    u16 unkC2[0xF];
-    u8 unkE0[0x11C];
+    s16 mail_codes[0x10];
+    u8 unkE0[0x118];
+    u16 shop_entry_hour;
+    u8 unk1FA[0x2];
     s16 drain_count;
     s16 drain_minute;
     u16 car_speed_setting;
     u16 text_speed_setting;
     EffectAlarm alarms[4];
     MailMenu mail_menu;
-    s32 unk244;
-    u8 unk248[0x4];
+    s32 effect_task;
+    s32 narration_task;
     s16 menu_busy;
-    u8 unk24E[0x2];
-    s16 unk250;
-    s16 unk252;
-    s16 unk254;
+    s16 text_open;
+    s16 flame_large_on;
+    s16 flame_small_on;
+    s16 clut_cycle_on;
 } GameVars;
 
 typedef struct NpcBody {
-    u16 unk0;
-    u16 unk2;
-    u16 unk4;
-    u16 unk6;
-    u16 unk8;
+    u16 id;
+    u16 height;
+    u16 sex;
+    u16 age;
+    u16 blood_type;
     u16 radius;
-    char unkC[0x20];
-    char unk2C[0x20];
-    char unk4C[0x20];
+    char line0[0x20];
+    char line1[0x20];
+    char line2[0x20];
     u8 unk6C[0x60];
 } NpcBody;
 
@@ -442,29 +443,33 @@ typedef struct ActionSet {
 } ActionSet;
 
 typedef struct ScreenLight {
-    s16 unk0[3];
+    s16 daylight_on;
+    s16 divide_pending;
+    s16 fog_on;
     s16 fade_active;
-    s16 unk8[3];
+    s16 daylight_step;
+    s16 clip_mode;
+    s16 ot_bias;
     s16 fade_level;
     s16 dark;
 } ScreenLight;
 
 typedef struct NpcStats {
-    u16 unk0;
+    u16 id;
     s16 weapon_kind;
-    u16 unk4;
+    u16 on_hit;
     u8 unk6[0x2];
     s16 damage;
     u16 defence;
-    s16 unkC;
-    u16 unkE;
+    s16 accuracy;
+    u16 aim_time;
     s16 speed;
     u16 resist_types;
-    u16 unk14;
-    s16 unk16;
-    s32 unk18;
-    s32 unk1C;
-    s32 unk20;
+    u16 fire_chance;
+    s16 fire_frames;
+    s32 range_min;
+    s32 range_mid;
+    s32 range_max;
 } NpcStats;
 
 typedef struct BgmSep {
@@ -485,15 +490,15 @@ typedef struct TrainState {
     s32 door_task;
     s32 trigger;
     s16 direction;
-    s16 unkA;
-    s16 unkC;
+    s16 placed;
+    s16 prompt_on;
     u16 door_state;
     u16 station;
     u16 motion;
     s16 speed;
     s16 stop_timer;
-    s16 unk18;
-    s16 unk1A;
+    s16 arrive_digit_dir1;
+    s16 arrive_digit_dir0;
     s32 mark_start;
     s32 mark_cruise;
     s32 mark_brake;
@@ -504,7 +509,7 @@ typedef struct TrainState {
     u8 unk32[0x2];
     s16 view_pitch;
     s16 view_yaw;
-    s16 unk38;
+    s16 view_roll;
 } TrainState;
 
 typedef struct VabStream {
@@ -518,7 +523,7 @@ typedef struct VabStream {
 
 typedef struct BuildingState {
     u16 building;
-    u16 unk2;
+    u16 entry;
 } BuildingState;
 
 typedef struct Rect {
@@ -530,7 +535,7 @@ typedef struct Rect {
 
 typedef struct RoadMap {
     u16 mode;
-    s16 unk2;
+    s16 zoomed;
     s16 *part0;
     s16 *part1;
     s16 *part2;
@@ -569,14 +574,14 @@ typedef struct ActionCond {
     s16 used;
     s16 invert;
     u16 index;
-    s16 unk6;
+    s16 skip_test;
     s16 low;
     s16 high;
 } ActionCond;
 
 typedef struct ActionSetHeader {
-    u16 unk0;
-    u16 unk2;
+    u16 id;
+    u16 match_all;
     u16 next_set;
     u16 next_mode;
     ActionCond cond_var_a;
@@ -629,7 +634,7 @@ typedef struct ModelList {
 typedef struct NpcRecord {
     u16 id;
     s16 enabled;
-    u16 unk4;
+    u16 ot_layer;
     u16 model;
     s32 pos_x;
     s32 pos_y;
@@ -643,17 +648,17 @@ typedef struct NpcRecord {
     s16 moving;
 } NpcRecord;
 
-typedef struct Unk_801A217C {
+typedef struct SeVabStream {
     u8 unk0[0x4];
-    s32 unk4;
+    s32 head;
     u8 unk8[0x4];
-    s32 unkC;
+    s32 head_size;
     u8 unk10[0x4];
-    u16 unk14;
-    u16 unk16;
-    u16 unk18;
-    u16 unk1A;
-} Unk_801A217C;
+    u16 vab_id;
+    u16 tone_count;
+    u16 bank_id;
+    u16 scene_bank;
+} SeVabStream;
 
 typedef struct Sprite {
     u16 id;
@@ -683,13 +688,13 @@ typedef struct SpriteRecord {
     u16 columns;
     u16 rows;
     u8 unk10[0x2];
-    s16 unk12;
-    u8 unk14[4];
+    s16 keep_clut;
+    u8 tim[4];
 } SpriteRecord;
 
 typedef struct Vehicle {
     u16 kind;
-    s16 unk2;
+    s16 ot_layer;
     s32 pos_x;
     s32 pos_y;
     s32 pos_z;
@@ -707,10 +712,10 @@ typedef struct Vehicle {
 typedef struct IffEntry {
     s32 offset;
     s32 size;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-    s32 unk14;
+    s32 count0;
+    s32 count1;
+    s32 count2;
+    s32 count3;
 } IffEntry;
 
 typedef struct AreaTrigger {
@@ -731,7 +736,7 @@ typedef struct RoomStorage {
     s16 open;
     s16 choice;
     s16 stage;
-    s16 unk6;
+    s16 cursor;
 } RoomStorage;
 
 typedef struct PlayerMove {
@@ -839,14 +844,8 @@ typedef struct VehicleSprite {
     u16 rows;
     s16 cell_col;
     s16 cell_row;
-    struct Unk_801AC55C_1C *tim;
+    struct TimHandle *tim;
 } VehicleSprite;
-
-typedef struct Unk_80184100 {
-    u8 unk0[0x6];
-    s16 unk6;
-    u16 unk8;
-} Unk_80184100;
 
 typedef struct TextCmd {
     u16 opcode;
@@ -856,10 +855,10 @@ typedef struct TextCmd {
 typedef struct PauseMenu {
     s16 item;
     s16 page;
-    s16 unk4;
+    s16 animating;
     s16 row;
-    struct Unk_801A44B8 *unk8;
-    struct Unk_801A44B8 *unkC;
+    struct MenuSprite *item_sprite;
+    struct MenuSprite *label_sprite;
 } PauseMenu;
 
 typedef struct DoorMove {
@@ -887,7 +886,7 @@ typedef struct DoorMove {
 } DoorMove;
 
 typedef struct TmdTri {
-    u16 unk0;
+    u16 run_count;
     u8 unk2[0x1];
     u8 mode;
     u8 code_r;
@@ -918,16 +917,16 @@ typedef struct GsDobj2 {
 } GsDobj2;
 
 typedef struct ShopState {
-    s16 unk0;
+    s16 active;
     s16 menu_stage;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
-    s16 unkE;
-    s16 unk10;
-    s16 unk12[3];
+    s16 to_inventory;
+    s16 alt_speaker;
+    s16 at_counter;
+    s16 has_second_menu;
+    s16 has_third_menu;
+    s16 deal_level;
+    s16 cursor;
+    s16 picks[3];
     s16 *list;
     s16 *texts;
 } ShopState;
@@ -949,9 +948,9 @@ typedef struct IffChunkBody {
     u8 unk0[0x7F8];
 } IffChunkBody;
 
-typedef struct Unk_8019120C {
+typedef struct IffSectorBody {
     u8 unk0[0x7F4];
-} Unk_8019120C;
+} IffSectorBody;
 
 typedef struct CdLoc {
     u8 unk0[0x4];
@@ -960,49 +959,53 @@ typedef struct CdLoc {
 typedef struct IffChunk {
     s32 tag;
     s32 size;
-    s16 unk8;
+    s16 id;
 } IffChunk;
 
-typedef struct Unk_80191AB0 {
-    s16 unk0;
+typedef struct SceneRequestLoadView {
+    s16 loop;
     u8 unk2[0xE];
-    s16 unk10;
-    s16 unk12;
-    s16 unk14;
+    s16 loop_param;
+    s16 office_no_gauge;
+    s16 arrival_sound;
     u8 unk16[0x6];
-    s16 unk1C;
-} Unk_80191AB0;
+    s16 building_gauge;
+} SceneRequestLoadView;
 
 typedef struct CarState {
     s16 stopped;
-    s16 unk2;
+    s16 slowed;
     s16 steer;
     s16 gear;
     s32 brake;
     s32 throttle;
     s32 speed;
-    s32 unk14;
-    s32 unk18;
-    SVector unk1C;
+    s32 turn_yaw;
+    s32 turn_radius;
+    SVector seat;
     s16 look_pitch;
     s16 look_yaw;
-    s16 unk28;
+    s16 look_roll;
     u8 unk2A[0x2];
     SVector corners[4];
-    s32 unk4C;
-    s32 unk50;
-    s32 unk54;
+    s32 axle_x;
+    s32 axle_y;
+    s32 axle_z;
     u8 unk58[0x4];
-    s32 unk5C;
-    s32 unk60;
-    s32 unk64;
+    s32 pivot_x;
+    s32 pivot_y;
+    s32 pivot_z;
 } CarState;
 
 typedef struct SceneRequest {
-    s16 unk0[5];
+    s16 loop;
+    s16 next_loop;
+    s16 scene_index;
+    s16 variant;
+    s16 quit;
     s16 change;
     char *path;
-    s16 unk10;
+    s16 loop_param;
     s16 yaw;
     s32 pos_x;
     s32 pos_y;
@@ -1011,12 +1014,12 @@ typedef struct SceneRequest {
 
 typedef struct CarNavi {
     s16 active;
-    s16 unk2;
+    s16 menu_reset;
     s16 dest;
     u8 unk6[0x2];
     u32 start_dist;
     VehicleSprite *dest_sprite;
-    VehicleSprite *unk10;
+    VehicleSprite *arrow_sprite;
 } CarNavi;
 
 typedef struct ItemRecord {
@@ -1030,7 +1033,7 @@ typedef struct SceneTrigger {
     s32 id;
     s16 enter_set;
     s16 leave_set;
-    s16 unk8;
+    s16 passable;
     s16 enabled;
 } SceneTrigger;
 

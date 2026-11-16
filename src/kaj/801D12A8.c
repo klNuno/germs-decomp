@@ -3,20 +3,9 @@
 
 extern TssTable kaj_tss_table;
 void free3(void *ptr);
-typedef struct {
-    u8 unk0[0x20];
-    s16 unk20;
-} Unk_801D14B8;
-s32 kaj_event_set_alarm(s32 a, s32 b, s32 c);
+s32 kaj_event_set_alarm(s32 delay, s32 id, s32 data);
 void *kaj_malloc(u32 size);
-void kaj_tss_free(TssSlot *arg0);
-typedef struct {
-    u8 unk0[0x24];
-    s16 unk24;
-    s16 unk26;
-    s16 unk28;
-    s32 unk2C;
-} Unk_801D1774;
+void kaj_tss_free(TssSlot *slot);
 extern ViewBuffer kaj_view_buffers[2];
 void SetDispMask(s32 mask);
 ViewBuffer *kaj_view_current;
@@ -25,7 +14,7 @@ void GsSetWorkBase(s32 arg0);
 void ClearOTagR(u32 *ot, s32 n);
 s32 ClearImage(Rect *rect, s32 r, s32 g, s32 b);
 s32 DrawSync(s32 mode);
-void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
+void kaj_abend(s32 code, char *msg, char *file, s32 line);
 extern char kaj_tss_str_file[];
 extern KajSystem kaj_system;
 s32 VSync(s32 mode);
@@ -33,11 +22,11 @@ void ResetGraph(s32 mode);
 void PutDispEnv(void *env);
 void PutDrawEnv(void *env);
 void DrawOTag(u32 *ot);
-extern s32 D_801E2D60;
-extern s16 D_801E2D64;
+extern s32 PSDCNT;
+extern s16 PSDIDX;
 s32 kaj_view_last_vsync;
-KajEvent *kaj_event_push(s32 arg0);
-void kaj_event_flush(s32 a, s32 b);
+KajEvent *kaj_event_push(s32 type);
+void kaj_event_flush(s32 type_mask, s32 id);
 void EnterCriticalSection(void);
 void ExitCriticalSection(void);
 extern char kaj_view_str_file[];
@@ -127,9 +116,9 @@ s32 kaj_tss_kill(s32 index) {
     return 1;
 }
 
-s32 kaj_tss_start(Unk_801D14B8 *task) {
-    kaj_event_set_alarm(1, task->unk20 + 1, 0);
-    return task->unk20;
+s32 kaj_tss_start(TssSlot *task) {
+    kaj_event_set_alarm(1, task->index + 1, 0);
+    return task->index;
 }
 
 void kaj_tss_finish(TssSlot *slot) {
@@ -235,14 +224,14 @@ void kaj_tss_quit(void) {
     p->done_list = 0;
 }
 
-void kaj_tss_set_steps(Unk_801D1774 *task, s32 steps) {
-    s32 dist = task->unk26 - task->unk24;
+void kaj_tss_set_steps(TssSlot *task, s32 steps) {
+    s32 dist = task->target - task->cur;
     s32 abs_dist;
     s32 step;
 
     if (steps == 0 || dist == 0) {
-        task->unk28 = dist;
-        task->unk2C = 0;
+        task->step = dist;
+        task->delay = 0;
         return;
     }
     abs_dist = dist;
@@ -253,8 +242,8 @@ void kaj_tss_set_steps(Unk_801D1774 *task, s32 steps) {
     if (dist < 0) {
         step = -step;
     }
-    task->unk28 = step;
-    task->unk2C = 2;
+    task->step = step;
+    task->delay = 2;
 }
 
 void kaj_view_init(void) {
@@ -341,13 +330,13 @@ void kaj_view_flip(ViewBuffer *buf) {
     }
     PutDispEnv(buf->disp_env);
     PutDrawEnv(buf);
-    frame = D_801E2D60 + 1;
-    D_801E2D60 = frame;
+    frame = PSDCNT + 1;
+    PSDCNT = frame;
     if (frame == 0) {
         frame = 1;
     }
-    D_801E2D60 = frame;
-    D_801E2D64 = D_801E2D64 == 0;
+    PSDCNT = frame;
+    PSDIDX = PSDIDX == 0;
     DrawOTag(buf->ot_tags + 0x1FFF);
     {
         KajSystem *p = &kaj_system;

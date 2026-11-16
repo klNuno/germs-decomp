@@ -50,8 +50,13 @@ def vram(off):
 
 # Ranges where two OBJs ship the same bytes under different names. The jal
 # targets differ only through relocations, so the callee decides. main()
-# checks the callee and stops if the evidence no longer holds.
+# checks the callee and stops if the evidence no longer holds. A leaf has no
+# callee (None): the evidence is then the game's call site, given in `why`.
 NAME_FIXES = {
+    # LIBMATH EQDF2.OBJ and NEDF2.OBJ are the same bytes. The only caller,
+    # block_point_in_poly, rebuilt with `a != b` on two doubles, makes gcc emit
+    # `jal __nedf2` with code identical to the original.
+    0x801BDC30: ("__nedf2", None, "the != test of block_point_in_poly compiles to __nedf2"),
 }
 
 
@@ -361,7 +366,7 @@ def main():
             w = int.from_bytes(data[p - LOAD + HEADER:p - LOAD + HEADER + 4], "little")
             if w >> 26 == 3:  # jal
                 targets.add((p & 0xF0000000) | ((w & 0x03FFFFFF) << 2))
-        if addr_of.get(callee) not in targets:
+        if callee is not None and addr_of.get(callee) not in targets:
             sys.exit("NAME_FIXES %s at %08x does not call %s" % (name, where, callee))
 
     taken = {v[0] for v in syms.values()}
