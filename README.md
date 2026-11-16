@@ -13,13 +13,13 @@ never shows.
 
 ## What the code taught us so far
 
-Eleven findings in [docs/discoveries.md](docs/discoveries.md), six of them checked in an emulator and two in part:
+Twenty findings in [docs/discoveries.md](docs/discoveries.md), twelve of them checked in an emulator and five in part:
 
 - [Energy at 0 is death, and only a hit to the head makes you wake up changed](docs/discoveries.md#-energy-at-0-is-death-and-only-a-hit-to-the-head-makes-you-wake-up-changed): starving is always game over, never the mine.
 - [Being changed is one flag](docs/discoveries.md#-being-changed-is-one-flag-a-pink-body-fast-healing-and-no-fatigue): a pink body, wounds that heal four times faster, no fatigue, and every stat set to 100.
 - [The five body parts](docs/discoveries.md#-body-part-damage-heals-by-the-hour-unless-it-is-at-the-worst-level) are head, arm, arm, torso and legs, not the order cheat makers used, and the worst level never heals by itself.
-- [The calendar stops at day 99](docs/discoveries.md#-the-clock-counts-minutes-and-stops-at-day-99), and one game minute is exactly 600 screen refreshes.
-- [One shop swaps its two menus on even days](docs/discoveries.md#-one-shop-swaps-its-two-menus-on-even-days), the only thing in the game that reads the day's parity.
+- [The blue wheel is the weapon's hit rate](docs/discoveries.md#-the-blue-wheel-is-the-weapons-hit-rate-and-the-five-classes-are-levels-up-to-100), not weapon experience, and the cheat value "one point below the maximum" is level 93 of 100.
+- [The burger shop secretly serves changed food](docs/discoveries.md#-the-burger-shop-secretly-serves-changed-food-and-even-days-swap-its-hours) under the same menu, at hours that swap on even days.
 
 ## Status
 
