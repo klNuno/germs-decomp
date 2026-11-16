@@ -1,20 +1,6 @@
 #include "common.h"
+#include "game/types.h"
 
-typedef struct Unk_801D12A8 {
-    struct Unk_801D12A8 *unk0;
-    u8 unk4[0x1C];
-    s16 unk20;
-    s16 unk22;
-    u8 unk24[0x14];
-    void (*unk38)(struct Unk_801D12A8 *);
-    void *unk3C;
-} Unk_801D12A8;
-typedef struct {
-    s32 unk0;
-    Unk_801D12A8 *unk4;
-    Unk_801D12A8 *unk8;
-    Unk_801D12A8 *unkC;
-} Unk_801DFBD0;
 extern Unk_801DFBD0 kaj_tss_table;
 void free3(void *ptr);
 typedef struct {
@@ -31,48 +17,17 @@ typedef struct {
     s16 unk28;
     s32 unk2C;
 } Unk_801D1774;
-typedef struct {
-    u8 unk0[0x17];
-    u8 unk17;
-    u8 unk18;
-    u8 unk19;
-    u8 unk1A;
-    u8 unk1B;
-    u8 unk1C[0x40];
-    u8 unk5C[0x14];
-    s32 unk70;
-    u32 *unk74;
-    s32 unk78;
-    s32 unk7C;
-    u32 *unk80;
-    u32 *unk84;
-    s32 unk88;
-} Unk_801E6FF0;
 extern Unk_801E6FF0 kaj_view_buffers[2];
 void SetDispMask(s32 mask);
 Unk_801E6FF0 *kaj_view_current;
 s32 GsGetWorkBase(void);
 void GsSetWorkBase(s32 arg0);
 void ClearOTagR(u32 *ot, s32 n);
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-} Unk_801D1BD4;
 s32 ClearImage(Unk_801D1BD4 *rect, s32 r, s32 g, s32 b);
 s32 DrawSync(s32 mode);
 void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
 extern char D_801DFDFC[];
-typedef struct Unk_801E6DA0 {
-    s32 unk0;
-    s32 unk4;
-    s16 unk8;
-    s16 unkA;
-    u8 unkC[0x8];
-    s32 unk14;
-} Unk_801E6DA0;
-extern Unk_801E6DA0 D_801E6DA0;
+extern KajSystem kaj_system;
 s32 VSync(s32 mode);
 void ResetGraph(s32 mode);
 void PutDispEnv(void *env);
@@ -81,7 +36,6 @@ void DrawOTag(u32 *ot);
 extern s32 D_801E2D60;
 extern s16 D_801E2D64;
 s32 kaj_view_last_vsync;
-typedef struct { s32 unk0; s32 unk4; s32 unk8; s32 unkC; s32 unk10; } Unk_801CC1E8;
 Unk_801CC1E8 *kaj_event_push(s32 arg0);
 void kaj_event_flush(s32 a, s32 b);
 void EnterCriticalSection(void);
@@ -396,14 +350,14 @@ void kaj_view_flip(Unk_801E6FF0 *arg0) {
     D_801E2D64 = D_801E2D64 == 0;
     DrawOTag(arg0->unk84 + 0x1FFF);
     {
-        Unk_801E6DA0 *p = &D_801E6DA0;
+        KajSystem *p = &kaj_system;
         s32 last = kaj_view_last_vsync;
 
         kaj_view_last_vsync = t;
         d = t - last;
-        p->unk14 = d;
+        p->vsync_delta = d;
         if (d < 0) {
-            p->unk14 = d + 0x7FFFFFFF;
+            p->vsync_delta = d + 0x7FFFFFFF;
         }
     }
 }

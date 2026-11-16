@@ -1,20 +1,6 @@
 #include "common.h"
+#include "game/types.h"
 
-typedef struct {
-    s32 unk0;
-    void *unk4;
-    s32 unk8;
-    s32 unkC;
-} Unk_801D05F8;
-typedef struct {
-    Unk_801D05F8 *unk0;
-    s32 unk4;
-    s32 unk8;
-    s16 unkC;
-    u8 padE[0x2];
-    s32 unk10;
-    s32 unk14;
-} Unk_801DFBB8;
 extern Unk_801DFBB8 kaj_timer_queue;
 void free3(void *ptr);
 s32 StopRCnt(s32 spec);
@@ -22,15 +8,7 @@ s32 DisableEvent(s32 event);
 s32 CloseEvent(s32 event);
 s32 kaj_timer_event;
 extern s16 kaj_timer_enabled[];
-typedef struct Unk_801E6DA0 {
-    s32 unk0;
-    s32 unk4;
-    s16 unk8;
-    s16 unkA;
-    s32 unkC;
-    s32 unk10;
-} Unk_801E6DA0;
-extern Unk_801E6DA0 D_801E6DA0;
+extern KajSystem kaj_system;
 extern char D_801DFDF4[];
 void *calloc3(s32 n, s32 size);
 void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
@@ -39,13 +17,6 @@ s32 OpenEvent(u32 desc, s32 spec, s32 mode, s32 (*func)(void));
 s32 EnableEvent(s32 event);
 s32 SetRCnt(u32 spec, u16 target, s32 mode);
 s32 StartRCnt(u32 spec);
-typedef struct Unk_801CC1E8 {
-    s32 unk0;
-    u32 unk4;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-} Unk_801CC1E8;
 s32 kaj_timer_last_tick;
 extern s32 kaj_timer_period[];
 s16 kaj_timer_pop_due(void);
@@ -64,10 +35,10 @@ s32 kaj_timer_handler(void) {
     Unk_801CC1E8 *e;
 
     q = &kaj_timer_queue;
-    if (D_801E6DA0.unk8 == 0) {
+    if (kaj_system.timer_enabled == 0) {
         return 0;
     }
-    kaj_timer_last_tick = D_801E6DA0.unkC++;
+    kaj_timer_last_tick = kaj_system.timer_ticks++;
     while (kaj_timer_pop_due()) {
         if (q->unk10 < 0x50) {
             e = kaj_event_push_front(2);
@@ -82,10 +53,10 @@ s32 kaj_timer_handler(void) {
     if (kaj_timer_last_tick != 0 && kaj_timer_last_tick % kaj_timer_period[0] == 0) {
         kaj_event_push(4);
     }
-    if ((kaj_timer_last_tick ^ D_801E6DA0.unkC) < 0) {
+    if ((kaj_timer_last_tick ^ kaj_system.timer_ticks) < 0) {
         kaj_timer_clear_wrap();
         kaj_timer_last_tick = 0;
-        D_801E6DA0.unkC = 1;
+        kaj_system.timer_ticks = 1;
     }
     return 0;
 }
@@ -196,9 +167,9 @@ void kaj_timer_init(void) {
     }
     kaj_timer_queue.unk8 = 0;
     kaj_timer_queue.unkC = 0;
-    D_801E6DA0.unkC = 0;
-    D_801E6DA0.unk8 = 0;
-    D_801E6DA0.unk10 = 0x258;
+    kaj_system.timer_ticks = 0;
+    kaj_system.timer_enabled = 0;
+    kaj_system.timer_period = 0x258;
     kaj_timer_event = OpenEvent(0xF2000003, 2, 0x1000, kaj_timer_handler);
     if (kaj_timer_event == -1) {
         kaj_abend(2, "Can not Create TIMER Event", D_801DFDF4, 0xBF);

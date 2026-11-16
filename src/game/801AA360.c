@@ -1,25 +1,7 @@
 #include "common.h"
+#include "game/types.h"
 
-typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    u8 padC[0x4];
-    s16 unk10;
-    s16 unk12;
-    s16 unk14;
-    u8 pad16[0x26];
-    s16 unk3C;
-    u8 pad3E[0x4];
-    u16 unk42;
-    u8 pad44[0x2];
-    u16 unk46;
-    u8 pad48[0x2A];
-    s16 unk72;
-    s16 unk74;
-    s16 unk76;
-} Unk_801E076C;
-extern Unk_801E076C *D_801E076C[];
+extern Player *D_801E076C[];
 void object_load_res(s32 arg0, s32 arg1);
 typedef struct {
     s32 unk0;
@@ -42,96 +24,30 @@ typedef struct {
     u8 unk6C[0x20];
 } Unk_801E032C;
 extern Unk_801E032C *D_801E032C[];
-void thing_car_init(Unk_801E032C *arg0, Unk_801E076C *arg1);
-void thing_train_init(Unk_801E032C *arg0, Unk_801E076C *arg1);
-typedef struct { u16 unk0; u8 pad2[0xB6]; void *unkB8; void *unkBC; void *unkC0; } Unk_801AC278;
-typedef struct { u8 pad0[0x54]; Unk_801AC278 *unk54; } Unk_801E02D8;
-extern Unk_801E02D8 D_801E02D8;
+void thing_car_init(Unk_801E032C *arg0, Player *arg1);
+void thing_train_init(Unk_801E032C *arg0, Player *arg1);
+extern SceneTables object_scene_tables;
 void thing_car_get_out(Unk_801AC278 *arg0);
 void free3(void *ptr);
 void sound_se_pop(void);
-void vehicle_car_drive(Unk_801E076C *arg0);
-void thing_train_update(Unk_801E076C *arg0);
-typedef struct { u16 unk0; u16 unk2; u8 pad4[0x10]; s16 unk14; } Unk_801AC55C_1C;
-typedef struct Unk_801AC55C {
-    s32 unk0;
-    s16 unk4;
-    u8 pad6[0x4];
-    s16 unkA;
-    s16 unkC;
-    u8 padE[0x2];
-    s16 unk10;
-    u16 unk12;
-    u16 unk14;
-    u16 unk16;
-    s16 unk18;
-    s16 unk1A;
-    Unk_801AC55C_1C *unk1C;
-} Unk_801AC55C;
-typedef struct {
-    u8 pad0[0x54];
-    Unk_801AC55C *unk54;
-    u8 pad58[0x4];
-    Unk_801E076C *unk5C;
-} Unk_801E0710;
-extern Unk_801E0710 D_801E0710;
+void vehicle_car_drive(Player *arg0);
+void thing_train_update(Player *arg0);
+typedef struct Unk_801AC55C_1C { u16 unk0; u16 unk2; u8 pad4[0x10]; s16 unk14; } Unk_801AC55C_1C;
+extern PlayerStatus player_status;
 extern s16 D_801D7FB0[];
 void sound_se_play(s32 arg0);
 s32 mail_menu_close(void);
-typedef struct {
-    s32 unk0;
-    s16 unk4;
-    s16 unk6;
-    u8 pad8[0xC];
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    s32 unk20;
-    s16 unk24;
-    s16 unk26;
-    s16 unk28;
-    u8 pad2A[0x2];
-    s32 unk2C;
-    u8 unk30[0x14];
-    s32 unk44;
-    s32 unk48;
-    s32 unk4C;
-} Unk_801A7C3C;
-typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
-    s16 unkE;
-    u16 unk10;
-    s16 unk12;
-    s16 unk14;
-    s16 unk16;
-    s16 unk18;
-    s16 unk1A;
-} Unk_801E1118;
 extern Unk_801E1118 D_801E1118;
 Unk_801A7C3C *thing_find(s32 arg0, s32 arg1);
 extern char vehicle_str_file[];
 void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
 void vehicle_car_follow_player(Unk_801A7C3C *arg0, s32 arg1);
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-    u32 unk8;
-    Unk_801AC55C *unkC;
-    Unk_801AC55C *unk10;
-} Unk_801D7FB0;
 s32 mail_menu_open(s16 a, s16 b, s16 c, s16 d, s16 e, s16 *f, s16 g, s16 h, s16 i);
 extern char D_80171A78[];
 extern char D_80171AA8[];
 void *kaj_malloc(u32 size);
 typedef struct { s16 unk0; s16 unk2; s16 unk4; s16 unk6; } Unk_801AA8DC_10;
 void RotMatrix(Unk_801AA8DC_10 *arg0, void *arg1);
-typedef struct { s32 unk0; s16 unk4; s16 unk6; u8 pad8[0xA]; u16 unk12; } Unk_801DFFE8;
 extern Unk_801DFFE8 D_801DFFE8;
 void text_show(char *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
 void text_close(void);
@@ -139,11 +55,8 @@ void action_reset(s16 arg0);
 extern s32 vehicle_str_sb1[];
 extern s32 vehicle_str_rw1[];
 void mail_goto_building(s32 arg0, s32 *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
-typedef struct { s16 unk0[5]; s16 unkA; char *unkC; s16 unk10; s16 unk12; s32 unk14; s32 unk18; s32 unk1C; } Unk_801E0340;
 extern Unk_801E0340 D_801E0340;
-typedef struct { s32 unk0; s32 unk4; s16 unk8; s16 unkA; u8 unkC[0x8]; s32 unk14; } Unk_801E6DA0;
-extern Unk_801E6DA0 D_801E6DA0;
-typedef struct { u16 unk0; s16 unk2; s16 *unk4; s16 *unk8; s16 *unkC; } Unk_801E07C0;
+extern KajSystem kaj_system;
 extern Unk_801E07C0 D_801E07C0;
 s16 mail_menu_get_state(void);
 s16 mail_menu_move(s16 a);
@@ -158,7 +71,6 @@ void *kaj_tss_alloc(u32 arg0);
 s32 kaj_tss_start(void *arg0);
 void vehicle_train_door_frame(Unk_801AC70C *arg0);
 void vehicle_train_door_last(Unk_801AC70C *arg0);
-typedef struct { u16 unk0; u16 unk2; u16 unk4; u16 unk6; } Unk_80184230;
 s32 MoveImage(Unk_80184230 *rect, s32 x, s32 y);
 void RotMatrixZXY(Unk_801AA8DC_10 *arg0, void *arg1);
 s32 block_find_surface(s32 arg0, s32 arg1, s32 *arg2, s32 arg3);
@@ -169,33 +81,10 @@ void sprite_fill_clut(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 s16 mail_wrap_angle(s16 a);
 s32 ratan2(s32 y, s32 x);
 extern s32 D_801E6DB4[];
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-    s32 unk14;
-    s32 unk18;
-    u8 unk1C[0x8];
-    s16 unk24;
-    s16 unk26;
-    s16 unk28;
-    u8 pad2A[0x22];
-    s32 unk4C;
-    s32 unk50;
-    s32 unk54;
-    u8 pad58[0x4];
-    s32 unk5C;
-    s32 unk60;
-    s32 unk64;
-} Unk_801E1158;
 extern Unk_801E1158 D_801E1158;
 s16 vehicle_car_stopped_input(void);
-s32 player_update_map(Unk_801E0710 *arg0);
-void vehicle_navi_update(Unk_801E076C *arg0, Unk_801AC578 *arg1);
+s32 player_update_map(PlayerStatus *arg0);
+void vehicle_navi_update(Player *arg0, Unk_801AC578 *arg1);
 s16 vehicle_car_turn_sfx_on;
 s16 thing_car_exit_prompt_on;
 s32 thing_car_speed_div;
@@ -211,7 +100,7 @@ INCLUDE_RODATA("asm/nonmatchings/game/801AA360", vehicle_str_file);
 
 INCLUDE_RODATA("asm/nonmatchings/game/801AA360", D_80171AA8);
 
-void vehicle_car_drive(Unk_801E076C *arg0) {
+void vehicle_car_drive(Player *arg0) {
     Unk_801AA8DC_10 sv;
     s32 flag;
     Unk_801E032C *p = D_801E032C[0];
@@ -227,7 +116,7 @@ void vehicle_car_drive(Unk_801E076C *arg0) {
     s32 ang;
 
     q->unk0 = 0;
-    vehicle_navi_update((Unk_801E076C *)p, (Unk_801AC578 *)arg0);
+    vehicle_navi_update((Player *)p, (Unk_801AC578 *)arg0);
     sv.unk0 = 0;
     sv.unk2 = 0;
     sv.unk4 = (q->unk4 << 12) / 360;
@@ -333,7 +222,7 @@ void vehicle_car_drive(Unk_801E076C *arg0) {
 
 void vehicle_train_place(void) {
     Unk_801AA8DC_10 sv;
-    Unk_801E076C *q = D_801E076C[0];
+    Player *q = D_801E076C[0];
     Unk_801E1118 *g = &D_801E1118;
     Unk_801A7C3C *p = thing_find(2, 0);
 
@@ -350,9 +239,9 @@ void vehicle_train_place(void) {
             p->unk18 = -0xF0A;
             p->unk26 = 180;
         }
-        p->unk44 = p->unk18 - q->unk72 * 12500;
-        p->unk48 = p->unk1C + q->unk74 * 32000;
-        p->unk4C = p->unk20 - q->unk76 * 12500;
+        p->unk44 = p->unk18 - q->cell_x * 12500;
+        p->unk48 = p->unk1C + q->cell_y * 32000;
+        p->unk4C = p->unk20 - q->cell_z * 12500;
         sv.unk0 = (p->unk24 << 12) / 360;
         sv.unk2 = (p->unk26 << 12) / 360;
         sv.unk4 = (p->unk28 << 12) / 360;
@@ -367,7 +256,7 @@ void vehicle_train_place(void) {
 void vehicle_train_arrive(s16 arg0, s16 arg1) {
     Unk_801AA8DC_10 sv;
     Unk_80184230 rect;
-    Unk_801E076C *q = D_801E076C[0];
+    Player *q = D_801E076C[0];
     Unk_801E1118 *g = &D_801E1118;
     Unk_801A7C3C *p = thing_find(2, 0);
     Unk_801AC55C *a;
@@ -389,9 +278,9 @@ void vehicle_train_arrive(s16 arg0, s16 arg1) {
             p->unk20 = 0xBB80;
             p->unk26 = 180;
         }
-        p->unk44 = p->unk18 - q->unk72 * 12500;
-        p->unk48 = p->unk1C + q->unk74 * 32000;
-        p->unk4C = p->unk20 - q->unk76 * 12500;
+        p->unk44 = p->unk18 - q->cell_x * 12500;
+        p->unk48 = p->unk1C + q->cell_y * 32000;
+        p->unk4C = p->unk20 - q->cell_z * 12500;
         sv.unk0 = (p->unk24 << 12) / 360;
         sv.unk2 = (p->unk26 << 12) / 360;
         sv.unk4 = (p->unk28 << 12) / 360;
@@ -419,7 +308,7 @@ void vehicle_train_arrive(s16 arg0, s16 arg1) {
 }
 
 void vehicle_train_update(Unk_801A7C3C *arg0) {
-    Unk_801E076C *q = D_801E076C[0];
+    Player *q = D_801E076C[0];
     Unk_801E1118 *g = &D_801E1118;
     Unk_801AC55C *p;
     u16 m;
@@ -510,14 +399,14 @@ void vehicle_train_update(Unk_801A7C3C *arg0) {
             }
         }
     }
-    arg0->unk44 = arg0->unk18 - q->unk72 * 12500;
-    arg0->unk48 = arg0->unk1C + q->unk74 * 32000;
-    arg0->unk4C = arg0->unk20 - q->unk76 * 12500;
+    arg0->unk44 = arg0->unk18 - q->cell_x * 12500;
+    arg0->unk48 = arg0->unk1C + q->cell_y * 32000;
+    arg0->unk4C = arg0->unk20 - q->cell_z * 12500;
     arg0->unk2C = 0;
 }
 
 void vehicle_train_exit_prompt(s16 arg0) {
-    Unk_801E076C *q = D_801E076C[0];
+    Player *q = D_801E076C[0];
     Unk_801DFFE8 *d = &D_801DFFE8;
     Unk_801E1118 *p = &D_801E1118;
 
@@ -530,13 +419,13 @@ void vehicle_train_exit_prompt(s16 arg0) {
                 if (d->unk6 != 2) {
                     d->unk6 = 2;
                 }
-                if (!(q->unk42 & 4)) {
-                    q->unk42 |= 4;
+                if (!(q->flags & 4)) {
+                    q->flags |= 4;
                 }
-                if (q->unk46 == 2) {
+                if (q->vehicle_mode == 2) {
                     /* " 7電車1から降りる      3○" */
                     text_show(" 7\223d\216\3241\202\251\202\347\215~\202\350\202\351      3\201\233", 1, -1, 8, -1, 0, 1);
-                } else if (q->unk46 == 3) {
+                } else if (q->vehicle_mode == 3) {
                     /* " 7地下鉄1から降りる     3○" */
                     text_show(" 7\222n\211\272\223S1\202\251\202\347\215~\202\350\202\351     3\201\233", 1, -1, 8, -1, 0, 1);
                 }
@@ -546,15 +435,15 @@ void vehicle_train_exit_prompt(s16 arg0) {
         text_close();
         action_reset(1);
         p->unkC = 0;
-        if (q->unk42 & 4) {
-            q->unk42 &= ~4;
+        if (q->flags & 4) {
+            q->flags &= ~4;
         }
     }
 }
 
 s16 vehicle_train_get_off(s16 arg0) {
     Unk_801E1118 *p;
-    u16 v = D_801E076C[0]->unk46;
+    u16 v = D_801E076C[0]->vehicle_mode;
 
     p = &D_801E1118;
 
@@ -579,7 +468,7 @@ s16 vehicle_train_get_off(s16 arg0) {
 s16 vehicle_train_end_of_line(s16 arg0) {
     Unk_801E0340 *r = &D_801E0340;
     Unk_801E1118 *p;
-    u16 v = D_801E076C[0]->unk46;
+    u16 v = D_801E076C[0]->vehicle_mode;
 
     p = &D_801E1118;
     if (v == 3) {
@@ -619,14 +508,14 @@ void vehicle_car_follow_player(Unk_801A7C3C *arg0, s32 arg1) {
     s32 y;
     s16 found = 0;
     s16 f = arg1;
-    Unk_801E0710 *g = &D_801E0710;
-    Unk_801E076C *q = g->unk5C;
+    PlayerStatus *g = &player_status;
+    Player *q = g->player;
 
     if (q->unk4 == 9999) {
         y = 0;
-        if (block_find_surface(q->unk0 - q->unk72 * 12500, q->unk8 - q->unk76 * 12500, &y, 1) != 0) {
+        if (block_find_surface(q->unk0 - q->cell_x * 12500, q->unk8 - q->cell_z * 12500, &y, 1) != 0) {
             found = 1;
-            y -= q->unk74 * 32000;
+            y -= q->cell_y * 32000;
             q->unk4 = y;
         }
     }
@@ -637,9 +526,9 @@ void vehicle_car_follow_player(Unk_801A7C3C *arg0, s32 arg1) {
         arg0->unk24 = q->unk10;
         arg0->unk26 = q->unk12;
         arg0->unk28 = q->unk14;
-        arg0->unk44 = arg0->unk18 - q->unk72 * 12500;
-        arg0->unk48 = arg0->unk1C + q->unk74 * 32000;
-        arg0->unk4C = arg0->unk20 - q->unk76 * 12500;
+        arg0->unk44 = arg0->unk18 - q->cell_x * 12500;
+        arg0->unk48 = arg0->unk1C + q->cell_y * 32000;
+        arg0->unk4C = arg0->unk20 - q->cell_z * 12500;
         sv.unk0 = (arg0->unk24 << 12) / 360;
         sv.unk2 = (arg0->unk26 << 12) / 360;
         sv.unk4 = (arg0->unk28 << 12) / 360;
@@ -648,12 +537,12 @@ void vehicle_car_follow_player(Unk_801A7C3C *arg0, s32 arg1) {
         if (f != 0) {
             arg0->unk4 = 1;
             arg0->unk14 = block_find_at(arg0->unk18, arg0->unk1C, arg0->unk20);
-            g->unk54 = (Unk_801AC55C *)arg0;
+            g->vehicle = (Unk_801AC55C *)arg0;
         }
     }
 }
 
-void vehicle_navi_update(Unk_801E076C *arg0, Unk_801AC578 *arg1) {
+void vehicle_navi_update(Player *arg0, Unk_801AC578 *arg1) {
     Unk_801D7FB0 *p = (Unk_801D7FB0 *)D_801D7FB0;
     s32 dx;
     s32 dz;
@@ -716,27 +605,27 @@ s16 vehicle_car_stopped_input(void) {
     s16 r = mail_menu_get_state();
 
     if (r == 1) {
-        if (!(D_801E6DA0.unk4 & 0x20) && (D_801E6DA0.unk0 & 0x20)) {
+        if (!(kaj_system.pad_prev & 0x20) && (kaj_system.pad_now & 0x20)) {
             D_801D7FB0[0] = 1;
             sound_se_play(0x11);
             mail_menu_close();
-        } else if (!(D_801E6DA0.unk4 & 0x40) && (D_801E6DA0.unk0 & 0x40)) {
+        } else if (!(kaj_system.pad_prev & 0x40) && (kaj_system.pad_now & 0x40)) {
             D_801D7FB0[0] = 0;
             sound_se_play(8);
             mail_menu_close();
-        } else if (!(D_801E6DA0.unk4 & 0x1000) && (D_801E6DA0.unk0 & 0x1000)) {
+        } else if (!(kaj_system.pad_prev & 0x1000) && (kaj_system.pad_now & 0x1000)) {
             p->unk4 = mail_menu_move(1);
-        } else if (!(D_801E6DA0.unk4 & 0x4000) && (D_801E6DA0.unk0 & 0x4000)) {
+        } else if (!(kaj_system.pad_prev & 0x4000) && (kaj_system.pad_now & 0x4000)) {
             p->unk4 = mail_menu_move(0);
         }
         return 0;
     }
     if (r == 0) {
-        if (!(D_801E6DA0.unk4 & 0x20) && (D_801E6DA0.unk0 & 0x20)) {
+        if (!(kaj_system.pad_prev & 0x20) && (kaj_system.pad_now & 0x20)) {
             sound_se_play(0x11);
             return 1;
         }
-        if (q->unk0 == 0 && !(D_801E6DA0.unk4 & 0x800) && (D_801E6DA0.unk0 & 0x800)) {
+        if (q->unk0 == 0 && !(kaj_system.pad_prev & 0x800) && (kaj_system.pad_now & 0x800)) {
             text_close();
             vehicle_navi_open_menu();
         }
@@ -745,9 +634,9 @@ s16 vehicle_car_stopped_input(void) {
     return 0;
 }
 
-s16 vehicle_car_input(Unk_801E0710 *arg0, s32 arg1) {
+s16 vehicle_car_input(PlayerStatus *arg0, s32 arg1) {
     Unk_801E1158 *q = &D_801E1158;
-    Unk_801E076C *o = arg0->unk5C;
+    Player *o = arg0->player;
     s16 r;
     s16 f0;
     s16 f1;
@@ -876,7 +765,7 @@ s16 vehicle_car_input(Unk_801E0710 *arg0, s32 arg1) {
 }
 
 void vehicle_load_data(void) {
-    switch (D_801E076C[0]->unk46) {
+    switch (D_801E076C[0]->vehicle_mode) {
     case 1:
         object_load_res(3, -1);
         break;
@@ -904,7 +793,7 @@ void vehicle_create(Unk_801AC278 **arg0, u32 arg1) {
 }
 
 void vehicle_init(Unk_801E032C *arg0) {
-    switch (D_801E076C[0]->unk46) {
+    switch (D_801E076C[0]->vehicle_mode) {
     case 1:
         thing_car_init(arg0, D_801E076C[0]);
         break;
@@ -917,7 +806,7 @@ void vehicle_init(Unk_801E032C *arg0) {
 }
 
 void vehicle_free(void) {
-    Unk_801E02D8 *p = &D_801E02D8;
+    SceneTables *p = &object_scene_tables;
     Unk_801AC278 *e = p->unk54;
     if (e != NULL) {
         if (e->unk0 == 1) {
@@ -947,7 +836,7 @@ void vehicle_set_origin(s32 arg0, s32 arg1, s32 arg2) {
 }
 
 void vehicle_update(void) {
-    s32 v = D_801E076C[0]->unk46;
+    s32 v = D_801E076C[0]->vehicle_mode;
     if (v == 1) {
         vehicle_car_drive(D_801E076C[0]);
     } else if (v >= 2) {
@@ -966,9 +855,9 @@ void vehicle_car_place(void) {
 }
 
 void vehicle_car_release(void) {
-    Unk_801E0710 *p = &D_801E0710;
-    p->unk54->unk4 = 0;
-    p->unk54 = NULL;
+    PlayerStatus *p = &player_status;
+    p->vehicle->unk4 = 0;
+    p->vehicle = NULL;
 }
 
 void vehicle_navi_show(Unk_801AC578 *arg0, s16 arg1, s16 arg2) {

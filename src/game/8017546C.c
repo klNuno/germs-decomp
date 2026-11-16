@@ -1,254 +1,106 @@
 #include "common.h"
+#include "game/types.h"
 
-typedef struct {
-    u16 unk0;
-    u16 unk2;
-} Unk_80174A14;
-typedef struct {
-    void *unk0;
-} Unk_80174BC8;
-typedef struct {
-    void *unk0;
-    s32 unk4;
-    Unk_80174BC8 *unk8;
-} Unk_80174CB8;
-typedef struct {
-    Unk_80174A14 *unk0;
-    s32 unk4;
-    Unk_80174CB8 *unk8;
-} Unk_80174B10;
-typedef struct Unk_801CCB70 {
-    void *unk0;
-    struct Unk_801CCB70 *unk4;
-    Unk_80174B10 *unk8;
-} Unk_801CCB70;
-typedef struct { Unk_801CCB70 *unk0; Unk_801CCB70 *unk4; Unk_801CCB70 *unk8; s32 unkC; } Unk_801DFE54;
 Unk_801DFE54 *action_queue;
 void kaj_ll_insert_before(Unk_801DFE54 *a0, s32 a1);
-typedef struct { s32 unk0; s32 unk4; s32 unk8; } Unk_80174F54;
-typedef struct { u16 unk0; s16 unk2; s16 unk4; s16 unk6; s16 unk8; u8 unkA; u8 unkB; s16 unkC; u8 unkE; u8 unkF; s16 unk10; u16 unk12; s16 unk14; s16 unk16; s16 unk18; s16 unk1A; s16 unk1C; s16 unk1E; s32 unk20; s32 unk24; s32 unk28; s32 unk2C; s32 unk30; s32 unk34; s16 unk38; s16 unk3A; s16 unk3C; s16 unk3E; s16 unk40; s16 unk42; u8 unk44; u8 unk45; s16 unk46; s32 unk48; } Unk_801762F4;
-typedef struct { u16 unk0; s16 unk2; s32 unk4; s16 unk8; u16 unkA; u8 unkC[0xC0]; } Unk_801767D4;
-typedef struct {
-    u16 unk0;
-    s16 unk2;
-    u16 unk4;
-    s16 unk6;
-    s16 unk8;
-    u16 unkA;
-    s16 unkC;
-    u16 unkE;
-    s16 unk10;
-    u16 unk12;
-    u16 unk14;
-    s16 unk16;
-    s32 unk18;
-    s32 unk1C;
-    s32 unk20;
-} Unk_80176890;
-typedef struct {
-    s32 unk0; s32 unk4; s32 unk8; s32 unkC; s32 unk10; s32 unk14;
-    s32 unk18; s32 unk1C; s32 unk20; s32 unk24; s32 unk28; s32 unk2C; s32 unk30; s32 unk34;
-    Unk_80174F54 *unk38; Unk_801762F4 *unk3C; Unk_801767D4 *unk40; Unk_80176890 *unk44;
-} Unk_801E02D8;
-extern Unk_801E02D8 D_801E02D8;
+extern SceneTables object_scene_tables;
 void free3(void *ptr);
 s32 block_find_at(s32 a0, s32 a1, s32 a2);
-Unk_801767D4 *npc_find_body(s16 arg0);
-typedef struct { s16 unk0; s16 unk2; s16 unk4[2]; u8 unk8[0x28]; s16 unk30; s16 unk32[8]; s16 unk42; s16 unk44; s16 unk46; s16 unk48; u8 unk4A[2]; s32 unk4C; } Unk_801E0768;
-extern Unk_801E0768 *D_801E0768[];
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    u16 unk4;
-    s16 unk6;
-    s16 unk8;
-    s16 unkA;
-} Unk_80173954;
-typedef struct {
-    u8 unk0[4];
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
-    s16 unkE;
-    s16 unk10;
-    s16 unk12;
-    s16 unk14;
-    u16 unk16;
-    u8 unk18[0x18];
-    void *unk30;
-    u8 unk34[0x8];
-    s32 unk3C;
-    u8 unk40[0x14];
-    s32 unk54;
-    s32 unk58;
-    s32 unk5C;
-} Unk_8018E56C;
-typedef struct {
-    u8 unk0[4];
-    s16 unk4;
-} Unk_80176370;
+NpcBody *npc_find_body(s16 arg0);
+extern Inventory *D_801E0768[];
 Unk_8018E56C *mod_find(u16 arg0);
 void mod_draw(s32 arg0, Unk_8018E56C *arg1, u16 arg2);
 void kaj_ll_remove_to_prev(Unk_801DFE54 *arg0);
 s16 kaj_ll_at_tail(Unk_801DFE54 *arg0);
 Unk_801DFE54 *action_set_list;
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    s16 unkA;
-} Unk_80174D6C;
 Unk_80174B10 *action_run_set(Unk_80174B10 *arg0, s32 arg1, s32 arg2);
-typedef struct {
-    u8 unk0[0x6];
-    s16 unk6;
-    u8 unk8[0x2];
-    s16 unkA;
-    u8 unkC[0x2];
-    s16 unkE;
-    u16 unk10;
-    u16 unk12;
-} Unk_801DFFE8;
 extern Unk_801DFFE8 D_801DFFE8;
 void text_release_cmd(void);
 void *memset(void *dst, s32 c, u32 n);
-typedef struct {
-    u8 unk0[0x40];
-    s32 unk40;
-    u8 unk44[0x10];
-    s32 unk54;
-    s32 unk58;
-    s32 unk5C;
-    u8 unk60[0xC];
-    s16 unk6C;
-    s16 unk6E;
-    u8 unk70[0x2];
-    s16 unk72;
-    s16 unk74;
-    s16 unk76;
-} Unk_801E076C;
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-} Unk_80174FFC;
-extern Unk_801E076C *D_801E076C[];
+extern Player *D_801E076C[];
 void mod_setup(Unk_8018E56C *arg0, s32 arg1, s32 arg2, s32 arg3);
 void RotMatrix(Unk_80174FFC *arg0, void *arg1);
-void action_place_npc(Unk_801762F4 *arg0, Unk_8018E56C *arg1);
+void action_place_npc(Npc *arg0, Unk_8018E56C *arg1);
 Unk_80174B10 *action_find_set(s16 arg0);
 void text_close(void);
 void GsSetLsMatrix(void *m);
 s16 block_point_on_model(void *arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4);
-Unk_801762F4 *npc_find(s16 arg0, u16 arg1);
+Npc *npc_find(s16 arg0, u16 arg1);
 s16 mail_wrap_angle(s16 a);
 s32 ratan2(s32 y, s32 x);
 s32 mail_angle_to_dir4(s16 a);
 extern s16 ai_probe_angle[];
 s32 rsin(s32 a);
 s32 rcos(s32 a);
-s16 ai_check_line(Unk_801762F4 *arg0, Unk_80174F54 *arg1, s32 arg2);
-s16 ai_try_move(Unk_801762F4 *arg0, Unk_80174F54 *arg1, s16 arg2);
+s16 ai_check_line(Npc *arg0, SceneTrigger *arg1, s32 arg2);
+s16 ai_try_move(Npc *arg0, SceneTrigger *arg1, s16 arg2);
 extern s32 D_801E6DB4[];
 extern Unk_8018E56C *ai_cur_model;
-typedef struct {
-    u8 unk0[0x8];
-    s16 unk8;
-    u8 unkA[0x4];
-    u16 unkE;
-    s32 unk10;
-    u8 unk14[0x4];
-    s32 unk18;
-    u8 unk1C[0x68];
-    void *unk84;
-    s32 unk88;
-} Unk_801DFC60;
-Unk_80176890 *npc_find_stats(s16 arg0);
-s16 ai_find_target(Unk_801762F4 *arg0, s16 arg1);
-s16 ai_decide_fire(Unk_801762F4 *arg0);
-void ai_face_player(Unk_801762F4 *arg0);
-extern Unk_80176890 D_801D7328;
-extern Unk_801767D4 ai_default_body;
+NpcStats *npc_find_stats(s16 arg0);
+s16 ai_find_target(Npc *arg0, s16 arg1);
+s16 ai_decide_fire(Npc *arg0);
+void ai_face_player(Npc *arg0);
+extern NpcStats D_801D7328;
+extern NpcBody ai_default_body;
 extern Unk_801DFC60 *ai_cur_block;
 extern s32 ai_cur_grid;
-extern Unk_80176890 *ai_cur_stats;
-extern Unk_801767D4 *ai_cur_body;
+extern NpcStats *ai_cur_stats;
+extern NpcBody *ai_cur_body;
+/* Local view of Unk_80173250: this unit reads 0x4 as u16, the shared type has an s32 there. */
 typedef struct {
     u16 unk0;
     u16 unk2;
     u16 unk4;
-} Unk_80173250;
+} Unk_80173250_u8017546C;
 typedef struct {
-    Unk_80173250 *unk0;
+    Unk_80173250_u8017546C *unk0;
     s32 unk4;
     char **unk8;
 } Unk_80173054;
 s32 atoi(char *s);
-typedef struct {
-    u8 unk0[0x2E];
-    s16 unk2E;
-    u8 unk30[2];
-    s16 unk32;
-    u8 unk34[0x18];
-    Unk_801762F4 *unk4C;
-    u8 unk50[8];
-    Unk_801E0768 *unk58;
-} Unk_801E0710;
-extern Unk_801E0710 D_801E0710;
+extern PlayerStatus player_status;
 s32 rand(void);
 void player_add_skill_exp(s16 arg0, s16 arg1);
 void player_add_exp(s32 arg0);
 void event_set_blink(s16 arg0, s16 arg1);
 extern s16 ai_dir_angle[];
 s16 mail_angle_to_dir8(s16 a);
-void ai_turn_step(Unk_801762F4 *arg0);
-void ai_move_toward(Unk_801762F4 *arg0, s16 arg1, s32 arg2, s32 arg3);
-s16 ai_in_aim_cone(Unk_801762F4 *arg0, s16 arg1, s16 arg2);
-s16 ai_heading_to(Unk_801762F4 *arg0, s16 arg1);
-s32 ai_player_in_front(Unk_801762F4 *arg0);
+void ai_turn_step(Npc *arg0);
+void ai_move_toward(Npc *arg0, s16 arg1, s32 arg2, s32 arg3);
+s16 ai_in_aim_cone(Npc *arg0, s16 arg1, s16 arg2);
+s16 ai_heading_to(Npc *arg0, s16 arg1);
+s32 ai_player_in_front(Npc *arg0);
 extern s16 D_801DFC74;
 extern s16 D_801DFC76;
-void ai_walk(Unk_801762F4 *arg0, s16 arg1, s32 arg2);
-s32 ai_step_back(Unk_801762F4 *arg0, s32 arg1);
-s32 ai_sidestep(Unk_801762F4 *arg0, s32 arg1);
+void ai_walk(Npc *arg0, s16 arg1, s32 arg2);
+s32 ai_step_back(Npc *arg0, s32 arg1);
+s32 ai_sidestep(Npc *arg0, s32 arg1);
 void mod_set_anim(void *arg0, s16 arg1, s16 arg2);
 void sound_se_stop(s32 arg0);
-u16 npc_get_radius(Unk_801762F4 *arg0);
+u16 npc_get_radius(Npc *arg0);
 extern s16 ai_dir_reverse[];
 extern s16 ai_quadrant_dir[4];
 extern u16 D_801E03E6[];
 s32 abs(s32 x);
-void player_take_hit(Unk_801762F4 *arg0, u16 arg1, s32 arg2);
+void player_take_hit(Npc *arg0, u16 arg1, s32 arg2);
 void sound_se_play(s32 arg0);
-typedef struct {
-    u16 unk0;
-    u16 unk2;
-    u16 unk4;
-    u16 unk6;
-    u8 *unk8;
-} Unk_801DFC64;
 s32 SquareRoot0(s32 a);
 s16 npc_find_at_point(s16 arg0, s32 arg1, s32 arg2, s32 arg3);
 s32 block_model_surface(void *arg0, s32 arg1, s32 arg2, s32 arg3);
-void ai_update_stand(Unk_801762F4 *arg0);
-s16 npc_update_anim(Unk_801762F4 *arg0, s16 arg1);
-void ai_update_move(Unk_801762F4 *arg0, s16 arg1);
-void ai_fire(Unk_801762F4 *arg0);
+void ai_update_stand(Npc *arg0);
+s16 npc_update_anim(Npc *arg0, s16 arg1);
+void ai_update_move(Npc *arg0, s16 arg1);
+void ai_fire(Npc *arg0);
 void mod_set_anim_by_id();
 void player_pick_target(void);
 void player_shoot_target(void);
 s16 D_801DFC5C;
 
-s16 npc_update_anim(Unk_801762F4 *arg0, s16 arg1) {
-    Unk_801E0710 *g = &D_801E0710;
-    Unk_801E0768 *s = g->unk58;
+s16 npc_update_anim(Npc *arg0, s16 arg1) {
+    PlayerStatus *g = &player_status;
+    Inventory *s = g->inventory;
     Unk_8018E56C *o;
-    Unk_80176890 *k;
+    NpcStats *k;
     u16 lo;
     u16 hi;
     u16 t;
@@ -261,8 +113,8 @@ s16 npc_update_anim(Unk_801762F4 *arg0, s16 arg1) {
     }
     switch (arg1) {
     case 0:
-        if (arg0 == g->unk4C) {
-            s->unk46 = 1;
+        if (arg0 == g->target_npc) {
+            s->armed = 1;
         }
         if (arg0->unkE == 1) {
             if (o->unk16 != 3) {
@@ -277,8 +129,8 @@ s16 npc_update_anim(Unk_801762F4 *arg0, s16 arg1) {
         }
         break;
     case 1:
-        if (arg0 == g->unk4C) {
-            s->unk46 = 1;
+        if (arg0 == g->target_npc) {
+            s->armed = 1;
         }
         if (arg0->unkE == 1) {
             if (o->unk16 != 4) {
@@ -299,8 +151,8 @@ s16 npc_update_anim(Unk_801762F4 *arg0, s16 arg1) {
         }
         break;
     case 2:
-        if (arg0 == g->unk4C) {
-            s->unk46 = 0;
+        if (arg0 == g->target_npc) {
+            s->armed = 0;
         }
         if (o->unk16 != 1) {
             mod_set_anim(o, 1, 0);
@@ -311,8 +163,8 @@ s16 npc_update_anim(Unk_801762F4 *arg0, s16 arg1) {
         }
         break;
     case 3:
-        if (arg0 == g->unk4C) {
-            s->unk46 = 1;
+        if (arg0 == g->target_npc) {
+            s->armed = 1;
         }
         if (o->unk16 != 9) {
             if (arg0->unk12 & 0x400) {
@@ -326,8 +178,8 @@ s16 npc_update_anim(Unk_801762F4 *arg0, s16 arg1) {
         }
         break;
     case 4:
-        if (arg0 == g->unk4C) {
-            s->unk46 = 1;
+        if (arg0 == g->target_npc) {
+            s->armed = 1;
         }
         if (o->unk16 != 7) {
             if (arg0->unk12 & 0x400) {
@@ -341,8 +193,8 @@ s16 npc_update_anim(Unk_801762F4 *arg0, s16 arg1) {
         }
         break;
     case 5:
-        if (arg0 == g->unk4C) {
-            s->unk46 = 1;
+        if (arg0 == g->target_npc) {
+            s->armed = 1;
         }
         k = npc_find_stats(arg0->unk18);
         if (k == NULL) {
@@ -381,7 +233,7 @@ s16 npc_update_anim(Unk_801762F4 *arg0, s16 arg1) {
         case 6:
             if (o->unk8 == 0) {
                 arg0->unk12 &= ~0x400;
-                if ((u16)k->unk2 == 4) {
+                if ((u16)k->weapon_kind == 4) {
                     sound_se_stop(0x27);
                 }
             } else {
@@ -406,17 +258,17 @@ s16 npc_update_anim(Unk_801762F4 *arg0, s16 arg1) {
 }
 
 void npc_update_all(void) {
-    Unk_801762F4 *p;
+    Npc *p;
     Unk_8018E56C *q;
     Unk_80174B10 *r;
     s32 i;
     u16 flags;
-    Unk_801E02D8 *g = &D_801E02D8;
+    SceneTables *g = &object_scene_tables;
 
-    p = g->unk3C;
-    if (g->unk1C != 0) {
+    p = g->npcs;
+    if (g->npc_count != 0) {
         player_shoot_target();
-        for (i = 0; i < g->unk1C; i++, p++) {
+        for (i = 0; i < g->npc_count; i++, p++) {
             if (p->unk6 == 0) {
                 continue;
             }
@@ -500,17 +352,17 @@ void npc_update_all(void) {
 }
 
 void npc_exec_command(Unk_80173054 *arg0) {
-    Unk_801E02D8 *p = &D_801E02D8;
-    Unk_801762F4 *e = p->unk3C;
-    Unk_80173250 *cmd = arg0->unk0;
+    SceneTables *p = &object_scene_tables;
+    Npc *e = p->npcs;
+    Unk_80173250_u8017546C *cmd = arg0->unk0;
     u16 id = cmd->unk4;
-    Unk_801762F4 *t;
+    Npc *t;
     s32 i;
 
-    if (p->unk1C == 0) {
+    if (p->npc_count == 0) {
         t = NULL;
     } else {
-        for (i = 0; i < p->unk1C; i++, e++) {
+        for (i = 0; i < p->npc_count; i++, e++) {
             if (e->unk0 == id) {
                 t = e;
                 goto done;
@@ -573,9 +425,9 @@ done:
     }
 }
 
-void npc_apply_damage(Unk_801762F4 *arg0, s32 arg1, s32 arg2, s16 arg3) {
-    Unk_801E0710 *g = &D_801E0710;
-    Unk_80176890 *k;
+void npc_apply_damage(Npc *arg0, s32 arg1, s32 arg2, s16 arg3) {
+    PlayerStatus *g = &player_status;
+    NpcStats *k;
     s32 v;
     s16 f;
     s32 n;
@@ -609,35 +461,35 @@ void npc_apply_damage(Unk_801762F4 *arg0, s32 arg1, s32 arg2, s16 arg3) {
         event_set_blink(1, 1);
         return;
     }
-    if (k->unkA == 0x7FFF) {
+    if (k->defence == 0x7FFF) {
         v = 0x7FFF;
     } else {
-        v = rand() % k->unkA;
+        v = rand() % k->defence;
     }
     f = 0;
     switch (arg1) {
     case 0:
-        if (k->unk12 & 1) {
+        if (k->resist_types & 1) {
             f = 1;
         }
         break;
     case 1:
-        if (k->unk12 & 2) {
+        if (k->resist_types & 2) {
             f = 1;
         }
         break;
     case 2:
-        if (k->unk12 & 4) {
+        if (k->resist_types & 4) {
             f = 1;
         }
         break;
     case 3:
-        if (k->unk12 & 8) {
+        if (k->resist_types & 8) {
             f = 1;
         }
         break;
     case 4:
-        if (k->unk12 & 0x10) {
+        if (k->resist_types & 0x10) {
             f = 1;
         }
         break;
@@ -691,24 +543,24 @@ void npc_apply_damage(Unk_801762F4 *arg0, s32 arg1, s32 arg2, s16 arg3) {
 }
 
 void npc_free_all(void) {
-    Unk_801E02D8 *p = &D_801E02D8;
-    if (p->unk1C != 0) {
-        if (p->unk3C != NULL) {
-            free3(p->unk3C);
+    SceneTables *p = &object_scene_tables;
+    if (p->npc_count != 0) {
+        if (p->npcs != NULL) {
+            free3(p->npcs);
         }
-        p->unk1C = 0;
-        p->unk3C = NULL;
+        p->npc_count = 0;
+        p->npcs = NULL;
     }
 }
 
-Unk_801762F4 *npc_find(s16 arg0, u16 arg1) {
-    Unk_801E02D8 *p = &D_801E02D8;
-    Unk_801762F4 *e = p->unk3C;
+Npc *npc_find(s16 arg0, u16 arg1) {
+    SceneTables *p = &object_scene_tables;
+    Npc *e = p->npcs;
     s32 i;
-    if (p->unk1C == 0) {
+    if (p->npc_count == 0) {
         return NULL;
     }
-    for (i = 0; i < p->unk1C; i++, e++) {
+    for (i = 0; i < p->npc_count; i++, e++) {
         if (arg0 == 0) {
             if (e->unk0 == arg1) {
                 return e;
@@ -723,16 +575,16 @@ Unk_801762F4 *npc_find(s16 arg0, u16 arg1) {
 }
 
 void npc_draw_all(s32 arg0) {
-    Unk_801E02D8 *p = &D_801E02D8;
-    Unk_801762F4 *e = p->unk3C;
+    SceneTables *p = &object_scene_tables;
+    Npc *e = p->npcs;
     Unk_80176370 *x;
     Unk_8018E56C *o;
     s32 i;
 
-    if (p->unk1C == 0) {
+    if (p->npc_count == 0) {
         return;
     }
-    for (i = 0; i < p->unk1C; i++, e++) {
+    for (i = 0; i < p->npc_count; i++, e++) {
         x = (Unk_80176370 *)e->unk48;
         if (e != NULL && e->unk4 != 0 && e->unk6 != 0 && x != NULL && x->unk4 != 0) {
             o = mod_find(e->unk16);
@@ -744,15 +596,15 @@ void npc_draw_all(s32 arg0) {
 }
 
 s16 npc_find_at_point(s16 arg0, s32 arg1, s32 arg2, s32 arg3) {
-    Unk_801E02D8 *p = &D_801E02D8;
-    Unk_801762F4 *e = p->unk3C;
+    SceneTables *p = &object_scene_tables;
+    Npc *e = p->npcs;
     Unk_8018E56C *o;
     s32 i;
 
-    if (p->unk1C == 0) {
+    if (p->npc_count == 0) {
         return -2;
     }
-    for (i = 0; i < p->unk1C; i++, e++) {
+    for (i = 0; i < p->npc_count; i++, e++) {
         if (e->unk4 != 0 && e->unk6 != 0) {
             o = mod_find(e->unk16);
             if (arg0 != e->unk0 && o != NULL && o->unk4 != 0 && o->unk30 != NULL) {
@@ -767,10 +619,10 @@ s16 npc_find_at_point(s16 arg0, s32 arg1, s32 arg2, s32 arg3) {
 }
 
 void npc_update_blocks(void) {
-    Unk_801E02D8 *p = &D_801E02D8;
-    Unk_801762F4 *e = p->unk3C;
+    SceneTables *p = &object_scene_tables;
+    Npc *e = p->npcs;
     s32 i;
-    for (i = 0; i < p->unk1C; i++, e++) {
+    for (i = 0; i < p->npc_count; i++, e++) {
         if (e->unk4 != 0 && e->unk6 != 0) {
             e->unk48 = block_find_at(e->unk20, e->unk24, e->unk28);
         }
@@ -778,15 +630,15 @@ void npc_update_blocks(void) {
 }
 
 void npc_rebase_all(s32 arg0, s32 arg1, s32 arg2) {
-    Unk_801E02D8 *p = &D_801E02D8;
-    Unk_801762F4 *e = p->unk3C;
+    SceneTables *p = &object_scene_tables;
+    Npc *e = p->npcs;
     Unk_8018E56C *o;
     s32 i;
 
-    if (p->unk1C == 0) {
+    if (p->npc_count == 0) {
         return;
     }
-    for (i = 0; i < p->unk1C; i++, e++) {
+    for (i = 0; i < p->npc_count; i++, e++) {
         if (e->unk4 != 0) {
             o = mod_find(e->unk16);
             if (o != NULL) {
@@ -799,33 +651,33 @@ void npc_rebase_all(s32 arg0, s32 arg1, s32 arg2) {
     }
 }
 
-u16 npc_get_radius(Unk_801762F4 *arg0) {
-    Unk_801767D4 *e = npc_find_body(arg0->unk14);
+u16 npc_get_radius(Npc *arg0) {
+    NpcBody *e = npc_find_body(arg0->unk14);
     if (e == NULL) {
         return 600;
     }
-    return e->unkA * 10;
+    return e->radius * 10;
 }
 
 void npc_free_bodies(void) {
-    Unk_801E02D8 *p = &D_801E02D8;
-    if (p->unk24 != 0) {
-        if (p->unk40 != NULL) {
-            free3(p->unk40);
+    SceneTables *p = &object_scene_tables;
+    if (p->npc_body_count != 0) {
+        if (p->npc_bodies != NULL) {
+            free3(p->npc_bodies);
         }
-        p->unk24 = 0;
-        p->unk40 = NULL;
+        p->npc_body_count = 0;
+        p->npc_bodies = NULL;
     }
 }
 
-Unk_801767D4 *npc_find_body(s16 arg0) {
-    Unk_801E02D8 *p = &D_801E02D8;
-    Unk_801767D4 *e = p->unk40;
+NpcBody *npc_find_body(s16 arg0) {
+    SceneTables *p = &object_scene_tables;
+    NpcBody *e = p->npc_bodies;
     s32 i;
-    if (p->unk24 == 0 || arg0 < 0) {
+    if (p->npc_body_count == 0 || arg0 < 0) {
         return NULL;
     }
-    for (i = 0; i < p->unk24; i++, e++) {
+    for (i = 0; i < p->npc_body_count; i++, e++) {
         if (e->unk0 == arg0) {
             return e;
         }
@@ -834,24 +686,24 @@ Unk_801767D4 *npc_find_body(s16 arg0) {
 }
 
 void npc_free_stats(void) {
-    Unk_801E02D8 *p = &D_801E02D8;
-    if (p->unk28 != 0) {
-        if (p->unk44 != NULL) {
-            free3(p->unk44);
+    SceneTables *p = &object_scene_tables;
+    if (p->npc_stats_count != 0) {
+        if (p->npc_stats != NULL) {
+            free3(p->npc_stats);
         }
-        p->unk28 = 0;
-        p->unk44 = NULL;
+        p->npc_stats_count = 0;
+        p->npc_stats = NULL;
     }
 }
 
-Unk_80176890 *npc_find_stats(s16 arg0) {
-    Unk_801E02D8 *p = &D_801E02D8;
-    Unk_80176890 *e = p->unk44;
+NpcStats *npc_find_stats(s16 arg0) {
+    SceneTables *p = &object_scene_tables;
+    NpcStats *e = p->npc_stats;
     s32 i;
-    if (p->unk28 == 0 || arg0 < 0) {
+    if (p->npc_stats_count == 0 || arg0 < 0) {
         return NULL;
     }
-    for (i = 0; i < p->unk28; i++, e++) {
+    for (i = 0; i < p->npc_stats_count; i++, e++) {
         if (e->unk0 == arg0) {
             return e;
         }

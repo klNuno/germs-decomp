@@ -1,22 +1,6 @@
 #include "common.h"
+#include "game/types.h"
 
-typedef struct {
-    u16 unk0;
-    u16 unk2;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
-    s16 unkE;
-    s16 unk10;
-    u16 unk12;
-    s16 unk14;
-    s16 unk16;
-    s16 unk18;
-    s16 unk1A;
-    s32 unk1C;
-} Unk_801A4370;
 void kaj_tim_free(s32 arg0);
 void free3(void *ptr);
 typedef struct Unk_801A44B8 {
@@ -43,63 +27,9 @@ typedef struct {
     u8 unk0[0xC];
     s32 unkC;
 } Unk_801A5DA0;
-typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
-    u16 unkE;
-    s16 unk10;
-    u16 unk12;
-    s16 unk14;
-    s16 unk16;
-    s16 unk18;
-    s16 unk1A;
-} Unk_801E1118;
 void sprite_station_show_prompt(s16 arg0);
 extern Unk_801E1118 D_801E1118;
-typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-    s32 unk14;
-    s32 unk18;
-    s16 unk1C;
-    s16 unk1E;
-    u16 unk20;
-} Unk_801E076C_18;
-typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    u8 unkC[0x4];
-    s16 unk10;
-    s16 unk12;
-    s16 unk14;
-    u8 unk16[0x2];
-    Unk_801E076C_18 unk18;
-    s16 unk3C;
-    u8 unk3E[0x4];
-    u16 unk42;
-    u8 unk44[0x2];
-    s16 unk46;
-    u8 unk48[0xC];
-    s32 unk54;
-    s32 unk58;
-    s32 unk5C;
-    u8 unk60[0xC];
-    u16 unk6C;
-    u16 unk6E;
-    u8 unk70[0x2];
-    s16 unk72;
-    s16 unk74;
-    s16 unk76;
-    s16 unk78;
-} Unk_801E076C;
-extern Unk_801E076C *D_801E076C[];
+extern Player *D_801E076C[];
 typedef struct {
     u8 unk0[0xC];
     s32 unkC;
@@ -141,7 +71,6 @@ s16 sprite_title_choice;
 s16 sprite_title_menu_active;
 s16 sprite_title_cursor_frame;
 s16 sprite_title_cursor_moving;
-typedef struct { u16 unk0; u16 unk2; } Unk_801DFE68;
 extern Unk_801DFE68 D_801DFE68;
 extern u16 D_801E03E6[];
 void vehicle_train_arrive(s16 arg0, s16 arg1);
@@ -160,13 +89,7 @@ extern s32 sprite_str_scene_gst[];
 void mail_goto_twn(s32 a, s32 b, s32 c, s16 d, s16 e);
 void mail_goto_building(s32 arg0, s32 *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
 extern u16 D_801E1126[];
-typedef struct {
-    s32 unk0; s32 unk4; s32 unk8; s32 unkC; s32 unk10; s32 unk14;
-    s32 unk18; s32 unk1C; s32 unk20; s32 unk24; s32 unk28; s32 unk2C; s32 unk30; s32 unk34;
-    u8 unk38[0x24];
-    void *unk5C[1];
-} Unk_801E02D8;
-extern Unk_801E02D8 D_801E02D8;
+extern SceneTables object_scene_tables;
 extern s32 D_801DFED4;
 s16 sprite_title_load;
 void sprite_title_loop(s16 arg0);
@@ -179,69 +102,20 @@ typedef struct {
     s32 unkC;
     s32 unk10;
 } Unk_801A6A1C;
-typedef struct {
-    u8 unk0[0x244];
-    s32 unk244;
-} Unk_801E0368;
-extern Unk_801E0368 D_801E0368;
+extern GameVars action_vars;
 void sprite_set_clut_entry(u16 arg0, s32 arg1, u16 arg2);
 void sprite_fill_clut(u16 arg0, s32 arg1, s32 arg2, u16 arg3);
 s16 sprite_phone_menu_state;
 s16 sprite_phone_menu_cursor;
-typedef struct {
-    u16 unk0;
-    u16 unk2;
-    u16 unk4;
-    u16 unk6;
-    u16 unk8;
-    u8 unkA[0x2];
-    u16 unkC;
-    u16 unkE;
-    u8 unk10[0x2];
-    s16 unk12;
-    u8 unk14[0x4];
-} Unk_801A3DD4;
 void *kaj_malloc(u32 size);
 void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
 void kaj_tim_load(void *arg0, void *arg1, u16 arg2, s16 arg3);
-typedef struct {
-    u16 unk0;
-    u16 unk2;
-    u16 unk4;
-    u16 unk6;
-} Unk_80184230;
 s32 MoveImage(Unk_80184230 *rect, s32 x, s32 y);
-typedef struct Unk_801E6DA0 {
-    s32 unk0;
-    s32 unk4;
-    s16 unk8;
-    s16 unkA;
-    u8 unkC[0x8];
-    s32 unk14;
-} Unk_801E6DA0;
-extern Unk_801E6DA0 D_801E6DA0;
-typedef struct { s16 unk0[5]; s16 unkA; char *unkC; s16 unk10; s16 unk12; s32 unk14; s32 unk18; s32 unk1C; } Unk_801E0340;
+extern KajSystem kaj_system;
 extern Unk_801E0340 D_801E0340[];
 s32 kaj_pad_read(void);
 void mail_goto_ofc(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 void sound_se_play(s32 arg0);
-typedef struct {
-    s32 unk0;
-    s16 unk4;
-    s16 unk6;
-    u8 unk8[0x8];
-    s16 unk10;
-    u8 unk12[0x6];
-    s32 unk18;
-    s32 unk1C;
-    s32 unk20;
-    u8 unk24[0x8];
-    s32 unk2C;
-    u8 unk30[0x14];
-    s32 unk44;
-    s32 unk48;
-    s32 unk4C;
-} Unk_801A7C3C;
 s32 sprite_title_on_effect_done(Unk_801A533C *arg0);
 void player_place_for_scene(s32 arg0);
 void object_load_res(s32 arg0, s32 arg1);
@@ -249,46 +123,10 @@ void thing_set_animate(s32 a, s32 b, s32 c);
 Unk_801A7C3C *thing_find(s32 arg0, s32 arg1);
 extern char D_80171820[];
 s32 MoveImage2(Unk_80184230 *rect, s32 x, s32 y);
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-} Unk_801A742C_10;
-typedef struct Unk_801A7AFC {
-    u16 unk0;
-    u16 unk2;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
-    s16 unkE;
-    s16 unk10;
-    u8 unk12[0x2];
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    s32 unk20;
-    s16 unk24;
-    s16 unk26;
-    s16 unk28;
-    u8 unk2A[0x2];
-    s32 unk2C;
-    u8 unk30[0x14];
-    s32 unk44;
-    s32 unk48;
-    s32 unk4C;
-    u8 unk50[0x2C];
-    void *unk7C;
-    void *unk80;
-    void *unk84;
-} Unk_801A7AFC;
 Unk_801DFF80 *D_801DFFA0;
 void RotMatrix(Unk_801A742C_10 *arg0, void *arg1);
 s32 block_find_at(s32 a0, s32 a1, s32 a2);
-typedef struct { u16 unk0; u16 unk2; s32 unk4; s16 unk8; u16 unkA; u8 unkC[0xC0]; } Unk_801767D4;
-Unk_801767D4 *npc_find_body(s16 arg0);
+NpcBody *npc_find_body(s16 arg0);
 extern s32 D_801E6DB4[];
 typedef struct {
     u8 unk0[0x6];
@@ -358,47 +196,15 @@ typedef struct {
 } Unk_801A6C34;
 void GsInitCoordinate2(void *super, void *base);
 void kaj_tmd_load(void *arg0, void *arg1, void *arg2);
-typedef struct {
-    s32 unk0;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
-    s16 unkE;
-    u8 unk10[2];
-    u16 unk12;
-} Unk_801DFFE8;
 extern Unk_801DFFE8 D_801DFFE8;
 void action_reset(s16 arg0);
-typedef struct {
-    u8 unk0[4];
-    s16 unk4;
-    u8 unk6[0x10];
-    u16 unk16;
-    u8 unk18[0x18];
-    void *unk30;
-    u8 unk34[0x8];
-    s32 unk3C;
-    u8 unk40[0x14];
-    s32 unk54;
-    s32 unk58;
-    s32 unk5C;
-} Unk_8018E56C;
-typedef struct {
-    u8 unk0[0x50];
-    Unk_8018E56C *unk50;
-    u8 unk54[0x8];
-    Unk_801E076C *unk5C;
-} Unk_801E0710;
-typedef struct { s16 unk0[3]; s16 unk6; s16 unk8[3]; s16 unkE; s16 unk10; } Unk_801E1040;
 void sprite_phone_pick_trigger(s32 *arg0);
 s32 sprite_phone_on_enter(Unk_801A6968 *arg0);
 void sprite_phone_on_alarm(Unk_801A69E0 *arg0);
 s32 sprite_phone_on_effect_done(Unk_801A6A1C *arg0);
 extern s32 D_801DFF50;
 extern s32 D_801DFED8;
-extern Unk_801E0710 D_801E0710;
+extern PlayerStatus player_status;
 extern Unk_801E1040 D_801E1040;
 extern s16 D_801E05B4[];
 Unk_8018E56C *mod_find(u16 arg0);
@@ -853,13 +659,13 @@ void sprite_title_handle_input(void) {
     s16 flag;
     s32 arg;
 
-    if (sprite_title_menu_active == 0 || sprite_title_cursor_moving != 0 || D_801E6DA0.unkA != 1) {
+    if (sprite_title_menu_active == 0 || sprite_title_cursor_moving != 0 || kaj_system.pad_mode != 1) {
         return;
     }
     kaj_pad_read();
     flag = 0;
-    if ((!(D_801E6DA0.unk4 & 0x800) && (D_801E6DA0.unk0 & 0x800)) ||
-        (!(D_801E6DA0.unk4 & 0x20) && (D_801E6DA0.unk0 & 0x20))) {
+    if ((!(kaj_system.pad_prev & 0x800) && (kaj_system.pad_now & 0x800)) ||
+        (!(kaj_system.pad_prev & 0x20) && (kaj_system.pad_now & 0x20))) {
         flag = 1;
         if (sprite_title_choice != 0) {
             arg = 2;
@@ -869,8 +675,8 @@ void sprite_title_handle_input(void) {
             sprite_title_load = 1;
             q->unkA = 1;
         }
-    } else if ((!(D_801E6DA0.unk4 & 0x1000) && (D_801E6DA0.unk0 & 0x1000)) ||
-               (!(D_801E6DA0.unk4 & 0x4000) && (D_801E6DA0.unk0 & 0x4000))) {
+    } else if ((!(kaj_system.pad_prev & 0x1000) && (kaj_system.pad_now & 0x1000)) ||
+               (!(kaj_system.pad_prev & 0x4000) && (kaj_system.pad_now & 0x4000))) {
         if (sprite_title_cursor_moving == 0) {
             flag = 1;
             arg = 1;
@@ -937,7 +743,7 @@ void sprite_title_init(s16 arg0) {
 void sprite_title_loop(s16 arg0) {
     s32 buf[6];
     s16 done;
-    Unk_801E02D8 *p;
+    SceneTables *p;
     s32 i;
 
     sprite_title_init(arg0);
@@ -991,7 +797,7 @@ void sprite_title_loop(s16 arg0) {
         roadmap_draw_frame(3);
     }
     kaj_timer_disable();
-    p = &D_801E02D8;
+    p = &object_scene_tables;
     D_801DFED4 = 0;
     if (sprite_title_load != 1) {
         thing_free_all();
@@ -1011,7 +817,7 @@ void sprite_title_loop(s16 arg0) {
 }
 
 void sprite_title_run(s32 arg0) {
-    Unk_801E02D8 *p;
+    SceneTables *p;
     s32 i;
 
     sprite_title_load = 0;
@@ -1025,7 +831,7 @@ loop:
     }
     sprite_title_load = 0;
     D_801DFED4 = 0;
-    p = &D_801E02D8;
+    p = &object_scene_tables;
     thing_free_all();
     sound_se_stop_all();
     sound_se_pop();
@@ -1136,14 +942,14 @@ void sprite_station_show_prompt(s16 arg0) {
                 /*  7地下鉄1に乗る       3○ */
                 {
                     char *s = " 7\222n\211\272\223S1\202\311\217\346\202\351       3\201\233";
-                    Unk_801E076C *e = D_801E076C[0];
+                    Player *e = D_801E076C[0];
 
                     if (D_801DFFE8.unk6 != 2) {
                         D_801DFFE8.unk6 = 2;
                     }
                     text_show(s, 1, -1, 8, -1, 0, 1);
-                    if (!(e->unk42 & 4)) {
-                        e->unk42 |= 4;
+                    if (!(e->flags & 4)) {
+                        e->flags |= 4;
                     }
                 }
             } else if (m->unk0 == 1 && m->unk2 != 3) {
@@ -1153,14 +959,14 @@ void sprite_station_show_prompt(s16 arg0) {
                 /*  7電車1に乗る        3○ */
                 {
                     char *s = " 7\223d\216\3241\202\311\217\346\202\351        3\201\233";
-                    Unk_801E076C *e = D_801E076C[0];
+                    Player *e = D_801E076C[0];
 
                     if (D_801DFFE8.unk6 != 2) {
                         D_801DFFE8.unk6 = 2;
                     }
                     text_show(s, 1, -1, 8, -1, 0, 1);
-                    if (!(e->unk42 & 4)) {
-                        e->unk42 |= 4;
+                    if (!(e->flags & 4)) {
+                        e->flags |= 4;
                     }
                 }
             } else {
@@ -1174,14 +980,14 @@ void sprite_station_show_prompt(s16 arg0) {
                 /*  7地下鉄1に乗る       3○ */
                 {
                     char *s = " 7\222n\211\272\223S1\202\311\217\346\202\351       3\201\233";
-                    Unk_801E076C *e = D_801E076C[0];
+                    Player *e = D_801E076C[0];
 
                     if (D_801DFFE8.unk6 != 2) {
                         D_801DFFE8.unk6 = 2;
                     }
                     text_show(s, 1, -1, 8, -1, 0, 1);
-                    if (!(e->unk42 & 4)) {
-                        e->unk42 |= 4;
+                    if (!(e->flags & 4)) {
+                        e->flags |= 4;
                     }
                 }
             } else if (m->unk0 == 1 && m->unk2 != 1) {
@@ -1191,14 +997,14 @@ void sprite_station_show_prompt(s16 arg0) {
                 /*  7電車1に乗る        3○ */
                 {
                     char *s = " 7\223d\216\3241\202\311\217\346\202\351        3\201\233";
-                    Unk_801E076C *e = D_801E076C[0];
+                    Player *e = D_801E076C[0];
 
                     if (D_801DFFE8.unk6 != 2) {
                         D_801DFFE8.unk6 = 2;
                     }
                     text_show(s, 1, -1, 8, -1, 0, 1);
-                    if (!(e->unk42 & 4)) {
-                        e->unk42 |= 4;
+                    if (!(e->flags & 4)) {
+                        e->flags |= 4;
                     }
                 }
             } else {
@@ -1206,14 +1012,14 @@ void sprite_station_show_prompt(s16 arg0) {
             }
         }
     } else {
-        Unk_801E076C *e = D_801E076C[0];
+        Player *e = D_801E076C[0];
 
         if (t->unkC != 0) {
             t->unkC = 0;
             text_close();
             action_reset(1);
-            if (e->unk42 & 4) {
-                e->unk42 &= ~4;
+            if (e->flags & 4) {
+                e->flags &= ~4;
             }
         }
     }
@@ -1266,25 +1072,25 @@ void sprite_station_copy_signs(Unk_801E1118 *arg0, Unk_801DFE68 *arg1) {
 }
 
 void sprite_station_board_train(s16 arg0) {
-    Unk_801E076C *p = D_801E076C[0];
+    Player *p = D_801E076C[0];
     u16 v = D_801E1126[0];
     Unk_801DFE68 *q = &D_801DFE68;
 
     if (v == 1) {
         if (arg0 != 0) {
             if (D_801DFE68.unk0 == 1) {
-                p->unk46 = 2;
+                p->vehicle_mode = 2;
                 mail_goto_twn(0x4CA2C, 0, (q->unk2 - 1) * 100000 - 195000, 270, 0);
             } else {
-                p->unk46 = 3;
+                p->vehicle_mode = 3;
                 mail_goto_twn(0x4A31C, 0, (q->unk2 - 1) * 100000 - 195000, 270, 0);
             }
         } else {
             if (D_801DFE68.unk0 == 1) {
-                p->unk46 = 2;
+                p->vehicle_mode = 2;
                 mail_goto_twn(0x4BF3C, 0, (q->unk2 - 1) * 100000 - 200000, 90, 0);
             } else {
-                p->unk46 = 3;
+                p->vehicle_mode = 3;
                 mail_goto_twn(0x4982C, 0, (q->unk2 - 1) * 100000 - 200000, 90, 0);
             }
         }
@@ -1340,10 +1146,10 @@ INCLUDE_RODATA("asm/nonmatchings/game/801A3DD4", D_8017186C);
 
 void sprite_phone_update(void) {
     Unk_801E0340 *m = D_801E0340;
-    Unk_801E0710 *g = &D_801E0710;
+    PlayerStatus *g = &player_status;
     s16 *p = &sprite_phone_menu_state;
-    s16 one = D_801E6DA0.unkA;
-    Unk_801E076C *e = g->unk5C;
+    s16 one = kaj_system.pad_mode;
+    Player *e = g->player;
     s32 btn;
     s16 sel;
     s16 ang;
@@ -1355,10 +1161,10 @@ void sprite_phone_update(void) {
     }
     btn = kaj_pad_read();
     if (sprite_phone_menu_state == 0) {
-        if (e->unk42 & 4) {
-            if (!(D_801E6DA0.unk4 & 0x20) && (D_801E6DA0.unk0 & 0x20)) {
+        if (e->flags & 4) {
+            if (!(kaj_system.pad_prev & 0x20) && (kaj_system.pad_now & 0x20)) {
                 Unk_801DFFE8 *f = &D_801DFFE8;
-                Unk_801E076C *e2 = g->unk5C;
+                Player *e2 = g->player;
                 Unk_801E076C_18 *t = &e2->unk18;
 
                 if (f->unk6 == 2 && (f->unk8 & 8)) {
@@ -1366,9 +1172,9 @@ void sprite_phone_update(void) {
                     sound_se_play(0x11);
                     switch (D_801DFFE8.unk0) {
                     case 0xFB0000:
-                        if (!(e2->unk42 & 0x40)) {
-                            mod_set_anim(g->unk50, 1, 0);
-                            e2->unk42 |= 0x40;
+                        if (!(e2->flags & 0x40)) {
+                            mod_set_anim(g->model, 1, 0);
+                            e2->flags |= 0x40;
                         }
                         break;
                     case 0xFB0001:
@@ -1377,11 +1183,11 @@ void sprite_phone_update(void) {
                     }
                     f->unk6 = 1;
                 }
-            } else if (!(D_801E6DA0.unk4 & 0x40) && (D_801E6DA0.unk0 & 0x40)) {
+            } else if (!(kaj_system.pad_prev & 0x40) && (kaj_system.pad_now & 0x40)) {
                 Unk_801DFFE8 *f = &D_801DFFE8;
                 Unk_801E076C_18 *t = &e->unk18;
 
-                if (e->unk42 & 0x40) {
+                if (e->flags & 0x40) {
                     return;
                 }
                 text_close();
@@ -1390,7 +1196,7 @@ void sprite_phone_update(void) {
                 f->unk6 = 0;
             }
         }
-    } else if (!(D_801E6DA0.unk4 & 0x20) && (D_801E6DA0.unk0 & 0x20)) {
+    } else if (!(kaj_system.pad_prev & 0x20) && (kaj_system.pad_now & 0x20)) {
         sound_se_play(0x11);
         switch (sprite_phone_menu_state) {
         case 1:
@@ -1417,7 +1223,7 @@ void sprite_phone_update(void) {
                 sprite_set_visible(0x206, 0);
                 sprite_set_visible(0x205, 0);
                 sprite_phone_menu_state = 0;
-                mod_set_anim(g->unk50, 2, 0);
+                mod_set_anim(g->model, 2, 0);
                 break;
             }
             return;
@@ -1450,7 +1256,7 @@ void sprite_phone_update(void) {
         text_show(D_8017196C, 3, -1, 0, -1, 0, 0);
         p[0] = 1;
         return;
-    } else if (!(D_801E6DA0.unk4 & 0x40) && (D_801E6DA0.unk0 & 0x40)) {
+    } else if (!(kaj_system.pad_prev & 0x40) && (kaj_system.pad_now & 0x40)) {
         sound_se_play(8);
         switch (p[0]) {
         case 1:
@@ -1459,7 +1265,7 @@ void sprite_phone_update(void) {
             sprite_set_visible(0x206, 0);
             sprite_set_visible(0x205, 0);
             sprite_phone_menu_state = 0;
-            mod_set_anim(g->unk50, 2, 0);
+            mod_set_anim(g->model, 2, 0);
             break;
         case 3:
         case 4:
@@ -1468,7 +1274,7 @@ void sprite_phone_update(void) {
             break;
         }
         return;
-    } else if (!(D_801E6DA0.unk4 & 0x1000) && (D_801E6DA0.unk0 & 0x1000)) {
+    } else if (!(kaj_system.pad_prev & 0x1000) && (kaj_system.pad_now & 0x1000)) {
         if (p[0] == 1) {
             s16 *q = &sprite_phone_menu_state;
 
@@ -1483,7 +1289,7 @@ void sprite_phone_update(void) {
             sound_se_play(0xF);
         }
         return;
-    } else if (!(D_801E6DA0.unk4 & 0x4000) && (D_801E6DA0.unk0 & 0x4000)) {
+    } else if (!(kaj_system.pad_prev & 0x4000) && (kaj_system.pad_now & 0x4000)) {
         if (p[0] == 1) {
             s16 *q = &sprite_phone_menu_state;
 
@@ -1499,21 +1305,21 @@ void sprite_phone_update(void) {
         }
         return;
     }
-    if (e->unk42 & 0x40) {
+    if (e->flags & 0x40) {
         return;
     }
     if (btn & 0x1000) {
         e->unk3C = 1;
-        e->unk6C += D_801E6DB4[0];
+        e->pitch += D_801E6DB4[0];
     } else if (btn & 0x4000) {
         e->unk3C = 1;
-        e->unk6C -= D_801E6DB4[0];
+        e->pitch -= D_801E6DB4[0];
     } else if (btn & 0x8000) {
         e->unk3C = 1;
-        e->unk6E -= D_801E6DB4[0];
+        e->yaw -= D_801E6DB4[0];
     } else if (btn & 0x2000) {
         e->unk3C = 1;
-        e->unk6E += D_801E6DB4[0];
+        e->yaw += D_801E6DB4[0];
     }
 }
 
@@ -1522,23 +1328,23 @@ void sprite_phone_loop(void) {
     s16 done = 0;
     s16 saved = 0;
     Unk_801E1040 *f = &D_801E1040;
-    Unk_801E0710 *g;
-    Unk_801E0710 *h;
-    Unk_801E0710 *k;
-    Unk_801E076C *e;
+    PlayerStatus *g;
+    PlayerStatus *h;
+    PlayerStatus *k;
+    Player *e;
     s16 *p = &sprite_phone_menu_state;
 
     if (f->unk0[0] != 0) {
         saved = 1;
         f->unk0[0] = 0;
     }
-    g = &D_801E0710;
+    g = &player_status;
     if (sprite_phone_save != 1) {
         player_place_for_scene(3);
         object_load_res(9, -1);
-        g->unk50 = mod_find(0x40);
-        if (g->unk50 != NULL) {
-            mod_setup(g->unk50, 0, 3, 0);
+        g->model = mod_find(0x40);
+        if (g->model != NULL) {
+            mod_setup(g->model, 0, 3, 0);
         }
         D_801DFF50 = (s32)sprite_phone_pick_trigger;
         D_801DFEE4 = sprite_phone_on_enter;
@@ -1570,15 +1376,15 @@ void sprite_phone_loop(void) {
             event_handle_tick(1);
             continue;
         case 0x200:
-            h = &D_801E0710;
-            e = h->unk5C;
-            if (h->unk50->unk16 == 1) {
-                e->unk42 &= ~4;
+            h = &player_status;
+            e = h->player;
+            if (h->model->unk16 == 1) {
+                e->flags &= ~4;
                 sound_se_play(0x1C);
                 effect_start_alarm(0, 0x405, 2);
-            } else if (h->unk50->unk16 == 2) {
-                e->unk42 &= ~0x40;
-                mod_set_anim(h->unk50, 0, 0);
+            } else if (h->model->unk16 == 2) {
+                e->flags &= ~0x40;
+                mod_set_anim(h->model, 0, 0);
                 player_reset_triggers(1);
             }
             continue;
@@ -1602,11 +1408,11 @@ void sprite_phone_loop(void) {
         mail_step_frame(3, 0, 0);
     }
     kaj_timer_disable();
-    k = &D_801E0710;
+    k = &player_status;
     effect_clear_alarms();
     sound_se_stop_all();
     if (sprite_phone_save != 1) {
-        k->unk50 = NULL;
+        k->model = NULL;
         D_801DFF50 = 0;
         D_801DFEE4 = 0;
         D_801DFED8 = 0;
@@ -1628,14 +1434,14 @@ void sprite_phone_loop(void) {
 }
 
 void sprite_phone_pick_trigger(s32 *arg0) {
-    Unk_801E076C *p = D_801E076C[0];
+    Player *p = D_801E076C[0];
 
-    if (p->unk42 & 0x40) {
+    if (p->flags & 0x40) {
         *arg0 = 0xFFFFFF;
         return;
     }
     *arg0 = 0xFB0000;
-    if ((u16)(p->unk6C + 14) >= 30 || (u16)(p->unk6E - 31) < 300) {
+    if ((u16)(p->pitch + 14) >= 30 || (u16)(p->yaw - 31) < 300) {
         *arg0 = 0xFB0001;
     }
 }
@@ -1664,7 +1470,7 @@ void sprite_phone_on_alarm(Unk_801A69E0 *arg0) {
 }
 
 s32 sprite_phone_on_effect_done(Unk_801A6A1C *arg0) {
-    Unk_801E0368 *p = &D_801E0368;
+    GameVars *p = &action_vars;
 
     if (arg0->unk10 == 6) {
         if (arg0->unkC == 0) {
@@ -1697,22 +1503,22 @@ void sprite_phone_run(void) {
 }
 
 void sprite_phone_save_exit(u16 arg0) {
-    Unk_801E076C *p = D_801E076C[0];
+    Player *p = D_801E076C[0];
     Unk_801E076C_18 *q = &p->unk18;
 
     q->unk1C = (arg0 & 0xF000) >> 12;
     q->unk1E = (arg0 & 0xF00) >> 8;
     q->unk0 = (arg0 & 0xFF) * 100;
-    q->unk4 = p->unk54 + p->unk72 * 12500;
-    q->unk8 = p->unk58 - p->unk74 * 32000 - p->unk78;
-    q->unkC = p->unk5C + p->unk76 * 12500;
-    q->unk20 = p->unk6E;
+    q->unk4 = p->pos_x + p->cell_x * 12500;
+    q->unk8 = p->pos_y - p->cell_y * 32000 - p->unk78;
+    q->unkC = p->pos_z + p->cell_z * 12500;
+    q->unk20 = p->yaw;
 }
 
 void sprite_thing_init(Unk_801A7AFC *arg0) {
     Unk_801A742C_10 sv;
     Unk_801A6C34 *src = arg0->unk84;
-    Unk_801E076C *e = D_801E076C[0];
+    Player *e = D_801E076C[0];
 
     arg0->unk0 = src->unk0;
     arg0->unk2 = src->unk2;
@@ -1732,9 +1538,9 @@ void sprite_thing_init(Unk_801A7AFC *arg0) {
         kaj_tmd_load(&arg0->unk80, (u8 *)arg0->unk84 + src->unk24, &arg0->unk2C);
     }
     GsInitCoordinate2(NULL, &arg0->unk2C);
-    arg0->unk44 = arg0->unk18 - e->unk72 * 0x30D4;
-    arg0->unk48 = arg0->unk1C + e->unk74 * 0x7D00;
-    arg0->unk4C = arg0->unk20 - e->unk76 * 0x30D4;
+    arg0->unk44 = arg0->unk18 - e->cell_x * 0x30D4;
+    arg0->unk48 = arg0->unk1C + e->cell_y * 0x7D00;
+    arg0->unk4C = arg0->unk20 - e->cell_z * 0x30D4;
     sv.unk0 = (arg0->unk24 << 12) / 360;
     sv.unk2 = (arg0->unk26 << 12) / 360;
     sv.unk4 = (arg0->unk28 << 12) / 360;
@@ -1752,7 +1558,7 @@ void sprite_thing_init(Unk_801A7AFC *arg0) {
 void sprite_thing_refresh_all(void) {
     Unk_801A742C_10 sv;
     Unk_801DFF80 *p = D_801DFFA0;
-    Unk_801E076C *e = D_801E076C[0];
+    Player *e = D_801E076C[0];
     Unk_801A7AFC *o;
 
     if (p->unkC == 0) {
@@ -1762,9 +1568,9 @@ void sprite_thing_refresh_all(void) {
     while (1) {
         o = (Unk_801A7AFC *)p->unk8->unk8;
         if (o != NULL && o->unk2 != 4) {
-            o->unk44 = o->unk18 - e->unk72 * 12500;
-            o->unk48 = o->unk1C + e->unk74 * 32000;
-            o->unk4C = o->unk20 - e->unk76 * 12500;
+            o->unk44 = o->unk18 - e->cell_x * 12500;
+            o->unk48 = o->unk1C + e->cell_y * 32000;
+            o->unk4C = o->unk20 - e->cell_z * 12500;
             sv.unk0 = (o->unk24 << 12) / 360;
             sv.unk2 = (o->unk26 << 12) / 360;
             sv.unk4 = (o->unk28 << 12) / 360;
@@ -1781,9 +1587,9 @@ void sprite_thing_refresh_all(void) {
 
 INCLUDE_ASM("asm/nonmatchings/game/801A3DD4", sprite_thing_draw_all);
 
-void sprite_thing_update_marker(Unk_801E076C *arg0, Unk_801A742C *arg1, Unk_801A727C *arg2) {
+void sprite_thing_update_marker(Player *arg0, Unk_801A742C *arg1, Unk_801A727C *arg2) {
     Unk_801A742C_10 sv;
-    Unk_801767D4 *q;
+    NpcBody *q;
     s32 y;
 
     q = npc_find_body(arg2->unk14);
@@ -1795,9 +1601,9 @@ void sprite_thing_update_marker(Unk_801E076C *arg0, Unk_801A742C *arg1, Unk_801A
     if (arg1->unk26 < 0) {
         arg1->unk26 += 360;
     }
-    arg1->unk44 = arg2->unk20 - arg0->unk72 * 12500;
-    arg1->unk48 = y + arg0->unk74 * 32000;
-    arg1->unk4C = arg2->unk28 - arg0->unk76 * 12500;
+    arg1->unk44 = arg2->unk20 - arg0->cell_x * 12500;
+    arg1->unk48 = y + arg0->cell_y * 32000;
+    arg1->unk4C = arg2->unk28 - arg0->cell_z * 12500;
     sv.unk0 = (arg1->unk24 << 12) / 360;
     sv.unk2 = (arg1->unk26 << 12) / 360;
     sv.unk4 = (arg1->unk28 << 12) / 360;
@@ -1807,10 +1613,10 @@ void sprite_thing_update_marker(Unk_801E076C *arg0, Unk_801A742C *arg1, Unk_801A
 
 void sprite_thing_update_fly_in(Unk_801A742C *arg0) {
     Unk_801A742C_10 sv;
-    Unk_801E6DA0 *p = &D_801E6DA0;
+    KajSystem *p = &kaj_system;
 
-    arg0->unk28 += p->unk14 * 3;
-    arg0->unk20 -= p->unk14 * 25;
+    arg0->unk28 += p->vsync_delta * 3;
+    arg0->unk20 -= p->vsync_delta * 25;
     if (arg0->unk28 >= 361) {
         arg0->unk28 -= 360;
     }

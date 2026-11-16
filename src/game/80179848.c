@@ -1,58 +1,6 @@
 #include "common.h"
+#include "game/types.h"
 
-typedef struct {
-    u16 unk0;
-    u16 unk2;
-    u16 unk4;
-    u16 unk6;
-} Unk_8017CAC8;
-typedef struct {
-    u16 unk0;
-    u16 unk2;
-    u16 unk4;
-    u16 unk6;
-    void *unk8;
-    Unk_8017CAC8 *unkC;
-} Unk_8017C9F8;
-typedef struct Unk_8017CCE4 {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    u8 padA[0x2];
-    s16 unkC;
-    u16 unkE;
-    s32 unk10;
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    s32 unk20;
-    s32 unk24;
-    s32 unk28;
-    u8 pad2C[0x14];
-    s32 unk40;
-    s32 unk44;
-    s32 unk48;
-    u8 pad4C[0x2C];
-    void *unk78;
-    void *unk7C;
-    void *unk80;
-    void *unk84;
-    Unk_8017C9F8 *unk88;
-    void *unk8C;
-} Unk_8017CCE4;
-typedef struct Unk_8017D0E0 {
-    s32 unk0;
-    struct Unk_8017D0E0 *unk4;
-    Unk_8017CCE4 *unk8;
-} Unk_8017D0E0;
-typedef struct {
-    Unk_8017D0E0 *unk0;
-    Unk_8017D0E0 *unk4;
-    Unk_8017D0E0 *unk8;
-    s32 unkC;
-} Unk_801DFE5C;
 s16 kaj_ll_at_tail(Unk_801DFE5C *arg0);
 Unk_801DFE5C *D_801DFE5C;
 void kaj_ll_insert_before(Unk_801DFE5C *arg0, s32 arg1);
@@ -60,30 +8,10 @@ void kaj_ll_insert_after(Unk_801DFE5C *arg0, s32 arg1);
 void kaj_cdmgr_free_all(void);
 s16 D_801DFC80;
 extern s16 D_801E71C8;
-typedef struct {
-    u8 pad0[0xBE];
-    s16 unkBE;
-    u8 padC0[0x140];
-    s16 unk200;
-    s16 unk202;
-    u8 pad204[0x40];
-    s32 unk244;
-    s32 unk248;
-    u8 pad24C[0x2];
-    s16 unk24E;
-    s16 unk250;
-    s16 unk252;
-    s16 unk254;
-} Unk_801E0368;
 u8 D_801DFC8C;
 u8 D_801DFC8D[1];
 u8 D_801DFC8E;
-extern Unk_801E0368 D_801E0368;
-typedef struct {
-    u8 pad0[0xC];
-    s32 unkC;
-    s32 unk10;
-} Unk_8017E504;
+extern GameVars action_vars;
 s16 block_wake_index;
 void block_create_all(void);
 void block_building_run(void);
@@ -91,17 +19,8 @@ void effect_elevator_run(void);
 u16 D_801DFE60;
 void text_release_cmd(void);
 void sprite_set_visible(s32 arg0, s32 arg1);
-typedef struct {
-    u8 pad0[0x6];
-    s16 unk6;
-    u16 unk8;
-} Unk_80184100;
 void sprite_set_clut_entry(s32 arg0, s32 arg1, s32 arg2);
 void sound_se_play(s32 arg0);
-typedef struct {
-    u16 unk0;
-    u16 unk2;
-} Unk_801DFCAC;
 Unk_801DFCAC **text_cmd;
 s16 text_window_sprite;
 void action_push_front(Unk_801DFCAC **arg0);
@@ -113,31 +32,8 @@ typedef struct {
     s32 unk8;
     s32 unkC;
 } Unk_8017AC88;
-typedef struct {
-    u8 pad0[0x18];
-    Unk_8017AC88 unk18[2];
-    u8 pad38[0x8];
-    s16 unk40;
-    u16 unk42;
-    u8 pad44[0x2];
-    u16 unk46;
-    u8 pad48[0xC];
-    s32 unk54;
-    s32 unk58;
-    s32 unk5C;
-    s32 unk60;
-    u8 pad64[0x4];
-    s32 unk68;
-    u8 pad6C[0x2];
-    s16 unk6E;
-    u8 pad70[0x2];
-    s16 unk72;
-    s16 unk74;
-    s16 unk76;
-    s16 unk78;
-} Unk_801E076C;
 extern s32 D_801E05B0[];
-extern Unk_801E076C *D_801E076C[];
+extern Player *D_801E076C[];
 extern char D_80170250[];
 void *kaj_malloc(u32 size);
 void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
@@ -155,22 +51,10 @@ typedef struct {
     } unk14[4];
 } Unk_801802A0;
 void sprite_fill_clut(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-} Unk_80181C10;
 void sprite_delete(s32 arg0);
 void mail_list_close(void);
 void mail_free(void);
-typedef struct {
-    u16 unk0;
-    u16 unk2;
-    u16 unk4;
-    u16 unk6;
-} Unk_80184230;
-typedef struct {
+typedef struct Unk_801A44B8 {
     u8 pad0[0x1C];
     Unk_80184230 *unk1C;
 } Unk_801A44B8;
@@ -178,19 +62,6 @@ Unk_801A44B8 *sprite_find(u16 arg0);
 s32 ClearImage2(Unk_80184230 *rect, s32 r, s32 g, s32 b);
 s16 text_draw_next(s32 arg0, s32 arg1);
 s16 text_row;
-typedef struct Unk_80184338 {
-    u8 pad0[0x22];
-    s16 unk22;
-    u16 unk24;
-    s16 unk26;
-    s16 unk28;
-    u8 pad2A[0x2];
-    s32 unk2C;
-    void (*unk30)(struct Unk_80184338 *arg0);
-    void (*unk34)(void);
-    void (*unk38)(void);
-    s32 *unk3C;
-} Unk_80184338;
 s16 D_801DFCE6;
 s16 text_pos;
 s32 block_model_surface(void *arg0, s32 arg1, s32 arg2, s32 arg3);
@@ -199,38 +70,6 @@ s16 text_cue_fade_done;
 s16 text_cue_bgm_done;
 void sound_bgm_fade_out(s32 arg0);
 void effect_start_fade(s32 arg0, s32 arg1);
-typedef struct {
-    s32 unk0;
-    s16 unk4;
-    s16 unk6;
-    u16 unk8;
-    s16 unkA;
-    u16 unkC;
-    s16 unkE;
-    u8 pad10[0x2];
-    u16 unk12;
-} Unk_801DFFE8;
-typedef struct {
-    u16 unk0;
-    u16 unk2;
-    u8 pad4[0x6];
-    u16 unkA;
-    s16 unkC;
-    s16 unkE;
-    s32 unk10;
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    s16 unk20;
-    s16 unk22;
-    s16 unk24;
-    u8 pad26[0x2];
-    s32 unk28;
-    u8 unk2C[0x14];
-    s32 unk40;
-    s32 unk44;
-    s32 unk48;
-} Unk_80184814;
 extern Unk_801DFFE8 D_801DFFE8;
 extern char D_80170270[];
 extern Unk_8017CCE4 *block_slots[];
@@ -255,24 +94,6 @@ void kaj_map_cell_loaded_slots(s16 *arg0, s32 *arg1);
 void kaj_map_set_cell_ready(void);
 void kaj_map_set_room_ready(void);
 void kaj_map_room_loaded_slots(s16 *arg0, s32 *arg1);
-typedef struct {
-    u16 unk0;
-    u8 unk2;
-    u8 unk3;
-    u8 unk4;
-    u8 unk5;
-    u8 unk6;
-    u8 pad7[0x1];
-    u16 unk8;
-    u16 unkA;
-    u16 unkC;
-    u16 unkE;
-} Unk_8017B1E8;
-typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-} Unk_8017B3E8;
 typedef struct {
     s32 unk0;
     struct {
@@ -310,6 +131,7 @@ s16 text_col;
 s16 text_color;
 s16 text_len;
 s32 strlen(char *s);
+/* Local view of Unk_801E0340: this unit reads 0x14-0x19 as halfwords, the shared type has two s32 there. */
 typedef struct {
     s16 unk0[5];
     s16 unkA;
@@ -322,8 +144,8 @@ typedef struct {
     u8 pad1A[0x2];
     s32 unk1C;
     u8 unk20[0x10];
-} Unk_801E0340;
-extern Unk_801E0340 D_801E0340;
+} Unk_801E0340_u80179848;
+extern Unk_801E0340_u80179848 D_801E0340;
 void object_load_res(s32 arg0, s32 arg1);
 void mail_list_open(void);
 void menu_list_page(Unk_80181C10 *arg0, s32 arg1, s32 arg2);
@@ -334,57 +156,9 @@ void text_narration_step(Unk_80184338 *arg0);
 void text_narration_end(void);
 void *kaj_tss_alloc(u32 arg0);
 s32 kaj_tss_start(void *arg0);
-typedef struct Unk_801854B8 {
-    u16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
-    s16 unkE;
-    s32 unk10;
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    s16 unk20;
-    s16 unk22;
-    s16 unk24;
-    s16 unk26;
-    s32 unk28;
-    u8 unk2C[0x14];
-    s32 unk40;
-    s32 unk44;
-    s32 unk48;
-    u8 unk4C[0x2C];
-    void *unk78;
-    void *unk7C;
-} Unk_801854B8;
-typedef struct Unk_801855C8 {
-    struct Unk_801855C8 *unk0;
-    struct Unk_801855C8 *unk4;
-    Unk_801854B8 *unk8;
-} Unk_801855C8;
-typedef struct Unk_801DFE80 {
-    Unk_801855C8 *unk0;
-    Unk_801855C8 *unk4;
-    Unk_801855C8 *unk8;
-    s32 unkC;
-} Unk_801DFE80;
 Unk_801DFE80 *D_801DFE80;
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-} Unk_80174FFC;
 void RotMatrix(Unk_80174FFC *arg0, void *arg1);
 Unk_8017CCE4 *block_find_at(s32 arg0, s32 arg1, s32 arg2);
-typedef struct {
-    u16 unk0;
-    u16 unk2;
-    u16 unk4;
-} Unk_8018519C_0;
 typedef struct {
     Unk_8018519C_0 *unk0;
     s32 unk4;
@@ -395,25 +169,9 @@ void door_start_open(Unk_80184814 *arg0, s16 arg1, s16 arg2, s16 arg3);
 void door_start_close(Unk_80184814 *arg0, s16 arg1, s16 arg2);
 extern char D_80170290[];
 s32 func_801BDC30(double arg0, double arg1);
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-} Unk_8017AF18;
 s16 block_point_in_poly(Unk_8017AC88 *arg0, s32 arg1, s32 arg2, s32 arg3);
-s32 block_poly_height(Unk_8017AC88 *arg0, Unk_8017AF18 *arg1, s32 arg2, s32 arg3, s32 arg4);
+s32 block_poly_height(Unk_8017AC88 *arg0, Unk_801A742C_10 *arg1, s32 arg2, s32 arg3, s32 arg4);
 s32 abs(s32 x);
-typedef struct {
-    u8 pad0[0x36];
-    s16 unk36;
-    u8 pad38[0x24];
-    Unk_801E076C *unk5C;
-} Unk_801E0710;
-typedef struct {
-    u16 unk0;
-    u16 unk2;
-} Unk_801DFE68;
 Unk_801DFE68 D_801DFE68;
 void text_next_page(Unk_80184100 *arg0);
 void text_close(void);
@@ -426,14 +184,8 @@ void roadmap_shop_open_menu(s16 arg0, s32 arg1);
 void text_show(char *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
 void *action_find_set(s16 arg0);
 void *action_run_set(void *arg0, s32 arg1, s32 arg2);
-extern Unk_801E0710 D_801E0710;
-typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s16 unk8;
-    s16 unkA;
-} Unk_801E6DA0;
-extern Unk_801E6DA0 D_801E6DA0;
+extern PlayerStatus player_status;
+extern KajSystem kaj_system;
 typedef struct {
     u8 pad0[0x4];
     s16 unk4;
@@ -444,11 +196,11 @@ typedef struct {
 } Unk_801E1058;
 extern Unk_801E1058 D_801E1058[];
 s32 kaj_pad_read(void);
-s16 effect_item_input(Unk_801E0710 *arg0, s16 arg1);
-s16 roadmap_shop_update_input(Unk_801E0710 *arg0);
-s16 effect_weapon_input(Unk_801E0710 *arg0);
-void block_on_action(Unk_801E0710 *arg0);
-void player_handle_pad(Unk_801E0710 *arg0, s32 arg1, s32 arg2);
+s16 effect_item_input(PlayerStatus *arg0, s16 arg1);
+s16 roadmap_shop_update_input(PlayerStatus *arg0);
+s16 effect_weapon_input(PlayerStatus *arg0);
+void block_on_action(PlayerStatus *arg0);
+void player_handle_pad(PlayerStatus *arg0, s32 arg1, s32 arg2);
 s16 block_scene_daylight;
 extern s32 (*D_801DFED4)(Unk_8017E504 *arg0);
 extern s32 (*D_801DFEE4)(Unk_8017E504 *arg0);
@@ -545,16 +297,6 @@ typedef struct {
 } Unk_80179848;
 void GsInitCoordinate2(void *super, void *base);
 void kaj_tmd_load(void *arg0, void *arg1, void *arg2);
-typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
-    u16 unkE;
-    s16 unk10;
-    u16 unk12;
-} Unk_801E1118;
 extern Unk_801E1118 D_801E1118;
 extern s16 D_801DFF78;
 extern s32 block_wake_positions[];
@@ -571,18 +313,8 @@ typedef struct {
     s16 unk4;
     s16 unk6;
 } Unk_8017A108;
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-    s32 unk8;
-    s32 unkC;
-    u8 pad10[0x1C];
-    Unk_8017AF18 unk2C[4];
-} Unk_801E1158;
 extern Unk_801E1158 D_801E1158;
-s32 block_test_player_inside(Unk_801E076C *arg0, u16 arg1, Unk_8017CCE4 *arg2, s32 *arg3, s32 *arg4);
+s32 block_test_player_inside(Player *arg0, u16 arg1, Unk_8017CCE4 *arg2, s32 *arg3, s32 *arg4);
 void GsSetLsMatrix(void *m);
 s32 mail_angle_to_dir8(s16 a);
 s32 rsin(s32 a);
@@ -591,7 +323,7 @@ s32 ratan2(s32 y, s32 x);
 
 void block_setup(Unk_8017CCE4 *arg0, u16 arg1) {
     s32 sp10[5];
-    Unk_801E076C *m;
+    Player *m;
     Unk_80179848 *d;
     Unk_8017CAC8 *s;
     Unk_8017C9F8 **p;
@@ -663,16 +395,16 @@ void block_setup(Unk_8017CCE4 *arg0, u16 arg1) {
         arg0->unkE |= 0x10;
     }
     GsInitCoordinate2(NULL, &arg0->unk28);
-    arg0->unk40 = arg0->unk10 - m->unk72 * 12500;
-    arg0->unk44 = arg0->unk14 + m->unk74 * 32000;
-    arg0->unk48 = arg0->unk18 - m->unk76 * 12500;
+    arg0->unk40 = arg0->unk10 - m->cell_x * 12500;
+    arg0->unk44 = arg0->unk14 + m->cell_y * 32000;
+    arg0->unk48 = arg0->unk18 - m->cell_z * 12500;
     arg0->unk28 = 0;
     arg0->unk0 = 1;
 }
 
 INCLUDE_ASM("asm/nonmatchings/game/80179848", block_draw_all);
 
-s32 block_test_player_inside(Unk_801E076C *arg0, u16 arg1, Unk_8017CCE4 *arg2, s32 *arg3, s32 *arg4) {
+s32 block_test_player_inside(Player *arg0, u16 arg1, Unk_8017CCE4 *arg2, s32 *arg3, s32 *arg4) {
     s32 a;
     s32 sp10[2];
     s32 b;
@@ -685,11 +417,11 @@ s32 block_test_player_inside(Unk_801E076C *arg0, u16 arg1, Unk_8017CCE4 *arg2, s
     Unk_8017C9F8 *p;
     s32 *v3 = arg3;
 
-    v3[0] = arg2->unk40 - arg0->unk54;
+    v3[0] = arg2->unk40 - arg0->pos_x;
     arg4[0] = arg2->unk1C + v3[0];
-    v3[1] = arg0->unk58 - arg0->unk78 - arg2->unk44;
+    v3[1] = arg0->pos_y - arg0->unk78 - arg2->unk44;
     arg4[1] = arg2->unk20 + v3[1];
-    v3[2] = arg2->unk48 - arg0->unk5C;
+    v3[2] = arg2->unk48 - arg0->pos_z;
     arg4[2] = arg2->unk24 + v3[2];
     if (arg1 == 2) {
         a = arg4[0] >> 1;
@@ -709,8 +441,8 @@ s32 block_test_player_inside(Unk_801E076C *arg0, u16 arg1, Unk_8017CCE4 *arg2, s
     }
     if (arg2->unkE & 0x10) {
         p = arg2->unk88;
-        x = arg0->unk54 + arg0->unk72 * 12500 - arg2->unk10;
-        z = arg0->unk5C + arg0->unk76 * 12500 - arg2->unk18;
+        x = arg0->pos_x + arg0->cell_x * 12500 - arg2->unk10;
+        z = arg0->pos_z + arg0->cell_z * 12500 - arg2->unk18;
         h = x >> 8;
         w = p->unk0;
         x = (x & 0xFF) ? (f = w + 1, h + f) : h + w;
@@ -738,7 +470,7 @@ INCLUDE_RODATA("asm/nonmatchings/game/80179848", D_801702B0);
 
 INCLUDE_RODATA("asm/nonmatchings/game/80179848", D_801702C8);
 
-static inline s32 func_8017A108_1(Unk_801E076C *o, s32 *lo, s32 *hi) {
+static inline s32 func_8017A108_1(Player *o, s32 *lo, s32 *hi) {
     Unk_801E1158 *q = &D_801E1158;
     s32 sp38[4];
     s32 sp48;
@@ -746,8 +478,8 @@ static inline s32 func_8017A108_1(Unk_801E076C *o, s32 *lo, s32 *hi) {
     GsSetLsMatrix(D_801E032C[0]->unk1C);
     for (i = 0; i < 4; i++) {
         RotTrans(&q->unk2C[i], sp38, &sp48);
-        sp38[0] -= o->unk54;
-        sp38[2] -= o->unk5C;
+        sp38[0] -= o->pos_x;
+        sp38[2] -= o->pos_z;
         if (sp38[0] >= lo[0] && sp38[0] < hi[0] && sp38[2] >= lo[2] && sp38[2] < hi[2]) {
             return 1;
         }
@@ -803,7 +535,7 @@ static inline s16 func_8017A108_2(s32 dir, s32 *lo, s32 *hi) {
 
 void block_update_visibility(u16 arg0) {
     Unk_801DFE5C *list = D_801DFE5C;
-    Unk_801E076C *o = D_801E076C[0];
+    Player *o = D_801E076C[0];
     Unk_8017CCE4 *e;
     s32 sp18[4];
     s32 sp28[4];
@@ -820,11 +552,11 @@ void block_update_visibility(u16 arg0) {
             if (e->unk6 != 0) {
                 e->unk4 = 1;
             } else if (arg0 == 2) {
-                if (o->unk46 == 1 && func_8017A108_1(o, sp18, sp28) && e->unk6 == 0) {
+                if (o->vehicle_mode == 1 && func_8017A108_1(o, sp18, sp28) && e->unk6 == 0) {
                     e->unk6 = 1;
                     e->unk4 = 1;
                 } else {
-                    e->unk4 = func_8017A108_2((s16)mail_angle_to_dir8(o->unk6E), sp18, sp28);
+                    e->unk4 = func_8017A108_2((s16)mail_angle_to_dir8(o->yaw), sp18, sp28);
                 }
             }
         }
@@ -920,7 +652,7 @@ void block_load_all(u16 arg0) {
 }
 
 void block_set_zone_flags(s32 arg0, s32 arg1) {
-    Unk_801E0368 *p = &D_801E0368;
+    GameVars *p = &action_vars;
 
     p->unk252 = 0;
     p->unk250 = 0;
@@ -947,9 +679,9 @@ void block_set_zone_flags(s32 arg0, s32 arg1) {
 
 void block_set_mode(u16 arg0) {
     s32 sp10[4];
-    Unk_801E0340 *g = &D_801E0340;
-    Unk_801E076C *o = D_801E076C[0];
-    Unk_801E0368 *p;
+    Unk_801E0340_u80179848 *g = &D_801E0340;
+    Player *o = D_801E076C[0];
+    GameVars *p;
 
     if (arg0 == 2) {
         if (kaj_map_open_city() != 0) {
@@ -974,7 +706,7 @@ void block_set_mode(u16 arg0) {
         }
         block_building_id = g->unk18;
         kaj_map_get_entry(block_building_id, sp10, &D_801DFC8C);
-        p = &D_801E0368;
+        p = &action_vars;
         p->unk252 = 0;
         p->unk250 = 0;
         switch (D_801DFC8D[0]) {
@@ -989,9 +721,9 @@ void block_set_mode(u16 arg0) {
             p->unk250 = 1;
             break;
         }
-        o->unk54 = sp10[0];
-        o->unk58 = sp10[1];
-        o->unk5C = sp10[2];
+        o->pos_x = sp10[0];
+        o->pos_y = sp10[1];
+        o->pos_z = sp10[2];
         player_place_for_scene(1);
         while (kaj_map_place_ready() == 0) {
             kaj_map_update_place(block_building_id, &D_801DFC8C);
@@ -1009,7 +741,7 @@ void block_set_mode(u16 arg0) {
 void block_stream_update(u16 arg0) {
     s32 sp10[12];
     s16 sp40;
-    Unk_801E076C *o = D_801E076C[0];
+    Player *o = D_801E076C[0];
     s32 r;
     s32 i;
     Unk_8017CCE4 *e;
@@ -1099,7 +831,7 @@ s16 block_point_in_poly(Unk_8017AC88 *arg0, s32 arg1, s32 arg2, s32 arg3) {
     return n % 2;
 }
 
-s32 block_poly_height(Unk_8017AC88 *arg0, Unk_8017AF18 *arg1, s32 arg2, s32 arg3, s32 arg4) {
+s32 block_poly_height(Unk_8017AC88 *arg0, Unk_801A742C_10 *arg1, s32 arg2, s32 arg3, s32 arg4) {
     s32 maxx;
     s32 minx;
     s32 maxz;
@@ -1187,16 +919,16 @@ s32 block_hit_tris(Unk_8017B1E8 *arg0, s32 arg1, s32 arg2, Unk_8017B3E8 *arg3, s
 
     e = arg0;
     for (i = 0; i < arg4; i++, e++) {
-        sp18[0].unk0 = ((Unk_8017AF18 *)arg1)[e->unkA].unk0 + arg3->unk0;
-        sp18[0].unk4 = ((Unk_8017AF18 *)arg1)[e->unkA].unk2 + arg3->unk4;
-        sp18[0].unk8 = ((Unk_8017AF18 *)arg1)[e->unkA].unk4 + arg3->unk8;
-        sp18[1].unk0 = ((Unk_8017AF18 *)arg1)[e->unkC].unk0 + arg3->unk0;
-        sp18[1].unk4 = ((Unk_8017AF18 *)arg1)[e->unkC].unk2 + arg3->unk4;
-        sp18[1].unk8 = ((Unk_8017AF18 *)arg1)[e->unkC].unk4 + arg3->unk8;
-        sp18[2].unk0 = ((Unk_8017AF18 *)arg1)[e->unkE].unk0 + arg3->unk0;
-        sp18[2].unk4 = ((Unk_8017AF18 *)arg1)[e->unkE].unk2 + arg3->unk4;
-        sp18[2].unk8 = ((Unk_8017AF18 *)arg1)[e->unkE].unk4 + arg3->unk8;
-        r = block_poly_height(sp18, (Unk_8017AF18 *)arg2 + e->unk8, 3, arg5, arg6);
+        sp18[0].unk0 = ((Unk_801A742C_10 *)arg1)[e->unkA].unk0 + arg3->unk0;
+        sp18[0].unk4 = ((Unk_801A742C_10 *)arg1)[e->unkA].unk2 + arg3->unk4;
+        sp18[0].unk8 = ((Unk_801A742C_10 *)arg1)[e->unkA].unk4 + arg3->unk8;
+        sp18[1].unk0 = ((Unk_801A742C_10 *)arg1)[e->unkC].unk0 + arg3->unk0;
+        sp18[1].unk4 = ((Unk_801A742C_10 *)arg1)[e->unkC].unk2 + arg3->unk4;
+        sp18[1].unk8 = ((Unk_801A742C_10 *)arg1)[e->unkC].unk4 + arg3->unk8;
+        sp18[2].unk0 = ((Unk_801A742C_10 *)arg1)[e->unkE].unk0 + arg3->unk0;
+        sp18[2].unk4 = ((Unk_801A742C_10 *)arg1)[e->unkE].unk2 + arg3->unk4;
+        sp18[2].unk8 = ((Unk_801A742C_10 *)arg1)[e->unkE].unk4 + arg3->unk8;
+        r = block_poly_height(sp18, (Unk_801A742C_10 *)arg2 + e->unk8, 3, arg5, arg6);
         *(s32 *)arg7 = r;
         if (r != 99999999) {
             return (e->unk4 << 16) | (e->unk5 << 8) | e->unk6;
@@ -1229,30 +961,30 @@ s32 block_hit_quads(Unk_8017B1E8 *arg0, s32 arg1, s32 arg2, Unk_8017B3E8 *arg3, 
     s32 maxx;
     s32 minz;
     s32 maxz;
-    Unk_801E076C *m;
+    Player *m;
     Unk_8017AC88 *p;
 
     e = (void *)arg0;
     for (i = 0; i < arg4; i++, e++) {
-        sp18[0].unk0 = ((Unk_8017AF18 *)arg1)[e->unkA].unk0 + arg3->unk0;
-        sp18[0].unk4 = ((Unk_8017AF18 *)arg1)[e->unkA].unk2 + arg3->unk4;
-        sp18[0].unk8 = ((Unk_8017AF18 *)arg1)[e->unkA].unk4 + arg3->unk8;
-        sp18[1].unk0 = ((Unk_8017AF18 *)arg1)[e->unkC].unk0 + arg3->unk0;
-        sp18[1].unk4 = ((Unk_8017AF18 *)arg1)[e->unkC].unk2 + arg3->unk4;
-        sp18[1].unk8 = ((Unk_8017AF18 *)arg1)[e->unkC].unk4 + arg3->unk8;
-        sp18[3].unk0 = ((Unk_8017AF18 *)arg1)[e->unkE].unk0 + arg3->unk0;
-        sp18[3].unk4 = ((Unk_8017AF18 *)arg1)[e->unkE].unk2 + arg3->unk4;
-        sp18[3].unk8 = ((Unk_8017AF18 *)arg1)[e->unkE].unk4 + arg3->unk8;
-        sp18[2].unk0 = ((Unk_8017AF18 *)arg1)[e->unk10].unk0 + arg3->unk0;
-        sp18[2].unk4 = ((Unk_8017AF18 *)arg1)[e->unk10].unk2 + arg3->unk4;
-        sp18[2].unk8 = ((Unk_8017AF18 *)arg1)[e->unk10].unk4 + arg3->unk8;
-        r = block_poly_height(sp18, (Unk_8017AF18 *)arg2 + e->unk8, 4, arg5, arg6);
+        sp18[0].unk0 = ((Unk_801A742C_10 *)arg1)[e->unkA].unk0 + arg3->unk0;
+        sp18[0].unk4 = ((Unk_801A742C_10 *)arg1)[e->unkA].unk2 + arg3->unk4;
+        sp18[0].unk8 = ((Unk_801A742C_10 *)arg1)[e->unkA].unk4 + arg3->unk8;
+        sp18[1].unk0 = ((Unk_801A742C_10 *)arg1)[e->unkC].unk0 + arg3->unk0;
+        sp18[1].unk4 = ((Unk_801A742C_10 *)arg1)[e->unkC].unk2 + arg3->unk4;
+        sp18[1].unk8 = ((Unk_801A742C_10 *)arg1)[e->unkC].unk4 + arg3->unk8;
+        sp18[3].unk0 = ((Unk_801A742C_10 *)arg1)[e->unkE].unk0 + arg3->unk0;
+        sp18[3].unk4 = ((Unk_801A742C_10 *)arg1)[e->unkE].unk2 + arg3->unk4;
+        sp18[3].unk8 = ((Unk_801A742C_10 *)arg1)[e->unkE].unk4 + arg3->unk8;
+        sp18[2].unk0 = ((Unk_801A742C_10 *)arg1)[e->unk10].unk0 + arg3->unk0;
+        sp18[2].unk4 = ((Unk_801A742C_10 *)arg1)[e->unk10].unk2 + arg3->unk4;
+        sp18[2].unk8 = ((Unk_801A742C_10 *)arg1)[e->unk10].unk4 + arg3->unk8;
+        r = block_poly_height(sp18, (Unk_801A742C_10 *)arg2 + e->unk8, 4, arg5, arg6);
         *(s32 *)arg7 = r;
         if (r != 99999999) {
             ret = (e->unk4 << 16) | (e->unk5 << 8) | e->unk6;
             if (e->unk4 == 0xFF) {
                 m = D_801E076C[0];
-                p = m->unk18;
+                p = (Unk_8017AC88 *)&m->unk18; /* this unit reads +0x18 as two quads */
                 if (sp18[0].unk0 > sp18[1].unk0) {
                     maxx = sp18[0].unk0;
                     minx = sp18[1].unk0;
@@ -1287,8 +1019,8 @@ s32 block_hit_quads(Unk_8017B1E8 *arg0, s32 arg1, s32 arg2, Unk_8017B3E8 *arg3, 
                 } else if (sp18[3].unk8 < minz) {
                     minz = sp18[3].unk8;
                 }
-                p[1].unk0 = m->unk72 * 12500 + ((minx + maxx) >> 1);
-                p[1].unk8 = m->unk76 * 12500 + ((minz + maxz) >> 1);
+                p[1].unk0 = m->cell_x * 12500 + ((minx + maxx) >> 1);
+                p[1].unk8 = m->cell_z * 12500 + ((minz + maxz) >> 1);
             }
             return ret;
         }
@@ -1315,9 +1047,9 @@ s16 block_point_on_model(void *arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
         u16 unk10;
         u8 pad12[0x2];
     } *e;
-    Unk_801E076C *m;
-    Unk_8017AF18 *v;
-    Unk_8017AF18 *b;
+    Player *m;
+    Unk_801A742C_10 *v;
+    Unk_801A742C_10 *b;
     s32 n;
     s32 cnt;
     s32 i;
@@ -1328,8 +1060,8 @@ s16 block_point_on_model(void *arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
     e = (void *)q->unk8->unk10;
     n = q->unk8->unk14;
     m = D_801E076C[0];
-    v = (Unk_8017AF18 *)q->unk8->unk0;
-    b = (Unk_8017AF18 *)q->unk8->unk8;
+    v = (Unk_801A742C_10 *)q->unk8->unk0;
+    b = (Unk_801A742C_10 *)q->unk8->unk8;
     while (n != 0) {
         cnt = e->unk0;
         if ((e->unk3 & 0xFD) == 0x20) {
@@ -1690,7 +1422,7 @@ static inline s32 func_8017C234_inl(Unk_8017BBB0 *q, Unk_8017B3E8 *sp, s32 x, s3
 s32 block_fit_ground_tilt(s32 *arg0, s16 arg1) {
     Unk_8017AC88 sp20[4];
     Unk_8017AC88 sp60;
-    Unk_8017AF18 sp70;
+    Unk_801A742C_10 sp70;
     s32 res[5];
     Unk_8017B3E8 sp90;
     s32 flag;
@@ -1916,7 +1648,7 @@ void block_free(Unk_8017CCE4 *arg0) {
 
 Unk_8017CCE4 *block_find_at(s32 arg0, s32 arg1, s32 arg2) {
     Unk_801DFE5C *p = D_801DFE5C;
-    Unk_801E0340 *g = &D_801E0340;
+    Unk_801E0340_u80179848 *g = &D_801E0340;
 
     if (p->unkC == 0) {
         return NULL;
@@ -2149,26 +1881,26 @@ void block_enter_area(u32 arg0) {
     }
     D_801DFC8D[0] = arg0 >> 8;
     D_801DFC8E = arg0;
-    D_801E0368.unk252 = 0;
-    D_801E0368.unk250 = 0;
+    action_vars.unk252 = 0;
+    action_vars.unk250 = 0;
     switch (D_801DFC8D[0]) {
     case 1:
-        D_801E0368.unk252 = 1;
+        action_vars.unk252 = 1;
         break;
     case 2:
-        D_801E0368.unk250 = 1;
+        action_vars.unk250 = 1;
         break;
     case 3:
-        D_801E0368.unk252 = 1;
-        D_801E0368.unk250 = 1;
+        action_vars.unk252 = 1;
+        action_vars.unk250 = 1;
         break;
     }
 }
 
 s32 block_on_effect_done(Unk_8017E504 *arg0) {
-    Unk_801E0368 *a = &D_801E0368;
-    Unk_801E0340 *b = &D_801E0340;
-    Unk_801E076C *m = D_801E076C[0];
+    GameVars *a = &action_vars;
+    Unk_801E0340_u80179848 *b = &D_801E0340;
+    Player *m = D_801E076C[0];
     Unk_801E1118 *c = &D_801E1118;
     Unk_801E1058 *d = D_801E1058;
     Unk_801DFFE8 *e = &D_801DFFE8;
@@ -2206,11 +1938,11 @@ s32 block_on_effect_done(Unk_8017E504 *arg0) {
             thing_set_animate(2, 0, 1);
         }
     } else if (k == 11) {
-        if (!(m->unk42 & 0x4000)) {
+        if (!(m->flags & 0x4000)) {
             text_show(*d->unk1C, 3, -1, 0, -1, 0, 1);
         }
     } else if (k == 12) {
-        if (!(m->unk42 & 0x4000)) {
+        if (!(m->flags & 0x4000)) {
             r = roadmap_shop_finish(D_801DFE68.unk0);
             if (D_801DFE68.unk0 == 8 && D_801DFF78 >= 0) {
                 if (r >= 0) {
@@ -2233,9 +1965,9 @@ s32 block_on_effect_done(Unk_8017E504 *arg0) {
             }
         }
     } else if (k == 4) {
-        f = m->unk42;
+        f = m->flags;
         if (f & 0x80) {
-            m->unk42 = f & ~4;
+            m->flags = f & ~4;
             b->unkA = 1;
         } else if (f & 0x20) {
             /*  横になると、深い眠りについた */
@@ -2257,7 +1989,7 @@ s32 block_on_effect_done(Unk_8017E504 *arg0) {
         if (arg0->unkC == 0) {
             a->unk244 = -1;
         }
-        f = m->unk42;
+        f = m->flags;
         if (f & 0x20) {
             player_rest(1, block_wake_positions[block_wake_index * 3], block_wake_positions[block_wake_index * 3 + 1], block_wake_positions[block_wake_index * 3 + 2]);
             text_close();
@@ -2274,11 +2006,11 @@ s32 block_on_effect_done(Unk_8017E504 *arg0) {
         if (arg0->unkC == 0) {
             a->unk244 = -1;
         }
-        f = m->unk42;
+        f = m->flags;
         if (f & 0x20) {
-            m->unk42 = f & ~0x20;
+            m->flags = f & ~0x20;
         } else if (f & 8) {
-            m->unk42 = f & ~8;
+            m->flags = f & ~8;
         }
     } else if (k == 13) {
         if (D_801DFE68.unk0 == 0) {
@@ -2288,7 +2020,7 @@ s32 block_on_effect_done(Unk_8017E504 *arg0) {
     return 0;
 }
 
-void block_on_action(Unk_801E0710 *arg0) {
+void block_on_action(PlayerStatus *arg0) {
     Unk_801DFFE8 *q = &D_801DFFE8;
     Unk_801DFE68 *r;
     void *item;
@@ -2345,7 +2077,7 @@ void block_on_action(Unk_801E0710 *arg0) {
         }
     default:
         if (q->unk0 >= 0xF02150 && q->unk0 < 0xF02155) {
-            if (arg0->unk36 < 6) {
+            if (arg0->hours_awake < 6) {
                 text_show(" \202\275\202\301\202\325\202\350\202\306\201A\220\207\226\260\202\315\202\306\202\352\202\304\202\242\202\351", 1, -1, 0, -1, 0, 4);
                 break;
             }
@@ -2364,11 +2096,11 @@ void block_on_action(Unk_801E0710 *arg0) {
 }
 
 void block_update_input(void) {
-    Unk_801E0710 *p = &D_801E0710;
-    Unk_801E076C *o = p->unk5C;
+    PlayerStatus *p = &player_status;
+    Player *o = p->player;
     s32 t;
 
-    if (D_801E6DA0.unkA != 1) {
+    if (kaj_system.pad_mode != 1) {
         return;
     }
     if (*(u32 *)&o->unk40 & 0x2A0000) {
@@ -2384,12 +2116,12 @@ void block_update_input(void) {
     if (effect_weapon_input(p) != 0) {
         return;
     }
-    if (o->unk42 & 4) {
-        if (!(D_801E6DA0.unk4 & 0x20) && (D_801E6DA0.unk0 & 0x20)) {
+    if (o->flags & 4) {
+        if (!(kaj_system.pad_prev & 0x20) && (kaj_system.pad_now & 0x20)) {
             block_on_action(p);
             return;
         }
-        if (!(D_801E6DA0.unk4 & 0x40) && (D_801E6DA0.unk0 & 0x40)) {
+        if (!(kaj_system.pad_prev & 0x40) && (kaj_system.pad_now & 0x40)) {
             Unk_801DFFE8 *q = &D_801DFFE8;
             Unk_801E1058 *r = D_801E1058;
             void *item;
@@ -2424,7 +2156,7 @@ void block_update_input(void) {
 
 void block_building_load(void) {
     char sp10[16];
-    Unk_801E0340 *g = &D_801E0340;
+    Unk_801E0340_u80179848 *g = &D_801E0340;
     Unk_801DFE68 *p;
 
     action_reset(1);
@@ -2619,10 +2351,10 @@ void block_elevator_input(s16 arg0, s16 arg1, s16 *arg2) {
     s32 i;
     s32 idx;
 
-    if (D_801E6DA0.unkA == 1) {
+    if (kaj_system.pad_mode == 1) {
         played = 0;
         kaj_pad_read();
-        if (!(D_801E6DA0.unk4 & 0x20) && (D_801E6DA0.unk0 & 0x20)) {
+        if (!(kaj_system.pad_prev & 0x20) && (kaj_system.pad_now & 0x20)) {
             played = 1;
             snd = 0x18;
             if (*arg2 == arg1) {
@@ -2630,13 +2362,13 @@ void block_elevator_input(s16 arg0, s16 arg1, s16 *arg2) {
             }
             idx = (arg0 * 11 + *arg2 - 12) * 3;
             mail_goto_twn(block_elevator_stops[idx] * 10, 0, block_elevator_stops[idx + 1] * 10, block_elevator_stops[idx + 2], 0);
-        } else if (!(D_801E6DA0.unk4 & 0x40) && (D_801E6DA0.unk0 & 0x40)) {
+        } else if (!(kaj_system.pad_prev & 0x40) && (kaj_system.pad_now & 0x40)) {
             played = 1;
             snd = 8;
             *arg2 = arg1;
             idx = (arg0 * 11 + arg1 - 12) * 3;
             mail_goto_twn(block_elevator_stops[idx] * 10, 0, block_elevator_stops[idx + 1] * 10, block_elevator_stops[idx + 2], 0);
-        } else if (!(D_801E6DA0.unk4 & 0x1000) && (D_801E6DA0.unk0 & 0x1000)) {
+        } else if (!(kaj_system.pad_prev & 0x1000) && (kaj_system.pad_now & 0x1000)) {
             played = 1;
             snd = 0xF;
             (*arg2)--;
@@ -2661,7 +2393,7 @@ void block_elevator_input(s16 arg0, s16 arg1, s16 *arg2) {
             }
             sprite_set_clut_entry(0, (arg0 << 4) + *arg2, 0x29F);
             sprite_set_clut_entry(0, *arg2, 0x1D5F);
-        } else if (!(D_801E6DA0.unk4 & 0x4000) && (D_801E6DA0.unk0 & 0x4000)) {
+        } else if (!(kaj_system.pad_prev & 0x4000) && (kaj_system.pad_now & 0x4000)) {
             played = 1;
             snd = 0xF;
             (*arg2)++;

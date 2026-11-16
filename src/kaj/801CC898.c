@@ -1,20 +1,9 @@
 #include "common.h"
+#include "game/types.h"
 
 void *malloc3(u32 size);
 void *memset(void *dst, s32 c, u32 n);
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-} Unk_801D1BD4;
-typedef struct Unk_801E6DA0 {
-    s32 unk0;
-    s32 unk4;
-    s16 unk8;
-    s16 unkA;
-} Unk_801E6DA0;
-extern Unk_801E6DA0 D_801E6DA0;
+extern KajSystem kaj_system;
 void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
 extern char D_801DFDBC[];
 void ResetCallback(void);
@@ -72,9 +61,9 @@ void kaj_init(void) {
     kaj_sound_init();
     kaj_view_init();
     MemCardInit(1);
-    D_801E6DA0.unk0 = 0;
-    D_801E6DA0.unk4 = 0;
-    D_801E6DA0.unkA = 0;
+    kaj_system.pad_now = 0;
+    kaj_system.pad_prev = 0;
+    kaj_system.pad_mode = 0;
     VSync(0);
     SetDispMask(1);
 }

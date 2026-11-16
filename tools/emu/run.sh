@@ -6,6 +6,7 @@
 #   GERMS_EMU_SHOTS   comma-separated vsync numbers to capture, e.g. 2700,3600
 #   GERMS_EMU_REGS    print pc, gp, sp, ra every N vsyncs (default 0, off)
 #   GERMS_EMU_OUT     capture folder (default captures, ignored by git)
+#   GERMS_EMU_DEBUG   1 runs the interpreter with the debugger, needed for PCSX.addBreakpoint (slower)
 # Also: GERMS_BIOS (default disks/bios.bin), GERMS_DISC (default disks/SLPS-02107.cue), GERMS_EMU_TIMEOUT (seconds, default 300).
 set -euo pipefail
 cd "$(dirname "$0")/../.."
@@ -18,6 +19,7 @@ disc=${GERMS_DISC:-disks/SLPS-02107.cue}
 export GERMS_EMU_OUT=${GERMS_EMU_OUT:-captures}
 mkdir -p "$GERMS_EMU_OUT"
 args=(-dofile tools/emu/probe.lua)
+[ "${GERMS_EMU_DEBUG:-0}" = 1 ] && args=(-debugger -interpreter "${args[@]}")
 for s in "$@"; do args+=(-dofile "$s"); done
 timeout -k 10 "${GERMS_EMU_TIMEOUT:-300}" nice -n 10 "$emu" -cli -stdout -lua_stdout -no-gui-logs \
   -bios "$bios" -iso "$disc" -run "${args[@]}"

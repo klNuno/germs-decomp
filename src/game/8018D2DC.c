@@ -1,84 +1,11 @@
 #include "common.h"
+#include "game/types.h"
 
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
-    s16 unkE;
-    s16 unk10;
-    u16 unk12;
-    u16 unk14;
-    s16 unk16;
-    s32 unk18;
-    s32 unk1C;
-    s32 unk20;
-    void *unk24;
-    void *unk28;
-    void *unk2C;
-    void *unk30;
-    s32 unk34;
-    void *unk38;
-    s32 unk3C;
-    u8 unk40[0x14];
-    s32 unk54;
-    s32 unk58;
-    s32 unk5C;
-    u8 unk60[0x2C];
-    void *unk8C;
-    s16 *unk90;
-} Unk_8018E56C;
-typedef struct Unk_8017D0E0 {
-    s32 unk0;
-    struct Unk_8017D0E0 *unk4;
-    Unk_8018E56C *unk8;
-} Unk_8017D0E0;
-typedef struct {
-    Unk_8017D0E0 *unk0;
-    Unk_8017D0E0 *unk4;
-    Unk_8017D0E0 *unk8;
-    s32 unkC;
-} Unk_801DFE5C;
 void kaj_ll_insert_before(Unk_801DFE5C *arg0, s32 arg1);
 void kaj_ll_insert_after(Unk_801DFE5C *arg0, s32 arg1);
 Unk_801DFE5C *mod_list;
-typedef struct { s32 unk0; s32 unk4; s32 unk8; } Unk_80174F54;
-typedef struct { u16 unk0; s16 unk2; s16 unk4; s16 unk6; s32 unk8; u8 unkC; u8 unkD; u8 unkE; u8 unkF; s32 unk10; s16 unk14; s16 unk16; s32 unk18; s32 unk1C; s32 unk20; s32 unk24; s32 unk28; s32 unk2C; s32 unk30; s32 unk34; s32 unk38; s32 unk3C; s32 unk40; s32 unk44; s32 unk48; } Unk_801762F4;
-typedef struct { u16 unk0; s16 unk2; s32 unk4; s16 unk8; u16 unkA; u8 unkC[0xC0]; } Unk_801767D4;
-typedef struct { u16 unk0; s16 unk2; s32 unk4[8]; } Unk_80176890;
-typedef struct {
-    u16 unk0;
-    s16 unk2;
-    u16 unk4;
-    u16 unk6;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-    s16 unk14;
-    s16 unk16;
-    s16 unk18;
-    u8 unk1A;
-    u8 unk1B;
-    s16 unk1C;
-    s16 unk1E;
-} Unk_8018F590;
-typedef struct {
-    s32 unk0; s32 unk4; s32 unk8; s32 unkC; s32 unk10; s32 unk14;
-    s32 unk18; s32 unk1C; s32 unk20; s32 unk24; s32 unk28; s32 unk2C; s32 unk30; s32 unk34;
-    Unk_80174F54 *unk38; Unk_801762F4 *unk3C; Unk_801767D4 *unk40; Unk_80176890 *unk44;
-    s32 unk48; s32 unk4C; Unk_8018F590 *unk50;
-} Unk_801E02D8;
-extern Unk_801E02D8 D_801E02D8;
+extern SceneTables object_scene_tables;
 void free3(void *ptr);
-typedef struct {
-    u8 unk0[0x6];
-    s16 unk6;
-    u8 unk8[0xA];
-    u16 unk12;
-} Unk_801DFFE8;
 typedef struct {
     u16 unk0;
     u16 unk2;
@@ -87,19 +14,13 @@ typedef struct {
     u8 unk12[0x4];
     s16 unk16;
 } Unk_801DFF08;
-typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
-} Unk_801CC1E8;
 extern Unk_801DFFE8 D_801DFFE8;
 Unk_801DFF08 *mod_finished;
 void UnDeliverEvent(u32 ev, u32 spec);
 Unk_801CC1E8 *kaj_event_push(s32 arg0);
 void mod_set_anim(void *arg0, s16 arg1, s16 arg2);
 extern Unk_8018F590 *mod_npcrec_table[];
-extern s16 D_801E0368[];
+extern s16 action_vars[];
 Unk_8018E56C *mod_find(u16 arg0);
 void mod_setup(Unk_8018E56C *arg0, s32 arg1, s32 arg2, s32 arg3);
 void mod_place_npcrec(Unk_8018F590 *arg0, Unk_8018E56C *arg1);
@@ -145,7 +66,7 @@ typedef struct {
     Unk_8018F958_3C *unk3C;
 } Unk_8018F958;
 s16 kaj_ll_at_tail(Unk_801DFE5C *arg0);
-Unk_801762F4 *npc_find(s16 arg0, u16 arg1);
+Npc *npc_find(s16 arg0, u16 arg1);
 Unk_8018F590 *mod_npcrec_find(u16 arg0);
 void mod_free_by_id(u16 arg0);
 void kaj_ll_remove_to_prev(Unk_801DFE5C *arg0);
@@ -159,35 +80,18 @@ extern char D_80170AA0[];
 void kaj_tmd_unmap(s32 arg0, s32 arg1);
 extern s32 D_801E6DB4[];
 void *kaj_tod_set_packet(void *arg0, void *arg1, s32 *arg2, void *arg3, s32 arg4, s32 arg5);
-typedef struct {
-    u16 unk0;
-    u16 unk2;
-    u32 unk4;
-} Unk_801D1088;
 void effect_weapon_check_fire_frame(s32 arg0);
 void *kaj_tod_set_frame(u32 arg0, Unk_801D1088 *arg1, void *arg2, s32 *arg3, void *arg4, s32 arg5, s32 arg6);
 void EnterCriticalSection(void);
 void ExitCriticalSection(void);
 void DeliverEvent(u32 ev, u32 spec);
 typedef struct {
-    u8 pad0[0x42];
-    u16 unk42;
-    u8 pad44[0x10];
-    s32 unk54;
-    s32 unk58;
-    s32 unk5C;
-    u8 pad60[0x12];
-    s16 unk72;
-    s16 unk74;
-    s16 unk76;
-} Unk_801E076C;
-typedef struct {
     s16 unk0;
     s16 unk2;
     s16 unk4;
     s16 unk6;
 } Unk_8018E8B8;
-extern Unk_801E076C *D_801E076C[];
+extern Player *D_801E076C[];
 void RotMatrix(Unk_8018E8B8 *arg0, void *arg1);
 void GsSetLsMatrix(void *m);
 s16 block_point_on_model(void *arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4);
@@ -317,7 +221,7 @@ void mod_setup(Unk_8018E56C *arg0, s32 arg1, s32 arg2, s32 arg3) {
 void mod_create(s16 *arg0) {
     Unk_8018E56C *mod;
     Unk_8018E56C **pp = &mod;
-    Unk_801762F4 *e;
+    Npc *e;
     u16 id;
 
     *pp = kaj_malloc(0x94);
@@ -399,7 +303,7 @@ void mod_relocate(s32 *arg0, s32 *arg1) {
 void mod_free_pooled(void) {
     Unk_801DFE5C *list = mod_list;
     Unk_8018E56C *mod;
-    Unk_801762F4 *e;
+    Npc *e;
     Unk_8018F590 *f;
     u16 id;
 
@@ -583,7 +487,7 @@ void mod_on_data_free(s16 *arg0) {
     Unk_801DFE5C *list = mod_list;
     Unk_8018E56C *item;
     Unk_8018E56C *t;
-    Unk_801762F4 *e;
+    Npc *e;
     Unk_8018F590 *f;
     s16 id;
 
@@ -772,12 +676,12 @@ s32 mod_finish_handler(void) {
 }
 
 void mod_place_npcrec(Unk_8018F590 *arg0, Unk_8018E56C *arg1) {
-    Unk_801E076C *g = D_801E076C[0];
+    Player *g = D_801E076C[0];
     Unk_8018E8B8 rot;
 
-    arg1->unk54 = arg0->unk8 - g->unk72 * 12500;
-    arg1->unk58 = arg0->unkC + g->unk74 * 32000;
-    arg1->unk5C = arg0->unk10 - g->unk76 * 12500;
+    arg1->unk54 = arg0->unk8 - g->cell_x * 12500;
+    arg1->unk58 = arg0->unkC + g->cell_y * 32000;
+    arg1->unk5C = arg0->unk10 - g->cell_z * 12500;
     rot.unk0 = (arg0->unk14 << 12) / 360;
     rot.unk2 = (arg0->unk16 << 12) / 360;
     rot.unk4 = (arg0->unk18 << 12) / 360;
@@ -869,7 +773,7 @@ loop:
 }
 
 void mod_cmd_npcrec(Unk_8018EED4 *arg0, Unk_8018E56C *arg1) {
-    Unk_801E02D8 *p = &D_801E02D8;
+    SceneTables *p = &object_scene_tables;
     Unk_8018F590 *e = p->unk50;
     Unk_8018EED4_0 *cmd = arg0->unk0;
     u16 id = cmd->unk4;
@@ -904,7 +808,7 @@ done:
     case 1:
         found->unk6 = atoi(arg0->unk8[0]);
         tb = mod_npcrec_table[0];
-        f = D_801E0368;
+        f = action_vars;
         t = tb + cmd->unk4;
         if (f[cmd->unk4] == 0) {
             break;
@@ -952,13 +856,13 @@ done:
 
 void mod_npcrec_update_all(void) {
     Unk_8018F590 *p;
-    Unk_801E076C *cam;
+    Player *cam;
     Unk_8018E56C *mod;
     Unk_8018E56C *mod2;
-    Unk_801E02D8 *g;
+    SceneTables *g;
     s32 i;
 
-    g = &D_801E02D8;
+    g = &object_scene_tables;
     p = g->unk50;
     cam = D_801E076C[0];
     if (g->unk20 != 0) {
@@ -974,8 +878,8 @@ void mod_npcrec_update_all(void) {
                         p->unk1B = 2;
                     }
                 } else if (p->unk2 != 0 && p->unk1E == 0 && p->unk0 != 0) {
-                    p->unk16 = mail_wrap_angle((ratan2(cam->unk54 + cam->unk72 * 12500 - p->unk8,
-                                                     cam->unk5C + cam->unk76 * 12500 - p->unk10) * 360 >> 12) - 180);
+                    p->unk16 = mail_wrap_angle((ratan2(cam->pos_x + cam->cell_x * 12500 - p->unk8,
+                                                     cam->pos_z + cam->cell_z * 12500 - p->unk10) * 360 >> 12) - 180);
                     mod2 = mod_find(p->unk6);
                     if (mod2 != NULL) {
                         mod_place_npcrec(p, mod2);
@@ -993,7 +897,7 @@ void mod_npcrec_show(u16 arg0, s16 arg1) {
     Unk_8018E56C *mod;
 
     b = mod_npcrec_table[0];
-    f = D_801E0368;
+    f = action_vars;
     e = b + arg0;
     if (f[arg0] != 0 || arg1 != 0) {
         if (e->unk1A == 0) {
@@ -1017,7 +921,7 @@ void mod_npcrec_show(u16 arg0, s16 arg1) {
 }
 
 void mod_npcrec_free_table(void) {
-    Unk_801E02D8 *p = &D_801E02D8;
+    SceneTables *p = &object_scene_tables;
     if (p->unk20 != 0) {
         if (p->unk50 != NULL) {
             free3(p->unk50);
@@ -1028,7 +932,7 @@ void mod_npcrec_free_table(void) {
 }
 
 Unk_8018F590 *mod_npcrec_find(u16 arg0) {
-    Unk_801E02D8 *p = &D_801E02D8;
+    SceneTables *p = &object_scene_tables;
     s32 n = p->unk20;
     Unk_8018F590 *e = p->unk50;
     s32 i;
@@ -1045,7 +949,7 @@ Unk_8018F590 *mod_npcrec_find(u16 arg0) {
 }
 
 void mod_npcrec_rebase_all(s32 arg0, s32 arg1, s32 arg2) {
-    Unk_801E02D8 *p = &D_801E02D8;
+    SceneTables *p = &object_scene_tables;
     Unk_8018F590 *e = p->unk50;
     Unk_8018E56C *mod;
     s32 i;
@@ -1067,7 +971,7 @@ void mod_npcrec_rebase_all(s32 arg0, s32 arg1, s32 arg2) {
 }
 
 void mod_npcrec_draw_all(s32 arg0) {
-    Unk_801E02D8 *p = &D_801E02D8;
+    SceneTables *p = &object_scene_tables;
     Unk_8018F590 *e = p->unk50;
     Unk_8018E56C *mod;
     s32 i;
@@ -1086,7 +990,7 @@ void mod_npcrec_draw_all(s32 arg0) {
 }
 
 s16 mod_npcrec_find_at_point(s32 arg0, s32 arg1, s32 arg2) {
-    Unk_801E02D8 *p = &D_801E02D8;
+    SceneTables *p = &object_scene_tables;
     Unk_8018F590 *e = p->unk50;
     Unk_8018E56C *mod;
     s32 i;
@@ -1109,7 +1013,7 @@ s16 mod_npcrec_find_at_point(s32 arg0, s32 arg1, s32 arg2) {
 }
 
 void mod_npcrec_reset_all(void) {
-    Unk_801E02D8 *p = &D_801E02D8;
+    SceneTables *p = &object_scene_tables;
     Unk_8018F590 *e = p->unk50;
     s32 i;
 

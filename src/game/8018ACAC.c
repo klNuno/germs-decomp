@@ -1,35 +1,14 @@
 #include "common.h"
+#include "game/types.h"
 
 typedef struct { s16 unk0, unk2, unk4, unk6; } Unk_801DFD30;
 Unk_801DFD30 *mail_list;
-typedef struct { s16 unk0[5]; s16 unkA; char *unkC; s16 unk10; s16 unk12; s32 unk14; s32 unk18; s32 unk1C; } Unk_801E0340;
 extern Unk_801E0340 D_801E0340;
 void kaj_pad_reset(s32 a);
 typedef struct { s16 unk0; s16 unk2; u16 unk4; } Unk_8018BD60_0;
 typedef struct { Unk_8018BD60_0 *unk0; } Unk_8018BD60;
 void mail_receive(u16 a);
-typedef struct { s32 unk0; s16 unk4; s16 unk6; } Unk_801E056C;
-typedef struct { s16 unk0; s16 unk2; s16 unk4; s16 unk6; s16 unk8; u16 unkA; s16 unkC; s16 unkE; u16 unk10; s16 unk12; s16 unk14; s16 unk16; s16 unk18; s16 unk1A; s16 *unk1C; } Unk_801E058C;
-typedef struct {
-    u16 unk0[0x60];
-    s16 unkC0;
-    u16 unkC2[0xF];
-    u8 unkE0[0x11C];
-    s16 unk1FC;
-    s16 unk1FE;
-    u16 unk200;
-    u16 unk202;
-    Unk_801E056C unk204[4];
-    Unk_801E058C unk224;
-    s32 unk244;
-    u8 unk248[4];
-    s16 unk24C;
-    s16 unk24E;
-    s16 unk250;
-    s16 unk252;
-    s16 unk254;
-} Unk_801E0368;
-extern Unk_801E0368 D_801E0368;
+extern GameVars action_vars;
 extern Unk_801E058C mail_menu;
 void effect_start_sprite_slide(s32 a, u16 b, s32 c);
 void sprite_set_visible(s32 arg0, s32 arg1);
@@ -41,29 +20,17 @@ extern char mail_str_file[];
 u16 *sprite_find(u16 arg0);
 void *kaj_malloc(u32 size);
 void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
-void mail_list_refresh(Unk_801E0368 *a, s16 b);
+void mail_list_refresh(GameVars *a, s16 b);
 void sprite_delete(s32 arg0);
 void free3(void *ptr);
-typedef struct { s32 unk0; s32 unk4; s32 unk8; } Unk_80174F54;
-typedef struct { u16 unk0; s16 unk2; s16 unk4; s16 unk6; s32 unk8; s32 unkC; s32 unk10; s16 unk14; s16 unk16; s32 unk18; s32 unk1C; s32 unk20; s32 unk24; s32 unk28; s32 unk2C; s32 unk30; s32 unk34; s32 unk38; s32 unk3C; s32 unk40; s32 unk44; s32 unk48; } Unk_801762F4;
-typedef struct { u16 unk0; s16 unk2; s32 unk4; s16 unk8; u16 unkA; u8 unkC[0xC0]; } Unk_801767D4;
-typedef struct { u16 unk0; s16 unk2; s32 unk4[8]; } Unk_80176890;
-typedef struct { u16 unk0; u8 unk2[0x19]; u8 unk1B; u8 unk1C[4]; } Unk_8018F590;
-typedef struct { u16 unk0; u8 unk2[0x5E]; } Unk_80188FEC;
+typedef struct Unk_80188FEC { u16 unk0; u8 unk2[0x5E]; } Unk_80188FEC;
 typedef struct { u8 unk0[0xC]; u16 unkC; s16 unkE; } Unk_8018BC50_8;
-typedef struct { u16 unk0; s16 unk2; s32 unk4; Unk_8018BC50_8 *unk8; Unk_8018BC50_8 *unkC; } Unk_8018BC50;
-typedef struct {
-    s32 unk0; s32 unk4; s32 unk8; s32 unkC; s32 unk10; s32 unk14;
-    s32 unk18; s32 unk1C; s32 unk20; s32 unk24; s32 unk28; s32 unk2C; s32 unk30; s32 unk34;
-    Unk_80174F54 *unk38; Unk_801762F4 *unk3C; Unk_801767D4 *unk40; Unk_80176890 *unk44;
-    s32 unk48; Unk_8018BC50 *unk4C; Unk_8018F590 *unk50; s32 unk54; Unk_80188FEC *unk58;
-} Unk_801E02D8;
-extern Unk_801E02D8 D_801E02D8;
+typedef struct Unk_8018BC50 { u16 unk0; s16 unk2; s32 unk4; Unk_8018BC50_8 *unk8; Unk_8018BC50_8 *unkC; } Unk_8018BC50;
+extern SceneTables object_scene_tables;
 u16 mail_entry_saved_y;
 u16 mail_scrollbar_saved_y;
 void sprite_set_clut_entry(s32 a, s32 b, s32 c);
-typedef struct { s16 unk0; u8 unk2[0x2A]; s16 unk2C; s16 unk2E; s16 unk30; u8 unk32[6]; s16 unk38; u8 unk3A[0xA]; s16 unk44; u8 unk46[4]; s16 unk4A; } Unk_801E0710;
-extern Unk_801E0710 D_801E0710;
+extern PlayerStatus player_status;
 void action_update(void);
 void npc_update_all(void);
 void door_update_all(void);
@@ -78,15 +45,7 @@ void effect_flame_large_update(void);
 void roadmap_draw_frame(u16 a);
 void mail_menu_clear_rows(Unk_801E058C *p);
 void sound_se_play(s32 a);
-typedef struct Unk_801E6DA0 {
-    s32 unk0;
-    s32 unk4;
-    s16 unk8;
-    s16 unkA;
-    u8 unkC[0x8];
-    s32 unk14;
-} Unk_801E6DA0;
-extern Unk_801E6DA0 D_801E6DA0;
+extern KajSystem kaj_system;
 s32 kaj_event_get(s32 *arg0);
 void kaj_event_done(s32 *arg0);
 void func_80189928(s32 *a);
@@ -104,7 +63,6 @@ s32 LoadImage2(void *rect, void *p);
 void sound_se_play(s32 arg0);
 typedef struct { s16 unk0; s16 unk2; } Unk_8018C864_1C;
 typedef struct { u8 unk0[0x1C]; Unk_8018C864_1C *unk1C; } Unk_8018C864;
-typedef struct { u16 unk0; u8 unk2[2]; u8 unk4[0x24]; } Unk_801891A4;
 Unk_801891A4 *effect_item_find(s16 arg0);
 s32 strlen(char *s);
 u16 *Krom2RawAdd2(u16 sjis);
@@ -370,7 +328,7 @@ void mail_scroll(s16 arg0) {
     p->unk6 = v;
 }
 
-void mail_list_refresh(Unk_801E0368 *a, s16 b) {
+void mail_list_refresh(GameVars *a, s16 b) {
     s32 i;
     s32 n;
     u16 *q;
@@ -378,7 +336,7 @@ void mail_list_refresh(Unk_801E0368 *a, s16 b) {
 
     n = 0;
     e = mail_list;
-    for (i = 0; i < (s16)a->unk0[0x5F]; i++, e++) {
+    for (i = 0; i < (s16)a->vars[0x5F]; i++, e++) {
         q = sprite_find(e->unk0 + 0x217);
         if (q != NULL) {
             if (i >= mail_list_top && i < mail_list_top + 9) {
@@ -404,8 +362,8 @@ void mail_list_refresh(Unk_801E0368 *a, s16 b) {
 }
 
 s32 mail_list_move(s16 a, s16 b) {
-    Unk_801E0368 *p = &D_801E0368;
-    if ((s16)p->unk0[0x5F] == 0) {
+    GameVars *p = &action_vars;
+    if ((s16)p->vars[0x5F] == 0) {
         return -1;
     }
     if (a != 0) {
@@ -422,8 +380,8 @@ s32 mail_list_move(s16 a, s16 b) {
         }
     } else {
         b++;
-        if (b >= (s16)p->unk0[0x5F]) {
-            return (s16)(p->unk0[0x5F] - 1);
+        if (b >= (s16)p->vars[0x5F]) {
+            return (s16)(p->vars[0x5F] - 1);
         }
         mail_list_row++;
         if (mail_list_row >= 9) {
@@ -435,7 +393,7 @@ s32 mail_list_move(s16 a, s16 b) {
     }
     mail_list_refresh(p, b);
     if (mail_scrollbar != NULL) {
-        mail_scrollbar[6] = b * 114 / ((s16)p->unk0[0x5F] - 1) + 0x29;
+        mail_scrollbar[6] = b * 114 / ((s16)p->vars[0x5F] - 1) + 0x29;
     }
     sound_se_play(0xF);
     return b;
@@ -446,24 +404,24 @@ void mail_list_open(void) {
     s32 j;
     u16 v;
     Unk_801DFD30 *e;
-    Unk_801E0368 *p = &D_801E0368;
-    if ((s16)p->unk0[0x5F] != 0) {
+    GameVars *p = &action_vars;
+    if ((s16)p->vars[0x5F] != 0) {
         mail_list_row = 0;
         mail_list_top = 0;
         mail_scrollbar = sprite_find(0x20C);
         if (mail_scrollbar != NULL) {
             mail_scrollbar[6] = 0x29;
         }
-        mail_list = kaj_malloc((s16)p->unk0[0x5F] * 8);
+        mail_list = kaj_malloc((s16)p->vars[0x5F] * 8);
         if (mail_list == NULL) {
             kaj_abend(3, "Error Allocating Mail List", mail_str_file, 0x16A);
         }
         for (i = 0; i < 0x20; i++) {
             j = i / 2 + 0x60;
             if (i & 1) {
-                v = (u8)*(p->unk0 + j);
+                v = (u8)*(p->vars + j);
             } else {
-                v = *(p->unk0 + j) >> 8;
+                v = *(p->vars + j) >> 8;
             }
             if (v & 0x80) {
                 e = &mail_list[v & 0x3F];
@@ -482,14 +440,14 @@ void mail_list_close(void) {
     s32 v;
     s32 t;
     Unk_801DFD30 *e;
-    Unk_801E0368 *p = &D_801E0368;
-    if ((s16)p->unk0[0x5F] != 0) {
+    GameVars *p = &action_vars;
+    if ((s16)p->vars[0x5F] != 0) {
         if (mail_scrollbar != NULL) {
             mail_scrollbar[6] = 0x29;
             mail_scrollbar = NULL;
         }
         e = mail_list;
-        for (i = 0; i < (s16)p->unk0[0x5F]; i++, e++) {
+        for (i = 0; i < (s16)p->vars[0x5F]; i++, e++) {
             v = 0x80;
             if (e->unk4 != 0) {
                 v = 0xC0;
@@ -497,10 +455,10 @@ void mail_list_close(void) {
             v += i & 0x3F;
             j = e->unk0 / 2 + 0x60;
             if (e->unk0 % 2) {
-                t = *(p->unk0 + j);
-                *(p->unk0 + j) = v | (t & ~0xFF);
+                t = *(p->vars + j);
+                *(p->vars + j) = v | (t & ~0xFF);
             } else {
-                *(p->unk0 + j) = (u8)*(p->unk0 + j) | (v << 8);
+                *(p->vars + j) = (u8)*(p->vars + j) | (v << 8);
             }
         }
         free3(mail_list);
@@ -516,29 +474,29 @@ void mail_receive(u16 a) {
     s32 i;
     s16 odd;
     u16 n;
-    Unk_801E0368 *p = &D_801E0368;
+    GameVars *p = &action_vars;
     if (a < 0x20) {
         i = a / 2 + 0x60;
         odd = a % 2;
         if (odd) {
-            v = (u8)*(p->unk0 + i) & 0x80;
+            v = (u8)*(p->vars + i) & 0x80;
         } else {
-            v = (*(p->unk0 + i) >> 8) & 0x80;
+            v = (*(p->vars + i) >> 8) & 0x80;
         }
         if (v == 0) {
-            n = p->unk0[0x5F]++ | 0x80;
+            n = p->vars[0x5F]++ | 0x80;
             if (odd) {
-                *(p->unk0 + i) = n | (*(p->unk0 + i) & 0xFF00);
+                *(p->vars + i) = n | (*(p->vars + i) & 0xFF00);
             } else {
-                *(p->unk0 + i) = (u8)*(p->unk0 + i) | (n << 8);
+                *(p->vars + i) = (u8)*(p->vars + i) | (n << 8);
             }
         }
     }
 }
 
 void mail_check_schedule(s32 a, s32 b) {
-    Unk_801E0368 *p = &D_801E0368;
-    if ((s16)p->unk0[0x30] == 0) {
+    GameVars *p = &action_vars;
+    if ((s16)p->vars[0x30] == 0) {
         if (a == 0) {
             if (b == 10) {
                 mail_receive(0xE);
@@ -555,15 +513,15 @@ void mail_check_schedule(s32 a, s32 b) {
             }
         } else if (a == 2) {
             if (b == 10) {
-                if ((s16)p->unk0[0xB] == 100 && (s16)p->unk0[1] == 0) {
+                if ((s16)p->vars[0xB] == 100 && (s16)p->vars[1] == 0) {
                     mail_receive(2);
                 }
                 mail_receive(0x11);
-                if ((s16)p->unk0[0x13] == 100) {
+                if ((s16)p->vars[0x13] == 100) {
                     mail_receive(0x14);
                 }
             } else if (b == 0xE) {
-                if ((s16)p->unk0[0x11] == 10) {
+                if ((s16)p->vars[0x11] == 10) {
                     mail_receive(0x15);
                 }
                 mail_receive(0x1A);
@@ -571,7 +529,7 @@ void mail_check_schedule(s32 a, s32 b) {
         } else if (a == 3) {
             if (b == 0xC) {
                 mail_receive(0x1D);
-                if ((s16)p->unk0[0x4D] == 0) {
+                if ((s16)p->vars[0x4D] == 0) {
                     mail_receive(0x1F);
                 }
             }
@@ -580,7 +538,7 @@ void mail_check_schedule(s32 a, s32 b) {
 }
 
 void mail_free(void) {
-    Unk_801E02D8 *p = &D_801E02D8;
+    SceneTables *p = &object_scene_tables;
     Unk_8018BC50 *e = p->unk4C;
     if (e != NULL) {
         mail_list[e->unk2].unk4 = 1;
@@ -610,12 +568,12 @@ void mail_cmd_receive(Unk_8018BD60 *a) {
 
 s32 mail_is_read(s16 a) {
     s32 v;
-    Unk_801E0368 *p = &D_801E0368;
+    GameVars *p = &action_vars;
     s32 i = a / 2 + 0x60;
     if (a & 1) {
-        v = (u8)p->unk0[i] & 0x40;
+        v = (u8)p->vars[i] & 0x40;
     } else {
-        v = (p->unk0[i] >> 8) & 0x40;
+        v = (p->vars[i] >> 8) & 0x40;
     }
     return v != 0;
 }
@@ -623,13 +581,13 @@ s32 mail_is_read(s16 a) {
 void main(void) {
     Unk_801E0340 *p;
     Unk_801E0340 *q;
-    Unk_801E0368 *r;
+    GameVars *r;
     s16 f;
     u16 a;
     u16 b;
 
     kaj_init();
-    memset(&D_801E02D8, 0, 0x64);
+    memset(&object_scene_tables, 0, 0x64);
     D_801DFED8 = 0;
     D_801DFEE4 = 0;
     D_801DFEE0 = 0;
@@ -646,7 +604,7 @@ void main(void) {
     event_open();
     roadmap_init_draw();
     object_load_res(1, 0);
-    r = &D_801E0368;
+    r = &action_vars;
     while (1) {
         q = &D_801E0340;
         f = mail_main_restarted;
@@ -654,7 +612,7 @@ void main(void) {
             a = r->unk200;
             b = r->unk202;
         }
-        memset(r, 0, sizeof(D_801E0368));
+        memset(r, 0, sizeof(action_vars));
         memset(q, 0, 0x24);
         if (f != 0) {
             r->unk200 = a;
@@ -666,19 +624,19 @@ void main(void) {
         q->unk0[0] = -1;
         q->unk0[1] = -1;
         player_init();
-        r->unk0[0x5F] = 3;
+        r->vars[0x5F] = 3;
         r->unkC0 = -0x7E80;
         r->unkC2[4] = 0x82;
-        r->unk0[0xA] = 100;
-        r->unk0[0xB] = 100;
-        r->unk0[0xC] = 100;
-        r->unk0[0xD] = 100;
-        r->unk0[0x1B] = 100;
-        r->unk0[0x3E] = 5;
-        r->unk0[0x3F] = 0;
-        r->unk0[0x30] = 0;
-        r->unk1FE = 0;
-        r->unk1FC = 0;
+        r->vars[0xA] = 100;
+        r->vars[0xB] = 100;
+        r->vars[0xC] = 100;
+        r->vars[0xD] = 100;
+        r->vars[0x1B] = 100;
+        r->vars[0x3E] = 5;
+        r->vars[0x3F] = 0;
+        r->vars[0x30] = 0;
+        r->drain_minute = 0;
+        r->drain_count = 0;
         effect_clear_alarms();
         p = &D_801E0340;
         vehicle_train_init_state();
@@ -755,7 +713,7 @@ void mail_wait(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
                 event_handle_mod_finish(buf);
                 continue;
             case 0:
-                n -= D_801E6DA0.unk14;
+                n -= kaj_system.vsync_delta;
                 break;
             case 0x100:
                 event_handle_effect_done(buf);
@@ -774,7 +732,7 @@ void mail_wait(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 }
 
 void mail_step_frame(u16 a, s16 b, s16 c) {
-    Unk_801E0368 *p = &D_801E0368;
+    GameVars *p = &action_vars;
     action_update();
     if (a < 2) {
         npc_update_all();
@@ -802,8 +760,8 @@ void mail_step_frame(u16 a, s16 b, s16 c) {
 
 void mail_goto_ofc(s16 a, s16 b, s16 c, s16 d) {
     Unk_801E0340 *p = &D_801E0340;
-    Unk_801E0710 *g = &D_801E0710;
-    Unk_801E0368 *q = &D_801E0368;
+    PlayerStatus *g = &player_status;
+    GameVars *q = &action_vars;
     p->unk12 = b;
     ((s16 *)&p->unk14)[0] = c;
     ((s16 *)&p->unk14)[1] = d;
@@ -816,7 +774,7 @@ void mail_goto_ofc(s16 a, s16 b, s16 c, s16 d) {
     if (d == 2) {
         return;
     }
-    if ((s16)q->unk0[0x30] != 0 || g->unk2C != 0) {
+    if ((s16)q->vars[0x30] != 0 || g->mutant != 0) {
         return;
     }
     switch (g->unk30) {
@@ -828,8 +786,8 @@ void mail_goto_ofc(s16 a, s16 b, s16 c, s16 d) {
         }
         break;
     case 1:
-        if (g->unk2E >= 5 && (s16)q->unk0[0x11] != 100) {
-            q->unk0[0x11] = 100;
+        if (g->unk2E >= 5 && (s16)q->vars[0x11] != 100) {
+            q->vars[0x11] = 100;
             p->unk0[3] = 1;
             g->unk30 = 2;
             g->unk2E = 0;
@@ -854,10 +812,10 @@ void mail_goto_twn(s32 a, s32 b, s32 c, s16 d, s16 e) {
 
 void mail_goto_building(u16 arg0, char *arg1, s16 arg2, s16 arg3, u16 arg4, u16 arg5, u16 arg6, u32 arg7, u16 arg8) {
     Unk_8018C554 *p = (Unk_8018C554 *)&D_801E0340;
-    Unk_801E0368 *g = &D_801E0368;
+    GameVars *g = &action_vars;
 
     p->unkA = 1;
-    switch ((s16)g->unk0[arg2]) {
+    switch ((s16)g->vars[arg2]) {
     case 0:
         p->unk0[3] = 0;
         break;
@@ -884,7 +842,7 @@ void mail_goto_building(u16 arg0, char *arg1, s16 arg2, s16 arg3, u16 arg4, u16 
     p->unk1A = arg5;
     p->unk14 = 0;
     p->unk1C = arg8;
-    if (arg2 != 13 && (u16)(arg2 - 11) < 16 && (u32)(*(g->unk0 + arg2) - 11) < 90) {
+    if (arg2 != 13 && (u16)(arg2 - 11) < 16 && (u32)(*(g->vars + arg2) - 11) < 90) {
         p->unk14 = 1;
     }
     if (arg0 == 1) {
@@ -1220,7 +1178,7 @@ s16 mail_menu_move(s16 a) {
 }
 
 s32 mail_menu_open(s16 a, s16 b, s16 c, s16 d, s16 e, s16 *f, s16 g, s16 h, s16 i) {
-    Unk_801E0368 *p = &D_801E0368;
+    GameVars *p = &action_vars;
     Unk_801E058C *q = &p->unk224;
     if (p->unk224.unk0 != 0) {
         return 0;

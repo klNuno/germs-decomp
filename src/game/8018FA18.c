@@ -1,118 +1,18 @@
 #include "common.h"
+#include "game/types.h"
 
-typedef struct { s32 unk0; s32 unk4; s32 unk8; s32 unkC; s32 unk10; s32 unk14; } Unk_80192E18;
-typedef struct { s32 unk0; s32 unk4; Unk_80192E18 *unk8; void *unkC; } Unk_80192F20;
 void free3(void *ptr);
-typedef struct { s32 unk0; u16 unk4; s16 unk6; s32 unk8; s32 unkC; } Unk_801E0600;
-typedef struct {
-    s32 unk0;
-    s16 unk4[10];
-    s32 unk18;
-    s32 unk1C;
-    s32 unk20;
-    u8 unk24[0x2C];
-} Unk_801E0620_A0;
-typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    u8 unkC[4];
-    s16 unk10;
-    s16 unk12;
-    s16 unk14;
-    u8 unk16[0x26];
-    s16 unk3C;
-    s16 unk3E;
-    s16 unk40;
-    u16 unk42;
-    s16 unk44;
-    u16 unk46;
-    s16 unk48;
-    s16 unk4A;
-    s16 unk4C;
-    s16 unk4E;
-    s16 unk50;
-    u8 unk52[2];
-    s32 unk54;
-    s32 unk58;
-    s32 unk5C;
-    s32 unk60;
-    s32 unk64;
-    s32 unk68;
-    s16 unk6C;
-    s16 unk6E;
-    s16 unk70;
-    s16 unk72;
-    s16 unk74;
-    s16 unk76;
-    s16 unk78;
-    u8 pad7A[0x2];
-    u8 unk7C[0x14];
-    s32 unk90[3];
-    s32 unk9C;
-    Unk_801E0620_A0 unkA0[1];
-} Unk_801E0620;
 s32 D_801DFF48;
 extern Unk_801E0600 D_801E0600;
 extern Unk_801E0600 D_801E0610;
-extern Unk_801E0620 D_801E0620;
+extern Player player_character;
 s16 effect_item_add(s16 arg0, s16 arg1);
 s16 effect_item_remove(s16 arg0, s16 arg1);
 void effect_weapon_unequip(s16 arg0);
 s16 effect_weapon_add(s16 arg0, s16 arg1);
-typedef struct {
-    u8 unk0[8];
-    s16 unk8;
-    u8 unkA[0xC];
-    u16 unk16;
-    u8 unk18[0x24];
-    s32 unk3C;
-    u8 unk40[0x14];
-    s32 unk54;
-    s32 unk58;
-    s32 unk5C;
-    u8 pad60[0x30];
-    s16 *unk90;
-} Unk_8018E56C;
-typedef struct {
-    u8 unk0[0x3C];
-    s16 unk3C;
-    u8 unk3E[2];
-    u16 unk40;
-    u16 unk42;
-    u8 unk44[0x10];
-    s32 unk54;
-    s32 unk58;
-    s32 unk5C;
-    u8 unk60[0xC];
-    s16 unk6C;
-    s16 unk6E;
-    u8 unk70[2];
-    s16 unk72;
-    u8 unk74[2];
-    s16 unk76;
-    s16 unk78;
-} Unk_801E076C;
-typedef struct {
-    s16 unk0;
-    u8 unk2[0x2A];
-    s16 unk2C;
-    u8 unk2E[2];
-    s16 unk30;
-    s16 unk32;
-    s16 unk34;
-    s16 unk36;
-    u8 unk38[2];
-    s16 unk3A[5];
-    u8 unk44[6];
-    s16 unk4A;
-    u8 unk4C[4];
-    Unk_8018E56C *unk50;
-    u8 unk54[8];
-    Unk_801E076C *unk5C;
-} Unk_801E0710;
-extern Unk_801E0710 D_801E0710;
-void event_draw_gauge(Unk_801E0710 *arg0);
+extern PlayerStatus player_status;
+void event_draw_gauge(PlayerStatus *arg0);
+/* Local view of GameVars: this unit reads 0x0-0x7A as an s16 array and 0x7A-0xB4 as scalars, the shared type has one u16 array. */
 typedef struct {
     s16 unk0[0x3D];
     s16 unk7A;
@@ -125,18 +25,10 @@ typedef struct {
     s16 unkB4[5];
     u8 unkBE[0x186];
     s32 unk244;
-} Unk_801E0368;
-extern Unk_801E0368 D_801E0368;
-typedef struct { s32 unk0; s32 unk4; s32 unk8; s32 unkC; } Unk_80192F60;
-typedef struct { s16 unk0; s16 unk2; s16 unk4; } Unk_801DFF30;
+} Unk_801E0368_u8018FA18;
+extern Unk_801E0368_u8018FA18 action_vars;
 Unk_801DFF30 object_room_phone;
 void text_show(char *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-} Unk_801DFF28;
 Unk_801DFF28 object_room_storage;
 u16 D_801DFD58;
 u16 D_801DFD5A;
@@ -145,7 +37,7 @@ void sprite_set_visible(s32 arg0, s32 arg1);
 void sprite_set_clut_entry(s32 arg0, s32 arg1, s32 arg2);
 void text_close(void);
 void mail_wait(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
-extern Unk_801E076C *D_801E076C[];
+extern Player *D_801E076C[];
 Unk_8018E56C *mod_find(u16 arg0);
 void mod_set_anim(void *arg0, s16 arg1, s16 arg2);
 void object_room_play_call(s16 arg0);
@@ -157,73 +49,18 @@ void object_room_main(void);
 void menu_run(void);
 void menu_card_run(s32 arg0, s32 arg1);
 void mail_goto_ofc(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
-typedef struct {
-    s32 unk0;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
-    s16 unkE;
-    u8 unk10[2];
-    u16 unk12;
-} Unk_801DFFE8;
 extern Unk_801DFFE8 D_801DFFE8;
-typedef struct { void *unk0; s32 unk4; void *unk8; } Unk_80174B10;
 extern void *D_801E0760[];
 Unk_80174B10 *action_find_set(s16 arg0);
 Unk_80174B10 *action_run_set(Unk_80174B10 *arg0, s32 arg1, s32 arg2);
-typedef struct { s32 unk0; s32 unk4; s32 unk8; s32 unkC; s32 unk10; } Unk_801CC1E8;
 s16 D_801DFF4C;
 void UnDeliverEvent(u32 ev, u32 spec);
 Unk_801CC1E8 *kaj_event_push(s32 arg0);
 extern s16 player_part_damage_caps[];
-void event_draw_limb_status(Unk_801E0710 *arg0);
+void event_draw_limb_status(PlayerStatus *arg0);
 void event_set_blink(s16 arg0, s16 arg1);
-typedef struct {
-    u16 unk0;
-    u16 unk2;
-    u8 unk4[0x10];
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    u8 unk20[0x1C];
-    s16 unk3C;
-    s16 unk3E;
-    s16 unk40;
-} Unk_8019A07C_3C;
-typedef struct {
-    u8 unk0[0x3C];
-    Unk_8019A07C_3C *unk3C;
-} Unk_8019A07C;
 void player_finish_death(void);
-typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    s32 unk20;
-    s32 unk24;
-    s32 unk28;
-    s32 unk2C;
-    s32 unk30;
-    s32 unk34;
-    void *unk38;
-    void *unk3C;
-    void *unk40;
-    void *unk44;
-    void *unk48;
-    void *unk4C;
-    void *unk50;
-    void *unk54;
-    void *unk58;
-    void *unk5C[1];
-} Unk_801E02D8;
-extern Unk_801E02D8 D_801E02D8;
+extern SceneTables object_scene_tables;
 s16 D_801DFF18;
 s32 object_aset_count;
 extern u8 object_iff_file_pos[4];
@@ -231,9 +68,8 @@ s32 CdPosToInt(void *p);
 void *CdIntToPos(s32 i, void *p);
 s32 CdControl(u8 com, u8 *param, u8 *result);
 void sound_se_play(s32 arg0);
-void player_set_view(Unk_801E076C *arg0, s16 arg1);
+void player_set_view(Player *arg0, s16 arg1);
 void event_advance_clock(s16 a, s16 b);
-typedef struct { s32 unk0; u8 *unk4; u8 *unk8; s32 unkC; s32 unk10; s16 unk14; } Unk_801A3970;
 extern Unk_801A3970 D_801E05C0;
 s32 CdMode(void);
 void *CdLastPos(void);
@@ -242,19 +78,13 @@ s32 CdReadSync(s32 mode, u8 *result);
 s32 VSync(s32 mode);
 u32 *sound_se_alloc_header(u8 *arg0, s32 arg1, Unk_801A3970 *arg2);
 void sound_vab_open_head(Unk_801A3970 *arg0);
-typedef struct Unk_801E6DA0 {
-    s32 unk0;
-    s32 unk4;
-    s16 unk8;
-    s16 unkA;
-} Unk_801E6DA0;
-extern Unk_801E6DA0 D_801E6DA0;
+extern KajSystem kaj_system;
 s32 kaj_pad_read(void);
 s16 object_room_storage_input(void);
-s16 effect_item_input(Unk_801E0710 *arg0, s16 arg1);
-void object_room_do_action(Unk_801E0710 *arg0);
+s16 effect_item_input(PlayerStatus *arg0, s16 arg1);
+void object_room_do_action(PlayerStatus *arg0);
 void player_start_move_to(s16 a, u16 b, s32 c, s32 d, s32 e, s16 f, s16 g, s16 h, s32 i);
-void player_handle_pad(Unk_801E0710 *arg0, s32 arg1, s32 arg2);
+void player_handle_pad(PlayerStatus *arg0, s32 arg1, s32 arg2);
 s16 D_801DFD54;
 extern s32 D_801DFF50;
 extern s32 D_801DFED8;
@@ -276,175 +106,35 @@ void sound_bgm_close(void);
 void sound_bgm_stop(void);
 void sprite_delete(s32 arg0);
 void thing_free_all(void);
-typedef struct { u8 unk0[0x7F8]; } Unk_8018FA18;
 void *kaj_malloc(u32 size);
 void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
 void *action_load_set(void *arg0);
 extern char D_80170B7C[];
-typedef struct {
-    u16 unk0;
-    u16 unk2;
-    u16 unk4;
-    u16 unk6;
-} Unk_8017CAC8;
-typedef struct {
-    u16 unk0;
-    u16 unk2;
-    u16 unk4;
-    u16 unk6;
-    void *unk8;
-    Unk_8017CAC8 *unkC;
-} Unk_8017C9F8;
-typedef struct Unk_8017CCE4 {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    u8 padA[0x2];
-    s16 unkC;
-    u16 unkE;
-    s32 unk10;
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    s32 unk20;
-    s32 unk24;
-    s32 unk28;
-    u8 pad2C[0x14];
-    s32 unk40;
-    s32 unk44;
-    s32 unk48;
-    u8 pad4C[0x2C];
-    void *unk78;
-    void *unk7C;
-    void *unk80;
-    void *unk84;
-    Unk_8017C9F8 *unk88;
-    void *unk8C;
-} Unk_8017CCE4;
 void block_create(Unk_8017CCE4 **arg0, s32 arg1);
 void block_setup(Unk_8017CCE4 *arg0, u16 arg1);
 void block_list_add(s32 arg0);
-typedef struct Unk_801854B8 {
-    u16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
-    s16 unkE;
-    s32 unk10;
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    s16 unk20;
-    s16 unk22;
-    s16 unk24;
-    s16 unk26;
-    s32 unk28;
-    u8 unk2C[0x14];
-    s32 unk40;
-    s32 unk44;
-    s32 unk48;
-    u8 unk4C[0x2C];
-    void *unk78;
-    void *unk7C;
-} Unk_801854B8;
 void door_create(Unk_801854B8 **arg0, u32 arg1);
 void door_setup(Unk_8017CCE4 *arg0);
 void door_add(void *arg0);
 void mail_create(s32 *arg0, void *arg1, s16 arg2);
 extern s32 D_801E0324[];
-typedef struct { s16 unk0; s16 unk2; s32 unk4; void *unk8; } Unk_801A3B5C;
 void sound_bgm_create(Unk_801A3B5C **arg0, u32 arg1);
 void sound_bgm_open(Unk_801A3B5C *arg0);
 void mod_alloc(Unk_8018E56C **arg0, u32 arg1);
 void mod_list_add(s32 arg0);
-typedef struct {
-    u16 unk0;
-    u16 unk2;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
-    s16 unkE;
-    s16 unk10;
-    u16 unk12;
-    s16 unk14;
-    s16 unk16;
-    s16 unk18;
-    s16 unk1A;
-    s32 unk1C;
-} Unk_801A4370;
-typedef struct {
-    u16 unk0;
-    u16 unk2;
-    u16 unk4;
-    u16 unk6;
-    u16 unk8;
-    u8 unkA[0x2];
-    u16 unkC;
-    u16 unkE;
-    u8 unk10[0x2];
-    s16 unk12;
-    u8 unk14[0x4];
-} Unk_801A3DD4;
 void sprite_create(Unk_801A4370 **arg0, Unk_801A3DD4 *arg1);
 void sprite_add(s32 arg0);
 void kaj_tim_upload_hdr(void *arg0);
-typedef struct Unk_801A7AFC {
-    u16 unk0;
-    u16 unk2;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    u8 unkA[0x2];
-    s16 unkC;
-    s16 unkE;
-    s16 unk10;
-    u8 unk12[0x2];
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    s32 unk20;
-    u8 unk24[0x8];
-    s32 unk2C;
-    u8 unk30[0x14];
-    s32 unk44;
-    s32 unk48;
-    s32 unk4C;
-    u8 unk50[0x2C];
-    void *unk7C;
-    void *unk80;
-    void *unk84;
-} Unk_801A7AFC;
 void thing_create(Unk_801A7AFC **arg0, u32 arg1);
 void sprite_thing_init(Unk_801A7AFC *arg0);
 void thing_list_add(s32 arg0);
-typedef struct { u8 unk0[0x7F4]; } Unk_8019120C;
 void kaj_tim_upload(u32 *arg0, s16 arg1);
 extern u8 *D_801E05C8[];
-typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-    u16 unk14;
-    u16 unk16;
-    u16 unk18;
-    u16 unk1A;
-} Unk_801A217C;
 void sound_vab_transfer(Unk_801A3970 *arg0);
 void sound_se_push(Unk_801A217C *arg0);
-typedef struct { u16 unk0; u8 pad2[0xB6]; void *unkB8; void *unkBC; void *unkC0; } Unk_801AC278;
 typedef struct { s32 unk0; s32 unk4; s32 unk8; s32 unkC; s32 unk10; s32 unk14; s32 unk18; s32 unk1C; s32 unk20; s32 unk24; s32 unk28; s32 unk2C; s32 unk30; s32 unk34; s32 unk38; } Unk_801E032C;
 void vehicle_create(Unk_801AC278 **arg0, u32 arg1);
 void vehicle_init(Unk_801E032C *arg0);
-typedef struct { s32 unk0; s32 unk4; s32 unk8; s32 unkC; s32 unk10; } Unk_80193068;
 void object_room_storage_open(s16 arg0, char *arg1);
 void effect_start_fade(s32 arg0, s32 arg1);
 void kaj_view_set_bg_color(u8 arg0, u8 arg1, u8 arg2);
@@ -452,7 +142,6 @@ void player_rest(s16 arg0, s32 arg1, s32 arg2, s32 arg3);
 void sound_bgm_play(s16 arg0);
 s16 D_801DFD56;
 extern u16 D_801E0356[];
-typedef struct { s16 unk0[5]; s16 unkA; char *unkC; s16 unk10; s16 unk12; s32 unk14; s32 unk18; s32 unk1C; } Unk_801E0340;
 extern Unk_801E0340 D_801E0340;
 s32 object_room_on_enter(Unk_80192F60 *arg0);
 s32 object_room_on_effect_done(Unk_80193068 *arg0);
@@ -502,37 +191,11 @@ void RotMatrixZYX(s16 *r, void *m);
 void object_iff_open(Unk_80192F20 **arg0, s32 arg1, s32 arg2);
 void object_read_chunks(Unk_80192F20 *arg0, s32 arg1, s32 arg2, s32 arg3);
 void action_init_npcs(void);
-typedef struct { u8 unk0[4]; } Unk_801DFF20;
 void *CdSearchFile(void *fp, char *name);
 extern s32 object_res_offsets[];
 extern s32 object_sce_offsets[];
 void text_next_page(Unk_801DFFE8 *arg0);
-typedef struct { s32 unk0; s32 unk4; s16 unk8; } Unk_80191AB0_C;
-typedef struct {
-    s16 unk0;
-    u8 unk2[0xE];
-    s16 unk10;
-    s16 unk12;
-    s16 unk14;
-    u8 unk16[6];
-    s16 unk1C;
-} Unk_80191AB0;
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4[2];
-    s16 unk8[2];
-    s16 unkC[0x12];
-    s16 unk30;
-    s16 unk32[8];
-    s16 unk42;
-    s16 unk44;
-    s16 unk46;
-    s16 unk48;
-    u8 unk4A[2];
-    s32 unk4C;
-} Unk_801E0768;
-extern Unk_801E0768 *D_801E0768[];
+extern Inventory *D_801E0768[];
 s32 object_load_chunk_count;
 s32 object_load_bar_step;
 void roadmap_draw_sprite_frame(s32 arg0);
@@ -816,9 +479,9 @@ void object_load_other(Unk_80192F20 *arg0, s32 arg1, s32 arg2) {
     s32 n;
     u8 *p;
     u32 *dst;
-    Unk_801E02D8 *g;
+    SceneTables *g;
 
-    g = &D_801E02D8;
+    g = &object_scene_tables;
     buf = kaj_malloc(arg2);
     if (buf == NULL) {
         kaj_abend(3, "Error Allocating IFF_ID_OTHER Buffer", D_80170B7C, 0xFD);
@@ -851,20 +514,20 @@ void object_load_other(Unk_80192F20 *arg0, s32 arg1, s32 arg2) {
     }
     switch (arg1) {
     case 0x41455241:
-        g->unk38 = buf;
+        g->triggers = buf;
         break;
     case 0x52544341:
-        g->unk3C = buf;
+        g->npcs = buf;
         action_init_npcs();
         break;
     case 0x2043504E:
         g->unk50 = buf;
         break;
     case 0x52414843:
-        g->unk40 = buf;
+        g->npc_bodies = buf;
         break;
     case 0x594D4E45:
-        g->unk44 = buf;
+        g->npc_stats = buf;
         break;
     case 0x4D455449:
         g->unk48 = buf;
@@ -1190,7 +853,7 @@ void object_load_vecl(Unk_80192F20 *arg0, s32 arg1) {
 }
 
 void object_read_chunks(Unk_80192F20 *arg0, s32 arg1, s32 arg2, s32 arg3) {
-    Unk_801E0768 *m;
+    Inventory *m;
     u32 *buf;
     s32 size;
     s16 id;
@@ -1281,7 +944,7 @@ void object_read_chunks(Unk_80192F20 *arg0, s32 arg1, s32 arg2, s32 arg3) {
                 found = 0;
                 m = D_801E0768[0];
                 for (i = 0; i < 2; i++) {
-                    if (((Unk_80191AB0_C *)arg0->unkC)->unk8 == m->unk4[i] + 0x400) {
+                    if (((Unk_80191AB0_C *)arg0->unkC)->unk8 == m->weapon_ids[i] + 0x400) {
                         found = 1;
                         break;
                     }
@@ -1491,7 +1154,7 @@ void object_load_scene(void) {
     Unk_80192F20 *q2;
     Unk_80192F20 *q3;
     Unk_80192E18 *e;
-    Unk_801E02D8 *g;
+    SceneTables *g;
     Unk_801E0340 *s;
     s32 pos;
     s32 a, b, c, d;
@@ -1510,13 +1173,13 @@ void object_load_scene(void) {
     e = q->unk8;
     pos = e->unk0;
     q->unk0 = e->unk4;
-    g = &D_801E02D8;
+    g = &object_scene_tables;
     a = e->unk8;
     b = e->unkC;
     c = e->unk10;
     d = e->unk14;
     if (a != 0) {
-        g->unk24 = a;
+        g->npc_body_count = a;
     }
     if (b != 0) {
         g->unk20 = b;
@@ -1544,10 +1207,10 @@ void object_load_scene(void) {
     e2 = q2->unk8 + idx + 1;
     pos2 = q2->unk8[idx + 1].unk0;
     q2->unk0 = e2->unk4;
-    D_801E02D8.unk1C = e2->unk8;
-    D_801E02D8.unk18 = e2->unkC;
+    object_scene_tables.npc_count = e2->unk8;
+    object_scene_tables.trigger_count = e2->unkC;
     object_aset_count = e2->unk10;
-    D_801E02D8.unk28 = e2->unk14;
+    object_scene_tables.npc_stats_count = e2->unk14;
     if (D_801DFF18 != 0) {
         loc2 = object_iff_file_pos;
         p2 = CdIntToPos(CdPosToInt(loc2) + ((pos2 - 0x800) >> 11), loc2);
@@ -1573,7 +1236,7 @@ void object_load_weapon_mods(void) {
     Unk_80192F20 *q;
     Unk_80192F20 *r;
     Unk_80192E18 *e;
-    Unk_801E02D8 *g;
+    SceneTables *g;
     s32 pos;
     s32 a, b, c, d;
     u8 *p;
@@ -1585,13 +1248,13 @@ void object_load_weapon_mods(void) {
     e = q->unk8;
     pos = e->unk0;
     q->unk0 = e->unk4;
-    g = &D_801E02D8;
+    g = &object_scene_tables;
     a = e->unk8;
     b = e->unkC;
     c = e->unk10;
     d = e->unk14;
     if (a != 0) {
-        g->unk24 = a;
+        g->npc_body_count = a;
     }
     if (b != 0) {
         g->unk20 = b;
@@ -1624,7 +1287,7 @@ void object_load_mail_by_id(s16 arg0) {
     Unk_80192F20 *q;
     Unk_80192F20 *r;
     Unk_80192E18 *e;
-    Unk_801E02D8 *g;
+    SceneTables *g;
     s32 pos;
     s32 a, b, c, d;
     u8 *p;
@@ -1636,13 +1299,13 @@ void object_load_mail_by_id(s16 arg0) {
     e = q->unk8;
     pos = e->unk0;
     q->unk0 = e->unk4;
-    g = &D_801E02D8;
+    g = &object_scene_tables;
     a = e->unk8;
     b = e->unkC;
     c = e->unk10;
     d = e->unk14;
     if (a != 0) {
-        g->unk24 = a;
+        g->npc_body_count = a;
     }
     if (b != 0) {
         g->unk20 = b;
@@ -1675,7 +1338,7 @@ void object_load_res(s32 arg0, s32 arg1) {
     Unk_80192F20 *q;
     Unk_80192F20 *r;
     Unk_80192E18 *e;
-    Unk_801E02D8 *g;
+    SceneTables *g;
     s32 pos;
     s32 a, b, c, d;
     u8 *p;
@@ -1687,13 +1350,13 @@ void object_load_res(s32 arg0, s32 arg1) {
     e = q->unk8;
     pos = e->unk0;
     q->unk0 = e->unk4;
-    g = &D_801E02D8;
+    g = &object_scene_tables;
     a = e->unk8;
     b = e->unkC;
     c = e->unk10;
     d = e->unk14;
     if (a != 0) {
-        g->unk24 = a;
+        g->npc_body_count = a;
     }
     if (b != 0) {
         g->unk20 = b;
@@ -1726,7 +1389,7 @@ void object_load_res12_by_id(s16 arg0) {
     Unk_80192F20 *q;
     Unk_80192F20 *r;
     Unk_80192E18 *e;
-    Unk_801E02D8 *g;
+    SceneTables *g;
     s32 pos;
     s32 a, b, c, d;
     u8 *p;
@@ -1738,13 +1401,13 @@ void object_load_res12_by_id(s16 arg0) {
     e = q->unk8;
     pos = e->unk0;
     q->unk0 = e->unk4;
-    g = &D_801E02D8;
+    g = &object_scene_tables;
     a = e->unk8;
     b = e->unkC;
     c = e->unk10;
     d = e->unk14;
     if (a != 0) {
-        g->unk24 = a;
+        g->npc_body_count = a;
     }
     if (b != 0) {
         g->unk20 = b;
@@ -1782,10 +1445,10 @@ void object_iff_seek_entry(Unk_80192F20 *arg0, u16 arg1) {
     e = arg0->unk8 + arg1 + 1;
     pos = arg0->unk8[arg1 + 1].unk0;
     arg0->unk0 = e->unk4;
-    D_801E02D8.unk1C = e->unk8;
-    D_801E02D8.unk18 = e->unkC;
+    object_scene_tables.npc_count = e->unk8;
+    object_scene_tables.trigger_count = e->unkC;
     object_aset_count = e->unk10;
-    D_801E02D8.unk28 = e->unk14;
+    object_scene_tables.npc_stats_count = e->unk14;
     if (D_801DFF18 != 0) {
         loc = object_iff_file_pos;
         p = CdIntToPos(CdPosToInt(loc) + ((pos - 0x800) >> 11), loc);
@@ -1837,13 +1500,13 @@ s32 object_room_on_enter(Unk_80192F60 *arg0) {
 }
 
 s32 object_room_on_effect_done(Unk_80193068 *arg0) {
-    Unk_801E0368 *g;
-    Unk_801E076C *o;
+    Unk_801E0368_u8018FA18 *g;
+    Player *o;
     u16 v;
     s32 t;
     Unk_801DFF28 *f;
 
-    g = &D_801E0368;
+    g = &action_vars;
     f = &object_room_storage;
     o = D_801E076C[0];
     t = arg0->unk10;
@@ -1853,7 +1516,7 @@ s32 object_room_on_effect_done(Unk_80193068 *arg0) {
             D_801DFD56 = 0;
             return 1;
         }
-        if (o->unk42 & 0x10) {
+        if (o->flags & 0x10) {
             /* " なんだか、うとうとしてきた" */
             text_show(" \202\310\202\361\202\276\202\251\201A\202\244\202\306\202\244\202\306\202\265\202\304\202\253\202\275", 1, -1, 0, -1, 0, 0);
             kaj_view_set_bg_color(0, 0, 0);
@@ -1871,7 +1534,7 @@ s32 object_room_on_effect_done(Unk_80193068 *arg0) {
         if (arg0->unkC == 0) {
             g->unk244 = -1;
         }
-        o->unk42 &= ~0x10;
+        o->flags &= ~0x10;
         kaj_view_set_bg_color(0x30, 0x30, 0x10);
     } else if (t == 0) {
         kaj_view_set_bg_color(0x30, 0x30, 0x10);
@@ -1879,7 +1542,7 @@ s32 object_room_on_effect_done(Unk_80193068 *arg0) {
             sound_bgm_play(0);
         }
     } else if (t == 11) {
-        if (!(o->unk42 & 0x4000)) {
+        if (!(o->flags & 0x4000)) {
             if (f->unk2 != 0) {
                 /* " 1預ける8武器1を方向キー上下で, 選んで下さい,      決定 3○ 1戻る 4×" */
                 text_show(" 1\227a\202\257\202\3518\225\220\212\3551\202\360\225\373\214\374\203L\201[\217\343\211\272\202\305, \221I\202\361\202\305\211\272\202\263\202\242,      \214\210\222\350 3\201\233 1\226\337\202\351 4\201~", 3, -1, 0, -1, 0, 1);
@@ -1906,25 +1569,25 @@ s32 object_room_on_effect_done(Unk_80193068 *arg0) {
 }
 
 void object_room_check_calls(void) {
-    Unk_801E076C *o;
+    Player *o;
     Unk_8018E56C *p;
     u16 flags;
     s16 t;
     Unk_801DFF30 *f;
-    Unk_801E0368 *g;
-    Unk_801E0710 *h;
+    Unk_801E0368_u8018FA18 *g;
+    PlayerStatus *h;
     Unk_801DFFE8 *e;
 
-    h = &D_801E0710;
+    h = &player_status;
     e = &D_801DFFE8;
     f = &object_room_phone;
-    g = &D_801E0368;
+    g = &action_vars;
 
-    o = h->unk5C;
-    p = h->unk50;
+    o = h->player;
+    p = h->model;
     flags = g->unkB2;
     if (f->unk0 != 0) {
-        if ((o->unk42 & 0x40) && f->unk2 == 4 && e->unk6 == 0 && p->unk8 == 0 && p->unk16 == 1) {
+        if ((o->flags & 0x40) && f->unk2 == 4 && e->unk6 == 0 && p->unk8 == 0 && p->unk16 == 1) {
             mod_set_anim(p, 2, 0);
         }
         return;
@@ -1995,7 +1658,7 @@ void object_room_check_calls(void) {
         f->unk0 = 1;
         f->unk2 = 1;
         f->unk4 = 0x73;
-    } else if (!(flags & 0x8000) && h->unk2C != 0) {
+    } else if (!(flags & 0x8000) && h->mutant != 0) {
         f->unk0 = 1;
         f->unk2 = 1;
         f->unk4 = 0x74;
@@ -2004,7 +1667,7 @@ void object_room_check_calls(void) {
     }
     sound_se_play(0x33);
     effect_start_alarm(2, 0x402, 0x14);
-    if (o->unk42 & 1) {
+    if (o->flags & 1) {
         player_reset_triggers(0);
     }
 }
@@ -2023,7 +1686,7 @@ s16 object_room_storage_input(void) {
     }
     t = mail_menu_get_state();
     if (p->unk4 == 0 && t == 0) {
-        if (!(D_801E6DA0.unk4 & 0x20) && (D_801E6DA0.unk0 & 0x20)) {
+        if (!(kaj_system.pad_prev & 0x20) && (kaj_system.pad_now & 0x20)) {
             r = effect_weapon_list(p->unk2, &n, D_801E05E0);
             if (p->unk2 != 0) {
                 p->unk4 = 1;
@@ -2134,7 +1797,7 @@ s16 object_room_storage_input(void) {
             mail_menu_open(1, 0x40B, 0x402, n, 6, D_801E05E0, 4, 0x2969, 0x2BFF);
             return 1;
         }
-        if (!(D_801E6DA0.unk4 & 0x40) && (D_801E6DA0.unk0 & 0x40)) {
+        if (!(kaj_system.pad_prev & 0x40) && (kaj_system.pad_now & 0x40)) {
             Unk_801DFF28 *q;
 
             sound_se_play(8);
@@ -2147,8 +1810,8 @@ s16 object_room_storage_input(void) {
             mail_wait(0, 0, 0, 1);
             return 1;
         }
-        if ((!(D_801E6DA0.unk4 & 0x1000) && (D_801E6DA0.unk0 & 0x1000)) ||
-            (!(D_801E6DA0.unk4 & 0x4000) && (D_801E6DA0.unk0 & 0x4000))) {
+        if ((!(kaj_system.pad_prev & 0x1000) && (kaj_system.pad_now & 0x1000)) ||
+            (!(kaj_system.pad_prev & 0x4000) && (kaj_system.pad_now & 0x4000))) {
             sound_se_play(0xF);
             p->unk2 = p->unk2 == 0;
             sprite_set_clut_entry(0, 4, (&D_801DFD58)[p->unk2]);
@@ -2158,20 +1821,20 @@ s16 object_room_storage_input(void) {
     }
     if (p->unk4 == 1 || p->unk4 == 2) {
         if (t == 1) {
-            if (!(D_801E6DA0.unk4 & 0x20) && (D_801E6DA0.unk0 & 0x20)) {
+            if (!(kaj_system.pad_prev & 0x20) && (kaj_system.pad_now & 0x20)) {
                 sound_se_play(0x11);
                 effect_weapon_swap_stock(p->unk2, D_801E05E0[p->unk6]);
                 mail_menu_close();
                 return 1;
             }
-            if (!(D_801E6DA0.unk4 & 0x40) && (D_801E6DA0.unk0 & 0x40)) {
+            if (!(kaj_system.pad_prev & 0x40) && (kaj_system.pad_now & 0x40)) {
                 sound_se_play(8);
                 mail_menu_close();
                 return 1;
             }
-            if (!(D_801E6DA0.unk4 & 0x1000) && (D_801E6DA0.unk0 & 0x1000)) {
+            if (!(kaj_system.pad_prev & 0x1000) && (kaj_system.pad_now & 0x1000)) {
                 p->unk6 = mail_menu_move(1);
-            } else if (!(D_801E6DA0.unk4 & 0x4000) && (D_801E6DA0.unk0 & 0x4000)) {
+            } else if (!(kaj_system.pad_prev & 0x4000) && (kaj_system.pad_now & 0x4000)) {
                 p->unk6 = mail_menu_move(0);
             }
         }
@@ -2179,12 +1842,12 @@ s16 object_room_storage_input(void) {
     return 1;
 }
 
-void object_room_do_action(Unk_801E0710 *arg0) {
+void object_room_do_action(PlayerStatus *arg0) {
     Unk_801E0340 *s;
     Unk_801DFFE8 *e;
     Unk_801DFF30 *q;
-    Unk_801E0368 *g;
-    Unk_801E076C *o;
+    Unk_801E0368_u8018FA18 *g;
+    Player *o;
     Unk_80174B10 *t;
     Unk_801DFF28 *r;
     s32 k;
@@ -2193,9 +1856,9 @@ void object_room_do_action(Unk_801E0710 *arg0) {
     s = &D_801E0340;
     e = &D_801DFFE8;
     q = &object_room_phone;
-    g = &D_801E0368;
+    g = &action_vars;
     mode = e->unk6;
-    o = arg0->unk5C;
+    o = arg0->player;
 
     if (mode == 3) {
         text_next_page(e);
@@ -2219,9 +1882,9 @@ void object_room_do_action(Unk_801E0710 *arg0) {
             break;
         case 0xFA0003:
             if (q->unk2 == 1 || q->unk2 == 2) {
-                o->unk42 |= 0x40;
+                o->flags |= 0x40;
                 g->unkB2 |= 1 << (q->unk4 - 0x65);
-                mod_set_anim(arg0->unk50, 1, 0);
+                mod_set_anim(arg0->model, 1, 0);
             }
             break;
         case 0xF0FF0A:
@@ -2257,34 +1920,34 @@ void object_room_do_action(Unk_801E0710 *arg0) {
 }
 
 void object_room_update_input(void) {
-    Unk_801E076C *s0;
+    Player *s0;
     s32 s3;
-    Unk_801E0710 *p = &D_801E0710;
+    PlayerStatus *p = &player_status;
 
-    s0 = p->unk5C;
-    if (D_801E6DA0.unkA != 1) {
+    s0 = p->player;
+    if (kaj_system.pad_mode != 1) {
         return;
     }
-    if ((s0->unk42 & 2) || (s0->unk42 & 0x10)) {
+    if ((s0->flags & 2) || (s0->flags & 0x10)) {
         return;
     }
     s3 = kaj_pad_read();
     if (object_room_storage_input() != 0) {
         return;
     }
-    if (!(s0->unk42 & 1) && effect_item_input(p, 0) != 0) {
+    if (!(s0->flags & 1) && effect_item_input(p, 0) != 0) {
         return;
     }
-    if (s0->unk42 & 4) {
-        if (!(D_801E6DA0.unk4 & 0x20) && (D_801E6DA0.unk0 & 0x20)) {
+    if (s0->flags & 4) {
+        if (!(kaj_system.pad_prev & 0x20) && (kaj_system.pad_now & 0x20)) {
             object_room_do_action(p);
             return;
         }
-        if (!(D_801E6DA0.unk4 & 0x40) && (D_801E6DA0.unk0 & 0x40)) {
+        if (!(kaj_system.pad_prev & 0x40) && (kaj_system.pad_now & 0x40)) {
             Unk_801DFFE8 *q = &D_801DFFE8;
-            if (!(p->unk5C->unk42 & 0x40)) {
+            if (!(p->player->flags & 0x40)) {
                 s16 t = q->unk6;
-                if (t == 2 && (p->unk5C->unk42 & 1)) {
+                if (t == 2 && (p->player->flags & 1)) {
                     text_close();
                     sound_se_play(0xE);
                     player_start_move_to(2, 1, 0x76C, 0, 0x19C8, 0, 0xB4, 0, t);
@@ -2294,24 +1957,24 @@ void object_room_update_input(void) {
             return;
         }
     }
-    if (!(s0->unk42 & 0x40)) {
+    if (!(s0->flags & 0x40)) {
         player_handle_pad(p, 0, s3);
     }
 }
 
 void object_room_init(void) {
-    Unk_801E0710 *p;
-    Unk_801E076C *o;
+    PlayerStatus *p;
+    Player *o;
     Unk_801DFF30 *q;
     Unk_801E0340 *r;
     Unk_8018E56C *m;
-    Unk_801E0368 *g;
+    Unk_801E0368_u8018FA18 *g;
     s32 i;
     s32 k;
 
-    p = &D_801E0710;
+    p = &player_status;
     r = &D_801E0340;
-    o = p->unk5C;
+    o = p->player;
     D_801DFD56 = 0;
     sprite_set_visible(0x410, 1);
     player_place_for_scene(0);
@@ -2325,13 +1988,13 @@ void object_room_init(void) {
     effect_weapon_calc_rate(1);
     m = mod_find(0x40);
     q = &object_room_phone;
-    p->unk50 = m;
+    p->model = m;
     if (m != NULL) {
         mod_setup(m, 0, 3, 0);
-        p->unk50->unk54 = 0xDAC - o->unk72 * 12500;
-        p->unk50->unk58 = 0;
-        p->unk50->unk5C = 0x1A2C - o->unk76 * 12500;
-        p->unk50->unk3C = 0;
+        p->model->unk54 = 0xDAC - o->cell_x * 12500;
+        p->model->unk58 = 0;
+        p->model->unk5C = 0x1A2C - o->cell_z * 12500;
+        p->model->unk3C = 0;
     }
     D_801DFF50 = (s32)object_room_pick_desk_action;
     D_801DFED8 = (s32)object_room_on_alarm;
@@ -2347,16 +2010,16 @@ void object_room_init(void) {
     }
     k = ((s16 *)&r->unk14)[1];
     if (k == 2) {
-        g = &D_801E0368;
-        D_801E0710.unk0 = 0xC9;
-        p->unk36 = k;
+        g = &action_vars;
+        player_status.energy = 0xC9;
+        p->hours_awake = k;
         p->unk34 = 0;
         g->unk0[0x30] = 1;
         for (i = 9; i < 0x1C; i++) {
             g->unk0[i] = 1000;
         }
         for (i = 0; i < 5; i++) {
-            p->unk3A[i] = 0;
+            p->limb_state[i] = 0;
             g->unkB4[i] = 0;
         }
         if (g->unk7C >= 5) {
@@ -2375,8 +2038,8 @@ void object_room_init(void) {
 }
 
 void object_room_quit(void) {
-    Unk_801E02D8 *p = &D_801E02D8;
-    Unk_801E0710 *q = &D_801E0710;
+    SceneTables *p = &object_scene_tables;
+    PlayerStatus *q = &player_status;
     s32 i;
 
     effect_clear_alarms();
@@ -2387,7 +2050,7 @@ void object_room_quit(void) {
     D_801DFEE4 = 0;
     D_801DFED4 = 0;
     D_801DFEE8 = 0;
-    q->unk50 = 0;
+    q->model = 0;
     text_close();
     action_reset(1);
     action_free_triggers();
@@ -2441,7 +2104,7 @@ void object_room_main(void) {
         sound_bgm_play(1);
     case 2:
         effect_fade_set_black();
-        text_start_narration((s32)D_801E02D8.unk5C[(s16)mode - 1]);
+        text_start_narration((s32)object_scene_tables.unk5C[(s16)mode - 1]);
         break;
     }
     m = mode;
@@ -2516,14 +2179,14 @@ void object_room_storage_open(s16 arg0, char *arg1) {
 }
 
 void object_room_pick_desk_action(s32 *arg0) {
-    Unk_801E076C *p = D_801E076C[0];
+    Player *p = D_801E076C[0];
     Unk_801DFF30 *q = &object_room_phone;
     s16 v;
 
     if ((*(u32 *)&p->unk40 & 0x1010000) == 0x10000) {
         *arg0 = 0xFA0000;
-        if (p->unk6C >= -20 && p->unk6C <= 10) {
-            v = p->unk6E;
+        if (p->pitch >= -20 && p->pitch <= 10) {
+            v = p->yaw;
             if (v >= 130 && v <= 170) {
                 *arg0 = 0xFA0001;
             } else if (v >= 180 && v < 220) {
@@ -2538,7 +2201,7 @@ void object_room_pick_desk_action(s32 *arg0) {
 }
 
 void object_room_on_alarm(Unk_80192F60 *arg0) {
-    Unk_801E076C *p = D_801E076C[0];
+    Player *p = D_801E076C[0];
     Unk_801DFF30 *q = &object_room_phone;
     Unk_8018E56C *o;
 
@@ -2552,11 +2215,11 @@ void object_room_on_alarm(Unk_80192F60 *arg0) {
         object_room_play_call(q->unk4);
         sound_se_stop(0x33);
     } else if (arg0->unkC == 0x402) {
-        if (!(p->unk42 & 0x40) && q->unk2 != 4) {
+        if (!(p->flags & 0x40) && q->unk2 != 4) {
             q->unk2 = 3;
             sound_se_stop(0x33);
             effect_start_alarm(3, 0x403, 10);
-            if (p->unk42 & 1) {
+            if (p->flags & 1) {
                 player_reset_triggers(0);
             }
         }
@@ -2570,9 +2233,9 @@ void object_room_on_alarm(Unk_80192F60 *arg0) {
 }
 
 void object_room_on_mod_finish(Unk_80192F60 *arg0) {
-    Unk_801E0710 *r = &D_801E0710;
-    Unk_801E076C *p = r->unk5C;
-    Unk_8018E56C *o = r->unk50;
+    PlayerStatus *r = &player_status;
+    Player *p = r->player;
+    Unk_8018E56C *o = r->model;
     Unk_801DFF30 *q = &object_room_phone;
 
     if (arg0->unkC == 3 && arg0->unk8 == 0x40) {
@@ -2587,11 +2250,11 @@ void object_room_on_mod_finish(Unk_80192F60 *arg0) {
             }
         } else if (o->unk16 == 2) {
             text_close();
-            p->unk42 &= ~0x40;
+            p->flags &= ~0x40;
             q->unk0 = 0;
             q->unk2 = 0;
             q->unk4 = -1;
-            if (p->unk42 & 1) {
+            if (p->flags & 1) {
                 player_reset_triggers(0);
             }
         }
@@ -2644,7 +2307,7 @@ void object_room_play_call(s16 arg0) {
 }
 
 s32 object_deliver_area_events(void) {
-    Unk_801E0620 *p = &D_801E0620;
+    Player *p = &player_character;
     Unk_801CC1E8 *o;
 
     UnDeliverEvent(0xF3000000, 2);
@@ -2666,6 +2329,6 @@ s32 object_deliver_area_events(void) {
     D_801E0610.unk4 = D_801E0600.unk4;
     D_801E0610.unk0 = D_801E0600.unk0;
     D_801E0610.unk8 = D_801E0600.unk8;
-    p->unk42 |= 4;
+    p->flags |= 4;
     return 0;
 }

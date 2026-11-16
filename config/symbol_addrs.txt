@@ -1921,3 +1921,15 @@ GsSetProjection = 0x801D1E00; // type:func size:0x20
 GsSetWorkBase = 0x801D1E20; // type:func size:0xC
 // LIBGS GS_125.OBJ GsGetWorkBase (0x10 OBJ): returns D_801E2D98 set by GsSetWorkBase; not SsGetVoiceMask, whose 4.4 OBJ puts it 0xC after the setter
 GsGetWorkBase = 0x801D1E30; // type:func size:0x10
+// KajSystem: pad words read by kaj_pad_read, kaj_timer_enabled/ticks/period inside it at +8/+0xC/+0x10; community: held pad buttons at 0x801E6DA0, clock period at 0x801E6DB0
+kaj_system = 0x801E6DA0;
+// PlayerStatus: energy (community: infinite energy writes 0x801E0710), level and exp (player_add_exp), hours awake and limb states (event_drain_gauge); memset by the player init
+player_status = 0x801E0710;
+// Inventory: 8 item slots and 2 weapon slots (community: carried weapon ids at 0x801E0774/6), linked at player_status.inventory by the player init
+player_inventory = 0x801E0770;
+// Player: the controlled character of the player_* functions (pos, cell, angles); community: player structure at 0x801E0620, pitch and yaw at +0x6C/+0x6E
+player_character = 0x801E0620;
+// GameVars: the u16 game variables set by action_cmd_var (opcode 10 of action_update) and saved by the memory card code
+action_vars = 0x801E0368;
+// SceneTables: trigger, NPC, NPC body and NPC stats tables filled by the object loader and freed by the scene unload
+object_scene_tables = 0x801E02D8;

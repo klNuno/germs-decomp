@@ -1,64 +1,13 @@
 #include "common.h"
+#include "game/types.h"
 
-typedef struct {
-    u16 unk0;
-    u16 unk2;
-    u16 unk4;
-    u16 unk6;
-} Unk_8017CAC8;
-typedef struct {
-    u16 unk0;
-    u16 unk2;
-    u16 unk4;
-    u16 unk6;
-    void *unk8;
-    Unk_8017CAC8 *unkC;
-} Unk_8017C9F8;
-typedef struct Unk_8017CCE4 {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    u8 padA[0x2];
-    s16 unkC;
-    u16 unkE;
-    s32 unk10;
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    s32 unk20;
-    s32 unk24;
-    s32 unk28;
-    u8 pad2C[0x14];
-    s32 unk40;
-    s32 unk44;
-    s32 unk48;
-    u8 pad4C[0x2C];
-    void *unk78;
-    void *unk7C;
-    void *unk80;
-    void *unk84;
-    Unk_8017C9F8 *unk88;
-    void *unk8C;
-} Unk_8017CCE4;
-typedef struct Unk_8017D0E0 {
-    s32 unk0;
-    struct Unk_8017D0E0 *unk4;
-    Unk_8017CCE4 *unk8;
-} Unk_8017D0E0;
-typedef struct {
-    Unk_8017D0E0 *unk0;
-    Unk_8017D0E0 *unk4;
-    Unk_8017D0E0 *unk8;
-    s32 unkC;
-} Unk_801DFE5C;
 s16 kaj_ll_at_tail(Unk_801DFE5C *arg0);
 Unk_801DFE5C *D_801DFE5C;
 void kaj_ll_insert_before(Unk_801DFE5C *arg0, s32 arg1);
 void kaj_ll_insert_after(Unk_801DFE5C *arg0, s32 arg1);
 void kaj_cdmgr_free_all(void);
 extern s16 D_801E71C8;
+/* Local view of GameVars: this unit reads 0x0-0xBE as one s16 array (lh), the shared type has a u16 array. */
 typedef struct {
     s16 unk0[0x5F];
     s16 unkBE;
@@ -74,15 +23,11 @@ typedef struct {
     s16 unk250;
     s16 unk252;
     s16 unk254;
-} Unk_801E0368;
+} Unk_801E0368_u8017EBF8;
 u8 D_801DFC8C;
 u8 D_801DFC8D[1];
 u8 D_801DFC8E;
-extern Unk_801E0368 D_801E0368;
-typedef struct {
-    u8 pad0[0xC];
-    s32 unkC;
-} Unk_8017E504;
+extern Unk_801E0368_u8017EBF8 action_vars;
 s16 block_wake_index;
 void block_create_all(void);
 void block_building_run(void);
@@ -90,36 +35,15 @@ void effect_elevator_run(void);
 u16 D_801DFE60;
 void text_release_cmd(void);
 void sprite_set_visible(s32 arg0, s32 arg1);
-typedef struct {
-    u8 pad0[0x6];
-    s16 unk6;
-    u16 unk8;
-} Unk_80184100;
 void sprite_set_clut_entry(s32 arg0, s32 arg1, s32 arg2);
 void sound_se_play(s32 arg0);
-typedef struct {
-    u16 unk0;
-    u16 unk2;
-} Unk_801DFCAC;
 Unk_801DFCAC **text_cmd;
 s16 text_window_sprite;
 void action_push_front(Unk_801DFCAC **arg0);
 s16 text_wait;
 extern s32 D_801E6DB4[];
-typedef struct {
-    u8 pad0[0x42];
-    u16 unk42;
-    u8 pad44[0x1C];
-    s32 unk60;
-    u8 pad64[0x4];
-    s32 unk68;
-    u8 pad6C[0x6];
-    s16 unk72;
-    s16 unk74;
-    s16 unk76;
-} Unk_801E076C;
 extern s32 D_801E05B0[];
-extern Unk_801E076C *D_801E076C[];
+extern Player *D_801E076C[];
 extern char D_80170250[];
 void *kaj_malloc(u32 size);
 void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
@@ -153,13 +77,7 @@ typedef struct {
     Unk_801802A0_14 unk14[4];
 } Unk_801802A0;
 void sprite_fill_clut(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
-typedef struct {
-    u16 unk0;
-    u16 unk2;
-    u16 unk4;
-    u16 unk6;
-} Unk_80184230;
-typedef struct {
+typedef struct Unk_801A44B8 {
     u8 pad0[0x4];
     s16 unk4;
     u8 pad6[0x6];
@@ -171,14 +89,6 @@ typedef struct {
     s16 unk1A;
     Unk_80184230 *unk1C;
 } Unk_801A44B8;
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-    Unk_801A44B8 *unk8;
-    Unk_801A44B8 *unkC;
-} Unk_80181C10;
 void sprite_delete(s32 arg0);
 void mail_list_close(void);
 void mail_free(void);
@@ -186,19 +96,6 @@ Unk_801A44B8 *sprite_find(u16 arg0);
 s32 ClearImage2(Unk_80184230 *rect, s32 r, s32 g, s32 b);
 s16 text_draw_next(s32 arg0, s32 arg1);
 s16 text_row;
-typedef struct Unk_80184338 {
-    u8 pad0[0x22];
-    s16 unk22;
-    u16 unk24;
-    s16 unk26;
-    s16 unk28;
-    u8 pad2A[0x2];
-    s32 unk2C;
-    void (*unk30)(struct Unk_80184338 *arg0);
-    void (*unk34)(void);
-    void (*unk38)(void);
-    s32 *unk3C;
-} Unk_80184338;
 s16 D_801DFCE6;
 s16 text_pos;
 s32 block_model_surface(void *arg0, s32 arg1, s32 arg2, s32 arg3);
@@ -207,39 +104,6 @@ s16 text_cue_fade_done;
 s16 text_cue_bgm_done;
 void sound_bgm_fade_out(s32 arg0);
 void effect_start_fade(s32 arg0, s32 arg1);
-typedef struct {
-    u8 pad0[0x6];
-    s16 unk6;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
-    s16 unkE;
-    u8 pad10[0x2];
-    u16 unk12;
-} Unk_801DFFE8;
-typedef struct {
-    u16 unk0;
-    u16 unk2;
-    s16 unk4;
-    s16 unk6;
-    u8 pad8[0x2];
-    u16 unkA;
-    s16 unkC;
-    s16 unkE;
-    s32 unk10;
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    s16 unk20;
-    s16 unk22;
-    s16 unk24;
-    u8 pad26[0x2];
-    s32 unk28;
-    u8 unk2C[0x14];
-    s32 unk40;
-    s32 unk44;
-    s32 unk48;
-} Unk_80184814;
 extern Unk_801DFFE8 D_801DFFE8;
 extern char D_80170270[];
 extern Unk_8017CCE4 *block_slots[];
@@ -264,16 +128,6 @@ void kaj_map_cell_loaded_slots(s16 *arg0, s32 *arg1);
 void kaj_map_set_cell_ready(void);
 void kaj_map_set_room_ready(void);
 void kaj_map_room_loaded_slots(s16 *arg0, s32 *arg1);
-typedef struct {
-    u16 unk0;
-    u8 unk2;
-    u8 unk3;
-} Unk_8017B1E8;
-typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-} Unk_8017B3E8;
 typedef struct {
     s32 unk0;
     struct {
@@ -305,7 +159,6 @@ s16 text_col;
 s16 text_color;
 s16 text_len;
 s32 strlen(char *s);
-typedef struct { s16 unk0[5]; s16 unkA; char *unkC; s16 unk10; s16 unk12; s32 unk14; s32 unk18; s32 unk1C; } Unk_801E0340;
 extern Unk_801E0340 D_801E0340;
 void object_load_res(s32 arg0, s32 arg1);
 void mail_list_open(void);
@@ -317,57 +170,9 @@ void text_narration_step(Unk_80184338 *arg0);
 void text_narration_end(void);
 void *kaj_tss_alloc(u32 arg0);
 s32 kaj_tss_start(void *arg0);
-typedef struct Unk_801854B8 {
-    u16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
-    s16 unkE;
-    s32 unk10;
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    s16 unk20;
-    s16 unk22;
-    s16 unk24;
-    s16 unk26;
-    s32 unk28;
-    u8 unk2C[0x14];
-    s32 unk40;
-    s32 unk44;
-    s32 unk48;
-    u8 unk4C[0x2C];
-    void *unk78;
-    void *unk7C;
-} Unk_801854B8;
-typedef struct Unk_801855C8 {
-    struct Unk_801855C8 *unk0;
-    struct Unk_801855C8 *unk4;
-    Unk_801854B8 *unk8;
-} Unk_801855C8;
-typedef struct Unk_801DFE80 {
-    Unk_801855C8 *unk0;
-    Unk_801855C8 *unk4;
-    Unk_801855C8 *unk8;
-    s32 unkC;
-} Unk_801DFE80;
 Unk_801DFE80 *D_801DFE80;
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-} Unk_80174FFC;
 void RotMatrix(Unk_80174FFC *arg0, void *arg1);
 Unk_8017CCE4 *block_find_at(s32 arg0, s32 arg1, s32 arg2);
-typedef struct {
-    u16 unk0;
-    u16 unk2;
-    u16 unk4;
-} Unk_8018519C_0;
 typedef struct {
     Unk_8018519C_0 *unk0;
     s32 unk4;
@@ -408,13 +213,7 @@ extern s16 menu_list_vars[];
 s32 MoveImage2(Unk_80184230 *rect, s32 x, s32 y);
 Unk_801A44B8 *menu_anim_sprite;
 s32 mail_list_move(s16 a, s16 b);
-typedef struct Unk_801E6DA0 {
-    s32 unk0;
-    s32 unk4;
-    s16 unk8;
-    s16 unkA;
-} Unk_801E6DA0;
-extern Unk_801E6DA0 D_801E6DA0;
+extern KajSystem kaj_system;
 void menu_confirm(Unk_80181C10 *arg0);
 void menu_back(Unk_80181C10 *arg0);
 void menu_move_cursor(Unk_80181C10 *arg0, s16 arg1);
@@ -439,12 +238,7 @@ u16 *Krom2RawAdd2(u16 sjis);
 s32 StoreImage2(void *rect, void *p);
 extern s32 text_line_y[];
 void text_draw_line(char *arg0, s16 arg1);
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4[2];
-    s32 unk8[0xF];
-} Unk_801E0710_58;
+/* Local view of Player: this unit reads 0x1C-0x38 as scalars, the shared type has one record at 0x18. */
 typedef struct {
     u8 pad0[0x1C];
     s32 unk1C;
@@ -453,32 +247,7 @@ typedef struct {
     u8 pad28[0x10];
     s16 unk38;
 } Unk_801E0710_5C;
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    u32 unk4;
-    u32 unk8;
-    u8 padC[0x8];
-    u16 unk14;
-    u8 pad16[0x2];
-    u16 unk18;
-    u8 pad1A[0x2];
-    u16 unk1C;
-    u8 pad1E[0x2];
-    u16 unk20;
-    u8 pad22[0x2];
-    u16 unk24;
-    u8 pad26[0x2];
-    u16 unk28;
-    u8 pad2A[0x8];
-    s16 unk32;
-    u8 pad34[0x2];
-    s16 unk36;
-    u8 pad38[0x20];
-    Unk_801E0710_58 *unk58;
-    Unk_801E0710_5C *unk5C;
-} Unk_801E0710;
-typedef struct {
+typedef struct Unk_80188FEC {
     u16 unk0;
     u16 unk2;
     u8 pad4[0x2C];
@@ -486,7 +255,7 @@ typedef struct {
     u8 pad32[0x1E];
     u16 unk50;
 } Unk_80188FEC;
-extern Unk_801E0710 D_801E0710;
+extern PlayerStatus player_status;
 void sprite_copy_cell(s32 a, s32 b, s32 c, s32 d, s32 e, s32 f);
 Unk_80188FEC *effect_weapon_find(s16 arg0);
 s32 rand(void);
@@ -496,11 +265,9 @@ s32 menu_cycle_pos_c;
 s16 menu_cycle_dir_a;
 s16 menu_cycle_dir_b;
 s16 menu_cycle_dir_c;
-typedef struct { u16 unk0; s16 unk2; s16 unk4; s16 unk6; s32 unk8; s32 unkC; s32 unk10; s16 unk14; s16 unk16; s32 unk18; s32 unk1C; s32 unk20; s32 unk24; s32 unk28; s32 unk2C; s32 unk30; s32 unk34; s32 unk38; s32 unk3C; s32 unk40; s32 unk44; s32 unk48; } Unk_801762F4;
-typedef struct { u16 unk0; u16 unk2; u16 unk4; u16 unk6; u16 unk8; u16 unkA; char unkC[0x20]; char unk2C[0x20]; char unk4C[0x20]; u8 unk6C[0x60]; } Unk_801767D4;
 void text_format_number(u8 *arg0, u16 arg1);
-Unk_801762F4 *npc_find(s16 arg0, u16 arg1);
-Unk_801767D4 *npc_find_body(s16 arg0);
+Npc *npc_find(s16 arg0, u16 arg1);
+NpcBody *npc_find_body(s16 arg0);
 extern char *text_sex_names[];
 extern char *text_blood_types[];
 void text_show_timed(u16 arg0, s16 arg1, s32 arg2, s16 arg3, s32 arg4);
@@ -718,11 +485,11 @@ static inline s16 func_8017EFEC_inline2(u8 *sec) {
 s32 menu_card_load(Unk_801802A0 *arg0) {
     Unk_8017EFEC buf;
     u8 sec[0x80];
-    Unk_801E0710 *h = &D_801E0710;
-    Unk_801E0368 *g = &D_801E0368;
+    PlayerStatus *h = &player_status;
+    Unk_801E0368_u8017EBF8 *g = &action_vars;
     s16 *c = &g->unk200;
-    Unk_801E0710_58 *a = h->unk58;
-    Unk_801E0710_5C *b = h->unk5C;
+    Inventory *a = h->inventory;
+    Unk_801E0710_5C *b = h->player;
     Unk_801802A0_14 *e;
     s32 ret;
     s32 i;
@@ -810,11 +577,11 @@ s32 menu_card_save(Unk_801802A0 *arg0, s32 arg1) {
     char s1[8];
     char s2[8];
     char s3[8];
-    Unk_801E0710 *h = &D_801E0710;
-    Unk_801E0368 *g = &D_801E0368;
+    PlayerStatus *h = &player_status;
+    Unk_801E0368_u8017EBF8 *g = &action_vars;
     s16 *c = &g->unk200;
-    Unk_801E0710_58 *a = h->unk58;
-    Unk_801E0710_5C *b = h->unk5C;
+    Inventory *a = h->inventory;
+    Unk_801E0710_5C *b = h->player;
     Unk_801802A0_14 *e;
     u8 *hdr;
     u8 *p;
@@ -1087,7 +854,7 @@ s16 menu_card_handle_input(Unk_801802A0 *arg0) {
     if (ok != 0) {
         ret = 0;
         kaj_pad_read();
-        if (!(D_801E6DA0.unk4 & 0x20) && (D_801E6DA0.unk0 & 0x20)) {
+        if (!(kaj_system.pad_prev & 0x20) && (kaj_system.pad_now & 0x20)) {
             ret = 1;
             snd = 0x11;
             switch (arg0->unkC) {
@@ -1127,7 +894,7 @@ s16 menu_card_handle_input(Unk_801802A0 *arg0) {
                 ret = 0;
                 break;
             }
-        } else if (!(D_801E6DA0.unk4 & 0x40) && (D_801E6DA0.unk0 & 0x40)) {
+        } else if (!(kaj_system.pad_prev & 0x40) && (kaj_system.pad_now & 0x40)) {
             if (arg0->unkC == 0x6B || (arg0->unk0 == 0 && arg0->unkC == 0x6A)) {
                 ret = 1;
                 snd = 8;
@@ -1137,11 +904,11 @@ s16 menu_card_handle_input(Unk_801802A0 *arg0) {
                 mail_wait(3, 0, 0, 1);
                 g->unkA = 1;
             }
-        } else if (!(D_801E6DA0.unk4 & 0x1000) && (D_801E6DA0.unk0 & 0x1000)) {
+        } else if (!(kaj_system.pad_prev & 0x1000) && (kaj_system.pad_now & 0x1000)) {
             if (arg0->unkC == 0x64) {
                 menu_card_move_cursor(arg0, 1);
             }
-        } else if (!(D_801E6DA0.unk4 & 0x4000) && (D_801E6DA0.unk0 & 0x4000)) {
+        } else if (!(kaj_system.pad_prev & 0x4000) && (kaj_system.pad_now & 0x4000)) {
             if (arg0->unkC == 0x64) {
                 menu_card_move_cursor(arg0, 0);
             }
@@ -1283,7 +1050,7 @@ s16 menu_card_run(s16 arg0, s16 arg1) {
 }
 
 void menu_list_page(Unk_80181C10 *arg0, s32 arg1, s32 arg2) {
-    Unk_801E0368 *g = &D_801E0368;
+    Unk_801E0368_u8017EBF8 *g = &action_vars;
     Unk_80184230 rect;
 
     switch ((s16)arg1) {
@@ -1342,9 +1109,9 @@ void menu_list_page(Unk_80181C10 *arg0, s32 arg1, s32 arg2) {
 }
 
 void menu_status_page(Unk_80181C10 *arg0, s32 arg1) {
-    Unk_801E0710 *g = &D_801E0710;
-    Unk_801E0368 *h = &D_801E0368;
-    Unk_801E0710_58 *p = g->unk58;
+    PlayerStatus *g = &player_status;
+    Unk_801E0368_u8017EBF8 *h = &action_vars;
+    Inventory *p = g->inventory;
     Unk_80188FEC *e;
     s32 n;
     s32 j;
@@ -1374,8 +1141,8 @@ void menu_status_page(Unk_80181C10 *arg0, s32 arg1) {
     sprite_fill_clut(0x23B, 0x60, 0x64, 0x14C6);
     sprite_fill_clut(0x23B, 0x70, 0x74, 0x14C6);
     col = 0x3D40;
-    n = g->unk4 / 6329;
-    if (n == 0 && g->unk4 != 0) {
+    n = g->exp / 6329;
+    if (n == 0 && g->exp != 0) {
         n = 1;
     }
     if (n > 32) {
@@ -1386,7 +1153,7 @@ void menu_status_page(Unk_80181C10 *arg0, s32 arg1) {
             sprite_set_clut_entry(0x23A, j + 0x10, (u16)col);
         }
     }
-    n = (g->unk2 << 5) / 50 + 1;
+    n = (g->level << 5) / 50 + 1;
     if (n > 32) {
         n = 32;
     }
@@ -1395,8 +1162,8 @@ void menu_status_page(Unk_80181C10 *arg0, s32 arg1) {
             sprite_set_clut_entry(0x23A, j + 0x30, (u16)col);
         }
     }
-    n = (g->unk4 << 4) / g->unk8;
-    if (n == 0 && g->unk4 != 0) {
+    n = (g->exp << 4) / g->next_exp;
+    if (n == 0 && g->exp != 0) {
         n = 1;
     }
     if (n > 16) {
@@ -1415,7 +1182,7 @@ void menu_status_page(Unk_80181C10 *arg0, s32 arg1) {
         }
     }
     col = 0x3D40;
-    n = g->unk36 > 32 ? 32 : g->unk36;
+    n = g->hours_awake > 32 ? 32 : g->hours_awake;
     if (n != 0) {
         for (j = 0; j < n; j++) {
             sprite_set_clut_entry(0x23A, j + 0x70, (u16)col);
@@ -1507,7 +1274,7 @@ void menu_status_page(Unk_80181C10 *arg0, s32 arg1) {
         }
     }
     for (i = 0; i < 2; i++) {
-        id = p->unk4[i];
+        id = p->weapon_ids[i];
         if (id >= 0) {
             e = effect_weapon_find(id);
             if (e != NULL) {
@@ -1536,7 +1303,7 @@ void menu_status_page(Unk_80181C10 *arg0, s32 arg1) {
 }
 
 void menu_options_page(Unk_80181C10 *arg0, s32 arg1, s16 arg2) {
-    Unk_801E0368 *g = &D_801E0368;
+    Unk_801E0368_u8017EBF8 *g = &action_vars;
     s16 s = 1;
 
     switch (arg1) {
@@ -1586,7 +1353,7 @@ void menu_options_page(Unk_80181C10 *arg0, s32 arg1, s16 arg2) {
 }
 
 void menu_move_cursor(Unk_80181C10 *arg0, s16 arg1) {
-    Unk_801E0368 *g = &D_801E0368;
+    Unk_801E0368_u8017EBF8 *g = &action_vars;
     Unk_801A44B8 *a;
     Unk_801A44B8 *b;
     Unk_801A44B8 *c;
@@ -1658,7 +1425,7 @@ void menu_move_cursor(Unk_80181C10 *arg0, s16 arg1) {
 }
 
 void menu_confirm(Unk_80181C10 *arg0) {
-    Unk_801E0368 *g = &D_801E0368;
+    Unk_801E0368_u8017EBF8 *g = &action_vars;
 
     switch (arg0->unk2) {
     case 0:
@@ -1735,30 +1502,30 @@ void menu_back(Unk_80181C10 *arg0) {
 void menu_handle_input(Unk_80181C10 *arg0) {
     s32 r;
 
-    if (D_801E6DA0.unkA != 1 || arg0->unk4 != 0) {
+    if (kaj_system.pad_mode != 1 || arg0->unk4 != 0) {
         return;
     }
     r = kaj_pad_read();
-    if (!(D_801E6DA0.unk4 & 0x1000) && (D_801E6DA0.unk0 & 0x1000)) {
+    if (!(kaj_system.pad_prev & 0x1000) && (kaj_system.pad_now & 0x1000)) {
         menu_move_cursor(arg0, 1);
-    } else if (!(D_801E6DA0.unk4 & 0x4000) && (D_801E6DA0.unk0 & 0x4000)) {
+    } else if (!(kaj_system.pad_prev & 0x4000) && (kaj_system.pad_now & 0x4000)) {
         menu_move_cursor(arg0, 0);
-    } else if (!(D_801E6DA0.unk4 & 0x8000) && (D_801E6DA0.unk0 & 0x8000)) {
+    } else if (!(kaj_system.pad_prev & 0x8000) && (kaj_system.pad_now & 0x8000)) {
         if (*(s32 *)arg0 == 0x10003) {
             menu_options_page(arg0, 2, 1);
         }
-    } else if (!(D_801E6DA0.unk4 & 0x2000) && (D_801E6DA0.unk0 & 0x2000)) {
+    } else if (!(kaj_system.pad_prev & 0x2000) && (kaj_system.pad_now & 0x2000)) {
         if (*(s32 *)arg0 == 0x10003) {
             menu_options_page(arg0, 2, 0);
         }
-    } else if (!(D_801E6DA0.unk4 & 0x40) && (D_801E6DA0.unk0 & 0x40)) {
+    } else if (!(kaj_system.pad_prev & 0x40) && (kaj_system.pad_now & 0x40)) {
         if (arg0->unk2 == 0) {
             sound_se_play(8);
             mail_goto_ofc(1, 1, 0, 0);
             return;
         }
         menu_back(arg0);
-    } else if (!(D_801E6DA0.unk4 & 0x20) && (D_801E6DA0.unk0 & 0x20) && arg0->unk0 != 0) {
+    } else if (!(kaj_system.pad_prev & 0x20) && (kaj_system.pad_now & 0x20) && arg0->unk0 != 0) {
         menu_confirm(arg0);
     }
     if (arg0->unk2 == 2 && arg0->unk0 == arg0->unk2) {
@@ -2378,7 +2145,7 @@ void text_show_timed(u16 arg0, s16 arg1, s32 arg2, s16 arg3, s32 arg4) {
 
     b = (arg0 == 1 || arg0 == 2);
     if (arg1 != 0) {
-        Unk_801E0368 *g = &D_801E0368;
+        Unk_801E0368_u8017EBF8 *g = &action_vars;
         Unk_801DFFE8 *d = &D_801DFFE8;
         s16 m = 3;
 
@@ -2420,7 +2187,7 @@ void text_show_timed(u16 arg0, s16 arg1, s32 arg2, s16 arg3, s32 arg4) {
             g->unk24E = 1;
         }
     } else {
-        Unk_801E0368 *g = &D_801E0368;
+        Unk_801E0368_u8017EBF8 *g = &action_vars;
         Unk_801DFFE8 *d = &D_801DFFE8;
         s16 m = 1;
 
@@ -2466,7 +2233,7 @@ void text_show_timed(u16 arg0, s16 arg1, s32 arg2, s16 arg3, s32 arg4) {
 }
 
 void text_start_typing(s32 arg0) {
-    Unk_801E0368 *g = &D_801E0368;
+    Unk_801E0368_u8017EBF8 *g = &action_vars;
     Unk_80184230 rect;
     Unk_801A44B8 *p;
 
@@ -2503,13 +2270,13 @@ void text_start_typing(s32 arg0) {
 }
 
 void text_show_profile(u16 arg0) {
-    Unk_801E0368 *g = &D_801E0368;
+    Unk_801E0368_u8017EBF8 *g = &action_vars;
     char buf[0x20];
     Unk_80184230 rect;
     u8 a[8];
     u8 b[8];
-    Unk_801762F4 *e;
-    Unk_801767D4 *d;
+    Npc *e;
+    NpcBody *d;
     Unk_801A44B8 *p;
     Unk_80184230 *r;
     char *pb;
@@ -2558,7 +2325,7 @@ void text_show_profile(u16 arg0) {
 static inline void func_801837F0_inl(s32 t, s16 m, s16 a, u16 b, s16 c, u16 d, s16 e) {
     Unk_80184230 rect;
     Unk_801A44B8 *p;
-    Unk_801E0368 *g2 = &D_801E0368;
+    Unk_801E0368_u8017EBF8 *g2 = &action_vars;
     Unk_801DFFE8 *dp = &D_801DFFE8;
     if (m == 1) {
         text_window_sprite = 0x403;
@@ -2603,8 +2370,8 @@ static inline void func_801837F0_inl(s32 t, s16 m, s16 a, u16 b, s16 c, u16 d, s
 }
 
 void text_exec_command(Unk_8018519C *arg0) {
-    Unk_801E0368 *g = &D_801E0368;
-    Unk_801E076C *q = D_801E076C[0];
+    Unk_801E0368_u8017EBF8 *g = &action_vars;
+    Player *q = D_801E076C[0];
     u16 state = arg0->unk0->unk2;
     Unk_801A44B8 *p;
     char **s;
@@ -2633,10 +2400,10 @@ void text_exec_command(Unk_8018519C *arg0) {
         break;
     case 1:
         if (D_801DFC5C != 0) {
-            q->unk42 |= 0x100;
+            q->flags |= 0x100;
             D_801DFC5C = 0;
             text_show_timed(1, 0, (s32)arg0->unk8[0], atoi(arg0->unk8[5]), 2);
-            q->unk42 &= 0xFEFF;
+            q->flags &= 0xFEFF;
             text_release_cmd();
             sprite_set_visible(0x403, 0);
             sprite_set_visible(0x404, 0);
@@ -2706,8 +2473,8 @@ void text_exec_command(Unk_8018519C *arg0) {
 }
 
 void text_start_narration(s32 arg0) {
-    Unk_801E0368 *g = &D_801E0368;
-    Unk_801E076C *q = D_801E076C[0];
+    Unk_801E0368_u8017EBF8 *g = &action_vars;
+    Player *q = D_801E076C[0];
     Unk_80184230 rect;
     Unk_80184338 *e;
     Unk_801A44B8 *p;
@@ -2742,12 +2509,12 @@ void text_start_narration(s32 arg0) {
     text_draw_next(arg0, 0);
     text_cue_fade_done = 0;
     text_cue_bgm_done = 0;
-    q->unk42 |= 0x100;
+    q->flags |= 0x100;
     g->unk248 = kaj_tss_start(e);
 }
 
 void text_show(s32 arg0, s16 arg1, s16 arg2, u16 arg3, s16 arg4, u16 arg5, s16 arg6) {
-    Unk_801E0368 *g = &D_801E0368;
+    Unk_801E0368_u8017EBF8 *g = &action_vars;
     Unk_801DFFE8 *d = &D_801DFFE8;
     Unk_80184230 rect;
     Unk_801A44B8 *p;
@@ -2795,7 +2562,7 @@ void text_show(s32 arg0, s16 arg1, s16 arg2, u16 arg3, s16 arg4, u16 arg5, s16 a
 }
 
 void text_close(void) {
-    Unk_801E0368 *p = &D_801E0368;
+    Unk_801E0368_u8017EBF8 *p = &action_vars;
 
     text_release_cmd();
     sprite_set_visible(0x403, 0);
@@ -2898,7 +2665,7 @@ void text_narration_step(Unk_80184338 *arg0) {
 void text_narration_end(void) {
     s32 v = -1;
     text_window_sprite = v;
-    D_801E076C[0]->unk42 &= 0xFEFF;
+    D_801E076C[0]->flags &= 0xFEFF;
     D_801E05B0[0] = v;
 }
 
@@ -2927,7 +2694,7 @@ void text_narration_cues(s16 arg0) {
 }
 
 void door_setup(Unk_801854B8 *arg0) {
-    Unk_801E076C *q = D_801E076C[0];
+    Player *q = D_801E076C[0];
     Unk_801844D4 *s = arg0->unk7C;
     Unk_80174FFC rot;
 
@@ -2941,9 +2708,9 @@ void door_setup(Unk_801854B8 *arg0) {
     arg0->unk20 = s->unk6;
     kaj_tmd_load(&arg0->unk78, ((Unk_801844D4 *)arg0->unk7C)->unk18, &arg0->unk28);
     GsInitCoordinate2(NULL, &arg0->unk28);
-    arg0->unk40 = arg0->unk14 - q->unk72 * 12500;
-    arg0->unk44 = arg0->unk18 + q->unk74 * 32000;
-    arg0->unk48 = arg0->unk1C - q->unk76 * 12500;
+    arg0->unk40 = arg0->unk14 - q->cell_x * 12500;
+    arg0->unk44 = arg0->unk18 + q->cell_y * 32000;
+    arg0->unk48 = arg0->unk1C - q->cell_z * 12500;
     rot.unk0 = 0;
     rot.unk2 = (arg0->unk20 << 12) / 360;
     rot.unk4 = 0;
@@ -2955,7 +2722,7 @@ void door_setup(Unk_801854B8 *arg0) {
 
 void door_refresh_all(void) {
     Unk_801DFE80 *list = D_801DFE80;
-    Unk_801E076C *q = D_801E076C[0];
+    Player *q = D_801E076C[0];
     Unk_801854B8 *item;
     Unk_80174FFC rot;
 
@@ -2966,9 +2733,9 @@ void door_refresh_all(void) {
     while (1) {
         item = list->unk8->unk8;
         if (item != NULL) {
-            item->unk40 = item->unk14 - q->unk72 * 12500;
-            item->unk44 = item->unk18 + q->unk74 * 32000;
-            item->unk48 = item->unk1C - q->unk76 * 12500;
+            item->unk40 = item->unk14 - q->cell_x * 12500;
+            item->unk44 = item->unk18 + q->cell_y * 32000;
+            item->unk48 = item->unk1C - q->cell_z * 12500;
             rot.unk0 = 0;
             rot.unk2 = (item->unk20 << 12) / 360;
             rot.unk4 = 0;
@@ -3213,7 +2980,7 @@ void door_move_angle(Unk_80184814 *arg0) {
 
 void door_update_all(void) {
     Unk_801DFE80 *list = D_801DFE80;
-    Unk_801E076C *q = D_801E076C[0];
+    Player *q = D_801E076C[0];
     Unk_80184814 *item;
     Unk_80174FFC rot;
 
@@ -3239,9 +3006,9 @@ void door_update_all(void) {
                 door_move_angle(item);
                 break;
             }
-            item->unk40 = item->unk14 - q->unk72 * 12500;
-            item->unk44 = item->unk18 + q->unk74 * 32000;
-            item->unk48 = item->unk1C - q->unk76 * 12500;
+            item->unk40 = item->unk14 - q->cell_x * 12500;
+            item->unk44 = item->unk18 + q->cell_y * 32000;
+            item->unk48 = item->unk1C - q->cell_z * 12500;
             rot.unk0 = 0;
             rot.unk2 = (item->unk20 << 12) / 360;
             rot.unk4 = 0;

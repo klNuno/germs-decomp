@@ -1,10 +1,6 @@
 #include "common.h"
+#include "game/types.h"
 
-typedef struct Unk_801CCB70 {
-    struct Unk_801CCB70 *unk0;
-    struct Unk_801CCB70 *unk4;
-    void *unk8;
-} Unk_801CCB70;
 typedef struct Unk_801CCAF4 {
     Unk_801CCB70 *unk0;
     Unk_801CCB70 *unk4;
@@ -15,13 +11,7 @@ void *kaj_malloc(u32 size);
 void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
 extern char D_801DFDC4[];
 void free3(void *ptr);
-typedef struct Unk_801E6DA0 {
-    s32 unk0;
-    s32 unk4;
-    s16 unk8;
-    s16 unkA;
-} Unk_801E6DA0;
-extern Unk_801E6DA0 D_801E6DA0;
+extern KajSystem kaj_system;
 u32 PadRead(s32 id);
 void SsInit(void);
 void SsSetTableSize(char *table, s16 s_max, s16 t_max);
@@ -459,24 +449,24 @@ void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3) {
 }
 
 void kaj_pad_reset(s16 arg0) {
-    D_801E6DA0.unk0 = 0;
-    D_801E6DA0.unk4 = 0;
+    kaj_system.pad_now = 0;
+    kaj_system.pad_prev = 0;
     if (arg0 != 0) {
-        D_801E6DA0.unkA = 2;
+        kaj_system.pad_mode = 2;
     } else {
-        D_801E6DA0.unkA = 0;
+        kaj_system.pad_mode = 0;
     }
 }
 
 s32 kaj_pad_read(void) {
     s32 v;
 
-    if (D_801E6DA0.unkA != 1) {
+    if (kaj_system.pad_mode != 1) {
         return 0;
     }
     v = PadRead(1);
-    D_801E6DA0.unk4 = D_801E6DA0.unk0;
-    D_801E6DA0.unk0 = v;
+    kaj_system.pad_prev = kaj_system.pad_now;
+    kaj_system.pad_now = v;
     return v;
 }
 

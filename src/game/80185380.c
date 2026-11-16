@@ -1,43 +1,7 @@
 #include "common.h"
+#include "game/types.h"
 
-typedef struct Unk_801854B8 {
-    u16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
-    s16 unkE;
-    s32 unk10;
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    s16 unk20;
-    s16 unk22;
-    s16 unk24;
-    s16 unk26;
-    s32 unk28;
-    u8 unk2C[0x14];
-    s32 unk40;
-    s32 unk44;
-    s32 unk48;
-    u8 unk4C[0x2C];
-    void *unk78;
-    void *unk7C;
-} Unk_801854B8;
 void free3(void *ptr);
-typedef struct Unk_801855C8 {
-    struct Unk_801855C8 *unk0;
-    struct Unk_801855C8 *unk4;
-    Unk_801854B8 *unk8;
-} Unk_801855C8;
-typedef struct Unk_801DFE80 {
-    Unk_801855C8 *unk0;
-    Unk_801855C8 *unk4;
-    Unk_801855C8 *unk8;
-    s32 unkC;
-} Unk_801DFE80;
 void kaj_ll_insert_before(Unk_801DFE80 *arg0, void *arg1);
 void kaj_ll_insert_after(Unk_801DFE80 *arg0, void *arg1);
 Unk_801DFE80 *D_801DFE80;
@@ -46,10 +10,7 @@ s16 kaj_ll_at_tail(Unk_801DFE80 *arg0);
 void *kaj_malloc(u32 size);
 void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
 extern char D_801DFCE8[];
-typedef struct { s16 unk0; s16 unk2; s32 unk4; void *unk8; } Unk_801A3B5C;
-typedef struct { Unk_801A3B5C *unk0; s32 unk4; s32 unk8; s32 unkC; s32 unk10; s32 unk14; } Unk_801E02D8;
-extern Unk_801E02D8 D_801E02D8[];
-typedef struct { s16 unk0[3]; s16 unk6; s16 unk8[3]; s16 unkE; } Unk_801E1040;
+extern SceneTables object_scene_tables[];
 extern Unk_801E1040 D_801E1040;
 void SsSepSetVol(s16 access_num, s16 seq_num, s16 voll, s16 volr);
 
@@ -189,7 +150,7 @@ void door_set_visible(u16 arg0, s16 arg1) {
 
 void door_fade_step(Unk_801854B8 *arg0) {
     Unk_801E1040 *p = &D_801E1040;
-    Unk_801A3B5C *q = D_801E02D8[0].unk0;
+    Unk_801A3B5C *q = object_scene_tables[0].unk0;
     s32 v;
     s32 t;
 

@@ -1,11 +1,10 @@
 #include "common.h"
+#include "game/types.h"
 
-typedef struct { u16 unk0; s16 unk2; s16 *unk4; s16 *unk8; s16 *unkC; } Unk_801E07C0;
 extern Unk_801E07C0 D_801E07C0;
 typedef struct { s16 unk0; s16 unk2; u8 unk4; u8 unk5; u8 unk6; u8 unk7; } Unk_801DFF68;
 Unk_801DFF68 roadmap_flash;
 void roadmap_shop_topic_menu(s16 arg0, s16 arg1);
-typedef struct { u16 unk0; u16 unk2; } Unk_801DFE68;
 typedef struct { s32 unk0; s32 unk4; s32 unk8; u8 unkC; } Unk_801A20CC;
 typedef struct {
     s16 unk0;
@@ -26,7 +25,6 @@ extern Unk_801E1058 D_801E1058;
 typedef struct { s16 unk0; s16 unk2; } Unk_801A216C;
 extern s32 roadmap_shop_exit_points[];
 void mail_goto_twn(s32 a, s32 b, s32 c, s16 d, s16 e);
-typedef struct { s16 unk0[3]; s16 unk6; s16 unk8[3]; s16 unkE; s16 unk10; } Unk_801E1040;
 extern Unk_801E1040 D_801E1040;
 typedef struct { u8 unk0[0x18]; void (*unk18)(); s32 unk1C; } Unk_801E2DB0;
 extern Unk_801E2DB0 roadmap_prim_handlers[8];
@@ -49,27 +47,7 @@ void roadmap_draw_gt4();
 void kaj_view_clear_vram(void);
 void kaj_view_set_bg_color(u8 arg0, u8 arg1, u8 arg2);
 void InitClip(Unk_801E0D30 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5);
-typedef struct {
-    u8 unk0[0x17];
-    u8 unk17;
-    u8 unk18;
-    u8 unk19;
-    u8 unk1A;
-    u8 unk1B;
-    u8 unk1C[0x40];
-    u8 unk5C[0x28];
-    u32 *unk84;
-    s32 unk88;
-} Unk_801E6FF0;
-typedef struct Unk_801E6DA0 {
-    s32 unk0;
-    s32 unk4;
-    s16 unk8;
-    s16 unkA;
-    u8 unkC[8];
-    s32 unk14;
-} Unk_801E6DA0;
-extern Unk_801E6DA0 D_801E6DA0;
+extern KajSystem kaj_system;
 s16 D_801DFF5C;
 s32 roadmap_daylight_level;
 s32 roadmap_brightness;
@@ -85,7 +63,7 @@ void mod_draw_player(Unk_801E6FF0 *arg0, s32 arg1);
 void vehicle_draw(Unk_801E6FF0 *arg0);
 void block_draw_all(Unk_801E6FF0 *arg0, s32 arg1);
 void kaj_view_flip(Unk_801E6FF0 *arg0);
-typedef struct {
+typedef struct Unk_80188FEC {
     u16 unk0;
     u8 unk2[2];
     char unk4[0x2C];
@@ -98,19 +76,17 @@ s32 roadmap_cmp_weapon_level(Unk_801A216C *arg0, Unk_801A216C *arg1);
 void qsort(void *base, s32 nel, s32 width, s32 (*cmp)());
 extern s16 D_801E0712[];
 extern s16 roadmap_shop_weapons[];
-typedef struct { s16 unk0; s16 unk2; s32 unk4; void *unk8; } Unk_801A3B5C;
-typedef struct { Unk_801A3B5C *unk0; s32 unk4; s32 unk8; s32 unkC; s32 unk10; s32 unk14; } Unk_801E02D8;
-extern Unk_801E02D8 D_801E02D8[];
+extern SceneTables object_scene_tables[];
 void SsSepSetVol(s16 access_num, s16 seq_num, s16 voll, s16 volr);
 void mail_step_frame(u16 a, s16 b, s16 c);
-typedef struct { u8 unk0[0x42]; u16 unk42; } Unk_801E076C;
-extern Unk_801E076C *D_801E076C[];
+extern Player *D_801E076C[];
 s16 D_801DFF78;
 extern char D_801715C4[];
 s16 mail_menu_get_state(void);
 s32 mail_menu_close(void);
 void text_show(char *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
 void text_close(void);
+/* Local view of GameVars: this unit reads 0x14-0x92 as scalars, the shared type has a u16 array there. */
 typedef struct {
     u8 unk0[0x14];
     s16 unk14;
@@ -124,9 +100,9 @@ typedef struct {
     u16 unk92;
     u8 unk94[0x164];
     u16 unk1F8;
-} Unk_801E0368;
+} Unk_801E0368_u8019A5D4;
 void roadmap_shop_pick_weapons(Unk_801A0820 *arg0);
-extern Unk_801E0368 D_801E0368;
+extern Unk_801E0368_u8019A5D4 action_vars;
 s32 mail_menu_open(s16 a, s16 b, s16 c, s16 d, s16 e, s16 *f, s16 g, s16 h, s16 i);
 extern s16 D_801D79F0[];
 extern s16 D_801D79F8[];
@@ -147,20 +123,13 @@ extern s16 D_801D7B10[];
 extern s16 D_801D7B1C[];
 extern s16 D_801D7B28[];
 extern s16 D_801DFD74[];
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    u8 unk4[0x58];
-    Unk_801E076C *unk5C;
-} Unk_801E0710;
-typedef struct { u16 unk0; u8 unk2[2]; char unk4[0x24]; } Unk_801891A4;
 typedef struct { char *unk0; char *unk4; char *unk8; } Unk_801D7B34;
 void roadmap_fade_screen_music(s16 arg0);
-extern Unk_801E0710 D_801E0710;
+extern PlayerStatus player_status;
 extern Unk_801D7B34 roadmap_shop_weapon_advice[];
 Unk_801891A4 *effect_item_find(s16 arg0);
 void text_show_timed(s16 arg0, s16 arg1, char *arg2, s16 arg3, s32 arg4);
-s16 effect_item_use(Unk_801E0710 *a, s16 b, s16 c, s16 d, s16 e);
+s16 effect_item_use(PlayerStatus *a, s16 b, s16 c, s16 d, s16 e);
 void mail_wait(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 void player_reset_triggers(s16 arg0);
 void *memset(void *dst, s32 c, u32 n);
@@ -323,7 +292,7 @@ void *roadmap_add_sprite(Unk_8019FDD8 *arg0, void *arg1, u32 *arg2) {
     SetSemiTrans(sp, 1);
     sp->unkE = arg0->unk1C->unk18;
     if (p->unk6 != 0) {
-        if ((D_801E076C[0]->unk42 & 0x100) && arg0->unk0 == 0x404) {
+        if ((D_801E076C[0]->flags & 0x100) && arg0->unk0 == 0x404) {
             sp->unk4 = roadmap_sprite_colors[arg0->unk8].unk0;
             sp->unk5 = roadmap_sprite_colors[arg0->unk8].unk1;
             sp->unk6 = roadmap_sprite_colors[arg0->unk8].unk2;
@@ -447,8 +416,8 @@ void roadmap_draw_frame(u16 arg0) {
     vehicle_draw(e);
     block_draw_all(e, arg0);
     kaj_view_flip(e);
-    if (D_801E6DA0.unkA == 2) {
-        D_801E6DA0.unkA = 1;
+    if (kaj_system.pad_mode == 2) {
+        kaj_system.pad_mode = 1;
     }
 }
 
@@ -604,7 +573,7 @@ void roadmap_shop_topic_menu(s16 arg0, s16 arg1) {
 }
 
 void roadmap_shop_say_reply(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
-    Unk_801E076C *p = D_801E076C[0];
+    Player *p = D_801E076C[0];
     s16 r = mail_menu_get_state();
     s16 v;
 
@@ -649,14 +618,14 @@ void roadmap_shop_say_reply(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
             if (arg0 == 8) {
                 v = D_801DFF78;
                 if (v == -1) {
-                    if (p->unk42 & 0x100) {
-                        p->unk42 &= 0xFEFF;
+                    if (p->flags & 0x100) {
+                        p->flags &= 0xFEFF;
                     }
                     text_show(D_801715C4, 3, -1, 0, v, 0, arg3);
                 }
             } else {
-                if (p->unk42 & 0x100) {
-                    p->unk42 &= 0xFEFF;
+                if (p->flags & 0x100) {
+                    p->flags &= 0xFEFF;
                 }
                 text_close();
             }
@@ -666,7 +635,7 @@ void roadmap_shop_say_reply(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
 }
 
 void roadmap_fade_screen_music(s16 arg0) {
-    Unk_801A3B5C *q = D_801E02D8[0].unk0;
+    Unk_801A3B5C *q = object_scene_tables[0].unk0;
     Unk_801E1040 *p = &D_801E1040;
     s32 t;
     s32 v;
@@ -679,13 +648,13 @@ void roadmap_fade_screen_music(s16 arg0) {
     }
     while (1) {
         if (arg0 != 0) {
-            p->unkE += D_801E6DA0.unk14 * 0x85;
+            p->unkE += kaj_system.vsync_delta * 0x85;
             if (p->unkE >= 0x1000) {
                 p->unkE = 0x1000;
                 break;
             }
         } else {
-            p->unkE -= D_801E6DA0.unk14 * 0x85;
+            p->unkE -= kaj_system.vsync_delta * 0x85;
             if (p->unkE <= 0x80) {
                 p->unkE = 0x80;
                 break;
@@ -714,10 +683,10 @@ void roadmap_fade_screen_music(s16 arg0) {
 INCLUDE_RODATA("asm/nonmatchings/game/8019A5D4", D_801715C4);
 
 s16 roadmap_shop_finish(s16 arg0) {
-    Unk_801E0710 *q = &D_801E0710;
+    PlayerStatus *q = &player_status;
     Unk_801E1058 *p = &D_801E1058;
-    Unk_801E0368 *r = &D_801E0368;
-    Unk_801E076C *e = q->unk5C;
+    Unk_801E0368_u8019A5D4 *r = &action_vars;
+    Player *e = q->player;
     char buf[0x80];
     Unk_801D7B34 *t;
     Unk_80188FEC *a;
@@ -737,9 +706,9 @@ s16 roadmap_shop_finish(s16 arg0) {
             t = &roadmap_shop_weapon_advice[p->unkE];
             a = effect_weapon_find(p->unk12[0]);
             if (a != NULL) {
-                if ((s16)a->unk30 == q->unk2) {
+                if ((s16)a->unk30 == q->level) {
                     s = t->unk4;
-                } else if ((s16)a->unk30 < q->unk2) {
+                } else if ((s16)a->unk30 < q->level) {
                     s = t->unk8;
                 } else {
                     s = t->unk0;
@@ -761,8 +730,8 @@ s16 roadmap_shop_finish(s16 arg0) {
                     sprintf(buf, " 8%s2\202\314\222n\220\175\202\313", b->unk4);
                     text_show_timed(1, 1, buf, 2, 2);
                     text_show(D_801715C4, 3, -1, 0, -1, 0, 1);
-                    if (e->unk42 & 0x100) {
-                        e->unk42 &= 0xFEFF;
+                    if (e->flags & 0x100) {
+                        e->flags &= 0xFEFF;
                     }
                 }
             }
@@ -813,7 +782,7 @@ s16 roadmap_shop_finish(s16 arg0) {
                 text_show(" 2\202\334\202\275\201A\202\346\202\353\202\265\202\255\202\250\212\350\202\242\202\265\202\334\202\267", 3, -1, 0, -1, 0, 1);
             }
         } else {
-            if (q->unk0 == 0xFF && p->unkE == 0) {
+            if (q->energy == 0xFF && p->unkE == 0) {
                 p->unkE = 1;
             }
             for (i = 0; i < 3; i++) {
@@ -864,17 +833,17 @@ s16 roadmap_shop_finish(s16 arg0) {
     return ret;
 }
 
-s16 roadmap_shop_update_input(Unk_801E0710 *arg0) {
+s16 roadmap_shop_update_input(PlayerStatus *arg0) {
     Unk_801E1058 *p = &D_801E1058;
     Unk_801DFE68 *q = &D_801DFE68;
-    Unk_801E076C *e = arg0->unk5C;
+    Player *e = arg0->player;
     s16 sel;
 
     if (D_801E1058.unk0 == 0) {
         return 0;
     }
     sel = mail_menu_get_state();
-    if (!(D_801E6DA0.unk4 & 0x20) && (D_801E6DA0.unk0 & 0x20)) {
+    if (!(kaj_system.pad_prev & 0x20) && (kaj_system.pad_now & 0x20)) {
         if (p->unk2 == 3 && sel == 0) {
             sound_se_play(0x11);
             roadmap_shop_topic_menu(0, 1);
@@ -959,14 +928,14 @@ s16 roadmap_shop_update_input(Unk_801E0710 *arg0) {
             return 1;
         }
         roadmap_shop_say_reply(q->unk0, p->unk4, p->unk6, 0);
-    } else if (!(D_801E6DA0.unk4 & 0x40) && (D_801E6DA0.unk0 & 0x40)) {
+    } else if (!(kaj_system.pad_prev & 0x40) && (kaj_system.pad_now & 0x40)) {
         sound_se_play(8);
         if (p->unk2 == 3 && sel == 0) {
             roadmap_shop_topic_menu(0, 0);
             /* " 2話が聞きたくなったら, いつでもおいで" */
             text_show_timed(1, 1, " 2\230b\202\252\225\267\202\253\202\275\202\255\202\310\202\301\202\275\202\347, \202\242\202\302\202\305\202\340\202\250\202\242\202\305", 1, 1);
-            if (e->unk42 & 0x100) {
-                e->unk42 &= 0xFEFF;
+            if (e->flags & 0x100) {
+                e->flags &= 0xFEFF;
             }
         } else if (p->unk2 == 0 && sel == 1) {
             roadmap_shop_say_reply(q->unk0, p->unk4, p->unk6, 1);
@@ -978,7 +947,7 @@ s16 roadmap_shop_update_input(Unk_801E0710 *arg0) {
             roadmap_shop_say_reply(q->unk0, p->unk4, p->unk6, 0);
             return 1;
         }
-    } else if (!(D_801E6DA0.unk4 & 0x1000) && (D_801E6DA0.unk0 & 0x1000)) {
+    } else if (!(kaj_system.pad_prev & 0x1000) && (kaj_system.pad_now & 0x1000)) {
         if (sel == 0) {
             if (p->unk2 == 3) {
                 sound_se_play(0xF);
@@ -993,7 +962,7 @@ s16 roadmap_shop_update_input(Unk_801E0710 *arg0) {
                 p->unk10 = mail_menu_move(1);
             }
         }
-    } else if (!(D_801E6DA0.unk4 & 0x4000) && (D_801E6DA0.unk0 & 0x4000)) {
+    } else if (!(kaj_system.pad_prev & 0x4000) && (kaj_system.pad_now & 0x4000)) {
         if (sel == 0) {
             if (p->unk2 == 3) {
                 sound_se_play(0xF);
@@ -1014,8 +983,8 @@ s16 roadmap_shop_update_input(Unk_801E0710 *arg0) {
 }
 
 s16 roadmap_shop_open_menu(s16 arg0, s32 arg1) {
-    Unk_801E076C *e = D_801E076C[0];
-    Unk_801E0368 *q = &D_801E0368;
+    Player *e = D_801E076C[0];
+    Unk_801E0368_u8019A5D4 *q = &action_vars;
     Unk_801E1058 *p = &D_801E1058;
     s32 j;
     s16 m;
@@ -1125,7 +1094,7 @@ s16 roadmap_shop_open_menu(s16 arg0, s32 arg1) {
         p->unk18 = roadmap_shop_weapons;
         break;
     case 8:
-        e->unk42 |= 0x100;
+        e->flags |= 0x100;
         if (arg1 != 0x300600) {
             goto fail;
         }
@@ -1155,7 +1124,7 @@ fail:
 }
 
 void roadmap_shop_init(s16 arg0) {
-    Unk_801E0368 *q = &D_801E0368;
+    Unk_801E0368_u8019A5D4 *q = &action_vars;
     Unk_801E1058 *p = &D_801E1058;
     s32 i;
     s32 j;

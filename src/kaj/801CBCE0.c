@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/types.h"
 
 s32 kaj_event_pop(s32 *arg0);
 void kaj_event_run_tss(s32 *arg0);
@@ -17,13 +18,6 @@ s32 kaj_event_alarm_id;
 s32 kaj_event_pending;
 void free3(void *ptr);
 void kaj_tss_release(s32 arg0);
-typedef struct Unk_801CC1E8 {
-    s32 unk0;
-    u32 unk4;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-} Unk_801CC1E8;
 void *kaj_malloc(u32 size);
 void *memcpy(void *dst, void *src, u32 n);
 s32 kaj_event_pending_data;
@@ -34,27 +28,6 @@ void kaj_event_queue_grow(void);
 void kaj_timer_add_alarm(s32 arg0, s32 arg1, s32 arg2);
 void kaj_timer_cancel(s32 arg0);
 s32 kaj_event_set_alarm(s32 arg0, s32 arg1, s32 arg2);
-typedef struct Unk_801D12A8 {
-    struct Unk_801D12A8 *unk0;
-    u8 unk4[0x1C];
-    s16 unk20;
-    s16 unk22;
-    s16 unk24;
-    s16 unk26;
-    s16 unk28;
-    u8 unk2A[0x2];
-    s32 unk2C;
-    void (*unk30)(struct Unk_801D12A8 *);
-    void (*unk34)(struct Unk_801D12A8 *);
-    void (*unk38)(struct Unk_801D12A8 *);
-    void *unk3C;
-} Unk_801D12A8;
-typedef struct {
-    s32 unk0;
-    Unk_801D12A8 *unk4;
-    Unk_801D12A8 *unk8;
-    Unk_801D12A8 *unkC;
-} Unk_801DFBD0;
 extern Unk_801DFBD0 kaj_tss_table;
 void kaj_tss_free(Unk_801D12A8 *arg0);
 void kaj_tss_finish(Unk_801D12A8 *arg0);

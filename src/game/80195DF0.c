@@ -1,143 +1,18 @@
 #include "common.h"
+#include "game/types.h"
 
-typedef struct { s32 unk0; s32 unk4; s32 unk8; s32 unkC; s32 unk10; s32 unk14; } Unk_80192E18;
-typedef struct { s32 unk0; s32 unk4; Unk_80192E18 *unk8; void *unkC; } Unk_80192F20;
 void free3(void *ptr);
-typedef struct { s32 unk0; u16 unk4; s16 unk6; s32 unk8; s32 unkC; } Unk_801E0600;
-typedef struct {
-    s32 unk0;
-    s16 unk4[10];
-    s32 unk18;
-    s32 unk1C;
-    s32 unk20;
-    u8 unk24[0x2C];
-} Unk_801E0620_A0;
-typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    u8 unkC[4];
-    s16 unk10;
-    s16 unk12;
-    s16 unk14;
-    u8 unk16[0x26];
-    s16 unk3C;
-    s16 unk3E;
-    s16 unk40;
-    u16 unk42;
-    s16 unk44;
-    u16 unk46;
-    s16 unk48;
-    s16 unk4A;
-    s16 unk4C;
-    s16 unk4E;
-    s16 unk50;
-    u8 unk52[2];
-    s32 unk54;
-    s32 unk58;
-    s32 unk5C;
-    u8 unk60[0xC];
-    s16 unk6C;
-    s16 unk6E;
-    s16 unk70;
-    s16 unk72;
-    s16 unk74;
-    s16 unk76;
-    s16 unk78;
-    u8 pad7A[0x2];
-    u8 unk7C[0x14];
-    s32 unk90[3];
-    s32 unk9C;
-    Unk_801E0620_A0 unkA0[1];
-} Unk_801E0620;
 s32 D_801DFF48;
 extern Unk_801E0600 D_801E0600;
 extern Unk_801E0600 D_801E0610;
-extern Unk_801E0620 D_801E0620;
+extern Player player_character;
 s16 effect_item_add(s16 arg0, s16 arg1);
 s16 effect_item_remove(s16 arg0, s16 arg1);
 void effect_weapon_unequip(s16 arg0);
 s16 effect_weapon_add(s16 arg0, s16 arg1);
-typedef struct { u8 unk0[0x16]; u16 unk16; } Unk_8018E56C;
-typedef struct Unk_801E076C {
-    u8 unk0[0x3C];
-    s16 unk3C;
-    u8 unk3E[2];
-    u16 unk40;
-    u16 unk42;
-    u8 unk44[2];
-    u16 unk46;
-    u8 unk48[2];
-    s16 unk4A;
-    u8 unk4C[2];
-    s16 unk4E;
-    s16 unk50;
-    u8 unk52[2];
-    s32 unk54;
-    s32 unk58;
-    s32 unk5C;
-    s32 unk60;
-    u8 unk64[4];
-    s32 unk68;
-    s16 unk6C;
-    s16 unk6E;
-    u8 unk70[8];
-    s16 unk78;
-} Unk_801E076C;
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4[2];
-    s16 unk8[0x14];
-    s16 unk30;
-    s16 unk32[8];
-    s16 unk42;
-    s16 unk44;
-    s16 unk46;
-    s16 unk48;
-    u8 unk4A[2];
-    s32 unk4C;
-} Unk_801E0770;
-typedef struct { u16 unk0; s16 unk2; s16 unk4; s16 unk6; s16 unk8; u8 unkA; u8 unkB; s16 unkC; u8 unkE; u8 unkF; s16 unk10; u16 unk12; s16 unk14; s16 unk16; s16 unk18; s16 unk1A; s16 unk1C; s16 unk1E; s32 unk20; s32 unk24; s32 unk28; s32 unk2C; s32 unk30; s32 unk34; s16 unk38; s16 unk3A; s16 unk3C; s16 unk3E; u16 unk40; s16 unk42; u8 unk44; u8 unk45; s16 unk46; s32 unk48; } Unk_801762F4;
-typedef struct Unk_801E0710 {
-    s16 unk0;
-    s16 unk2;
-    u32 unk4;
-    s32 unk8;
-    s16 unkC;
-    s16 unkE;
-    s16 unk10;
-    s16 unk12;
-    s16 unk14;
-    s16 unk16;
-    s16 unk18;
-    s16 unk1A;
-    s16 unk1C;
-    s16 unk1E;
-    s16 unk20;
-    s16 unk22;
-    s16 unk24;
-    s16 unk26;
-    s16 unk28;
-    s16 unk2A;
-    s16 unk2C;
-    u8 unk2E[6];
-    s16 unk34;
-    s16 unk36;
-    u8 unk38[2];
-    s16 unk3A[5];
-    s16 unk44;
-    s16 unk46;
-    s16 unk48;
-    s16 unk4A;
-    Unk_801762F4 *unk4C;
-    Unk_8018E56C *unk50;
-    u8 unk54[4];
-    Unk_801E0770 *unk58;
-    Unk_801E076C *unk5C;
-} Unk_801E0710;
-extern Unk_801E0710 D_801E0710;
-void event_draw_gauge(Unk_801E0710 *arg0);
+extern PlayerStatus player_status;
+void event_draw_gauge(PlayerStatus *arg0);
+/* Local view of GameVars: this unit reads 0x0-0xB4 as s16 arrays and scalars, the shared type has one u16 array. */
 typedef struct {
     s16 unk0[0x14];
     s16 unk28[0x1C];
@@ -152,13 +27,10 @@ typedef struct {
     u8 padBE[0x22];
     u8 unkE0[0x16C];
     s16 unk24C;
-} Unk_801E0368;
-extern Unk_801E0368 D_801E0368;
-typedef struct { s32 unk0; s32 unk4; s32 unk8; s32 unkC; } Unk_80192F60;
-typedef struct { s16 unk0; s16 unk2; s16 unk4; } Unk_801DFF30;
+} Unk_801E0368_u80195DF0;
+extern Unk_801E0368_u80195DF0 action_vars;
 Unk_801DFF30 object_room_phone;
 void text_show(char *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
-typedef struct { s16 unk0; s16 unk2; s16 unk4; } Unk_801DFF28;
 Unk_801DFF28 object_room_storage;
 u16 D_801DFD58;
 u16 D_801DFD5A;
@@ -167,7 +39,7 @@ void sprite_set_visible(s32 arg0, s32 arg1);
 void sprite_set_clut_entry(s32 arg0, s32 arg1, s32 arg2);
 void text_close(void);
 void mail_wait(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
-extern Unk_801E076C *D_801E076C[];
+extern Player *D_801E076C[];
 Unk_8018E56C *mod_find(u16 arg0);
 void mod_set_anim(void *arg0, s16 arg1, s16 arg2);
 void object_room_play_call(s16 arg0);
@@ -179,67 +51,18 @@ void object_room_main(void);
 void menu_run(void);
 void menu_card_run(s32 arg0, s32 arg1);
 void mail_goto_ofc(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
-typedef struct {
-    s32 unk0;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
-    s16 unkE;
-    u8 unk10[2];
-    u16 unk12;
-} Unk_801DFFE8;
 extern Unk_801DFFE8 D_801DFFE8;
-typedef struct { void *unk0; s32 unk4; void *unk8; } Unk_80174B10;
 extern void *D_801E0760[];
 Unk_80174B10 *action_find_set(s16 arg0);
 Unk_80174B10 *action_run_set(Unk_80174B10 *arg0, s32 arg1, s32 arg2);
-typedef struct { s32 unk0; s32 unk4; s32 unk8; s32 unkC; s32 unk10; } Unk_801CC1E8;
 s16 D_801DFF4C;
 void UnDeliverEvent(u32 ev, u32 spec);
 Unk_801CC1E8 *kaj_event_push(s32 arg0);
 extern s16 player_part_damage_caps[];
-void event_draw_limb_status(Unk_801E0710 *arg0);
+void event_draw_limb_status(PlayerStatus *arg0);
 void event_set_blink(s16 arg0, s16 arg1);
-typedef struct {
-    u16 unk0;
-    u16 unk2;
-    u8 unk4[0x10];
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    u8 unk20[0x1C];
-    s16 unk3C;
-    s16 unk3E;
-    s16 unk40;
-} Unk_8019A07C_3C;
-typedef struct {
-    u8 unk0[0x3C];
-    Unk_8019A07C_3C *unk3C;
-} Unk_8019A07C;
 void player_finish_death(void);
-typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    s32 unk20;
-    s32 unk24;
-    s32 unk28;
-    s32 unk2C;
-    s32 unk30;
-    s32 unk34;
-    u8 unk38[4];
-    Unk_801762F4 *unk3C;
-    u8 unk40[0x1C];
-    void *unk5C[1];
-} Unk_801E02D8;
-extern Unk_801E02D8 D_801E02D8;
+extern SceneTables object_scene_tables;
 s16 D_801DFF18;
 s32 object_aset_count;
 extern u8 object_iff_file_pos[];
@@ -247,9 +70,8 @@ s32 CdPosToInt(void *p);
 void *CdIntToPos(s32 i, void *p);
 s32 CdControl(u8 com, u8 *param, u8 *result);
 void sound_se_play(s32 arg0);
-void player_set_view(Unk_801E076C *arg0, s16 arg1);
+void player_set_view(Player *arg0, s16 arg1);
 void event_advance_clock(s16 a, s16 b);
-typedef struct { s32 unk0; u8 *unk4; u8 *unk8; s32 unkC; s32 unk10; s16 unk14; } Unk_801A3970;
 extern Unk_801A3970 D_801E05C0;
 s32 CdMode(void);
 void *CdLastPos(void);
@@ -258,19 +80,13 @@ s32 CdReadSync(s32 mode, u8 *result);
 s32 VSync(s32 mode);
 u32 *sound_se_alloc_header(u8 *arg0, s32 arg1, Unk_801A3970 *arg2);
 void sound_vab_open_head(Unk_801A3970 *arg0);
-typedef struct Unk_801E6DA0 {
-    s32 unk0;
-    s32 unk4;
-    s16 unk8;
-    s16 unkA;
-} Unk_801E6DA0;
-extern Unk_801E6DA0 D_801E6DA0;
+extern KajSystem kaj_system;
 s32 kaj_pad_read(void);
 s16 object_room_storage_input(void);
-s16 effect_item_input(Unk_801E0710 *arg0, s16 arg1);
-void object_room_do_action(Unk_801E0710 *arg0);
+s16 effect_item_input(PlayerStatus *arg0, s16 arg1);
+void object_room_do_action(PlayerStatus *arg0);
 void player_start_move_to(s16 arg0, u16 arg1, s32 arg2, s32 arg3, s32 arg4, s16 arg5, s16 arg6, s16 arg7, s32 arg8);
-void player_handle_pad(Unk_801E0710 *arg0, s32 arg1, s32 arg2);
+void player_handle_pad(PlayerStatus *arg0, s32 arg1, s32 arg2);
 s16 D_801DFD54;
 extern s32 D_801DFF50;
 extern s32 D_801DFED8;
@@ -292,13 +108,12 @@ void sound_bgm_close(void);
 void sound_bgm_stop(void);
 void sprite_delete(s32 arg0);
 void thing_free_all(void);
-extern Unk_801E0770 D_801E0770;
+extern Inventory player_inventory;
 void *memset(void *dst, s32 c, u32 n);
 void RotMatrix(s16 *arg0, void *arg1);
 void ApplyMatrixLV(void *arg0, void *arg1, void *arg2);
 void GsSetView2(void *arg0);
 void GsInitCoordinate2(void *super, void *base);
-typedef struct { s16 unk0[5]; s16 unkA; char *unkC; s16 unk10; s16 unk12; s32 unk14; s32 unk18; s32 unk1C; } Unk_801E0340;
 extern Unk_801E0340 D_801E0340;
 extern s32 player_str_scene_cmn[];
 void mail_goto_building(s32 arg0, s32 *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
@@ -306,7 +121,7 @@ extern s16 D_801DFC76;
 void roadmap_start_flash(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 extern s16 D_801E1046[];
 u16 roadmap_get_state(void);
-s16 ai_in_aim_cone(Unk_801762F4 *arg0, s32 arg1, s16 arg2);
+s16 ai_in_aim_cone(Npc *arg0, s32 arg1, s16 arg2);
 extern char D_80170EDC[];
 extern char D_80170EFC[];
 extern char D_80170F14[];
@@ -328,6 +143,7 @@ typedef struct {
     s32 unk34;
     s32 unk38;
 } Unk_801E032C;
+/* Local view of Unk_801E1158: this unit reads 0x14 as s16 and 0x1C as an s16 array, the shared type has an s32 and a record there. */
 typedef struct {
     u8 unk0[4];
     s16 unk4;
@@ -350,24 +166,23 @@ typedef struct {
     s32 unk5C;
     u8 unk60[4];
     s32 unk64;
-} Unk_801E1158;
+} Unk_801E1158_u80195DF0;
 void RotMatrixZXY(s16 *r, void *m);
 void GsSetLsMatrix(void *m);
 void RotTrans(void *v0, s32 *v1, s32 *flag);
-typedef struct { s16 unk0[3]; s16 unk6; s16 unk8[3]; s16 unkE; } Unk_801E1040;
 extern Unk_801E1040 D_801E1040;
-void player_wrap_cell(Unk_801E0620 *arg0);
+void player_wrap_cell(Player *arg0);
 void SetFogNearFar(s32 a, s32 b, s32 h);
 void RotMatrixZYX(s16 *r, void *m);
-void player_start_death(u16 arg0, Unk_801E0710 *arg1, Unk_801E0620 *arg2);
-void event_update_hud(Unk_801E0710 *a);
+void player_start_death(u16 arg0, PlayerStatus *arg1, Player *arg2);
+void event_update_hud(PlayerStatus *a);
 void block_stream_update(u16 arg0);
 void block_update_visibility(u16 arg0);
-void player_move_on_foot(Unk_801E0620 *arg0, u16 arg1, s16 arg2, s16 arg3);
-void event_draw_compass(Unk_801E0620 *arg0);
-void player_move_in_car(Unk_801E0620 *arg0, s32 arg1);
-void player_move_in_train(Unk_801E0620 *arg0, u16 arg1);
-void sound_footstep_update(Unk_801E0620 *arg0);
+void player_move_on_foot(Player *arg0, u16 arg1, s16 arg2, s16 arg3);
+void event_draw_compass(Player *arg0);
+void player_move_in_car(Player *arg0, s32 arg1);
+void player_move_in_train(Player *arg0, u16 arg1);
+void sound_footstep_update(Player *arg0);
 int rand(void);
 typedef struct {
     s16 unk0;
@@ -409,47 +224,22 @@ typedef struct {
     void *unk38;
     Unk_80198ADC_3C *unk3C;
 } Unk_80198ADC;
-typedef struct { u16 unk0; s16 unk2; s16 *unk4; s16 *unk8; s16 *unkC; } Unk_801E07C0;
-typedef struct Unk_801E1118 {
-    s32 unk0;
-    s32 unk4;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
-    u16 unkE;
-    u16 unk10;
-    u16 unk12;
-    s16 unk14;
-    s16 unk16;
-    u8 unk18[0x4];
-    s32 unk1C;
-    s32 unk20;
-    s32 unk24;
-    s32 unk28;
-    s16 unk2C;
-    s16 unk2E;
-    s16 unk30;
-    u8 unk32[0x2];
-    s16 unk34;
-    s16 unk36;
-    s16 unk38;
-} Unk_801E1118;
 extern Unk_801E1118 D_801E1118;
 extern Unk_801E032C *D_801E032C[];
 s16 player_try_slide(s16 arg0, s16 arg1, s32 *arg2, s32 *arg3, s32 arg4, s32 arg5);
-void player_update_view(Unk_801E0620 *arg0, s16 *arg1, u16 arg2);
+void player_update_view(Player *arg0, s16 *arg1, u16 arg2);
 s32 func_8017BBB0(s32 arg0, s32 arg1, s32 *arg2);
-s16 player_check_ground(Unk_801E0620 *arg0, s32 arg1, s16 arg2, s16 arg3);
+s16 player_check_ground(Player *arg0, s32 arg1, s16 arg2, s16 arg3);
 s32 rsin(s32 a);
 s32 rcos(s32 a);
-extern Unk_801E1158 D_801E1158;
-void player_place_in_car(Unk_801E0620 *arg0, Unk_801E032C *arg1, Unk_801E1158 *arg2, s32 arg3, s32 arg4, s16 arg5, s16 arg6);
+extern Unk_801E1158_u80195DF0 D_801E1158;
+void player_place_in_car(Player *arg0, Unk_801E032C *arg1, Unk_801E1158_u80195DF0 *arg2, s32 arg3, s32 arg4, s16 arg5, s16 arg6);
 s32 block_fit_ground_tilt(s32 *arg0, s32 arg1);
 s32 SquareRoot0(s32 arg0);
 s32 player_pick_hit_part(s16 arg0);
 s16 mail_angle_to_dir8(s16 a);
 void player_add_skill_exp(s16 arg0, s16 arg1);
-typedef struct {
+typedef struct Unk_80188FEC {
     u16 unk0;
     u16 unk2;
     u8 unk4[0x20];
@@ -477,8 +267,8 @@ typedef struct {
     s32 unk58;
     s32 unk5C;
 } Unk_80188FEC;
-void npc_apply_damage(Unk_801762F4 *arg0, s32 arg1, s32 arg2, s16 arg3);
-u16 npc_get_radius(Unk_801762F4 *arg0);
+void npc_apply_damage(Npc *arg0, s32 arg1, s32 arg2, s16 arg3);
+u16 npc_get_radius(Npc *arg0);
 Unk_80188FEC *effect_weapon_find(s16 arg0);
 void player_move_to_step(Unk_80198ADC *arg0);
 void player_move_to_done(Unk_8019A07C *arg0);
@@ -498,19 +288,17 @@ s32 block_find_surface(s32 arg0, s32 arg1, s32 *arg2, s16 arg3);
 s32 block_find_surface_nearest(s32 arg0, s32 arg1, s32 arg2, s32 *arg3);
 s16 mod_npcrec_find_at_point(s32 arg0, s32 arg1, s32 arg2);
 s16 npc_find_at_point(s16 arg0, s32 arg1, s32 arg2, s32 arg3);
-Unk_801762F4 *npc_find(s16 arg0, u16 arg1);
+Npc *npc_find(s16 arg0, u16 arg1);
 u16 thing_hit_test(s32 arg0, s32 arg1, s32 arg2, u16 arg3);
 s16 D_801DFD5C;
 s16 D_801DFD5E;
 extern s32 D_801E6DB4[];
 s32 mail_exp_for_level(s32 a);
 void effect_weapon_calc_rate(s32 arg0);
-typedef struct { s32 unk0; s16 unk4; } Unk_801AC55C;
-typedef struct { s16 unk0; s16 unk2; u8 unk4[0x8]; Unk_801AC55C *unkC; Unk_801AC55C *unk10; } Unk_801D7FB0;
 extern Unk_801E07C0 D_801E07C0;
 extern Unk_801D7FB0 D_801D7FB0;
 void effect_start_sprite_slide(s32 arg0, u16 arg1, s32 arg2);
-void player_update_map_cursor(Unk_801E076C *arg0, Unk_801E07C0 *arg1);
+void player_update_map_cursor(Player *arg0, Unk_801E07C0 *arg1);
 void effect_weapon_calc_rate(s32 a);
 
 INCLUDE_RODATA("asm/nonmatchings/game/80195DF0", D_80170EDC);
@@ -590,7 +378,7 @@ s16 player_try_slide(s16 arg0, s16 arg1, s32 *arg2, s32 *arg3, s32 arg4, s32 arg
     return ret;
 }
 
-void player_move_in_train(Unk_801E0620 *arg0, u16 arg1) {
+void player_move_in_train(Player *arg0, u16 arg1) {
     s32 v[3];
     s16 rot[3];
     s16 dir[3];
@@ -609,10 +397,10 @@ void player_move_in_train(Unk_801E0620 *arg0, u16 arg1) {
     s16 moved;
     s16 step;
 
-    ox = arg0->unk54;
-    oz = arg0->unk5C;
-    rot[0] = (-arg0->unk6C << 12) / 360;
-    rot[1] = (-arg0->unk6E << 12) / 360;
+    ox = arg0->pos_x;
+    oz = arg0->pos_z;
+    rot[0] = (-arg0->pitch << 12) / 360;
+    rot[1] = (-arg0->yaw << 12) / 360;
     rot[2] = (-arg0->unk70 << 12) / 360;
     col = 0x1000000;
     moved = 0;
@@ -620,8 +408,8 @@ void player_move_in_train(Unk_801E0620 *arg0, u16 arg1) {
     y = 0;
     p = &D_801E1118;
     m = D_801E032C[0];
-    if (arg0->unk42 & 0x800) {
-        arg0->unk44 = 0;
+    if (arg0->flags & 0x800) {
+        arg0->move_state = 0;
     } else {
         dir[0] = 0;
         dir[2] = 0;
@@ -631,13 +419,13 @@ void player_move_in_train(Unk_801E0620 *arg0, u16 arg1) {
         dir[1] = ((p->unk36 + 90) << 12) / 360;
         if (arg0->unk3E != 0) {
             block_update_visibility(arg1);
-            col = func_8017BBB0(arg0->unk54, arg0->unk5C, &y);
+            col = func_8017BBB0(arg0->pos_x, arg0->pos_z, &y);
             if (arg0->unk3E == 1) {
                 col = 0x1000000;
             }
             arg0->unk3E = 0;
             player_check_ground(arg0, col, 0, 0);
-            arg0->unk58 = y + arg0->unk78;
+            arg0->pos_y = y + arg0->unk78;
         } else {
             dx = (arg0->unk50 * rsin(cam[1])) >> 12;
             dz = (arg0->unk50 * rcos(cam[1])) >> 12;
@@ -654,25 +442,25 @@ void player_move_in_train(Unk_801E0620 *arg0, u16 arg1) {
             loop:
                 GsSetLsMatrix(m->unk1C);
                 RotTrans(&p->unk2C, v, &flag);
-                arg0->unk54 = v[0];
-                arg0->unk5C = v[2];
+                arg0->pos_x = v[0];
+                arg0->pos_z = v[2];
                 block_stream_update(arg1);
                 block_update_visibility(arg1);
-                col = func_8017BBB0(arg0->unk54, arg0->unk5C, &y);
+                col = func_8017BBB0(arg0->pos_x, arg0->pos_z, &y);
             } else {
                 block_stream_update(arg1);
                 block_update_visibility(arg1);
             }
             if (player_check_ground(arg0, col, moved, step) != 0) {
-                arg0->unk58 = y + arg0->unk78;
+                arg0->pos_y = y + arg0->unk78;
             } else {
                 step = player_try_slide(2, step, (s32 *)&p->unk2C, (s32 *)&p->unk30, dx, dz);
                 if (step != -1) {
                     goto loop;
                 }
-                arg0->unk54 = ox;
-                arg0->unk5C = oz;
-                arg0->unk44 = 5;
+                arg0->pos_x = ox;
+                arg0->pos_z = oz;
+                arg0->move_state = 5;
             }
             player_wrap_cell(arg0);
         }
@@ -680,7 +468,7 @@ void player_move_in_train(Unk_801E0620 *arg0, u16 arg1) {
     player_update_view(arg0, rot, 2);
 }
 
-void player_place_in_car(Unk_801E0620 *arg0, Unk_801E032C *arg1, Unk_801E1158 *arg2, s32 arg3, s32 arg4, s16 arg5, s16 arg6) {
+void player_place_in_car(Player *arg0, Unk_801E032C *arg1, Unk_801E1158_u80195DF0 *arg2, s32 arg3, s32 arg4, s16 arg5, s16 arg6) {
     s32 v[3];
     s16 rot[3];
     s32 flag;
@@ -688,9 +476,9 @@ void player_place_in_car(Unk_801E0620 *arg0, Unk_801E032C *arg1, Unk_801E1158 *a
     arg1->unk4 += arg3;
     arg1->unkC += arg4;
     arg1->unk12 += arg5;
-    arg1->unk30 = arg1->unk4 - arg0->unk72 * 0x30D4;
-    arg1->unk34 = arg1->unk8 + arg0->unk74 * 0x7D00;
-    arg1->unk38 = arg1->unkC - arg0->unk76 * 0x30D4;
+    arg1->unk30 = arg1->unk4 - arg0->cell_x * 0x30D4;
+    arg1->unk34 = arg1->unk8 + arg0->cell_y * 0x7D00;
+    arg1->unk38 = arg1->unkC - arg0->cell_z * 0x30D4;
     rot[0] = (arg1->unk10 << 12) / 360;
     rot[1] = (arg1->unk12 << 12) / 360;
     rot[2] = (arg1->unk14 << 12) / 360;
@@ -700,17 +488,17 @@ void player_place_in_car(Unk_801E0620 *arg0, Unk_801E032C *arg1, Unk_801E1158 *a
     }
     GsSetLsMatrix(arg1->unk1C);
     RotTrans(arg2->unk1C, v, &flag);
-    arg0->unk54 = v[0];
-    arg0->unk58 = v[1] - 0x172;
-    arg0->unk5C = v[2];
-    arg0->unk6C = arg2->unk24;
-    arg0->unk6E = arg2->unk26 + arg1->unk12;
+    arg0->pos_x = v[0];
+    arg0->pos_y = v[1] - 0x172;
+    arg0->pos_z = v[2];
+    arg0->pitch = arg2->unk24;
+    arg0->yaw = arg2->unk26 + arg1->unk12;
     arg0->unk70 = arg2->unk28;
-    if (arg0->unk6E >= 0x168) {
-        arg0->unk6E -= 0x168;
+    if (arg0->yaw >= 0x168) {
+        arg0->yaw -= 0x168;
     }
-    if (arg0->unk6E < 0) {
-        arg0->unk6E += 0x168;
+    if (arg0->yaw < 0) {
+        arg0->yaw += 0x168;
     }
     if (arg1->unk12 >= 0x168) {
         arg1->unk12 -= 0x168;
@@ -720,10 +508,10 @@ void player_place_in_car(Unk_801E0620 *arg0, Unk_801E032C *arg1, Unk_801E1158 *a
     }
 }
 
-void player_move_in_car(Unk_801E0620 *arg0, s32 arg1) {
+void player_move_in_car(Player *arg0, s32 arg1) {
     s16 rot[3];
     s32 y;
-    Unk_801E1158 *p;
+    Unk_801E1158_u80195DF0 *p;
     Unk_801E032C *m;
     s32 dx;
     s32 dz;
@@ -796,13 +584,13 @@ void player_move_in_car(Unk_801E0620 *arg0, s32 arg1) {
     }
     player_place_in_car(arg0, m, p, 0, 0, 0, 1);
     player_wrap_cell(arg0);
-    rot[0] = (-arg0->unk6C << 12) / 360;
-    rot[1] = (-arg0->unk6E << 12) / 360;
+    rot[0] = (-arg0->pitch << 12) / 360;
+    rot[1] = (-arg0->yaw << 12) / 360;
     rot[2] = (-arg0->unk70 << 12) / 360;
     player_update_view(arg0, rot, 2);
 }
 
-void player_move_on_foot(Unk_801E0620 *arg0, u16 arg1, s16 arg2, s16 arg3) {
+void player_move_on_foot(Player *arg0, u16 arg1, s16 arg2, s16 arg3) {
     s16 rot[3];
     s16 dir[3];
     s32 y;
@@ -816,7 +604,7 @@ void player_move_on_foot(Unk_801E0620 *arg0, u16 arg1, s16 arg2, s16 arg3) {
     s32 px;
     s32 pz;
     s32 t;
-    Unk_801762F4 *e;
+    Npc *e;
     s16 moved;
     u16 r3;
     s16 r2;
@@ -828,21 +616,21 @@ void player_move_on_foot(Unk_801E0620 *arg0, u16 arg1, s16 arg2, s16 arg3) {
     moved = 0;
     step = 0;
     y = 0;
-    if ((arg0->unk42 & 1) || (arg0->unk42 & 0x10)) {
+    if ((arg0->flags & 1) || (arg0->flags & 0x10)) {
         col = 0x2000000;
         y = 700;
     } else {
         col = 0x1000000;
     }
-    rot[0] = (-arg0->unk6C << 12) / 360;
-    rot[1] = (-arg0->unk6E << 12) / 360;
+    rot[0] = (-arg0->pitch << 12) / 360;
+    rot[1] = (-arg0->yaw << 12) / 360;
     rot[2] = (-arg0->unk70 << 12) / 360;
     if (*(s32 *)&arg0->unk40 & 0x09020000) {
-        arg0->unk44 = 0;
+        arg0->move_state = 0;
     } else {
-        if (!(arg0->unk42 & 0x39)) {
+        if (!(arg0->flags & 0x39)) {
             dir[0] = 0;
-            dir[1] = (-(arg0->unk6E + 90) << 12) / 360;
+            dir[1] = (-(arg0->yaw + 90) << 12) / 360;
             dir[2] = 0;
             col = 0x1000000;
             if (arg0->unk3E != 0) {
@@ -851,11 +639,11 @@ void player_move_on_foot(Unk_801E0620 *arg0, u16 arg1, s16 arg2, s16 arg3) {
                 }
                 switch (arg1) {
                 case 1:
-                    col = block_find_surface_nearest(arg0->unk54, arg0->unk58 - arg0->unk78, arg0->unk5C, &y);
+                    col = block_find_surface_nearest(arg0->pos_x, arg0->pos_y - arg0->unk78, arg0->pos_z, &y);
                     break;
                 case 0:
                 case 2:
-                    col = block_find_surface(arg0->unk54, arg0->unk5C, &y, 1);
+                    col = block_find_surface(arg0->pos_x, arg0->pos_z, &y, 1);
                     break;
                 }
                 if (arg0->unk3E == 1) {
@@ -863,7 +651,7 @@ void player_move_on_foot(Unk_801E0620 *arg0, u16 arg1, s16 arg2, s16 arg3) {
                 }
                 arg0->unk3E = 0;
                 player_check_ground(arg0, col, moved, step);
-                arg0->unk58 = y + arg0->unk78;
+                arg0->pos_y = y + arg0->unk78;
                 goto end;
             }
             s = rsin(-rot[1]);
@@ -878,8 +666,8 @@ void player_move_on_foot(Unk_801E0620 *arg0, u16 arg1, s16 arg2, s16 arg3) {
             dx += sx;
             dz += sz;
             if (dx != 0 || dz != 0) {
-                arg0->unk54 += dx;
-                arg0->unk5C += dz;
+                arg0->pos_x += dx;
+                arg0->pos_z += dz;
             loop:
                 if (arg0->unk50 < 0) {
                     px = -(s * 600) >> 12;
@@ -888,19 +676,19 @@ void player_move_on_foot(Unk_801E0620 *arg0, u16 arg1, s16 arg2, s16 arg3) {
                     px = (s * 600) >> 12;
                     pz = (c * 600) >> 12;
                 }
-                r1 = mod_npcrec_find_at_point(arg0->unk54 + px, arg0->unk58 - arg0->unk78, arg0->unk5C + pz);
+                r1 = mod_npcrec_find_at_point(arg0->pos_x + px, arg0->pos_y - arg0->unk78, arg0->pos_z + pz);
                 if (r1 >= 0) {
                     col = r1 + 0xF70000;
                 } else {
-                    r2 = npc_find_at_point(-1, arg0->unk54 + px, arg0->unk58 - arg0->unk78, arg0->unk5C + pz);
+                    r2 = npc_find_at_point(-1, arg0->pos_x + px, arg0->pos_y - arg0->unk78, arg0->pos_z + pz);
                     if (r2 >= 0) {
                         e = npc_find(0, r2);
                         if (e != NULL && e->unkF == 6) {
-                            y = e->unk24 + arg0->unk74 * 32000;
+                            y = e->unk24 + arg0->cell_y * 32000;
                         }
                         col = r2 + 0xFC0000;
                     } else {
-                        r3 = thing_hit_test(arg0->unk54, arg0->unk58 - arg0->unk78, arg0->unk5C, arg1);
+                        r3 = thing_hit_test(arg0->pos_x, arg0->pos_y - arg0->unk78, arg0->pos_z, arg1);
                         if (r3 != 0xFFFF) {
                             col = r3 + 0xFD0000;
                         } else {
@@ -912,11 +700,11 @@ void player_move_on_foot(Unk_801E0620 *arg0, u16 arg1, s16 arg2, s16 arg3) {
                             }
                             switch (arg1) {
                             case 1:
-                                col = block_find_surface_nearest(arg0->unk54, arg0->unk58 - arg0->unk78, arg0->unk5C, &y);
+                                col = block_find_surface_nearest(arg0->pos_x, arg0->pos_y - arg0->unk78, arg0->pos_z, &y);
                                 break;
                             case 0:
                             case 2:
-                                col = block_find_surface(arg0->unk54, arg0->unk5C, &y, 1);
+                                col = block_find_surface(arg0->pos_x, arg0->pos_z, &y, 1);
                                 break;
                             }
                         }
@@ -933,22 +721,22 @@ void player_move_on_foot(Unk_801E0620 *arg0, u16 arg1, s16 arg2, s16 arg3) {
         }
         if (player_check_ground(arg0, col, moved, step) != 0) {
             t = y + arg0->unk78;
-            if (t < arg0->unk58) {
+            if (t < arg0->pos_y) {
                 arg0->unk40 = 1;
             }
-            if (arg0->unk58 < t) {
+            if (arg0->pos_y < t) {
                 arg0->unk40 = 0;
             }
-            arg0->unk58 = t;
+            arg0->pos_y = t;
         } else if (r1 >= 0 || r2 >= 0 || r3 != 0xFFFF || D_801DFD5C != 0 || D_801DFD5E != 0) {
-            arg0->unk54 -= dx;
-            arg0->unk5C -= dz;
+            arg0->pos_x -= dx;
+            arg0->pos_z -= dz;
         } else {
-            step = player_try_slide(arg1, step, &arg0->unk54, &arg0->unk5C, dx, dz);
+            step = player_try_slide(arg1, step, &arg0->pos_x, &arg0->pos_z, dx, dz);
             if (step != -1) {
                 goto loop;
             }
-            arg0->unk44 = 5;
+            arg0->move_state = 5;
         }
         player_wrap_cell(arg0);
     }
@@ -957,18 +745,18 @@ end:
 }
 
 void player_init(void) {
-    Unk_801E0710 *p = &D_801E0710;
-    Unk_801E0770 *q = &D_801E0770;
-    Unk_801E0620 *r = &D_801E0620;
-    Unk_801E0368 *o;
+    PlayerStatus *p = &player_status;
+    Inventory *q = &player_inventory;
+    Player *r = &player_character;
+    Unk_801E0368_u80195DF0 *o;
     s16 sv[3];
     s32 i;
 
     memset(p, 0, 0x60);
-    p->unk0 = 0xC9;
-    p->unk2 = 1;
-    p->unk8 = 0x144;
-    p->unk36 = 2;
+    p->energy = 0xC9;
+    p->level = 1;
+    p->next_exp = 0x144;
+    p->hours_awake = 2;
     p->unkC = 1;
     p->unkE = 1;
     p->unk10 = 1;
@@ -979,17 +767,17 @@ void player_init(void) {
     p->unk20 = 1;
     p->unk24 = 1;
     p->unk28 = 1;
-    p->unk44 = 1;
-    p->unk46 = 1;
-    p->unk48 = 1;
-    p->unk4A = 0;
-    o = &D_801E0368;
+    p->drain_pending = 1;
+    p->limb_redraw = 1;
+    p->weapon_redraw = 1;
+    p->infected = 0;
+    o = &action_vars;
     memset(q, 0, 0x50);
     for (i = 0; i < 8; i++) {
-        q->unk32[i] = -1;
+        q->item_ids[i] = -1;
     }
     o->unk78 = 1;
-    q->unk4[1] = -1;
+    q->weapon_ids[1] = -1;
     q->unk42 = 0xF;
     memset(r, 0, 0xF0);
     r->unk0 = 0x5C30;
@@ -1008,21 +796,21 @@ void player_init(void) {
     ApplyMatrixLV(r->unk7C, r->unk90, r->unk90);
     r->unk9C = 0;
     GsSetView2(r->unk7C);
-    GsInitCoordinate2(NULL, r->unkA0);
-    p->unk58 = q;
-    p->unk5C = (Unk_801E076C *)r;
+    GsInitCoordinate2(NULL, r->coord);
+    p->inventory = q;
+    p->player = (Player *)r;
 }
 
 void player_place_for_scene(u16 arg0) {
-    Unk_801E0710 *p = &D_801E0710;
+    PlayerStatus *p = &player_status;
     Unk_801E1040 *f = &D_801E1040;
     Unk_801E0340 *q = &D_801E0340;
-    Unk_801E0620 *r;
+    Player *r;
     s16 rot[3];
     s32 v;
 
-    p->unk4C = NULL;
-    p->unk4A = 0;
+    p->target_npc = NULL;
+    p->infected = 0;
     f->unk0[2] = 0;
     q->unkA = 0;
     D_801E0610.unk4 = 0;
@@ -1031,33 +819,33 @@ void player_place_for_scene(u16 arg0) {
     D_801E0610.unk0 = 0xFFFFFF;
     D_801E0610.unk8 = 0;
     D_801E0600.unk8 = 0;
-    r = &D_801E0620;
-    r->unk42 &= ~4;
+    r = &player_character;
+    r->flags &= ~4;
     r->unk3E = 1;
     r->unk3C = 1;
     r->unk40 = 1;
     r->unk78 = -0x640;
     D_801DFF48 = 0xFFFFFF;
-    r->unk44 = 0;
+    r->move_state = 0;
     r->unk4C = 0;
-    r->unk4A = 4;
-    r->unk42 = 0;
+    r->speed_step = 4;
+    r->flags = 0;
     switch (arg0) {
     case 0:
         if (q->unk12 != 0) {
-            r->unk54 = 0xCE4;
-            r->unk58 = -0x384;
-            r->unk5C = 0x1AF4;
-            r->unk42 = 1;
-            r->unk6C = 0;
-            r->unk6E = 0x96;
+            r->pos_x = 0xCE4;
+            r->pos_y = -0x384;
+            r->pos_z = 0x1AF4;
+            r->flags = 1;
+            r->pitch = 0;
+            r->yaw = 0x96;
             r->unk70 = 0;
         } else {
-            r->unk54 = 0xDAC;
-            r->unk58 = -0x640;
-            r->unk5C = 0x2BC;
-            r->unk6C = 0;
-            r->unk6E = 0;
+            r->pos_x = 0xDAC;
+            r->pos_y = -0x640;
+            r->pos_z = 0x2BC;
+            r->pitch = 0;
+            r->yaw = 0;
             r->unk70 = 0;
         }
         break;
@@ -1068,71 +856,71 @@ void player_place_for_scene(u16 arg0) {
                 SetFogNearFar(0x30D4, 0xFFFF, 0xE4);
             }
         }
-        r->unk6C = 0;
+        r->pitch = 0;
         r->unk70 = 0;
-        r->unk58 += r->unk78;
-        r->unk6E = (u32)q->unk18 >> 16;
+        r->pos_y += r->unk78;
+        r->yaw = (u32)q->unk18 >> 16;
         break;
     case 2:
         f->unk0[2] = 1;
         SetFogNearFar(0x1388, 0x2710, 0xE4);
         r->unk78 = -0xAA;
-        r->unk6C = 0;
+        r->pitch = 0;
         r->unk70 = 0;
-        r->unk54 = q->unk14;
-        r->unk58 = q->unk18 + r->unk78;
-        r->unk5C = q->unk1C;
-        r->unk6E = q->unk12;
-        switch (r->unk46) {
+        r->pos_x = q->unk14;
+        r->pos_y = q->unk18 + r->unk78;
+        r->pos_z = q->unk1C;
+        r->yaw = q->unk12;
+        switch (r->vehicle_mode) {
         case 0:
-            r->unk6C = 0xC;
+            r->pitch = 0xC;
             break;
         case 2:
         case 3:
             v = -0x2A8;
             r->unk78 = v;
-            r->unk58 = q->unk18 + v;
+            r->pos_y = q->unk18 + v;
             break;
         }
         break;
     case 3:
-        r->unk54 = 0;
-        r->unk58 = 0;
-        r->unk5C = 0;
-        r->unk6C = 0;
-        r->unk6E = 0;
+        r->pos_x = 0;
+        r->pos_y = 0;
+        r->pos_z = 0;
+        r->pitch = 0;
+        r->yaw = 0;
         r->unk70 = 0;
         break;
     }
-    player_set_view((Unk_801E076C *)r, 0);
+    player_set_view((Player *)r, 0);
     player_wrap_cell(r);
     if (arg0 == 1) {
-        r->unkA0->unk18 = r->unk54;
-        r->unkA0->unk1C = r->unk58 - r->unk4C + 0x140;
-        r->unkA0->unk20 = r->unk5C;
-        rot[0] = (r->unk6C << 12) / 360;
-        rot[1] = (r->unk6E << 12) / 360;
+        r->coord->coord_tx = r->pos_x;
+        r->coord->coord_ty = r->pos_y - r->unk4C + 0x140;
+        r->coord->coord_tz = r->pos_z;
+        rot[0] = (r->pitch << 12) / 360;
+        rot[1] = (r->yaw << 12) / 360;
         rot[2] = (r->unk70 << 12) / 360;
-        RotMatrixZYX(rot, r->unkA0->unk4);
-        r->unkA0->unk0 = 0;
+        RotMatrixZYX(rot, r->coord->coord_m);
+        r->coord->flg = 0;
     }
 }
 
 void player_finish_death(void) {
-    Unk_801E0710 *p = &D_801E0710;
+    PlayerStatus *p = &player_status;
     Unk_801E0340 *q = &D_801E0340;
-    Unk_801E0368 *o = &D_801E0368;
+    Unk_801E0368_u80195DF0 *o = &action_vars;
     s32 i;
     s16 v;
 
-    if (o->unk60 == 0 && p->unk4A != 0) {
-        p->unk0 = 0xFF;
-        p->unk36 = 0;
+    if (o->unk60 == 0 && p->infected != 0) {
+        p->energy = 0xFF;
+        p->hours_awake = 0;
         p->unk34 = 0;
-        if (p->unk2C == 0) {
-            p->unk2C = 1;
+        if (p->mutant == 0) {
+            p->mutant = 1;
             o->unk0[6] = 1;
-            o->unk62[0] = p->unk2;
+            o->unk62[0] = p->level;
             o->unk62[1] = p->unkC;
             o->unk62[2] = p->unkE;
             o->unk62[3] = p->unk10;
@@ -1149,7 +937,7 @@ void player_finish_death(void) {
                 o->unk28[i] = v;
             }
         }
-        p->unk2 = 100;
+        p->level = 100;
         p->unkC = 100;
         p->unkE = 100;
         p->unk10 = 100;
@@ -1161,7 +949,7 @@ void player_finish_death(void) {
         p->unk24 = 100;
         p->unk28 = 100;
         for (i = 0; i < 5; i++) {
-            p->unk3A[i] = 0;
+            p->limb_state[i] = 0;
             o->unkB4[i] = 0;
         }
         mail_goto_building(1, player_str_scene_cmn, 0x18, 0x41, 7, 0xB4, 0x15, 0x500F07, 1);
@@ -1173,14 +961,14 @@ void player_finish_death(void) {
     }
 }
 
-void player_start_death(u16 arg0, Unk_801E0710 *arg1, Unk_801E0620 *arg2) {
-    Unk_801E0368 *o = &D_801E0368;
+void player_start_death(u16 arg0, PlayerStatus *arg1, Player *arg2) {
+    Unk_801E0368_u80195DF0 *o = &action_vars;
     s32 v;
 
     if (D_801E1046[0] == 0 && o->unk24C == 0 && roadmap_get_state() == 0
-        && arg2->unk46 != 1 && !(arg2->unk42 & 0x8000) && !(arg2->unk42 & 0x4802)) {
-        arg2->unk42 |= 0x800;
-        if (arg2->unk46 != 0) {
+        && arg2->vehicle_mode != 1 && !(arg2->flags & 0x8000) && !(arg2->flags & 0x4802)) {
+        arg2->flags |= 0x800;
+        if (arg2->vehicle_mode != 0) {
             player_finish_death();
             return;
         }
@@ -1188,21 +976,21 @@ void player_start_death(u16 arg0, Unk_801E0710 *arg1, Unk_801E0620 *arg2) {
         if (arg0 == 2) {
             v = 0x82;
         }
-        player_start_move_to(0, 0, arg2->unk54 + arg2->unk72 * 0x30D4,
-                      arg2->unk58 - arg2->unk74 * 0x7D00 - arg2->unk78 + v,
-                      arg2->unk5C + arg2->unk76 * 0x30D4, -0x4B, arg2->unk6E, arg2->unk70, 4);
+        player_start_move_to(0, 0, arg2->pos_x + arg2->cell_x * 0x30D4,
+                      arg2->pos_y - arg2->cell_y * 0x7D00 - arg2->unk78 + v,
+                      arg2->pos_z + arg2->cell_z * 0x30D4, -0x4B, arg2->yaw, arg2->unk70, 4);
     }
 }
 
 void player_update(u16 arg0, s16 arg1, s16 arg2) {
-    Unk_801E0710 *p = &D_801E0710;
-    Unk_801E0620 *r = &D_801E0620;
+    PlayerStatus *p = &player_status;
+    Player *r = &player_character;
 
-    if (p->unk0 <= 0) {
+    if (p->energy <= 0) {
         player_start_death(arg0, p, r);
     }
     event_update_hud(p);
-    r->unk44 = 0;
+    r->move_state = 0;
     if (r->unk3C == 0) {
         if (arg1 != 0) {
             block_stream_update(arg0);
@@ -1211,22 +999,22 @@ void player_update(u16 arg0, s16 arg1, s16 arg2) {
             block_update_visibility(arg0);
         }
     } else {
-        if (!(r->unk42 & 0x800) && !(r->unk42 & 2)) {
-            if (r->unk6C > 0x41) {
-                r->unk6C = 0x41;
+        if (!(r->flags & 0x800) && !(r->flags & 2)) {
+            if (r->pitch > 0x41) {
+                r->pitch = 0x41;
             }
-            if (r->unk6C < -0x19) {
-                r->unk6C = -0x19;
+            if (r->pitch < -0x19) {
+                r->pitch = -0x19;
             }
-            if (r->unk6E >= 0x168) {
-                r->unk6E -= 0x168;
+            if (r->yaw >= 0x168) {
+                r->yaw -= 0x168;
             }
-            if (r->unk6E < 0) {
-                r->unk6E += 0x168;
+            if (r->yaw < 0) {
+                r->yaw += 0x168;
             }
         }
         if (arg0 == 2) {
-            switch (r->unk46) {
+            switch (r->vehicle_mode) {
             case 0:
                 player_move_on_foot(r, 2, arg1, arg2);
                 event_draw_compass(r);
@@ -1256,7 +1044,7 @@ void player_update(u16 arg0, s16 arg1, s16 arg2) {
 }
 
 void player_add_skill_exp(s16 arg0, s16 arg1) {
-    Unk_801E0710 *p = &D_801E0710;
+    PlayerStatus *p = &player_status;
     s16 flag = 0;
     u16 a;
     u16 b;
@@ -1337,20 +1125,20 @@ void player_add_skill_exp(s16 arg0, s16 arg1) {
 }
 
 void player_add_exp(s32 arg0) {
-    Unk_801E0710 *p = &D_801E0710;
+    PlayerStatus *p = &player_status;
     s32 i;
 
-    if (p->unk2 == 100) {
+    if (p->level == 100) {
         return;
     }
-    p->unk4 += arg0;
-    if (p->unk4 < (u32)p->unk8) {
+    p->exp += arg0;
+    if (p->exp < (u32)p->next_exp) {
         return;
     }
 loop:
-    p->unk2++;
-    if (p->unk2 < 100) {
-        p->unk8 = mail_exp_for_level(p->unk2);
+    p->level++;
+    if (p->level < 100) {
+        p->next_exp = mail_exp_for_level(p->level);
     }
     p->unkC += rand() % 3;
     if ((u16)p->unkC > 100) {
@@ -1371,7 +1159,7 @@ loop:
     for (i = 0; i < 2; i++) {
         effect_weapon_calc_rate(i);
     }
-    if (p->unk4 >= (u32)p->unk8) {
+    if (p->exp >= (u32)p->next_exp) {
         goto loop;
     }
 }
@@ -1418,23 +1206,23 @@ s32 player_pick_hit_part(s16 arg0) {
     }
 }
 
-void player_take_hit(Unk_801762F4 *arg0, s32 arg1, s32 arg2) {
-    Unk_801E0710 *p;
-    Unk_801E0620 *q;
-    Unk_801E0368 *r;
+void player_take_hit(Npc *arg0, s32 arg1, s32 arg2) {
+    PlayerStatus *p;
+    Player *q;
+    Unk_801E0368_u80195DF0 *r;
     s32 n;
     s32 t;
     s32 div;
     s16 dir;
     s16 k;
 
-    p = &D_801E0710;
-    q = &D_801E0620;
-    r = &D_801E0368;
-    if (p->unk0 > 0) {
+    p = &player_status;
+    q = &player_character;
+    r = &action_vars;
+    if (p->energy > 0) {
         div = 1;
         n = rand() % (u16)p->unk12;
-        dir = mail_angle_to_dir8(q->unk6E - arg0->unk3A);
+        dir = mail_angle_to_dir8(q->yaw - arg0->unk3A);
         switch (dir) {
         case 6:
             arg2 = arg2 * 3 / 2;
@@ -1450,7 +1238,7 @@ void player_take_hit(Unk_801762F4 *arg0, s32 arg1, s32 arg2) {
                 div = 5;
                 n += rand() % (u16)p->unkC;
                 t = rand() % (u16)p->unkE;
-                switch (p->unk3A[4]) {
+                switch (p->limb_state[4]) {
                 case 2:
                     t = t * 2 / 3;
                     break;
@@ -1480,9 +1268,9 @@ void player_take_hit(Unk_801762F4 *arg0, s32 arg1, s32 arg2) {
         if (arg2 > 0) {
             *(r->unkB4 + k) += arg2;
             if (k == 0) {
-                p->unk0 -= arg2;
+                p->energy -= arg2;
                 if ((u16)arg0->unk2 != 0) {
-                    p->unk4A = 1;
+                    p->infected = 1;
                 }
             }
             event_draw_gauge(p);
@@ -1494,39 +1282,40 @@ void player_take_hit(Unk_801762F4 *arg0, s32 arg1, s32 arg2) {
 }
 
 void player_pick_target(void) {
-    Unk_801E02D8 *g = &D_801E02D8;
-    Unk_801762F4 *e = g->unk3C;
-    Unk_801E0710 *p = &D_801E0710;
-    Unk_801E0770 *q;
+    SceneTables *g = &object_scene_tables;
+    Npc *e = g->npcs;
+    PlayerStatus *p = &player_status;
+    Inventory *q;
     s16 v;
     s32 i;
 
-    p->unk4C = NULL;
-    q = p->unk58;
-    if (g->unk1C != 0) {
-        v = q->unk4[q->unk2];
-        for (i = 0; i < g->unk1C; i++, e++) {
+    p->target_npc = NULL;
+    q = p->inventory;
+    if (g->npc_count != 0) {
+        v = q->weapon_ids[q->weapon_slot];
+        for (i = 0; i < g->npc_count; i++, e++) {
+            /* Npc.unk40 is loaded unsigned (lhu) in this unit only: casts keep its bytes */
             if (e->unk4 != 0 && e->unk6 != 0 && e->unkE != 2 && !(e->unk12 & 0x200) && (e->unk12 & 2)
-                && e->unk40 != 0 && ai_in_aim_cone(e, 0, v) != 0) {
-                if (p->unk4C == NULL || e->unk40 < p->unk4C->unk40) {
-                    p->unk4C = e;
+                && (u16)e->unk40 != 0 && ai_in_aim_cone(e, 0, v) != 0) {
+                if (p->target_npc == NULL || (u16)e->unk40 < (u16)p->target_npc->unk40) {
+                    p->target_npc = e;
                 }
             }
         }
-        if (p->unk4C != NULL) {
+        if (p->target_npc != NULL) {
             return;
         }
     }
-    if (q->unk46 == 0) {
-        q->unk46 = 1;
+    if (q->armed == 0) {
+        q->armed = 1;
     }
 }
 
 void player_shoot_target(void) {
-    Unk_801E0710 *g = &D_801E0710;
-    Unk_801E0620 *d = &D_801E0620;
-    Unk_801E0770 *s = &D_801E0770;
-    Unk_801762F4 *p = g->unk4C;
+    PlayerStatus *g = &player_status;
+    Player *d = &player_character;
+    Inventory *s = &player_inventory;
+    Npc *p = g->target_npc;
     Unk_80188FEC *e;
     s32 dist;
     s32 chance;
@@ -1541,20 +1330,20 @@ void player_shoot_target(void) {
     s32 amt;
     s32 miss;
 
-    if (!(d->unk42 & 0x400)) {
+    if (!(d->flags & 0x400)) {
         return;
     }
-    d->unk42 &= ~0x400;
-    if (s->unk46 == 0 || p == NULL || p->unkE == 2 || (p->unk12 & 0x200) || !(p->unk12 & 2)) {
+    d->flags &= ~0x400;
+    if (s->armed == 0 || p == NULL || p->unkE == 2 || (p->unk12 & 0x200) || !(p->unk12 & 2)) {
         return;
     }
     t = npc_get_radius(p) + 600;
-    k = p->unk40;
+    k = (u16)p->unk40;
     dist = k - t;
     if (dist < 0) {
         dist = 0;
     }
-    e = effect_weapon_find(s->unk4[s->unk2]);
+    e = effect_weapon_find(s->weapon_ids[s->weapon_slot]);
     if (e == NULL) {
         return;
     }
@@ -1562,7 +1351,7 @@ void player_shoot_target(void) {
     a = e->unk54 * 10;
     b = e->unk58 * 10;
     c = e->unk5C * 10;
-    m = s->unk8[s->unk2];
+    m = s->weapon_rate[s->weapon_slot];
     f = 0;
     if (dist < a) {
         chance = -1;
@@ -1575,7 +1364,7 @@ void player_shoot_target(void) {
         chance = (m * f) >> 12;
     }
     if (e->unk2 == 0) {
-        w = d->unk58 - d->unk74 * 32000 - p->unk24 + 1600;
+        w = d->pos_y - d->cell_y * 32000 - p->unk24 + 1600;
         if (w > 0) {
             w = -w;
         }
@@ -1596,10 +1385,10 @@ void player_shoot_target(void) {
         }
         chance = 20;
     }
-    if ((u16)d->unk44 == 1 || (u16)d->unk44 == 3) {
+    if ((u16)d->move_state == 1 || (u16)d->move_state == 3) {
         chance = chance * 9 / 10;
     }
-    switch (g->unk3A[1]) {
+    switch (g->limb_state[1]) {
     case 2:
         chance = chance * 9 / 10;
         break;
@@ -1633,13 +1422,13 @@ void player_shoot_target(void) {
 
 void player_move_to_step(Unk_80198ADC *arg0) {
     Unk_80198ADC_3C *e = arg0->unk3C;
-    Unk_801E0620 *p = &D_801E0620;
+    Player *p = &player_character;
 
-    p->unk54 = e->unk4 + e->unk24 * arg0->unk24 / arg0->unk26;
-    p->unk58 = e->unk8 + e->unk28 * arg0->unk24 / arg0->unk26;
-    p->unk5C = e->unkC + e->unk2C * arg0->unk24 / arg0->unk26;
-    p->unk6C = e->unk34 + e->unk44 * arg0->unk24 / arg0->unk26;
-    p->unk6E = e->unk36 + e->unk46 * arg0->unk24 / arg0->unk26;
+    p->pos_x = e->unk4 + e->unk24 * arg0->unk24 / arg0->unk26;
+    p->pos_y = e->unk8 + e->unk28 * arg0->unk24 / arg0->unk26;
+    p->pos_z = e->unkC + e->unk2C * arg0->unk24 / arg0->unk26;
+    p->pitch = e->unk34 + e->unk44 * arg0->unk24 / arg0->unk26;
+    p->yaw = e->unk36 + e->unk46 * arg0->unk24 / arg0->unk26;
     p->unk70 = e->unk38 + e->unk48 * arg0->unk24 / arg0->unk26;
     p->unk3C = 1;
 }
@@ -1651,9 +1440,9 @@ void player_start_move_to(s16 arg0, u16 arg1, s32 arg2, s32 arg3, s32 arg4, s16 
     u16 ay;
     u16 az;
     s16 dz;
-    Unk_801E0620 *d;
+    Player *d;
 
-    d = &D_801E0620;
+    d = &player_character;
     ax = arg5;
     ay = arg6;
     az = arg7;
@@ -1669,18 +1458,18 @@ void player_start_move_to(s16 arg0, u16 arg1, s32 arg2, s32 arg3, s32 arg4, s16 
     t->unk26 = arg8 * 30;
     p->unk0 = arg0;
     p->unk2 = arg1;
-    arg2 -= d->unk72 * 12500;
-    arg3 += d->unk78 + d->unk74 * 32000;
-    arg4 -= d->unk76 * 12500;
-    if (d->unk54 == arg2 && d->unk58 == arg3 && d->unk5C == arg4 &&
-        d->unk6C == arg5 && d->unk6E == arg6 && d->unk70 == arg7) {
+    arg2 -= d->cell_x * 12500;
+    arg3 += d->unk78 + d->cell_y * 32000;
+    arg4 -= d->cell_z * 12500;
+    if (d->pos_x == arg2 && d->pos_y == arg3 && d->pos_z == arg4 &&
+        d->pitch == arg5 && d->yaw == arg6 && d->unk70 == arg7) {
         t->unk26 = 0;
     }
-    p->unk4 = d->unk54;
-    p->unk8 = d->unk58;
-    p->unkC = d->unk5C;
-    p->unk34 = d->unk6C;
-    p->unk36 = d->unk6E;
+    p->unk4 = d->pos_x;
+    p->unk8 = d->pos_y;
+    p->unkC = d->pos_z;
+    p->unk34 = d->pitch;
+    p->unk36 = d->yaw;
     p->unk38 = d->unk70;
     p->unk14 = arg2;
     p->unk18 = arg3;
@@ -1688,12 +1477,12 @@ void player_start_move_to(s16 arg0, u16 arg1, s32 arg2, s32 arg3, s32 arg4, s16 
     p->unk3C = ax;
     p->unk3E = ay;
     p->unk40 = az;
-    p->unk24 = arg2 - d->unk54;
-    p->unk28 = arg3 - d->unk58;
-    p->unk2C = arg4 - d->unk5C;
+    p->unk24 = arg2 - d->pos_x;
+    p->unk28 = arg3 - d->pos_y;
+    p->unk2C = arg4 - d->pos_z;
 loop:
-    p->unk44 = ax - d->unk6C;
-    p->unk46 = ay - d->unk6E;
+    p->unk44 = ax - d->pitch;
+    p->unk46 = ay - d->yaw;
     p->unk48 = dz = az - d->unk70;
     if (p->unk44 > 180) {
         ax -= 360;
@@ -1719,12 +1508,12 @@ loop:
         az += 360;
         goto loop;
     }
-    d->unk42 |= 2;
+    d->flags |= 2;
     d->unk48 = kaj_tss_start(t);
 }
 
-void player_exec_command(Unk_80199034 *arg0, Unk_801762F4 *arg1) {
-    Unk_801E0620 *d = &D_801E0620;
+void player_exec_command(Unk_80199034 *arg0, Npc *arg1) {
+    Player *d = &player_character;
     s16 a;
     s16 b;
     s16 v;
@@ -1734,7 +1523,7 @@ void player_exec_command(Unk_80199034 *arg0, Unk_801762F4 *arg1) {
     s16 e;
     s32 f;
     u16 g;
-    Unk_801E0710 *p;
+    PlayerStatus *p;
 
     switch (arg0->unk0->unk2) {
     case 0:
@@ -1769,33 +1558,33 @@ void player_exec_command(Unk_80199034 *arg0, Unk_801762F4 *arg1) {
         break;
     case 3:
         if (atoi(arg0->unk8[0]) != 0) {
-            if (!(d->unk42 & 0x100)) {
-                d->unk42 |= 0x100;
+            if (!(d->flags & 0x100)) {
+                d->flags |= 0x100;
             }
         } else {
-            if (d->unk42 & 0x100) {
-                d->unk42 &= ~0x100;
+            if (d->flags & 0x100) {
+                d->flags &= ~0x100;
             }
         }
         break;
     case 4:
         a = atoi(arg0->unk8[0]);
         b = atoi(arg0->unk8[1]);
-        p = &D_801E0710;
+        p = &player_status;
         if (a < 0) {
-            p->unk4A = 0;
+            p->infected = 0;
         }
-        p->unk0 += a;
-        v = p->unk0;
+        p->energy += a;
+        v = p->energy;
         if (v > 255) {
-            p->unk0 = 255;
+            p->energy = 255;
         } else if (v < 0) {
-            p->unk0 = 0;
+            p->energy = 0;
             if (b != 0) {
-                p->unk0 = b;
+                p->energy = b;
             }
         } else if (v > 0 && v < 255 && v < b) {
-            p->unk0 = b;
+            p->energy = b;
         }
         event_draw_gauge(p);
         break;
@@ -1803,16 +1592,16 @@ void player_exec_command(Unk_80199034 *arg0, Unk_801762F4 *arg1) {
 }
 
 void player_recover(s32 arg0, s32 arg1, s32 arg2, s16 arg3) {
-    Unk_801E0710 *p = &D_801E0710;
-    Unk_801E0368 *o = &D_801E0368;
-    Unk_801E076C *e = p->unk5C;
+    PlayerStatus *p = &player_status;
+    Unk_801E0368_u80195DF0 *o = &action_vars;
+    Player *e = p->player;
     s16 r;
     s32 i;
 
-    if (p->unk2C != 0 && arg3 != 0) {
-        p->unk2C = 0;
+    if (p->mutant != 0 && arg3 != 0) {
+        p->mutant = 0;
         o->unk0[6] = 0;
-        p->unk2 = o->unk62[0];
+        p->level = o->unk62[0];
         p->unkC = o->unk62[1];
         p->unkE = o->unk62[2];
         p->unk10 = o->unk62[3];
@@ -1840,7 +1629,7 @@ void player_recover(s32 arg0, s32 arg1, s32 arg2, s16 arg3) {
         }
     }
     for (i = 0; i < 5; i++) {
-        p->unk3A[i] = 0;
+        p->limb_state[i] = 0;
         o->unkB4[i] = 0;
     }
     if (arg3 == 0) {
@@ -1848,62 +1637,62 @@ void player_recover(s32 arg0, s32 arg1, s32 arg2, s16 arg3) {
     }
     event_draw_gauge(p);
     event_draw_limb_status(p);
-    e->unk54 = arg0;
-    e->unk5C = arg2;
-    e->unk58 = arg1 + e->unk78;
+    e->pos_x = arg0;
+    e->pos_z = arg2;
+    e->pos_y = arg1 + e->unk78;
     player_set_view(e, 1);
 }
 
-void player_handle_pad(Unk_801E0710 *arg0, s32 arg1, s32 arg2) {
-    Unk_801E076C *p;
+void player_handle_pad(PlayerStatus *arg0, s32 arg1, s32 arg2) {
+    Player *p;
     Unk_801E1118 *q;
 
-    p = arg0->unk5C;
+    p = arg0->player;
     q = &D_801E1118;
     if (arg2 & 0x1000) {
         p->unk3C = 1;
-        if (p->unk46) {
+        if (p->vehicle_mode) {
             q->unk34 += D_801E6DB4[0];
         } else {
-            p->unk6C += D_801E6DB4[0];
+            p->pitch += D_801E6DB4[0];
         }
     } else if (arg2 & 0x4000) {
         p->unk3C = 1;
-        if (p->unk46) {
+        if (p->vehicle_mode) {
             q->unk34 -= D_801E6DB4[0];
         } else {
-            p->unk6C -= D_801E6DB4[0];
+            p->pitch -= D_801E6DB4[0];
         }
     }
     if (arg2 & 0x8000) {
         p->unk3C = 1;
-        if (p->unk46) {
+        if (p->vehicle_mode) {
             q->unk36 -= D_801E6DB4[0];
         } else {
-            p->unk6E -= D_801E6DB4[0];
+            p->yaw -= D_801E6DB4[0];
         }
     } else if (arg2 & 0x2000) {
         p->unk3C = 1;
-        if (p->unk46) {
+        if (p->vehicle_mode) {
             q->unk36 += D_801E6DB4[0];
         } else {
-            p->unk6E += D_801E6DB4[0];
+            p->yaw += D_801E6DB4[0];
         }
     }
-    if (p->unk42 & 0x100) {
-        p->unk4A = 4;
-        p->unk42 &= ~0x1000;
+    if (p->flags & 0x100) {
+        p->speed_step = 4;
+        p->flags &= ~0x1000;
         return;
     }
     if (arg2 & 0x40) {
         p->unk3C = 1;
-        if (p->unk42 & 0x1000) {
-            if (p->unk4A >= 5) {
-                p->unk4A--;
-                p->unk50 = p->unk4A * D_801E6DB4[0];
+        if (p->flags & 0x1000) {
+            if (p->speed_step >= 5) {
+                p->speed_step--;
+                p->unk50 = p->speed_step * D_801E6DB4[0];
             } else {
-                p->unk4A = 4;
-                p->unk42 &= ~0x1000;
+                p->speed_step = 4;
+                p->flags &= ~0x1000;
                 p->unk50 = D_801E6DB4[0] * 4;
             }
         } else {
@@ -1912,20 +1701,20 @@ void player_handle_pad(Unk_801E0710 *arg0, s32 arg1, s32 arg2) {
     } else if (arg2 & 0x10) {
         p->unk3C = 1;
         if ((u16)arg1 == 2 && (arg2 & 1)) {
-            if (!(p->unk42 & 0x1000)) {
-                p->unk42 |= 0x1000;
+            if (!(p->flags & 0x1000)) {
+                p->flags |= 0x1000;
             }
-            if (p->unk4A < 11) {
-                p->unk4A++;
+            if (p->speed_step < 11) {
+                p->speed_step++;
             }
-            p->unk50 = D_801E6DB4[0] * p->unk4A;
-        } else if (p->unk42 & 0x1000) {
-            if (p->unk4A >= 5) {
-                p->unk4A--;
-                p->unk50 = p->unk4A * D_801E6DB4[0];
+            p->unk50 = D_801E6DB4[0] * p->speed_step;
+        } else if (p->flags & 0x1000) {
+            if (p->speed_step >= 5) {
+                p->speed_step--;
+                p->unk50 = p->speed_step * D_801E6DB4[0];
             } else {
-                p->unk4A = 4;
-                p->unk42 &= ~0x1000;
+                p->speed_step = 4;
+                p->flags &= ~0x1000;
                 p->unk50 = D_801E6DB4[0] * 4;
             }
         } else {
@@ -1934,13 +1723,13 @@ void player_handle_pad(Unk_801E0710 *arg0, s32 arg1, s32 arg2) {
     }
     if (arg2 & 4) {
         p->unk3C = 1;
-        if (p->unk42 & 0x1000) {
-            if (p->unk4A >= 5) {
-                p->unk4A--;
-                p->unk50 = p->unk4A * D_801E6DB4[0];
+        if (p->flags & 0x1000) {
+            if (p->speed_step >= 5) {
+                p->speed_step--;
+                p->unk50 = p->speed_step * D_801E6DB4[0];
             } else {
-                p->unk4A = 4;
-                p->unk42 &= ~0x1000;
+                p->speed_step = 4;
+                p->flags &= ~0x1000;
                 p->unk50 = D_801E6DB4[0] * 4;
             }
         } else {
@@ -1948,13 +1737,13 @@ void player_handle_pad(Unk_801E0710 *arg0, s32 arg1, s32 arg2) {
         }
     } else if (arg2 & 8) {
         p->unk3C = 1;
-        if (p->unk42 & 0x1000) {
-            if (p->unk4A >= 5) {
-                p->unk4A--;
-                p->unk50 = p->unk4A * D_801E6DB4[0];
+        if (p->flags & 0x1000) {
+            if (p->speed_step >= 5) {
+                p->speed_step--;
+                p->unk50 = p->speed_step * D_801E6DB4[0];
             } else {
-                p->unk4A = 4;
-                p->unk42 &= ~0x1000;
+                p->speed_step = 4;
+                p->flags &= ~0x1000;
                 p->unk50 = D_801E6DB4[0] * 4;
             }
         } else {
@@ -1962,21 +1751,21 @@ void player_handle_pad(Unk_801E0710 *arg0, s32 arg1, s32 arg2) {
         }
     }
     if (p->unk3C == 0 || (p->unk50 == 0 && p->unk4E == 0)) {
-        if (!(p->unk42 & 0x1000)) {
+        if (!(p->flags & 0x1000)) {
             return;
         }
         p->unk3C = 1;
-        if (p->unk4A >= 5) {
-            p->unk4A--;
-            p->unk50 = p->unk4A * D_801E6DB4[0];
+        if (p->speed_step >= 5) {
+            p->speed_step--;
+            p->unk50 = p->speed_step * D_801E6DB4[0];
         } else {
-            p->unk4A = 4;
-            p->unk42 &= ~0x1000;
+            p->speed_step = 4;
+            p->flags &= ~0x1000;
             p->unk50 = D_801E6DB4[0] * 4;
         }
     }
     if ((u16)arg1 == 2) {
-        if (p->unk46) {
+        if (p->vehicle_mode) {
             p->unk50 <<= 2;
             p->unk4E <<= 2;
         }
@@ -1984,7 +1773,7 @@ void player_handle_pad(Unk_801E0710 *arg0, s32 arg1, s32 arg2) {
         p->unk50 *= 10;
         p->unk4E *= 10;
     }
-    switch (arg0->unk3A[4]) {
+    switch (arg0->limb_state[4]) {
     case 2:
         p->unk50 = p->unk50 * 9 / 10;
         p->unk4E = p->unk4E * 9 / 10;
@@ -2076,9 +1865,9 @@ void player_reset_triggers(s16 arg0) {
     D_801E0600.unk0 = 0xFFFFFF;
     D_801E0610.unk8 = 0;
     D_801E0600.unk8 = 0;
-    D_801E0620.unk3E = arg0;
-    D_801E0620.unk3C = 1;
-    D_801E0620.unk42 &= ~4;
+    player_character.unk3E = arg0;
+    player_character.unk3C = 1;
+    player_character.flags &= ~4;
 }
 
 s32 player_set_item(s16 arg0, s16 arg1, s16 arg2) {
@@ -2105,8 +1894,8 @@ s32 player_set_weapon(s16 arg0, s16 arg1, s16 arg2) {
 }
 
 void player_heal_part(s16 arg0, s16 arg1, s16 arg2) {
-    Unk_801E0368 *p = &D_801E0368;
-    Unk_801E0710 *q = &D_801E0710;
+    Unk_801E0368_u80195DF0 *p = &action_vars;
+    PlayerStatus *q = &player_status;
     s16 v = p->unkB4[arg0];
 
     v -= arg2;
@@ -2125,53 +1914,53 @@ void player_heal_part(s16 arg0, s16 arg1, s16 arg2) {
 }
 
 void player_add_hp(s16 arg0, s16 arg1) {
-    Unk_801E0710 *p = &D_801E0710;
+    PlayerStatus *p = &player_status;
     s16 v;
 
     if (arg0 < 0) {
-        p->unk4A = 0;
+        p->infected = 0;
     }
-    v = p->unk0 + arg0;
-    p->unk0 = v;
+    v = p->energy + arg0;
+    p->energy = v;
     if (v >= 0x100) {
-        p->unk0 = 0xFF;
+        p->energy = 0xFF;
     } else if (v < 0) {
-        p->unk0 = 0;
+        p->energy = 0;
         if (arg1 != 0) {
-            p->unk0 = arg1;
+            p->energy = arg1;
         }
     } else if (v > 0 && v < 0xFF) {
         if (v < arg1) {
-            p->unk0 = arg1;
+            p->energy = arg1;
         }
     }
     event_draw_gauge(p);
 }
 
 void player_rest(s16 arg0, s32 arg1, s32 arg2, s32 arg3) {
-    Unk_801E0710 *p = &D_801E0710;
-    Unk_801E076C *o = p->unk5C;
-    Unk_801E0368 *q = &D_801E0368;
+    PlayerStatus *p = &player_status;
+    Player *o = p->player;
+    Unk_801E0368_u80195DF0 *q = &action_vars;
     s16 v;
 
     if (arg0 == 0) {
         v = 0x3C;
-        p->unk36 -= 4;
-        if (p->unk36 < 0) {
-            p->unk36 = 0;
+        p->hours_awake -= 4;
+        if (p->hours_awake < 0) {
+            p->hours_awake = 0;
         }
     } else {
         v = 0x1A4;
-        p->unk36 = 0;
+        p->hours_awake = 0;
         if (q->unk7C > 0x14) {
             v = (0x17 - q->unk7C) * 0x3C - (q->unk7E - 0x21C);
         } else if (q->unk7C < 3) {
             v = 0x1E0 - q->unk7E - q->unk7C * 0x3C;
         }
     }
-    o->unk54 = arg1;
-    o->unk5C = arg3;
-    o->unk58 = arg2 + o->unk78;
+    o->pos_x = arg1;
+    o->pos_z = arg3;
+    o->pos_y = arg2 + o->unk78;
     player_set_view(o, 1);
     event_advance_clock(v, 1);
 }
@@ -2180,7 +1969,7 @@ s32 player_is_injured(void) {
     s32 i;
 
     for (i = 0; i < 5; i++) {
-        if (D_801E0368.unkB4[i] > 0) {
+        if (action_vars.unkB4[i] > 0) {
             return 1;
         }
     }
@@ -2188,7 +1977,7 @@ s32 player_is_injured(void) {
 }
 
 s32 player_leave_trigger(void) {
-    Unk_801E0620 *p = &D_801E0620;
+    Player *p = &player_character;
     Unk_801CC1E8 *o;
 
     UnDeliverEvent(0xF3000001, 2);
@@ -2201,32 +1990,32 @@ s32 player_leave_trigger(void) {
     D_801E0610.unk4 = D_801E0600.unk4;
     D_801E0610.unk0 = D_801E0600.unk0;
     D_801E0610.unk8 = D_801E0600.unk8;
-    p->unk42 &= ~4;
+    p->flags &= ~4;
     return 0;
 }
 
 void player_move_to_done(Unk_8019A07C *arg0) {
     Unk_8019A07C_3C *e = arg0->unk3C;
-    Unk_801E0620 *p = &D_801E0620;
+    Player *p = &player_character;
     Unk_801DFFE8 *s = &D_801DFFE8;
 
-    p->unk54 = e->unk14;
-    p->unk58 = e->unk18;
-    p->unk5C = e->unk1C;
-    p->unk6C = e->unk3C;
-    p->unk6E = e->unk3E;
+    p->pos_x = e->unk14;
+    p->pos_y = e->unk18;
+    p->pos_z = e->unk1C;
+    p->pitch = e->unk3C;
+    p->yaw = e->unk3E;
     p->unk70 = e->unk40;
-    p->unk42 &= ~2;
+    p->flags &= ~2;
     p->unk3C = 1;
     switch (e->unk0) {
     case 0:
-        p->unk42 |= e->unk2;
+        p->flags |= e->unk2;
         break;
     case 1:
-        p->unk42 &= e->unk2;
+        p->flags &= e->unk2;
         break;
     case 2:
-        p->unk42 &= ~e->unk2;
+        p->flags &= ~e->unk2;
         break;
     }
     if (s->unk12 & 0x20) {
@@ -2236,12 +2025,12 @@ void player_move_to_done(Unk_8019A07C *arg0) {
         }
     }
     p->unk48 = -1;
-    if (p->unk42 & 0x800) {
+    if (p->flags & 0x800) {
         player_finish_death();
     }
 }
 
-void player_update_map_cursor(Unk_801E076C *arg0, Unk_801E07C0 *arg1) {
+void player_update_map_cursor(Player *arg0, Unk_801E07C0 *arg1) {
     s32 dir;
 
     if (arg1->unk2 != 0) {
@@ -2253,7 +2042,7 @@ void player_update_map_cursor(Unk_801E076C *arg0, Unk_801E07C0 *arg1) {
             if (arg1->unk8[2] == 0) {
                 arg1->unk8[2] = 1;
             }
-            dir = (arg0->unk6E + 23) / 45;
+            dir = (arg0->yaw + 23) / 45;
             if (dir >= 8) {
                 dir = 0;
             }
@@ -2271,7 +2060,7 @@ void player_update_map_cursor(Unk_801E076C *arg0, Unk_801E07C0 *arg1) {
             if (arg1->unk8[2] == 0) {
                 arg1->unk8[2] = 1;
             }
-            dir = (arg0->unk6E + 23) / 45;
+            dir = (arg0->yaw + 23) / 45;
             if (dir >= 8) {
                 dir = 0;
             }
@@ -2283,17 +2072,17 @@ void player_update_map_cursor(Unk_801E076C *arg0, Unk_801E07C0 *arg1) {
     }
 }
 
-s32 player_update_map(Unk_801E0710 *arg0) {
-    Unk_801E0368 *o = &D_801E0368;
-    Unk_801E076C *e = arg0->unk5C;
+s32 player_update_map(PlayerStatus *arg0) {
+    Unk_801E0368_u80195DF0 *o = &action_vars;
+    Player *e = arg0->player;
     Unk_801E07C0 *p = &D_801E07C0;
     Unk_801D7FB0 *q;
 
-    if (e->unk46 >= 2) {
+    if (e->vehicle_mode >= 2) {
         return 0;
     }
     if (p->unk0 != 2) {
-        if (!(D_801E6DA0.unk4 & 0x100) && (D_801E6DA0.unk0 & 0x100)) {
+        if (!(kaj_system.pad_prev & 0x100) && (kaj_system.pad_now & 0x100)) {
             if (p->unk0 == 1) {
                 if (p->unk2 == 0) {
                     q = &D_801D7FB0;

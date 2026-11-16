@@ -1,16 +1,6 @@
 #include "common.h"
+#include "game/types.h"
 
-typedef struct {
-    s32 unk0;
-    void *unk4;
-    s32 unk8;
-    s32 unkC;
-} Unk_801D05F8;
-typedef struct {
-    Unk_801D05F8 *unk0;
-    s32 unk4;
-    s32 unk8;
-} Unk_801DFBB8;
 typedef struct {
     s16 unk0[9];
     u8 pad12[0x2];
@@ -31,11 +21,6 @@ typedef struct {
     s32 unkC[1][7];
 } Unk_801D1044;
 void GsInitCoordinate2(void *super, void *base);
-typedef struct {
-    u16 unk0;
-    u16 unk2;
-    u32 unk4;
-} Unk_801D1088;
 void *kaj_tod_set_packet(void *arg0, void *arg1, s32 *arg2, void *arg3, s32 arg4, s32 arg5);
 typedef struct {
     s32 unk0;

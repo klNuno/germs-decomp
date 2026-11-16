@@ -1,237 +1,86 @@
 #include "common.h"
+#include "game/types.h"
 
-typedef struct {
-    u16 unk0;
-    u16 unk2;
-} Unk_80174A14;
-typedef struct {
-    void *unk0;
-} Unk_80174BC8;
-typedef struct {
-    void *unk0;
-    s32 unk4;
-    Unk_80174BC8 *unk8;
-} Unk_80174CB8;
-typedef struct {
-    Unk_80174A14 *unk0;
-    s32 unk4;
-    Unk_80174CB8 *unk8;
-} Unk_80174B10;
-typedef struct Unk_801CCB70 {
-    void *unk0;
-    struct Unk_801CCB70 *unk4;
-    Unk_80174B10 *unk8;
-} Unk_801CCB70;
-typedef struct { Unk_801CCB70 *unk0; Unk_801CCB70 *unk4; Unk_801CCB70 *unk8; s32 unkC; } Unk_801DFE54;
 Unk_801DFE54 *action_queue;
 void kaj_ll_insert_before(Unk_801DFE54 *a0, s32 a1);
-typedef struct { s32 unk0; s32 unk4; s32 unk8; } Unk_80174F54;
-typedef struct { u16 unk0; s16 unk2; s16 unk4; s16 unk6; s16 unk8; u8 unkA; u8 unkB; s16 unkC; u8 unkE; u8 unkF; s16 unk10; u16 unk12; s16 unk14; s16 unk16; s16 unk18; s16 unk1A; s16 unk1C; s16 unk1E; s32 unk20; s32 unk24; s32 unk28; s32 unk2C; s32 unk30; s32 unk34; s16 unk38; s16 unk3A; s16 unk3C; s16 unk3E; s16 unk40; s16 unk42; u8 unk44; u8 unk45; s16 unk46; s32 unk48; } Unk_801762F4;
-typedef struct { u16 unk0; s16 unk2; s32 unk4; s16 unk8; u16 unkA; u8 unkC[0xC0]; } Unk_801767D4;
-typedef struct {
-    u16 unk0;
-    s16 unk2;
-    u16 unk4;
-    s16 unk6;
-    s16 unk8;
-    u16 unkA;
-    s16 unkC;
-    u16 unkE;
-    s16 unk10;
-    u16 unk12;
-    u16 unk14;
-    s16 unk16;
-    s32 unk18;
-    s32 unk1C;
-    s32 unk20;
-} Unk_80176890;
-typedef struct {
-    s32 unk0; s32 unk4; s32 unk8; s32 unkC; s32 unk10; s32 unk14;
-    s32 unk18; s32 unk1C; s32 unk20; s32 unk24; s32 unk28; s32 unk2C; s32 unk30; s32 unk34;
-    Unk_80174F54 *unk38; Unk_801762F4 *unk3C; Unk_801767D4 *unk40; Unk_80176890 *unk44;
-} Unk_801E02D8;
-extern Unk_801E02D8 D_801E02D8;
+/* local view of SceneTrigger: see n2a-report */
+/* Local view of SceneTrigger: this unit reads 0x4 and 0x8 as s32, the shared type has s16 there. */
+typedef struct Unk_80174F54_u801768F8 { s32 unk0; s32 unk4; s32 unk8; } Unk_80174F54_u801768F8;
+extern SceneTables object_scene_tables;
 void free3(void *ptr);
 s32 block_find_at(s32 a0, s32 a1, s32 a2);
-Unk_801767D4 *npc_find_body(s16 arg0);
-typedef struct { s16 unk0; s16 unk2; s16 unk4[2]; u8 unk8[0x28]; s16 unk30; s16 unk32[8]; s16 unk42; s16 unk44; s16 unk46; s16 unk48; u8 unk4A[2]; s32 unk4C; } Unk_801E0768;
-extern Unk_801E0768 *D_801E0768[];
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    u16 unk4;
-    s16 unk6;
-    s16 unk8;
-    s16 unkA;
-} Unk_80173954;
-typedef struct {
-    u8 unk0[4];
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
-    s16 unkE;
-    s16 unk10;
-    s16 unk12;
-    s16 unk14;
-    u16 unk16;
-    u8 unk18[0x18];
-    void *unk30;
-    u8 unk34[0x8];
-    s32 unk3C;
-    u8 unk40[0x14];
-    s32 unk54;
-    s32 unk58;
-    s32 unk5C;
-} Unk_8018E56C;
-typedef struct {
-    u8 unk0[4];
-    s16 unk4;
-} Unk_80176370;
+NpcBody *npc_find_body(s16 arg0);
+extern Inventory *D_801E0768[];
 Unk_8018E56C *mod_find(u16 arg0);
 void mod_draw(s32 arg0, Unk_8018E56C *arg1, u16 arg2);
 void kaj_ll_remove_to_prev(Unk_801DFE54 *arg0);
 s16 kaj_ll_at_tail(Unk_801DFE54 *arg0);
 Unk_801DFE54 *action_set_list;
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    s16 unkA;
-} Unk_80174D6C;
 Unk_80174B10 *action_run_set(Unk_80174B10 *arg0, s32 arg1, s32 arg2);
-typedef struct {
-    u8 unk0[0x6];
-    s16 unk6;
-    u8 unk8[0x2];
-    s16 unkA;
-    u8 unkC[0x2];
-    s16 unkE;
-    u16 unk10;
-    u16 unk12;
-} Unk_801DFFE8;
 extern Unk_801DFFE8 D_801DFFE8;
 void text_release_cmd(void);
 void *memset(void *dst, s32 c, u32 n);
-typedef struct {
-    u8 unk0[0x40];
-    s32 unk40;
-    u8 unk44[0x10];
-    s32 unk54;
-    s32 unk58;
-    s32 unk5C;
-    u8 unk60[0xC];
-    s16 unk6C;
-    s16 unk6E;
-    u8 unk70[0x2];
-    s16 unk72;
-    s16 unk74;
-    s16 unk76;
-} Unk_801E076C;
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-} Unk_80174FFC;
-extern Unk_801E076C *D_801E076C[];
+extern Player *D_801E076C[];
 void mod_setup(Unk_8018E56C *arg0, s32 arg1, s32 arg2, s32 arg3);
 void RotMatrix(Unk_80174FFC *arg0, void *arg1);
-void action_place_npc(Unk_801762F4 *arg0, Unk_8018E56C *arg1);
+void action_place_npc(Npc *arg0, Unk_8018E56C *arg1);
 Unk_80174B10 *action_find_set(s16 arg0);
 void text_close(void);
 void GsSetLsMatrix(void *m);
 s16 block_point_on_model(void *arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4);
-Unk_801762F4 *npc_find(s16 arg0, u16 arg1);
+Npc *npc_find(s16 arg0, u16 arg1);
 s16 mail_wrap_angle(s16 a);
 s32 ratan2(s32 y, s32 x);
 s32 mail_angle_to_dir4(s16 a);
 extern s16 ai_probe_angle[];
 s32 rsin(s32 a);
 s32 rcos(s32 a);
-s16 ai_check_line(Unk_801762F4 *arg0, Unk_80174F54 *arg1, s32 arg2);
-s16 ai_try_move(Unk_801762F4 *arg0, Unk_80174F54 *arg1, s16 arg2);
+s16 ai_check_line(Npc *arg0, Unk_80174F54_u801768F8 *arg1, s32 arg2);
+s16 ai_try_move(Npc *arg0, Unk_80174F54_u801768F8 *arg1, s16 arg2);
 extern s32 D_801E6DB4[];
 Unk_8018E56C *ai_cur_model;
-typedef struct {
-    u8 unk0[0x8];
-    s16 unk8;
-    u8 unkA[0x4];
-    u16 unkE;
-    s32 unk10;
-    u8 unk14[0x4];
-    s32 unk18;
-    u8 unk1C[0x68];
-    void *unk84;
-    s32 unk88;
-} Unk_801DFC60;
-Unk_80176890 *npc_find_stats(s16 arg0);
-s16 ai_find_target(Unk_801762F4 *arg0, s16 arg1);
-s16 ai_decide_fire(Unk_801762F4 *arg0);
-void ai_face_player(Unk_801762F4 *arg0);
-extern Unk_80176890 D_801D7328;
-extern Unk_801767D4 ai_default_body;
+NpcStats *npc_find_stats(s16 arg0);
+s16 ai_find_target(Npc *arg0, s16 arg1);
+s16 ai_decide_fire(Npc *arg0);
+void ai_face_player(Npc *arg0);
+extern NpcStats D_801D7328;
+extern NpcBody ai_default_body;
 Unk_801DFC60 *ai_cur_block;
 s32 ai_cur_grid;
-Unk_80176890 *ai_cur_stats;
-Unk_801767D4 *ai_cur_body;
-typedef struct {
-    u16 unk0;
-    u16 unk2;
-    u16 unk4;
-} Unk_80173250;
+NpcStats *ai_cur_stats;
+NpcBody *ai_cur_body;
 typedef struct {
     Unk_80173250 *unk0;
     s32 unk4;
     char **unk8;
 } Unk_80173054;
 s32 atoi(char *s);
-typedef struct {
-    u8 unk0[0x2E];
-    s16 unk2E;
-    u8 unk30[2];
-    s16 unk32;
-    u8 unk34[0x18];
-    Unk_801762F4 *unk4C;
-    u8 unk50[8];
-    Unk_801E0768 *unk58;
-} Unk_801E0710;
-extern Unk_801E0710 D_801E0710;
+extern PlayerStatus player_status;
 s32 rand(void);
 void player_add_skill_exp(s16 arg0, s16 arg1);
 void player_add_exp(s32 arg0);
 void event_set_blink(s16 arg0, s16 arg1);
 extern s16 ai_dir_angle[];
 s16 mail_angle_to_dir8(s16 a);
-void ai_turn_step(Unk_801762F4 *arg0);
-void ai_move_toward(Unk_801762F4 *arg0, s16 arg1, s32 arg2, s32 arg3);
-s16 ai_in_aim_cone(Unk_801762F4 *arg0, s16 arg1, s16 arg2);
-s16 ai_heading_to(Unk_801762F4 *arg0, s16 arg1);
-s32 ai_player_in_front(Unk_801762F4 *arg0);
+void ai_turn_step(Npc *arg0);
+void ai_move_toward(Npc *arg0, s16 arg1, s32 arg2, s32 arg3);
+s16 ai_in_aim_cone(Npc *arg0, s16 arg1, s16 arg2);
+s16 ai_heading_to(Npc *arg0, s16 arg1);
+s32 ai_player_in_front(Npc *arg0);
 s16 D_801DFC74;
 s16 D_801DFC76;
-void ai_walk(Unk_801762F4 *arg0, s16 arg1, s32 arg2);
-s32 ai_step_back(Unk_801762F4 *arg0, s32 arg1);
-s32 ai_sidestep(Unk_801762F4 *arg0, s32 arg1);
+void ai_walk(Npc *arg0, s16 arg1, s32 arg2);
+s32 ai_step_back(Npc *arg0, s32 arg1);
+s32 ai_sidestep(Npc *arg0, s32 arg1);
 void mod_set_anim(void *arg0, s16 arg1, s16 arg2);
 void sound_se_stop(s32 arg0);
-u16 npc_get_radius(Unk_801762F4 *arg0);
+u16 npc_get_radius(Npc *arg0);
 extern s16 ai_dir_reverse[];
 extern s16 ai_quadrant_dir[4];
 extern u16 D_801E03E6[];
 s32 abs(s32 x);
-void player_take_hit(Unk_801762F4 *arg0, u16 arg1, s32 arg2);
+void player_take_hit(Npc *arg0, u16 arg1, s32 arg2);
 void sound_se_play(s32 arg0);
-typedef struct {
-    u16 unk0;
-    u16 unk2;
-    u16 unk4;
-    u16 unk6;
-    u8 *unk8;
-} Unk_801DFC64;
 s32 SquareRoot0(s32 a);
 s16 npc_find_at_point(s16 arg0, s32 arg1, s32 arg2, s32 arg3);
 s32 block_model_surface(void *arg0, s32 arg1, s32 arg2, s32 arg3);
@@ -281,8 +130,8 @@ static inline s16 pass(s32 v, s32 mode) {
     return 1;
 }
 
-s16 ai_check_line(Unk_801762F4 *arg0, Unk_80174F54 *arg1, s32 arg2) {
-    Unk_801E076C *p;
+s16 ai_check_line(Npc *arg0, Unk_80174F54_u801768F8 *arg1, s32 arg2) {
+    Player *p;
     s32 mode;
     s32 d;
     s32 x0;
@@ -377,7 +226,7 @@ s16 ai_check_line(Unk_801762F4 *arg0, Unk_80174F54 *arg1, s32 arg2) {
             p = D_801E076C[0];
             a = (ratan2(arg1->unk4 - arg0->unk24, (u16)arg0->unk40) * 0x1680) >> 16;
             arg0->unk45 = abs(a);
-            b = abs(p->unk6C - a);
+            b = abs(p->pitch - a);
             if (b < 0x100) {
                 arg0->unk44 = b;
             } else {
@@ -388,7 +237,7 @@ s16 ai_check_line(Unk_801762F4 *arg0, Unk_80174F54 *arg1, s32 arg2) {
     return 1;
 }
 
-void ai_turn_step(Unk_801762F4 *arg0) {
+void ai_turn_step(Npc *arg0) {
     Unk_80174FFC sv;
     s16 d;
     s16 diff;
@@ -427,9 +276,9 @@ void ai_turn_step(Unk_801762F4 *arg0) {
     }
 }
 
-s16 ai_heading_to(Unk_801762F4 *arg0, s16 arg1) {
-    Unk_801E076C *p = D_801E076C[0];
-    Unk_801762F4 *t;
+s16 ai_heading_to(Npc *arg0, s16 arg1) {
+    Player *p = D_801E076C[0];
+    Npc *t;
     s32 dx;
     s32 dz;
 
@@ -440,8 +289,8 @@ s16 ai_heading_to(Unk_801762F4 *arg0, s16 arg1) {
         dx = arg0->unk2C - arg0->unk20;
         dz = arg0->unk34 - arg0->unk28;
     } else if (arg1 == -1) {
-        dx = p->unk54 + p->unk72 * 12500 - arg0->unk20;
-        dz = p->unk5C + p->unk76 * 12500 - arg0->unk28;
+        dx = p->pos_x + p->cell_x * 12500 - arg0->unk20;
+        dz = p->pos_z + p->cell_z * 12500 - arg0->unk28;
     } else {
         t = npc_find(0, arg1);
         if (t == 0) {
@@ -453,13 +302,13 @@ s16 ai_heading_to(Unk_801762F4 *arg0, s16 arg1) {
     return mail_wrap_angle((ratan2(dx, dz) * 360 >> 12) - 180);
 }
 
-s32 ai_player_in_front(Unk_801762F4 *arg0) {
-    Unk_801E076C *p = D_801E076C[0];
+s32 ai_player_in_front(Npc *arg0) {
+    Player *p = D_801E076C[0];
     s32 dx;
     s32 dz;
 
-    dx = p->unk54 + p->unk72 * 12500 - arg0->unk20;
-    dz = p->unk5C + p->unk76 * 12500 - arg0->unk28;
+    dx = p->pos_x + p->cell_x * 12500 - arg0->unk20;
+    dz = p->pos_z + p->cell_z * 12500 - arg0->unk28;
     if (dx >= -9999 && dx < 10000 && dz >= -9999 && dz < 10000) {
         return 1;
     }
@@ -488,8 +337,8 @@ s32 ai_player_in_front(Unk_801762F4 *arg0) {
     return 1;
 }
 
-s16 ai_find_target(Unk_801762F4 *arg0, s16 arg1) {
-    Unk_80174F54 v;
+s16 ai_find_target(Npc *arg0, s16 arg1) {
+    Unk_80174F54_u801768F8 v;
     s16 found;
     u16 min;
     u16 saved;
@@ -499,14 +348,14 @@ s16 ai_find_target(Unk_801762F4 *arg0, s16 arg1) {
     s32 i;
     u16 d;
     s16 r;
-    Unk_801762F4 *e;
-    Unk_801E076C *cam;
-    Unk_801E02D8 *g = &D_801E02D8;
+    Npc *e;
+    Player *cam;
+    SceneTables *g = &object_scene_tables;
 
     min = 0xFFFF;
     saved = 0;
     found = 0;
-    e = g->unk3C;
+    e = g->npcs;
     cam = D_801E076C[0];
     arg0->unk10 = -2;
     best = -2;
@@ -516,9 +365,9 @@ s16 ai_find_target(Unk_801762F4 *arg0, s16 arg1) {
     a = b;
     if (ai_cur_block->unk8 != 0
         && (D_801DFC74 != 0 || D_801DFC76 != 0 || (s16)ai_player_in_front(arg0) != 0)) {
-        v.unk0 = cam->unk54 + cam->unk72 * 12500;
-        v.unk4 = cam->unk58 - cam->unk74 * 32000 + 1600;
-        v.unk8 = cam->unk5C + cam->unk76 * 12500;
+        v.unk0 = cam->pos_x + cam->cell_x * 12500;
+        v.unk4 = cam->pos_y - cam->cell_y * 32000 + 1600;
+        v.unk8 = cam->pos_z + cam->cell_z * 12500;
         if (ai_check_line(arg0, &v, 15) != 0) {
             saved = arg0->unk40;
             min = saved;
@@ -532,8 +381,8 @@ s16 ai_find_target(Unk_801762F4 *arg0, s16 arg1) {
         ai_turn_step(arg0);
         return 0;
     }
-    if (g->unk1C > 0) {
-        for (i = 0; i < g->unk1C; i++, e++) {
+    if (g->npc_count > 0) {
+        for (i = 0; i < g->npc_count; i++, e++) {
             if (e->unk4 != 0 && e->unk6 != 0 && e->unk0 != arg0->unk0 && e->unkE != 2 && e->unkF != 6
                 && e->unk24 == arg0->unk24) {
                 v.unk0 = e->unk20;
@@ -573,8 +422,8 @@ s16 ai_find_target(Unk_801762F4 *arg0, s16 arg1) {
     return 1;
 }
 
-s16 ai_try_move(Unk_801762F4 *arg0, Unk_80174F54 *arg1, s16 arg2) {
-    Unk_801E076C *cam = D_801E076C[0];
+s16 ai_try_move(Npc *arg0, Unk_80174F54_u801768F8 *arg1, s16 arg2) {
+    Player *cam = D_801E076C[0];
     Unk_80174FFC sv;
     s32 y;
     s32 r;
@@ -598,17 +447,17 @@ s16 ai_try_move(Unk_801762F4 *arg0, Unk_80174F54 *arg1, s16 arg2) {
     if (ax == 0 && arg1->unk8 == 0) {
         return 1;
     }
-    r = ai_cur_body->unkA * 10;
-    x = arg0->unk20 + ax - cam->unk72 * 12500;
-    z = arg0->unk28 + arg1->unk8 - cam->unk76 * 12500;
+    r = ai_cur_body->radius * 10;
+    x = arg0->unk20 + ax - cam->cell_x * 12500;
+    z = arg0->unk28 + arg1->unk8 - cam->cell_z * 12500;
     s = r * rsin(arg2) >> 12;
     c = r * rcos(arg2) >> 12;
     if (npc_find_at_point(arg0->unk0, x + s, arg0->unk24, z + c) >= 0) {
         return 0;
     }
     r += 600;
-    dx = abs(x - cam->unk54);
-    dz = abs(z - cam->unk5C);
+    dx = abs(x - cam->pos_x);
+    dz = abs(z - cam->pos_z);
     if (dx <= r && dz <= r) {
         arg0->unk12 |= 0x10;
         return arg0->unkE == 1;
@@ -617,14 +466,14 @@ s16 ai_try_move(Unk_801762F4 *arg0, Unk_80174F54 *arg1, s16 arg2) {
         return 0;
     }
     arg0->unk20 += arg1->unk0;
-    arg0->unk24 = y - cam->unk74 * 32000;
+    arg0->unk24 = y - cam->cell_y * 32000;
     arg0->unk28 += arg1->unk8;
     if (ai_cur_model == NULL || ai_cur_model->unk4 == 0) {
         return 0;
     }
-    ai_cur_model->unk54 = arg0->unk20 - cam->unk72 * 12500;
-    ai_cur_model->unk58 = arg0->unk24 + cam->unk74 * 32000;
-    ai_cur_model->unk5C = arg0->unk28 - cam->unk76 * 12500;
+    ai_cur_model->unk54 = arg0->unk20 - cam->cell_x * 12500;
+    ai_cur_model->unk58 = arg0->unk24 + cam->cell_y * 32000;
+    ai_cur_model->unk5C = arg0->unk28 - cam->cell_z * 12500;
     sv.unk0 = (arg0->unk38 << 12) / 360;
     sv.unk2 = (arg0->unk3A << 12) / 360;
     sv.unk4 = (arg0->unk3C << 12) / 360;
@@ -637,8 +486,8 @@ s16 ai_try_move(Unk_801762F4 *arg0, Unk_80174F54 *arg1, s16 arg2) {
     return 1;
 }
 
-static inline s32 func_801779B8_inline(Unk_801762F4 *arg0, s16 n, s32 arg2, s16 arg3) {
-    Unk_80174F54 v;
+static inline s32 func_801779B8_inline(Npc *arg0, s16 n, s32 arg2, s16 arg3) {
+    Unk_80174F54_u801768F8 v;
     s16 a;
     arg0->unk3E = ai_dir_angle[n];
     ai_turn_step(arg0);
@@ -652,15 +501,15 @@ static inline s32 func_801779B8_inline(Unk_801762F4 *arg0, s16 n, s32 arg2, s16 
     return 1;
 }
 
-void ai_move_toward(Unk_801762F4 *arg0, s16 arg1, s32 arg2, s32 arg3) {
+void ai_move_toward(Npc *arg0, s16 arg1, s32 arg2, s32 arg3) {
     s16 f = arg3;
-    Unk_801E076C *p = D_801E076C[0];
+    Player *p = D_801E076C[0];
     s16 d[2];
     s16 cur;
     s16 back;
     s32 dx;
     s32 dz;
-    Unk_801762F4 *t;
+    Npc *t;
     s16 n;
     s16 a;
     s16 j;
@@ -678,14 +527,14 @@ void ai_move_toward(Unk_801762F4 *arg0, s16 arg1, s32 arg2, s32 arg3) {
             goto fallback;
         }
         if (arg0->unk10 == -1) {
-            dx = p->unk54 + p->unk72 * 12500 - arg0->unk20;
-            dz = p->unk5C + p->unk76 * 12500 - arg0->unk28;
+            dx = p->pos_x + p->cell_x * 12500 - arg0->unk20;
+            dz = p->pos_z + p->cell_z * 12500 - arg0->unk28;
         } else {
             t = npc_find(0, arg0->unk10);
             if (t == 0 || t->unk10 != -1) {
                 goto fallback;
             }
-            n = npc_get_radius(t) + ai_cur_body->unkA * 10;
+            n = npc_get_radius(t) + ai_cur_body->radius * 10;
             a = (mail_wrap_angle(t->unk3A - 270) << 12) / 360;
             if (t->unk0 & 1) {
                 n = -n;
@@ -762,8 +611,8 @@ fallback:
     ai_turn_step(arg0);
 }
 
-void ai_walk(Unk_801762F4 *arg0, s16 arg1, s32 arg2) {
-    Unk_80174F54 v;
+void ai_walk(Npc *arg0, s16 arg1, s32 arg2) {
+    Unk_80174F54_u801768F8 v;
     s32 f;
     s16 d;
     s16 a;
@@ -804,8 +653,8 @@ void ai_walk(Unk_801762F4 *arg0, s16 arg1, s32 arg2) {
     ai_move_toward(arg0, arg1, arg2, f);
 }
 
-s32 ai_step_back(Unk_801762F4 *arg0, s32 arg1) {
-    Unk_80174F54 v;
+s32 ai_step_back(Npc *arg0, s32 arg1) {
+    Unk_80174F54_u801768F8 v;
     s32 i;
     s32 n;
     s16 a;
@@ -830,8 +679,8 @@ s32 ai_step_back(Unk_801762F4 *arg0, s32 arg1) {
     return 0;
 }
 
-s32 ai_sidestep(Unk_801762F4 *arg0, s32 arg1) {
-    Unk_80174F54 v;
+s32 ai_sidestep(Npc *arg0, s32 arg1) {
+    Unk_80174F54_u801768F8 v;
     s32 i;
     s16 a;
     s16 r;
@@ -853,8 +702,8 @@ s32 ai_sidestep(Unk_801762F4 *arg0, s32 arg1) {
     return 0;
 }
 
-s16 ai_decide_fire(Unk_801762F4 *arg0) {
-    Unk_801E076C *p = D_801E076C[0];
+s16 ai_decide_fire(Npc *arg0) {
+    Player *p = D_801E076C[0];
     s32 c;
     s32 *pc;
     s32 t;
@@ -868,7 +717,7 @@ s16 ai_decide_fire(Unk_801762F4 *arg0) {
     if (arg0->unk10 != -1) {
         return 0;
     }
-    if (p->unk40 & 0xC9000000) {
+    if (*(s32 *)&p->unk40 & 0xC9000000) { /* one word over 0x40 and 0x42 */
         return 0;
     }
     if (!ai_in_aim_cone(arg0, 1, 0)) {
@@ -884,7 +733,7 @@ s16 ai_decide_fire(Unk_801762F4 *arg0) {
         }
     }
     pc = &c;
-    t = -(ai_cur_body->unkA + 600) + (u16)arg0->unk40;
+    t = -(ai_cur_body->radius + 600) + (u16)arg0->unk40;
     c = ai_cur_stats->unk14;
     if (t < 0) {
         t = 0;
@@ -918,12 +767,12 @@ s16 ai_decide_fire(Unk_801762F4 *arg0) {
     return 1;
 }
 
-void ai_face_player(Unk_801762F4 *arg0) {
-    Unk_801E076C *p = D_801E076C[0];
+void ai_face_player(Npc *arg0) {
+    Player *p = D_801E076C[0];
     Unk_80174FFC sv;
 
     if (ai_cur_model != 0 && ai_cur_model->unk4 != 0) {
-        arg0->unk3A = mail_wrap_angle((ratan2(p->unk54 + p->unk72 * 12500 - arg0->unk20, p->unk5C + p->unk76 * 12500 - arg0->unk28) * 360 >> 12) - 180);
+        arg0->unk3A = mail_wrap_angle((ratan2(p->pos_x + p->cell_x * 12500 - arg0->unk20, p->pos_z + p->cell_z * 12500 - arg0->unk28) * 360 >> 12) - 180);
         sv.unk0 = (arg0->unk38 << 12) / 360;
         sv.unk2 = (arg0->unk3A << 12) / 360;
         sv.unk4 = (arg0->unk3C << 12) / 360;
@@ -932,7 +781,7 @@ void ai_face_player(Unk_801762F4 *arg0) {
     }
 }
 
-void ai_update_stand(Unk_801762F4 *arg0) {
+void ai_update_stand(Npc *arg0) {
     s16 f;
 
     ai_cur_grid = 0;
@@ -971,7 +820,7 @@ void ai_update_stand(Unk_801762F4 *arg0) {
     }
 }
 
-void ai_update_move(Unk_801762F4 *arg0, s16 arg1) {
+void ai_update_move(Npc *arg0, s16 arg1) {
     s32 f;
     s32 n;
     s32 m;
@@ -1025,8 +874,8 @@ void ai_update_move(Unk_801762F4 *arg0, s16 arg1) {
         break;
     }
     d = D_801E6DB4[0];
-    if ((u16)ai_cur_stats->unk10 != 0) {
-        x = d * (u16)ai_cur_stats->unk10;
+    if ((u16)ai_cur_stats->speed != 0) {
+        x = d * (u16)ai_cur_stats->speed;
     } else {
         x = d * 3;
     }
@@ -1076,8 +925,8 @@ void ai_update_move(Unk_801762F4 *arg0, s16 arg1) {
     }
 }
 
-void ai_fire(Unk_801762F4 *arg0) {
-    Unk_801E076C *p;
+void ai_fire(Npc *arg0) {
+    Player *p;
     s32 f;
     s32 t;
     s32 a;
@@ -1112,7 +961,7 @@ void ai_fire(Unk_801762F4 *arg0) {
         if ((arg0->unk2 & 0xFF) == 2 || (arg0->unk2 & 0xFF) == 3) {
             sound_se_play(0x28);
         } else {
-            switch ((u16)ai_cur_stats->unk2) {
+            switch ((u16)ai_cur_stats->weapon_kind) {
             case 0:
                 sound_se_play(0x23);
                 break;
@@ -1136,7 +985,7 @@ void ai_fire(Unk_801762F4 *arg0) {
         if ((arg0->unk2 & 0xFF) == 2 || (arg0->unk2 & 0xFF) == 3) {
             sound_se_play(0x28);
         } else {
-            switch ((u16)ai_cur_stats->unk2) {
+            switch ((u16)ai_cur_stats->weapon_kind) {
             case 0:
                 sound_se_play(0x23);
                 break;
@@ -1156,7 +1005,7 @@ void ai_fire(Unk_801762F4 *arg0) {
         }
         return;
     }
-    t = -(ai_cur_body->unkA + 600) + (u16)arg0->unk40;
+    t = -(ai_cur_body->radius + 600) + (u16)arg0->unk40;
     if (t < 0) {
         t = 0;
     }
@@ -1176,8 +1025,8 @@ void ai_fire(Unk_801762F4 *arg0) {
     if (!(t < a)) {
         r = c * m >> 12;
     }
-    if ((u16)ai_cur_stats->unk2 == 0) {
-        x = p->unk58 - p->unk74 * 32000 - arg0->unk24 + 1600;
+    if ((u16)ai_cur_stats->weapon_kind == 0) {
+        x = p->pos_y - p->cell_y * 32000 - arg0->unk24 + 1600;
         if (x > 0) {
             x = -x;
         }
@@ -1185,7 +1034,7 @@ void ai_fire(Unk_801762F4 *arg0) {
             if ((arg0->unk2 & 0xFF) == 2 || (arg0->unk2 & 0xFF) == 3) {
                 sound_se_play(0x28);
             } else {
-                switch ((u16)ai_cur_stats->unk2) {
+                switch ((u16)ai_cur_stats->weapon_kind) {
                 case 0:
                     sound_se_play(0x23);
                     break;
@@ -1216,12 +1065,12 @@ void ai_fire(Unk_801762F4 *arg0) {
         if (m < 410) {
             m = 410;
         }
-        player_take_hit(arg0, ai_cur_stats->unk2, (u16)ai_cur_stats->unk8 * m >> 12);
+        player_take_hit(arg0, ai_cur_stats->weapon_kind, (u16)ai_cur_stats->damage * m >> 12);
     }
     if ((arg0->unk2 & 0xFF) == 2 || (arg0->unk2 & 0xFF) == 3) {
         sound_se_play(0x28);
     } else {
-        switch ((u16)ai_cur_stats->unk2) {
+        switch ((u16)ai_cur_stats->weapon_kind) {
         case 0:
             sound_se_play(0x23);
             break;
@@ -1241,8 +1090,8 @@ void ai_fire(Unk_801762F4 *arg0) {
     }
 }
 
-s16 ai_in_aim_cone(Unk_801762F4 *arg0, s16 arg1, s16 arg2) {
-    Unk_801E076C *p = D_801E076C[0];
+s16 ai_in_aim_cone(Npc *arg0, s16 arg1, s16 arg2) {
+    Player *p = D_801E076C[0];
     s32 dx;
     s32 dz;
     s16 lim;
@@ -1251,11 +1100,11 @@ s16 ai_in_aim_cone(Unk_801762F4 *arg0, s16 arg1, s16 arg2) {
 
     if (arg1 != 0) {
         lim = 10;
-        dx = p->unk54 + p->unk72 * 12500 - arg0->unk20;
-        dz = p->unk5C + p->unk76 * 12500 - arg0->unk28;
+        dx = p->pos_x + p->cell_x * 12500 - arg0->unk20;
+        dz = p->pos_z + p->cell_z * 12500 - arg0->unk28;
     } else {
-        dx = arg0->unk20 - p->unk54 - p->unk72 * 12500;
-        dz = arg0->unk28 - p->unk5C - p->unk76 * 12500;
+        dx = arg0->unk20 - p->pos_x - p->cell_x * 12500;
+        dz = arg0->unk28 - p->pos_z - p->cell_z * 12500;
         lim = 15;
         if (arg2 == 10 || arg2 >= 14) {
             lim = 25;
@@ -1265,7 +1114,7 @@ s16 ai_in_aim_cone(Unk_801762F4 *arg0, s16 arg1, s16 arg2) {
     if (arg1 != 0) {
         a = mail_wrap_angle(t - arg0->unk3A + 180);
     } else {
-        a = mail_wrap_angle(t - p->unk6E);
+        a = mail_wrap_angle(t - p->yaw);
     }
     if (a <= lim || a >= 360 - lim) {
         if (arg1 != 0) {

@@ -1,34 +1,6 @@
 #include "common.h"
+#include "game/types.h"
 
-typedef struct Unk_801A7AFC {
-    u16 unk0;
-    u16 unk2;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    u8 unkA[0x2];
-    s16 unkC;
-    s16 unkE;
-    s16 unk10;
-    u8 unk12[0x2];
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    s32 unk20;
-    s16 unk24;
-    s16 unk26;
-    s16 unk28;
-    u8 unk2A[0x2];
-    s32 unk2C;
-    u8 unk30[0x14];
-    s32 unk44;
-    s32 unk48;
-    s32 unk4C;
-    u8 unk50[0x2C];
-    void *unk7C;
-    void *unk80;
-    void *unk84;
-} Unk_801A7AFC;
 void free3(void *ptr);
 typedef struct Unk_801A7BA4 {
     struct Unk_801A7BA4 *unk0;
@@ -51,31 +23,6 @@ typedef struct Unk_801A8EFC {
     s32 unk10;
 } Unk_801A8EFC;
 void sound_se_play(s32 arg0);
-typedef struct Unk_801E1118 {
-    s32 unk0;
-    s32 unk4;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
-    u16 unkE;
-    u16 unk10;
-    u16 unk12;
-    s16 unk14;
-    s16 unk16;
-    s16 unk18;
-    s16 unk1A;
-    s32 unk1C;
-    s32 unk20;
-    s32 unk24;
-    s32 unk28;
-    s16 unk2C;
-    s16 unk2E;
-    s16 unk30;
-    u8 unk32[0x2];
-    s16 unk34;
-    s16 unk36;
-    s16 unk38;
-} Unk_801E1118;
 void vehicle_train_exit_prompt(s32 arg0);
 extern Unk_801E1118 D_801E1118;
 void vehicle_train_set_doors(s32 arg0);
@@ -106,100 +53,27 @@ extern char D_801719DC[];
 void *kaj_malloc(u32 size);
 void kaj_abend(s32 arg0, char *arg1, char *arg2, s32 arg3);
 extern char thing_str_file[];
-typedef struct { void *unk0; s32 unk4; void *unk8; } Unk_80174B10;
 Unk_80174B10 *action_find_set(s16 arg0);
 Unk_80174B10 *action_run_set(Unk_80174B10 *arg0, s32 arg1, s32 arg2);
-typedef struct {
-    s32 unk0;
-    s32 unk4;
-    s32 unk8;
-    u8 unkC[0x4];
-    s16 unk10;
-    s16 unk12;
-    s16 unk14;
-    u8 unk16[0x26];
-    s16 unk3C;
-    u8 unk3E[0x4];
-    u16 unk42;
-    u8 unk44[0x2];
-    u16 unk46;
-    u8 unk48[0xC];
-    s32 unk54;
-    s32 unk58;
-    s32 unk5C;
-    u8 unk60[0xC];
-    u16 unk6C;
-    u16 unk6E;
-    u16 unk70;
-    s16 unk72;
-    s16 unk74;
-    s16 unk76;
-} Unk_801E076C;
-extern Unk_801E076C *D_801E076C[];
+extern Player *D_801E076C[];
 extern s16 D_801D7FB0[];
-typedef struct { s32 unk0; s16 unk4; s16 unk6; } Unk_801E056C;
-typedef struct {
-    u16 unk0[0x70];
-    u8 unkE0[0x120];
-    s16 unk200;
-    u8 unk202[0x2];
-    Unk_801E056C unk204[4];
-    u8 unk224[0x20];
-    s32 unk244;
-    u8 unk248[6];
-    s16 unk24E;
-    s16 unk250;
-    s16 unk252;
-} Unk_801E0368;
-extern Unk_801E0368 D_801E0368;
-typedef struct { u16 unk0; s16 unk2; s16 *unk4; s16 *unk8; s16 *unkC; } Unk_801E07C0;
+extern GameVars action_vars;
 extern Unk_801E07C0 D_801E07C0;
 s16 thing_next_vehicle_mode;
 void text_show(char *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
 void text_close(void);
 void sound_bgm_play(s16 arg0);
 s16 vehicle_train_end_of_line(s16 arg0);
-void vehicle_navi_show(Unk_801E076C *arg0, s16 arg1, s32 arg2);
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4[2];
-    u8 unk8[4];
-    s16 unkC[0x12];
-    s16 unk30;
-    s16 unk32[8];
-    s16 unk42;
-    s16 unk44;
-    s16 unk46;
-    u16 unk48;
-    u8 unk4A[2];
-    s32 unk4C;
-} Unk_801E0768;
-typedef struct {
-    u8 unk0[0x4C];
-    void *unk4C;
-    u8 unk50[0x8];
-    Unk_801E0768 *unk58;
-    Unk_801E076C *unk5C;
-} Unk_801E0710;
-extern Unk_801E0710 D_801E0710;
-typedef struct { s16 unk0[5]; s16 unkA; char *unkC; s16 unk10; s16 unk12; s32 unk14; s32 unk18; s32 unk1C; } Unk_801E0340;
+void vehicle_navi_show(Player *arg0, s16 arg1, s32 arg2);
+extern PlayerStatus player_status;
 extern Unk_801E0340 D_801E0340;
-typedef struct Unk_801E6DA0 {
-    s32 unk0;
-    s32 unk4;
-    s16 unk8;
-    s16 unkA;
-    u8 unkC[0x8];
-    s32 unk14;
-} Unk_801E6DA0;
-extern Unk_801E6DA0 D_801E6DA0;
+extern KajSystem kaj_system;
 s32 kaj_pad_read(void);
-s16 vehicle_car_input(Unk_801E0710 *arg0, s32 arg1);
-s16 effect_item_input(Unk_801E0710 *arg0, s16 arg1);
-s32 player_update_map(Unk_801E0710 *arg0);
-void player_handle_pad(Unk_801E0710 *arg0, s32 arg1, s32 arg2);
-void thing_field_do_action(Unk_801E076C *arg0);
+s16 vehicle_car_input(PlayerStatus *arg0, s32 arg1);
+s16 effect_item_input(PlayerStatus *arg0, s16 arg1);
+s32 player_update_map(PlayerStatus *arg0);
+void player_handle_pad(PlayerStatus *arg0, s32 arg1, s32 arg2);
+void thing_field_do_action(Player *arg0);
 extern s32 D_801DFED4;
 extern s32 D_801DFED8;
 extern s32 D_801DFEDC;
@@ -226,17 +100,6 @@ void kaj_view_set_bg_color(u8 arg0, u8 arg1, u8 arg2);
 void block_hide_all(void);
 void thing_set_active(s32 arg0, s32 arg1, s16 arg2);
 void block_stream_stop(void);
-typedef struct {
-    u32 unk0;
-    s16 unk4;
-    s16 unk6;
-    u16 unk8;
-    s16 unkA;
-    u16 unkC;
-    s16 unkE;
-    u8 pad10[0x2];
-    u16 unk12;
-} Unk_801DFFE8;
 extern Unk_801DFFE8 D_801DFFE8;
 void sprite_phone_save_exit();
 s16 vehicle_train_get_off(s16 arg0);
@@ -312,12 +175,6 @@ typedef struct {
     void *unkBC;
     Unk_801A9BF4 *unkC0;
 } Unk_801E032C;
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-} Unk_801A742C_10;
 void thing_train_calc_stops(Unk_801E1118 *arg0);
 void RotMatrix(Unk_801A742C_10 *arg0, void *arg1);
 void GsInitCoordinate2(void *super, void *base);
@@ -325,49 +182,16 @@ void kaj_tmd_load(void *arg0, void *arg1, void *arg2);
 extern s16 D_801DFC80;
 void RotMatrixZYX(Unk_801A742C_10 *arg0, void *arg1);
 s32 block_find_at(s32 a0, s32 a1, s32 a2);
-void sprite_thing_update_marker(Unk_801E076C *arg0, Unk_801A7AFC *arg1, void *arg2);
+void sprite_thing_update_marker(Player *arg0, Unk_801A7AFC *arg1, void *arg2);
 void sprite_thing_update_fly_in(Unk_801A7AFC *arg0);
 void vehicle_train_update(Unk_801A7AFC *arg0);
 void vehicle_car_follow_player(Unk_801A7AFC *arg0, s32 arg1);
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-    s32 unk14;
-    s32 unk18;
-    Unk_801A742C_10 unk1C;
-    s16 unk24;
-    s16 unk26;
-    s16 unk28;
-    u8 unk2A[0x2];
-    Unk_801A742C_10 unk2C[4];
-    s32 unk4C;
-    s32 unk50;
-    s32 unk54;
-    u8 unk58[0x4];
-    s32 unk5C;
-    s32 unk60;
-    s32 unk64;
-} Unk_801E1158;
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-} Unk_801D7FB0;
 extern Unk_801A7AFC *D_801E0764[];
 extern Unk_801E1158 D_801E1158;
 s16 thing_car_exit_prompt_on;
 s32 thing_car_speed_div;
 void RotTrans(void *v0, s32 *v1, s32 *flag);
-void player_set_view(Unk_801E076C *arg0, s16 arg1);
+void player_set_view(Player *arg0, s16 arg1);
 void sound_se_stop(s32 arg0);
 void mail_goto_twn(s32 a, s32 b, s32 c, s16 d, s16 e);
 s32 rsin(s32 a);
@@ -383,9 +207,9 @@ INCLUDE_RODATA("asm/nonmatchings/game/801A7560", D_801719DC);
 void thing_update_all(void) {
     Unk_801A742C_10 sv;
     Unk_801DFFA0 *p = D_801DFFA0;
-    Unk_801E0710 *g = &D_801E0710;
-    Unk_801E0768 *a = g->unk58;
-    Unk_801E076C *e = g->unk5C;
+    PlayerStatus *g = &player_status;
+    Inventory *a = g->inventory;
+    Player *e = g->player;
     Unk_801A7AFC *o;
 
     if (p->unkC == 0) {
@@ -396,7 +220,7 @@ void thing_update_all(void) {
         o = p->unk8->unk8;
         if (o != NULL && o->unk2 != 4) {
             if (*(s32 *)o == 0x30007) {
-                if (g->unk4C != 0 && a->unk48 >= 3) {
+                if (g->target_npc != 0 && a->weapon_state >= 3) {
                     if (o->unk4 == 0) {
                         o->unk4 = 1;
                     }
@@ -419,7 +243,7 @@ void thing_update_all(void) {
                         case 0:
                         case 2:
                         case 6:
-                            o->unk26 = -D_801E6DA0.unk14 + o->unk26;
+                            o->unk26 = -kaj_system.vsync_delta + o->unk26;
                             if (o->unk26 < 0) {
                                 o->unk26 += 360;
                             } else if (o->unk26 > 360) {
@@ -432,7 +256,7 @@ void thing_update_all(void) {
                             o->unk2C = 0;
                             break;
                         case 1:
-                            o->unk26 -= -D_801E6DA0.unk14;
+                            o->unk26 -= -kaj_system.vsync_delta;
                             if (o->unk26 < 0) {
                                 o->unk26 += 360;
                             } else if (o->unk26 > 360) {
@@ -447,7 +271,7 @@ void thing_update_all(void) {
                         case 3:
                         case 4:
                         case 5:
-                            o->unk26 += ~(D_801E6DA0.unk14 / 4);
+                            o->unk26 += ~(kaj_system.vsync_delta / 4);
                             if (o->unk26 < 0) {
                                 o->unk26 += 360;
                             } else if (o->unk26 > 360) {
@@ -460,10 +284,10 @@ void thing_update_all(void) {
                             o->unk2C = 0;
                             break;
                         case 7:
-                            sprite_thing_update_marker(e, o, g->unk4C);
+                            sprite_thing_update_marker(e, o, g->target_npc);
                             break;
                         case 8:
-                            o->unk26 += D_801E6DA0.unk14 * 5 / 2;
+                            o->unk26 += kaj_system.vsync_delta * 5 / 2;
                             if (o->unk26 < 0) {
                                 o->unk26 += 360;
                             } else if (o->unk26 > 360) {
@@ -476,7 +300,7 @@ void thing_update_all(void) {
                             o->unk2C = 0;
                             break;
                         case 9:
-                            o->unk26 -= D_801E6DA0.unk14 * 5;
+                            o->unk26 -= kaj_system.vsync_delta * 5;
                             if (o->unk26 < 0) {
                                 o->unk26 += 360;
                             } else if (o->unk26 > 360) {
@@ -808,8 +632,8 @@ void thing_cmd_set_active(Unk_801A8264 *arg0) {
 }
 
 s32 thing_field_task_hook(Unk_801A8EFC *arg0) {
-    Unk_801E0368 *g = &D_801E0368;
-    Unk_801E076C *o = D_801E076C[0];
+    GameVars *g = &action_vars;
+    Player *o = D_801E076C[0];
     Unk_801E1118 *p = &D_801E1118;
     Unk_801E07C0 *c = &D_801E07C0;
     s16 *q = D_801D7FB0;
@@ -852,7 +676,7 @@ s32 thing_field_task_hook(Unk_801A8EFC *arg0) {
     return 0;
 }
 
-void thing_field_do_action(Unk_801E076C *arg0) {
+void thing_field_do_action(Player *arg0) {
     Unk_801E0340 *s = &D_801E0340;
     Unk_801DFFE8 *d = &D_801DFFE8;
     Unk_80174B10 *p;
@@ -868,12 +692,12 @@ void thing_field_do_action(Unk_801E076C *arg0) {
             if (hi == 0 && lo == 0) {
                 sound_se_play(0x16);
                 s->unkA = 1;
-                s->unk14 = arg0->unk54 + arg0->unk72 * 12500;
+                s->unk14 = arg0->pos_x + arg0->cell_x * 12500;
                 s->unk18 = 0;
-                s->unk1C = arg0->unk5C + arg0->unk76 * 12500;
+                s->unk1C = arg0->pos_z + arg0->cell_z * 12500;
                 thing_field_exit_code = 3;
                 thing_next_vehicle_mode = 1;
-                s->unk12 = arg0->unk6E;
+                s->unk12 = arg0->yaw;
                 s->unk10 = 0;
             } else {
                 sound_se_play(0x11);
@@ -885,7 +709,7 @@ void thing_field_do_action(Unk_801E076C *arg0) {
             sound_se_play(0xD);
             s->unkA = 1;
             thing_field_exit_code = 2;
-            thing_field_exit_arg_hi = (d->unk0 & 0xFF00) >> 8;
+            thing_field_exit_arg_hi = ((u32)d->unk0 & 0xFF00) >> 8; /* unk0 is read unsigned here (srl): the cast keeps the bytes */
             thing_field_exit_arg_lo = d->unk0 & 0xFF;
             break;
         case 0xFF:
@@ -910,16 +734,16 @@ void thing_field_do_action(Unk_801E076C *arg0) {
 
 void thing_field_input(void) {
     Unk_801E0340 *s = &D_801E0340;
-    Unk_801E0710 *m = &D_801E0710;
-    Unk_801E6DA0 *pad = &D_801E6DA0;
-    s16 mode = pad->unkA;
-    Unk_801E076C *o = m->unk5C;
+    PlayerStatus *m = &player_status;
+    KajSystem *pad = &kaj_system;
+    s16 mode = pad->pad_mode;
+    Player *o = m->player;
     s32 id;
     s32 t;
 
-    if (mode == 1 && !(o->unk42 & 2)) {
+    if (mode == 1 && !(o->flags & 2)) {
         t = kaj_pad_read();
-        id = o->unk46;
+        id = o->vehicle_mode;
         if (id == mode) {
             if (vehicle_car_input(m, t) != 0) {
                 thing_field_exit_code = 4;
@@ -928,7 +752,7 @@ void thing_field_input(void) {
             }
         } else if (effect_item_input(m, 2) == 0) {
             player_update_map(m);
-            if ((o->unk42 & 4) && !(pad->unk4 & 0x20) && (pad->unk0 & 0x20)) {
+            if ((o->flags & 4) && !(pad->pad_prev & 0x20) && (pad->pad_now & 0x20)) {
                 thing_field_do_action(o);
                 return;
             }
@@ -938,14 +762,14 @@ void thing_field_input(void) {
 }
 
 void thing_field_enter(void) {
-    Unk_801E0768 *p;
-    Unk_801E076C *o;
+    Inventory *p;
+    Player *o;
     Unk_801E1118 *q;
 
     thing_next_vehicle_mode = -1;
     D_801DFFAC = 1;
-    p = D_801E0710.unk58;
-    o = D_801E0710.unk5C;
+    p = player_status.inventory;
+    o = player_status.player;
     q = &D_801E1118;
     sprite_set_visible(0x410, 1);
     action_reset(1);
@@ -972,7 +796,7 @@ void thing_field_enter(void) {
         block_set_mode(2);
         break;
     }
-    switch (o->unk46) {
+    switch (o->vehicle_mode) {
     case 0:
         vehicle_car_place();
         sound_se_play(0x15);
@@ -984,7 +808,7 @@ void thing_field_enter(void) {
         thing_set_animate(3, 3, 1);
         thing_set_animate(3, 4, 1);
         sprite_set_visible(0x40E, 1);
-        if (o->unk46 == 1) {
+        if (o->vehicle_mode == 1) {
             sound_se_play(0x19);
             sound_se_play(0x1A);
         }
@@ -1012,7 +836,7 @@ void thing_field_enter(void) {
 }
 
 void thing_field_leave(void) {
-    Unk_801E076C *o = D_801E076C[0];
+    Player *o = D_801E076C[0];
     s32 i;
 
     effect_clear_alarms();
@@ -1060,7 +884,7 @@ void thing_field_leave(void) {
     }
     block_stream_stop();
     if (thing_next_vehicle_mode != -1) {
-        o->unk46 = thing_next_vehicle_mode;
+        o->vehicle_mode = thing_next_vehicle_mode;
     }
 }
 
@@ -1197,7 +1021,7 @@ void thing_train_calc_stops(Unk_801E1118 *arg0) {
     }
 }
 
-void thing_car_init(Unk_801E032C *arg0, Unk_801E076C *arg1) {
+void thing_car_init(Unk_801E032C *arg0, Player *arg1) {
     s32 v[3];
     Unk_801A742C_10 sv;
     s32 flag;
@@ -1205,7 +1029,7 @@ void thing_car_init(Unk_801E032C *arg0, Unk_801E076C *arg1) {
     Unk_801A7AFC *o = D_801E0764[0];
     Unk_801E1158 *q = &D_801E1158;
     Unk_801D7FB0 *r = (Unk_801D7FB0 *)D_801D7FB0;
-    Unk_801E0368 *g = &D_801E0368;
+    GameVars *g = &action_vars;
 
     arg0->unk0 = h->unk0;
     arg0->unk2 = 0;
@@ -1227,9 +1051,9 @@ void thing_car_init(Unk_801E032C *arg0, Unk_801E076C *arg1) {
     arg0->unk10 = o->unk24;
     arg0->unk12 = o->unk26;
     arg0->unk14 = o->unk28;
-    arg0->unk30 = arg0->unk4 - arg1->unk72 * 12500;
-    arg0->unk34 = arg0->unk8 + arg1->unk74 * 32000;
-    arg0->unk38 = arg0->unkC - arg1->unk76 * 12500;
+    arg0->unk30 = arg0->unk4 - arg1->cell_x * 12500;
+    arg0->unk34 = arg0->unk8 + arg1->cell_y * 32000;
+    arg0->unk38 = arg0->unkC - arg1->cell_z * 12500;
     sv.unk0 = (arg0->unk10 << 12) / 360;
     sv.unk2 = (arg0->unk12 << 12) / 360;
     sv.unk4 = (arg0->unk14 << 12) / 360;
@@ -1245,11 +1069,11 @@ void thing_car_init(Unk_801E032C *arg0, Unk_801E076C *arg1) {
     sv.unk2 = 0;
     sv.unk4 = 0;
     RotMatrix(&sv, arg0->unk6C);
-    arg1->unk54 = v[0] + arg1->unk72 * 12500;
-    arg1->unk58 = v[1] - arg1->unk74 * 32000;
-    arg1->unk5C = v[2] + arg1->unk76 * 12500;
-    arg1->unk6C = 0;
-    arg1->unk6E = arg0->unk12;
+    arg1->pos_x = v[0] + arg1->cell_x * 12500;
+    arg1->pos_y = v[1] - arg1->cell_y * 32000;
+    arg1->pos_z = v[2] + arg1->cell_z * 12500;
+    arg1->pitch = 0;
+    arg1->yaw = arg0->unk12;
     arg1->unk70 = 0;
     player_set_view(arg1, 1);
     q->unk0 = 0;
@@ -1288,7 +1112,7 @@ void thing_car_init(Unk_801E032C *arg0, Unk_801E076C *arg1) {
     r->unk8 = 0;
     r->unkC = 0;
     r->unk10 = 0;
-    switch (g->unk200) {
+    switch ((s16)g->unk200) { /* read signed in this unit */
     case 2:
         thing_car_speed_div = 500;
         break;
@@ -1301,13 +1125,13 @@ void thing_car_init(Unk_801E032C *arg0, Unk_801E076C *arg1) {
     }
 }
 
-static inline s32 func_801A968C_inline(Unk_801E032C *arg0, Unk_801E076C *o, s32 *px, s32 *py, s32 *pz, s32 ang) {
+static inline s32 func_801A968C_inline(Unk_801E032C *arg0, Player *o, s32 *px, s32 *py, s32 *pz, s32 ang) {
     s32 x;
     s32 z;
     x = arg0->unk4 + ((*px * rcos(ang) + *pz * rsin(ang)) >> 12);
     z = arg0->unkC + ((*pz * rcos(ang) - *px * rsin(ang)) >> 12);
-    *px = x - o->unk72 * 12500;
-    *pz = z - o->unk76 * 12500;
+    *px = x - o->cell_x * 12500;
+    *pz = z - o->cell_z * 12500;
     if ((s16)func_8017CFE4(*px, py, *pz)) {
         *px = x;
         *pz = z;
@@ -1321,7 +1145,7 @@ void thing_car_get_out(Unk_801E032C *arg0) {
     s32 y;
     s32 z;
     s32 ang;
-    Unk_801E076C *o = D_801E076C[0];
+    Player *o = D_801E076C[0];
 
     o->unk0 = arg0->unk4;
     o->unk4 = arg0->unk8 - 370;
@@ -1356,7 +1180,7 @@ void thing_car_get_out(Unk_801E032C *arg0) {
     mail_goto_twn(x, y, z, arg0->unk12, 0);
 }
 
-void thing_train_init(Unk_801E032C *arg0, Unk_801E076C *arg1) {
+void thing_train_init(Unk_801E032C *arg0, Player *arg1) {
     Unk_801A742C_10 sv;
     Unk_801A9BF4 *h = arg0->unkC0;
     Unk_801E1118 *q = &D_801E1118;
@@ -1371,25 +1195,25 @@ void thing_train_init(Unk_801E032C *arg0, Unk_801E076C *arg1) {
         kaj_tmd_load(&arg0->unkBC, (u8 *)arg0->unkC0 + h->unk1C, &arg0->unk18);
     }
     GsInitCoordinate2(NULL, &arg0->unk18);
-    arg0->unk4 = arg1->unk72 * 12500 + arg1->unk54;
-    arg0->unk8 = -(arg1->unk74 * 32000) + 75;
-    arg0->unkC = arg1->unk76 * 12500 + arg1->unk5C;
+    arg0->unk4 = arg1->cell_x * 12500 + arg1->pos_x;
+    arg0->unk8 = -(arg1->cell_y * 32000) + 75;
+    arg0->unkC = arg1->cell_z * 12500 + arg1->pos_z;
     arg0->unk10 = 0;
     arg0->unk12 = 0;
     arg0->unk14 = 0;
     if (q->unk8 == 0) {
         arg0->unk12 = 180;
-        arg1->unk6E -= 180;
+        arg1->yaw -= 180;
     }
     q->unk2C = 0;
     q->unk2E = 0;
     q->unk30 = 0;
-    q->unk34 = arg1->unk6C;
-    q->unk36 = arg1->unk6E;
+    q->unk34 = arg1->pitch;
+    q->unk36 = arg1->yaw;
     q->unk38 = arg1->unk70;
-    arg0->unk30 = arg0->unk4 - arg1->unk72 * 12500;
-    arg0->unk34 = arg0->unk8 + arg1->unk74 * 32000;
-    arg0->unk38 = arg0->unkC - arg1->unk76 * 12500;
+    arg0->unk30 = arg0->unk4 - arg1->cell_x * 12500;
+    arg0->unk34 = arg0->unk8 + arg1->cell_y * 32000;
+    arg0->unk38 = arg0->unkC - arg1->cell_z * 12500;
     sv.unk0 = (arg0->unk10 << 12) / 360;
     sv.unk2 = (arg0->unk12 << 12) / 360;
     sv.unk4 = (arg0->unk14 << 12) / 360;
@@ -1397,12 +1221,12 @@ void thing_train_init(Unk_801E032C *arg0, Unk_801E076C *arg1) {
     arg0->unk18 = 0;
 }
 
-void thing_train_update(Unk_801E076C *arg0) {
+void thing_train_update(Player *arg0) {
     s32 v[4];
     s32 flag;
     Unk_801E032C *p = D_801E032C[0];
     Unk_801E1118 *q = &D_801E1118;
-    Unk_801E0368 *g = &D_801E0368;
+    GameVars *g = &action_vars;
 
     if (q->unk12 != 0) {
         arg0->unk3C = 1;
@@ -1422,7 +1246,7 @@ void thing_train_update(Unk_801E076C *arg0) {
                 }
                 thing_train_calc_stops(q);
                 vehicle_train_set_doors(1);
-                q->unk18 = (s16)g->unk0[0x3F] % 10;
+                q->unk18 = (s16)g->vars[0x3F] % 10;
                 if (q->unk18 >= 5) {
                     q->unk1A = q->unk18 - 5;
                 } else {
@@ -1456,7 +1280,7 @@ void thing_train_update(Unk_801E076C *arg0) {
                 }
                 thing_train_calc_stops(q);
                 vehicle_train_set_doors(1);
-                q->unk1A = (s16)g->unk0[0x3F] % 10;
+                q->unk1A = (s16)g->vars[0x3F] % 10;
                 if (q->unk1A >= 5) {
                     q->unk18 = q->unk1A - 5;
                 } else {
@@ -1476,13 +1300,13 @@ void thing_train_update(Unk_801E076C *arg0) {
             }
         }
     }
-    p->unk38 = p->unkC - arg0->unk76 * 12500;
+    p->unk38 = p->unkC - arg0->cell_z * 12500;
     p->unk18 = 0;
     GsSetLsMatrix(p->unk1C);
     RotTrans(&q->unk2C, v, &flag);
-    arg0->unk54 = v[0];
-    arg0->unk5C = v[2];
-    arg0->unk6C = q->unk34 + p->unk10;
-    arg0->unk6E = q->unk36 + p->unk12;
+    arg0->pos_x = v[0];
+    arg0->pos_z = v[2];
+    arg0->pitch = q->unk34 + p->unk10;
+    arg0->yaw = q->unk36 + p->unk12;
     arg0->unk70 = q->unk38 + p->unk14;
 }

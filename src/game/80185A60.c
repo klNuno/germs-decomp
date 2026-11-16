@@ -1,20 +1,8 @@
 #include "common.h"
+#include "game/types.h"
 
-typedef struct { s16 unk0[3]; s16 unk6; s16 unk8[3]; s16 unkE; } Unk_801E1040;
 extern Unk_801E1040 D_801E1040;
-typedef struct { s32 unk0; s16 unk4; s16 unk6; } Unk_801E056C;
-typedef struct {
-    u16 unk0[0x70];
-    u8 unkE0[0x124];
-    Unk_801E056C unk204[4];
-    u8 unk224[0x20];
-    s32 unk244;
-    u8 unk248[4];
-    s32 unk24C;
-    s16 unk250;
-    s16 unk252;
-} Unk_801E0368;
-extern Unk_801E0368 D_801E0368;
+extern GameVars action_vars;
 void kaj_event_flush(s32 a, s32 b);
 extern Unk_801E056C effect_alarms[4];
 s32 kaj_event_set_alarm(s32 a, s32 b, s32 c);
@@ -70,31 +58,10 @@ typedef struct {
     u16 unk4;
     s16 unk6;
 } Unk_801DFEB8;
-typedef struct { u16 unk0; u16 unk2; } Unk_801DFE68;
 Unk_801DFEB8 effect_elevator;
 extern Unk_801DFE68 D_801DFE68;
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    s16 unk4[2];
-    s16 unk8[2];
-    s16 unkC[0x12];
-    s16 unk30;
-    s16 unk32[8];
-    s16 unk42;
-    s16 unk44;
-    s16 unk46;
-    s16 unk48;
-    u8 unk4A[2];
-    s32 unk4C;
-} Unk_801E0768;
-extern Unk_801E0768 *D_801E0768[];
-typedef struct { s32 unk0; s32 unk4; s32 unk8; } Unk_80174F54;
-typedef struct { u16 unk0; s16 unk2; s16 unk4; s16 unk6; s32 unk8; s32 unkC; s32 unk10; s16 unk14; s16 unk16; s32 unk18; s32 unk1C; s32 unk20; s32 unk24; s32 unk28; s32 unk2C; s32 unk30; s32 unk34; s32 unk38; s32 unk3C; s32 unk40; s32 unk44; s32 unk48; } Unk_801762F4;
-typedef struct { u16 unk0; s16 unk2; s32 unk4; s16 unk8; u16 unkA; u8 unkC[0xC0]; } Unk_801767D4;
-typedef struct { u16 unk0; s16 unk2; s32 unk4[8]; } Unk_80176890;
-typedef struct { u16 unk0; u8 unk2[0x19]; u8 unk1B; u8 unk1C[4]; } Unk_8018F590;
-typedef struct {
+extern Inventory *D_801E0768[];
+typedef struct Unk_80188FEC {
     u16 unk0;
     u16 unk2;
     u8 unk4[0x20];
@@ -120,19 +87,7 @@ typedef struct {
     u16 unk52;
     u8 unk54[0xC];
 } Unk_80188FEC;
-typedef struct {
-    s32 unk0; s32 unk4; s32 unk8; s32 unkC; s32 unk10; s32 unk14;
-    s32 unk18; s32 unk1C; s32 unk20; s32 unk24; s32 unk28; s32 unk2C; s32 unk30; s32 unk34;
-    Unk_80174F54 *unk38; Unk_801762F4 *unk3C; Unk_801767D4 *unk40; Unk_80176890 *unk44;
-    s32 unk48; s32 unk4C; Unk_8018F590 *unk50; s32 unk54; Unk_80188FEC *unk58;
-} Unk_801E02D8;
-extern Unk_801E02D8 D_801E02D8;
-typedef struct {
-    u16 unk0;
-    u16 unk2;
-    char unk4[0x22];
-    s16 unk26;
-} Unk_801891A4;
+extern SceneTables object_scene_tables;
 typedef struct { s16 unk0; s16 unk2; s16 unk4; s16 unk6; } Unk_801DFEB0;
 Unk_801DFEB0 effect_flame_large_rect;
 s16 effect_flame_large_cur;
@@ -176,58 +131,12 @@ void mail_step_frame(s32 a, s32 b, s32 c);
 s32 kaj_event_get(s32 *arg0);
 void kaj_event_done(s32 *arg0);
 void kaj_timer_disable(void);
-typedef struct { s16 unk0[5]; s16 unkA; char *unkC; s16 unk10; s16 unk12; s32 unk14; s32 unk18; s32 unk1C; } Unk_801E0340;
 extern Unk_801E0340 D_801E0340[];
-typedef struct {
-    u8 unk0[0x42];
-    u16 unk42;
-    u8 unk44[0x10];
-    s32 unk54;
-    s32 unk58;
-    s32 unk5C;
-    u8 unk60[0xC];
-    s16 unk6C;
-    s16 unk6E;
-    s16 unk70;
-    s16 unk72;
-    s16 unk74;
-    s16 unk76;
-    s16 unk78;
-    u8 unk7A[0x26];
-    u8 unkA0[4];
-} Unk_801E0710_5C;
-typedef struct {
-    s16 unk0;
-    s16 unk2;
-    u8 unk4[8];
-    u16 unkC;
-    u16 unkE;
-    u16 unk10;
-    u16 unk12;
-    u16 unk14;
-    u8 unk16[2];
-    u16 unk18;
-    u8 unk1A[2];
-    u16 unk1C;
-    u8 unk1E[2];
-    u16 unk20;
-    u8 unk22[2];
-    u16 unk24;
-    u8 unk26[6];
-    s16 unk2C;
-    u8 unk2E[0x1A];
-    s16 unk48;
-    u8 unk4A[2];
-    s32 unk4C;
-    u8 unk50[8];
-    Unk_801E0768 *unk58;
-    Unk_801E0710_5C *unk5C;
-} Unk_801E0710;
-extern Unk_801E0710 D_801E0710;
+extern PlayerStatus player_status;
 extern s16 effect_item_menu_list[];
 s16 effect_item_sel;
 s16 effect_item_full;
-s16 effect_item_use(Unk_801E0710 *a, s16 b, s16 c, s16 d, s16 e);
+s16 effect_item_use(PlayerStatus *a, s16 b, s16 c, s16 d, s16 e);
 void *mod_find(u16 a);
 void mod_setup(void *a, void *b, s32 c, s32 d);
 void effect_weapon_calc_rate(s32 arg0);
@@ -236,7 +145,7 @@ void thing_set_animate(s32 a, s32 b, s32 c);
 void thing_set_flag10(s32 a, s32 b, s32 c);
 Unk_80188FEC *effect_weapon_find(s16 arg0);
 void player_weapon_sound(s16 a, s32 b);
-extern Unk_801E0710_5C *D_801E076C[];
+extern Player *D_801E076C[];
 s32 effect_elevator_on_task_end(s32 *arg0);
 void sprite_fill_clut(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 void sprite_set_clut_entry(s32 arg0, s32 arg1, s32 arg2);
@@ -256,32 +165,6 @@ typedef struct {
 void effect_sprite_slide_step(Unk_801867E8 *arg0);
 void effect_sprite_slide_end(Unk_80186838 *arg0);
 extern u8 effect_flame_small_cluts[][0x20];
-typedef struct Unk_801854B8 {
-    u16 unk0;
-    s16 unk2;
-    s16 unk4;
-    s16 unk6;
-    s16 unk8;
-    s16 unkA;
-    s16 unkC;
-    s16 unkE;
-    s32 unk10;
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    s16 unk20;
-    s16 unk22;
-    s16 unk24;
-    s16 unk26;
-    s32 unk28;
-    u8 unk2C[0x14];
-    s32 unk40;
-    s32 unk44;
-    s32 unk48;
-    u8 unk4C[0x2C];
-    void *unk78;
-    void *unk7C;
-} Unk_801854B8;
 Unk_801854B8 *door_find(u16 arg0);
 extern char D_80170590[];
 void text_show(char *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
@@ -305,14 +188,8 @@ char *strncpy(char *dst, char *src, u32 n);
 extern char effect_str_scene_idc[];
 extern char effect_str_scene_htl[];
 extern char effect_str_scene_cmn[];
-typedef struct Unk_801E6DA0 {
-    s32 unk0;
-    s32 unk4;
-    s16 unk8;
-    s16 unkA;
-} Unk_801E6DA0;
 u16 effect_elevator_floor_count;
-extern Unk_801E6DA0 D_801E6DA0;
+extern KajSystem kaj_system;
 void effect_elevator_exit(void);
 void effect_elevator_move_doors(Unk_801DFEB8 *arg0, s16 arg1);
 s32 kaj_pad_read(void);
@@ -335,7 +212,7 @@ extern char D_801707F4[];
 /* refined: unk26[0x22] split into unk26[6], s16 unk2C, unk2E[0x1A] */
 int sprintf(char *buf, const char *fmt, ...);
 void text_show_timed(s16 arg0, s16 arg1, char *arg2, s16 arg3, s32 arg4);
-void event_draw_limb_status(Unk_801E0710 *arg0);
+void event_draw_limb_status(PlayerStatus *arg0);
 void event_advance_clock(s16 a, s16 b);
 void player_heal_part(s16 arg0, s16 arg1, s16 arg2);
 void player_add_hp(s16 arg0, s16 arg1);
@@ -346,14 +223,14 @@ void sound_se_stop(s32 arg0);
 void effect_weapon_draw_panel(s16 arg0, s16 arg1);
 void mod_set_anim(void *arg0, s16 arg1, s16 arg2);
 extern char D_8017080C[];
-s16 effect_item_menu_show(Unk_801E0710 *arg0, s16 arg1, s16 arg2);
+s16 effect_item_menu_show(PlayerStatus *arg0, s16 arg1, s16 arg2);
 s16 mail_menu_get_state(void);
 s16 mail_menu_move(s16 a);
 u16 roadmap_get_state(void);
-s16 effect_item_input(Unk_801E0710 *arg0, s16 arg1);
+s16 effect_item_input(PlayerStatus *arg0, s16 arg1);
 
 void effect_start_sprite_slide(s32 arg0, u16 arg1, s32 arg2) {
-    Unk_801E0368 *g = &D_801E0368;
+    GameVars *g = &action_vars;
     Unk_80186884_0 *spr;
     Unk_80185A60 *node;
 
@@ -500,7 +377,7 @@ void effect_flame_large_update(void) {
 }
 
 void effect_start_fade(s32 arg0, s32 arg1) {
-    Unk_801E0368 *g = &D_801E0368;
+    GameVars *g = &action_vars;
     Unk_801E1040 *h = &D_801E1040;
     Unk_80185918 *node;
 
@@ -553,7 +430,7 @@ void effect_fade_set_dim(void) {
 }
 
 void effect_start_sprite_anim(u16 arg0, s32 arg1) {
-    Unk_801E0368 *g = &D_801E0368;
+    GameVars *g = &action_vars;
     Unk_80186884_0 *spr;
     Unk_80186884 *node;
 
@@ -581,8 +458,8 @@ void effect_clear_alarms(void) {
     s32 i;
 
     for (i = 0; i < 4; i++) {
-        D_801E0368.unk204[i].unk4 = 0;
-        D_801E0368.unk204[i].unk0 = -1;
+        action_vars.unk204[i].unk4 = 0;
+        action_vars.unk204[i].unk0 = -1;
         kaj_event_flush(2, i + 0x64);
     }
 }
@@ -720,7 +597,7 @@ void effect_sprite_slide_step(Unk_801867E8 *arg0) {
 
 void effect_sprite_slide_end(Unk_80186838 *arg0) {
     Unk_80186838_0 *p = *arg0->unk3C;
-    Unk_801E0368 *q = &D_801E0368;
+    GameVars *q = &action_vars;
 
     p->unkC = effect_slide_y;
     p->unk12 = effect_slide_height;
@@ -738,7 +615,7 @@ void effect_sprite_anim_step(Unk_80186884 *arg0) {
 }
 
 s32 effect_elevator_on_task_end(s32 *arg0) {
-    Unk_801E0710_5C *p = D_801E076C[0];
+    Player *p = D_801E076C[0];
     Unk_801DFEB8 *q = &effect_elevator;
     Unk_801854B8 *e;
     s32 i;
@@ -746,7 +623,7 @@ s32 effect_elevator_on_task_end(s32 *arg0) {
     if (arg0[4] != 4) {
         return 0;
     }
-    if (p->unk42 & 0x80) {
+    if (p->flags & 0x80) {
         kaj_pad_reset(1);
         sprite_set_visible(2, 1);
         text_show(D_80170590, 3, -1, 0, -1, 0, 1);
@@ -767,9 +644,9 @@ s32 effect_elevator_on_task_end(s32 *arg0) {
                 e->unk1C = e->unkC;
                 break;
             }
-            e->unk40 = e->unk14 - p->unk72 * 0x30D4;
-            e->unk44 = e->unk18 + p->unk74 * 0x7D00;
-            e->unk48 = e->unk1C - p->unk76 * 0x30D4;
+            e->unk40 = e->unk14 - p->cell_x * 0x30D4;
+            e->unk44 = e->unk18 + p->cell_y * 0x7D00;
+            e->unk48 = e->unk1C - p->cell_z * 0x30D4;
             e->unk28 = 0;
         }
     }
@@ -777,17 +654,17 @@ s32 effect_elevator_on_task_end(s32 *arg0) {
 }
 
 void effect_elevator_exit(void) {
-    Unk_801E0710_5C *p = D_801E076C[0];
+    Player *p = D_801E076C[0];
     s32 x;
     s32 z;
 
     sprite_set_visible(2, 0);
     kaj_pad_reset(0);
-    x = rsin((p->unk6E << 12) / 360) * 0x1194 >> 12;
-    z = rcos((p->unk6E << 12) / 360) * 0x1194 >> 12;
-    x += p->unk54 + p->unk72 * 0x30D4;
-    z += p->unk5C + p->unk76 * 0x30D4;
-    player_start_move_to(2, 0x80, x, p->unk58 - p->unk74 * 0x7D00 - p->unk78, z, p->unk6C, p->unk6E, p->unk70, 2);
+    x = rsin((p->yaw << 12) / 360) * 0x1194 >> 12;
+    z = rcos((p->yaw << 12) / 360) * 0x1194 >> 12;
+    x += p->pos_x + p->cell_x * 0x30D4;
+    z += p->pos_z + p->cell_z * 0x30D4;
+    player_start_move_to(2, 0x80, x, p->pos_y - p->cell_y * 0x7D00 - p->unk78, z, p->pitch, p->yaw, p->unk70, 2);
 }
 
 void effect_elevator_move_doors(Unk_801DFEB8 *arg0, s16 arg1) {
@@ -851,11 +728,11 @@ void effect_elevator_move_doors(Unk_801DFEB8 *arg0, s16 arg1) {
 void effect_elevator_input(void) {
     Unk_801DFEB8 *p = &effect_elevator;
 
-    if (D_801E6DA0.unkA != 1) {
+    if (kaj_system.pad_mode != 1) {
         return;
     }
     kaj_pad_read();
-    if (!(D_801E6DA0.unk4 & 0x1000) && (D_801E6DA0.unk0 & 0x1000)) {
+    if (!(kaj_system.pad_prev & 0x1000) && (kaj_system.pad_now & 0x1000)) {
         sound_se_play(0xF);
         effect_elevator.unk0++;
         if (effect_elevator_floor_count < effect_elevator.unk0) {
@@ -868,7 +745,7 @@ void effect_elevator_input(void) {
             sprite_set_clut_entry(2, effect_elevator.unk0, 0x17FF);
             sprite_set_clut_entry(2, p->unk2, 0x14BF);
         }
-    } else if (!(D_801E6DA0.unk4 & 0x4000) && (D_801E6DA0.unk0 & 0x4000)) {
+    } else if (!(kaj_system.pad_prev & 0x4000) && (kaj_system.pad_now & 0x4000)) {
         Unk_801DFEB8 *q = &effect_elevator;
 
         sound_se_play(0xF);
@@ -883,11 +760,11 @@ void effect_elevator_input(void) {
             sprite_set_clut_entry(2, effect_elevator.unk0, 0x17FF);
             sprite_set_clut_entry(2, q->unk2, 0x14BF);
         }
-    } else if (!(D_801E6DA0.unk4 & 0x40) && (D_801E6DA0.unk0 & 0x40)) {
+    } else if (!(kaj_system.pad_prev & 0x40) && (kaj_system.pad_now & 0x40)) {
         sound_se_play(8);
         text_close();
         effect_elevator_exit();
-    } else if (!(D_801E6DA0.unk4 & 0x20) && (D_801E6DA0.unk0 & 0x20)) {
+    } else if (!(kaj_system.pad_prev & 0x20) && (kaj_system.pad_now & 0x20)) {
         if (p->unk2 != p->unk0) {
             mod_free_pooled();
             sound_se_play(0x11);
@@ -898,7 +775,7 @@ void effect_elevator_input(void) {
 }
 
 void effect_elevator_enter(void) {
-    Unk_801E0710_5C *p;
+    Player *p;
     Unk_801DFEB8 *q;
     s32 x;
     s32 y;
@@ -914,11 +791,11 @@ void effect_elevator_enter(void) {
         sprite_set_clut_entry(2, (u16)effect_elevator.unk0, 0x17FF);
         sprite_set_clut_entry(2, (u16)q->unk2, 0x14BF);
     }
-    x = p->unk54 + p->unk72 * 0x30D4;
-    y = p->unk58 - p->unk74 * 0x7D00 - p->unk78;
-    z = p->unk5C + p->unk76 * 0x30D4;
+    x = p->pos_x + p->cell_x * 0x30D4;
+    y = p->pos_y - p->cell_y * 0x7D00 - p->unk78;
+    z = p->pos_z + p->cell_z * 0x30D4;
     kaj_timer_enable();
-    player_start_move_to(0, 0, x, y, z, p->unk6C, (s16)(p->unk6E + 0xB4), p->unk70, 2);
+    player_start_move_to(0, 0, x, y, z, p->pitch, (s16)(p->yaw + 0xB4), p->unk70, 2);
 }
 
 static inline u16 func_801872D4_inl(s32 a) {
@@ -930,7 +807,7 @@ static inline u16 func_801872D4_inl(s32 a) {
 }
 
 void effect_elevator_update(void) {
-    Unk_801E0710_5C *p = D_801E076C[0];
+    Player *p = D_801E076C[0];
     Unk_801DFEB8 *q = &effect_elevator;
     u16 v;
 
@@ -939,7 +816,7 @@ void effect_elevator_update(void) {
         break;
     case 3:
         block_set_mode(1);
-        p->unk42 |= 0x80;
+        p->flags |= 0x80;
         q->unk6 = 4;
         break;
     case 4:
@@ -1021,31 +898,31 @@ void effect_elevator_init(s16 arg0) {
 }
 
 s32 effect_weapon_unequip(s16 arg0) {
-    Unk_801E0710 *g = &D_801E0710;
-    Unk_801E0768 *p = g->unk58;
-    Unk_801E0710_5C *q = g->unk5C;
+    PlayerStatus *g = &player_status;
+    Inventory *p = g->inventory;
+    Player *q = g->player;
     void *r;
     s32 i;
 
     for (i = 0; i < 2; i++) {
-        if (p->unk4[i] == arg0) {
+        if (p->weapon_ids[i] == arg0) {
             mod_free_by_id(arg0 + 0x400);
             p->unk0--;
-            p->unk4[i] = -1;
-            p->unk8[i] = 0;
-            if (p->unk2 == 0 && i == 0) {
-                p->unk2 = 1;
-            } else if (p->unk2 == 1 && i == 1) {
-                p->unk2 = 0;
+            p->weapon_ids[i] = -1;
+            p->weapon_rate[i] = 0;
+            if (p->weapon_slot == 0 && i == 0) {
+                p->weapon_slot = 1;
+            } else if (p->weapon_slot == 1 && i == 1) {
+                p->weapon_slot = 0;
             } else {
                 return 1;
             }
-            r = mod_find(p->unk4[p->unk2] + 0x400);
-            p->unk4C = (s32)r;
+            r = mod_find(p->weapon_ids[p->weapon_slot] + 0x400);
+            p->weapon_model = (s32)r;
             if (r != 0) {
-                mod_setup(r, q->unkA0, 1, 0);
+                mod_setup(r, q->coord, 1, 0);
             }
-            effect_weapon_calc_rate(p->unk2);
+            effect_weapon_calc_rate(p->weapon_slot);
             return 1;
         }
     }
@@ -1061,7 +938,7 @@ INCLUDE_RODATA("asm/nonmatchings/game/80185A60", D_8017056C);
 INCLUDE_RODATA("asm/nonmatchings/game/80185A60", D_80170590);
 
 void effect_weapon_draw_panel(s16 arg0, s16 arg1) {
-    Unk_801E0768 *p = D_801E0768[0];
+    Inventory *p = D_801E0768[0];
     Unk_80188FEC *e;
     s16 id;
     s16 v;
@@ -1071,7 +948,7 @@ void effect_weapon_draw_panel(s16 arg0, s16 arg1) {
         sprite_set_visible(0x402, arg0);
     }
     if (arg0 != 0) {
-        id = p->unk4[p->unk2];
+        id = p->weapon_ids[p->weapon_slot];
         e = effect_weapon_find(id);
         if (e != NULL) {
             v = (s16)e->unk30 >> 3;
@@ -1137,9 +1014,9 @@ INCLUDE_RODATA("asm/nonmatchings/game/80185A60", D_801707F4);
 INCLUDE_RODATA("asm/nonmatchings/game/80185A60", D_8017080C);
 
 void effect_weapon_calc_rate(s32 arg0) {
-    Unk_801E0710 *g = &D_801E0710;
-    Unk_801E0768 *p = g->unk58;
-    Unk_80188FEC *e = effect_weapon_find(p->unk4[arg0]);
+    PlayerStatus *g = &player_status;
+    Inventory *p = g->inventory;
+    Unk_80188FEC *e = effect_weapon_find(p->weapon_ids[arg0]);
     s32 a, b, c, v;
     s32 val;
 
@@ -1147,8 +1024,8 @@ void effect_weapon_calc_rate(s32 arg0) {
         return;
     }
     a = 0x2000;
-    if (e->unk28 != 0 && g->unk2 < (s16)e->unk30) {
-        a = (g->unk2 << 13) / (s16)e->unk30;
+    if (e->unk28 != 0 && g->level < (s16)e->unk30) {
+        a = (g->level << 13) / (s16)e->unk30;
     }
     b = 0x1000;
     if (e->unk34 != 0) {
@@ -1195,22 +1072,22 @@ void effect_weapon_calc_rate(s32 arg0) {
     }
     val = (e->unk50 * (a + b + c)) >> 14;
     v = (val < 20) ? 20 : (val > 100) ? 100 : val;
-    p->unk8[arg0] = v;
-    g->unk48 = 1;
+    p->weapon_rate[arg0] = v;
+    g->weapon_redraw = 1;
 }
 
 void effect_weapon_swap_stock(s16 arg0, s16 arg1) {
-    Unk_801E0768 *p = D_801E0768[0];
-    Unk_801E0710 *g;
-    Unk_801E0768 *e;
-    Unk_801E0710_5C *q;
+    Inventory *p = D_801E0768[0];
+    PlayerStatus *g;
+    Inventory *e;
+    Player *q;
     void *r;
     s32 i;
     s32 j;
 
     p->unk0 = 0;
     for (j = 0; j < 2; j++) {
-        if (p->unk4[j] >= 0) {
+        if (p->weapon_ids[j] >= 0) {
             p->unk0++;
         }
     }
@@ -1218,15 +1095,15 @@ void effect_weapon_swap_stock(s16 arg0, s16 arg1) {
         effect_weapon_unequip(arg1);
         p->unkC[arg1]++;
     } else {
-        g = &D_801E0710;
-        e = g->unk58;
-        q = g->unk5C;
+        g = &player_status;
+        e = g->inventory;
+        q = g->player;
         for (i = 0; i < 2; i++) {
-            if (e->unk4[i] < 0) {
-                e->unk4[i] = arg1;
+            if (e->weapon_ids[i] < 0) {
+                e->weapon_ids[i] = arg1;
                 r = mod_find(arg1 + 0x400);
                 if (r != 0) {
-                    mod_setup(r, q->unkA0, 1, 0);
+                    mod_setup(r, q->coord, 1, 0);
                 }
                 effect_weapon_calc_rate(i);
                 break;
@@ -1238,14 +1115,14 @@ void effect_weapon_swap_stock(s16 arg0, s16 arg1) {
 }
 
 s32 effect_inventory_has_room(s16 arg0) {
-    Unk_801E0768 *p = D_801E0768[0];
+    Inventory *p = D_801E0768[0];
     s32 i;
     s16 n;
 
     switch (arg0) {
     case 0:
         for (i = 0, n = 0; i < 8; i++) {
-            if ((u16)p->unk32[i] < 100) {
+            if ((u16)p->item_ids[i] < 100) {
                 n++;
             }
         }
@@ -1253,7 +1130,7 @@ s32 effect_inventory_has_room(s16 arg0) {
             break;
         }
         for (i = 0; i < 8; i++) {
-            if (p->unk32[i] < 0) {
+            if (p->item_ids[i] < 0) {
                 return 1;
             }
         }
@@ -1261,14 +1138,14 @@ s32 effect_inventory_has_room(s16 arg0) {
     case 1:
     case 3:
         for (i = 0; i < 8; i++) {
-            if (p->unk32[i] < 0) {
+            if (p->item_ids[i] < 0) {
                 return 1;
             }
         }
         return 0;
     case 4:
         for (i = 0; i < 2; i++) {
-            if (p->unk4[i] < 0) {
+            if (p->weapon_ids[i] < 0) {
                 return 1;
             }
         }
@@ -1280,7 +1157,7 @@ s32 effect_inventory_has_room(s16 arg0) {
 }
 
 static inline void func_80187E38_inl(s32 d) {
-    Unk_801E0768 *g;
+    Inventory *g;
     s32 k;
     void *r;
     s32 id;
@@ -1289,95 +1166,95 @@ static inline void func_80187E38_inl(s32 d) {
         return;
     }
     sound_se_play(0xF);
-    k = g->unk2;
+    k = g->weapon_slot;
     k += d;
     if (k >= 2) {
         k = 0;
     } else if (k < 0) {
         k = 1;
     }
-    g->unk2 = k;
-    id = g->unk4[k];
+    g->weapon_slot = k;
+    id = g->weapon_ids[k];
     r = mod_find(id + 0x400);
     effect_weapon_draw_panel(1, 0);
     effect_weapon_calc_rate(k);
     if (r == NULL) {
         return;
     }
-    g->unk4C = (s32)r;
+    g->weapon_model = (s32)r;
     mod_set_anim(r, 5, 0);
 }
 
-s32 effect_weapon_input(Unk_801E0710 *arg0) {
-    Unk_801E0368 *q = &D_801E0368;
-    Unk_801E0710_5C *b = arg0->unk5C;
-    Unk_801E0768 *a = arg0->unk58;
+s32 effect_weapon_input(PlayerStatus *arg0) {
+    GameVars *q = &action_vars;
+    Player *b = arg0->player;
+    Inventory *a = arg0->inventory;
 
-    if (b->unk42 & 0x8000) {
-        if (a->unk44 == 0) {
-            b->unk42 &= 0x7FFF;
-            a->unk48 = 0;
+    if (b->flags & 0x8000) {
+        if (a->weapon_shown == 0) {
+            b->flags &= 0x7FFF;
+            a->weapon_state = 0;
         }
-        if ((u16)a->unk48 != 2) {
+        if ((u16)a->weapon_state != 2) {
             return 1;
         }
-        if (!(D_801E6DA0.unk4 & 0x1000) && (D_801E6DA0.unk0 & 0x1000)) {
+        if (!(kaj_system.pad_prev & 0x1000) && (kaj_system.pad_now & 0x1000)) {
             func_80187E38_inl(1);
-        } else if (!(D_801E6DA0.unk4 & 0x4000) && (D_801E6DA0.unk0 & 0x4000)) {
+        } else if (!(kaj_system.pad_prev & 0x4000) && (kaj_system.pad_now & 0x4000)) {
             func_80187E38_inl(-1);
-        } else if (!(D_801E6DA0.unk4 & 0x40) && (D_801E6DA0.unk0 & 0x40)) {
+        } else if (!(kaj_system.pad_prev & 0x40) && (kaj_system.pad_now & 0x40)) {
             sound_se_play(8);
             effect_weapon_draw_panel(0, 1);
-            a->unk48 = 1;
-            mod_set_anim((void *)a->unk4C, 6, 0);
-        } else if ((!(D_801E6DA0.unk4 & 0x100) && (D_801E6DA0.unk0 & 0x100)) ||
-                   (!(D_801E6DA0.unk4 & 0x20) && (D_801E6DA0.unk0 & 0x20))) {
+            a->weapon_state = 1;
+            mod_set_anim((void *)a->weapon_model, 6, 0);
+        } else if ((!(kaj_system.pad_prev & 0x100) && (kaj_system.pad_now & 0x100)) ||
+                   (!(kaj_system.pad_prev & 0x20) && (kaj_system.pad_now & 0x20))) {
             sound_se_play(0x11);
             effect_weapon_draw_panel(0, 1);
-            b->unk42 &= 0x7FFF;
-            a->unk48 = 3;
-            mod_set_anim((void *)a->unk4C, 0, 0);
+            b->flags &= 0x7FFF;
+            a->weapon_state = 3;
+            mod_set_anim((void *)a->weapon_model, 0, 0);
         }
         return 1;
     }
-    if ((u16)a->unk48 == 2 && a->unk44 == 0) {
-        a->unk48 = 0;
+    if ((u16)a->weapon_state == 2 && a->weapon_shown == 0) {
+        a->weapon_state = 0;
     }
-    if (!(D_801E6DA0.unk4 & 0x100) && (D_801E6DA0.unk0 & 0x100)) {
-        if (q->unk24C != 0) {
+    if (!(kaj_system.pad_prev & 0x100) && (kaj_system.pad_now & 0x100)) {
+        if (*(s32 *)&q->unk24C != 0) { /* this unit reads one word at 0x24C */
             return 0;
         }
-        if ((u16)a->unk48 == 0) {
+        if ((u16)a->weapon_state == 0) {
             sound_se_play(0x13);
-            b->unk42 |= 0x8000;
+            b->flags |= 0x8000;
             effect_weapon_draw_panel(1, 1);
-            a->unk44 = 1;
-            mod_set_anim((void *)a->unk4C, 4, 0);
-        } else if ((u16)a->unk48 == 3) {
+            a->weapon_shown = 1;
+            mod_set_anim((void *)a->weapon_model, 4, 0);
+        } else if ((u16)a->weapon_state == 3) {
             sound_se_play(0x13);
-            b->unk42 |= 0x8000;
+            b->flags |= 0x8000;
             effect_weapon_draw_panel(1, 1);
-            a->unk48 = 2;
+            a->weapon_state = 2;
         }
-    } else if ((!(D_801E6DA0.unk4 & 2) && (D_801E6DA0.unk0 & 2)) ||
-               (!(D_801E6DA0.unk4 & 1) && (D_801E6DA0.unk0 & 1))) {
-        if (a->unk46 != 0) {
-            if ((u16)a->unk48 == 3) {
-                a->unk48 = 4;
-                mod_set_anim((void *)a->unk4C, 1, 0);
-            } else if ((u16)a->unk48 == 5) {
-                a->unk48 = 6;
-                mod_set_anim((void *)a->unk4C, 2, 0);
+    } else if ((!(kaj_system.pad_prev & 2) && (kaj_system.pad_now & 2)) ||
+               (!(kaj_system.pad_prev & 1) && (kaj_system.pad_now & 1))) {
+        if (a->armed != 0) {
+            if ((u16)a->weapon_state == 3) {
+                a->weapon_state = 4;
+                mod_set_anim((void *)a->weapon_model, 1, 0);
+            } else if ((u16)a->weapon_state == 5) {
+                a->weapon_state = 6;
+                mod_set_anim((void *)a->weapon_model, 2, 0);
             }
         }
     }
     return 0;
 }
 
-s16 effect_item_use(Unk_801E0710 *a, s16 b, s16 c, s16 d, s16 e) {
+s16 effect_item_use(PlayerStatus *a, s16 b, s16 c, s16 d, s16 e) {
     char buf[0x80];
-    Unk_801E02D8 *p = &D_801E02D8;
-    Unk_801E0368 *q = &D_801E0368;
+    SceneTables *p = &object_scene_tables;
+    GameVars *q = &action_vars;
     Unk_801891A4 *ent;
     Unk_801891A4 *e2;
     s32 n;
@@ -1419,7 +1296,7 @@ done:
     case 0:
         v = ent->unk26;
         if (v < 0) {
-            if (a->unk2C != 0) {
+            if (a->mutant != 0) {
                 player_add_hp(-v, 0);
                 if (flag) {
                     /* " 8%s, 1を飲んで、8Ｖｉｔａｌｉｔｙ1が, 回復した" */
@@ -1460,7 +1337,7 @@ done:
                 /* " 8%s, 1を食べて、8Ｖｉｔａｌｉｔｙ1が, 回復した" */
                 sprintf(buf, D_80170648, ent->unk4);
             }
-            if (a->unk0 == 0xFF && d == 0) {
+            if (a->energy == 0xFF && d == 0) {
                 ret = 1;
                 text_show_timed(b, 1, buf, kind, 2);
                 memset(buf, 0, 0x80);
@@ -1474,9 +1351,9 @@ done:
         r = player_is_injured();
         if ((s16)r != 0) {
             for (i = 0; i < 5; i++) {
-                (q->unk0 + 0x5A)[i] -= ent->unk26;
-                if ((s16)(q->unk0 + 0x5A)[i] < 0) {
-                    (q->unk0 + 0x5A)[i] = 0;
+                (q->vars + 0x5A)[i] -= ent->unk26;
+                if ((s16)(q->vars + 0x5A)[i] < 0) {
+                    (q->vars + 0x5A)[i] = 0;
                 }
             }
             event_draw_limb_status(a);
@@ -1526,8 +1403,8 @@ done:
 }
 
 void effect_item_use_selected(void) {
-    Unk_801E0710 *g = &D_801E0710;
-    Unk_801E0768 *p;
+    PlayerStatus *g = &player_status;
+    Inventory *p;
     s16 id;
     s16 r;
     s32 i;
@@ -1539,11 +1416,11 @@ void effect_item_use_selected(void) {
             if (r != 0) {
                 effect_item_full = 1;
             }
-            p = g->unk58;
+            p = g->inventory;
             if (p->unk30 != 0) {
                 for (i = 0; i < 8; i++) {
-                    if (p->unk32[i] == id) {
-                        p->unk32[i] = -1;
+                    if (p->item_ids[i] == id) {
+                        p->item_ids[i] = -1;
                         p->unk30--;
                         return;
                     }
@@ -1553,8 +1430,8 @@ void effect_item_use_selected(void) {
     }
 }
 
-s16 effect_item_menu_show(Unk_801E0710 *arg0, s16 arg1, s16 arg2) {
-    Unk_801E0768 *p = arg0->unk58;
+s16 effect_item_menu_show(PlayerStatus *arg0, s16 arg1, s16 arg2) {
+    Inventory *p = arg0->inventory;
     s32 i;
     s32 n;
 
@@ -1564,15 +1441,15 @@ s16 effect_item_menu_show(Unk_801E0710 *arg0, s16 arg1, s16 arg2) {
         effect_item_prompt_shown = 0;
         D_801DFEC2 = arg1;
         effect_item_full = 0;
-        if (arg0->unk0 == 0xFF) {
+        if (arg0->energy == 0xFF) {
             effect_item_full = 1;
         }
         for (i = 0; i < 8; i++) {
             effect_item_menu_list[i] = -1;
         }
         for (i = 0, n = 0; i < 8; i++) {
-            if (p->unk32[i] >= 0) {
-                effect_item_menu_list[n++] = p->unk32[i];
+            if (p->item_ids[i] >= 0) {
+                effect_item_menu_list[n++] = p->item_ids[i];
             }
         }
         return mail_menu_open(1, 0x40B, -2, p->unk30, 6, effect_item_menu_list, 4, 0x2969, 0x2BFF);
@@ -1581,32 +1458,32 @@ s16 effect_item_menu_show(Unk_801E0710 *arg0, s16 arg1, s16 arg2) {
     return mail_menu_close();
 }
 
-s16 effect_item_input(Unk_801E0710 *arg0, s16 arg1) {
+s16 effect_item_input(PlayerStatus *arg0, s16 arg1) {
     s16 n = arg1;
-    Unk_801E0710_5C *q = arg0->unk5C;
-    Unk_801E0368 *g = &D_801E0368;
-    Unk_801E0768 *p = arg0->unk58;
+    Player *q = arg0->player;
+    GameVars *g = &action_vars;
+    Inventory *p = arg0->inventory;
 
-    if (q->unk42 & 0x4000) {
+    if (q->flags & 0x4000) {
         if (mail_menu_get_state() == 1) {
             if (effect_item_prompt_shown == 0) {
                 effect_item_prompt_shown = 1;
                 /* "  8アイテム1を方向キー上下で,  選んで下さい,     決定 3○1 やめる4 ×" */
                 text_show(D_8017080C, 3, -1, 0, -1, 0, 1);
             }
-            if (!(D_801E6DA0.unk4 & 0x20) && (D_801E6DA0.unk0 & 0x20)) {
+            if (!(kaj_system.pad_prev & 0x20) && (kaj_system.pad_now & 0x20)) {
                 if (effect_item_sel < 0) {
                     effect_item_sel = 0;
                 }
                 effect_item_menu_show(arg0, n, 0);
-            } else if (!(D_801E6DA0.unk4 & 0x40) && (D_801E6DA0.unk0 & 0x40)) {
+            } else if (!(kaj_system.pad_prev & 0x40) && (kaj_system.pad_now & 0x40)) {
                 if (effect_item_sel >= 0) {
                     effect_item_sel = -1;
                 }
                 effect_item_menu_show(arg0, n, 0);
-            } else if (!(D_801E6DA0.unk4 & 0x1000) && (D_801E6DA0.unk0 & 0x1000)) {
+            } else if (!(kaj_system.pad_prev & 0x1000) && (kaj_system.pad_now & 0x1000)) {
                 effect_item_sel = mail_menu_move(1);
-            } else if (!(D_801E6DA0.unk4 & 0x4000) && (D_801E6DA0.unk0 & 0x4000)) {
+            } else if (!(kaj_system.pad_prev & 0x4000) && (kaj_system.pad_now & 0x4000)) {
                 effect_item_sel = mail_menu_move(0);
             }
         }
@@ -1618,12 +1495,12 @@ s16 effect_item_input(Unk_801E0710 *arg0, s16 arg1) {
     if (roadmap_get_state() != 0) {
         return 0;
     }
-    if (!(D_801E6DA0.unk4 & 0x800) && (D_801E6DA0.unk0 & 0x800)) {
-        if (g->unk24C != 0) {
+    if (!(kaj_system.pad_prev & 0x800) && (kaj_system.pad_now & 0x800)) {
+        if (*(s32 *)&g->unk24C != 0) {
             return 0;
         }
         if (effect_item_menu_show(arg0, n, 1) != 0) {
-            q->unk42 |= 0x4000;
+            q->flags |= 0x4000;
         }
     }
     if (effect_item_prompt_shown != 0 && mail_menu_get_state() == 0) {
@@ -1634,18 +1511,18 @@ s16 effect_item_input(Unk_801E0710 *arg0, s16 arg1) {
 }
 
 s32 effect_weapon_add(s16 arg0, s16 arg1) {
-    Unk_801E0710 *g = &D_801E0710;
-    Unk_801E0768 *p = g->unk58;
-    Unk_801E0710_5C *q = g->unk5C;
+    PlayerStatus *g = &player_status;
+    Inventory *p = g->inventory;
+    Player *q = g->player;
     void *r;
     s32 i;
 
     for (i = 0; i < 2; i++) {
-        if (p->unk4[i] < 0) {
-            p->unk4[i] = arg0;
+        if (p->weapon_ids[i] < 0) {
+            p->weapon_ids[i] = arg0;
             r = mod_find(arg0 + 0x400);
             if (r != 0) {
-                mod_setup(r, q->unkA0, 1, 0);
+                mod_setup(r, q->coord, 1, 0);
             }
             effect_weapon_calc_rate(i);
             return 1;
@@ -1658,26 +1535,26 @@ s32 effect_weapon_add(s16 arg0, s16 arg1) {
 }
 
 void effect_weapon_load_models(void) {
-    Unk_801E0710 *g = &D_801E0710;
-    Unk_801E0768 *p = g->unk58;
-    Unk_801E0710_5C *q = g->unk5C;
-    Unk_801E0368 *s = &D_801E0368;
+    PlayerStatus *g = &player_status;
+    Inventory *p = g->inventory;
+    Player *q = g->player;
+    GameVars *s = &action_vars;
     void *r;
     s32 i;
     u16 id;
 
-    p->unk46 = 1;
+    p->armed = 1;
     object_load_weapon_mods();
-    s->unk0[0x3C] = 2;
+    s->vars[0x3C] = 2;
     for (i = 0; i < 2; i++) {
-        if (p->unk4[i] >= 0) {
-            id = p->unk4[i] + 0x400;
-            s->unk0[0x3C]--;
+        if (p->weapon_ids[i] >= 0) {
+            id = p->weapon_ids[i] + 0x400;
+            s->vars[0x3C]--;
             r = mod_find(id);
             if (r != 0) {
-                mod_setup(r, q->unkA0, 1, 0);
-                if (p->unk2 == i) {
-                    p->unk4C = (s32)r;
+                mod_setup(r, q->coord, 1, 0);
+                if (p->weapon_slot == i) {
+                    p->weapon_model = (s32)r;
                 }
             }
             effect_weapon_calc_rate(i);
@@ -1688,25 +1565,25 @@ void effect_weapon_load_models(void) {
 }
 
 void effect_weapon_reset(void) {
-    Unk_801E0768 *p = D_801E0768[0];
+    Inventory *p = D_801E0768[0];
 
-    p->unk44 = 0;
-    p->unk48 = 0;
+    p->weapon_shown = 0;
+    p->weapon_state = 0;
     p->unk0 = 0;
-    p->unk4C = 0;
-    p->unk46 = 0;
+    p->weapon_model = 0;
+    p->armed = 0;
 }
 
 void effect_weapon_check_fire_frame(s32 arg0) {
-    Unk_801E0710 *g = &D_801E0710;
-    Unk_801E0768 *p = g->unk58;
-    Unk_801E0710_5C *q = g->unk5C;
-    Unk_80188FEC *e = effect_weapon_find(p->unk4[p->unk2]);
+    PlayerStatus *g = &player_status;
+    Inventory *p = g->inventory;
+    Player *q = g->player;
+    Unk_80188FEC *e = effect_weapon_find(p->weapon_ids[p->weapon_slot]);
 
     if (e != NULL && e->unk4C == arg0) {
-        if (g->unk4C != 0) {
-            if (!(q->unk42 & 0x400)) {
-                q->unk42 |= 0x400;
+        if (g->target_npc != 0) {
+            if (!(q->flags & 0x400)) {
+                q->flags |= 0x400;
             }
         }
         player_weapon_sound(e->unk0, 1);
@@ -1714,15 +1591,15 @@ void effect_weapon_check_fire_frame(s32 arg0) {
 }
 
 s32 effect_weapon_list(s16 arg0, s16 *arg1, s16 *arg2) {
-    Unk_801E0768 *p = D_801E0768[0];
+    Inventory *p = D_801E0768[0];
     s32 i;
     s32 n;
     s32 m;
 
     for (i = 0, n = 0; i < 2; i++) {
-        if (p->unk4[i] >= 0) {
+        if (p->weapon_ids[i] >= 0) {
             if (arg0 != 0) {
-                arg2[n] = p->unk4[i];
+                arg2[n] = p->weapon_ids[i];
             }
             n++;
         }
@@ -1750,7 +1627,7 @@ s32 effect_weapon_list(s16 arg0, s16 *arg1, s16 *arg2) {
 }
 
 void effect_weapon_free_records(void) {
-    Unk_801E02D8 *p = &D_801E02D8;
+    SceneTables *p = &object_scene_tables;
     if (p->unk30 != 0) {
         if (p->unk58 != NULL) {
             free3(p->unk58);
@@ -1761,7 +1638,7 @@ void effect_weapon_free_records(void) {
 }
 
 Unk_80188FEC *effect_weapon_find(s16 arg0) {
-    Unk_801E02D8 *p = &D_801E02D8;
+    SceneTables *p = &object_scene_tables;
     s32 n = p->unk30;
     Unk_80188FEC *e = p->unk58;
     s32 i;
@@ -1777,7 +1654,7 @@ Unk_80188FEC *effect_weapon_find(s16 arg0) {
 }
 
 s32 effect_item_add(s16 arg0, s16 arg1) {
-    Unk_801E0768 *p = D_801E0768[0];
+    Inventory *p = D_801E0768[0];
     s32 i;
 
     if (arg1 == 2) {
@@ -1785,8 +1662,8 @@ s32 effect_item_add(s16 arg0, s16 arg1) {
         return 1;
     }
     for (i = 0; i < 8; i++) {
-        if (p->unk32[i] < 0) {
-            p->unk32[i] = arg0;
+        if (p->item_ids[i] < 0) {
+            p->item_ids[i] = arg0;
             p->unk30++;
             return 1;
         }
@@ -1795,7 +1672,7 @@ s32 effect_item_add(s16 arg0, s16 arg1) {
 }
 
 s32 effect_item_remove(s16 arg0, s16 arg1) {
-    Unk_801E0768 *p = D_801E0768[0];
+    Inventory *p = D_801E0768[0];
     s32 i;
 
     if (arg1 == 2) {
@@ -1806,8 +1683,8 @@ s32 effect_item_remove(s16 arg0, s16 arg1) {
         return 0;
     }
     for (i = 0; i < 8; i++) {
-        if (p->unk32[i] == arg0) {
-            p->unk32[i] = -1;
+        if (p->item_ids[i] == arg0) {
+            p->item_ids[i] = -1;
             p->unk30--;
             return 1;
         }
@@ -1816,7 +1693,7 @@ s32 effect_item_remove(s16 arg0, s16 arg1) {
 }
 
 void effect_item_free_records(void) {
-    Unk_801E02D8 *p = &D_801E02D8;
+    SceneTables *p = &object_scene_tables;
     if (p->unk2C != 0) {
         if (p->unk48 != 0) {
             free3((void *)p->unk48);
@@ -1827,7 +1704,7 @@ void effect_item_free_records(void) {
 }
 
 Unk_801891A4 *effect_item_find(s16 arg0) {
-    Unk_801E02D8 *p = &D_801E02D8;
+    SceneTables *p = &object_scene_tables;
     s32 n = p->unk2C;
     Unk_801891A4 *e = (Unk_801891A4 *)p->unk48;
     s32 i;

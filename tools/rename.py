@@ -5,7 +5,9 @@
 
 NAMES_FILE holds one rename per line, `OLD NEW`, and the evidence on `#` lines just above it; the evidence
 becomes the `//` comment over the new line in config/symbol_addrs.txt (a name needs evidence, so a rename
-with no `#` line is refused). OLD is a splat name (func_X, D_X) or a name given earlier. --check runs
+with no `#` line is refused). OLD is a splat name (func_X, D_X) or a name given earlier, or a struct type
+(`Unk_X` or a type named earlier, prefixed `type:` as in `type:Unk_801E0368 TimeBlock`): a type exists only in the
+sources, so it is renamed there and its evidence stays in the names file. --check runs
 `make split` then `make check` afterwards. Reads build/xref.json (tools/xref.py --json build/xref.json)
 for addresses and kinds; writes it again when the split ran.
 """
@@ -25,6 +27,7 @@ LITERAL = re.compile(r'"(?:[^"\\\n]|\\.)*"|\'(?:[^\'\\\n]|\\.)*\'')
 C_KEYWORDS = set("""auto break case char const continue default do double else enum extern float for goto if inline
 int long register return short signed sizeof static struct switch typedef union unsigned void volatile while
 asm""".split())
+TYPES = set()  # OLD names given as `type:OLD`: source-only renames
 RESERVED = re.compile(r"^(func|D|jtbl|Unk|unk|pad|sub|lbl|L)_[0-9A-Fa-f]+$")
 
 
@@ -39,6 +42,11 @@ def load_names(path):
             evidence.append(line[1:].strip())
             continue
         parts = line.split()
+        if len(parts) == 2 and parts[0].startswith("type:"):
+            parts[0] = parts[0][5:]
+            if not parts[0]:
+                sys.exit(f"{path}:{n}: empty type name")
+            TYPES.add(parts[0])
         if len(parts) != 2:
             sys.exit(f"{path}:{n}: expected `OLD NEW`, got {line!r}")
         if not evidence:
@@ -59,10 +67,14 @@ def source_identifiers():
 
 
 def validate(renames, xref):
-    taken = set(xref) | source_identifiers()
+    ids = source_identifiers()
+    taken = set(xref) | ids
     seen_old, seen_new = set(), set()
     for old, new, ev in renames:
-        if old not in xref:
+        if old in TYPES:
+            if old not in ids:
+                sys.exit(f"{old}: type not found in src/ or include/")
+        elif old not in xref:
             sys.exit(f"{old}: unknown symbol (stale build/xref.json? run tools/xref.py --json build/xref.json)")
         if not IDENT.match(new) or RESERVED.match(new) or new in C_KEYWORDS:
             sys.exit(f"{new}: not a C identifier or looks like a placeholder name")
@@ -70,7 +82,7 @@ def validate(renames, xref):
             sys.exit(f"{new}: name already used")
         if old in seen_old:
             sys.exit(f"{old}: renamed twice")
-        if xref[old]["addr"] is None:
+        if old not in TYPES and xref[old]["addr"] is None:
             sys.exit(f"{old}: no address in xref")
         seen_old.add(old)
         seen_new.add(new)
@@ -80,6 +92,8 @@ def update_config(renames, xref, dry):
     text = open(SYMS, encoding="utf-8").read()
     added = []
     for old, new, ev in renames:
+        if old in TYPES:
+            continue
         line_re = re.compile(rf"^((?://.*\n)*){re.escape(old)}(\s*=)", re.M)
         if line_re.search(text):
             # a given name: its old evidence goes with it; a bare splat split keeps its comments
