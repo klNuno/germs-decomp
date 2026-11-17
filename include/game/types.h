@@ -444,7 +444,7 @@ typedef struct ActionSet {
 
 typedef struct ScreenLight {
     s16 daylight_on;
-    s16 divide_pending;
+    s16 bg_color_pending;
     s16 fog_on;
     s16 fade_active;
     s16 daylight_step;
@@ -554,7 +554,7 @@ typedef struct Arena {
     u16 width;
     u16 depth;
     void *data;
-    ArenaHeader *cells;
+    ArenaHeader *header;
 } Arena;
 
 typedef struct DoorListNode {

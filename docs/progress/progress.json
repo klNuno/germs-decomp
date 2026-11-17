@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "commit": "ea8a72b",
+ "commit": "f8d4d67",
  "tracked_tree_dirty": true,
  "exe_sha1": "178e728643d9b456436f4d19c9e07db11ab8aa2c",
  "metric": "Code bytes of each function (.text of the link map). asm: still INCLUDE_ASM; c: matching C whose body still carries names we did not choose; read: matching C with only our names.",
@@ -39,7 +39,7 @@
    "unk_types": 0,
    "d_globals": 0
   },
-  "sony_symbols": 643,
+  "sony_symbols": 647,
   "sony_bytes": 138048
  },
  "units": [
@@ -974,7 +974,7 @@
      "level": "read"
     },
     {
-     "name": "block_elevator_input",
+     "name": "block_bus_input",
      "address": "0x8017E594",
      "bytes": 1032,
      "unk_fields": 0,
@@ -984,7 +984,7 @@
      "level": "read"
     },
     {
-     "name": "block_elevator_run",
+     "name": "block_bus_run",
      "address": "0x8017E99C",
      "bytes": 604,
      "unk_fields": 0,
@@ -3898,7 +3898,7 @@
      "level": "read"
     },
     {
-     "name": "roadmap_add_flash_tile",
+     "name": "roadmap_add_flash_quad",
      "address": "0x801A06C0",
      "bytes": 352,
      "unk_fields": 0,
@@ -3998,7 +3998,7 @@
      "level": "read"
     },
     {
-     "name": "roadmap_shop_close_topic",
+     "name": "roadmap_shop_open_topic_list",
      "address": "0x801A20A8",
      "bytes": 36,
      "unk_fields": 0,
@@ -5950,7 +5950,7 @@
      "level": "sony"
     },
     {
-     "name": "func_801B25D0",
+     "name": "GsSetView2",
      "address": "0x801B25D0",
      "bytes": 352,
      "level": "sony"
@@ -6034,7 +6034,7 @@
      "level": "sony"
     },
     {
-     "name": "func_801B34C0",
+     "name": "GsSortObject4J",
      "address": "0x801B34C0",
      "bytes": 2192,
      "level": "sony"
@@ -6564,7 +6564,19 @@
     {
      "name": "func_801B910C",
      "address": "0x801B910C",
-     "bytes": 52,
+     "bytes": 24,
+     "level": "sony"
+    },
+    {
+     "name": "D_801B9124",
+     "address": "0x801B9124",
+     "bytes": 24,
+     "level": "sony"
+    },
+    {
+     "name": "D_801B913C",
+     "address": "0x801B913C",
+     "bytes": 4,
      "level": "sony"
     },
     {
@@ -8784,7 +8796,19 @@
     {
      "name": "_ExitCard",
      "address": "0x801CBC60",
-     "bytes": 128,
+     "bytes": 112,
+     "level": "sony"
+    },
+    {
+     "name": "D_801CBCD0",
+     "address": "0x801CBCD0",
+     "bytes": 12,
+     "level": "sony"
+    },
+    {
+     "name": "D_801CBCDC",
+     "address": "0x801CBCDC",
+     "bytes": 4,
      "level": "sony"
     }
    ],

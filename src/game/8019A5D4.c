@@ -609,8 +609,8 @@ void *roadmap_add_clipped_f3(ClipVertex *v0, ClipVertex *v1, ClipVertex *v2, Roa
             gte_stcv(color);
         }
     }
-    if (light->divide_pending != 0) {
-        light->divide_pending = 0;
+    if (light->bg_color_pending != 0) {
+        light->bg_color_pending = 0;
         rgbc = (RoadmapRgb *)&poly->r0;
         kaj_view_set_bg_color(rgbc->r, rgbc->g, rgbc->b);
     }
@@ -717,8 +717,8 @@ void *roadmap_add_clipped_g3(ClipVertex *v0, ClipVertex *v1, ClipVertex *v2, voi
             gte_stcv(rgb2);
         }
     }
-    if (light->divide_pending != 0) {
-        light->divide_pending = 0;
+    if (light->bg_color_pending != 0) {
+        light->bg_color_pending = 0;
         rgbc = (RoadmapRgb *)&poly->r0;
         kaj_view_set_bg_color(rgbc->r, rgbc->g, rgbc->b);
     }
@@ -914,8 +914,8 @@ void *roadmap_draw_ft3(RoadmapPrimFT3 *op, SVector *vp, void *packet, s32 count,
             rgbc = (RoadmapRgb *)&poly->r0;
             packet = DivideFT3(&vp[op->vert0], &vp[op->vert1], &vp[op->vert2], (u32 *)&op->u0, (u32 *)&op->u1,
                                (u32 *)&op->u2, rgbc, packet, tag, divp);
-            if (light->divide_pending != 0) {
-                light->divide_pending = 0;
+            if (light->bg_color_pending != 0) {
+                light->bg_color_pending = 0;
                 kaj_view_set_bg_color(rgbc->r * 0x333 >> 10, rgbc->g * 0x333 >> 10, rgbc->b * 0x333 >> 10);
             }
         } else {
@@ -1113,8 +1113,8 @@ void *roadmap_draw_gt3(RoadmapPrimGT3 *op, SVector *vp, void *packet, s32 count,
             packet = DivideGT3(&vp[op->vert0], &vp[op->vert1], &vp[op->vert2], (u32 *)&op->u0, (u32 *)&op->u1,
                                (u32 *)&op->u2, rgbc, (RoadmapRgb *)&poly->r1, (RoadmapRgb *)&poly->r2, packet, tag,
                                divp);
-            if (light->divide_pending != 0) {
-                light->divide_pending = 0;
+            if (light->bg_color_pending != 0) {
+                light->bg_color_pending = 0;
                 kaj_view_set_bg_color(rgbc->r * 0x333 >> 10, rgbc->g * 0x333 >> 10, rgbc->b * 0x333 >> 10);
             }
         } else {
@@ -1311,8 +1311,8 @@ void *roadmap_draw_ft4(RoadmapPrimFT4 *op, SVector *vp, void *packet, s32 count,
             rgbc = (RoadmapRgb *)&poly->r0;
             packet = DivideFT4(&vp[op->vert0], &vp[op->vert1], &vp[op->vert2], &vp[op->vert3], (u32 *)&op->u0,
                                (u32 *)&op->u1, (u32 *)&op->u2, (u32 *)&op->u3, rgbc, packet, tag, divp);
-            if (light->divide_pending != 0) {
-                light->divide_pending = 0;
+            if (light->bg_color_pending != 0) {
+                light->bg_color_pending = 0;
                 kaj_view_set_bg_color(rgbc->r * 0x333 >> 10, rgbc->g * 0x333 >> 10, rgbc->b * 0x333 >> 10);
             }
         } else {
@@ -1553,8 +1553,8 @@ void *roadmap_draw_gt4(RoadmapPrimGT4 *op, SVector *vp, void *packet, s32 count,
             packet = DivideGT4(&vp[op->vert0], &vp[op->vert1], &vp[op->vert2], &vp[op->vert3], (u32 *)&op->u0,
                                (u32 *)&op->u1, (u32 *)&op->u2, (u32 *)&op->u3, rgbc, (RoadmapRgb *)&poly->r1,
                                (RoadmapRgb *)&poly->r2, (RoadmapRgb *)&poly->r3, packet, tag, divp);
-            if (light->divide_pending != 0) {
-                light->divide_pending = 0;
+            if (light->bg_color_pending != 0) {
+                light->bg_color_pending = 0;
                 kaj_view_set_bg_color(rgbc->r * 0x333 >> 10, rgbc->g * 0x333 >> 10, rgbc->b * 0x333 >> 10);
             }
         } else {
@@ -1634,9 +1634,9 @@ void *roadmap_add_sprite(RoadmapSprite *sprite, void *packet, u32 *ot_base) {
     return pkt;
 }
 
-/* Inline copy of roadmap_add_flash_tile (defined further down in the unit): the draw call below
+/* Inline copy of roadmap_add_flash_quad (defined further down in the unit): the draw call below
  * keeps its body, including the missing return when the packet buffer is full. */
-static inline PolyF4Packet *roadmap_add_flash_tile_inline(RoadmapFlash *flash, PolyF4Packet *tile, u32 *ot) {
+static inline PolyF4Packet *roadmap_add_flash_quad_inline(RoadmapFlash *flash, PolyF4Packet *tile, u32 *ot) {
     ScreenLight *light = &screen_light;
     u8 rgb[3];
     if ((u32)kaj_view_packet_used() <= 0xAFFA) {
@@ -1680,7 +1680,7 @@ void roadmap_draw_flash(ViewBuffer *view) {
                 flash->frames_left = 0;
             }
             SetSpadStack(0x1F8003FC);
-            GsOUT_PACKET_P = roadmap_add_flash_tile_inline(flash, GsOUT_PACKET_P, view->ot_tags);
+            GsOUT_PACKET_P = roadmap_add_flash_quad_inline(flash, GsOUT_PACKET_P, view->ot_tags);
             ResetSpadStack();
         } else {
             roadmap_flash.active = 0;
@@ -1711,7 +1711,7 @@ void roadmap_init_draw(void) {
     screen_light.fade_active = 0;
     screen_light.clip_mode = 0;
     screen_light.ot_bias = 3;
-    screen_light.divide_pending = 0;
+    screen_light.bg_color_pending = 0;
     screen_light.daylight_step = 0;
     screen_light.dark = 0;
     flash = &roadmap_flash;
@@ -1798,7 +1798,7 @@ void roadmap_start_flash(s32 red, s32 green, s32 blue, s32 duration) {
     }
 }
 
-PolyF4Packet *roadmap_add_flash_tile(RoadmapFlash *flash, PolyF4Packet *tile, u32 *ot) {
+PolyF4Packet *roadmap_add_flash_quad(RoadmapFlash *flash, PolyF4Packet *tile, u32 *ot) {
     ScreenLight *light = &screen_light;
     u8 rgb[3];
 
@@ -2543,7 +2543,7 @@ void roadmap_shop_exit_to_town(s16 building, s16 exit_no) {
     mail_goto_twn(roadmap_shop_exit_points[point], 0, roadmap_shop_exit_points[point + 1], roadmap_shop_exit_points[point + 2], 1);
 }
 
-void roadmap_shop_close_topic(void) {
+void roadmap_shop_open_topic_list(void) {
     roadmap_shop_topic_menu(0, 1);
 }
 

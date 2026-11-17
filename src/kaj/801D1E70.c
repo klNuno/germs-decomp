@@ -202,7 +202,7 @@ s32 kaj_cdmgr_read_left;
 s32 kaj_cdmgr_stall_count;
 s32 kaj_cdmgr_read_done;
 u8 kaj_cdmgr_reloc_kind;
-void block_replace_arena(void *old_cells, void *new_cells);
+void block_replace_arena(void *old_header, void *new_header);
 void mod_relocate(s32 *old_data, s32 *new_data);
 s32 kaj_map_cell_flags(s16 cx, s16 cy, u8 layer, u8 *flags);
 typedef struct {

@@ -595,10 +595,10 @@ block_building_run = 0x8017E25C; // type:func size:0x2A8
 block_on_enter = 0x8017E504; // type:func size:0x40
 // block.c: block_create_all then block_building_run, again with func_8018748C between runs while D_801DFE60 == 1; called by func_8018BDE8
 block_building_main = 0x8017E544; // type:func size:0x50
-// block.c: pad up/down (0x1000/0x4000) moves the selected floor 1..11 (1..5 for building 3) and recolours the CLUTs; 0x20/0x40 warp with func_8018C50C to D_801D74B0[(building*11+floor-12)*3]; only caller block_elevator_run
-block_elevator_input = 0x8017E594; // type:func size:0x408
-// block.c: floor selection loop (func_801CC378 messages, block_elevator_input on message 0) then event_advance_clock(|floors moved| * 5 minutes); caller func_801A9070
-block_elevator_run = 0x8017E99C; // type:func size:0x25C
+// Reached from the town 0xFE trigger: picks stop 1..11 of a line and warps by mail_goto_twn to a town position; community: three bus lines, a stop moves you there
+block_bus_input = 0x8017E594; // type:func size:0x408
+// Run for town trigger 0xFE by thing_game_loop, a line map sprite, stop choice loop, then 5 minutes per stop moved; the bus (docs/community-knowledge.md), no elevator
+block_bus_run = 0x8017E99C; // type:func size:0x25C
 // event.c: OpenEvent 0xF3000000/0xF3000001/0xF3000002, "Can not Enable to ENTER Event", "LEAVE Event", "MOD Finish Event", clears D_801DFF50; called by func_8018BDE8
 event_open = 0x8018920C; // type:func size:0x144
 // event.c: handles message 0x10 (ENTER) of the scene loops: copies the trigger into D_801DFFE8, calls hook D_801DFEE4, per type prompts (Japanese text), bus stops (Japanese text), (Japanese text), 0x80 -> block_enter_area
@@ -637,7 +637,7 @@ event_set_blink = 0x8018A968; // type:func size:0x98
 event_clock_tick = 0x8018AA00; // type:func size:0xBC
 // event.c: draws day+1, hour and minute with event_draw_clock_digits, stores the daylight switch into D_801E1040.unk0, SetFarColor(0,0,0), event_update_daylight(1); called by block_building_load and 2 scene loaders
 event_show_clock = 0x8018AABC; // type:func size:0x8C
-// event.c: event_clock_add_minute a times without redrawing, then the three digit pairs; block_elevator_run calls it with 5 minutes per floor
+// event.c: event_clock_add_minute a times without redrawing, then the three digit pairs; block_bus_run calls it with 5 minutes per stop
 event_advance_clock = 0x8018ABE8; // type:func size:0xC4
 // event.c: MoveImage of a 12x16 strip of sprite 0x40E at x = 0x140 + heading (unk6E, degrees) * 48 / 360; caller func_801979B4
 event_draw_compass = 0x8018AB48; // type:func size:0xA0
@@ -653,8 +653,8 @@ player_update_view = 0x80195BC8; // type:func size:0x228
 block_str_scene_path = 0x80170374;
 // block.c: 3 ints per index D_801DFE64, the warp target after sleeping or fainting in block_on_effect_done (func_80199EB4 / func_80199370)
 block_wake_positions = 0x801D7450;
-// block.c: {x/10, z/10, direction} per building*11 + floor - 12, warp target of block_elevator_input via func_8018C50C
-block_elevator_stops = 0x801D74B0;
+// {x/10, z/10, yaw} per line * 11 + stop - 12, the town positions block_bus_input passes to mail_goto_twn; bus stops, not elevator floors
+block_bus_stops = 0x801D74B0;
 // block.c: building id copied from D_801E0340+0x18 by block_set_mode, passed to the building stream calls func_801D6940/func_801D5934
 block_building_id = 0x801DFE58;
 // block.c: set to the scene kind when it is 1 by block_building_load, passed to event_show_clock (daylight switch) and event_handle_tick
@@ -1349,8 +1349,8 @@ roadmap_draw_frame = 0x801A0418; // type:func size:0x1D4
 roadmap_draw_sprite_frame = 0x801A05EC; // type:func size:0xA4
 // roadmap.c: starts roadmap_flash with color (arg0, arg1, arg2) and duration arg3 unless one is running; callers action_update and func_80195DF0-unit hit colors (0xFF,0,0) etc.
 roadmap_start_flash = 0x801A0690; // type:func size:0x30
-// roadmap.c: the TILE part of roadmap_draw_flash as a function (320x240 semi-transparent, OT slot 0x10); no caller
-roadmap_add_flash_tile = 0x801A06C0; // type:func size:0x160
+// Builds a POLY_F4 (len 5, code 0x28, four corners 0..0x13F x 0..0xEF), not a libgpu TILE (0x60); the flash quad of roadmap_draw_flash, no caller
+roadmap_add_flash_quad = 0x801A06C0; // type:func size:0x160
 // roadmap.c: gun shop list: player level D_801E0712/20 (0..2), weapons 1..12 but 10 by required level func_80188FEC()->unk30, qsort with roadmap_cmp_weapon_level, keeps 6 into roadmap_shop_weapons
 roadmap_shop_pick_weapons = 0x801A0820; // type:func size:0x158
 // roadmap.c: shop talk menu: arg0 != 0 shows the 3-topic chooser (sprite 3 rows 4..6, D_801DFF78 = 0), else closes it or opens the list of topic D_801DFF78 (D_801D7A92 / D_801D7AB0 / D_801D7ACE) with func_8018D078
@@ -1369,8 +1369,8 @@ roadmap_shop_open_menu = 0x801A1AB8; // type:func size:0x408
 roadmap_shop_init = 0x801A1EC0; // type:func size:0x114
 // roadmap.c: for shop types 4..7 and exit arg1 picks (x, z, angle) in roadmap_shop_exit_points and calls func_8018C50C(x, 0, z, angle, 1), the "\S\TWN.S;1" town scene change; caller block_on_action
 roadmap_shop_exit_to_town = 0x801A1FD4; // type:func size:0xD4
-// roadmap.c: roadmap_shop_topic_menu(0, 1); called by block_building_run
-roadmap_shop_close_topic = 0x801A20A8; // type:func size:0x24
+// Body is roadmap_shop_topic_menu(0, 1): hides the chooser, then mail_menu_open of the chosen topic's list; event 0x400 in block_building_run
+roadmap_shop_open_topic_list = 0x801A20A8; // type:func size:0x24
 // roadmap.c: ENTER handler in D_801DFEE4: area type 0x30 with index < 11 (shop 3) or < 6 (shop 6) sets D_801E1058.unk8 = 1 (at the counter)
 roadmap_shop_on_enter = 0x801A20CC; // type:func size:0x50
 // roadmap.c: LEAVE counterpart in D_801DFEE0: same test, clears D_801E1058.unk8

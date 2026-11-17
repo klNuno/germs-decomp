@@ -34,7 +34,7 @@ The evidence words:
 | [game/80173054](../src/game/80173054.c) | action.c | `action_cmd_change_scene..action_run_npc_event` @0x801752F4 (19) | likely | start of .text; assert in `action_load_set` (0x80173A44) |
 | [game/8017546C](../src/game/8017546C.c) | unknown | `npc_update_anim..npc_find_stats` @0x80176890 (15) | likely | jtbl cut |
 | [game/801768F8](../src/game/801768F8.c) | unknown | `ai_check_line..ai_in_aim_cone` @0x80179630 (16) | likely | gp cut: `ai_door_noise` is read with `lui` before, through `gp` from here |
-| [game/80179848](../src/game/80179848.c) | block.c | `block_setup..block_elevator_run` @0x8017E99C (42) | likely | assert from `block_setup` to `block_create` (0x8017CB98) |
+| [game/80179848](../src/game/80179848.c) | block.c | `block_setup..block_bus_run` @0x8017E99C (42) | likely | assert from `block_setup` to `block_create` (0x8017CB98) |
 | [game/8017EBF8](../src/game/8017EBF8.c) | unknown | `menu_card_init_slots..door_exec_command` @0x8018519C (46) | likely | jtbl cut |
 | [game/80185380](../src/game/80185380.c) | door.c | `door_create..door_fade_step` @0x80185918 (9) | guess | assert in `door_create`; the file may start at `door_setup` (0x801844D4) or before (below) |
 | [game/80185A60](../src/game/80185A60.c) | effect.c | `effect_start_sprite_slide..effect_item_find` @0x801891A4 (50) | likely | assert from the first function to `effect_weapon_unequip` (0x801875E4) |
@@ -76,7 +76,7 @@ are labels for what the code does, not file names: `menu_` and `text_` do not so
 
 | Unit | Functions | What points to another file |
 | --- | --- | --- |
-| game/80179848 | `block_free` (0x8017CCE4) to `block_elevator_run` | no assert after `block_create`, a long run of town and building loop code |
+| game/80179848 | `block_free` (0x8017CCE4) to `block_bus_run` | no assert after `block_create`, a long run of town and building loop code |
 | game/8017EBF8 | `door_setup` (0x801844D4) to `door_exec_command` | they set up, move and command the `Door` records that door.c creates and keeps in `door_list`; door.c may start here |
 | game/80185A60 | `effect_weapon_draw_panel` (0x80187718) to `effect_item_find` | the weapon and item inventories, no assert; a name between effect and event would fit |
 | game/8018ACAC | `main` (0x8018BDE8) to `mail_menu_get_entry` | the entry point and the scene loop step; `main` sorts after `mail` and before `mod`, so a main.c here fits the alphabet |

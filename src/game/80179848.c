@@ -179,7 +179,7 @@ void kaj_pad_reset(s32 enable);
 s32 kaj_event_get(s32 *event);
 void kaj_event_done(s32 *event);
 void event_handle_enter(s32 *ev);
-void roadmap_shop_close_topic(void);
+void roadmap_shop_open_topic_list(void);
 void event_handle_leave(s32 *ev);
 void event_handle_tick(s16 daylight);
 void event_handle_mod_finish(s32 *ev);
@@ -203,7 +203,7 @@ void mod_free_all(void);
 void thing_free_all(void);
 void sound_bgm_close(void);
 void sound_se_pop_scene(void);
-void block_elevator_input(s16 building, s16 start_floor, s16 *floor);
+void block_bus_input(s16 building, s16 start_floor, s16 *floor);
 void event_advance_clock(s16 minutes, s16 no_fatigue);
 void mail_wait(s32 mode, s32 stream, s32 visibility, s32 seconds);
 void roadmap_draw_frame(u16 mode);
@@ -221,7 +221,7 @@ void door_refresh_all(void);
 void sprite_thing_refresh_all(void);
 void RotTrans(void *v0, s32 *v1, s32 *flag);
 void mail_goto_twn(s32 x, s32 y, s32 z, s16 yaw, s16 e);
-extern s32 block_elevator_stops[];
+extern s32 block_bus_stops[];
 typedef struct {
     s32 slot;
     s32 offset;
@@ -337,7 +337,7 @@ void block_setup(Block *block, u16 mode) {
         (*arena)->width = src->width;
         (*arena)->depth = src->depth;
         (*arena)->data = src + 1;
-        (*arena)->cells = src;
+        (*arena)->header = src;
         block->model_flags |= 0x10;
     }
     GsInitCoordinate2(NULL, &block->coord_flg);
@@ -367,14 +367,14 @@ void block_draw_all(ViewBuffer *view, u16 mode) {
             GsSetLsMatrix(ls);
             if (block->model_flags & 2) {
                 if (mode == 2 && player->vehicle_mode != 3) {
-                    light->divide_pending = block->player_inside;
+                    light->bg_color_pending = block->player_inside;
                 }
                 light->ot_bias = 0x100;
                 SetSpadStack(0x1F8003FC);
                 GsSortObject4J(block->model1, &view->ot_length, 1, (void *)0x1F800000);
                 ResetSpadStack();
             }
-            light->divide_pending = 0;
+            light->bg_color_pending = 0;
             if (block->model_flags & 4) {
                 light->ot_bias = 0xC0;
                 SetSpadStack(0x1F8003FC);
@@ -1540,7 +1540,7 @@ s32 block_fit_ground_tilt(s32 *height_out, s16 all) {
     return 0;
 }
 
-void block_replace_arena(ArenaHeader *old_cells, ArenaHeader *new_cells) {
+void block_replace_arena(ArenaHeader *old_header, ArenaHeader *new_header) {
     BlockList *list = block_list;
     Arena *arena;
 
@@ -1550,7 +1550,7 @@ void block_replace_arena(ArenaHeader *old_cells, ArenaHeader *new_cells) {
             Block *block = list->cursor->data;
             if (block != NULL && (block->model_flags & 0x10)) {
                 arena = block->arena;
-                if (arena->cells == old_cells) {
+                if (arena->header == old_header) {
                     break;
                 }
             }
@@ -1564,8 +1564,8 @@ void block_replace_arena(ArenaHeader *old_cells, ArenaHeader *new_cells) {
         arena = NULL;
     }
     if (arena != NULL) {
-        arena->cells = new_cells;
-        arena->data = new_cells + 1;
+        arena->header = new_header;
+        arena->data = new_header + 1;
     }
 }
 
@@ -1583,7 +1583,7 @@ void block_arena_init(Arena **arena_p, ArenaHeader *src) {
     (*arena_p)->width = src->width;
     (*arena_p)->depth = src->depth;
     (*arena_p)->data = src + 1;
-    (*arena_p)->cells = src;
+    (*arena_p)->header = src;
 }
 
 void block_create(Block **block_p, s32 size) {
@@ -2249,7 +2249,7 @@ void block_building_run(void) {
             event_handle_enter(ev);
             continue;
         case 0x400:
-            roadmap_shop_close_topic();
+            roadmap_shop_open_topic_list();
             continue;
         case 0x20:
             event_handle_leave(ev);
@@ -2336,7 +2336,7 @@ void block_building_main(void) {
     }
 }
 
-void block_elevator_input(s16 building, s16 start_floor, s16 *floor) {
+void block_bus_input(s16 building, s16 start_floor, s16 *floor) {
     s32 se;
     s16 played;
     s32 i;
@@ -2352,13 +2352,13 @@ void block_elevator_input(s16 building, s16 start_floor, s16 *floor) {
                 se = 0x11;
             }
             stop = (building * 11 + *floor - 12) * 3;
-            mail_goto_twn(block_elevator_stops[stop] * 10, 0, block_elevator_stops[stop + 1] * 10, block_elevator_stops[stop + 2], 0);
+            mail_goto_twn(block_bus_stops[stop] * 10, 0, block_bus_stops[stop + 1] * 10, block_bus_stops[stop + 2], 0);
         } else if (!(kaj_system.pad_prev & 0x40) && (kaj_system.pad_now & 0x40)) {
             played = 1;
             se = 8;
             *floor = start_floor;
             stop = (building * 11 + start_floor - 12) * 3;
-            mail_goto_twn(block_elevator_stops[stop] * 10, 0, block_elevator_stops[stop + 1] * 10, block_elevator_stops[stop + 2], 0);
+            mail_goto_twn(block_bus_stops[stop] * 10, 0, block_bus_stops[stop + 1] * 10, block_bus_stops[stop + 2], 0);
         } else if (!(kaj_system.pad_prev & 0x1000) && (kaj_system.pad_now & 0x1000)) {
             played = 1;
             se = 0xF;
@@ -2416,7 +2416,7 @@ void block_elevator_input(s16 building, s16 start_floor, s16 *floor) {
     }
 }
 
-void block_elevator_run(s16 building, s16 start_floor) {
+void block_bus_run(s16 building, s16 start_floor) {
     s32 ev[6];
     s16 floor;
     s16 done;
@@ -2443,7 +2443,7 @@ void block_elevator_run(s16 building, s16 start_floor) {
             event_handle_tick(1);
             continue;
         case 0x0:
-            block_elevator_input(building, start_floor, &floor);
+            block_bus_input(building, start_floor, &floor);
             if (mail_take_scene_change() != 0) {
                 effect_start_fade(1, 3);
             }

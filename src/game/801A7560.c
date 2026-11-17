@@ -24,7 +24,7 @@ void vehicle_train_set_doors(s32 opening);
 void block_create_all(void);
 void thing_field_loop(void);
 void sprite_phone_run(void);
-void block_elevator_run(s32 building, s32 start_floor);
+void block_bus_run(s32 building, s32 start_floor);
 s16 thing_field_exit_arg_hi;
 s16 thing_field_exit_arg_lo;
 s16 thing_field_exit_code;
@@ -965,7 +965,7 @@ void thing_game_loop(void) {
             sprite_phone_run();
             break;
         case 2:
-            block_elevator_run(thing_field_exit_arg_hi, thing_field_exit_arg_lo);
+            block_bus_run(thing_field_exit_arg_hi, thing_field_exit_arg_lo);
             break;
         }
     }
