@@ -38,35 +38,35 @@ The game:
 
 Follow the calls from the entry point; each step names the function to open next.
 
-1. [`main`](../../src/game/8018ACAC.c): `kaj_init`, the seven lists, `event_open`, RES.R entry 1,
+1. [`main`](../../src/game/main.c): `kaj_init`, the seven lists, `event_open`, RES.R entry 1,
    then the endless loop over the title and the three scene loops
    ([boot and loop](boot-and-loop.md#from-main-to-the-scene-loop)).
-2. [`kaj_init`](../../src/kaj/801CC898.c) and the parts it starts:
-   [event.c](../../src/kaj/801CBCE0.c) for the queue, [timer.c](../../src/kaj/801CFD70.c) for the
-   clock events, [tss.c and view.c](../../src/kaj/801D12A8.c) for tasks and the screen.
-3. `object_room_main` in [object.c](../../src/game/8018FA18.c): the clearest scene loop, a switch
+2. [`kaj_init`](../../src/kaj/kaj.c) and the parts it starts:
+   [event.c](../../src/kaj/event.c) for the queue, [timer.c](../../src/kaj/timer.c) for the
+   clock events, [tss.c](../../src/kaj/tss.c) and [view.c](../../src/kaj/view.c) for tasks and the screen.
+3. `object_room_main` in [object.c](../../src/game/object.c): the clearest scene loop, a switch
    over `kaj_event_get` that calls `mail_step_frame` on every empty event. `block_building_main`
-   ([block.c](../../src/game/80179848.c)) and `thing_game_loop`
-   ([thing.c](../../src/game/801A7560.c)) have the same shape.
+   ([block.c](../../src/game/block.c)) and `thing_game_loop`
+   ([thing.c](../../src/game/thing.c)) have the same shape.
 4. `object_load_scene` and `object_read_chunks` in object.c: how a scene's chunks become sprites,
    models, sounds, scripts and tables ([files and CD](files-and-cd.md#the-chunk-walk)).
-5. The handlers in [event.c](../../src/game/8018920C.c): alarms, area enter and leave, the clock
+5. The handlers in [event.c](../../src/game/event.c): alarms, area enter and leave, the clock
    tick, finished tasks and animations, and the hooks each scene installs.
 6. `mail_step_frame` in mail.c: the update order of one frame, then `action_update` in
-   [action.c](../../src/game/80173054.c) for the scripts and `player_update` in
-   [the player unit](../../src/game/80195DF0.c).
-7. `roadmap_draw_frame` in [roadmap.c](../../src/game/8019A5D4.c): the draw order, then
-   [mod.c](../../src/game/8018D2DC.c) and [sprite.c](../../src/game/801A3DD4.c).
-8. Under all of it: [cdmgr.c and the map streamer](../../src/kaj/801D1E70.c) for the town,
-   [sound.c](../../src/game/801A217C.c) for sound, and
-   [the menu and text unit](../../src/game/8017EBF8.c).
+   [action.c](../../src/game/action.c) for the scripts and `player_update` in
+   [player.c](../../src/game/player.c).
+7. `roadmap_draw_frame` in [roadmap.c](../../src/game/roadmap.c): the draw order, then
+   [mod.c](../../src/game/mod.c) and [sprite.c](../../src/game/sprite.c).
+8. Under all of it: [cdmgr.c](../../src/kaj/cdmgr.c) and [the map streamer](../../src/kaj/map.c) for the town,
+   [sound.c](../../src/game/sound.c) for sound, and
+   the menus and text windows of [card.c](../../src/game/card.c) and [dialog.c](../../src/game/dialog.c).
 
 Five habits of the code help when reading any file:
 
-- A source file is named after the address of its first function. The module it holds is named
-  by the file name its error messages carry ("object.c" passed to `kaj_abend`, "cdmgr.c" printed
-  with a line number); units with no such string carry the prefix of what they do (`player_`,
-  `npc_`, `kaj_tod_`). Each page says which unit holds which module the first time.
+- A source file is named by the file name its error messages carry ("object.c" passed to
+  `kaj_abend`, "cdmgr.c" printed with a line number); a file with no such string is named after
+  what it does ([layout](../layout.md)), and its functions carry the prefix of what they do
+  (`player_`, `npc_`, `kaj_tod_`). Each page says which file holds which module the first time.
 - Most allocations go through `kaj_malloc`, which returns NULL on failure, and most callers then
   stop in `kaj_abend` with a message such as "Error Allocating MOD Pointer": searching a message
   finds the code that owns the data. The exceptions are listed in

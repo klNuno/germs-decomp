@@ -1,0 +1,90 @@
+--- a/src/game/door.c
++++ b/src/game/door.c
+@@ -508,7 +508,6 @@
+ void kaj_ll_insert_after(DoorList *list, void *data);
+ DoorList *door_list;
+ void kaj_ll_remove_to_prev(DoorList *list);
+-s16 kaj_ll_at_tail(DoorList *list);
+ void *kaj_malloc(u32 size);
+ void kaj_abend(s32 code, char *msg, char *file, s32 line);
+ extern char door_str_file[];
+--- a/src/game/player.c
++++ b/src/game/player.c
+@@ -398,7 +398,6 @@
+ void player_add_hp(s16 amount, s16 floor);
+ extern Inventory player_inventory;
+ void *memset(void *dst, s32 c, u32 n);
+-void RotMatrix(s16 *arg0, void *arg1);
+ void ApplyMatrixLV(void *arg0, void *arg1, void *arg2);
+ void GsSetView2(void *arg0);
+ void GsInitCoordinate2(void *super, void *base);
+--- a/src/game/thing.c
++++ b/src/game/thing.c
+@@ -20,7 +20,18 @@
+ s16 kaj_ll_at_tail(SpriteList *list);
+ extern Player *player_status_player[];
+ extern KajSystem kaj_system;
+-SpriteList *thing_list;
++typedef struct ThingListNode {
++    struct ThingListNode *prev;
++    struct ThingListNode *next;
++    Thing *data;
++} ThingListNode;
++typedef struct ThingList {
++    ThingListNode *head;
++    ThingListNode *tail;
++    ThingListNode *cursor;
++    s32 count;
++} ThingList;
++ThingList *thing_list;
+ void RotMatrix(SVector *arg0, void *arg1);
+ s32 block_find_at(s32 x, s32 y, s32 z);
+ NpcBody *npc_find_body(s16 id);
+@@ -213,22 +224,9 @@
+ }
+ 
+ void free3(void *ptr);
+-typedef struct ThingListNode {
+-    struct ThingListNode *prev;
+-    struct ThingListNode *next;
+-    Thing *data;
+-} ThingListNode;
+-typedef struct ThingList {
+-    ThingListNode *head;
+-    ThingListNode *tail;
+-    ThingListNode *cursor;
+-    s32 count;
+-} ThingList;
+ void kaj_ll_insert_before(ThingList *list, s32 data);
+ void kaj_ll_insert_after(ThingList *list, s32 data);
+-ThingList *thing_list;
+ void kaj_ll_remove_to_prev(ThingList *list);
+-s16 kaj_ll_at_tail(ThingList *list);
+ void GsSetLsMatrix(void *m);
+ s16 block_point_on_model(void *obj, s32 x, s32 y, s32 z, u16 mode);
+ /* View of ActionCmd for thing_cmd_set_active: the target word read as two bytes (lbu). */
+@@ -255,7 +253,6 @@
+ extern s16 block_reloaded;
+ void RotMatrixZYX(SVector *arg0, void *arg1);
+ s32 block_find_at(s32 x, s32 y, s32 z);
+-void sprite_thing_update_marker(Player *player, Thing *marker, void *target);
+ void sprite_thing_update_fly_in(Thing *thing);
+ void vehicle_train_update(Thing *thing);
+ void vehicle_car_follow_player(Thing *car, s32 force);
+--- a/src/game/vehicle.c
++++ b/src/game/vehicle.c
+@@ -7,12 +7,12 @@
+  */
+ 
+ extern TrainState vehicle_train_state;
+-void vehicle_train_set_doors(s32 opening);
++void vehicle_train_set_doors(s16 opening);
+ void GsSetLsMatrix(void *m);
+ extern Player *player_status_player[];
+ extern s16 vehicle_navi[];
+ extern GameVars action_vars;
+-void vehicle_navi_show(Player *player, s16 show, s32 reset_dist);
++void vehicle_navi_show(Player *player, s16 show, s16 reset_dist);
+ void sprite_delete(s32 id);
+ typedef struct VehicleRecord {
+     u16 kind;

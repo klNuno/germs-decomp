@@ -10,7 +10,7 @@ covers both paths and the TIM, TMD and TOD formats. What a scene does with its c
 
 ## SCE.S
 
-src/game/8018FA18.c holds object.c. `object_load_scene` (0x801926B4) loads the scene of
+src/game/object.c holds object.c. `object_load_scene` (0x801926B4) loads the scene of
 `scene_request` ([changing place](boot-and-loop.md#changing-place)) by calling
 `object_iff_open(&ctx, 0, scene)` (0x80192380). That function searches "\SCE.S;1" with
 `CdSearchFile` (retrying until found), seeks to `object_sce_offsets[scene]` (0x801D7780, 24
@@ -94,8 +94,8 @@ rules above.
 
 ## The CD manager
 
-[kaj/801D1E70.c](../../src/kaj/801D1E70.c) holds cdmgr.c, then a heap with no assert
-(`kaj_heap_`) and the map streamer (`kaj_map_`). Only block.c uses them. `kaj_cdmgr_init`
+[cdmgr.c](../../src/kaj/cdmgr.c) is followed by a heap with no assert
+([heap.c](../../src/kaj/heap.c), `kaj_heap_`) and the map streamer ([map.c](../../src/kaj/map.c), `kaj_map_`). Only block.c uses them. `kaj_cdmgr_init`
 (0x801D1E70) allocates each pool of `kaj_cdmgr_pools` (0x801DFBE0, {id, size, buffer, heap}, 3
 pools) and makes its heap with `kaj_heap_init` (0x801D3924); a heap is a list of {addr, size,
 next} blocks that `kaj_heap_compact` closes up with `memmove`. There are 32 cache slots of 0x24.
@@ -136,21 +136,21 @@ the blocks with `block_setup`, result 1 reloads them all. `block_load_all` sends
 
 ## TIM, TMD and TOD
 
-[kaj/801CF790.c](../../src/kaj/801CF790.c) holds tim.c. `kaj_tim_load` (0x801CF790) reads a TIM
+[kaj/tim.c](../../src/kaj/tim.c) holds tim.c. `kaj_tim_load` (0x801CF790) reads a TIM
 with `GsGetTimInfo`, uploads pixels and palette with `LoadImage` (not in mode 2) and fills a
 0x24-byte handle: position, size, texture page, CLUT and, on request, two copies of the palette
 ("No CLUT in this TIM" when a palette is asked of a TIM without one). `kaj_tim_upload`
 (0x801CFB4C) only uploads; `kaj_tim_upload_hdr` (0x801CFBB4) does the same after an 8-byte header
 whose second halfword says whether to load the palette. `kaj_tim_free` (0x801CFAE8) frees all.
 
-TMD models go through misc.c in kaj/801CCAF4.c: `kaj_tmd_map` (0x801CD3F0) and `kaj_tmd_load`
+TMD models go through misc.c in kaj/misc.c: `kaj_tmd_map` (0x801CD3F0) and `kaj_tmd_load`
 (0x801CD028) call `GsMapModelingData` ("Crashed TMD or Illegal Data"); `kaj_tmd_load` also
 allocates the `GsDOBJ2` array ("Too Many Objects in TMD") and links each object with
 `GsLinkObject4`. `kaj_tmd_unmap` (0x801CD78C), despite its name, does not undo the mapping: it
 subtracts a word delta from three pointers of each object of a mapped TMD, so a mapped TMD stays
 valid after its data moved.
 
-kaj/801D0880.c has no assert; its `kaj_tod_` functions play TOD animation. `kaj_tod_set_frame`
+kaj/tod.c has no assert; its `kaj_tod_` functions play TOD animation. `kaj_tod_set_frame`
 (0x801D1088) runs the packets of a frame through `kaj_tod_set_packet` (0x801D0880):
 
 | Packet type | Effect |

@@ -8,8 +8,8 @@ town and buildings in [town and vehicles](town-and-vehicles.md).
 
 ## The scene request
 
-One `SceneRequest` at 0x801E0340, `scene_request`, says which scene runs next. Three functions of the 8018ACAC unit
-([mail.c](../../src/game/8018ACAC.c)) fill it:
+One `SceneRequest` at 0x801E0340, `scene_request`, says which scene runs next. Three functions of
+[mail.c](../../src/game/mail.c) fill it:
 
 | Function | Loop | Scene index | Variant |
 | --- | --- | --- | --- |
@@ -29,7 +29,7 @@ variable 48 is set or the player is changed.
 
 ## Loading a scene
 
-`object_load_scene` (0x801926B4, 8018FA18 unit, [object.c](../../src/game/8018FA18.c)) is called by the enter
+`object_load_scene` (0x801926B4, [object.c](../../src/game/object.c)) is called by the enter
 functions of the three loops: `object_room_init` (0x8019430C), `block_building_load` (0x8017DFA4) and
 `thing_field_enter` (0x801A88B4). It opens `SCE.S` through `object_iff_open` (0x80192380) and reads the scene's
 directory sector. Entry 0 holds the data common to all variants with four counts (bodies, people records, weapons,
@@ -52,8 +52,8 @@ CD](files-and-cd.md).
 
 ## Action sets
 
-An `ASET` chunk is a run of action sets. `action_load_set` (0x80173A44, 80173054 unit,
-[action.c](../../src/game/80173054.c)) copies each one into an `ActionSet` and appends it to `action_set_list`:
+An `ASET` chunk is a run of action sets. `action_load_set` (0x80173A44,
+[action.c](../../src/game/action.c)) copies each one into an `ActionSet` and appends it to `action_set_list`:
 
 | Part | Size | Content |
 | --- | --- | --- |
@@ -126,7 +126,7 @@ colour of the floor polygon under a point as a 24-bit code (red, green, blue), a
 `object_area_current` and sent as a BIOS event (`DeliverEvent`, 0xF3000000 enter or 0xF3000001 leave, opened by
 `event_open`, 0x8018920C). Its handler, `object_deliver_area_events` (0x80194FAC), pushes kaj events 0x20 (leave the
 old one) and 0x10 (enter); each scene loop passes them to `event_handle_enter` (0x80189350) and `event_handle_leave`
-([event.c](../../src/game/8018920C.c)):
+([event.c](../../src/game/event.c)):
 
 | Kind | Enter does |
 | --- | --- |
@@ -142,12 +142,11 @@ A `SceneTrigger` (AREA record, 12 bytes) is `id`, `enter_set`, `leave_set`, a wa
 
 ## Scene objects and doors
 
-A `Thing` (THNG chunk, 801A7560 unit, [thing.c](../../src/game/801A7560.c)) is a model with a type, an id, `active`
+A `Thing` (THNG chunk, [thing.c](../../src/game/thing.c)) is a model with a type, an id, `active`
 and `animate` flags, an enter set at +0xC, a leave set at +0xE and an optional hit model. `thing_hit_test`
 (0x801A7CF0) returns `id + (type << 12)` for the object a point touches, the code a 0xFD trigger carries.
 
-A door (`Door`, DOOR chunk, `door_create` (0x80185380) in the 80185380 unit, [door.c](../../src/game/80185380.c),
-and its movers in the [8017EBF8 unit](../../src/game/8017EBF8.c)) slides along x, y or z or turns. Opcode 4 sub 0
+A door (`Door`, DOOR chunk, `door_create` (0x80185380) and its movers in [door.c](../../src/game/door.c)) slides along x, y or z or turns. Opcode 4 sub 0
 calls `door_start_open(door, distance, speed, auto_return)` (0x80184ECC): for a slide the target is the position
 plus distance times 10 and the step is speed times 10 (one stored unit is ten coordinate units); for a turn both are
 degrees, unscaled; with `auto_return` the door jumps back when it arrives. Sub 1 calls `door_start_close`

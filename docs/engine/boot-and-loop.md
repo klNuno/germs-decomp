@@ -8,9 +8,9 @@ the drawing of a frame is on [rendering](rendering.md).
 
 ## From main to the scene loop
 
-[`main`](../../src/game/8018ACAC.c) (0x8018BDE8, in src/game/8018ACAC.c, which holds mail.c) runs:
+[`main`](../../src/game/main.c) (0x8018BDE8, in src/game/main.c) runs:
 
-1. `kaj_init` (0x801CC8F0, [kaj/801CC898.c](../../src/kaj/801CC898.c): kaj.c and misc.c).
+1. `kaj_init` (0x801CC8F0, [kaj/kaj.c](../../src/kaj/kaj.c): kaj.c and misc.c).
 2. Clears `object_scene_tables` (0x64 bytes) and the six event hooks: `event_alarm_hook`,
    `event_enter_hook`, `event_leave_hook`, `event_tick_hook`, `event_effect_done_hook` and
    `event_mod_finish_hook`.
@@ -66,7 +66,7 @@ took) and at +0x18 the music volume, 0x7F at start.
 
 ## The event queue
 
-[kaj/801CBCE0.c](../../src/kaj/801CBCE0.c) holds the kaj event.c. The queue is a ring of
+The kaj event queue is in [kaj/event.c](../../src/kaj/event.c). The queue is a ring of
 `KajEvent` records of 0x14 bytes (type, tick stamp, three parameters), 0x40 at start, doubled by
 `kaj_event_queue_grow` (0x801CBCE0) when full. `kaj_event_push` (0x801CC1E8) adds at the tail,
 `kaj_event_push_front` (0x801CC2AC) at the head; both stamp the event with `timer_ticks`.
@@ -92,7 +92,7 @@ Enter, leave and animation events start as user events opened by `event_open`: 0
 
 ## The timer and alarms
 
-[kaj/801CFD70.c](../../src/kaj/801CFD70.c) holds timer.c. `kaj_timer_init` (0x801D0300) opens
+The timer is [kaj/timer.c](../../src/kaj/timer.c). `kaj_timer_init` (0x801D0300) opens
 an event on root counter 3 (0xF2000003, the vertical blank counter) with `kaj_timer_handler`
 (0x801CFD70), starts the counter and sets the period to 600. The handler counts one tick per
 refresh, pushes every due alarm of its binary heap (capacity 8 at start, filled by
@@ -104,7 +104,7 @@ ends, so the clock stands still during loading.
 
 ## Tasks
 
-[kaj/801D12A8.c](../../src/kaj/801D12A8.c) holds tss.c and view.c. A task is one of 16 `TssSlot`
+Tasks are in [kaj/tss.c](../../src/kaj/tss.c), the screen in [kaj/view.c](../../src/kaj/view.c). A task is one of 16 `TssSlot`
 records of 0x48 bytes that moves a value `cur` toward `target` by `step`, calling `on_step` each
 time and `on_end` at the target. `kaj_tss_init` (0x801D164C) allocates the 16 slots ("Error
 Allocating Sharing Table" on failure); `kaj_tss_alloc` (0x801D15C8) takes a free slot (0 when none
@@ -133,7 +133,7 @@ The scene loops share one shape, best read in `object_room_main` (0x80194780, ob
 | 0x100 | `event_handle_effect_done` (0x8018970C): its result ends the loop |
 | 0 | input, scene change check, `object_room_check_calls`, one frame |
 
-src/game/8018920C.c holds event.c. `event_clock_tick` (0x8018AA00) adds a minute
+The clock is in src/game/event.c. `event_clock_tick` (0x8018AA00) adds a minute
 (`event_clock_add_minute`), marks an energy drain when the minute modulo 10 equals the drain
 minute ([energy](../discoveries.md#-energy-drains-faster-the-longer-you-stay-awake)) and updates
 the daylight when its loop asks, as the building, station and town loops do

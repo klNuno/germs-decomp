@@ -33,7 +33,7 @@ Every function and global name sits in `config/symbol_addrs.txt` with its eviden
 
 ## Tools
 
-- `tools/xref.py NAME|ADDR`: one card per symbol, from the split assembly: unit, size, the strings it reaches, callees, callers, data and users. `--unit game/8018920C` prints a whole unit, `--unnamed` lists what still has a placeholder name, `--json build/xref.json` writes the index the renamer reads.
+- `tools/xref.py NAME|ADDR`: one card per symbol, from the split assembly: unit, size, the strings it reaches, callees, callers, data and users. `--unit game/event` prints a whole file, `--unnamed` lists what still has a placeholder name, `--json build/xref.json` writes the index the renamer reads.
 - `tools/rename.py NAMES.txt [--check]`: one `OLD NEW` per line under `#` evidence lines. Functions and globals go to `config/symbol_addrs.txt` with their evidence; every use in `src/`, `include/` and the docs follows. A struct type is written `type:Unk_X NewName`. A rename with no evidence is refused, and `--check` rebuilds and compares the executable.
 - `tools/field_rename.py FIELDS.tsv`: renames a struct member in its definition, then every access the compiler reports, line by line. `--units src/game/X.c` compiles only the units given, for a struct local to one source file, so workers on other units are not disturbed.
 - `tools/local_rename.py LOCALS.tsv`: renames a parameter or local inside one function.

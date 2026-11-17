@@ -10,7 +10,7 @@ fog by time of day and the functions kept in assembly. The frame loop that calls
 
 ## Frame buffers and the flip
 
-view.c sits in [kaj/801D12A8.c](../../src/kaj/801D12A8.c) after tss.c. `kaj_view_init`
+view.c sits in [kaj/view.c](../../src/kaj/view.c) after tss.c. `kaj_view_init`
 (0x801D17F0) calls `GsInitGraph(320, 240, 4, 1, 0)` and builds two `ViewBuffer` records, each a
 `DRAWENV` and a `DISPENV` (at +0x5C), an ordering table and a packet area:
 
@@ -34,7 +34,7 @@ Both then put the two environments, count the frame and draw the table from its 
 
 ## The town renderer
 
-src/game/8019A5D4.c holds roadmap.c. `roadmap_draw_frame(mode)` (0x801A0418) copies the light
+src/game/roadmap.c holds roadmap.c. `roadmap_draw_frame(mode)` (0x801A0418) copies the light
 levels of `screen_light` (0x801E1040) into `roadmap_brightness` and `roadmap_daylight_level`,
 computes the textured colour (0x60 grey, or a tint from the daylight step when the light switch
 and the dark flag are on) and the flag word that tells the handlers what to apply (dusk 1, depth cue 2, fade
@@ -70,7 +70,7 @@ for its loading sprites ([the chunk walk](files-and-cd.md#the-chunk-walk)). `roa
 
 ## Models and animation
 
-src/game/8018D2DC.c holds mod.c. A model (`Model`, 0x94 bytes, made by `mod_alloc` or
+src/game/mod.c holds mod.c. A model (`Model`, 0x94 bytes, made by `mod_alloc` or
 `mod_create`) holds resident data with a header: TMD ids, the TMD itself and a TOD animation
 table. `mod_setup` (0x8018D2DC) maps the TMD with `kaj_tmd_map`, loads the objects with
 `kaj_tmd_load` and allocates the `GsOBJTABLE2`, `GsDOBJ2` and `GsCOORDINATE2` tables.
@@ -83,7 +83,7 @@ are models too (`mod_npcrec_` functions; see [people and combat](people-and-comb
 
 ## Sprites and colour tables
 
-src/game/801A3DD4.c holds sprite.c. `sprite_create` (0x801A3DD4) makes a 0x20-byte sprite from a
+src/game/sprite.c holds sprite.c. `sprite_create` (0x801A3DD4) makes a 0x20-byte sprite from a
 `SPRT` chunk record: id, mode, position, depth and a grid of cells, with its TIM loaded by
 `kaj_tim_load`, which keeps two copies of the palette when the record asks. `sprite_add` and
 `sprite_find` (0x801A44B8) use `sprite_list`; `sprite_set_visible` (0x801A4A68) shows or hides by
@@ -103,7 +103,7 @@ the HUD is lit this way, by palette entries (credit: the hiddenblur/Germs-englis
 
 ## Effects
 
-src/game/80185A60.c holds effect.c. Its timed effects are kaj tasks
+src/game/effect.c holds effect.c. Its timed effects are kaj tasks
 ([tasks](boot-and-loop.md#tasks)) counted in 30ths of their length:
 
 | Effect | Function | What it does |

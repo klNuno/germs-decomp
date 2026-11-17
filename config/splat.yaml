@@ -2,18 +2,14 @@
 # .rodata 0x80170000..0x80173054, .text 0x80173054..0x801D7328 (last jr ra at 0x801D7320),
 # .data 0x801D7328..0x801DFC58, .sdata from gp 0x801DFC58 (set at 0x801C88BC) to 0x801DFE50,
 # bss 0x801DFE50..0x801E7A10, cleared by __SN_ENTRY_POINT.
-# Text units: game/<addr> is the game's own code (13 source files, named by their assert strings);
-# psyq/<addr> are Sony library runs found by tools/psyq/match.py (asm, never decompiled);
-# kaj/<addr> are the pieces between them that no Sony signature matches: the developer's own
-# library (assert strings kaj.c, ll.c, misc.c, tim.c, timer.c, tss.c, cdmgr.c), linked among Sony's.
-# Game units are provisional: each starts at the first function that names a source file in an
-# assert (the comment gives the file), moved earlier when the .rodata order forbids that cut. Files
-# without an assert sit inside the previous unit; the layout study fixes the real boundaries.
-# .rodata follows the same unit order (checked: every rodata symbol is referenced by one unit only).
+# Text units: game/<name> and kaj/<name> are the original source files, rebuilt from the evidence in
+# docs/layout.md (config/layout.tsv, tools/split_units.py); psyq/<addr> are Sony library runs found by
+# tools/psyq/match.py (asm, never decompiled). The kaj files (the developer's own library, assert strings
+# kaj.c, ll.c, misc.c, tim.c, timer.c, tss.c, view.c, cdmgr.c) are linked among Sony's. Each c entry's
+# comment gives the confidence of the file's boundaries and their evidence in short.
 # Jtbl cuts: GCC 2.8.1 puts every jump table at .align 3 inside its object and the link keeps 4-byte
-# alignment, so a jump table at 4 mod 8 from its unit's .rodata start proves that a new object starts
-# before it, at 4 mod 8. Such a cut sits just before the first function that needs it: the real file
-# start may be a few functions earlier (no function between them uses .rodata, so the bytes agree).
+# alignment, so a jump table at 4 mod 8 from its file's .rodata start proves that a new object starts
+# before it.
 name: Germs Nerawareta Machi (SLPS-02107)
 sha1: 178e728643d9b456436f4d19c9e07db11ab8aa2c
 options:
@@ -69,70 +65,88 @@ segments:
     vram: 0x80170000
     bss_size: 0x7BC0
     subsegments:
-      # .rodata per text unit, in the same order as .text (each start is the first symbol the unit's
-      # code references). Game and kaj units use the dot form so splat pairs them with their c unit
+      # .rodata per source file, in the same order as .text (each start is the first symbol the file's
+      # code references). Game and kaj files use the dot form so splat pairs them with their c file
       # and migrates jump tables and strings into their function.
-      - [0x800, .rodata, game/80173054]
-      - [0x93C, .rodata, game/8017546C]
-      - [0x9F4, .rodata, game/801768F8]
-      - [0xA50, .rodata, game/80179848]
-      - [0xC1C, .rodata, game/8017EBF8]
-      - [0xD04, .rodata, game/80185380]
-      - [0xD44, .rodata, game/80185A60]
-      - [0x1080, .rodata, game/8018920C]
-      - [0x122C, .rodata, game/8018ACAC]
-      - [0x1280, .rodata, game/8018D2DC]
-      - [0x1358, .rodata, game/8018FA18]
-      - [0x16DC, .rodata, game/80195DF0]
-      - [0x1820, .rodata, game/8019A5D4]
-      - [0x1EEC, .rodata, game/801A217C]
-      - [0x1FF4, .rodata, game/801A3DD4]
-      - [0x21BC, .rodata, game/801A7560]
-      - [0x2278, .rodata, game/801AA360]
+      - [0x800, .rodata, game/action]
+      - [0x93C, .rodata, game/actor]
+      - [0x9F4, .rodata, game/ai]
+      - [0xA50, .rodata, game/block]
+      - [0xB08, .rodata, game/building]
+      - [0xC1C, .rodata, game/card]
+      - [0xCF0, .rodata, game/dialog]
+      - [0xD04, .rodata, game/door]
+      - [0xD44, .rodata, game/effect]
+      - [0x1080, .rodata, game/event]
+      - [0x122C, .rodata, game/mail]
+      - [0x1268, .rodata, game/main]
+      - [0x1280, .rodata, game/mod]
+      - [0x1358, .rodata, game/object]
+      - [0x16DC, .rodata, game/player]
+      - [0x1820, .rodata, game/roadmap]
+      - [0x1848, .rodata, game/shop]
+      - [0x1EEC, .rodata, game/sound]
+      - [0x1FF4, .rodata, game/sprite]
+      - [0x21BC, .rodata, game/thing]
+      - [0x2228, .rodata, game/town]
+      - [0x2278, .rodata, game/vehicle]
       - [0x2334,  rodata, psyq/801AC9D0]
-      - [0x3334, .rodata, kaj/801CBCE0]
-      - [0x3374, .rodata, kaj/801CC898]
-      - [0x3398, .rodata, kaj/801CCAF4]
+      - [0x3334, .rodata, kaj/event]
+      - [0x3374, .rodata, kaj/kaj]
+      - [0x3398, .rodata, kaj/ll]
+      - [0x34A8, .rodata, kaj/misc]
       - [0x3588,  rodata, psyq/801CD850]
-      - [0x3688, .rodata, kaj/801CF790]
-      - [0x36D8, .rodata, kaj/801CFD70]
-      - [0x3750, .rodata, kaj/801D0880]
-      - [0x3774, .rodata, kaj/801D12A8]
-      - [0x37D0, .rodata, kaj/801D1E70]
-      - [0x3854, c, game/80173054]  # action.c asserts
-      - [0x5C6C, c, game/8017546C]  # no assert: jtbl cut
-      - [0x70F8, c, game/801768F8]  # no assert: gp cut (ai_door_noise is lui before, gp from here)
-      - [0xA048, c, game/80179848]  # block.c
-      - [0xF3F8, c, game/8017EBF8]  # no assert: jtbl cut
-      - [0x15B80, c, game/80185380]  # door.c
-      - [0x16260, c, game/80185A60]  # effect.c
-      - [0x19A0C, c, game/8018920C]  # event.c
-      - [0x1B4AC, c, game/8018ACAC]  # mail.c
-      - [0x1DADC, c, game/8018D2DC]  # mod.c
-      - [0x20218, c, game/8018FA18]  # object.c
-      - [0x25898, c, game/80195098]  # no assert: gp cut (player_pick_trigger_hook is lui before, gp from here)
-      - [0x265F0, c, game/80195DF0]  # no assert: jtbl cut
-      - [0x2ADD4, c, game/8019A5D4]  # roadmap.c
-      - [0x3297C, c, game/801A217C]  # sound.c
-      - [0x345D4, c, game/801A3DD4]  # sprite.c
-      - [0x37D60, c, game/801A7560]  # thing.c (first valid rodata cut before its first assert, 0x801A7A04)
-      - [0x3AB60, c, game/801AA360]  # vehicle.c (last valid rodata cut before its first assert, 0x801AC158)
+      - [0x3688, .rodata, kaj/tim]
+      - [0x36D8, .rodata, kaj/timer]
+      - [0x3750, .rodata, kaj/tod]
+      - [0x3774, .rodata, kaj/tss]
+      - [0x3794, .rodata, kaj/view]
+      - [0x37D0, .rodata, kaj/cdmgr]
+      - [0x37F8, .rodata, kaj/map]
+      - [0x3854, c, game/action]  # likely; start of .text; assert in action_load_set
+      - [0x5C6C, c, game/actor]  # likely; no assert: jtbl cut (npc jump tables at 4 mod 8)
+      - [0x70F8, c, game/ai]  # likely; no assert: gp cut (ai_door_noise is lui before, gp from ai_find_target)
+      - [0xA048, c, game/block]  # likely; block.c asserts; ends where block_area_flames stops being read through gp
+      - [0xDE04, c, game/building]  # likely; no assert: starts after block.c; card strings follow its jump table
+      - [0xF3F8, c, game/card]  # guess; no assert: jtbl cut; its end is a guess
+      - [0x11304, c, game/dialog]  # guess; no assert: a string after card.c's jump tables; its start is a guess
+      - [0x14CD4, c, game/door]  # likely; door.c asserts; door_list through gp from door_refresh_all
+      - [0x16260, c, game/effect]  # likely; effect.c asserts
+      - [0x19A0C, c, game/event]  # likely; event.c asserts
+      - [0x1B4AC, c, game/mail]  # guess; mail.c asserts; its end is a guess
+      - [0x1C5E8, c, game/main]  # guess; main, a file only by its name
+      - [0x1D064, c, game/menu]  # likely; no assert: a normal function after main.c's deferred inline tail
+      - [0x1DADC, c, game/mod]  # likely; mod.c asserts
+      - [0x1F0B8, c, game/npc]  # likely; no assert: a normal function after mod.c's deferred inline tail
+      - [0x20218, c, game/object]  # likely; object.c asserts
+      - [0x257AC, c, game/player]  # likely; no assert: gp users of player_area_leave_pending and player_pick_trigger_hook
+      - [0x2ADD4, c, game/roadmap]  # likely; roadmap.c asserts
+      - [0x31020, c, game/shop]  # likely; no assert: a normal function after roadmap.c's deferred inline tail
+      - [0x3297C, c, game/sound]  # likely; sound.c asserts
+      - [0x345D4, c, game/sprite]  # likely; sprite.c asserts
+      - [0x37434, c, game/thing]  # likely; thing.c asserts; thing_list through gp from sprite_thing_refresh_all
+      - [0x38B70, c, game/town]  # guess; no assert: a string after thing.c's jump table; its end is a guess
+      - [0x3990C, c, game/vehicle]  # guess; vehicle.c asserts; its start is a guess
       - [0x3D1D0, asm, psyq/801AC9D0]  # LIBAPI,LIBC,LIBC2,LIBCARD,LIBCD,LIBETC,LIBGPU,LIBGS,LIBGTE,LIBMATH,LIBMCRD,LIBSN,LIBSND,LIBSPU
-      - [0x5C4E0, c, kaj/801CBCE0]  # no Sony signature, calls Sony code only
+      - [0x5C4E0, c, kaj/event]  # proven; Sony code on both sides; event.c asserts
       - [0x5CF68, asm, psyq/801CC768]  # LIBAPI
-      - [0x5D098, c, kaj/801CC898]  # no Sony signature, calls Sony code only
+      - [0x5D098, c, kaj/kaj]  # proven; Sony code on both sides; kaj.c asserts
       - [0x5D1F4, asm, psyq/801CC9F4]  # LIBAPI,LIBETC,LIBMCRD
-      - [0x5D2F4, c, kaj/801CCAF4]  # no Sony signature, calls Sony code only
+      - [0x5D2F4, c, kaj/ll]  # likely; Sony code before; ll.c asserts
+      - [0x5D828, c, kaj/misc]  # likely; misc.c asserts; Sony code after
       - [0x5E050, asm, psyq/801CD850]  # LIBAPI,LIBGS,LIBSND,LIBSPU
-      - [0x5FF90, c, kaj/801CF790]  # no Sony signature, calls Sony code only
+      - [0x5FF90, c, kaj/tim]  # proven; Sony code on both sides; tim.c asserts
       - [0x60420, asm, psyq/801CFC20]  # LIBGPU,LIBGS
-      - [0x60570, c, kaj/801CFD70]  # no Sony signature, calls Sony code only
+      - [0x60570, c, kaj/timer]  # proven; Sony code on both sides; timer.c asserts
       - [0x60ED0, asm, psyq/801D06D0]  # LIBAPI
-      - [0x61080, c, kaj/801D0880]  # no Sony signature, calls Sony code only
+      - [0x61080, c, kaj/tod]  # proven; Sony code on both sides; no assert, TOD animation packets
       - [0x61938, asm, psyq/801D1138]  # LIBGTE
-      - [0x61AA8, c, kaj/801D12A8]  # no Sony signature, calls Sony code only
+      - [0x61AA8, c, kaj/tss]  # likely; Sony code before; tss.c asserts
+      - [0x61FF0, c, kaj/view]  # likely; view.c asserts; Sony code after
       - [0x62420, asm, psyq/801D1C20]  # LIBGPU,LIBGS,LIBGTE
-      - [0x62670, c, kaj/801D1E70]  # no Sony signature, calls Sony code only
+      - [0x62670, c, kaj/cdmgr]  # guess; Sony code before; cdmgr.c asserts; its end is a guess
+      - [0x63F64, c, kaj/heap]  # guess; no assert: kaj_heap_unused_* are read only here
+      - [0x6437C, c, kaj/map]  # likely; no assert: a normal function after cdmgr.c's deferred inline tail; end of .text after
       - [0x67B28, data, main]
       - [0x70458, sdata, main]
       - { type: bss, vram: 0x801DFE50, name: main }

@@ -1,9 +1,9 @@
 # Player and survival
 
 The player is one `Player` record (`player_character`, the body in the world) and one `PlayerStatus`
-(`player_status`, the numbers: energy, level, stats, hours awake). Most of the code that moves the body sits in two
-units without an assert, 80195098 and 80195DF0, whose functions carry a `player_` label; the clock, the gauges and
-the body parts are in event.c (8018920C unit) and the mails in mail.c (8018ACAC unit). This page follows the body
+(`player_status`, the numbers: energy, level, stats, hours awake). Most of the code that moves the body sits in one
+file without an assert, [player.c](../../src/game/player.c), whose functions carry a `player_` label; the clock, the
+gauges and the body parts are in event.c and the mails in mail.c. This page follows the body
 from the pad to the floor, then the survival rules. The findings about each rule are in
 [discoveries](../discoveries.md) and only linked here.
 

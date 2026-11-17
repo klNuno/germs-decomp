@@ -1,8 +1,8 @@
 # Menus, text and the save
 
-One unit with no assert, src/game/8017EBF8.c, holds three modules: the menus (the memory card
-screen and the menu opened in the office), the text window that draws Shift-JIS strings with
-the BIOS Kanji ROM, and the start of door.c. This page covers the menus and the status page, text
+Two files with no assert hold this part: src/game/card.c, the memory card screen, and
+src/game/dialog.c, the menu opened in the office and the text window that draws Shift-JIS strings
+with the BIOS Kanji ROM; door.c follows them. This page covers the menus and the status page, text
 drawing, narration and profiles, the memory card screen and the save, and the pad. Each menu is
 a modal loop over `kaj_event_get` like the scene loops ([one frame](boot-and-loop.md#one-frame-of-the-game))
 and draws only sprites ([sprites](rendering.md#sprites-and-colour-tables)).

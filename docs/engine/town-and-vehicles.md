@@ -2,10 +2,10 @@
 
 The world of Germs is built from blocks: pieces of map with a floor model, up to three other models and an optional
 grid for the enemies. The town streams its blocks by cells around the player, a building loads its rooms. This page
-covers the blocks of the 80179848 unit ([block.c](../../src/game/80179848.c)), how the code finds the ground under a
+covers the blocks of [block.c](../../src/game/block.c), how the code finds the ground under a
 point, the buildings and their state, the town loop with the car and the train of the
-[thing.c](../../src/game/801A7560.c) and [vehicle.c](../../src/game/801AA360.c) units, and the shops of
-[roadmap.c](../../src/game/8019A5D4.c). How a scene file is read is in [scenes and scripts](scenes-and-scripts.md).
+[thing.c](../../src/game/thing.c) and [vehicle.c](../../src/game/vehicle.c) units, and the shops of
+[roadmap.c](../../src/game/roadmap.c). How a scene file is read is in [scenes and scripts](scenes-and-scripts.md).
 
 ## Town blocks
 
@@ -149,7 +149,7 @@ gauge from the start distance, picks one of eight arrow frames with `ratan2`, an
 
 Two train codes exist. Thing (2, 0) is the train seen from a platform: `vehicle_train_arrive` (0x801AAA9C) sends it
 in from z -16000 or 48000, `vehicle_train_update` (0x801AACF4) brakes it to z 16000 and opens its doors (sprite
-0x408 frames, `vehicle_train_set_doors`, 0x801AC70C). The ride itself is `thing_train_update`, in the 801A7560 unit:
+0x408 frames, `vehicle_train_set_doors`, 0x801AC70C). The ride itself is `thing_train_update`, in vehicle.c:
 `TrainState` holds a direction, a station from 1 to 6 and four marks on z (`thing_train_calc_stops`, 0x801A910C,
 100000 apart) for start, cruise, brake and stop. Speed grows with the distance from the start mark (/ 300 + 7),
 holds while cruising and falls with the distance to the stop mark. At the stop, the doors open, `stop_timer` starts

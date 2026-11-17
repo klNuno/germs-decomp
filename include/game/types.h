@@ -1,28 +1,10 @@
 #ifndef GAME_TYPES_H
 #define GAME_TYPES_H
 
-/* Struct types shared by several units, one definition each. */
+/* Struct types used by six source files or more, one definition each; the others live in the header
+   of the file that owns them (docs/layout.md, Headers). */
 
-typedef struct KajSystem {
-    s32 pad_now;
-    s32 pad_prev;
-    s16 timer_enabled;
-    s16 pad_mode;
-    s32 timer_ticks;
-    s32 timer_period;
-    s32 vsync_delta;
-    s16 sep_volume;
-    u8 unk1A[0x2];
-} KajSystem;
-
-typedef struct GsCoordinate2 {
-    s32 flg;
-    s16 coord_m[0xA];
-    s32 coord_tx;
-    s32 coord_ty;
-    s32 coord_tz;
-    u8 unk24[0x2C];
-} GsCoordinate2;
+#include "psyq/libgs.h"
 
 typedef struct PlayerExit {
     s32 distance;
@@ -204,69 +186,6 @@ typedef struct PlayerStatus {
     Player *player;
 } PlayerStatus;
 
-typedef struct Door {
-    u16 id;
-    s16 axis;
-    s16 active;
-    s16 visible;
-    s16 ot_layer;
-    s16 state;
-    s16 move_from;
-    s16 move_to;
-    s32 block;
-    s32 pos_x;
-    s32 pos_y;
-    s32 pos_z;
-    s16 angle;
-    s16 speed;
-    s16 auto_return;
-    s16 unk26;
-    s32 coord_flg;
-    u8 coord_m[0x14];
-    s32 coord_tx;
-    s32 coord_ty;
-    s32 coord_tz;
-    u8 unk4C[0x2C];
-    void *tmd_objects;
-    void *record;
-} Door;
-
-typedef struct LlNode {
-    struct LlNode *prev;
-    struct LlNode *next;
-    struct ActionSet *data;
-} LlNode;
-
-typedef struct Thing {
-    u16 id;
-    u16 type;
-    s16 active;
-    s16 animate;
-    s16 script_enabled;
-    s16 ot_layer;
-    s16 enter_set;
-    s16 leave_set;
-    s16 block_fixed;
-    u8 unk12[0x2];
-    s32 block;
-    s32 pos_x;
-    s32 pos_y;
-    s32 pos_z;
-    s16 rot_x;
-    s16 rot_y;
-    s16 rot_z;
-    u8 unk2A[0x2];
-    s32 coord_flg;
-    u8 coord_m[0x14];
-    s32 coord_tx;
-    s32 coord_ty;
-    s32 coord_tz;
-    u8 unk50[0x2C];
-    void *tmd_objects;
-    void *hit_model;
-    void *record;
-} Thing;
-
 typedef struct Block {
     s16 active;
     s16 owns_data;
@@ -295,13 +214,6 @@ typedef struct Block {
     struct Arena *arena;
     void *data;
 } Block;
-
-typedef struct IffContext {
-    s32 size;
-    s32 pos;
-    struct IffEntry *header;
-    void *chunk;
-} IffContext;
 
 typedef struct EventState {
     s32 trigger;
@@ -428,14 +340,6 @@ typedef struct NpcBody {
     u8 unk6C[0x60];
 } NpcBody;
 
-typedef struct KajEvent {
-    s32 type;
-    u32 ticks;
-    s32 param0;
-    s32 param1;
-    s32 param2;
-} KajEvent;
-
 typedef struct ActionSet {
     struct ActionSetHeader *header;
     s32 count;
@@ -479,68 +383,6 @@ typedef struct BgmSep {
     void *data;
 } BgmSep;
 
-typedef struct SVector {
-    s16 vx;
-    s16 vy;
-    s16 vz;
-    u8 unk6[0x2];
-} SVector;
-
-typedef struct TrainState {
-    s32 door_task;
-    s32 trigger;
-    s16 direction;
-    s16 placed;
-    s16 prompt_on;
-    u16 door_state;
-    u16 station;
-    u16 motion;
-    s16 speed;
-    s16 stop_timer;
-    s16 arrive_digit_dir1;
-    s16 arrive_digit_dir0;
-    s32 mark_start;
-    s32 mark_cruise;
-    s32 mark_brake;
-    s32 mark_stop;
-    s16 carry_vx;
-    s16 carry_vy;
-    s16 carry_vz;
-    u8 unk32[0x2];
-    s16 view_pitch;
-    s16 view_yaw;
-    s16 view_roll;
-} TrainState;
-
-typedef struct VabStream {
-    u8 unk0[0x4];
-    u8 *head;
-    u8 *body_buf;
-    u8 unkC[0x4];
-    s32 body_len;
-    s16 vab_id;
-} VabStream;
-
-typedef struct BuildingState {
-    u16 building;
-    u16 entry;
-} BuildingState;
-
-typedef struct Rect {
-    u16 x;
-    u16 y;
-    u16 w;
-    u16 h;
-} Rect;
-
-typedef struct RoadMap {
-    u16 mode;
-    s16 zoomed;
-    s16 *part0;
-    s16 *part1;
-    s16 *part2;
-} RoadMap;
-
 typedef struct ArenaHeader {
     u16 origin_x;
     u16 origin_z;
@@ -556,19 +398,6 @@ typedef struct Arena {
     void *data;
     ArenaHeader *header;
 } Arena;
-
-typedef struct DoorListNode {
-    u8 unk0[0x4];
-    struct DoorListNode *next;
-    Door *data;
-} DoorListNode;
-
-typedef struct DoorList {
-    DoorListNode *head;
-    DoorListNode *tail;
-    DoorListNode *cursor;
-    s32 count;
-} DoorList;
 
 typedef struct ActionCond {
     s16 used;
@@ -596,41 +425,8 @@ typedef struct Action {
     char **args;
 } Action;
 
-typedef struct LlList {
-    LlNode *head;
-    LlNode *tail;
-    LlNode *cursor;
-    s32 count;
-} LlList;
-
-typedef struct BlockListNode {
-    u8 unk0[0x4];
-    struct BlockListNode *next;
-    Block *data;
-} BlockListNode;
-
-typedef struct BlockList {
-    BlockListNode *head;
-    BlockListNode *tail;
-    BlockListNode *cursor;
-    s32 count;
-} BlockList;
-
 /* kaj ll list of models (mod_list): same handle and node layout as BlockList, but the nodes hold
    the Model * that mod_list_add inserts (mod_alloc result) and mod_find walks. */
-typedef struct ModelListNode {
-    u8 unk0[0x4];
-    struct ModelListNode *next;
-    Model *data;
-} ModelListNode;
-
-typedef struct ModelList {
-    ModelListNode *head;
-    ModelListNode *tail;
-    ModelListNode *cursor;
-    s32 count;
-} ModelList;
-
 typedef struct NpcRecord {
     u16 id;
     s16 enabled;
@@ -647,50 +443,6 @@ typedef struct NpcRecord {
     s16 move_task;
     s16 moving;
 } NpcRecord;
-
-typedef struct SeVabStream {
-    u8 unk0[0x4];
-    s32 head;
-    u8 unk8[0x4];
-    s32 head_size;
-    u8 unk10[0x4];
-    u16 vab_id;
-    u16 tone_count;
-    u16 bank_id;
-    u16 scene_bank;
-} SeVabStream;
-
-typedef struct Sprite {
-    u16 id;
-    u16 mode;
-    s16 visible;
-    s16 clut_dirty;
-    s16 color;
-    s16 x;
-    s16 y;
-    s16 depth;
-    s16 cell_w;
-    u16 cell_h;
-    s16 columns;
-    s16 rows;
-    s16 cell_col;
-    s16 cell_row;
-    s32 tim;
-} Sprite;
-
-typedef struct SpriteRecord {
-    u16 id;
-    u16 mode;
-    u16 x;
-    u16 y;
-    u16 depth;
-    u8 unkA[0x2];
-    u16 columns;
-    u16 rows;
-    u8 unk10[0x2];
-    s16 keep_clut;
-    u8 tim[4];
-} SpriteRecord;
 
 typedef struct Vehicle {
     u16 kind;
@@ -709,128 +461,6 @@ typedef struct Vehicle {
     void *data;
 } Vehicle;
 
-typedef struct IffEntry {
-    s32 offset;
-    s32 size;
-    s32 count0;
-    s32 count1;
-    s32 count2;
-    s32 count3;
-} IffEntry;
-
-typedef struct AreaTrigger {
-    s32 trigger;
-    u16 trigger_type;
-    u8 unk6[0x2];
-    s32 scene_trigger;
-    u8 unkC[0x4];
-} AreaTrigger;
-
-typedef struct RoomPhone {
-    s16 ringing;
-    s16 state;
-    s16 message;
-} RoomPhone;
-
-typedef struct RoomStorage {
-    s16 open;
-    s16 choice;
-    s16 stage;
-    s16 cursor;
-} RoomStorage;
-
-typedef struct PlayerMove {
-    u16 flag_op;
-    u16 flag_bits;
-    s32 from_x;
-    s32 from_y;
-    s32 from_z;
-    u8 unk10[4];
-    s32 to_x;
-    s32 to_y;
-    s32 to_z;
-    u8 unk20[4];
-    s32 delta_x;
-    s32 delta_y;
-    s32 delta_z;
-    u8 unk30[4];
-    s16 from_pitch;
-    s16 from_yaw;
-    s16 from_roll;
-    u8 unk3A[2];
-    s16 to_pitch;
-    s16 to_yaw;
-    s16 to_roll;
-    u8 unk42[2];
-    s16 delta_pitch;
-    s16 delta_yaw;
-    s16 delta_roll;
-} PlayerMove;
-
-typedef struct TimerAlarm {
-    s32 due;
-    void *id;
-    s32 data;
-    s32 wrap;
-} TimerAlarm;
-
-typedef struct TimerHeap {
-    TimerAlarm *entries;
-    s32 capacity;
-    s32 count;
-    s16 full;
-    u8 unkE[0x2];
-    s32 popped_id;
-    s32 popped_data;
-} TimerHeap;
-
-typedef struct TodFrame {
-    u8 unk0[0x2];
-    u16 packet_count;
-    u32 frame;
-} TodFrame;
-
-typedef struct TssSlot {
-    struct TssSlot *next;
-    u8 unk4[0x1C];
-    s16 index;
-    s16 type;
-    s16 cur;
-    s16 target;
-    s16 step;
-    u8 unk2A[0x2];
-    s32 delay;
-    void (*on_step)(struct TssSlot *);
-    void (*on_end)(struct TssSlot *);
-    void (*on_kill)(struct TssSlot *);
-    void *data;
-} TssSlot;
-
-typedef struct TssTable {
-    s32 count;
-    TssSlot *slots;
-    TssSlot *free_list;
-    TssSlot *done_list;
-} TssTable;
-
-typedef struct ViewBuffer {
-    u8 unk0[0x17];
-    u8 dfe;
-    u8 isbg;
-    u8 bg_r;
-    u8 bg_g;
-    u8 bg_b;
-    u8 unk1C[0x40];
-    u8 disp_env[0x14];
-    s32 ot_length;
-    u32 *ot_org;
-    s32 ot_offset;
-    s32 ot_point;
-    u32 *ot_tag;
-    u32 *ot_tags;
-    s32 packets;
-} ViewBuffer;
-
 typedef struct VehicleSprite {
     u8 unk0[0x4];
     s16 visible;
@@ -847,156 +477,6 @@ typedef struct VehicleSprite {
     struct TimHandle *tim;
 } VehicleSprite;
 
-typedef struct TextCmd {
-    u16 opcode;
-    u16 state;
-} TextCmd;
-
-typedef struct PauseMenu {
-    s16 item;
-    s16 page;
-    s16 animating;
-    s16 row;
-    struct MenuSprite *item_sprite;
-    struct MenuSprite *label_sprite;
-} PauseMenu;
-
-typedef struct DoorMove {
-    u16 id;
-    u16 axis;
-    s16 active;
-    s16 visible;
-    u8 unk8[0x2];
-    u16 state;
-    s16 move_from;
-    s16 move_to;
-    s32 block;
-    s32 pos_x;
-    s32 pos_y;
-    s32 pos_z;
-    s16 angle;
-    s16 speed;
-    s16 auto_return;
-    u8 unk26[0x2];
-    s32 coord_flg;
-    u8 coord_m[0x14];
-    s32 coord_tx;
-    s32 coord_ty;
-    s32 coord_tz;
-} DoorMove;
-
-typedef struct TmdTri {
-    u16 run_count;
-    u8 unk2[0x1];
-    u8 mode;
-    u8 code_r;
-    u8 code_g;
-    u8 code_b;
-    u8 unk7[0x1];
-    u16 normal;
-    u16 vert0;
-    u16 vert1;
-    u16 vert2;
-} TmdTri;
-
-/* TMD object table entry: vertex, normal and primitive tops and counts (block_hit_tris walks the primitives). */
-typedef struct TmdObject {
-    s32 vert_top;
-    s32 unk4;
-    s32 normal_top;
-    s32 unkC;
-    TmdTri *primitive_top;
-    s32 n_primitive;
-} TmdObject;
-
-/* GsDOBJ2 head as the block and vehicle code read it: attribute, coordinate, TMD object. */
-typedef struct GsDobj2 {
-    s32 unk0;
-    GsCoordinate2 *coord2;
-    TmdObject *tmd;
-} GsDobj2;
-
-typedef struct ShopState {
-    s16 active;
-    s16 menu_stage;
-    s16 to_inventory;
-    s16 alt_speaker;
-    s16 at_counter;
-    s16 has_second_menu;
-    s16 has_third_menu;
-    s16 deal_level;
-    s16 cursor;
-    s16 picks[3];
-    s16 *list;
-    s16 *texts;
-} ShopState;
-
-typedef struct Vec3 {
-    s32 x;
-    s32 y;
-    s32 z;
-} Vec3;
-
-/* View of ActionCmd for the handlers that read the target +4 as u16 (lhu): npc_exec_command, door_exec_command. */
-typedef struct ActionCmdShort {
-    u16 opcode;
-    u16 sub;
-    u16 target;
-} ActionCmdShort;
-
-typedef struct IffChunkBody {
-    u8 unk0[0x7F8];
-} IffChunkBody;
-
-typedef struct IffSectorBody {
-    u8 unk0[0x7F4];
-} IffSectorBody;
-
-typedef struct CdLoc {
-    u8 unk0[0x4];
-} CdLoc;
-
-typedef struct IffChunk {
-    s32 tag;
-    s32 size;
-    s16 id;
-} IffChunk;
-
-typedef struct SceneRequestLoadView {
-    s16 loop;
-    u8 unk2[0xE];
-    s16 loop_param;
-    s16 office_no_gauge;
-    s16 arrival_sound;
-    u8 unk16[0x6];
-    s16 building_gauge;
-} SceneRequestLoadView;
-
-typedef struct CarState {
-    s16 stopped;
-    s16 slowed;
-    s16 steer;
-    s16 gear;
-    s32 brake;
-    s32 throttle;
-    s32 speed;
-    s32 turn_yaw;
-    s32 turn_radius;
-    SVector seat;
-    s16 look_pitch;
-    s16 look_yaw;
-    s16 look_roll;
-    u8 unk2A[0x2];
-    SVector corners[4];
-    s32 axle_x;
-    s32 axle_y;
-    s32 axle_z;
-    u8 unk58[0x4];
-    s32 pivot_x;
-    s32 pivot_y;
-    s32 pivot_z;
-} CarState;
-
 typedef struct SceneRequest {
     s16 loop;
     s16 next_loop;
@@ -1011,23 +491,6 @@ typedef struct SceneRequest {
     s32 pos_y;
     s32 pos_z;
 } SceneRequest;
-
-typedef struct CarNavi {
-    s16 active;
-    s16 menu_reset;
-    s16 dest;
-    u8 unk6[0x2];
-    u32 start_dist;
-    VehicleSprite *dest_sprite;
-    VehicleSprite *arrow_sprite;
-} CarNavi;
-
-typedef struct ItemRecord {
-    u16 id;
-    u16 kind;
-    char name[0x22];
-    s16 value;
-} ItemRecord;
 
 typedef struct SceneTrigger {
     s32 id;

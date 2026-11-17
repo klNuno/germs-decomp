@@ -37,7 +37,7 @@ kaj_tmd_load = 0x801CD028; // type:func size:0x3C8
 kaj_tmd_map = 0x801CD3F0; // type:func size:0x15C
 // {code, text} table ending at code 15 that kaj_abend searches: "Error Occured", "TSS Error", "Invalid TMD"
 kaj_error_names = 0x801DFAF8;
-// event.c (kaj/801CBCE0). Type-2 event handler: arg0[2] = n in 1..16 indexes kaj_tss_table; steps cur (+0x24) toward target (+0x26) by step (+0x28), calls the step callback (+0x30) and re-arms with func_801CC3DC, or at the target calls the end callback (+0x34) and posts event 0x100; only caller func_801CC378
+// event.c (kaj/event). Type-2 event handler: arg0[2] = n in 1..16 indexes kaj_tss_table; steps cur (+0x24) toward target (+0x26) by step (+0x28), calls the step callback (+0x30) and re-arms with func_801CC3DC, or at the target calls the end callback (+0x34) and posts event 0x100; only caller func_801CC378
 kaj_event_run_tss = 0x801CBDF0; // type:func size:0x23C
 // event.c: under EnterCriticalSection copies the head entry (0x14 bytes) of the ring queue D_801DFAD4 into arg0, skips cleared entries, returns its type; a pending D_801DFFC4 == 1 is returned first
 kaj_event_pop = 0x801CC02C; // type:func size:0x1BC
@@ -55,7 +55,7 @@ kaj_event_flush = 0x801CC514; // type:func size:0x178
 kaj_event_quit = 0x801CC708; // type:func size:0x2C
 // event.c: for an event of type 0x100 (tss end notice) releases its tss slot arg0[2] with func_801D1300; called right after kaj_event_get by the same 10 game loops
 kaj_event_done = 0x801CC734; // type:func size:0x34
-// ll.c (kaj/801CCAF4): walks the list from head (+0) through node->next (+4), free3 of each node data (+8) and node, then free3 of the 0x10 handle made by kaj_ll_create
+// ll.c (kaj/ll): walks the list from head (+0) through node->next (+4), free3 of each node data (+8) and node, then free3 of the 0x10 handle made by kaj_ll_create
 kaj_ll_destroy = 0x801CCB70; // type:func size:0x84
 // ll.c: "Error Allocating a LL Node", kaj_malloc(0xC) node {prev, next, data}, links it before the cursor (+8), becomes head when the cursor is the head, cursor moves to it, count++
 kaj_ll_insert_before = 0x801CCBF4; // type:func size:0x100
@@ -79,13 +79,13 @@ kaj_sound_quit = 0x801CD764; // type:func size:0x28
 kaj_tmd_unmap = 0x801CD78C; // type:func size:0x7C
 // srand() seeded with the nibble-swapped tick count D_801E6DAC
 kaj_srand_ticks = 0x801CD808; // type:func size:0x48
-// tim.c (kaj/801CF790): frees the two CLUT copies (+0x1C, +0x20) then the 0x24 handle made by kaj_tim_load
+// tim.c (kaj/tim): frees the two CLUT copies (+0x1C, +0x20) then the 0x24 handle made by kaj_tim_load
 kaj_tim_free = 0x801CFAE8; // type:func size:0x64
 // tim.c: GsGetTimInfo then LoadImage of the pixels, and of the CLUT when arg1 and the TIM has one; called after a CD read of a TIM
 kaj_tim_upload = 0x801CFB4C; // type:func size:0x68
 // tim.c: like kaj_tim_upload but the TIM sits after an 8-byte header whose halfword 1 is the CLUT flag; used by block.c for type-6 cache entries
 kaj_tim_upload_hdr = 0x801CFBB4; // type:func size:0x6C
-// timer.c (kaj/801CFD70): callback given to OpenEvent(0xF2000003 = vblank root counter) by kaj_timer_init; when enabled bumps the tick, posts a type-2 event for every expired alarm (func_801D0134), a type-4 event every D_801E6DB0 ticks
+// timer.c (kaj/timer): callback given to OpenEvent(0xF2000003 = vblank root counter) by kaj_timer_init; when enabled bumps the tick, posts a type-2 event for every expired alarm (func_801D0134), a type-4 event every D_801E6DB0 ticks
 kaj_timer_handler = 0x801CFD70; // type:func size:0x140
 // timer.c: if the heap top of D_801DFBB8 is due against tick D_801E6DAC, stores its id/data, moves the last entry to the top and sifts it down, returns 1
 kaj_timer_pop_due = 0x801D0134; // type:func size:0x1CC
@@ -99,7 +99,7 @@ kaj_timer_quit = 0x801D064C; // type:func size:0x68
 kaj_timer_enable = 0x801D06B4; // type:func size:0x10
 // timer.c: sets D_801E6DA8 = 0, ticks stop
 kaj_timer_disable = 0x801D06C4; // type:func size:0xC
-// kaj/801D0880 has no assert; prefix kaj_tod_ because it plays TOD animation packets: header id 16 bits, type 4 bits, flag 4 bits, length; type 0 attribute, 1 coordinate (rotate /360, scale, translate, flag bit 0 relative), 2 TMD id (GsLinkObject4), 3 parent id, 8 create/kill object
+// kaj/tod has no assert; prefix kaj_tod_ because it plays TOD animation packets: header id 16 bits, type 4 bits, flag 4 bits, length; type 0 attribute, 1 coordinate (rotate /360, scale, translate, flag bit 0 relative), 2 TMD id (GsLinkObject4), 3 parent id, 8 create/kill object
 kaj_tod_set_packet = 0x801D0880; // type:func size:0x5D8
 // TOD object table init: count 0, capacity arg4, each object gets attribute 0x80000000, id -1, coordinate arg2[i] and parameters arg3 + i*0x28
 kaj_tod_init_table = 0x801D0E58; // type:func size:0x60
@@ -113,7 +113,7 @@ kaj_tod_remove_obj = 0x801D0FB8; // type:func size:0x8C
 kaj_tod_find_tmd = 0x801D1044; // type:func size:0x44
 // when frame arg0 >= the frame header number (+4), runs kaj_tod_set_packet on its packet count (+2) packets; caller func_8018DE58
 kaj_tod_set_frame = 0x801D1088; // type:func size:0xB0
-// tss.c (kaj/801D12A8): free3 of the slot data (+0x3C) when not inline, pushes the slot on the free list (+8) of D_801DFBD0
+// tss.c (kaj/tss): free3 of the slot data (+0x3C) when not inline, pushes the slot on the free list (+8) of D_801DFBD0
 kaj_tss_free = 0x801D12A8; // type:func size:0x58
 // tss.c: unlinks slot arg0 from the finished list (+0xC) and pushes it on the free list; called by kaj_event_done and kaj_event_flush for 0x100 events
 kaj_tss_release = 0x801D1300; // type:func size:0x7C
@@ -143,7 +143,7 @@ kaj_view_flip = 0x801D1AAC; // type:func size:0x100
 kaj_view_set_bg_color = 0x801D1BAC; // type:func size:0x28
 // view.c: ClearImage of the 320x480 rect at 0,0 then DrawSync
 kaj_view_clear_vram = 0x801D1BD4; // type:func size:0x4C
-// cdmgr.c (kaj/801D1E70, assert "cdmgr.c"): kaj_malloc of every pool buffer of D_801DFBE0, heap init (func_801D3924), clears the 32 cache slots of D_801E71C8; called by both map openers
+// cdmgr.c (kaj/cdmgr, assert "cdmgr.c"): kaj_malloc of every pool buffer of D_801DFBE0, heap init (func_801D3924), clears the 32 cache slots of D_801E71C8; called by both map openers
 kaj_cdmgr_init = 0x801D1E70; // type:func size:0x100
 // cdmgr.c: read state machine on D_801E71C8: 1 CdControl seek, 3 double speed and CdRead, 4 CdReadSync with stall retry, -1 CdFlush; returns 1 when a read chain ends; polled in loops by block.c
 kaj_cdmgr_poll = 0x801D1F70; // type:func size:0x2A0
@@ -219,7 +219,7 @@ kaj_heap_free = 0x801D3A14; // type:func size:0xC0
 kaj_heap_free_space = 0x801D3AD4; // type:func size:0x5C
 // heap: free3 of every block record
 kaj_heap_free_all = 0x801D3B30; // type:func size:0x4C
-// kaj/801D1E70 after the heap has no assert; prefix kaj_map_ for the CITY / per-place map streamer used by block.c. Mode 1: once CITY.MP is cached, loads "\C\CITY.F;1" (directory) and rebases it on "\C\CITY.BC;1"; returns 1 when done
+// kaj/map has no assert; prefix kaj_map_ for the CITY / per-place map streamer used by block.c. Mode 1: once CITY.MP is cached, loads "\C\CITY.F;1" (directory) and rebases it on "\C\CITY.BC;1"; returns 1 when done
 kaj_map_load_city_dir = 0x801D3B7C; // type:func size:0xD4
 // mode 2: once the .B is cached, loads "\F\%c\%s.F;1" and rebases it on "\M\%c\%s.RM;1", then func_801D5BE4; returns 1 when done
 kaj_map_load_place_dir = 0x801D3C50; // type:func size:0x1CC
@@ -1405,7 +1405,7 @@ roadmap_shop_weapons = 0x801D7A68;
 roadmap_shop_weapon_advice = 0x801D7B34;
 // roadmap.c: (x, z, angle) triples per shop type and exit, passed to func_8018C50C (town position) by roadmap_shop_exit_to_town
 roadmap_shop_exit_points = 0x801D77E0;
-// no assert, prefix player (same as unit game/80195098, player_check_ground): every function here works on the controlled character D_801E0620 (pos unk54/58/5C, angles unk6C/6E/70) or its stats D_801E0710 collision fallback: called by player_move_on_foot / player_move_in_train when player_check_ground blocks the move; steps through states 0,1,2,4,3 nudging x/z by +-2 (x10 off mode 2) along D_801DFF40/44, returns -1 when all tries fail
+// no assert, prefix player (as player_check_ground in the same file): every function here works on the controlled character D_801E0620 (pos unk54/58/5C, angles unk6C/6E/70) or its stats D_801E0710 collision fallback: called by player_move_on_foot / player_move_in_train when player_check_ground blocks the move; steps through states 0,1,2,4,3 nudging x/z by +-2 (x10 off mode 2) along D_801DFF40/44, returns -1 when all tries fail
 player_try_slide = 0x80195DF0; // type:func size:0x258
 // x step sign (+-2, x10) chosen by player_try_slide state 0 and reused by its later states; only user player_try_slide
 player_slide_dx = 0x801DFF40;
@@ -2275,7 +2275,7 @@ thing_field_show_clock = 0x801DFFAC;
 kaj_map_room_dirty = 0x801DFFE4;
 // object_scene_tables + 0x14 (SceneTables.se_bank_count) declared as its own array, as object_scene_vehicle; sound_vab_open_head aborts when it is 4
 object_scene_se_bank_count = 0x801E02EC;
-// SceneTables.mail (object_scene_tables + 0x4C) declared as its own array; object_load_mail stores the handler mail_create built, mail_scroll reads it; also used in 80195098.c. Same precedent as object_scene_vehicle
+// SceneTables.mail (object_scene_tables + 0x4C) declared as its own array; object_load_mail stores the handler mail_create built, mail_scroll reads it; also used in player.c. Same precedent as object_scene_vehicle
 object_scene_mail = 0x801E0324;
 // SceneTables.texts (object_scene_tables + 0x5C) declared as its own array, as object_scene_vehicle: sprite_title_loop passes texts[0] to text_start_narration, as object_room_main passes object_scene_tables.texts[mode - 1]
 object_scene_texts = 0x801E0334;

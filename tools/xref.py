@@ -2,7 +2,7 @@
 """Cross-references of every symbol in asm/ (functions and data), the evidence base for naming.
 
   tools/xref.py NAME_OR_ADDR ...     card per symbol: unit, size, strings, callees, callers, data, users
-  tools/xref.py --unit game/80185380 cards of every function in a unit
+  tools/xref.py --unit game/door cards of every function in a unit
   tools/xref.py --json build/xref.json   dump the whole index
   tools/xref.py --unnamed [--unit U] list functions still called func_X with their evidence counts
 

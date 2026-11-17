@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "commit": "f8d4d67",
+ "commit": "4efff08",
  "tracked_tree_dirty": true,
  "exe_sha1": "178e728643d9b456436f4d19c9e07db11ab8aa2c",
  "metric": "Code bytes of each function (.text of the link map). asm: still INCLUDE_ASM; c: matching C whose body still carries names we did not choose; read: matching C with only our names.",
@@ -44,7 +44,7 @@
  },
  "units": [
   {
-   "unit": "src/game/80173054.c",
+   "unit": "src/game/action.c",
    "game": true,
    "library": "game",
    "bytes": 9240,
@@ -242,7 +242,7 @@
    ]
   },
   {
-   "unit": "src/game/8017546C.c",
+   "unit": "src/game/actor.c",
    "game": true,
    "library": "game",
    "bytes": 5260,
@@ -400,7 +400,7 @@
    ]
   },
   {
-   "unit": "src/game/801768F8.c",
+   "unit": "src/game/ai.c",
    "game": true,
    "library": "game",
    "bytes": 12112,
@@ -568,10 +568,10 @@
    ]
   },
   {
-   "unit": "src/game/80179848.c",
+   "unit": "src/game/block.c",
    "game": true,
    "library": "game",
-   "bytes": 21424,
+   "bytes": 15804,
    "functions": [
     {
      "name": "block_setup",
@@ -902,7 +902,15 @@
      "unk_types": 0,
      "d_globals": 0,
      "level": "read"
-    },
+    }
+   ]
+  },
+  {
+   "unit": "src/game/building.c",
+   "game": true,
+   "library": "game",
+   "bytes": 5620,
+   "functions": [
     {
      "name": "block_on_effect_done",
      "address": "0x8017D604",
@@ -996,10 +1004,10 @@
    ]
   },
   {
-   "unit": "src/game/8017EBF8.c",
+   "unit": "src/game/card.c",
    "game": true,
    "library": "game",
-   "bytes": 26504,
+   "bytes": 7948,
    "functions": [
     {
      "name": "menu_card_init_slots",
@@ -1090,7 +1098,15 @@
      "unk_types": 0,
      "d_globals": 0,
      "level": "read"
-    },
+    }
+   ]
+  },
+  {
+   "unit": "src/game/dialog.c",
+   "game": true,
+   "library": "game",
+   "bytes": 14800,
+   "functions": [
     {
      "name": "menu_list_page",
      "address": "0x80180B04",
@@ -1360,7 +1376,15 @@
      "unk_types": 0,
      "d_globals": 0,
      "level": "read"
-    },
+    }
+   ]
+  },
+  {
+   "unit": "src/game/door.c",
+   "game": true,
+   "library": "game",
+   "bytes": 5516,
+   "functions": [
     {
      "name": "door_setup",
      "address": "0x801844D4",
@@ -1460,15 +1484,7 @@
      "unk_types": 0,
      "d_globals": 0,
      "level": "read"
-    }
-   ]
-  },
-  {
-   "unit": "src/game/80185380.c",
-   "game": true,
-   "library": "game",
-   "bytes": 1760,
-   "functions": [
+    },
     {
      "name": "door_create",
      "address": "0x80185380",
@@ -1562,7 +1578,7 @@
    ]
   },
   {
-   "unit": "src/game/80185A60.c",
+   "unit": "src/game/effect.c",
    "game": true,
    "library": "game",
    "bytes": 14252,
@@ -2070,7 +2086,7 @@
    ]
   },
   {
-   "unit": "src/game/8018920C.c",
+   "unit": "src/game/event.c",
    "game": true,
    "library": "game",
    "bytes": 6816,
@@ -2298,10 +2314,10 @@
    ]
   },
   {
-   "unit": "src/game/8018ACAC.c",
+   "unit": "src/game/mail.c",
    "game": true,
    "library": "game",
-   "bytes": 9776,
+   "bytes": 4412,
    "functions": [
     {
      "name": "mail_create",
@@ -2422,7 +2438,15 @@
      "unk_types": 0,
      "d_globals": 0,
      "level": "read"
-    },
+    }
+   ]
+  },
+  {
+   "unit": "src/game/main.c",
+   "game": true,
+   "library": "game",
+   "bytes": 2684,
+   "functions": [
     {
      "name": "main",
      "address": "0x8018BDE8",
@@ -2532,7 +2556,15 @@
      "unk_types": 0,
      "d_globals": 0,
      "level": "read"
-    },
+    }
+   ]
+  },
+  {
+   "unit": "src/game/menu.c",
+   "game": true,
+   "library": "game",
+   "bytes": 2680,
+   "functions": [
     {
      "name": "mail_menu_draw_item_name",
      "address": "0x8018C864",
@@ -2626,10 +2658,10 @@
    ]
   },
   {
-   "unit": "src/game/8018D2DC.c",
+   "unit": "src/game/mod.c",
    "game": true,
    "library": "game",
-   "bytes": 10044,
+   "bytes": 5596,
    "functions": [
     {
      "name": "mod_setup",
@@ -2800,7 +2832,15 @@
      "unk_types": 0,
      "d_globals": 0,
      "level": "read"
-    },
+    }
+   ]
+  },
+  {
+   "unit": "src/game/npc.c",
+   "game": true,
+   "library": "game",
+   "bytes": 4448,
+   "functions": [
     {
      "name": "mod_place_npcrec",
      "address": "0x8018E8B8",
@@ -2934,10 +2974,10 @@
    ]
   },
   {
-   "unit": "src/game/8018FA18.c",
+   "unit": "src/game/object.c",
    "game": true,
    "library": "game",
-   "bytes": 22144,
+   "bytes": 21908,
    "functions": [
     {
      "name": "object_load_aset",
@@ -3318,7 +3358,15 @@
      "unk_types": 0,
      "d_globals": 0,
      "level": "read"
-    },
+    }
+   ]
+  },
+  {
+   "unit": "src/game/player.c",
+   "game": true,
+   "library": "game",
+   "bytes": 22056,
+   "functions": [
     {
      "name": "object_deliver_area_events",
      "address": "0x80194FAC",
@@ -3328,15 +3376,7 @@
      "unk_types": 0,
      "d_globals": 0,
      "level": "read"
-    }
-   ]
-  },
-  {
-   "unit": "src/game/80195098.c",
-   "game": true,
-   "library": "game",
-   "bytes": 3416,
-   "functions": [
+    },
     {
      "name": "player_check_ground",
      "address": "0x80195098",
@@ -3376,15 +3416,7 @@
      "unk_types": 0,
      "d_globals": 0,
      "level": "read"
-    }
-   ]
-  },
-  {
-   "unit": "src/game/80195DF0.c",
-   "game": true,
-   "library": "game",
-   "bytes": 18404,
-   "functions": [
+    },
     {
      "name": "player_try_slide",
      "address": "0x80195DF0",
@@ -3718,10 +3750,10 @@
    ]
   },
   {
-   "unit": "src/game/8019A5D4.c",
+   "unit": "src/game/roadmap.c",
    "game": true,
    "library": "game",
-   "bytes": 31656,
+   "bytes": 25164,
    "functions": [
     {
      "name": "roadmap_init",
@@ -3906,7 +3938,15 @@
      "unk_types": 0,
      "d_globals": 0,
      "level": "read"
-    },
+    }
+   ]
+  },
+  {
+   "unit": "src/game/shop.c",
+   "game": true,
+   "library": "game",
+   "bytes": 6492,
+   "functions": [
     {
      "name": "roadmap_shop_pick_weapons",
      "address": "0x801A0820",
@@ -4040,7 +4080,7 @@
    ]
   },
   {
-   "unit": "src/game/801A217C.c",
+   "unit": "src/game/sound.c",
    "game": true,
    "library": "game",
    "bytes": 7256,
@@ -4258,10 +4298,10 @@
    ]
   },
   {
-   "unit": "src/game/801A3DD4.c",
+   "unit": "src/game/sprite.c",
    "game": true,
    "library": "game",
-   "bytes": 14220,
+   "bytes": 11872,
    "functions": [
     {
      "name": "sprite_create",
@@ -4632,7 +4672,15 @@
      "unk_types": 0,
      "d_globals": 0,
      "level": "read"
-    },
+    }
+   ]
+  },
+  {
+   "unit": "src/game/thing.c",
+   "game": true,
+   "library": "game",
+   "bytes": 5948,
+   "functions": [
     {
      "name": "sprite_thing_init",
      "address": "0x801A6C34",
@@ -4682,15 +4730,7 @@
      "unk_types": 0,
      "d_globals": 0,
      "level": "read"
-    }
-   ]
-  },
-  {
-   "unit": "src/game/801A7560.c",
-   "game": true,
-   "library": "game",
-   "bytes": 11776,
-   "functions": [
+    },
     {
      "name": "thing_update_all",
      "address": "0x801A7560",
@@ -4820,7 +4860,15 @@
      "unk_types": 0,
      "d_globals": 0,
      "level": "read"
-    },
+    }
+   ]
+  },
+  {
+   "unit": "src/game/town.c",
+   "game": true,
+   "library": "game",
+   "bytes": 3484,
+   "functions": [
     {
      "name": "thing_field_task_hook",
      "address": "0x801A8370",
@@ -4930,7 +4978,15 @@
      "unk_types": 0,
      "d_globals": 0,
      "level": "read"
-    },
+    }
+   ]
+  },
+  {
+   "unit": "src/game/vehicle.c",
+   "game": true,
+   "library": "game",
+   "bytes": 14532,
+   "functions": [
     {
      "name": "thing_train_calc_stops",
      "address": "0x801A910C",
@@ -4980,15 +5036,7 @@
      "unk_types": 0,
      "d_globals": 0,
      "level": "read"
-    }
-   ]
-  },
-  {
-   "unit": "src/game/801AA360.c",
-   "game": true,
-   "library": "game",
-   "bytes": 9840,
-   "functions": [
+    },
     {
      "name": "vehicle_car_drive",
      "address": "0x801AA360",
@@ -8815,7 +8863,7 @@
    "libraries": ""
   },
   {
-   "unit": "src/kaj/801CBCE0.c",
+   "unit": "src/kaj/event.c",
    "game": true,
    "library": "kaj",
    "bytes": 2696,
@@ -8960,7 +9008,7 @@
    "libraries": ""
   },
   {
-   "unit": "src/kaj/801CC898.c",
+   "unit": "src/kaj/kaj.c",
    "game": true,
    "library": "kaj",
    "bytes": 348,
@@ -9033,10 +9081,10 @@
    "libraries": ""
   },
   {
-   "unit": "src/kaj/801CCAF4.c",
+   "unit": "src/kaj/ll.c",
    "game": true,
    "library": "kaj",
-   "bytes": 3420,
+   "bytes": 1332,
    "functions": [
     {
      "name": "kaj_ll_create",
@@ -9117,7 +9165,15 @@
      "unk_types": 0,
      "d_globals": 0,
      "level": "read"
-    },
+    }
+   ]
+  },
+  {
+   "unit": "src/kaj/misc.c",
+   "game": true,
+   "library": "kaj",
+   "bytes": 2088,
+   "functions": [
     {
      "name": "kaj_tmd_load",
      "address": "0x801CD028",
@@ -9412,7 +9468,7 @@
    "libraries": ""
   },
   {
-   "unit": "src/kaj/801CF790.c",
+   "unit": "src/kaj/tim.c",
    "game": true,
    "library": "kaj",
    "bytes": 1168,
@@ -9487,7 +9543,7 @@
    "libraries": ""
   },
   {
-   "unit": "src/kaj/801CFD70.c",
+   "unit": "src/kaj/timer.c",
    "game": true,
    "library": "kaj",
    "bytes": 2400,
@@ -9612,7 +9668,7 @@
    "libraries": ""
   },
   {
-   "unit": "src/kaj/801D0880.c",
+   "unit": "src/kaj/tod.c",
    "game": true,
    "library": "kaj",
    "bytes": 2232,
@@ -9711,10 +9767,10 @@
    "libraries": ""
   },
   {
-   "unit": "src/kaj/801D12A8.c",
+   "unit": "src/kaj/tss.c",
    "game": true,
    "library": "kaj",
-   "bytes": 2424,
+   "bytes": 1352,
    "functions": [
     {
      "name": "kaj_tss_free",
@@ -9815,7 +9871,15 @@
      "unk_types": 0,
      "d_globals": 0,
      "level": "read"
-    },
+    }
+   ]
+  },
+  {
+   "unit": "src/kaj/view.c",
+   "game": true,
+   "library": "kaj",
+   "bytes": 1072,
+   "functions": [
     {
      "name": "kaj_view_init",
      "address": "0x801D17F0",
@@ -9952,10 +10016,10 @@
    "libraries": ""
   },
   {
-   "unit": "src/kaj/801D1E70.c",
+   "unit": "src/kaj/cdmgr.c",
    "game": true,
    "library": "kaj",
-   "bytes": 21688,
+   "bytes": 6388,
    "functions": [
     {
      "name": "kaj_cdmgr_init",
@@ -10246,7 +10310,15 @@
      "unk_types": 0,
      "d_globals": 0,
      "level": "read"
-    },
+    }
+   ]
+  },
+  {
+   "unit": "src/kaj/heap.c",
+   "game": true,
+   "library": "kaj",
+   "bytes": 1048,
+   "functions": [
     {
      "name": "kaj_heap_alloc",
      "address": "0x801D3764",
@@ -10346,7 +10418,15 @@
      "unk_types": 0,
      "d_globals": 0,
      "level": "read"
-    },
+    }
+   ]
+  },
+  {
+   "unit": "src/kaj/map.c",
+   "game": true,
+   "library": "kaj",
+   "bytes": 14252,
+   "functions": [
     {
      "name": "kaj_map_load_city_dir",
      "address": "0x801D3B7C",

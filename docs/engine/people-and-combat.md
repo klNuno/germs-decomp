@@ -1,9 +1,9 @@
 # People and combat
 
-The people of a scene (passers-by, shop staff, the infected) are `Npc` records loaded from the scene file. Two units
-move them: the 8017546C unit holds the table, the animation, the script commands and the damage, and the 801768F8
-unit holds the AI: line of sight, target choice, walking and firing. Neither unit has an assert string, so their
-file names are unknown ([layout](../layout.md)). This page also follows a shot from the player to a person and back,
+The people of a scene (passers-by, shop staff, the infected) are `Npc` records loaded from the scene file. Two files
+move them: [actor.c](../../src/game/actor.c) holds the table, the animation, the script commands and the damage, and
+[ai.c](../../src/game/ai.c) holds the AI: line of sight, target choice, walking and firing. Neither file has an
+assert string, so both names are ours ([layout](../layout.md)). This page also follows a shot from the player to a person and back,
 down to death and arrest. The scripts that drive people are in [scenes and scripts](scenes-and-scripts.md).
 
 ## Records from the scene

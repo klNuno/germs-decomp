@@ -8,7 +8,7 @@ and no movie player ([the movie](../discoveries.md#-the-movie-on-the-disc-can-ne
 
 ## Start-up
 
-Two functions of misc.c in [kaj/801CCAF4.c](../../src/kaj/801CCAF4.c) form the kaj sound part:
+Two functions of [misc.c](../../src/kaj/misc.c) form the kaj sound part:
 
 | Function | Calls |
 | --- | --- |
@@ -21,7 +21,7 @@ Two functions of misc.c in [kaj/801CCAF4.c](../../src/kaj/801CCAF4.c) form the k
 
 ## Sound banks
 
-src/game/801A217C.c holds sound.c. A bank is a VAB that the scene loader receives in two chunks,
+src/game/sound.c holds sound.c. A bank is a VAB that the scene loader receives in two chunks,
 `VABH` (the header) then `VABB` (the body). The stack of banks lives in `object_scene_tables`:
 `se_banks[4]` and `se_bank_count`.
 
