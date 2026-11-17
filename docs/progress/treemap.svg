@@ -5,7 +5,7 @@
 <rect width="1200" height="820" rx="16" fill="#1a1a19"/>
 <g font-family="system-ui, -apple-system, Segoe UI, sans-serif">
 <text x="28" y="44" font-size="25" font-weight="700" fill="#f0efec">Germs: Nerawareta Machi · decompilation</text>
-<text x="28" y="72" font-size="14" fill="#c3c2b7">SLPS_021.07 rebuilt byte for byte · 2026-11-17 · 655 functions, 272,276 code bytes</text>
+<text x="28" y="72" font-size="14" fill="#c3c2b7">SLPS_021.07 rebuilt byte for byte · 1f3e774 · 655 functions, 272,276 code bytes</text>
 <text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700" fill="#f0efec">96.5% in C</text>
 <text x="1172" y="72" text-anchor="end" font-size="14" fill="#c3c2b7">651 of 655 functions match from C</text>
 <rect x="28" y="92" width="12" height="12" rx="2" fill="#34362f" stroke="#8f8d84" stroke-width="0.5"/>

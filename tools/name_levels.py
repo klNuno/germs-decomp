@@ -3,6 +3,7 @@
 
     tools/name_levels.py merge OUT.tsv IN.tsv [IN.tsv ...]
     tools/name_levels.py check LEVELS.tsv
+    tools/name_levels.py selftest
 
 An audit TSV has a header line and the columns NAME KIND FILE LEVEL NEW EVIDENCE (tab separated).
 KIND is func, global, type or field (FILE is then include/game/x.h:Type); LEVEL is game (seen in
@@ -14,7 +15,7 @@ code, game) and the disagreement is printed. Writes OUT with the columns NAME KI
 
 
 check: every func and global row names a symbol of config/symbol_addrs.txt, every type row a type
-defined in include/ or src/, every field row a member of its struct; every name of ours in
+defined in its FILE, every field row a member declared in the body of its struct in its FILE; every name of ours in
 config/symbol_addrs.txt has a row. Exits 1 and lists what is off.
 """
 import argparse
@@ -67,9 +68,11 @@ def merge(out, inputs):
 
 
 def struct_bodies():
-    """Type name -> list of bodies (comments stripped) of the struct, union or enum it names."""
+    """(file, type name) -> list of bodies (comments stripped) of the struct, union or enum it names,
+    file relative to the repo root. Typedefs without a body map to an empty list."""
     out = collections.defaultdict(list)
     for path in list((ROOT / "include").rglob("*.h")) + list((ROOT / "src").rglob("*.c")):
+        rel = path.relative_to(ROOT).as_posix()
         text = re.sub(r"/\*.*?\*/|//[^\n]*", " ", path.read_text(encoding="utf-8", errors="replace"), flags=re.S)
         for m in re.finditer(r"\b(?:struct|union|enum)\s*(\w*)\s*\{", text):
             depth, i = 0, m.end() - 1
@@ -80,14 +83,42 @@ def struct_bodies():
                 i += 1
             body = text[m.end():i]
             tail = re.match(r"\s*(\w+)\s*;", text[i + 1:])
-            for name in {m.group(1), tail.group(1) if tail and text[m.start():m.start() + 7] != "" and
-                         re.search(r"typedef\s+$", text[max(0, m.start() - 40):m.start()]) else ""} - {""}:
-                out[name].append(body)
+            names = {m.group(1)}
+            if tail and re.search(r"typedef\s+$", text[max(0, m.start() - 40):m.start()]):
+                names.add(tail.group(1))
+            for name in names - {""}:
+                out[(rel, name)].append(body)
         for m in re.finditer(r"typedef\s+[^;{}()]*?\b(\w+)\s*(?:\[[^\]]*\])?\s*;", text):
-            out.setdefault(m.group(1), [])
+            out.setdefault((rel, m.group(1)), [])
         for m in re.finditer(r"typedef\s+[^;{}]*\(\s*\*\s*(\w+)\s*\)", text):
-            out.setdefault(m.group(1), [])
+            out.setdefault((rel, m.group(1)), [])
     return out
+
+
+def members(body):
+    """Member names declared in a struct or union body (nested bodies included), or enumerators."""
+    names = set()
+    flat = body.replace("{", ";").replace("}", "; __nested ")  # "} cell;" declares the member cell
+    if ";" not in flat.strip() and "," in flat:  # an enum: NAME [= value], ...
+        return {m.group(1) for m in re.finditer(r"(?:^|,)\s*(\w+)", flat)}
+    for decl in flat.split(";"):
+        decl = re.sub(r":\s*\w+\s*$", "", decl.strip())  # bit-field width
+        if not decl or decl.startswith(("struct", "union")) and "," not in decl and decl.count(" ") < 1:
+            continue
+        fp = re.search(r"\(\s*\*\s*(\w+)\s*\)", decl)
+        if fp:
+            names.add(fp.group(1))
+            continue
+        decl = re.sub(r"\[[^\]]*\]", "", decl)
+        parts = decl.split(",")
+        head = re.findall(r"\w+", parts[0])
+        if len(head) >= 2:
+            names.add(head[-1])
+        for p in parts[1:]:
+            w = re.findall(r"\w+", p)
+            if w:
+                names.add(w[-1])
+    return names
 
 
 def check(levels):
@@ -100,15 +131,27 @@ def check(levels):
             seen.add(name)
             if name not in ours:
                 bad.append(f"{kind} {name}: not in config/symbol_addrs.txt")
-        elif kind == "type" and name not in bodies:
-            bad.append(f"type {name}: no definition in include/ or src/")
+        elif kind == "type" and (r["FILE"], name) not in bodies:
+            bad.append(f"type {name}: no definition in {r['FILE']}")
         elif kind == "field":
-            st = r["FILE"].rsplit(":", 1)[-1]
-            if not any(re.search(r"\b" + re.escape(name) + r"\b", b) for b in bodies.get(st, [])):
-                bad.append(f"field {st}.{name}: not a member of {st}")
+            path, _, st = r["FILE"].rpartition(":")
+            if (path, st) not in bodies:
+                bad.append(f"field {st}.{name}: no type {st} in {path}")
+            elif not any(name in members(b) for b in bodies[(path, st)]):
+                bad.append(f"field {st}.{name}: not a member of {st} in {path}")
     bad += [f"no row for {n}" for n in sorted(ours - seen)]
     print("\n".join(bad) if bad else "every row matches the code")
     sys.exit(1 if bad else 0)
+
+
+def selftest():
+    """members() on the shapes the review found: nested union members, a type token, function pointers."""
+    body = "s32 x; union { struct { s32 width; } cell; u16 raw[2]; } dims; void (*on_done)(void *); u8 a, *b; u32 f : 3;"
+    got = members(body)
+    want = {"x", "width", "cell", "raw", "dims", "on_done", "a", "b", "f"}
+    ok = got == want and "u16" not in got and "s32" not in got
+    print("selftest " + ("ok" if ok else "FAILED: %s" % sorted(got ^ want)))
+    sys.exit(0 if ok else 1)
 
 
 def main():
@@ -117,11 +160,14 @@ def main():
     m = sub.add_parser("merge")
     m.add_argument("out")
     m.add_argument("inputs", nargs="+")
+    sub.add_parser("selftest")
     k = sub.add_parser("check")
     k.add_argument("levels")
     args = ap.parse_args()
     if args.cmd == "merge":
         merge(args.out, args.inputs)
+    elif args.cmd == "selftest":
+        selftest()
     else:
         check(args.levels)
 

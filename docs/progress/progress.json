@@ -1,7 +1,7 @@
 {
  "schema_version": 1,
- "commit": "4efff08",
- "tracked_tree_dirty": true,
+ "commit": "1f3e774",
+ "tracked_tree_dirty": false,
  "exe_sha1": "178e728643d9b456436f4d19c9e07db11ab8aa2c",
  "metric": "Code bytes of each function (.text of the link map). asm: still INCLUDE_ASM; c: matching C whose body still carries names we did not choose; read: matching C with only our names.",
  "totals": {
