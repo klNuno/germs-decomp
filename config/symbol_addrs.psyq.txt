@@ -83,7 +83,6 @@ print_matrix = 0x801B1EEC; // type:func size:0x70
 print_vector = 0x801B1F5C; // type:func
 GsSetFlatLight = 0x801B1F90; // type:func
 Gssub_make_matrix = 0x801B2500; // type:func
-func_801B25D0 = 0x801B25D0; // type:func size:0x160
 GsGetLw = 0x801B2730; // type:func
 GsInitGraph = 0x801B29F0; // type:func
 GsInitGraph2 = 0x801B2B80; // type:func
@@ -95,7 +94,6 @@ GsSetDrawBuffClip = 0x801B30A0; // type:func
 GsInit3D = 0x801B3120; // type:func
 gte_init = 0x801B31A0; // type:func
 GsGetLs = 0x801B31F0; // type:func
-func_801B34C0 = 0x801B34C0; // type:func
 rsin = 0x801B3D50; // type:func size:0x3C
 sin_1 = 0x801B3D8C; // type:func
 rcos = 0x801B3E20; // type:func size:0xA0
@@ -535,3 +533,38 @@ GsInitVcount = 0x801D1D20; // type:func
 GsDefDispBuff = 0x801D1D60; // type:func
 SetBackColor = 0x801D1E40; // type:func size:0x20
 SetGeomScreen = 0x801D1E60; // type:func
+
+// Hand-kept below this line (tools/psyq/match.py keeps this block when it rewrites the file).
+// Labels at addresses that are not word aligned (or inside a function): spimdisasm writes them,
+// but splat does not count them as defined and also writes them as fixed addresses in
+// linker/undefined_syms_auto.txt, which the linker then never moves. defined:True stops that.
+D_80172622 = 0x80172622; // defined:True // Sony rodata byte after D_80172620
+D_801B9124 = 0x801B9124; // defined:True // _patch_gte compares the kernel handler with func_801B910C up to here, then copies from here
+D_801B913C = 0x801B913C; // defined:True // end of the words _patch_gte copies
+D_801CBCD0 = 0x801CBCD0; // defined:True // three words after _ExitCard that it copies into the kernel
+D_801CBCDC = 0x801CBCDC; // defined:True // end of the words _ExitCard copies
+D_801D8011 = 0x801D8011; // defined:True // Sony data, inside D_801D8000
+D_801D8101 = 0x801D8101; // defined:True // Sony state byte
+D_801D8102 = 0x801D8102; // defined:True // Sony state byte
+D_801D8103 = 0x801D8103; // defined:True // Sony state byte
+D_801D8106 = 0x801D8106; // defined:True // Sony state halfword
+D_801D81D6 = 0x801D81D6; // defined:True // Sony table halfword
+D_801D8262 = 0x801D8262; // defined:True // Sony table halfword
+D_801D82AE = 0x801D82AE; // defined:True // Sony table halfword
+D_801D832E = 0x801D832E; // defined:True // Sony table halfword
+D_801D837A = 0x801D837A; // defined:True // Sony table halfword
+D_801D91F1 = 0x801D91F1; // defined:True // Sony data, inside D_801D91C0
+D_801DDDC5 = 0x801DDDC5; // defined:True // Sony state byte
+D_801DDEEA = 0x801DDEEA; // defined:True // Sony state halfword
+D_801DF20A = 0x801DF20A; // defined:True // Sony state halfword
+D_801DF24A = 0x801DF24A; // defined:True // Sony state halfword
+D_801DF676 = 0x801DF676; // defined:True // Sony state halfword
+D_801DF776 = 0x801DF776; // defined:True // Sony state halfword
+D_801DFB8A = 0x801DFB8A; // defined:True // Sony state byte
+// Sony string blocks that pointer tables (D_801DDB0C, D_801DDB8C, D_801DDDC8, D_801DEF50) point into: the size
+// lets spimdisasm write `.word block + offset` instead of a number.
+D_801721F4 = 0x801721F4; // size:0x14C
+D_801723F4 = 0x801723F4; // size:0x40
+D_801726D4 = 0x801726D4; // size:0x44
+// End of .bss: Sony's startup __SN_ENTRY_POINT clears .bss up to it and starts the heap there.
+main_BSS_END = 0x801E7A10; // defined:True

@@ -1,7 +1,7 @@
 # germs-decomp: matching decompilation of Germs: Nerawareta Machi (SLPS-02107).
 #   make             build build/SLPS_021.07 from src/ and asm/
 #   make check       build, then compare its sha1 with the retail executable
-#   make split       regenerate asm/ and linker/ (and missing src/ stubs) with splat
+#   make split       regenerate asm/ and linker/ (and missing src/ stubs) with splat, then tools/postsplit.py
 #   make check-disk  extract the disc and check the retail executable
 #   make clean       remove build/; make distclean also removes extract/, asm/, linker/
 
@@ -73,6 +73,7 @@ $(BUILD)/asm/%.s.o: asm/%.s
 split linker/germs.ld: $(SPLAT) config/symbol_addrs.txt config/symbol_addrs.psyq.txt | $(EXTRACT)/$(EXE)
 	rm -rf asm linker
 	$(PYTHON) -m splat split $(SPLAT)
+	$(PYTHON) -I tools/postsplit.py
 
 extract: $(EXTRACT)/$(EXE)
 

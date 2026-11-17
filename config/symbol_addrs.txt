@@ -1,9 +1,12 @@
 // Our own names, with evidence. Sony names live in symbol_addrs.psyq.txt.
+// defined:True marks a label that is not word aligned: splat would also write it as a fixed address in
+// linker/undefined_syms_auto.txt, which the linker never moves. A size on a string block lets spimdisasm write
+// a pointer into its middle as `.word block + offset` instead of a number (tools/rawscan.py).
 // Address splits (named since wave 4): a C function reads the second half or the tail as its own symbol.
 // one rodata block of Shift-JIS shop lines (order prompts, side offers, topic questions, map and course choices, weapon advice, thanks, purchase confirm); roadmap_shop_texts, roadmap_shop_texts_4 and roadmap_shop_texts_5 point into it
-roadmap_shop_lines = 0x80171048;
+roadmap_shop_lines = 0x80171048; // size:0x4CC
 // menu: direction flag of menu_cycle_pos_b; also an address split (a C function reads it as the second half of a pair)
-menu_cycle_dir_b = 0x801DFCA6; // size:0x2
+menu_cycle_dir_b = 0x801DFCA6; // size:0x2 defined:True
 // its own message "kaj_abend: NULL File Pointer"; prints ERROR CODE, FILE, LINE, MESSAGE, then exit(code)
 kaj_abend = 0x801CD54C; // type:func size:0x13C
 // malloc3(size) then memset 0, NULL when size is 0; every allocation in the game and kaj goes through it
@@ -351,7 +354,7 @@ kaj_map_letter = 0x801DFE44;
 // index of the current room state in D_801E7830
 kaj_map_room_cur = 0x801DFE48;
 // index of the current cell state in D_801E7950
-kaj_map_cell_cur = 0x801DFE49;
+kaj_map_cell_cur = 0x801DFE49; // defined:True
 // two room states of 0x90
 kaj_map_rooms = 0x801E7830;
 // two cell states of 0x60
@@ -417,7 +420,7 @@ action_queue = 0x801DFE54;
 // action.c: set by opcode 11 in action_update; the next action_run_set inserts its first command at the queue head and clears it
 action_queue_front_flag = 0x801DFC58;
 // action.c: (n + 1) % 16 counter of action_update state 3, toggles the colour of sprite 0x40A at 0 and 8 (func_801A461C)
-action_blink_count = 0x801DFC5A;
+action_blink_count = 0x801DFC5A; // defined:True
 // no assert (jtbl cut): every function here walks the NPC table D_801E02D8.unk3C, hence prefix npc (people with hp, enter/leave action sets, hostile state); this one sets the model animation by mode via func_8018DA2C (idle 0/3, walk 2/4, 1, hit 9, hurt 7, attack 5/6) and returns 1 on the attack frame
 npc_update_anim = 0x8017546C; // type:func size:0x544
 // npc: per-frame loop over all NPCs: init on first frame, death (unkE 2) runs set unk1E and sound 0x14, then by state calls npc_update_anim with ai_update_stand / ai_update_move / ai_fire; called by the main loop step func_8018C2FC
@@ -673,19 +676,19 @@ event_limb_colors = 0x801D7730;
 // event.c: blink flag of HUD entry 1, set by event_set_blink(0), run by event_update_hud
 event_blink0_on = 0x801DFD1C;
 // event.c: blink flag of HUD entry 2, event_set_blink(1)
-event_blink1_on = 0x801DFD1E;
+event_blink1_on = 0x801DFD1E; // defined:True
 // event.c: blink flag of HUD entry 3, event_set_blink(2)
 event_blink2_on = 0x801DFD20;
 // event.c: frame counter of blink 0, stops at 11 in event_update_hud
-event_blink0_timer = 0x801DFD22;
+event_blink0_timer = 0x801DFD22; // defined:True
 // event.c: frame counter of blink 1
 event_blink1_timer = 0x801DFD24;
 // event.c: frame counter of blink 2
-event_blink2_timer = 0x801DFD26;
+event_blink2_timer = 0x801DFD26; // defined:True
 // event.c: colour written to CLUT 0x400 entry 1 every third frame of blink 0
 event_blink0_color = 0x801DFD28;
 // event.c: colour of CLUT 0x400 entry 2 for blink 1
-event_blink1_color = 0x801DFD2A;
+event_blink1_color = 0x801DFD2A; // defined:True
 // event.c: colour of CLUT 0x400 entry 3 for blink 2
 event_blink2_color = 0x801DFD2C;
 // no assert (jtbl cut) and the unit holds 3 modules, so 3 prefixes: menu (memory card screen + pause menu, both modal func_801CC378 loops on sprites 0x200..0x23D), text (Kanji message window, sprites 0x403..0x40D), door (works on the door list D_801DFE80, door.c follows at 0x80185380) menu: for the 4 save slots sprintf "BISLPS-02107GERMS%d" file names and a memory card header ('S','C', 0x11, 1 block, 0x40 title, CLUT D_801D75F4), resets cursor unk8; with arg 1 clears 3 VRAM strips by LoadImage2 of 0x22 bytes
@@ -1701,7 +1704,7 @@ thing_str_file = 0x801DFD98;
 // vehicle mode written to player unk46 by thing_field_leave when != -1; set by thing_field_do_action (1 = car), thing_field_input (0 = on foot), vehicle_train_get_off returns
 thing_next_vehicle_mode = 0x801DFDA0;
 // cache of D_801E0710.unk58->unk42: thing_field_enter calls func_80192CD0 only when it differs
-thing_field_loaded_id = 0x801DFDA2;
+thing_field_loaded_id = 0x801DFDA2; // defined:True
 // exit code of thing_field_loop: 0 quit, 1 menu, 2 func_8017E99C, 3 get in car, 4 get out; read by thing_game_loop
 thing_field_exit_code = 0x801DFFAE;
 // high byte of the 0xFE action code, first argument of func_8017E99C in thing_game_loop
@@ -2127,7 +2130,7 @@ vehicle_str_alloc_pointer = 0x80171A78;
 // "Error Allocating VEHICLE Buffer", kaj_abend message of vehicle_create
 vehicle_str_alloc_buffer = 0x80171AA8;
 // "Error Allocating a LL Node", the message kaj_ll_insert_before and kaj_ll_insert_after pass to kaj_abend when kaj_malloc(0xC) fails (the error-name strings of kaj_error_names follow it in the same symbol)
-kaj_ll_str_node_error = 0x80172BB4;
+kaj_ll_str_node_error = 0x80172BB4; // size:0xF4
 // "kaj_abend: NULL File Pointer\n", printed by kaj_abend (and its inlined copies in kaj_tmd_load, kaj_tmd_map) when file is NULL
 kaj_misc_str_null_file = 0x80172CA8;
 // "kaj_abend: Illegal Line Number - %d\n", printed by kaj_abend when line < 0
@@ -2157,7 +2160,7 @@ roadmap_shop_list_3_changed = 0x801D7A08;
 // shop kind 4 normal list (with roadmap_shop_texts_4)
 roadmap_shop_list_4 = 0x801D7A10;
 // shop kind 4 alt list, used with alt_speaker by var 10 = 2000 or by hour and day parity
-roadmap_shop_list_4_alt = 0x801D7A22;
+roadmap_shop_list_4_alt = 0x801D7A22; // defined:True
 // shop kind 5 list
 roadmap_shop_list_5 = 0x801D7A34;
 // shop kind 6 list for hours 11 to 13
@@ -2171,11 +2174,11 @@ roadmap_shop_list_6_changed = 0x801D7A60;
 // shop kind 8 list, 13 entries, opened on trigger 0x300600
 roadmap_shop_list_8 = 0x801D7A74;
 // roadmap_shop_topic_menu topic 0 list, 14 entries
-roadmap_shop_topic_list_0 = 0x801D7A92;
+roadmap_shop_topic_list_0 = 0x801D7A92; // defined:True
 // topic 1 list, 15 entries
 roadmap_shop_topic_list_1 = 0x801D7AB0;
 // topic 2 list, 4 entries
-roadmap_shop_topic_list_2 = 0x801D7ACE;
+roadmap_shop_topic_list_2 = 0x801D7ACE; // defined:True
 // menu texts of shop kinds 3, 6 and 7
 roadmap_shop_texts = 0x801D7AEC;
 // menu texts with roadmap_shop_list_4
@@ -2197,33 +2200,37 @@ npc_death_set_1000 = 0x801DFC5C;
 // set by door_start_open and door_start_close; ai_find_target sees the player while it is set (scenes-and-scripts.md)
 ai_door_noise = 0x801DFC74;
 // set by player_weapon_sound, cleared each frame (8017546C); ai_find_target sees the player while it is set (people-and-combat.md)
-ai_weapon_noise = 0x801DFC76;
+ai_weapon_noise = 0x801DFC76; // defined:True
 // block_load_all and block_stream_update set 1 when the blocks were reloaded; door_update_all and thing_update_all then look up their block again; block_stream_stop clears it
 block_reloaded = 0x801DFC80;
 // block_enter_area stores the area code kind byte (code >> 16); kaj_map_get_entry fills it with the next byte as the place entry's 2 room bytes; kaj_map_update_place reads it
 block_area_kind = 0x801DFC8C;
 // second room byte: 1 small flame, 2 large flame, 3 both (block_set_mode, block_enter_area set GameVars flame_small_on and flame_large_on from it)
-block_area_flames = 0x801DFC8D;
+block_area_flames = 0x801DFC8D; // defined:True
 // block_enter_area stores the low byte of a kind 0x80 area code; no reader in C
-block_area_low = 0x801DFC8E;
+block_area_low = 0x801DFC8E; // defined:True
 // the string "*" menu_card_scan passes to MemCardGetDirentry
 menu_card_dir_pattern = 0x801DFC90;
 // one fullwidth question mark (Shift-JIS) text_format_number writes for 0 (unknown height or age)
 text_str_unknown = 0x801DFCBC;
+// the first blood type string (text_blood_types[0], the unknown type) and its pad byte, written as bytes
+// (spimdisasm's string guess ran over the halfword below and dropped its label), so that
+// text_narration_page_full gets its own label in .sdata
+D_801DFCE0 = 0x801DFCE0; // type:u8 size:0x6
 // the text_draw_next result in text_narration_step: 1 when the page is full, then the next step only clears it
-text_narration_page_full = 0x801DFCE6;
+text_narration_page_full = 0x801DFCE6; // type:s16 size:0x2 defined:True
 // object_room_init sets it 1 when the scene variant (request unk0[3]) is 1; object_room_quit then calls player_add_hp(0xFF, 0)
 object_room_heal_on_quit = 0x801DFD54;
 // object_room_do_action sets it 1 for computer action 0xFA0002 with a scene change; object_room_on_effect_done clears it on effect 4 and returns 1; object_room_init clears it
-object_room_exit_pending = 0x801DFD56;
+object_room_exit_pending = 0x801DFD56; // defined:True
 // u16 0x2969, the plain colour of the shop menus (roadmap_shop_open_menu color): the storage yes/no prompt puts it in CLUT entry 5 when it opens and swaps entries 4 and 5 by (&it)[choice]
 object_room_choice_color = 0x801DFD58;
 // u16 0x2BFF, the cursor colour of the shop menus (roadmap_shop_open_menu cursor_color): CLUT entry 4 when the storage prompt opens, read as (&object_room_choice_color)[1] by the choice swap
-object_room_choice_cursor_color = 0x801DFD5A;
+object_room_choice_cursor_color = 0x801DFD5A; // defined:True
 // player_check_ground sets 1 on area code 0xFF with no scene trigger (not walkable); player_move_on_foot then undoes the move
 player_blocked_by_area = 0x801DFD5C;
 // player_check_ground sets 1 on a scene trigger whose passable is 0; player_move_on_foot then undoes the move
-player_blocked_by_trigger = 0x801DFD5E;
+player_blocked_by_trigger = 0x801DFD5E; // defined:True
 // shop kind 9 list, 3 entries
 roadmap_shop_list_9 = 0x801DFD74;
 // " - ", printed by kaj_abend between the code and the error name
