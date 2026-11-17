@@ -197,7 +197,7 @@ void text_next_page(EventState *event);
 extern Inventory *player_status_inventory[];
 s32 object_load_chunk_count;
 s32 object_load_bar_step;
-void roadmap_draw_sprite_frame(s32 arg0);
+void roadmap_draw_sprite_frame(u16 id);
 void effect_clut_rotate(void);
 s16 mail_list_get_id(s16 i);
 void object_load_aset(IffContext *iff, s32 size);

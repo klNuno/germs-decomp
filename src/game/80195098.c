@@ -54,7 +54,7 @@ s32 CdPosToInt(void *p);
 void *CdIntToPos(s32 i, void *p);
 s32 CdControl(u8 com, u8 *param, u8 *result);
 void sound_se_play(s32 id);
-void player_set_view(Player *arg0, s16 arg1);
+void player_set_view(Player *player, s16 keep_cell);
 void event_advance_clock(s16 minutes, s16 no_fatigue);
 extern VabStream sound_vab_stream;
 s32 CdMode(void);
@@ -169,7 +169,7 @@ void mod_npcrec_rebase_all(s32 origin_x, s32 origin_y, s32 origin_z);
 void thing_set_origin(s32 origin_x, s32 origin_y, s32 origin_z);
 void vehicle_set_origin(s32 origin_x, s32 origin_y, s32 origin_z);
 void MatrixNormal(void *m, void *n);
-void RotMatrix(s16 *r, void *m);
+void *RotMatrix(s16 *r, void *m);
 void ApplyMatrixLV(void *arg0, void *arg1, void *arg2);
 void GsSetView2(void *arg0);
 void RotMatrixZYX(s16 *r, void *m);
@@ -183,7 +183,7 @@ void text_next_page(EventState *event);
 extern Inventory *player_status_inventory[];
 s32 object_load_chunk_count;
 s32 object_load_bar_step;
-void roadmap_draw_sprite_frame(s32 arg0);
+void roadmap_draw_sprite_frame(u16 id);
 void effect_clut_rotate(void);
 s16 mail_list_get_id(s16 i);
 void object_load_aset(IffContext *iff, s32 size);
@@ -396,7 +396,37 @@ s16 player_check_ground(Player *player, s32 col, s16 sidestep, s16 slide) {
     return walkable;
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/80195098", player_set_view);
+void player_set_view(Player *player, s16 keep_cell) {
+    s16 rot[3];
+
+    player->view_dirty = 1;
+    if (keep_cell != 0) {
+        player->pos_x -= player->cell_x * 12500;
+        player->pos_y += player->cell_y * 32000;
+        player->pos_z -= player->cell_z * 12500;
+    } else {
+        player->cell_x = player->pos_x / 12500;
+        player->cell_y = player->pos_y / -32000;
+        player->cell_z = player->pos_z / 12500;
+        player->pos_x = player->pos_x % 12500;
+        player->pos_y = player->pos_y % 32000;
+        player->pos_z = player->pos_z % 12500;
+    }
+    player->view_trans[0] = -player->pos_x;
+    player->world_x = (player->pos_x + player->cell_x * 12500) / 100;
+    player->world_y = (player->pos_y - player->cell_y * 32000) / 100;
+    player->world_z = (player->pos_z + player->cell_z * 12500) / 100;
+    player->view_trans[1] = -player->pos_y;
+    player->view_trans[2] = -player->pos_z;
+    if (keep_cell == 0) {
+        rot[0] = (-player->pitch << 12) / 360;
+        rot[1] = (-player->yaw << 12) / 360;
+        rot[2] = (-player->roll << 12) / 360;
+        RotMatrix(rot, player->view_matrix);
+        ApplyMatrixLV(player->view_matrix, player->view_trans, player->view_trans);
+        GsSetView2(player->view_matrix);
+    }
+}
 
 void player_wrap_cell(Player *player) {
     s32 x;

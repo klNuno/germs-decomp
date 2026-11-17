@@ -2316,3 +2316,5 @@ kaj_heap_set_unused = 0x801D3910; // type:func size:0x14
 block_str_err_alloc_arena = 0x80170250;
 // action_vars + 0x200 = GameVars.car_speed_setting (base + field form): menu_card_save and menu_card_load copy the two settings words (car speed, text speed) from and to it
 action_vars_car_speed_setting = 0x801E0568;
+// LIBGS GsSetWorkBase stores its argument here and GsGetWorkBase returns it; GsSortObject4J and the game's packet builders read and advance it: PSY-Q's GsOUT_PACKET_P (libgs.h)
+GsOUT_PACKET_P = 0x801E2D98;

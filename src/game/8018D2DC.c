@@ -1,5 +1,6 @@
 #include "common.h"
 #include "game/types.h"
+#include "gte.h"
 
 void kaj_ll_insert_before(ModelList *list, s32 data);
 void kaj_ll_insert_after(ModelList *list, s32 data);
@@ -25,7 +26,7 @@ extern s16 action_vars[];
 Model *mod_find(u16 id);
 void mod_setup(Model *mod, s32 parent, s32 kind, s32 anim);
 void mod_place_npcrec(NpcRecord *rec, Model *mod);
-void mod_draw(s32 arg0, Model *arg1, u16 arg2);
+void mod_draw(ViewBuffer *view, Model *mod, u16 ot_layer);
 typedef struct {
     s32 from_x;
     s32 from_y;
@@ -99,6 +100,22 @@ s32 ratan2(s32 y, s32 x);
 s32 atoi(char *s);
 void mod_set_anim_by_id(u16 id, s16 anim, s16 frames);
 void mod_npcrec_move_to(NpcRecord *rec, s32 x, s32 y, s32 z, s16 rot_x, s16 rot_y, s16 rot_z, s32 seconds);
+/* GsDOBJ2 with its id, as one entry of a model's object table */
+typedef struct ModDobj {
+    s32 attribute;
+    GsCoordinate2 *coord2;
+    TmdObject *tmd;
+    s32 id;
+} ModDobj;
+/* GsOBJTABLE2 head: the object array and its length */
+typedef struct ModObjTable {
+    ModDobj *top;
+    s32 count;
+} ModObjTable;
+extern ScreenLight screen_light;
+extern PlayerStatus player_status;
+void GsGetLs(void *coord, void *m);
+void GsSortObject4J(void *obj, void *ot, s32 shift, void *scratch);
 
 INCLUDE_RODATA("asm/nonmatchings/game/8018D2DC", mod_str_alloc_model);
 
@@ -364,7 +381,60 @@ void mod_set_anim(void *mod, s16 anim, s16 frames) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/8018D2DC", mod_draw_player);
+static inline void mod_draw_objects(ViewBuffer *view, Model *mod, u16 ot_layer) {
+    s32 ls[8];
+    ModObjTable *table;
+    ModDobj *dobj;
+    s32 i = 0;
+    ScreenLight *light = &screen_light;
+    table = mod->obj_table;
+    dobj = table->top;
+    for (; i < table->count; i++, dobj++) {
+        dobj->coord2->flg = 0;
+        if (dobj->id != -1 && dobj->tmd != NULL) {
+            GsGetLs(dobj->coord2, ls);
+            GsSetLsMatrix(ls);
+            light->ot_bias = (ot_layer + 1) * 64;
+            SetSpadStack(0x1F8003FC);
+            GsSortObject4J(dobj, &view->ot_length, 1, (void *)0x1F800000);
+            ResetSpadStack();
+        }
+    }
+}
+
+void mod_draw_player(ViewBuffer *view, u16 mode) {
+    Inventory *inv = player_status.inventory;
+    Model *mod;
+    ModelList *list;
+    u16 id;
+
+    if (player_status.model != NULL && player_status.model->ready != 0) {
+        mod_draw_objects(view, player_status.model, 0);
+    }
+    if (mode == 1 && inv->weapon_shown != 0) {
+        list = mod_list;
+        id = inv->weapon_ids[inv->weapon_slot] + 0x400;
+        if (list->count == 0) {
+            mod = NULL;
+        } else {
+            list->cursor = list->head;
+            while (1) {
+                mod = list->cursor->data;
+                if (mod != NULL && *mod->data == id) {
+                    break;
+                }
+                if (kaj_ll_at_tail(list) != 0) {
+                    mod = NULL;
+                    break;
+                }
+                list->cursor = list->cursor->next;
+            }
+        }
+        if (mod != NULL && mod->ready != 0) {
+            mod_draw_objects(view, mod, 0);
+        }
+    }
+}
 
 void mod_update_all(void) {
     ModelList *list = mod_list;
@@ -620,7 +690,9 @@ void mod_set_anim_by_id(u16 id, s16 anim, s16 frames) {
     mod_set_anim(mod, anim, frames);
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/8018D2DC", mod_draw);
+void mod_draw(ViewBuffer *view, Model *mod, u16 ot_layer) {
+    mod_draw_objects(view, mod, ot_layer);
+}
 
 s32 mod_finish_handler(void) {
     EventState *s = &event_state;

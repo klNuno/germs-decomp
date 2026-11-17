@@ -1,5 +1,6 @@
 #include "common.h"
 #include "game/types.h"
+#include "gte.h"
 
 s16 kaj_ll_at_tail(BlockList *list);
 BlockList *block_list;
@@ -203,7 +204,6 @@ void thing_free_all(void);
 void sound_bgm_close(void);
 void sound_se_pop_scene(void);
 void block_elevator_input(s16 building, s16 start_floor, s16 *floor);
-void event_handle_tick(s16 daylight);
 void event_advance_clock(s16 minutes, s16 no_fatigue);
 void mail_wait(s32 mode, s32 stream, s32 visibility, s32 seconds);
 void roadmap_draw_frame(u16 mode);
@@ -263,6 +263,9 @@ s32 mail_angle_to_dir8(s16 angle);
 s32 rsin(s32 a);
 s32 rcos(s32 a);
 s32 ratan2(s32 y, s32 x);
+extern ScreenLight screen_light;
+void GsGetLs(void *coord, void *m);
+void GsSortObject4J(void *obj, void *ot, s32 shift, void *scratch);
 
 void block_setup(Block *block, u16 mode) {
     s32 offsets[5];
@@ -345,7 +348,52 @@ void block_setup(Block *block, u16 mode) {
     block->active = 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/80179848", block_draw_all);
+void block_draw_all(ViewBuffer *view, u16 mode) {
+    s32 ls[8];
+    BlockList *list = block_list;
+    Player *player = player_status_player[0];
+    ScreenLight *light = &screen_light;
+    Block *block;
+
+    if (list->count == 0) {
+        return;
+    }
+    list->cursor = list->head;
+    while (1) {
+        block = list->cursor->data;
+        if (block != NULL && block->active != 0 && block->visible != 0) {
+            light->clip_mode = block->far;
+            GsGetLs(&block->coord_flg, ls);
+            GsSetLsMatrix(ls);
+            if (block->model_flags & 2) {
+                if (mode == 2 && player->vehicle_mode != 3) {
+                    light->divide_pending = block->player_inside;
+                }
+                light->ot_bias = 0x100;
+                SetSpadStack(0x1F8003FC);
+                GsSortObject4J(block->model1, &view->ot_length, 1, (void *)0x1F800000);
+                ResetSpadStack();
+            }
+            light->divide_pending = 0;
+            if (block->model_flags & 4) {
+                light->ot_bias = 0xC0;
+                SetSpadStack(0x1F8003FC);
+                GsSortObject4J(block->model2, &view->ot_length, 1, (void *)0x1F800000);
+                ResetSpadStack();
+            }
+            if (block->model_flags & 8) {
+                light->ot_bias = 0x80;
+                SetSpadStack(0x1F8003FC);
+                GsSortObject4J(block->model3, &view->ot_length, 1, (void *)0x1F800000);
+                ResetSpadStack();
+            }
+        }
+        if (kaj_ll_at_tail(list) != 0) {
+            return;
+        }
+        list->cursor = list->cursor->next;
+    }
+}
 
 s32 block_test_player_inside(Player *player, u16 mode, Block *block, s32 *lo, s32 *hi) {
     s32 a;

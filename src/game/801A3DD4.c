@@ -1,5 +1,6 @@
 #include "common.h"
 #include "game/types.h"
+#include "gte.h"
 
 void kaj_tim_free(s32 handle);
 void free3(void *ptr);
@@ -172,6 +173,12 @@ extern char sprite_phone_str_move_car[];
 extern char sprite_phone_str_coming[];
 s32 rsin(s32 a);
 s32 rcos(s32 a);
+extern void *GsOUT_PACKET_P;
+void *roadmap_add_sprite(void *sprite, void *packet, u32 *ot_base);
+extern s16 roadmap_draw_flags;
+void GsGetLs(void *coord, void *m);
+void GsSetLsMatrix(void *m);
+void GsSortObject4J(void *obj, void *ot, s32 shift, void *scratch);
 
 void sprite_create(Sprite **out, SpriteRecord *rec) {
     TimHandle *tim;
@@ -380,7 +387,28 @@ u16 *sprite_find(u16 id) {
     return sprite;
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/801A3DD4", sprite_draw_all);
+void sprite_draw_all(ViewBuffer *view) {
+    SpriteList *list = sprite_list;
+    u32 *ot = view->ot_tags;
+    u16 *sprite;
+
+    if (list->count == 0) {
+        return;
+    }
+    list->cursor = list->head;
+    while (1) {
+        sprite = list->cursor->data;
+        if (sprite != NULL && ((Sprite *)sprite)->visible != 0) {
+            SetSpadStack(0x1F8003FC);
+            GsOUT_PACKET_P = roadmap_add_sprite(sprite, GsOUT_PACKET_P, ot);
+            ResetSpadStack();
+        }
+        if (kaj_ll_at_tail(list) != 0) {
+            return;
+        }
+        list->cursor = list->cursor->next;
+    }
+}
 
 void sprite_set_clut_entry(u16 id, s32 index, u16 color) {
     SpriteList *list = sprite_list;
@@ -1531,7 +1559,51 @@ void sprite_thing_refresh_all(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/801A3DD4", sprite_thing_draw_all);
+void sprite_thing_draw_all(ViewBuffer *view) {
+    s32 ls[8];
+    SpriteList *list = thing_list;
+    Player *player = player_status_player[0];
+    ScreenLight *light = &screen_light;
+    Thing *thing;
+    s16 flags;
+
+    if (list->count == 0) {
+        return;
+    }
+    list->cursor = list->head;
+    while (1) {
+        thing = (Thing *)list->cursor->data;
+        if (thing != NULL && (thing->block_fixed != 0 ? thing->active != 0
+                              : thing->active != 0 && (Block *)thing->block != NULL
+                                    && ((Block *)thing->block)->visible != 0)) {
+            flags = roadmap_draw_flags;
+            if (thing->type == 4) {
+                thing->coord_tx = player->pos_x;
+                thing->coord_tz = player->pos_z;
+                if (player->vehicle_mode == 2) {
+                    thing->coord_ty = player->pos_y - player->eye_height + 15000;
+                } else {
+                    thing->coord_ty = player->pos_y - player->eye_height + 500;
+                }
+                thing->coord_flg = 0;
+                if (roadmap_draw_flags & 2) {
+                    roadmap_draw_flags -= 2;
+                }
+            }
+            GsGetLs(&thing->coord_flg, ls);
+            GsSetLsMatrix(ls);
+            light->ot_bias = (thing->ot_layer + 1) << 6;
+            SetSpadStack(0x1F8003FC);
+            GsSortObject4J(thing->tmd_objects, &view->ot_length, 1, (void *)0x1F800000);
+            ResetSpadStack();
+            roadmap_draw_flags = flags;
+        }
+        if (kaj_ll_at_tail(list) != 0) {
+            return;
+        }
+        list->cursor = list->cursor->next;
+    }
+}
 
 void sprite_thing_update_marker(Player *player, Thing *marker, Npc *target) {
     SVector sv;

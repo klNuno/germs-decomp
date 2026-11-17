@@ -1,5 +1,6 @@
 #include "common.h"
 #include "game/types.h"
+#include "gte.h"
 
 extern Player *player_status_player[];
 void object_load_res(s32 index, s32 progress);
@@ -70,6 +71,10 @@ void GsSetLsMatrix(void *m);
 void RotTrans(void *v0, s32 *v1, s32 *flag);
 s32 rsin(s32 a);
 s32 rcos(s32 a);
+void GsGetLs(void *coord, void *m);
+void GsSortObject4J(void *obj, void *ot, s32 shift, void *scratch);
+extern ScreenLight screen_light;
+extern s16 roadmap_draw_flags;
 
 INCLUDE_RODATA("asm/nonmatchings/game/801AA360", vehicle_str_alloc_pointer);
 
@@ -800,7 +805,38 @@ void vehicle_free(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/801AA360", vehicle_draw);
+void vehicle_draw(ViewBuffer *view) {
+    s32 ls[8];
+    Vehicle *car;
+    ScreenLight *light = &screen_light;
+    s16 dusk_cleared;
+
+    car = object_scene_vehicle[0];
+    if (car == NULL) {
+        return;
+    }
+    dusk_cleared = 0;
+    if (car->kind == 2 && (roadmap_draw_flags & 1)) {
+        roadmap_draw_flags -= 1;
+        dusk_cleared = 1;
+    }
+    GsGetLs(&car->coord, ls);
+    GsSetLsMatrix(ls);
+    light->ot_bias = (car->ot_layer + 1) << 6;
+    SetSpadStack(0x1F8003FC);
+    GsSortObject4J(car->model0, &view->ot_length, 1, (void *)0x1F800000);
+    ResetSpadStack();
+    if (car->kind == 1) {
+        GsGetLs(&car->coord2, ls);
+        GsSetLsMatrix(ls);
+        SetSpadStack(0x1F8003FC);
+        GsSortObject4J(car->model1, &view->ot_length, 1, (void *)0x1F800000);
+        ResetSpadStack();
+    }
+    if (dusk_cleared) {
+        roadmap_draw_flags += 1;
+    }
+}
 
 void vehicle_set_origin(s32 origin_x, s32 origin_y, s32 origin_z) {
     Vehicle *car = object_scene_vehicle[0];

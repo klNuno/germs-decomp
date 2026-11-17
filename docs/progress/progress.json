@@ -1,26 +1,26 @@
 {
  "schema_version": 1,
- "commit": "22cf59e",
+ "commit": "ea8a72b",
  "tracked_tree_dirty": true,
  "exe_sha1": "178e728643d9b456436f4d19c9e07db11ab8aa2c",
  "metric": "Code bytes of each function (.text of the link map). asm: still INCLUDE_ASM; c: matching C whose body still carries names we did not choose; read: matching C with only our names.",
  "totals": {
   "functions": 655,
   "bytes": 272276,
-  "bytes_in_c": 245568,
-  "functions_in_c": 635,
+  "bytes_in_c": 262632,
+  "functions_in_c": 651,
   "levels": {
    "asm": {
-    "functions": 20,
-    "bytes": 26708
+    "functions": 4,
+    "bytes": 9644
    },
    "c": {
     "functions": 0,
     "bytes": 0
    },
    "read": {
-    "functions": 635,
-    "bytes": 245568
+    "functions": 651,
+    "bytes": 262632
    }
   },
   "libraries": {
@@ -587,7 +587,11 @@
      "name": "block_draw_all",
      "address": "0x80179C50",
      "bytes": 512,
-     "level": "asm"
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "block_test_player_inside",
@@ -1519,7 +1523,11 @@
      "name": "door_draw_all",
      "address": "0x80185664",
      "bytes": 304,
-     "level": "asm"
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "door_rebase_all",
@@ -2677,7 +2685,11 @@
      "name": "mod_draw_player",
      "address": "0x8018DBA4",
      "bytes": 692,
-     "level": "asm"
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "mod_update_all",
@@ -2773,7 +2785,11 @@
      "name": "mod_draw",
      "address": "0x8018E6D8",
      "bytes": 276,
-     "level": "asm"
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "mod_finish_handler",
@@ -3335,7 +3351,11 @@
      "name": "player_set_view",
      "address": "0x8019555C",
      "bytes": 928,
-     "level": "asm"
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "player_wrap_cell",
@@ -3737,13 +3757,21 @@
      "name": "roadmap_add_clipped_f3",
      "address": "0x8019A6B4",
      "bytes": 636,
-     "level": "asm"
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "roadmap_add_clipped_g3",
      "address": "0x8019A930",
      "bytes": 1096,
-     "level": "asm"
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "roadmap_draw_f3",
@@ -3761,13 +3789,21 @@
      "name": "roadmap_draw_ft3",
      "address": "0x8019BE6C",
      "bytes": 2336,
-     "level": "asm"
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "roadmap_draw_gt3",
      "address": "0x8019C78C",
      "bytes": 2628,
-     "level": "asm"
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "roadmap_draw_f4",
@@ -3785,13 +3821,21 @@
      "name": "roadmap_draw_ft4",
      "address": "0x8019E688",
      "bytes": 2716,
-     "level": "asm"
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "roadmap_draw_gt4",
      "address": "0x8019F124",
      "bytes": 3252,
-     "level": "asm"
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "roadmap_add_sprite",
@@ -3807,7 +3851,11 @@
      "name": "roadmap_draw_flash",
      "address": "0x801A00EC",
      "bytes": 476,
-     "level": "asm"
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "roadmap_init_draw",
@@ -3833,7 +3881,11 @@
      "name": "roadmap_draw_sprite_frame",
      "address": "0x801A05EC",
      "bytes": 164,
-     "level": "asm"
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "roadmap_start_flash",
@@ -4285,7 +4337,11 @@
      "name": "sprite_draw_all",
      "address": "0x801A4554",
      "bytes": 200,
-     "level": "asm"
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "sprite_set_clut_entry",
@@ -4601,7 +4657,11 @@
      "name": "sprite_thing_draw_all",
      "address": "0x801A7084",
      "bytes": 504,
-     "level": "asm"
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "sprite_thing_update_marker",
@@ -5093,7 +5153,11 @@
      "name": "vehicle_draw",
      "address": "0x801AC30C",
      "bytes": 344,
-     "level": "asm"
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "vehicle_set_origin",

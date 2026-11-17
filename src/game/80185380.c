@@ -1,5 +1,6 @@
 #include "common.h"
 #include "game/types.h"
+#include "gte.h"
 
 void free3(void *ptr);
 void kaj_ll_insert_before(DoorList *list, void *data);
@@ -13,6 +14,9 @@ extern char door_str_file[];
 extern SceneTables object_scene_tables[];
 extern ScreenLight screen_light;
 void SsSepSetVol(s16 access_num, s16 seq_num, s16 voll, s16 volr);
+void GsGetLs(void *coord, void *m);
+void GsSetLsMatrix(void *m);
+void GsSortObject4J(void *obj, void *ot, s32 shift, void *scratch);
 
 void door_create(Door **out, u32 record_size) {
     *out = kaj_malloc(0x80);
@@ -96,7 +100,36 @@ Door *door_find(u16 id) {
     return NULL;
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/80185380", door_draw_all);
+void door_draw_all(ViewBuffer *view) {
+    s32 ls[8];
+    DoorList *list = door_list;
+    ScreenLight *light = &screen_light;
+    Door *door;
+    Block *block;
+
+    if (list->count == 0) {
+        return;
+    }
+    list->cursor = list->head;
+    while (1) {
+        door = list->cursor->data;
+        if (door != NULL) {
+            block = (Block *)door->block;
+            if (block != NULL && block->visible != 0 && door->active != 0 && door->visible != 0) {
+                GsGetLs(&door->coord_flg, ls);
+                GsSetLsMatrix(ls);
+                light->ot_bias = (door->ot_layer + 1) << 6;
+                SetSpadStack(0x1F8003FC);
+                GsSortObject4J(door->tmd_objects, &view->ot_length, 1, (void *)0x1F800000);
+                ResetSpadStack();
+            }
+        }
+        if (kaj_ll_at_tail(list) != 0) {
+            return;
+        }
+        list->cursor = list->cursor->next;
+    }
+}
 
 void door_rebase_all(s32 origin_x, s32 origin_y, s32 origin_z) {
     DoorList *list = door_list;

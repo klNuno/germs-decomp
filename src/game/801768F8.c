@@ -11,7 +11,7 @@ s32 block_find_at(s32 x, s32 y, s32 z);
 NpcBody *npc_find_body(s16 id);
 extern Inventory *player_status_inventory[];
 Model *mod_find(u16 id);
-void mod_draw(s32 arg0, Model *arg1, u16 arg2);
+void mod_draw(ViewBuffer *view, Model *mod, u16 ot_layer);
 void kaj_ll_remove_to_prev(LlList *list);
 s16 kaj_ll_at_tail(LlList *list);
 LlList *action_set_list;
