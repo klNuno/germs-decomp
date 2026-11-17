@@ -17,7 +17,7 @@ Machinery:
   and its loaders, the CD manager and its pools, town cells and streamed places, TIM, TMD and TOD.
 - [Rendering](rendering.md): the two buffers and the flip, ordering tables, the primitive
   handlers, models and animation, sprites and palettes, effects, fog by the hour, the functions
-  kept in assembly.
+  once kept in assembly.
 - [Sound and music](sound-and-music.md): VAB banks and their stream, sound effects on eight
   voices, one SEP of music per scene, footsteps, and every LIBSND call.
 - [Menus, text and the save](menus-text-and-save.md): the office menu and its status page, Kanji

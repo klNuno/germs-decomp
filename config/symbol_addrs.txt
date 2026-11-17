@@ -1395,6 +1395,8 @@ roadmap_divpoly3 = 0x801E07D0;
 roadmap_divpoly4 = 0x801E09F0;
 // roadmap.c: InitClip buffer (InitClip(&this, 0x150, 0x100, 0xE4, 0x6E, 0xFFFF)) in roadmap_init_draw
 roadmap_clip_buf = 0x801E0D30;
+// roadmap.c: 20 pointers, the evmx output of Clip3FP/Clip3GP/Clip4FP/Clip4GP read by roadmap_draw_f3/g3/f4/g4
+roadmap_clip_evmx = 0x801E0FF0;
 // roadmap.c: 8 entries of 0x20, handler at +0x18 = roadmap_draw_f3..gt4, set by roadmap_init_draw
 roadmap_prim_handlers = 0x801E2DB0;
 // roadmap.c: rgb table indexed by sprite field unk8 in roadmap_add_sprite

@@ -141,12 +141,20 @@ forces an update. `player_place_for_scene` (0x80197370) turns the depth cue on w
 some building arrivals. The same minute step drives
 `roadmap_daylight_level`, the `GPF` scale of the handlers.
 
-## Functions kept in assembly
+## Functions once kept in assembly
 
-Twenty functions stay in assembly. Nineteen on purpose, because they move the stack to the
-scratchpad or drive the GTE in ways plain C cannot express: `roadmap_draw_f3`, `roadmap_draw_g3`,
-`roadmap_draw_ft3`, `roadmap_draw_gt3`, `roadmap_draw_f4`, `roadmap_draw_g4`, `roadmap_draw_ft4`,
-`roadmap_draw_gt4`, `roadmap_add_clipped_f3`, `roadmap_add_clipped_g3`, `roadmap_draw_flash`,
+No function is left in assembly. Nineteen were set aside at first because they move the stack to
+the scratchpad or drive the GTE: `roadmap_draw_f3`, `roadmap_draw_g3`, `roadmap_draw_ft3`,
+`roadmap_draw_gt3`, `roadmap_draw_f4`, `roadmap_draw_g4`, `roadmap_draw_ft4`, `roadmap_draw_gt4`,
+`roadmap_add_clipped_f3`, `roadmap_add_clipped_g3`, `roadmap_draw_flash`,
 `roadmap_draw_sprite_frame`, `sprite_draw_all`, `sprite_thing_draw_all`, `door_draw_all`,
-`mod_draw`, `mod_draw_player`, `vehicle_draw` and `block_draw_all`. The twentieth,
-`player_set_view` (0x8019555C), rebuilds the view matrix and is still a near match.
+`mod_draw`, `mod_draw_player`, `vehicle_draw` and `block_draw_all`. They are C now, with the GTE
+and scratchpad code in the PSY-Q style macros of `include/gte.h`. The twentieth, `player_set_view`
+(0x8019555C), rebuilds the view matrix and is C too.
+
+The four handlers that call the near-plane clipper (`roadmap_draw_f3`, `roadmap_draw_g3`,
+`roadmap_draw_f4`, `roadmap_draw_g4`) hold one branch that never runs, `if ((nclip & 1) < 0)`,
+right after the clip call. GCC 2.8.1 only gives the packet pointer `poly` a saved register when
+`poly` lives across a call; that branch, which jumps to the code that reads `poly`, makes it live
+across the clip call when the register allocator looks, and the combiner folds the test away
+before any code is written. Without it, the closest C costs one extra register copy.

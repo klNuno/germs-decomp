@@ -25,7 +25,7 @@ extern RoadMap roadmap_state;
 typedef struct { s16 active; s16 frames_left; u8 red; u8 green; u8 blue; u8 unk7; } RoadmapFlash;
 RoadmapFlash roadmap_flash;
 extern ScreenLight screen_light;
-typedef struct { u8 unk0[0x18]; void (*handler)(); s32 unk1C; } RoadmapPrimHandler;
+typedef struct { u8 unk0[0x18]; void *(*handler)(); s32 unk1C; } RoadmapPrimHandler;
 extern RoadmapPrimHandler roadmap_prim_handlers[8];
 typedef struct { s32 ndiv; s32 pih; s32 piv; u16 clut; u16 tpage; } DivPolygon;
 extern DivPolygon roadmap_divpoly3;
@@ -35,8 +35,8 @@ extern ClipVector roadmap_clip_buf;
 u8 roadmap_ft_color_r;
 u8 roadmap_ft_color_g;
 u8 roadmap_ft_color_b;
-static void roadmap_draw_f3();
-static void roadmap_draw_g3();
+static void *roadmap_draw_f3();
+static void *roadmap_draw_g3();
 typedef struct {
     u8 olen;
     u8 ilen;
@@ -94,8 +94,8 @@ typedef struct {
     u16 pad3;
 } RoadmapPrimGT3;
 static void *roadmap_draw_gt3(RoadmapPrimGT3 *op, SVector *vp, void *packet, s32 count, s32 shift, GsOT *ot);
-static void roadmap_draw_f4();
-static void roadmap_draw_g4();
+static void *roadmap_draw_f4();
+static void *roadmap_draw_g4();
 typedef struct {
     u8 olen;
     u8 ilen;
@@ -191,14 +191,14 @@ typedef struct {
     u8 g0;
     volatile u8 b0;
     u8 code;
-    s16 x0;
-    s16 y0;
-    s16 x1;
-    s16 y1;
-    s16 x2;
-    s16 y2;
-    s16 x3;
-    s16 y3;
+    volatile s16 x0;
+    volatile s16 y0;
+    volatile s16 x1;
+    volatile s16 y1;
+    volatile s16 x2;
+    volatile s16 y2;
+    volatile s16 x3;
+    volatile s16 y3;
 } PolyF4Packet;
 typedef struct { u8 r; u8 g; u8 b; u8 code; } RoadmapRgb;
 /* one vertex of the near-plane clipper output (PSY-Q EVECTOR layout, 0x2C bytes) */
@@ -222,12 +222,12 @@ typedef struct {
     u8 g0;
     u8 b0;
     u8 code;
-    s16 x0;
-    s16 y0;
-    s16 x1;
-    s16 y1;
-    s16 x2;
-    s16 y2;
+    volatile s16 x0;
+    volatile s16 y0;
+    volatile s16 x1;
+    volatile s16 y1;
+    volatile s16 x2;
+    volatile s16 y2;
 } PolyF3Packet;
 /* LIBGS GsOT: the ordering table header the packet builders link into */
 /* screen and depth extent of one projected triangle */
@@ -251,20 +251,20 @@ typedef struct {
     u8 g0;
     u8 b0;
     u8 code;
-    s16 x0;
-    s16 y0;
+    volatile s16 x0;
+    volatile s16 y0;
     u8 r1;
     u8 g1;
     u8 b1;
     u8 pad1;
-    s16 x1;
-    s16 y1;
+    volatile s16 x1;
+    volatile s16 y1;
     u8 r2;
     u8 g2;
     u8 b2;
     u8 pad2;
-    s16 x2;
-    s16 y2;
+    volatile s16 x2;
+    volatile s16 y2;
 } PolyG3Packet;
 void SetShadeTex(void *p, s32 tge);
 /* one textured flat triangle of the roadmap model (TMD primitive layout, 0x1C bytes) */
@@ -607,10 +607,6 @@ static void *roadmap_add_clipped_g3(ClipVertex *v0, ClipVertex *v1, ClipVertex *
     return (PolyG3Packet *)packet + 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/roadmap", roadmap_draw_f3);
-
-INCLUDE_ASM("asm/nonmatchings/game/roadmap", roadmap_draw_g3);
-
 static inline s32 roadmap_bounds_visible(RoadmapBounds *b) {
     if (b->xmax < -16 || b->xmin >= 0x150 || b->ymax < -16 || b->ymin >= 0x100 || b->zmax < 0x6E ||
         b->zmin > 0xFFFF) {
@@ -634,6 +630,370 @@ static inline s32 roadmap_bounds_need_divide(RoadmapBounds *b, s32 n) {
         return 1;
     }
     return 0;
+}
+
+/* the clipper's output: Clip3FP, Clip3GP, Clip4FP and Clip4GP fill it with pointers to the clipped vertices */
+extern ClipVertex *roadmap_clip_evmx[20];
+/* TMD flat triangle, no normal (0x10 bytes) */
+typedef struct {
+    u8 olen;
+    u8 ilen;
+    u8 flag;
+    u8 mode;
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 pad0;
+    u16 vert0;
+    u16 vert1;
+    u16 vert2;
+    u16 pad1;
+} RoadmapPrimF3;
+s32 Clip3FP(SVector *v0, SVector *v1, SVector *v2, ClipVertex **evmx);
+
+static void *roadmap_draw_f3(RoadmapPrimF3 *op, SVector *vp, void *packet, s32 count, s32 shift, GsOT *ot) {
+    ScreenLight *light = &screen_light;
+    ClipVertex **evmx = roadmap_clip_evmx;
+    RoadmapPrimWork w;
+    s32 flag;
+    s32 opz;
+    s32 dp;
+    s32 otz;
+    PolyF3Packet *poly;
+    RoadmapRgb *color;
+    u32 *tag;
+    s32 divide;
+    s32 depth;
+    s32 level;
+    s32 fog;
+    s32 nclip;
+    s32 k;
+    s32 i;
+
+    for (i = 0; i < count; i++, op++) {
+        if ((u32)kaj_view_packet_used() > 0xAFD3) {
+            return packet;
+        }
+        ((u8 *)packet)[3] = 4;
+        ((u8 *)packet)[7] = 0x20;
+        w.tex_mode[0] = (op->mode >> 1) & 1;
+        SetSemiTrans(packet, w.tex_mode[0]);
+        poly = packet;
+        gte_ldv3(&vp[op->vert0], &vp[op->vert1], &vp[op->vert2]);
+        gte_rtpt();
+        gte_stflg(&flag);
+        if (light->clip_mode == 1 && flag < 0) {
+            continue;
+        }
+        gte_nclip();
+        gte_stopz(&opz);
+        if (opz <= 0) {
+            continue;
+        }
+        gte_stsxy3_f3(poly);
+        gte_stsz3(&w.bounds.sz[0], &w.bounds.sz[1], &w.bounds.sz[2]);
+        if (poly->x0 > poly->x1) {
+            w.bounds.xmax = poly->x0;
+            w.bounds.xmin = poly->x1;
+        } else {
+            w.bounds.xmin = poly->x0;
+            w.bounds.xmax = poly->x1;
+        }
+        if (poly->x2 > w.bounds.xmax) {
+            w.bounds.xmax = poly->x2;
+        } else if (poly->x2 < w.bounds.xmin) {
+            w.bounds.xmin = poly->x2;
+        }
+        if (poly->y0 > poly->y1) {
+            w.bounds.ymax = poly->y0;
+            w.bounds.ymin = poly->y1;
+        } else {
+            w.bounds.ymin = poly->y0;
+            w.bounds.ymax = poly->y1;
+        }
+        if (poly->y2 > w.bounds.ymax) {
+            w.bounds.ymax = poly->y2;
+        } else if (poly->y2 < w.bounds.ymin) {
+            w.bounds.ymin = poly->y2;
+        }
+        if (w.bounds.sz[0] > w.bounds.sz[1]) {
+            w.bounds.zmax = w.bounds.sz[0];
+            w.bounds.zmin = w.bounds.sz[1];
+        } else {
+            w.bounds.zmin = w.bounds.sz[0];
+            w.bounds.zmax = w.bounds.sz[1];
+        }
+        if (w.bounds.sz[2] > w.bounds.zmax) {
+            w.bounds.zmax = w.bounds.sz[2];
+        } else if (w.bounds.sz[2] < w.bounds.zmin) {
+            w.bounds.zmin = w.bounds.sz[2];
+        }
+        if (!roadmap_bounds_visible(&w.bounds)) {
+            continue;
+        }
+        if (flag < 0 || (light->clip_mode == 0 && (divide = roadmap_bounds_need_divide(&w.bounds, 3)) != 0)) {
+            nclip = Clip3FP(&vp[op->vert0], &vp[op->vert1], &vp[op->vert2], evmx);
+            /* Never taken: nclip & 1 is never negative. GCC 2.8.1 needs this edge when it counts the calls
+               poly lives across, so poly gets s0 as in the original; combine folds the test and the dead
+               block is deleted, leaving no code. `dp = i` gives i one more use, which settles its register
+               tie with op in f3 and f4. */
+            if ((nclip & 1) < 0) {
+                dp = i;
+                goto draw;
+            }
+            if (nclip >= 3) {
+                for (k = 0; k < nclip - 2; k++) {
+                    packet = roadmap_add_clipped_f3(evmx[0], evmx[k + 1], evmx[k + 2], (RoadmapRgb *)&op->r,
+                                                    packet, ot, light, &w);
+                }
+            }
+            continue;
+        }
+    draw:
+        gte_stdp(&dp);
+        gte_avsz3();
+        gte_stotz(&otz);
+        poly->r0 = op->r;
+        poly->g0 = op->g;
+        poly->b0 = op->b;
+        if (roadmap_draw_flags != 0) {
+            level = 0x1000;
+            fog = 0;
+            color = (RoadmapRgb *)&poly->r0;
+            depth = dp;
+            if (roadmap_draw_flags & 1) {
+                level = roadmap_daylight_level;
+            }
+            if (roadmap_draw_flags & 2) {
+                fog = depth;
+            }
+            gte_lddp(level);
+            gte_ldcv(color);
+            gte_gpf12();
+            gte_lddp(0);
+            gte_gpl12();
+            gte_stcv(color);
+            gte_ldrgb(color);
+            gte_lddp(fog);
+            gte_dpcs();
+            gte_strgb(color);
+            if (roadmap_draw_flags & 4) {
+                gte_lddp(roadmap_brightness);
+                gte_ldcv(color);
+                gte_gpf12();
+                gte_lddp(0);
+                gte_gpl12();
+                gte_stcv(color);
+            }
+        }
+        tag = ot->org + (otz / 4 + light->ot_bias);
+        poly->tag = (*tag & 0xFFFFFF) | 0x04000000;
+        *tag = (u32)poly & 0xFFFFFF;
+        packet = (PolyF3Packet *)packet + 1;
+    }
+    return packet;
+}
+
+/* TMD gouraud triangle, no normal (0x18 bytes) */
+typedef struct {
+    u8 olen;
+    u8 ilen;
+    u8 flag;
+    u8 mode;
+    RoadmapRgb rgb0;
+    RoadmapRgb rgb1;
+    RoadmapRgb rgb2;
+    u16 vert0;
+    u16 vert1;
+    u16 vert2;
+    u16 pad;
+} RoadmapPrimG3;
+s32 Clip3GP(SVector *v0, SVector *v1, SVector *v2, RoadmapRgb *rgb0, RoadmapRgb *rgb1, RoadmapRgb *rgb2,
+            ClipVertex **evmx);
+
+static void *roadmap_draw_g3(RoadmapPrimG3 *op, SVector *vp, void *packet, s32 count, s32 shift, GsOT *ot) {
+    ScreenLight *light = &screen_light;
+    ClipVertex **evmx = roadmap_clip_evmx;
+    RoadmapPrimWork w;
+    s32 flag;
+    s32 opz;
+    s32 dp;
+    s32 otz;
+    PolyG3Packet *poly;
+    RoadmapRgb *rgb0;
+    RoadmapRgb *rgb1;
+    RoadmapRgb *rgb2;
+    u32 *tag;
+    s32 divide;
+    s32 depth;
+    s32 level;
+    s32 fog;
+    s32 nclip;
+    s32 k;
+    s32 i;
+
+    for (i = 0; i < count; i++, op++) {
+        if ((u32)kaj_view_packet_used() > 0xAFC1) {
+            return packet;
+        }
+        ((u8 *)packet)[3] = 6;
+        ((u8 *)packet)[7] = 0x30;
+        w.tex_mode[0] = (op->mode >> 1) & 1;
+        SetSemiTrans(packet, w.tex_mode[0]);
+        poly = packet;
+        gte_ldv3(&vp[op->vert0], &vp[op->vert1], &vp[op->vert2]);
+        gte_rtpt();
+        gte_stflg(&flag);
+        if (light->clip_mode == 1 && flag < 0) {
+            continue;
+        }
+        gte_nclip();
+        gte_stopz(&opz);
+        if (opz <= 0) {
+            continue;
+        }
+        gte_stsxy3_g3(poly);
+        gte_stsz3(&w.bounds.sz[0], &w.bounds.sz[1], &w.bounds.sz[2]);
+        if (poly->x0 > poly->x1) {
+            w.bounds.xmax = poly->x0;
+            w.bounds.xmin = poly->x1;
+        } else {
+            w.bounds.xmin = poly->x0;
+            w.bounds.xmax = poly->x1;
+        }
+        if (poly->x2 > w.bounds.xmax) {
+            w.bounds.xmax = poly->x2;
+        } else if (poly->x2 < w.bounds.xmin) {
+            w.bounds.xmin = poly->x2;
+        }
+        if (poly->y0 > poly->y1) {
+            w.bounds.ymax = poly->y0;
+            w.bounds.ymin = poly->y1;
+        } else {
+            w.bounds.ymin = poly->y0;
+            w.bounds.ymax = poly->y1;
+        }
+        if (poly->y2 > w.bounds.ymax) {
+            w.bounds.ymax = poly->y2;
+        } else if (poly->y2 < w.bounds.ymin) {
+            w.bounds.ymin = poly->y2;
+        }
+        if (w.bounds.sz[0] > w.bounds.sz[1]) {
+            w.bounds.zmax = w.bounds.sz[0];
+            w.bounds.zmin = w.bounds.sz[1];
+        } else {
+            w.bounds.zmin = w.bounds.sz[0];
+            w.bounds.zmax = w.bounds.sz[1];
+        }
+        if (w.bounds.sz[2] > w.bounds.zmax) {
+            w.bounds.zmax = w.bounds.sz[2];
+        } else if (w.bounds.sz[2] < w.bounds.zmin) {
+            w.bounds.zmin = w.bounds.sz[2];
+        }
+        if (!roadmap_bounds_visible(&w.bounds)) {
+            continue;
+        }
+        if (flag < 0 || (light->clip_mode == 0 && (divide = roadmap_bounds_need_divide(&w.bounds, 3)) != 0)) {
+            nclip = Clip3GP(&vp[op->vert0], &vp[op->vert1], &vp[op->vert2], &op->rgb0, &op->rgb1, &op->rgb2,
+                            evmx);
+            /* Never taken: nclip & 1 is never negative. GCC 2.8.1 needs this edge when it counts the calls
+               poly lives across, so poly gets s0 as in the original; combine folds the test and the dead
+               block is deleted, leaving no code. `dp = i` gives i one more use, which settles its register
+               tie with op in f3 and f4. */
+            if ((nclip & 1) < 0) {
+                dp = i;
+                goto draw;
+            }
+            if (nclip >= 3) {
+                for (k = 0; k < nclip - 2; k++) {
+                    packet = roadmap_add_clipped_g3(evmx[0], evmx[k + 1], evmx[k + 2], packet, ot, light, &w);
+                }
+            }
+            continue;
+        }
+    draw:
+        gte_stdp(&dp);
+        gte_avsz3();
+        gte_stotz(&otz);
+        poly->r0 = op->rgb0.r;
+        poly->g0 = op->rgb0.g;
+        poly->b0 = op->rgb0.b;
+        poly->r1 = op->rgb1.r;
+        poly->g1 = op->rgb1.g;
+        poly->b1 = op->rgb1.b;
+        poly->r2 = op->rgb2.r;
+        poly->g2 = op->rgb2.g;
+        poly->b2 = op->rgb2.b;
+        if (roadmap_draw_flags != 0) {
+            level = 0x1000;
+            fog = 0;
+            rgb0 = (RoadmapRgb *)&poly->r0;
+            rgb1 = (RoadmapRgb *)&poly->r1;
+            depth = dp;
+            rgb2 = (RoadmapRgb *)&poly->r2;
+            if (roadmap_draw_flags & 1) {
+                level = roadmap_daylight_level;
+            }
+            if (roadmap_draw_flags & 2) {
+                fog = depth;
+            }
+            gte_lddp(level);
+            gte_ldcv(rgb0);
+            gte_gpf12();
+            gte_lddp(0);
+            gte_gpl12();
+            gte_stcv(rgb0);
+            gte_ldrgb(rgb0);
+            gte_lddp(fog);
+            gte_dpcs();
+            gte_strgb(rgb0);
+            gte_lddp(level);
+            gte_ldcv(rgb1);
+            gte_gpf12();
+            gte_lddp(0);
+            gte_gpl12();
+            gte_stcv(rgb1);
+            gte_ldrgb(rgb1);
+            gte_lddp(fog);
+            gte_dpcs();
+            gte_strgb(rgb1);
+            gte_lddp(level);
+            gte_ldcv(rgb2);
+            gte_gpf12();
+            gte_lddp(0);
+            gte_gpl12();
+            gte_stcv(rgb2);
+            gte_ldrgb(rgb2);
+            gte_lddp(fog);
+            gte_dpcs();
+            gte_strgb(rgb2);
+            if (roadmap_draw_flags & 4) {
+                gte_lddp(roadmap_brightness);
+                gte_ldcv(rgb0);
+                gte_gpf12();
+                gte_lddp(0);
+                gte_gpl12();
+                gte_stcv(rgb0);
+                gte_lddp(roadmap_brightness);
+                gte_ldcv(rgb1);
+                gte_gpf12();
+                gte_lddp(0);
+                gte_gpl12();
+                gte_stcv(rgb1);
+                gte_lddp(roadmap_brightness);
+                gte_ldcv(rgb2);
+                gte_gpf12();
+                gte_lddp(0);
+                gte_gpl12();
+                gte_stcv(rgb2);
+            }
+        }
+        tag = ot->org + (otz / 4 + light->ot_bias);
+        poly->tag = (*tag & 0xFFFFFF) | 0x06000000;
+        *tag = (u32)poly & 0xFFFFFF;
+        packet = (PolyG3Packet *)packet + 1;
+    }
+    return packet;
 }
 
 static void *roadmap_draw_ft3(RoadmapPrimFT3 *op, SVector *vp, void *packet, s32 count, s32 shift, GsOT *ot) {
@@ -1008,9 +1368,458 @@ static void *roadmap_draw_gt3(RoadmapPrimGT3 *op, SVector *vp, void *packet, s32
     return packet;
 }
 
-INCLUDE_ASM("asm/nonmatchings/game/roadmap", roadmap_draw_f4);
+/* TMD flat quad, no normal (0x10 bytes) */
+typedef struct {
+    u8 olen;
+    u8 ilen;
+    u8 flag;
+    u8 mode;
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 pad;
+    u16 vert0;
+    u16 vert1;
+    u16 vert2;
+    u16 vert3;
+} RoadmapPrimF4;
+s32 Clip4FP(SVector *v0, SVector *v1, SVector *v2, SVector *v3, ClipVertex **evmx);
 
-INCLUDE_ASM("asm/nonmatchings/game/roadmap", roadmap_draw_g4);
+static void *roadmap_draw_f4(RoadmapPrimF4 *op, SVector *vp, void *packet, s32 count, s32 shift, GsOT *ot) {
+    ScreenLight *light = &screen_light;
+    ClipVertex **evmx = roadmap_clip_evmx;
+    RoadmapPrimWork w;
+    s32 flag;
+    s32 opz;
+    s32 flag3;
+    s32 dp;
+    s32 otz;
+    PolyF4Packet *poly;
+    RoadmapRgb *color;
+    u32 *tag;
+    s32 divide;
+    s32 depth;
+    s32 level;
+    s32 fog;
+    s32 nclip;
+    s32 k;
+    s32 i;
+
+    for (i = 0; i < count; i++, op++) {
+        if ((u32)kaj_view_packet_used() > 0xAFCA) {
+            return packet;
+        }
+        ((u8 *)packet)[3] = 5;
+        ((u8 *)packet)[7] = 0x28;
+        w.tex_mode[0] = (op->mode >> 1) & 1;
+        SetSemiTrans(packet, w.tex_mode[0]);
+        poly = packet;
+        gte_ldv3(&vp[op->vert0], &vp[op->vert1], &vp[op->vert2]);
+        gte_rtpt();
+        gte_stflg(&flag);
+        if (light->clip_mode == 1 && flag < 0) {
+            continue;
+        }
+        gte_nclip();
+        gte_stopz(&opz);
+        if (opz <= 0) {
+            continue;
+        }
+        gte_stsxy3_f4(poly);
+        gte_ldv0(&vp[op->vert3]);
+        gte_rtps();
+        gte_stflg(&flag3);
+        flag |= flag3;
+        gte_stsxy(&poly->x3);
+        gte_stsz4(&w.bounds.sz[0], &w.bounds.sz[1], &w.bounds.sz[2], &w.bounds.sz[3]);
+        if (poly->x0 > poly->x1) {
+            w.bounds.xmax = poly->x0;
+            w.bounds.xmin = poly->x1;
+        } else {
+            w.bounds.xmin = poly->x0;
+            w.bounds.xmax = poly->x1;
+        }
+        if (poly->x2 > w.bounds.xmax) {
+            w.bounds.xmax = poly->x2;
+        } else if (poly->x2 < w.bounds.xmin) {
+            w.bounds.xmin = poly->x2;
+        }
+        if (poly->x3 > w.bounds.xmax) {
+            w.bounds.xmax = poly->x3;
+        } else if (poly->x3 < w.bounds.xmin) {
+            w.bounds.xmin = poly->x3;
+        }
+        if (poly->y0 > poly->y1) {
+            w.bounds.ymax = poly->y0;
+            w.bounds.ymin = poly->y1;
+        } else {
+            w.bounds.ymin = poly->y0;
+            w.bounds.ymax = poly->y1;
+        }
+        if (poly->y2 > w.bounds.ymax) {
+            w.bounds.ymax = poly->y2;
+        } else if (poly->y2 < w.bounds.ymin) {
+            w.bounds.ymin = poly->y2;
+        }
+        if (poly->y3 > w.bounds.ymax) {
+            w.bounds.ymax = poly->y3;
+        } else if (poly->y3 < w.bounds.ymin) {
+            w.bounds.ymin = poly->y3;
+        }
+        if (w.bounds.sz[0] > w.bounds.sz[1]) {
+            w.bounds.zmax = w.bounds.sz[0];
+            w.bounds.zmin = w.bounds.sz[1];
+        } else {
+            w.bounds.zmin = w.bounds.sz[0];
+            w.bounds.zmax = w.bounds.sz[1];
+        }
+        if (w.bounds.sz[2] > w.bounds.zmax) {
+            w.bounds.zmax = w.bounds.sz[2];
+        } else if (w.bounds.sz[2] < w.bounds.zmin) {
+            w.bounds.zmin = w.bounds.sz[2];
+        }
+        if (w.bounds.sz[3] > w.bounds.zmax) {
+            w.bounds.zmax = w.bounds.sz[3];
+        } else if (w.bounds.sz[3] < w.bounds.zmin) {
+            w.bounds.zmin = w.bounds.sz[3];
+        }
+        if (!roadmap_bounds_visible(&w.bounds)) {
+            continue;
+        }
+        if (flag < 0 || (light->clip_mode == 0 && (divide = roadmap_bounds_need_divide(&w.bounds, 4)) != 0)) {
+            nclip = Clip4FP(&vp[op->vert0], &vp[op->vert1], &vp[op->vert2], &vp[op->vert3], evmx);
+            /* Never taken: nclip & 1 is never negative. GCC 2.8.1 needs this edge when it counts the calls
+               poly lives across, so poly gets s0 as in the original; combine folds the test and the dead
+               block is deleted, leaving no code. `dp = i` gives i one more use, which settles its register
+               tie with op in f3 and f4. */
+            if ((nclip & 1) < 0) {
+                dp = i;
+                goto draw;
+            }
+            if (nclip >= 3) {
+                for (k = 0; k < nclip - 2; k++) {
+                    packet = roadmap_add_clipped_f3(evmx[0], evmx[k + 1], evmx[k + 2], (RoadmapRgb *)&op->r,
+                                                    packet, ot, light, &w);
+                }
+            }
+            continue;
+        }
+    draw:
+        gte_stdp(&dp);
+        gte_avsz4();
+        gte_stotz(&otz);
+        poly->r0 = op->r;
+        poly->g0 = op->g;
+        poly->b0 = op->b;
+        if (roadmap_draw_flags != 0) {
+            level = 0x1000;
+            fog = 0;
+            color = (RoadmapRgb *)&poly->r0;
+            depth = dp;
+            if (roadmap_draw_flags & 1) {
+                level = roadmap_daylight_level;
+            }
+            if (roadmap_draw_flags & 2) {
+                fog = depth;
+            }
+            gte_lddp(level);
+            gte_ldcv(color);
+            gte_gpf12();
+            gte_lddp(0);
+            gte_gpl12();
+            gte_stcv(color);
+            gte_ldrgb(color);
+            gte_lddp(fog);
+            gte_dpcs();
+            gte_strgb(color);
+            if (roadmap_draw_flags & 4) {
+                gte_lddp(roadmap_brightness);
+                gte_ldcv(color);
+                gte_gpf12();
+                gte_lddp(0);
+                gte_gpl12();
+                gte_stcv(color);
+            }
+        }
+        tag = ot->org + (otz / 4 + light->ot_bias);
+        poly->tag = (*tag & 0xFFFFFF) | 0x05000000;
+        *tag = (u32)poly & 0xFFFFFF;
+        packet = (PolyF4Packet *)packet + 1;
+    }
+    return packet;
+}
+
+/* TMD gouraud quad, no normal (0x1C bytes) */
+typedef struct {
+    u8 olen;
+    u8 ilen;
+    u8 flag;
+    u8 mode;
+    RoadmapRgb rgb0;
+    RoadmapRgb rgb1;
+    RoadmapRgb rgb2;
+    RoadmapRgb rgb3;
+    u16 vert0;
+    u16 vert1;
+    u16 vert2;
+    u16 vert3;
+} RoadmapPrimG4;
+typedef struct {
+    u32 tag;
+    u8 r0;
+    u8 g0;
+    u8 b0;
+    u8 code;
+    volatile s16 x0;
+    volatile s16 y0;
+    u8 r1;
+    u8 g1;
+    u8 b1;
+    u8 pad1;
+    volatile s16 x1;
+    volatile s16 y1;
+    u8 r2;
+    u8 g2;
+    u8 b2;
+    u8 pad2;
+    volatile s16 x2;
+    volatile s16 y2;
+    u8 r3;
+    u8 g3;
+    u8 b3;
+    u8 pad3;
+    volatile s16 x3;
+    volatile s16 y3;
+} PolyG4Packet;
+s32 Clip4GP(SVector *v0, SVector *v1, SVector *v2, SVector *v3, RoadmapRgb *rgb0, RoadmapRgb *rgb1,
+            RoadmapRgb *rgb2, RoadmapRgb *rgb3, ClipVertex **evmx);
+
+static void *roadmap_draw_g4(RoadmapPrimG4 *op, SVector *vp, void *packet, s32 count, s32 shift, GsOT *ot) {
+    ScreenLight *light = &screen_light;
+    ClipVertex **evmx = roadmap_clip_evmx;
+    RoadmapPrimWork w;
+    s32 flag;
+    s32 opz;
+    s32 flag3;
+    s32 dp;
+    s32 otz;
+    PolyG4Packet *poly;
+    RoadmapRgb *rgb0;
+    RoadmapRgb *rgb1;
+    RoadmapRgb *rgb2;
+    RoadmapRgb *rgb3;
+    u32 *tag;
+    s32 divide;
+    s32 depth;
+    s32 level;
+    s32 fog;
+    s32 nclip;
+    s32 k;
+    s32 i;
+
+    for (i = 0; i < count; i++, op++) {
+        if ((u32)kaj_view_packet_used() > 0xAFAF) {
+            return packet;
+        }
+        ((u8 *)packet)[3] = 8;
+        ((u8 *)packet)[7] = 0x38;
+        w.tex_mode[0] = (op->mode >> 1) & 1;
+        SetSemiTrans(packet, w.tex_mode[0]);
+        poly = packet;
+        gte_ldv3(&vp[op->vert0], &vp[op->vert1], &vp[op->vert2]);
+        gte_rtpt();
+        gte_stflg(&flag);
+        if (light->clip_mode == 1 && flag < 0) {
+            continue;
+        }
+        gte_nclip();
+        gte_stopz(&opz);
+        if (opz <= 0) {
+            continue;
+        }
+        gte_stsxy3_g4(poly);
+        gte_ldv0(&vp[op->vert3]);
+        gte_rtps();
+        gte_stflg(&flag3);
+        flag |= flag3;
+        gte_stsxy(&poly->x3);
+        gte_stsz4(&w.bounds.sz[0], &w.bounds.sz[1], &w.bounds.sz[2], &w.bounds.sz[3]);
+        if (poly->x0 > poly->x1) {
+            w.bounds.xmax = poly->x0;
+            w.bounds.xmin = poly->x1;
+        } else {
+            w.bounds.xmin = poly->x0;
+            w.bounds.xmax = poly->x1;
+        }
+        if (poly->x2 > w.bounds.xmax) {
+            w.bounds.xmax = poly->x2;
+        } else if (poly->x2 < w.bounds.xmin) {
+            w.bounds.xmin = poly->x2;
+        }
+        if (poly->x3 > w.bounds.xmax) {
+            w.bounds.xmax = poly->x3;
+        } else if (poly->x3 < w.bounds.xmin) {
+            w.bounds.xmin = poly->x3;
+        }
+        if (poly->y0 > poly->y1) {
+            w.bounds.ymax = poly->y0;
+            w.bounds.ymin = poly->y1;
+        } else {
+            w.bounds.ymin = poly->y0;
+            w.bounds.ymax = poly->y1;
+        }
+        if (poly->y2 > w.bounds.ymax) {
+            w.bounds.ymax = poly->y2;
+        } else if (poly->y2 < w.bounds.ymin) {
+            w.bounds.ymin = poly->y2;
+        }
+        if (poly->y3 > w.bounds.ymax) {
+            w.bounds.ymax = poly->y3;
+        } else if (poly->y3 < w.bounds.ymin) {
+            w.bounds.ymin = poly->y3;
+        }
+        if (w.bounds.sz[0] > w.bounds.sz[1]) {
+            w.bounds.zmax = w.bounds.sz[0];
+            w.bounds.zmin = w.bounds.sz[1];
+        } else {
+            w.bounds.zmin = w.bounds.sz[0];
+            w.bounds.zmax = w.bounds.sz[1];
+        }
+        if (w.bounds.sz[2] > w.bounds.zmax) {
+            w.bounds.zmax = w.bounds.sz[2];
+        } else if (w.bounds.sz[2] < w.bounds.zmin) {
+            w.bounds.zmin = w.bounds.sz[2];
+        }
+        if (w.bounds.sz[3] > w.bounds.zmax) {
+            w.bounds.zmax = w.bounds.sz[3];
+        } else if (w.bounds.sz[3] < w.bounds.zmin) {
+            w.bounds.zmin = w.bounds.sz[3];
+        }
+        if (!roadmap_bounds_visible(&w.bounds)) {
+            continue;
+        }
+        if (flag < 0 || (light->clip_mode == 0 && (divide = roadmap_bounds_need_divide(&w.bounds, 4)) != 0)) {
+            nclip = Clip4GP(&vp[op->vert0], &vp[op->vert1], &vp[op->vert2], &vp[op->vert3], &op->rgb0, &op->rgb1,
+                            &op->rgb2, &op->rgb3, evmx);
+            /* Never taken: nclip & 1 is never negative. GCC 2.8.1 needs this edge when it counts the calls
+               poly lives across, so poly gets s0 as in the original; combine folds the test and the dead
+               block is deleted, leaving no code. `dp = i` gives i one more use, which settles its register
+               tie with op in f3 and f4. */
+            if ((nclip & 1) < 0) {
+                dp = i;
+                goto draw;
+            }
+            if (nclip >= 3) {
+                for (k = 0; k < nclip - 2; k++) {
+                    packet = roadmap_add_clipped_g3(evmx[0], evmx[k + 1], evmx[k + 2], packet, ot, light, &w);
+                }
+            }
+            continue;
+        }
+    draw:
+        gte_stdp(&dp);
+        gte_avsz4();
+        gte_stotz(&otz);
+        poly->r0 = op->rgb0.r;
+        poly->g0 = op->rgb0.g;
+        poly->b0 = op->rgb0.b;
+        poly->r1 = op->rgb1.r;
+        poly->g1 = op->rgb1.g;
+        poly->b1 = op->rgb1.b;
+        poly->r2 = op->rgb2.r;
+        poly->g2 = op->rgb2.g;
+        poly->b2 = op->rgb2.b;
+        poly->r3 = op->rgb3.r;
+        poly->g3 = op->rgb3.g;
+        poly->b3 = op->rgb3.b;
+        if (roadmap_draw_flags != 0) {
+            level = 0x1000;
+            fog = 0;
+            rgb0 = (RoadmapRgb *)&poly->r0;
+            rgb1 = (RoadmapRgb *)&poly->r1;
+            rgb2 = (RoadmapRgb *)&poly->r2;
+            depth = dp;
+            rgb3 = (RoadmapRgb *)&poly->r3;
+            if (roadmap_draw_flags & 1) {
+                level = roadmap_daylight_level;
+            }
+            if (roadmap_draw_flags & 2) {
+                fog = depth;
+            }
+            gte_lddp(level);
+            gte_ldcv(rgb0);
+            gte_gpf12();
+            gte_lddp(0);
+            gte_gpl12();
+            gte_stcv(rgb0);
+            gte_ldrgb(rgb0);
+            gte_lddp(fog);
+            gte_dpcs();
+            gte_strgb(rgb0);
+            gte_lddp(level);
+            gte_ldcv(rgb1);
+            gte_gpf12();
+            gte_lddp(0);
+            gte_gpl12();
+            gte_stcv(rgb1);
+            gte_ldrgb(rgb1);
+            gte_lddp(fog);
+            gte_dpcs();
+            gte_strgb(rgb1);
+            gte_lddp(level);
+            gte_ldcv(rgb2);
+            gte_gpf12();
+            gte_lddp(0);
+            gte_gpl12();
+            gte_stcv(rgb2);
+            gte_ldrgb(rgb2);
+            gte_lddp(fog);
+            gte_dpcs();
+            gte_strgb(rgb2);
+            gte_lddp(level);
+            gte_ldcv(rgb3);
+            gte_gpf12();
+            gte_lddp(0);
+            gte_gpl12();
+            gte_stcv(rgb3);
+            gte_ldrgb(rgb3);
+            gte_lddp(fog);
+            gte_dpcs();
+            gte_strgb(rgb3);
+            if (roadmap_draw_flags & 4) {
+                gte_lddp(roadmap_brightness);
+                gte_ldcv(rgb0);
+                gte_gpf12();
+                gte_lddp(0);
+                gte_gpl12();
+                gte_stcv(rgb0);
+                gte_lddp(roadmap_brightness);
+                gte_ldcv(rgb1);
+                gte_gpf12();
+                gte_lddp(0);
+                gte_gpl12();
+                gte_stcv(rgb1);
+                gte_lddp(roadmap_brightness);
+                gte_ldcv(rgb2);
+                gte_gpf12();
+                gte_lddp(0);
+                gte_gpl12();
+                gte_stcv(rgb2);
+                gte_lddp(roadmap_brightness);
+                gte_ldcv(rgb3);
+                gte_gpf12();
+                gte_lddp(0);
+                gte_gpl12();
+                gte_stcv(rgb3);
+            }
+        }
+        tag = ot->org + (otz / 4 + light->ot_bias);
+        poly->tag = (*tag & 0xFFFFFF) | 0x08000000;
+        *tag = (u32)poly & 0xFFFFFF;
+        packet = (PolyG4Packet *)packet + 1;
+    }
+    return packet;
+}
 
 static void *roadmap_draw_ft4(RoadmapPrimFT4 *op, SVector *vp, void *packet, s32 count, s32 shift, GsOT *ot) {
     DivPolygon *divp = &roadmap_divpoly4;

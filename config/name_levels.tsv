@@ -984,6 +984,7 @@ vehicle_navi	global	src/game/player.c	code	CarNavi state of vehicle_navi_show an
 GsOUT_PACKET_P	global	src/game/roadmap.c	code	LIBGS GsSetWorkBase stores its argument here and GsGetWorkBase returns it, as PSY-Q libgs.h GsOUT_PACKET_P; the packet builders advance it
 roadmap_brightness	global	src/game/roadmap.c	code	Per-frame copy of screen_light brightness, GPF scale when roadmap_draw_flags & 4
 roadmap_clip_buf	global	src/game/roadmap.c	code	Buffer passed to InitClip(buf, 0x150, 0x100, 0xE4, 0x6E, 0xFFFF) by roadmap_init_draw
+roadmap_clip_evmx	global	src/game/roadmap.c	code	Last argument (evmx) of Clip3FP, Clip3GP, Clip4FP and Clip4GP; roadmap_draw_f3/g3/f4/g4 read the clipped vertices from it
 roadmap_daylight_level	global	src/game/roadmap.c	code	Light level computed per frame by roadmap_draw_frame from screen_light, GPF scale in the polygon handlers
 roadmap_divpoly3	global	src/game/roadmap.c	code	DivideFT3/DivideGT3 work area (ndiv 3, 320, 240) set up by roadmap_init_draw
 roadmap_divpoly4	global	src/game/roadmap.c	code	DivideFT4/DivideGT4 work area (ndiv 3, 320, 240) set up by roadmap_init_draw
@@ -2662,3 +2663,73 @@ trans_y	field	src/kaj/tod.c:TodCoordParam	code	Increased by the packet value
 trans_z	field	src/kaj/tod.c:TodCoordParam	code	Increased by the packet value
 nobj	field	src/kaj/tod.c:TodTmd	code	Object count bounding the kaj_tod_find_tmd walk, the nobj word of a TMD
 objects	field	src/kaj/tod.c:TodTmd	code	The 7-word object entries kaj_tod_find_tmd steps through
+RoadmapPrimF3	type	src/game/roadmap.c	code	TMD flat triangle primitive record (Sony TMD format) read by roadmap_draw_f3 from the block's primitive stream
+olen	field	src/game/roadmap.c:RoadmapPrimF3	code	TMD primitive header byte 0, output packet length in words
+ilen	field	src/game/roadmap.c:RoadmapPrimF3	code	TMD primitive header byte 1, input data length in words
+flag	field	src/game/roadmap.c:RoadmapPrimF3	code	TMD primitive header byte 2, light and side flags
+mode	field	src/game/roadmap.c:RoadmapPrimF3	code	TMD mode byte; the handler takes bit 1 as semi-transparency
+r	field	src/game/roadmap.c:RoadmapPrimF3	code	Color red, the source color of the packet
+g	field	src/game/roadmap.c:RoadmapPrimF3	code	Color green, the source color of the packet
+b	field	src/game/roadmap.c:RoadmapPrimF3	code	Color blue, the source color of the packet
+vert0	field	src/game/roadmap.c:RoadmapPrimF3	code	Index of vertex 0 in the block vertex table, loaded by gte_ldv3/gte_ldv0 for the transform
+vert1	field	src/game/roadmap.c:RoadmapPrimF3	code	Index of vertex 1 in the block vertex table, loaded by gte_ldv3/gte_ldv0 for the transform
+vert2	field	src/game/roadmap.c:RoadmapPrimF3	code	Index of vertex 2 in the block vertex table, loaded by gte_ldv3/gte_ldv0 for the transform
+RoadmapPrimG3	type	src/game/roadmap.c	code	TMD gouraud triangle primitive record (Sony TMD format) read by roadmap_draw_g3 from the block's primitive stream
+olen	field	src/game/roadmap.c:RoadmapPrimG3	code	TMD primitive header byte 0, output packet length in words
+ilen	field	src/game/roadmap.c:RoadmapPrimG3	code	TMD primitive header byte 1, input data length in words
+flag	field	src/game/roadmap.c:RoadmapPrimG3	code	TMD primitive header byte 2, light and side flags
+mode	field	src/game/roadmap.c:RoadmapPrimG3	code	TMD mode byte; the handler takes bit 1 as semi-transparency
+rgb0	field	src/game/roadmap.c:RoadmapPrimG3	code	Color of vertex 0, copied into the gouraud packet and passed to the clipper
+rgb1	field	src/game/roadmap.c:RoadmapPrimG3	code	Color of vertex 1, copied into the gouraud packet and passed to the clipper
+rgb2	field	src/game/roadmap.c:RoadmapPrimG3	code	Color of vertex 2, copied into the gouraud packet and passed to the clipper
+vert0	field	src/game/roadmap.c:RoadmapPrimG3	code	Index of vertex 0 in the block vertex table, loaded by gte_ldv3/gte_ldv0 for the transform
+vert1	field	src/game/roadmap.c:RoadmapPrimG3	code	Index of vertex 1 in the block vertex table, loaded by gte_ldv3/gte_ldv0 for the transform
+vert2	field	src/game/roadmap.c:RoadmapPrimG3	code	Index of vertex 2 in the block vertex table, loaded by gte_ldv3/gte_ldv0 for the transform
+RoadmapPrimF4	type	src/game/roadmap.c	code	TMD flat quad primitive record (Sony TMD format) read by roadmap_draw_f4 from the block's primitive stream
+olen	field	src/game/roadmap.c:RoadmapPrimF4	code	TMD primitive header byte 0, output packet length in words
+ilen	field	src/game/roadmap.c:RoadmapPrimF4	code	TMD primitive header byte 1, input data length in words
+flag	field	src/game/roadmap.c:RoadmapPrimF4	code	TMD primitive header byte 2, light and side flags
+mode	field	src/game/roadmap.c:RoadmapPrimF4	code	TMD mode byte; the handler takes bit 1 as semi-transparency
+r	field	src/game/roadmap.c:RoadmapPrimF4	code	Color red, the source color of the packet
+g	field	src/game/roadmap.c:RoadmapPrimF4	code	Color green, the source color of the packet
+b	field	src/game/roadmap.c:RoadmapPrimF4	code	Color blue, the source color of the packet
+vert0	field	src/game/roadmap.c:RoadmapPrimF4	code	Index of vertex 0 in the block vertex table, loaded by gte_ldv3/gte_ldv0 for the transform
+vert1	field	src/game/roadmap.c:RoadmapPrimF4	code	Index of vertex 1 in the block vertex table, loaded by gte_ldv3/gte_ldv0 for the transform
+vert2	field	src/game/roadmap.c:RoadmapPrimF4	code	Index of vertex 2 in the block vertex table, loaded by gte_ldv3/gte_ldv0 for the transform
+vert3	field	src/game/roadmap.c:RoadmapPrimF4	code	Index of vertex 3 in the block vertex table, loaded by gte_ldv3/gte_ldv0 for the transform
+RoadmapPrimG4	type	src/game/roadmap.c	code	TMD gouraud quad primitive record (Sony TMD format) read by roadmap_draw_g4 from the block's primitive stream
+olen	field	src/game/roadmap.c:RoadmapPrimG4	code	TMD primitive header byte 0, output packet length in words
+ilen	field	src/game/roadmap.c:RoadmapPrimG4	code	TMD primitive header byte 1, input data length in words
+flag	field	src/game/roadmap.c:RoadmapPrimG4	code	TMD primitive header byte 2, light and side flags
+mode	field	src/game/roadmap.c:RoadmapPrimG4	code	TMD mode byte; the handler takes bit 1 as semi-transparency
+rgb0	field	src/game/roadmap.c:RoadmapPrimG4	code	Color of vertex 0, copied into the gouraud packet and passed to the clipper
+rgb1	field	src/game/roadmap.c:RoadmapPrimG4	code	Color of vertex 1, copied into the gouraud packet and passed to the clipper
+rgb2	field	src/game/roadmap.c:RoadmapPrimG4	code	Color of vertex 2, copied into the gouraud packet and passed to the clipper
+rgb3	field	src/game/roadmap.c:RoadmapPrimG4	code	Color of vertex 3, copied into the gouraud packet and passed to the clipper
+vert0	field	src/game/roadmap.c:RoadmapPrimG4	code	Index of vertex 0 in the block vertex table, loaded by gte_ldv3/gte_ldv0 for the transform
+vert1	field	src/game/roadmap.c:RoadmapPrimG4	code	Index of vertex 1 in the block vertex table, loaded by gte_ldv3/gte_ldv0 for the transform
+vert2	field	src/game/roadmap.c:RoadmapPrimG4	code	Index of vertex 2 in the block vertex table, loaded by gte_ldv3/gte_ldv0 for the transform
+vert3	field	src/game/roadmap.c:RoadmapPrimG4	code	Index of vertex 3 in the block vertex table, loaded by gte_ldv3/gte_ldv0 for the transform
+PolyG4Packet	type	src/game/roadmap.c	code	PSY-Q POLY_G4 layout (0x24 bytes, code 0x38 with length 8 written by roadmap_draw_g4) that roadmap_draw_g4 fills and links into the ordering table
+tag	field	src/game/roadmap.c:PolyG4Packet	code	Ordering-table link word: roadmap_draw_g4 stores the old tag with the length byte, the OT entry gets the packet address
+code	field	src/game/roadmap.c:PolyG4Packet	code	GPU command byte of POLY_G4, set with the length by roadmap_draw_g4 and SetSemiTrans
+r0	field	src/game/roadmap.c:PolyG4Packet	code	Vertex 0 red, copied from the primitive's rgb0 and lit by the GTE in roadmap_draw_g4
+g0	field	src/game/roadmap.c:PolyG4Packet	code	Vertex 0 green, copied from the primitive's rgb0 and lit by the GTE in roadmap_draw_g4
+b0	field	src/game/roadmap.c:PolyG4Packet	code	Vertex 0 blue, copied from the primitive's rgb0 and lit by the GTE in roadmap_draw_g4
+x0	field	src/game/roadmap.c:PolyG4Packet	code	Screen x of vertex 0, written by gte_stsxy and read for the bounds in roadmap_draw_g4
+y0	field	src/game/roadmap.c:PolyG4Packet	code	Screen y of vertex 0, written by gte_stsxy and read for the bounds in roadmap_draw_g4
+r1	field	src/game/roadmap.c:PolyG4Packet	code	Vertex 1 red, copied from the primitive's rgb1 and lit by the GTE in roadmap_draw_g4
+g1	field	src/game/roadmap.c:PolyG4Packet	code	Vertex 1 green, copied from the primitive's rgb1 and lit by the GTE in roadmap_draw_g4
+b1	field	src/game/roadmap.c:PolyG4Packet	code	Vertex 1 blue, copied from the primitive's rgb1 and lit by the GTE in roadmap_draw_g4
+x1	field	src/game/roadmap.c:PolyG4Packet	code	Screen x of vertex 1, written by gte_stsxy and read for the bounds in roadmap_draw_g4
+y1	field	src/game/roadmap.c:PolyG4Packet	code	Screen y of vertex 1, written by gte_stsxy and read for the bounds in roadmap_draw_g4
+r2	field	src/game/roadmap.c:PolyG4Packet	code	Vertex 2 red, copied from the primitive's rgb2 and lit by the GTE in roadmap_draw_g4
+g2	field	src/game/roadmap.c:PolyG4Packet	code	Vertex 2 green, copied from the primitive's rgb2 and lit by the GTE in roadmap_draw_g4
+b2	field	src/game/roadmap.c:PolyG4Packet	code	Vertex 2 blue, copied from the primitive's rgb2 and lit by the GTE in roadmap_draw_g4
+x2	field	src/game/roadmap.c:PolyG4Packet	code	Screen x of vertex 2, written by gte_stsxy and read for the bounds in roadmap_draw_g4
+y2	field	src/game/roadmap.c:PolyG4Packet	code	Screen y of vertex 2, written by gte_stsxy and read for the bounds in roadmap_draw_g4
+r3	field	src/game/roadmap.c:PolyG4Packet	code	Vertex 3 red, copied from the primitive's rgb3 and lit by the GTE in roadmap_draw_g4
+g3	field	src/game/roadmap.c:PolyG4Packet	code	Vertex 3 green, copied from the primitive's rgb3 and lit by the GTE in roadmap_draw_g4
+b3	field	src/game/roadmap.c:PolyG4Packet	code	Vertex 3 blue, copied from the primitive's rgb3 and lit by the GTE in roadmap_draw_g4
+x3	field	src/game/roadmap.c:PolyG4Packet	code	Screen x of vertex 3, written by gte_stsxy and read for the bounds in roadmap_draw_g4
+y3	field	src/game/roadmap.c:PolyG4Packet	code	Screen y of vertex 3, written by gte_stsxy and read for the bounds in roadmap_draw_g4

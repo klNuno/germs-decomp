@@ -5,23 +5,23 @@
 <rect width="1200" height="820" rx="16" fill="#1a1a19"/>
 <g font-family="system-ui, -apple-system, Segoe UI, sans-serif">
 <text x="28" y="44" font-size="25" font-weight="700" fill="#f0efec">Germs: Nerawareta Machi · decompilation</text>
-<text x="28" y="72" font-size="14" fill="#c3c2b7">SLPS_021.07 rebuilt byte for byte · 1f3e774 · 655 functions, 272,276 code bytes</text>
-<text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700" fill="#f0efec">96.5% in C</text>
-<text x="1172" y="72" text-anchor="end" font-size="14" fill="#c3c2b7">651 of 655 functions match from C</text>
+<text x="28" y="72" font-size="14" fill="#c3c2b7">SLPS_021.07 rebuilt byte for byte · 2026-11-17 · 655 functions, 272,276 code bytes</text>
+<text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700" fill="#f0efec">100.0% in C</text>
+<text x="1172" y="72" text-anchor="end" font-size="14" fill="#c3c2b7">655 of 655 functions match from C</text>
 <rect x="28" y="92" width="12" height="12" rx="2" fill="#34362f" stroke="#8f8d84" stroke-width="0.5"/>
-<text x="47" y="103" font-size="14" fill="#f0efec">Assembly 3.5%</text>
+<text x="47" y="103" font-size="14" fill="#f0efec">Assembly 0.0%</text>
 <rect x="171.8" y="92" width="12" height="12" rx="2" fill="#3fa35a" stroke="#8f8d84" stroke-width="0.5"/>
 <text x="190.8" y="103" font-size="14" fill="#f0efec">In C, unknowns inside 0.0%</text>
 <rect x="414.4" y="92" width="12" height="12" rx="2" fill="#8fe0a0" stroke="#8f8d84" stroke-width="0.5"/>
-<text x="433.4" y="103" font-size="14" fill="#f0efec">Read: every name ours 96.5%</text>
+<text x="433.4" y="103" font-size="14" fill="#f0efec">Read: every name ours 100.0%</text>
 <rect x="28.00" y="124.00" width="102.87" height="75.44" fill="#8fe0a0" stroke="#1a1a19" stroke-width="0.6"><title>roadmap_draw_gt4 · 0x8019F124 · 3252 bytes · game/roadmap.c · Read: every name ours · unknown fields 0, m2c names 0, Unk_ types 0, D_ globals 0</title></rect>
-<rect x="130.87" y="124.00" width="95.53" height="75.44" fill="#34362f" stroke="#1a1a19" stroke-width="0.6"><title>roadmap_draw_g4 · 0x8019DABC · 3020 bytes · game/roadmap.c · Assembly</title></rect>
+<rect x="130.87" y="124.00" width="95.53" height="75.44" fill="#8fe0a0" stroke="#1a1a19" stroke-width="0.6"><title>roadmap_draw_g4 · 0x8019DABC · 3020 bytes · game/roadmap.c · Read: every name ours · unknown fields 0, m2c names 0, Unk_ types 0, D_ globals 0</title></rect>
 <rect x="28.00" y="199.44" width="69.44" height="93.34" fill="#8fe0a0" stroke="#1a1a19" stroke-width="0.6"><title>roadmap_draw_ft4 · 0x8019E688 · 2716 bytes · game/roadmap.c · Read: every name ours · unknown fields 0, m2c names 0, Unk_ types 0, D_ globals 0</title></rect>
 <rect x="97.44" y="199.44" width="67.19" height="93.34" fill="#8fe0a0" stroke="#1a1a19" stroke-width="0.6"><title>roadmap_draw_gt3 · 0x8019C78C · 2628 bytes · game/roadmap.c · Read: every name ours · unknown fields 0, m2c names 0, Unk_ types 0, D_ globals 0</title></rect>
-<rect x="164.63" y="199.44" width="61.77" height="93.34" fill="#34362f" stroke="#1a1a19" stroke-width="0.6"><title>roadmap_draw_g3 · 0x8019B4FC · 2416 bytes · game/roadmap.c · Assembly</title></rect>
+<rect x="164.63" y="199.44" width="61.77" height="93.34" fill="#8fe0a0" stroke="#1a1a19" stroke-width="0.6"><title>roadmap_draw_g3 · 0x8019B4FC · 2416 bytes · game/roadmap.c · Read: every name ours · unknown fields 0, m2c names 0, Unk_ types 0, D_ globals 0</title></rect>
 <rect x="28.00" y="292.79" width="82.34" height="67.71" fill="#8fe0a0" stroke="#1a1a19" stroke-width="0.6"><title>roadmap_draw_ft3 · 0x8019BE6C · 2336 bytes · game/roadmap.c · Read: every name ours · unknown fields 0, m2c names 0, Unk_ types 0, D_ globals 0</title></rect>
-<rect x="28.00" y="360.49" width="82.34" height="66.20" fill="#34362f" stroke="#1a1a19" stroke-width="0.6"><title>roadmap_draw_f4 · 0x8019D1D0 · 2284 bytes · game/roadmap.c · Assembly</title></rect>
-<rect x="110.34" y="292.79" width="73.94" height="62.10" fill="#34362f" stroke="#1a1a19" stroke-width="0.6"><title>roadmap_draw_f3 · 0x8019AD78 · 1924 bytes · game/roadmap.c · Assembly</title></rect>
+<rect x="28.00" y="360.49" width="82.34" height="66.20" fill="#8fe0a0" stroke="#1a1a19" stroke-width="0.6"><title>roadmap_draw_f4 · 0x8019D1D0 · 2284 bytes · game/roadmap.c · Read: every name ours · unknown fields 0, m2c names 0, Unk_ types 0, D_ globals 0</title></rect>
+<rect x="110.34" y="292.79" width="73.94" height="62.10" fill="#8fe0a0" stroke="#1a1a19" stroke-width="0.6"><title>roadmap_draw_f3 · 0x8019AD78 · 1924 bytes · game/roadmap.c · Read: every name ours · unknown fields 0, m2c names 0, Unk_ types 0, D_ globals 0</title></rect>
 <rect x="184.28" y="292.79" width="42.12" height="62.10" fill="#8fe0a0" stroke="#1a1a19" stroke-width="0.6"><title>roadmap_add_clipped_g3 · 0x8019A930 · 1096 bytes · game/roadmap.c · Read: every name ours · unknown fields 0, m2c names 0, Unk_ types 0, D_ globals 0</title></rect>
 <rect x="110.34" y="354.89" width="47.33" height="39.73" fill="#8fe0a0" stroke="#1a1a19" stroke-width="0.6"><title>roadmap_add_sprite · 0x8019FDD8 · 788 bytes · game/roadmap.c · Read: every name ours · unknown fields 0, m2c names 0, Unk_ types 0, D_ globals 0</title></rect>
 <rect x="110.34" y="394.62" width="47.33" height="32.07" fill="#8fe0a0" stroke="#1a1a19" stroke-width="0.6"><title>roadmap_add_clipped_f3 · 0x8019A6B4 · 636 bytes · game/roadmap.c · Read: every name ours · unknown fields 0, m2c names 0, Unk_ types 0, D_ globals 0</title></rect>
@@ -773,8 +773,8 @@
 <text x="1111.04" y="593.07" font-size="12.5" fill="#f0efec">tim.c</text>
 <text x="28" y="717" font-size="13" fill="#c3c2b7">The whole executable's code</text>
 <rect x="28" y="726" width="757.12" height="30" rx="4" fill="#34362f" stroke="#8f8d84" stroke-width="0.5"/>
-<rect x="28" y="726" width="732.23" height="30" rx="4" fill="#3fa35a"/>
-<text x="40" y="746" font-size="13.5" font-weight="600" fill="#f0efec">Game and KAJ library 66%: 96% of it in C, mapped above</text>
+<rect x="28" y="726" width="759.12" height="30" rx="4" fill="#3fa35a"/>
+<text x="40" y="746" font-size="13.5" font-weight="600" fill="#f0efec">Game and KAJ library 66%: 100% of it in C, mapped above</text>
 <rect x="789.12" y="726" width="382.88" height="30" rx="4" fill="url(#hatch)"><title>Sony libraries linked as is: </title></rect>
 <rect x="795.12" y="731" width="370.88" height="20" rx="3" fill="#1a1a19" fill-opacity="0.82"/>
 <text x="803.12" y="746" font-size="13" fill="#f0efec">Sony PSY-Q 34%: stock libraries</text>

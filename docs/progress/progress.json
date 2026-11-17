@@ -1,26 +1,26 @@
 {
  "schema_version": 1,
- "commit": "1f3e774",
- "tracked_tree_dirty": false,
+ "commit": "a6d8328",
+ "tracked_tree_dirty": true,
  "exe_sha1": "178e728643d9b456436f4d19c9e07db11ab8aa2c",
  "metric": "Code bytes of each function (.text of the link map). asm: still INCLUDE_ASM; c: matching C whose body still carries names we did not choose; read: matching C with only our names.",
  "totals": {
   "functions": 655,
   "bytes": 272276,
-  "bytes_in_c": 262632,
-  "functions_in_c": 651,
+  "bytes_in_c": 272276,
+  "functions_in_c": 655,
   "levels": {
    "asm": {
-    "functions": 4,
-    "bytes": 9644
+    "functions": 0,
+    "bytes": 0
    },
    "c": {
     "functions": 0,
     "bytes": 0
    },
    "read": {
-    "functions": 651,
-    "bytes": 262632
+    "functions": 655,
+    "bytes": 272276
    }
   },
   "libraries": {
@@ -3809,13 +3809,21 @@
      "name": "roadmap_draw_f3",
      "address": "0x8019AD78",
      "bytes": 1924,
-     "level": "asm"
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "roadmap_draw_g3",
      "address": "0x8019B4FC",
      "bytes": 2416,
-     "level": "asm"
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "roadmap_draw_ft3",
@@ -3841,13 +3849,21 @@
      "name": "roadmap_draw_f4",
      "address": "0x8019D1D0",
      "bytes": 2284,
-     "level": "asm"
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "roadmap_draw_g4",
      "address": "0x8019DABC",
      "bytes": 3020,
-     "level": "asm"
+     "unk_fields": 0,
+     "m2c_names": 0,
+     "unk_types": 0,
+     "d_globals": 0,
+     "level": "read"
     },
     {
      "name": "roadmap_draw_ft4",

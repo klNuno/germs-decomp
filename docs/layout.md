@@ -167,9 +167,10 @@ matches as long as each file declares the gp symbols it uses (rule 1 below).
   sprite_phone_save_exit, text_show, text_show_profile, text_show_timed and thing_run_script. The other two,
   kaj_tim_load and kaj_tim_free, name a `TimHandle` that two files define differently. Each header lists its own
   exceptions in a closing comment.
-- A function that only its own file calls, and that no data table points to, is `static` (201 of them). The four
-  still in `INCLUDE_ASM` (roadmap_draw_f3, roadmap_draw_g3, roadmap_draw_f4 and roadmap_draw_g4) stay global,
-  because their asm label is global. A function that nothing references stays global too: cc1 could drop a
+- A function that no other file references by symbol is `static` (205 of them). That includes the eight
+  primitive handlers roadmap_draw_f3 to roadmap_draw_gt4: roadmap_init_draw stores them in
+  `roadmap_prim_handlers` at run time, and Sony's `GsSortObject4J` calls them through that table, never by
+  name. A function that nothing references stays global too: cc1 could drop a
   `static` copy of an inline function.
 - The Makefile does not track headers. After editing one, run `rm -rf build/src` and then `make check`.
 
@@ -180,7 +181,7 @@ matches as long as each file declares the gp symbols it uses (rule 1 below).
    and the linker merges it with the asm data. An `extern` gives `lui` accesses and shifts the whole executable.
    Never move such a declaration into a header with `extern`.
 2. **No `static` variable while the data lives in asm**: it would allocate bytes in the C object and duplicate
-   the data. A function is `static` when no other file calls it and no data points to it. `static` keeps the
+   the data. A function is `static` when no other file names it and no data points to it. `static` keeps the
    bytes but changes the relocations, so `tools/unit_check.sh --save` must run again after one is added or
    removed.
 3. A file with rodata keeps its `.rodata` entry in `config/splat.yaml` (dot form, same name); an

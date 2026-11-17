@@ -13,16 +13,16 @@ never shows.
 
 ## At a glance
 
-- **651 of 655 functions in C** (506 of the game's 510, all 145 of the developer's own library), compiled by GCC 2.8.1
+- **All 655 functions in C** (the game's 510 and the 145 of the developer's own library), compiled by GCC 2.8.1
   and ASPSX 2.56 at `-O2 -G8 -funsigned-char`; `make check` compares the sha1 of the result with the retail
   `SLPS_021.07`. The geometry (GTE) and scratchpad code goes through PSY-Q style macros in
   [include/gte.h](include/gte.h), the only file that holds inline assembly. Four polygon draw handlers of the
-  roadmap are still assembly: their best C is 99.65 to 99.87 %, one register copy away (GCC gives the packet
-  header pointer a saved register in the original without the copy).
+  roadmap match through one never-taken branch after the clip call, commented in
+  [src/game/roadmap.c](src/game/roadmap.c): it gives GCC the register choice of the original and leaves no code.
 - **Every function in C is read**: no function body uses a placeholder name (`unk` field, compiler-made local,
   `Unk_` type, `D_` global). The 1,160 function and global names each carry their evidence in
-  `config/symbol_addrs.txt`; an audit rated all 2,663 names we gave (functions, globals, struct types and
-  fields): 74 checked in game, 2,525 proven by the code, 64 guesses that say what is unproven
+  `config/symbol_addrs.txt`; an audit rated 2,734 of the names we gave (functions, globals, struct types and
+  fields): 74 checked in game, 2,596 proven by the code, 64 guesses that say what is unproven
   ([config/name_levels.tsv](config/name_levels.tsv)).
 - **36 source files** laid out the way the original programmers most likely had them, in link order between
   Sony's objects (24 game files, 12 of the developer's library; [docs/layout.md](docs/layout.md) gives the
