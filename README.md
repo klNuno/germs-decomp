@@ -27,7 +27,8 @@ never shows.
 - **36 source files** laid out the way the original programmers most likely had them, in link order between
   Sony's objects (24 game files, 12 of the developer's library; [docs/layout.md](docs/layout.md) gives the
   evidence for each boundary), with one header per file in `include/game/` and `include/kaj/`, and the Sony
-  prototypes in `include/psyq/`.
+  prototypes in `include/psyq/`. Every game function and global carries its file's prefix (`shop_` in
+  `shop.c`).
 - **Shiftable**: every pointer into the executable is a symbol, so code can be added before `main` and the
   game still runs. `tools/rawscan.py` relinks the build at another address and finds 0 fixed addresses, and a
   build with 0x100 extra bytes before `main` played the same opening as the retail one in an emulator: the

@@ -28,20 +28,20 @@
  */
 
 extern TrainState vehicle_train_state;
-static void thing_field_loop(void);
-s16 thing_field_exit_arg_hi;
-s16 thing_field_exit_arg_lo;
-s16 thing_field_exit_code;
+static void town_loop(void);
+s16 town_exit_arg_hi;
+s16 town_exit_arg_lo;
+s16 town_exit_code;
 extern Player *player_status_player[];
 extern s16 vehicle_navi[];
 extern GameVars action_vars;
 extern RoadMap roadmap_state;
-s16 thing_next_vehicle_mode;
-void text_show(char *str, s32 mode, s32 circle_set, s32 circle_flags, s32 cross_set, s32 cross_flags, s32 se);
+s16 town_next_vehicle_mode;
+void dialog_show(char *str, s32 mode, s32 circle_set, s32 circle_flags, s32 cross_set, s32 cross_flags, s32 se);
 extern PlayerStatus player_status;
-extern SceneRequest scene_request;
+extern SceneRequest main_scene_request;
 extern KajSystem kaj_system;
-static void thing_field_do_action(Player *player);
+static void town_do_action(Player *player);
 extern s32 event_effect_done_hook;
 extern s32 event_alarm_hook;
 extern s32 event_tick_hook;
@@ -49,19 +49,19 @@ extern s32 event_leave_hook;
 extern s32 event_enter_hook;
 extern EventState event_state;
 void sprite_phone_save_exit();
-s16 thing_field_show_clock;
-s16 thing_field_loaded_id;
-static s32 thing_field_task_hook(KajEvent *ev);
-static void thing_field_timer_hook(KajEvent *ev);
-static s32 thing_train_enter_hook(KajEvent *ev);
-static s32 thing_train_leave_hook(KajEvent *ev);
-static void thing_train_tick_hook(void);
-static void thing_field_input(void);
-static void thing_field_enter(void);
-static void thing_field_leave(void);
-s32 mail_take_scene_change(void);
+s16 town_show_clock;
+s16 town_loaded_id;
+static s32 town_task_hook(KajEvent *ev);
+static void town_timer_hook(KajEvent *ev);
+static s32 town_train_enter_hook(KajEvent *ev);
+static s32 town_train_leave_hook(KajEvent *ev);
+static void town_train_tick_hook(void);
+static void town_input(void);
+static void town_enter(void);
+static void town_leave(void);
+s32 main_take_scene_change(void);
 
-static s32 thing_field_task_hook(KajEvent *ev) {
+static s32 town_task_hook(KajEvent *ev) {
     GameVars *game = &action_vars;
     Player *player = player_status_player[0];
     TrainState *train = &vehicle_train_state;
@@ -84,15 +84,15 @@ static s32 thing_field_task_hook(KajEvent *ev) {
         }
     } else if (kind == 11) {
         /* car navigation prompt: set or clear the destination */
-        text_show(" 8\203J\201[\203i\203r1\202\3143\226\332\223I\222n1\202\360, \225\373\214\374\203L\201[\217\343\211\272\202\305\221I\202\361\202\305\211\272\202\263\202\242,      \220\335\222\350 3\201\233 1\211\360\217\234 4\201~", 3, -1, 0, -1, 0, 1);
+        dialog_show(" 8\203J\201[\203i\203r1\202\3143\226\332\223I\222n1\202\360, \225\373\214\374\203L\201[\217\343\211\272\202\305\221I\202\361\202\305\211\272\202\263\202\242,      \220\335\222\350 3\201\233 1\211\360\217\234 4\201~", 3, -1, 0, -1, 0, 1);
     } else if (kind == 12) {
-        text_close();
+        dialog_close();
         vehicle_navi_show(player, navi[0], 1);
     } else if (kind == 7) {
         if (train->door_state == 3) {
             train->door_state = 1;
-            thing_next_vehicle_mode = vehicle_train_end_of_line(thing_next_vehicle_mode);
-            if (thing_next_vehicle_mode != 0) {
+            town_next_vehicle_mode = vehicle_train_end_of_line(town_next_vehicle_mode);
+            if (town_next_vehicle_mode != 0) {
                 vehicle_train_exit_prompt(1);
             }
         } else if (train->door_state == 2) {
@@ -106,15 +106,15 @@ static s32 thing_field_task_hook(KajEvent *ev) {
     return 0;
 }
 
-static void thing_field_do_action(Player *player) {
-    SceneRequest *request = &scene_request;
+static void town_do_action(Player *player) {
+    SceneRequest *request = &main_scene_request;
     EventState *ev_state = &event_state;
     ActionSet *set;
     s32 type_bits;
     s32 thing_id;
 
     if (ev_state->state == 2 && (ev_state->circle_flags & 8)) {
-        text_close();
+        dialog_close();
         switch (ev_state->trigger_type) {
         case 0xFD:
             type_bits = ev_state->trigger & 0xF000;
@@ -125,8 +125,8 @@ static void thing_field_do_action(Player *player) {
                 request->pos_x = player->pos_x + player->cell_x * 12500;
                 request->pos_y = 0;
                 request->pos_z = player->pos_z + player->cell_z * 12500;
-                thing_field_exit_code = 3;
-                thing_next_vehicle_mode = 1;
+                town_exit_code = 3;
+                town_next_vehicle_mode = 1;
                 request->yaw = player->yaw;
                 request->loop_param = 0;
             } else {
@@ -138,19 +138,19 @@ static void thing_field_do_action(Player *player) {
         case 0xFE:
             sound_se_play(0xD);
             request->change = 1;
-            thing_field_exit_code = 2;
-            thing_field_exit_arg_hi = ((u32)ev_state->trigger & 0xFF00) >> 8; /* unk0 is read unsigned here (srl): the cast keeps the bytes */
-            thing_field_exit_arg_lo = ev_state->trigger & 0xFF;
+            town_exit_code = 2;
+            town_exit_arg_hi = ((u32)ev_state->trigger & 0xFF00) >> 8; /* unk0 is read unsigned here (srl): the cast keeps the bytes */
+            town_exit_arg_lo = ev_state->trigger & 0xFF;
             break;
         case 0xFF:
             sound_se_play(0xD);
-            thing_field_exit_code = 1;
+            town_exit_code = 1;
             request->change = 1;
             sprite_phone_save_exit(ev_state->trigger);
             break;
         case 0x20:
             sound_se_play(0x11);
-            thing_next_vehicle_mode = vehicle_train_get_off(thing_next_vehicle_mode);
+            town_next_vehicle_mode = vehicle_train_get_off(town_next_vehicle_mode);
             break;
         default:
             for (set = action_find_set(ev_state->circle_set); set != 0; set = action_run_set(set, 0, 0)) {
@@ -162,8 +162,8 @@ static void thing_field_do_action(Player *player) {
     }
 }
 
-static void thing_field_input(void) {
-    SceneRequest *request = &scene_request;
+static void town_input(void) {
+    SceneRequest *request = &main_scene_request;
     PlayerStatus *status = &player_status;
     KajSystem *pad = &kaj_system;
     s16 mode = pad->pad_mode;
@@ -176,14 +176,14 @@ static void thing_field_input(void) {
         vmode = player->vehicle_mode;
         if (vmode == mode) {
             if (vehicle_car_input(status, buttons) != 0) {
-                thing_field_exit_code = 4;
-                thing_next_vehicle_mode = 0;
+                town_exit_code = 4;
+                town_next_vehicle_mode = 0;
                 request->change = vmode;
             }
         } else if (effect_item_input(status, 2) == 0) {
             player_update_map(status);
             if ((player->flags & 4) && !(pad->pad_prev & 0x20) && (pad->pad_now & 0x20)) {
-                thing_field_do_action(player);
+                town_do_action(player);
                 return;
             }
             player_handle_pad(status, 2, buttons);
@@ -191,30 +191,30 @@ static void thing_field_input(void) {
     }
 }
 
-static void thing_field_enter(void) {
+static void town_enter(void) {
     Inventory *inv;
     Player *player;
     TrainState *train;
 
-    thing_next_vehicle_mode = -1;
-    thing_field_show_clock = 1;
+    town_next_vehicle_mode = -1;
+    town_show_clock = 1;
     inv = player_status.inventory;
     player = player_status.player;
     train = &vehicle_train_state;
     sprite_set_visible(0x410, 1);
     action_reset(1);
-    if (thing_field_exit_code != 3) {
+    if (town_exit_code != 3) {
         player_place_for_scene(2);
     }
     roadmap_init();
     effect_weapon_calc_rate(0);
     effect_weapon_calc_rate(1);
-    switch (thing_field_exit_code) {
+    switch (town_exit_code) {
     case 0:
         object_load_scene();
-        if (thing_field_loaded_id != inv->kind2_item) {
+        if (town_loaded_id != inv->kind2_item) {
             object_load_res12_by_id(inv->kind2_item);
-            thing_field_loaded_id = inv->kind2_item;
+            town_loaded_id = inv->kind2_item;
         }
         effect_flame_small_init(2);
         effect_clut_cycle_init();
@@ -232,7 +232,7 @@ static void thing_field_enter(void) {
         sound_se_play(0x15);
     case 1:
         vehicle_load_data();
-        event_alarm_hook = (s32)thing_field_timer_hook;
+        event_alarm_hook = (s32)town_timer_hook;
         thing_set_active(3, 3, 1);
         thing_set_active(3, 4, 1);
         thing_set_animate(3, 3, 1);
@@ -244,28 +244,28 @@ static void thing_field_enter(void) {
         }
         break;
     case 3:
-        thing_field_show_clock = 0;
+        town_show_clock = 0;
         thing_set_active(4, 0, 0);
     case 2:
         vehicle_load_data();
-        event_enter_hook = (s32)thing_train_enter_hook;
-        event_leave_hook = (s32)thing_train_leave_hook;
-        event_tick_hook = (s32)thing_train_tick_hook;
+        event_enter_hook = (s32)town_train_enter_hook;
+        event_leave_hook = (s32)town_train_leave_hook;
+        event_tick_hook = (s32)town_train_tick_hook;
         train->prompt_on = 0;
         train->trigger = 0;
         train->stop_timer = 0;
         break;
     }
-    if (thing_field_exit_code != 0) {
-        sprite_thing_refresh_all();
+    if (town_exit_code != 0) {
+        thing_refresh_all();
     }
-    event_effect_done_hook = (s32)thing_field_task_hook;
-    thing_field_exit_code = 0;
-    event_show_clock(thing_field_show_clock);
+    event_effect_done_hook = (s32)town_task_hook;
+    town_exit_code = 0;
+    event_show_clock(town_show_clock);
     sprite_set_visible(0x410, 0);
 }
 
-static void thing_field_leave(void) {
+static void town_leave(void) {
     Player *player = player_status_player[0];
     s32 i;
 
@@ -279,10 +279,10 @@ static void thing_field_leave(void) {
     event_enter_hook = 0;
     event_leave_hook = 0;
     event_tick_hook = 0;
-    text_close();
+    dialog_close();
     vehicle_free();
     roadmap_quit();
-    switch (thing_field_exit_code) {
+    switch (town_exit_code) {
     case 0:
         action_free_triggers();
         action_free_all_sets();
@@ -313,19 +313,19 @@ static void thing_field_leave(void) {
         break;
     }
     block_stream_stop();
-    if (thing_next_vehicle_mode != -1) {
-        player->vehicle_mode = thing_next_vehicle_mode;
+    if (town_next_vehicle_mode != -1) {
+        player->vehicle_mode = town_next_vehicle_mode;
     }
 }
 
-static void thing_field_loop(void) {
+static void town_loop(void) {
     s32 ev[6];
     s16 elevator_wait;
     s16 done;
 
     elevator_wait = 0;
     done = 0;
-    thing_field_enter();
+    town_enter();
     kaj_timer_enable();
     effect_start_fade(0, 3);
     while (done == 0) {
@@ -340,12 +340,12 @@ static void thing_field_loop(void) {
             event_handle_leave(ev);
             continue;
         case 4:
-            event_handle_tick(thing_field_show_clock);
+            event_handle_tick(town_show_clock);
             continue;
         case 0:
-            thing_field_input();
-            if ((s16)mail_take_scene_change() != 0) {
-                if (thing_field_exit_code == 2) {
+            town_input();
+            if ((s16)main_take_scene_change() != 0) {
+                if (town_exit_code == 2) {
                     kaj_pad_reset(0);
                     elevator_wait = 1;
                 } else {
@@ -361,22 +361,22 @@ static void thing_field_loop(void) {
             continue;
         }
         effect_start_alarm(0, 0x404, rand() % 30 + 30);
-        mail_step_frame(2, 1, 1);
+        main_step_frame(2, 1, 1);
         if (elevator_wait != 0 && block_cd_idle() != 0) {
             done = 1;
         }
     }
     kaj_timer_disable();
-    thing_field_leave();
+    town_leave();
 }
 
-static void thing_field_timer_hook(KajEvent *ev) {
+static void town_timer_hook(KajEvent *ev) {
     if (ev->param1 == 0x404) {
         sound_se_play(0x17);
     }
 }
 
-static s32 thing_train_enter_hook(KajEvent *ev) {
+static s32 town_train_enter_hook(KajEvent *ev) {
     TrainState *train = &vehicle_train_state;
     s32 trigger = ev->param1;
 
@@ -390,7 +390,7 @@ static s32 thing_train_enter_hook(KajEvent *ev) {
     return 0;
 }
 
-static s32 thing_train_leave_hook(KajEvent *ev) {
+static s32 town_train_leave_hook(KajEvent *ev) {
     TrainState *train = &vehicle_train_state;
     s32 trigger = ev->param1;
 
@@ -405,7 +405,7 @@ static s32 thing_train_leave_hook(KajEvent *ev) {
     return 0;
 }
 
-static void thing_train_tick_hook(void) {
+static void town_train_tick_hook(void) {
     if (vehicle_train_state.motion == 0 && vehicle_train_state.door_state == 1) {
         if (vehicle_train_state.stop_timer > 0) {
             vehicle_train_state.stop_timer--;
@@ -418,19 +418,19 @@ static void thing_train_tick_hook(void) {
     }
 }
 
-void thing_game_loop(void) {
-    thing_field_exit_code = 0;
+void town_game_loop(void) {
+    town_exit_code = 0;
     block_create_all();
     while (1) {
-        thing_field_loop();
-        switch (thing_field_exit_code) {
+        town_loop();
+        switch (town_exit_code) {
         case 0:
             return;
         case 1:
             sprite_phone_run();
             break;
         case 2:
-            block_bus_run(thing_field_exit_arg_hi, thing_field_exit_arg_lo);
+            building_bus_run(town_exit_arg_hi, town_exit_arg_lo);
             break;
         }
     }

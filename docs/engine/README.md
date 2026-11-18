@@ -45,14 +45,14 @@ Follow the calls from the entry point; each step names the function to open next
    [event.c](../../src/kaj/event.c) for the queue, [timer.c](../../src/kaj/timer.c) for the
    clock events, [tss.c](../../src/kaj/tss.c) and [view.c](../../src/kaj/view.c) for tasks and the screen.
 3. `object_room_main` in [object.c](../../src/game/object.c): the clearest scene loop, a switch
-   over `kaj_event_get` that calls `mail_step_frame` on every empty event. `block_building_main`
-   ([block.c](../../src/game/block.c)) and `thing_game_loop`
-   ([thing.c](../../src/game/thing.c)) have the same shape.
+   over `kaj_event_get` that calls `main_step_frame` on every empty event. `building_main`
+   ([building.c](../../src/game/building.c)) and `town_game_loop`
+   ([town.c](../../src/game/town.c)) have the same shape.
 4. `object_load_scene` and `object_read_chunks` in object.c: how a scene's chunks become sprites,
    models, sounds, scripts and tables ([files and CD](files-and-cd.md#the-chunk-walk)).
 5. The handlers in [event.c](../../src/game/event.c): alarms, area enter and leave, the clock
    tick, finished tasks and animations, and the hooks each scene installs.
-6. `mail_step_frame` in mail.c: the update order of one frame, then `action_update` in
+6. `main_step_frame` in [main.c](../../src/game/main.c): the update order of one frame, then `action_update` in
    [action.c](../../src/game/action.c) for the scripts and `player_update` in
    [player.c](../../src/game/player.c).
 7. `roadmap_draw_frame` in [roadmap.c](../../src/game/roadmap.c): the draw order, then
@@ -65,8 +65,9 @@ Five habits of the code help when reading any file:
 
 - A source file is named by the file name its error messages carry ("object.c" passed to
   `kaj_abend`, "cdmgr.c" printed with a line number); a file with no such string is named after
-  what it does ([layout](../layout.md)), and its functions carry the prefix of what they do
-  (`player_`, `npc_`, `kaj_tod_`). Each page says which file holds which module the first time.
+  what it does ([layout](../layout.md)). Every game function and global carries its file's prefix
+  (`player_` in player.c, `shop_` in shop.c); the developer's library uses `kaj_` and a topic
+  (`kaj_tod_`, `kaj_map_`).
 - Most allocations go through `kaj_malloc`, which returns NULL on failure, and most callers then
   stop in `kaj_abend` with a message such as "Error Allocating MOD Pointer": searching a message
   finds the code that owns the data. The exceptions are listed in

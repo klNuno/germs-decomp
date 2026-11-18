@@ -15,16 +15,16 @@
  */
 
 extern GameVars action_vars;
-extern MailMenu mail_menu;
-static void mail_menu_draw(MailMenu *menu, s32 draw_icons);
+extern ListMenu menu_list;
+static void menu_draw(ListMenu *menu, s32 draw_icons);
 void sprite_copy_cell(s32 src_id, s32 col, s32 row, s32 dst_id, s32 dst_x, s32 dst_y);
-static void mail_menu_draw_item_name(s32 sprite_id, s32 y, s32 item_id);
+static void menu_draw_item_name(s32 sprite_id, s32 y, s32 item_id);
 typedef struct { u16 img_x; u16 img_y; u8 unk4[0x10]; s16 u_shift; } MenuTimView;
 typedef struct { u8 unk0[0x10]; s16 cell_w; u16 cell_h; s16 columns; u16 rows; s32 unk18; MenuTimView *tim; } MenuSpriteView;
 typedef struct { s16 img_x; s16 img_y; } ItemNameTim;
 typedef struct { u8 unk0[0x1C]; ItemNameTim *tim; } ItemNameSprite;
 
-static void mail_menu_draw_item_name(s32 sprite_id, s32 y, s32 item_id) {
+static void menu_draw_item_name(s32 sprite_id, s32 y, s32 item_id) {
     s16 rect[4];
     u16 buf[0x20];
     ItemNameSprite *sprite;
@@ -173,7 +173,7 @@ static void mail_menu_draw_item_name(s32 sprite_id, s32 y, s32 item_id) {
     }
 }
 
-static void mail_menu_draw(MailMenu *menu, s32 draw_icons) {
+static void menu_draw(ListMenu *menu, s32 draw_icons) {
     s32 i;
     s16 start;
     s16 end;
@@ -201,13 +201,13 @@ static void mail_menu_draw(MailMenu *menu, s32 draw_icons) {
                 }
                 sprite_copy_cell((u16)menu->icon_sprite, col, row, menu->sprite, 0x10, (u16)(line * 0x11 + 0xC));
             } else if (menu->icon_sprite == -2) {
-                mail_menu_draw_item_name((s16)menu->sprite, line * 0x11 + 0xC, menu->list[i]);
+                menu_draw_item_name((s16)menu->sprite, line * 0x11 + 0xC, menu->list[i]);
             }
         }
     }
 }
 
-void mail_menu_clear_rows(MailMenu *menu) {
+void menu_clear_rows(ListMenu *menu) {
     s16 rect[4];
     MenuSpriteView *sprite;
     MenuSpriteView *icons;
@@ -242,10 +242,10 @@ void mail_menu_clear_rows(MailMenu *menu) {
     }
 }
 
-s16 mail_menu_move(s16 up) {
+s16 menu_move(s16 up) {
     s16 snd = 1;
     s32 scrolled = 0;
-    MailMenu *menu = &mail_menu;
+    ListMenu *menu = &menu_list;
 
     if (up != 0) {
         menu->index--;
@@ -297,18 +297,18 @@ s16 mail_menu_move(s16 up) {
     if (snd) {
         sound_se_play(0xF);
     }
-    mail_menu_draw(menu, scrolled);
+    menu_draw(menu, scrolled);
     return menu->index;
 }
 
-s32 mail_menu_open(s16 reset, s16 sprite, s16 icon_sprite, s16 count, s16 rows, s16 *list, s16 first_entry, s16 color, s16 cursor_color) {
+s32 menu_open(s16 reset, s16 sprite, s16 icon_sprite, s16 count, s16 rows, s16 *list, s16 first_entry, s16 color, s16 cursor_color) {
     GameVars *game = &action_vars;
-    MailMenu *menu = &game->mail_menu;
-    if (game->mail_menu.state != 0) {
+    ListMenu *menu = &game->menu_list;
+    if (game->menu_list.state != 0) {
         return 0;
     }
     game->menu_busy = 1;
-    game->mail_menu.state = 2;
+    game->menu_list.state = 2;
     if (reset != 0) {
         menu->index = 0;
         menu->cursor_entry = first_entry;
@@ -331,15 +331,15 @@ s32 mail_menu_open(s16 reset, s16 sprite, s16 icon_sprite, s16 count, s16 rows, 
     menu->count = count;
     menu->list = list;
     if ((icon_sprite == 0x40C || icon_sprite == 0x402 || icon_sprite == -2) && sprite == 0x40B) {
-        mail_menu_clear_rows(menu);
+        menu_clear_rows(menu);
     }
-    mail_menu_draw(menu, 1);
+    menu_draw(menu, 1);
     effect_start_sprite_slide(0xB, sprite, 2);
     return 1;
 }
 
-s32 mail_menu_close(void) {
-    MailMenu *menu = &mail_menu;
+s32 menu_close(void) {
+    ListMenu *menu = &menu_list;
     if (menu->state != 1) {
         return 0;
     }
@@ -348,10 +348,10 @@ s32 mail_menu_close(void) {
     return 1;
 }
 
-s16 mail_menu_get_state(void) { return mail_menu.state; }
+s16 menu_get_state(void) { return menu_list.state; }
 
-s32 mail_menu_set_list(u16 sprite, s16 *list) {
-    MailMenu *menu = &mail_menu;
+s32 menu_set_list(u16 sprite, s16 *list) {
+    ListMenu *menu = &menu_list;
     if (menu->state == 2) {
         return 0;
     }
@@ -362,12 +362,12 @@ s32 mail_menu_set_list(u16 sprite, s16 *list) {
     sprite_set_visible(menu->sprite, 0);
     sprite_set_visible(sprite, 1);
     menu->sprite = sprite;
-    mail_menu_draw(menu, 0);
+    menu_draw(menu, 0);
     return 1;
 }
 
-s16 mail_menu_get_entry(s16 i) {
-    MailMenu *menu = &mail_menu;
+s16 menu_get_entry(s16 i) {
+    ListMenu *menu = &menu_list;
     if (i < 0 || menu->count < i) {
         return -1;
     }

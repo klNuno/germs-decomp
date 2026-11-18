@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "commit": "a6d8328",
+ "commit": "25be5ab",
  "tracked_tree_dirty": true,
  "exe_sha1": "178e728643d9b456436f4d19c9e07db11ab8aa2c",
  "metric": "Code bytes of each function (.text of the link map). asm: still INCLUDE_ASM; c: matching C whose body still carries names we did not choose; read: matching C with only our names.",
@@ -248,7 +248,7 @@
    "bytes": 5260,
    "functions": [
     {
-     "name": "npc_update_anim",
+     "name": "actor_update_anim",
      "address": "0x8017546C",
      "bytes": 1348,
      "unk_fields": 0,
@@ -258,7 +258,7 @@
      "level": "read"
     },
     {
-     "name": "npc_update_all",
+     "name": "actor_update_all",
      "address": "0x801759B0",
      "bytes": 808,
      "unk_fields": 0,
@@ -268,7 +268,7 @@
      "level": "read"
     },
     {
-     "name": "npc_exec_command",
+     "name": "actor_exec_command",
      "address": "0x80175CD8",
      "bytes": 720,
      "unk_fields": 0,
@@ -278,7 +278,7 @@
      "level": "read"
     },
     {
-     "name": "npc_apply_damage",
+     "name": "actor_apply_damage",
      "address": "0x80175FA8",
      "bytes": 760,
      "unk_fields": 0,
@@ -288,7 +288,7 @@
      "level": "read"
     },
     {
-     "name": "npc_free_all",
+     "name": "actor_free_all",
      "address": "0x801762A0",
      "bytes": 84,
      "unk_fields": 0,
@@ -298,7 +298,7 @@
      "level": "read"
     },
     {
-     "name": "npc_find",
+     "name": "actor_find",
      "address": "0x801762F4",
      "bytes": 124,
      "unk_fields": 0,
@@ -308,7 +308,7 @@
      "level": "read"
     },
     {
-     "name": "npc_draw_all",
+     "name": "actor_draw_all",
      "address": "0x80176370",
      "bytes": 244,
      "unk_fields": 0,
@@ -318,7 +318,7 @@
      "level": "read"
     },
     {
-     "name": "npc_find_at_point",
+     "name": "actor_find_at_point",
      "address": "0x80176464",
      "bytes": 344,
      "unk_fields": 0,
@@ -328,7 +328,7 @@
      "level": "read"
     },
     {
-     "name": "npc_update_blocks",
+     "name": "actor_update_blocks",
      "address": "0x801765BC",
      "bytes": 152,
      "unk_fields": 0,
@@ -338,7 +338,7 @@
      "level": "read"
     },
     {
-     "name": "npc_rebase_all",
+     "name": "actor_rebase_all",
      "address": "0x80176654",
      "bytes": 224,
      "unk_fields": 0,
@@ -348,7 +348,7 @@
      "level": "read"
     },
     {
-     "name": "npc_get_radius",
+     "name": "actor_get_radius",
      "address": "0x80176734",
      "bytes": 76,
      "unk_fields": 0,
@@ -358,7 +358,7 @@
      "level": "read"
     },
     {
-     "name": "npc_free_bodies",
+     "name": "actor_free_bodies",
      "address": "0x80176780",
      "bytes": 84,
      "unk_fields": 0,
@@ -368,7 +368,7 @@
      "level": "read"
     },
     {
-     "name": "npc_find_body",
+     "name": "actor_find_body",
      "address": "0x801767D4",
      "bytes": 104,
      "unk_fields": 0,
@@ -378,7 +378,7 @@
      "level": "read"
     },
     {
-     "name": "npc_free_stats",
+     "name": "actor_free_stats",
      "address": "0x8017683C",
      "bytes": 84,
      "unk_fields": 0,
@@ -388,7 +388,7 @@
      "level": "read"
     },
     {
-     "name": "npc_find_stats",
+     "name": "actor_find_stats",
      "address": "0x80176890",
      "bytes": 104,
      "unk_fields": 0,
@@ -912,7 +912,7 @@
    "bytes": 5620,
    "functions": [
     {
-     "name": "block_on_effect_done",
+     "name": "building_on_effect_done",
      "address": "0x8017D604",
      "bytes": 1252,
      "unk_fields": 0,
@@ -922,7 +922,7 @@
      "level": "read"
     },
     {
-     "name": "block_on_action",
+     "name": "building_on_action",
      "address": "0x8017DAE8",
      "bytes": 648,
      "unk_fields": 0,
@@ -932,7 +932,7 @@
      "level": "read"
     },
     {
-     "name": "block_update_input",
+     "name": "building_update_input",
      "address": "0x8017DD70",
      "bytes": 564,
      "unk_fields": 0,
@@ -942,7 +942,7 @@
      "level": "read"
     },
     {
-     "name": "block_building_load",
+     "name": "building_load",
      "address": "0x8017DFA4",
      "bytes": 696,
      "unk_fields": 0,
@@ -952,7 +952,7 @@
      "level": "read"
     },
     {
-     "name": "block_building_run",
+     "name": "building_run",
      "address": "0x8017E25C",
      "bytes": 680,
      "unk_fields": 0,
@@ -962,7 +962,7 @@
      "level": "read"
     },
     {
-     "name": "block_on_enter",
+     "name": "building_on_enter",
      "address": "0x8017E504",
      "bytes": 64,
      "unk_fields": 0,
@@ -972,7 +972,7 @@
      "level": "read"
     },
     {
-     "name": "block_building_main",
+     "name": "building_main",
      "address": "0x8017E544",
      "bytes": 80,
      "unk_fields": 0,
@@ -982,7 +982,7 @@
      "level": "read"
     },
     {
-     "name": "block_bus_input",
+     "name": "building_bus_input",
      "address": "0x8017E594",
      "bytes": 1032,
      "unk_fields": 0,
@@ -992,7 +992,7 @@
      "level": "read"
     },
     {
-     "name": "block_bus_run",
+     "name": "building_bus_run",
      "address": "0x8017E99C",
      "bytes": 604,
      "unk_fields": 0,
@@ -1010,7 +1010,7 @@
    "bytes": 7948,
    "functions": [
     {
-     "name": "menu_card_init_slots",
+     "name": "card_init_slots",
      "address": "0x8017EBF8",
      "bytes": 564,
      "unk_fields": 0,
@@ -1020,7 +1020,7 @@
      "level": "read"
     },
     {
-     "name": "menu_card_set_message",
+     "name": "card_set_message",
      "address": "0x8017EE2C",
      "bytes": 448,
      "unk_fields": 0,
@@ -1030,7 +1030,7 @@
      "level": "read"
     },
     {
-     "name": "menu_card_load",
+     "name": "card_load",
      "address": "0x8017EFEC",
      "bytes": 1800,
      "unk_fields": 0,
@@ -1040,7 +1040,7 @@
      "level": "read"
     },
     {
-     "name": "menu_card_save",
+     "name": "card_save",
      "address": "0x8017F6F4",
      "bytes": 2072,
      "unk_fields": 0,
@@ -1050,7 +1050,7 @@
      "level": "read"
     },
     {
-     "name": "menu_card_scan",
+     "name": "card_scan",
      "address": "0x8017FF0C",
      "bytes": 916,
      "unk_fields": 0,
@@ -1060,7 +1060,7 @@
      "level": "read"
     },
     {
-     "name": "menu_card_move_cursor",
+     "name": "card_move_cursor",
      "address": "0x801802A0",
      "bytes": 284,
      "unk_fields": 0,
@@ -1070,7 +1070,7 @@
      "level": "read"
     },
     {
-     "name": "menu_card_handle_input",
+     "name": "card_handle_input",
      "address": "0x801803BC",
      "bytes": 896,
      "unk_fields": 0,
@@ -1080,7 +1080,7 @@
      "level": "read"
     },
     {
-     "name": "menu_card_process",
+     "name": "card_process",
      "address": "0x8018073C",
      "bytes": 436,
      "unk_fields": 0,
@@ -1090,7 +1090,7 @@
      "level": "read"
     },
     {
-     "name": "menu_card_run",
+     "name": "card_run",
      "address": "0x801808F0",
      "bytes": 532,
      "unk_fields": 0,
@@ -1108,7 +1108,7 @@
    "bytes": 14800,
    "functions": [
     {
-     "name": "menu_list_page",
+     "name": "dialog_menu_list_page",
      "address": "0x80180B04",
      "bytes": 648,
      "unk_fields": 0,
@@ -1118,7 +1118,7 @@
      "level": "read"
     },
     {
-     "name": "menu_status_page",
+     "name": "dialog_menu_status_page",
      "address": "0x80180D8C",
      "bytes": 2240,
      "unk_fields": 0,
@@ -1128,7 +1128,7 @@
      "level": "read"
     },
     {
-     "name": "menu_options_page",
+     "name": "dialog_menu_options_page",
      "address": "0x8018164C",
      "bytes": 460,
      "unk_fields": 0,
@@ -1138,7 +1138,7 @@
      "level": "read"
     },
     {
-     "name": "menu_move_cursor",
+     "name": "dialog_menu_move_cursor",
      "address": "0x80181818",
      "bytes": 588,
      "unk_fields": 0,
@@ -1148,7 +1148,7 @@
      "level": "read"
     },
     {
-     "name": "menu_confirm",
+     "name": "dialog_menu_confirm",
      "address": "0x80181A64",
      "bytes": 428,
      "unk_fields": 0,
@@ -1158,7 +1158,7 @@
      "level": "read"
     },
     {
-     "name": "menu_back",
+     "name": "dialog_menu_back",
      "address": "0x80181C10",
      "bytes": 284,
      "unk_fields": 0,
@@ -1168,7 +1168,7 @@
      "level": "read"
     },
     {
-     "name": "menu_handle_input",
+     "name": "dialog_menu_handle_input",
      "address": "0x80181D2C",
      "bytes": 624,
      "unk_fields": 0,
@@ -1178,7 +1178,7 @@
      "level": "read"
     },
     {
-     "name": "menu_animate",
+     "name": "dialog_menu_animate",
      "address": "0x80181F9C",
      "bytes": 868,
      "unk_fields": 0,
@@ -1188,7 +1188,7 @@
      "level": "read"
     },
     {
-     "name": "menu_run",
+     "name": "dialog_menu_run",
      "address": "0x80182300",
      "bytes": 536,
      "unk_fields": 0,
@@ -1198,7 +1198,7 @@
      "level": "read"
     },
     {
-     "name": "text_draw_string",
+     "name": "dialog_draw_string",
      "address": "0x80182518",
      "bytes": 840,
      "unk_fields": 0,
@@ -1208,7 +1208,7 @@
      "level": "read"
     },
     {
-     "name": "text_draw_next",
+     "name": "dialog_draw_next",
      "address": "0x80182860",
      "bytes": 1236,
      "unk_fields": 0,
@@ -1218,7 +1218,7 @@
      "level": "read"
     },
     {
-     "name": "text_draw_line",
+     "name": "dialog_draw_line",
      "address": "0x80182D34",
      "bytes": 876,
      "unk_fields": 0,
@@ -1228,7 +1228,7 @@
      "level": "read"
     },
     {
-     "name": "text_format_number",
+     "name": "dialog_format_number",
      "address": "0x801830A0",
      "bytes": 332,
      "unk_fields": 0,
@@ -1238,7 +1238,7 @@
      "level": "read"
     },
     {
-     "name": "text_show_timed",
+     "name": "dialog_show_timed",
      "address": "0x801831EC",
      "bytes": 704,
      "unk_fields": 0,
@@ -1248,7 +1248,7 @@
      "level": "read"
     },
     {
-     "name": "text_start_typing",
+     "name": "dialog_start_typing",
      "address": "0x801834AC",
      "bytes": 364,
      "unk_fields": 0,
@@ -1258,7 +1258,7 @@
      "level": "read"
     },
     {
-     "name": "text_show_profile",
+     "name": "dialog_show_profile",
      "address": "0x80183618",
      "bytes": 472,
      "unk_fields": 0,
@@ -1268,7 +1268,7 @@
      "level": "read"
     },
     {
-     "name": "text_exec_command",
+     "name": "dialog_exec_command",
      "address": "0x801837F0",
      "bytes": 1292,
      "unk_fields": 0,
@@ -1278,7 +1278,7 @@
      "level": "read"
     },
     {
-     "name": "text_start_narration",
+     "name": "dialog_start_narration",
      "address": "0x80183CFC",
      "bytes": 396,
      "unk_fields": 0,
@@ -1288,7 +1288,7 @@
      "level": "read"
     },
     {
-     "name": "text_show",
+     "name": "dialog_show",
      "address": "0x80183E88",
      "bytes": 524,
      "unk_fields": 0,
@@ -1298,7 +1298,7 @@
      "level": "read"
     },
     {
-     "name": "text_close",
+     "name": "dialog_close",
      "address": "0x80184094",
      "bytes": 108,
      "unk_fields": 0,
@@ -1308,7 +1308,7 @@
      "level": "read"
     },
     {
-     "name": "text_next_page",
+     "name": "dialog_next_page",
      "address": "0x80184100",
      "bytes": 96,
      "unk_fields": 0,
@@ -1318,7 +1318,7 @@
      "level": "read"
     },
     {
-     "name": "text_release_cmd",
+     "name": "dialog_release_cmd",
      "address": "0x80184160",
      "bytes": 100,
      "unk_fields": 0,
@@ -1328,7 +1328,7 @@
      "level": "read"
     },
     {
-     "name": "text_wait_step",
+     "name": "dialog_wait_step",
      "address": "0x801841C4",
      "bytes": 108,
      "unk_fields": 0,
@@ -1338,7 +1338,7 @@
      "level": "read"
     },
     {
-     "name": "text_type_step",
+     "name": "dialog_type_step",
      "address": "0x80184230",
      "bytes": 264,
      "unk_fields": 0,
@@ -1348,7 +1348,7 @@
      "level": "read"
     },
     {
-     "name": "text_narration_step",
+     "name": "dialog_narration_step",
      "address": "0x80184338",
      "bytes": 208,
      "unk_fields": 0,
@@ -1358,7 +1358,7 @@
      "level": "read"
     },
     {
-     "name": "text_narration_end",
+     "name": "dialog_narration_end",
      "address": "0x80184408",
      "bytes": 44,
      "unk_fields": 0,
@@ -1368,7 +1368,7 @@
      "level": "read"
     },
     {
-     "name": "text_narration_cues",
+     "name": "dialog_narration_cues",
      "address": "0x80184434",
      "bytes": 160,
      "unk_fields": 0,
@@ -2458,7 +2458,7 @@
      "level": "read"
     },
     {
-     "name": "mail_angle_to_dir8",
+     "name": "main_angle_to_dir8",
      "address": "0x8018C0A0",
      "bytes": 208,
      "unk_fields": 0,
@@ -2468,7 +2468,7 @@
      "level": "read"
     },
     {
-     "name": "mail_take_scene_change",
+     "name": "main_take_scene_change",
      "address": "0x8018C170",
      "bytes": 64,
      "unk_fields": 0,
@@ -2478,7 +2478,7 @@
      "level": "read"
     },
     {
-     "name": "mail_wait",
+     "name": "main_wait",
      "address": "0x8018C1B0",
      "bytes": 332,
      "unk_fields": 0,
@@ -2488,7 +2488,7 @@
      "level": "read"
     },
     {
-     "name": "mail_step_frame",
+     "name": "main_step_frame",
      "address": "0x8018C2FC",
      "bytes": 280,
      "unk_fields": 0,
@@ -2498,7 +2498,7 @@
      "level": "read"
     },
     {
-     "name": "mail_goto_ofc",
+     "name": "main_goto_ofc",
      "address": "0x8018C414",
      "bytes": 248,
      "unk_fields": 0,
@@ -2508,7 +2508,7 @@
      "level": "read"
     },
     {
-     "name": "mail_goto_twn",
+     "name": "main_goto_twn",
      "address": "0x8018C50C",
      "bytes": 72,
      "unk_fields": 0,
@@ -2518,7 +2518,7 @@
      "level": "read"
     },
     {
-     "name": "mail_goto_building",
+     "name": "main_goto_building",
      "address": "0x8018C554",
      "bytes": 508,
      "unk_fields": 0,
@@ -2528,7 +2528,7 @@
      "level": "read"
     },
     {
-     "name": "mail_wrap_angle",
+     "name": "main_wrap_angle",
      "address": "0x8018C750",
      "bytes": 64,
      "unk_fields": 0,
@@ -2538,7 +2538,7 @@
      "level": "read"
     },
     {
-     "name": "mail_angle_to_dir4",
+     "name": "main_angle_to_dir4",
      "address": "0x8018C790",
      "bytes": 128,
      "unk_fields": 0,
@@ -2548,7 +2548,7 @@
      "level": "read"
     },
     {
-     "name": "mail_exp_for_level",
+     "name": "main_exp_for_level",
      "address": "0x8018C810",
      "bytes": 84,
      "unk_fields": 0,
@@ -2566,7 +2566,7 @@
    "bytes": 2680,
    "functions": [
     {
-     "name": "mail_menu_draw_item_name",
+     "name": "menu_draw_item_name",
      "address": "0x8018C864",
      "bytes": 780,
      "unk_fields": 0,
@@ -2576,7 +2576,7 @@
      "level": "read"
     },
     {
-     "name": "mail_menu_draw",
+     "name": "menu_draw",
      "address": "0x8018CB70",
      "bytes": 476,
      "unk_fields": 0,
@@ -2586,7 +2586,7 @@
      "level": "read"
     },
     {
-     "name": "mail_menu_clear_rows",
+     "name": "menu_clear_rows",
      "address": "0x8018CD4C",
      "bytes": 340,
      "unk_fields": 0,
@@ -2596,7 +2596,7 @@
      "level": "read"
     },
     {
-     "name": "mail_menu_move",
+     "name": "menu_move",
      "address": "0x8018CEA0",
      "bytes": 472,
      "unk_fields": 0,
@@ -2606,7 +2606,7 @@
      "level": "read"
     },
     {
-     "name": "mail_menu_open",
+     "name": "menu_open",
      "address": "0x8018D078",
      "bytes": 296,
      "unk_fields": 0,
@@ -2616,7 +2616,7 @@
      "level": "read"
     },
     {
-     "name": "mail_menu_close",
+     "name": "menu_close",
      "address": "0x8018D1A0",
      "bytes": 80,
      "unk_fields": 0,
@@ -2626,7 +2626,7 @@
      "level": "read"
     },
     {
-     "name": "mail_menu_get_state",
+     "name": "menu_get_state",
      "address": "0x8018D1F0",
      "bytes": 16,
      "unk_fields": 0,
@@ -2636,7 +2636,7 @@
      "level": "read"
     },
     {
-     "name": "mail_menu_set_list",
+     "name": "menu_set_list",
      "address": "0x8018D200",
      "bytes": 148,
      "unk_fields": 0,
@@ -2646,7 +2646,7 @@
      "level": "read"
     },
     {
-     "name": "mail_menu_get_entry",
+     "name": "menu_get_entry",
      "address": "0x8018D294",
      "bytes": 72,
      "unk_fields": 0,
@@ -2842,7 +2842,7 @@
    "bytes": 4448,
    "functions": [
     {
-     "name": "mod_place_npcrec",
+     "name": "npc_rec_place",
      "address": "0x8018E8B8",
      "bytes": 328,
      "unk_fields": 0,
@@ -2852,7 +2852,7 @@
      "level": "read"
     },
     {
-     "name": "mod_npcrec_move_step",
+     "name": "npc_rec_move_step",
      "address": "0x8018EA00",
      "bytes": 580,
      "unk_fields": 0,
@@ -2862,7 +2862,7 @@
      "level": "read"
     },
     {
-     "name": "mod_npcrec_move_to",
+     "name": "npc_rec_move_to",
      "address": "0x8018EC44",
      "bytes": 656,
      "unk_fields": 0,
@@ -2872,7 +2872,7 @@
      "level": "read"
     },
     {
-     "name": "mod_cmd_npcrec",
+     "name": "npc_rec_cmd",
      "address": "0x8018EED4",
      "bytes": 864,
      "unk_fields": 0,
@@ -2882,7 +2882,7 @@
      "level": "read"
     },
     {
-     "name": "mod_npcrec_update_all",
+     "name": "npc_rec_update_all",
      "address": "0x8018F234",
      "bytes": 500,
      "unk_fields": 0,
@@ -2892,7 +2892,7 @@
      "level": "read"
     },
     {
-     "name": "mod_npcrec_show",
+     "name": "npc_rec_show",
      "address": "0x8018F428",
      "bytes": 276,
      "unk_fields": 0,
@@ -2902,7 +2902,7 @@
      "level": "read"
     },
     {
-     "name": "mod_npcrec_free_table",
+     "name": "npc_rec_free_table",
      "address": "0x8018F53C",
      "bytes": 84,
      "unk_fields": 0,
@@ -2912,7 +2912,7 @@
      "level": "read"
     },
     {
-     "name": "mod_npcrec_find",
+     "name": "npc_rec_find",
      "address": "0x8018F590",
      "bytes": 88,
      "unk_fields": 0,
@@ -2922,7 +2922,7 @@
      "level": "read"
     },
     {
-     "name": "mod_npcrec_rebase_all",
+     "name": "npc_rec_rebase_all",
      "address": "0x8018F5E8",
      "bytes": 256,
      "unk_fields": 0,
@@ -2932,7 +2932,7 @@
      "level": "read"
     },
     {
-     "name": "mod_npcrec_draw_all",
+     "name": "npc_rec_draw_all",
      "address": "0x8018F6E8",
      "bytes": 232,
      "unk_fields": 0,
@@ -2942,7 +2942,7 @@
      "level": "read"
     },
     {
-     "name": "mod_npcrec_find_at_point",
+     "name": "npc_rec_find_at_point",
      "address": "0x8018F7D0",
      "bytes": 332,
      "unk_fields": 0,
@@ -2952,7 +2952,7 @@
      "level": "read"
     },
     {
-     "name": "mod_npcrec_reset_all",
+     "name": "npc_rec_reset_all",
      "address": "0x8018F91C",
      "bytes": 60,
      "unk_fields": 0,
@@ -2962,7 +2962,7 @@
      "level": "read"
     },
     {
-     "name": "mod_npcrec_move_end",
+     "name": "npc_rec_move_end",
      "address": "0x8018F958",
      "bytes": 192,
      "unk_fields": 0,
@@ -3368,7 +3368,7 @@
    "bytes": 22056,
    "functions": [
     {
-     "name": "object_deliver_area_events",
+     "name": "player_deliver_area_events",
      "address": "0x80194FAC",
      "bytes": 236,
      "unk_fields": 0,
@@ -3964,7 +3964,7 @@
    "bytes": 6492,
    "functions": [
     {
-     "name": "roadmap_shop_pick_weapons",
+     "name": "shop_pick_weapons",
      "address": "0x801A0820",
      "bytes": 344,
      "unk_fields": 0,
@@ -3974,7 +3974,7 @@
      "level": "read"
     },
     {
-     "name": "roadmap_shop_topic_menu",
+     "name": "shop_topic_menu",
      "address": "0x801A0978",
      "bytes": 464,
      "unk_fields": 0,
@@ -3984,7 +3984,7 @@
      "level": "read"
     },
     {
-     "name": "roadmap_shop_say_reply",
+     "name": "shop_say_reply",
      "address": "0x801A0B48",
      "bytes": 528,
      "unk_fields": 0,
@@ -3994,7 +3994,7 @@
      "level": "read"
     },
     {
-     "name": "roadmap_fade_screen_music",
+     "name": "shop_fade_screen_music",
      "address": "0x801A0D58",
      "bytes": 388,
      "unk_fields": 0,
@@ -4004,7 +4004,7 @@
      "level": "read"
     },
     {
-     "name": "roadmap_shop_finish",
+     "name": "shop_finish",
      "address": "0x801A0EDC",
      "bytes": 1476,
      "unk_fields": 0,
@@ -4014,7 +4014,7 @@
      "level": "read"
     },
     {
-     "name": "roadmap_shop_update_input",
+     "name": "shop_update_input",
      "address": "0x801A14A0",
      "bytes": 1560,
      "unk_fields": 0,
@@ -4024,7 +4024,7 @@
      "level": "read"
     },
     {
-     "name": "roadmap_shop_open_menu",
+     "name": "shop_open_menu",
      "address": "0x801A1AB8",
      "bytes": 1032,
      "unk_fields": 0,
@@ -4034,7 +4034,7 @@
      "level": "read"
     },
     {
-     "name": "roadmap_shop_init",
+     "name": "shop_init",
      "address": "0x801A1EC0",
      "bytes": 276,
      "unk_fields": 0,
@@ -4044,7 +4044,7 @@
      "level": "read"
     },
     {
-     "name": "roadmap_shop_exit_to_town",
+     "name": "shop_exit_to_town",
      "address": "0x801A1FD4",
      "bytes": 212,
      "unk_fields": 0,
@@ -4054,7 +4054,7 @@
      "level": "read"
     },
     {
-     "name": "roadmap_shop_open_topic_list",
+     "name": "shop_open_topic_list",
      "address": "0x801A20A8",
      "bytes": 36,
      "unk_fields": 0,
@@ -4064,7 +4064,7 @@
      "level": "read"
     },
     {
-     "name": "roadmap_shop_on_enter",
+     "name": "shop_on_enter",
      "address": "0x801A20CC",
      "bytes": 80,
      "unk_fields": 0,
@@ -4074,7 +4074,7 @@
      "level": "read"
     },
     {
-     "name": "roadmap_shop_on_leave",
+     "name": "shop_on_leave",
      "address": "0x801A211C",
      "bytes": 80,
      "unk_fields": 0,
@@ -4084,7 +4084,7 @@
      "level": "read"
     },
     {
-     "name": "roadmap_cmp_weapon_level",
+     "name": "shop_cmp_weapon_level",
      "address": "0x801A216C",
      "bytes": 16,
      "unk_fields": 0,
@@ -4698,7 +4698,7 @@
    "bytes": 5948,
    "functions": [
     {
-     "name": "sprite_thing_init",
+     "name": "thing_init_from_record",
      "address": "0x801A6C34",
      "bytes": 640,
      "unk_fields": 0,
@@ -4708,7 +4708,7 @@
      "level": "read"
     },
     {
-     "name": "sprite_thing_refresh_all",
+     "name": "thing_refresh_all",
      "address": "0x801A6EB4",
      "bytes": 464,
      "unk_fields": 0,
@@ -4718,7 +4718,7 @@
      "level": "read"
     },
     {
-     "name": "sprite_thing_draw_all",
+     "name": "thing_draw_all",
      "address": "0x801A7084",
      "bytes": 504,
      "unk_fields": 0,
@@ -4728,7 +4728,7 @@
      "level": "read"
     },
     {
-     "name": "sprite_thing_update_marker",
+     "name": "thing_update_target_marker",
      "address": "0x801A727C",
      "bytes": 432,
      "unk_fields": 0,
@@ -4738,7 +4738,7 @@
      "level": "read"
     },
     {
-     "name": "sprite_thing_update_fly_in",
+     "name": "thing_update_title_fly_in",
      "address": "0x801A742C",
      "bytes": 308,
      "unk_fields": 0,
@@ -4886,7 +4886,7 @@
    "bytes": 3484,
    "functions": [
     {
-     "name": "thing_field_task_hook",
+     "name": "town_task_hook",
      "address": "0x801A8370",
      "bytes": 412,
      "unk_fields": 0,
@@ -4896,7 +4896,7 @@
      "level": "read"
     },
     {
-     "name": "thing_field_do_action",
+     "name": "town_do_action",
      "address": "0x801A850C",
      "bytes": 604,
      "unk_fields": 0,
@@ -4906,7 +4906,7 @@
      "level": "read"
     },
     {
-     "name": "thing_field_input",
+     "name": "town_input",
      "address": "0x801A8768",
      "bytes": 332,
      "unk_fields": 0,
@@ -4916,7 +4916,7 @@
      "level": "read"
     },
     {
-     "name": "thing_field_enter",
+     "name": "town_enter",
      "address": "0x801A88B4",
      "bytes": 644,
      "unk_fields": 0,
@@ -4926,7 +4926,7 @@
      "level": "read"
     },
     {
-     "name": "thing_field_leave",
+     "name": "town_leave",
      "address": "0x801A8B38",
      "bytes": 452,
      "unk_fields": 0,
@@ -4936,7 +4936,7 @@
      "level": "read"
     },
     {
-     "name": "thing_field_loop",
+     "name": "town_loop",
      "address": "0x801A8CFC",
      "bytes": 512,
      "unk_fields": 0,
@@ -4946,7 +4946,7 @@
      "level": "read"
     },
     {
-     "name": "thing_field_timer_hook",
+     "name": "town_timer_hook",
      "address": "0x801A8EFC",
      "bytes": 48,
      "unk_fields": 0,
@@ -4956,7 +4956,7 @@
      "level": "read"
     },
     {
-     "name": "thing_train_enter_hook",
+     "name": "town_train_enter_hook",
      "address": "0x801A8F2C",
      "bytes": 96,
      "unk_fields": 0,
@@ -4966,7 +4966,7 @@
      "level": "read"
     },
     {
-     "name": "thing_train_leave_hook",
+     "name": "town_train_leave_hook",
      "address": "0x801A8F8C",
      "bytes": 108,
      "unk_fields": 0,
@@ -4976,7 +4976,7 @@
      "level": "read"
     },
     {
-     "name": "thing_train_tick_hook",
+     "name": "town_train_tick_hook",
      "address": "0x801A8FF8",
      "bytes": 120,
      "unk_fields": 0,
@@ -4986,7 +4986,7 @@
      "level": "read"
     },
     {
-     "name": "thing_game_loop",
+     "name": "town_game_loop",
      "address": "0x801A9070",
      "bytes": 156,
      "unk_fields": 0,
@@ -5004,7 +5004,7 @@
    "bytes": 14532,
    "functions": [
     {
-     "name": "thing_train_calc_stops",
+     "name": "vehicle_train_calc_stops",
      "address": "0x801A910C",
      "bytes": 304,
      "unk_fields": 0,
@@ -5014,7 +5014,7 @@
      "level": "read"
     },
     {
-     "name": "thing_car_init",
+     "name": "vehicle_car_init",
      "address": "0x801A923C",
      "bytes": 1104,
      "unk_fields": 0,
@@ -5024,7 +5024,7 @@
      "level": "read"
     },
     {
-     "name": "thing_car_get_out",
+     "name": "vehicle_car_get_out",
      "address": "0x801A968C",
      "bytes": 1384,
      "unk_fields": 0,
@@ -5034,7 +5034,7 @@
      "level": "read"
     },
     {
-     "name": "thing_train_init",
+     "name": "vehicle_train_init",
      "address": "0x801A9BF4",
      "bytes": 688,
      "unk_fields": 0,
@@ -5044,7 +5044,7 @@
      "level": "read"
     },
     {
-     "name": "thing_train_update",
+     "name": "vehicle_train_drive",
      "address": "0x801A9EA4",
      "bytes": 1212,
      "unk_fields": 0,

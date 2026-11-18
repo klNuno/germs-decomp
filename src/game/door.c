@@ -513,7 +513,7 @@ void door_exec_command(Action *action, EventState *event) {
 DoorList *door_list;
 extern char door_str_file[];
 extern SceneTables object_scene_tables[];
-extern ScreenLight screen_light;
+extern ScreenLight roadmap_screen_light;
 
 void door_create(Door **out, u32 record_size) {
     *out = kaj_malloc(0x80);
@@ -600,7 +600,7 @@ Door *door_find(u16 id) {
 void door_draw_all(ViewBuffer *view) {
     s32 ls[8];
     DoorList *list = door_list;
-    ScreenLight *light = &screen_light;
+    ScreenLight *light = &roadmap_screen_light;
     Door *door;
     Block *block;
 
@@ -679,7 +679,7 @@ void door_set_visible(u16 id, s16 visible) {
 }
 
 void door_fade_step(TssSlot *task) {
-    ScreenLight *light = &screen_light;
+    ScreenLight *light = &roadmap_screen_light;
     BgmSep *bgm = object_scene_tables[0].bgm;
     s32 volume;
     s32 t;

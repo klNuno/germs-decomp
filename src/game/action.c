@@ -35,7 +35,7 @@ LlList *action_set_list;
 extern EventState event_state;
 extern Player *player_status_player[];
 extern s32 kaj_system_vsync_delta[];
-void mail_goto_building(s32 form, char *name, s32 var, s32 map_letter, s32 map_entry, s32 yaw, s32 scene_index, s32 trigger, s32 script_entry);
+void main_goto_building(s32 form, char *name, s32 var, s32 map_letter, s32 map_entry, s32 yaw, s32 scene_index, s32 trigger, s32 script_entry);
 extern u16 action_vars[];
 typedef struct {
     s16 opcode;
@@ -68,9 +68,9 @@ void action_cmd_change_scene(Action *action, s32 *event) {
     switch (cmd->sub) {
     case 0:
         if (atoi(action->args[0]) != 0) {
-            mail_goto_ofc(1, 0, 1, 0);
+            main_goto_ofc(1, 0, 1, 0);
         } else {
-            mail_goto_ofc(1, 1, 1, 2);
+            main_goto_ofc(1, 1, 1, 2);
         }
         break;
     case 1:
@@ -79,13 +79,13 @@ void action_cmd_change_scene(Action *action, s32 *event) {
         b = (s16)atoi(action->args[2]);
         c = (s16)atoi(action->args[3]);
         d = (s16)atoi(action->args[5]);
-        mail_goto_building(cmd->sub, action->args[1], a, action->args[0][0], b, c, d, *event, 1);
+        main_goto_building(cmd->sub, action->args[1], a, action->args[0][0], b, c, d, *event, 1);
         break;
     case 2:
         x = atoi(action->args[0]) * 10;
         y = atoi(action->args[1]) * 10;
         z = atoi(action->args[2]) * 10;
-        mail_goto_twn(x, y, z, atoi(action->args[3]), 1);
+        main_goto_twn(x, y, z, atoi(action->args[3]), 1);
         break;
     }
 }
@@ -222,7 +222,7 @@ void action_update(void) {
         }
         break;
     case 1:
-        npc_exec_command(action);
+        actor_exec_command(action);
         break;
     case 2:
         thing_cmd_set_active(action);
@@ -238,13 +238,13 @@ void action_update(void) {
         door_exec_command(action, event);
         break;
     case 5:
-        text_exec_command(action);
+        dialog_exec_command(action);
         break;
     case 6:
         action_cmd_change_scene(action, (s32 *)event);
         break;
     case 7:
-        mod_cmd_npcrec(action, event);
+        npc_rec_cmd(action, event);
         break;
     case 8:
         player_exec_command(action, event);
@@ -594,7 +594,7 @@ void action_reset(s16 flush_all) {
     LlList *list;
     ActionCmd *cmd;
 
-    text_release_cmd();
+    dialog_release_cmd();
     memset(event, 0, 0x14);
     event->circle_set = -1;
     event->cross_set = -1;
@@ -939,7 +939,7 @@ found:
         if (enter != 0) {
             set = action_find_set(0x400);
         } else {
-            text_close();
+            dialog_close();
         }
     } else if (npc->mode == 1) {
         if (npc->flags & 0x20) {

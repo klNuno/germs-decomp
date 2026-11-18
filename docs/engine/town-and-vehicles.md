@@ -3,9 +3,9 @@
 The world of Germs is built from blocks: pieces of map with a floor model, up to three other models and an optional
 grid for the enemies. The town streams its blocks by cells around the player, a building loads its rooms. This page
 covers the blocks of [block.c](../../src/game/block.c), how the code finds the ground under a
-point, the buildings and their state, the town loop with the car and the train of the
-[thing.c](../../src/game/thing.c) and [vehicle.c](../../src/game/vehicle.c) units, and the shops of
-[roadmap.c](../../src/game/roadmap.c). How a scene file is read is in [scenes and scripts](scenes-and-scripts.md).
+point, the buildings and their state ([building.c](../../src/game/building.c)), the town loop of
+[town.c](../../src/game/town.c) with the car and the train of [vehicle.c](../../src/game/vehicle.c), and the shops of
+[shop.c](../../src/game/shop.c). How a scene file is read is in [scenes and scripts](scenes-and-scripts.md).
 
 ## Town blocks
 
@@ -33,14 +33,14 @@ block starts with `far` set; in a building they are raw. A table of offsets give
 
 Each frame `block_stream_update` (0x8017AAB4) polls the map layer with the player position: `kaj_map_update_city`
 (0x801D4FA0) in the town, `kaj_map_update_place` (0x801D5934) in a building. Status 3 means a new set of resources
-is in: every slot is cleared and refilled through `block_setup`, and in a building `npc_update_blocks` (0x801765BC)
+is in: every slot is cleared and refilled through `block_setup`, and in a building `actor_update_blocks` (0x801765BC)
 moves the people to their new blocks. Status 1, or a finished CD read, marks the cell ready and calls
 `block_load_all` again. The map layer itself (the kaj cdmgr and map files) is described in [files and the
 CD](files-and-cd.md).
 
 In the town, `block_set_zone_flags` (0x8017A6E8) also tests the player position (in hundreds of units) against fixed
 rectangles of the map and sets three effect switches in `GameVars`. A building sets the first two from the entry the
-map gives instead. `mail_step_frame` (0x8018C2FC) runs the effects while they are set:
+map gives instead. `main_step_frame` (0x8018C2FC) runs the effects while they are set:
 
 | Field | Effect it turns on | Town area |
 | --- | --- | --- |
@@ -87,37 +87,37 @@ combat](people-and-combat.md#targets-and-line-of-sight)).
 
 ## Buildings and their state
 
-`block_building_main` (0x8017E544) creates the slots and runs `block_building_run` (0x8017E25C):
-`block_building_load` (0x8017DFA4), then a loop on kaj events (0x10 enter and 0x20 leave a trigger, 0x400 closes a
-shop topic, and the other event handlers). `block_building_load` sets mode 1, builds the path `\S\<name>.S;1` from
-the request, loads the scene, then sets the building up by its kind, `scene_request` +0x10, which
-`mail_goto_building` (0x8018C554) derives from the door's trigger code:
+`building_main` (0x8017E544) creates the slots and runs `building_run` (0x8017E25C):
+`building_load` (0x8017DFA4), then a loop on kaj events (0x10 enter and 0x20 leave a trigger, 0x400 closes a
+shop topic, and the other event handlers). `building_load` sets mode 1, builds the path `\S\<name>.S;1` from
+the request, loads the scene, then sets the building up by its kind, `main_scene_request` +0x10, which
+`main_goto_building` (0x8018C554) derives from the door's trigger code:
 
-| Kind | Source | Setup in `block_building_load` |
+| Kind | Source | Setup in `building_load` |
 | --- | --- | --- |
-| 0 | a plain building | by room number: scene objects and figures shown (`mod_npcrec_show`, 0x8018F428), flames started (`effect_flame_small_init`, 0x8018647C) for some rooms |
-| 1, 2 | trigger codes 0xF6xxxx and 0xF9xxxx | a station: `sprite_station_init` (0x801A5C34); kind 1 also sets `block_scene_daylight` for `event_show_clock` (0x8018AABC) |
-| 3 and up | the trigger's middle byte plus 2 | a shop: `roadmap_shop_init` (0x801A1EC0) |
+| 0 | a plain building | by room number: scene objects and figures shown (`npc_rec_show`, 0x8018F428), flames started (`effect_flame_small_init`, 0x8018647C) for some rooms |
+| 1, 2 | trigger codes 0xF6xxxx and 0xF9xxxx | a station: `sprite_station_init` (0x801A5C34); kind 1 also sets `building_scene_daylight` for `event_show_clock` (0x8018AABC) |
+| 3 and up | the trigger's middle byte plus 2 | a shop: `shop_init` (0x801A1EC0) |
 
 The state of a building lives in its game variable (variables 9 to 27): its value picks the scene variant ([the
-scene request](scenes-and-scripts.md#the-scene-request)). `mail_goto_building` also raises `scene_request` +0x14
-when the variable is one of 11 to 26 (not 13) and its value is 11 to 100; `block_building_load` then plays sound
+scene request](scenes-and-scripts.md#the-scene-request)). `main_goto_building` also raises `main_scene_request` +0x14
+when the variable is one of 11 to 26 (not 13) and its value is 11 to 100; `building_load` then plays sound
 effect 0x21 on arrival.
 
 ## The town loop
 
-`thing_game_loop` (0x801A9070), called once by `main` (0x8018BDE8), loops on `thing_field_loop` (0x801A8CFC). That
-runs `thing_field_enter` (0x801A88B4), polls kaj events, calls `thing_field_input` (0x801A8768) and
-`mail_step_frame` each frame, and ends with `thing_field_leave` (0x801A8B38). The exit code it leaves decides what
+`town_game_loop` (0x801A9070), called once by `main` (0x8018BDE8), loops on `town_loop` (0x801A8CFC). That
+runs `town_enter` (0x801A88B4), polls kaj events, calls `town_input` (0x801A8768) and
+`main_step_frame` each frame, and ends with `town_leave` (0x801A8B38). The exit code it leaves decides what
 comes next: 0 quit, 1 the phone (`sprite_phone_run`, 0x801A6AC4, after a 0xFF trigger), 2 the bus (below), 3 get
 into the car, 4 get out. The vehicle mode the player is in is player `vehicle_mode`: 0 on foot, 1 the car, 2 the train, 3
-the subway. `vehicle_update` (0x801AC4A8) runs `vehicle_car_drive` (0x801AA360) in mode 1 and `thing_train_update`
+the subway. `vehicle_update` (0x801AC4A8) runs `vehicle_car_drive` (0x801AA360) in mode 1 and `vehicle_train_drive`
 (0x801A9EA4) in modes 2 and 3.
 
-A 0xFE trigger (a bus stop) answered with CIRCLE in `thing_field_do_action` (0x801A850C) leaves exit code 2 with the
-trigger's two low bytes, and `thing_game_loop` passes them to `block_elevator_run` (0x8017E99C). Despite its name,
+A 0xFE trigger (a bus stop) answered with CIRCLE in `town_do_action` (0x801A850C) leaves exit code 2 with the
+trigger's two low bytes, and `town_game_loop` passes them to `block_elevator_run` (0x8017E99C). Despite its name,
 this is reached only from the town: `block_elevator_input` (0x8017E594) moves a selection from 1 to 11 (1 to 5 when
-the first byte is 3), recolours the sprite, and warps through `mail_goto_twn` (0x8018C50C) to a town position stored
+the first byte is 3), recolours the sprite, and warps through `main_goto_twn` (0x8018C50C) to a town position stored
 for each line and stop; the clock then advances 5 minutes per step moved (`event_advance_clock`, 0x8018ABE8).
 
 ## The car
@@ -132,11 +132,11 @@ computes:
 | revs, forward gear | 800 + 30 times the `brake` counter, at most 6500, minus 45 times the `throttle` counter, at least 800 |
 | revs, reverse | the same with the two counters swapped |
 | speed | (revs - 800) x 347436 / (divisor x 55086), or / (divisor x 72566) backward, then a quarter of it, times the frame time |
-| divisor | `thing_car_speed_div`: 300, 400 or 500 from the car speed setting (`thing_car_init`, 0x801A923C); three times more while `vehicle_car_state.slowed` is set |
+| divisor | `vehicle_car_speed_div`: 300, 400 or 500 from the car speed setting (`vehicle_car_init`, 0x801A923C); three times more while `vehicle_car_state.slowed` is set |
 
 (The two counter names look swapped by their use.)  Sound effect 0x1B plays when speed is 25 or more with steering
 40 or more. When the car stands, the prompt to get out shows and CIRCLE leaves (`vehicle_car_stopped_input`,
-0x801ABA88); `thing_car_get_out` (0x801A968C) tries four spots around the car (245 to the sides, 490 ahead and
+0x801ABA88); `vehicle_car_get_out` (0x801A968C) tries four spots around the car (245 to the sides, 490 ahead and
 behind) with `block_has_ground_at`.
 
 ## Car navigation
@@ -149,8 +149,8 @@ gauge from the start distance, picks one of eight arrow frames with `ratan2`, an
 
 Two train codes exist. Thing (2, 0) is the train seen from a platform: `vehicle_train_arrive` (0x801AAA9C) sends it
 in from z -16000 or 48000, `vehicle_train_update` (0x801AACF4) brakes it to z 16000 and opens its doors (sprite
-0x408 frames, `vehicle_train_set_doors`, 0x801AC70C). The ride itself is `thing_train_update`, in vehicle.c:
-`TrainState` holds a direction, a station from 1 to 6 and four marks on z (`thing_train_calc_stops`, 0x801A910C,
+0x408 frames, `vehicle_train_set_doors`, 0x801AC70C). The ride itself is `vehicle_train_drive`, in vehicle.c:
+`TrainState` holds a direction, a station from 1 to 6 and four marks on z (`vehicle_train_calc_stops`, 0x801A910C,
 100000 apart) for start, cruise, brake and stop. Speed grows with the distance from the start mark (/ 300 + 7),
 holds while cruising and falls with the distance to the stop mark. At the stop, the doors open, `stop_timer` starts
 at 2 and the player is carried by the car's matrix. Getting off (`vehicle_train_get_off`, 0x801AB1A0) goes to the
@@ -158,12 +158,12 @@ station scene `SB1` (subway) or `RW1` (train); at a line end `vehicle_train_end_
 
 ## Shops
 
-`roadmap_shop_init` keeps the hour, hides the doors outside the shop and installs enter and leave hooks that mark
-the player at the counter. `roadmap_shop_open_menu` (0x801A1AB8) opens the first menu by kind. For the gun shop
-(kind 7), `roadmap_shop_pick_weapons` (0x801A0820) takes weapons 1 to 12 except 10, sorts them by required level
-(`roadmap_cmp_weapon_level`, 0x801A216C; a missing record counts as 100) and keeps six: positions 0 to 5, 3 to 8 or
-5 to 10 by the player's level band (level / 20, at most 2). `roadmap_shop_finish` (0x801A0EDC) ends a deal: kind 7
+`shop_init` keeps the hour, hides the doors outside the shop and installs enter and leave hooks that mark
+the player at the counter. `shop_open_menu` (0x801A1AB8) opens the first menu by kind. For the gun shop
+(kind 7), `shop_pick_weapons` (0x801A0820) takes weapons 1 to 12 except 10, sorts them by required level
+(`shop_cmp_weapon_level`, 0x801A216C; a missing record counts as 100) and keeps six: positions 0 to 5, 3 to 8 or
+5 to 10 by the player's level band (level / 20, at most 2). `shop_finish` (0x801A0EDC) ends a deal: kind 7
 gives level advice, kind 9 uses the bought item at once between screen fades (`effect_item_use`, 0x801882AC), and
 the food shops either hand over up to three items or eat them at once with `effect_item_use` (a meal adds 1 to
-`meal_count`, GameVars + 0x92). `roadmap_shop_exit_to_town` (0x801A1FD4) puts the player back in the town at the shop's exit
+`meal_count`, GameVars + 0x92). `shop_exit_to_town` (0x801A1FD4) puts the player back in the town at the shop's exit
 point. What the food and the clinics do is in [player and survival](player-and-survival.md#food-and-healing).

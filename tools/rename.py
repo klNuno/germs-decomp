@@ -116,9 +116,10 @@ def update_config(renames, xref, dry):
 
 def update_sources(renames, dry):
     files = []
+    # RENAME_EXTRA_GLOBS: more globs to rename in, separated by spaces (private notes kept outside git)
+    extra = tuple(os.environ.get("RENAME_EXTRA_GLOBS", "").split())
     for pat in ("src/**/*.c", "src/**/*.h", "include/**/*.h", "work/*.wip.c", "work/*.wip.gte",
-                "docs/*.md", "README.md", ".agents/**/*.md",
-                ".agents/research/skip.txt"):
+                "docs/**/*.md", "README.md") + extra:
         files += glob.glob(os.path.join(ROOT, pat), recursive=True)
     table = {old: new for old, new, _ in renames}
     word = re.compile(r"\b(" + "|".join(map(re.escape, table)) + r")\b")

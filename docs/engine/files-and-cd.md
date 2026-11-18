@@ -11,7 +11,7 @@ covers both paths and the TIM, TMD and TOD formats. What a scene does with its c
 ## SCE.S
 
 src/game/object.c holds object.c. `object_load_scene` (0x801926B4) loads the scene of
-`scene_request` ([changing place](boot-and-loop.md#changing-place)) by calling
+`main_scene_request` ([changing place](boot-and-loop.md#changing-place)) by calling
 `object_iff_open(&ctx, 0, scene)` (0x80192380). That function searches "\SCE.S;1" with
 `CdSearchFile` (retrying until found), seeks to `object_sce_offsets[scene]` (0x801D7780, 24
 entries, byte offsets turned into sectors with `>> 11`) and reads one 0x800 sector of
@@ -22,7 +22,7 @@ the header, a chunk buffer of 0x800, the size and the position ("Error Allocatio
 | Entry | Counts it gives | Read when |
 | --- | --- | --- |
 | 0 | npc bodies, npc records, weapons, items (each only when not 0) | always: the common part of the scene |
-| variant + 1 | npcs, area triggers, action sets (`object_aset_count`), enemy stats | the variant in `scene_request.variant` |
+| variant + 1 | npcs, area triggers, action sets (`object_aset_count`), enemy stats | the variant in `main_scene_request.variant` |
 
 Each entry is read with `object_read_chunks(ctx, request, 2, 0)`. The path the request carries
 ("\S\OFC.S;1" and others) is never opened
@@ -48,7 +48,7 @@ Buffer" and the like).
 | `MOD`, `MOE` | `object_load_mod` (0x801905A0) | `mod_alloc`, `mod_list_add`; filter 0x400 keeps only the equipped weapons |
 | `SPRT` | `object_load_sprt` (0x80190B2C) | `sprite_create`, `sprite_add` |
 | `TEXT` | `object_load_text` (0x80190D8C) | a picture uploaded with `kaj_tim_upload_hdr` |
-| `THNG` | `object_load_thng` (0x80190FD8) | `thing_create`, `sprite_thing_init`, `thing_list_add` |
+| `THNG` | `object_load_thng` (0x80190FD8) | `thing_create`, `thing_init_from_record`, `thing_list_add` |
 | `TIM` | `object_load_tim` (0x8019120C) | the TIM whose id is asked for, `kaj_tim_upload` |
 | `VABH` | `object_load_vabh` (0x80191450) | `sound_se_alloc_header`, `sound_vab_open_head` |
 | `VABB` | `object_load_vabb` (0x8019159C) | streamed to the SPU, `sound_se_push` ([banks](sound-and-music.md#sound-banks)) |
@@ -84,13 +84,13 @@ rules above.
 | 1 | `main` at boot | SPRT, VAB, NPC, WEPN (18 weapons), TEXT, ITEM (74 items) |
 | 2 | `object_load_weapon_mods` (0x8019290C) | THNG, 18 MOD: the weapon models |
 | 3, 0xB, 0xA | `vehicle_load_data`, vehicle modes 1, 2 and 3 | VAB, VECL (3 adds SPRT and TEXT) |
-| 4, 5 | `menu_card_run`: load, save | SPRT |
-| 6 | `menu_run`, the pause menu | 12 SPRT |
+| 4, 5 | `card_run`: load, save | SPRT |
+| 6 | `dialog_menu_run`, the pause menu | 12 SPRT |
 | 7 | `object_load_mail_by_id` (0x80192A44) | 32 MAIL |
-| 8 | `menu_confirm`, the mail list | 32 SPRT |
+| 8 | `dialog_menu_confirm`, the mail list | 32 SPRT |
 | 9 | `sprite_phone_loop`, the phone | VAB, BLCK, SPRT, TEXT, MOD |
-| 0xC | `object_load_res12_by_id` (0x80192CD0), for thing.c | 13 TIM |
-| 0xD, 0xE | `menu_confirm`, the list page and the status page | SPRT, TEXT |
+| 0xC | `object_load_res12_by_id` (0x80192CD0), for town.c | 13 TIM |
+| 0xD, 0xE | `dialog_menu_confirm`, the list page and the status page | SPRT, TEXT |
 
 ## The CD manager
 

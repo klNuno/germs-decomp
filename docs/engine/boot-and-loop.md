@@ -25,24 +25,24 @@ Then an endless loop starts a new game each time round:
 
 | Step | What it does |
 | --- | --- |
-| `action_vars` cleared | car speed and text speed kept when `mail_main_restarted` is set, else both set to 1 |
-| `scene_request` cleared | 0x24 bytes; current and requested loop set to -1 |
+| `action_vars` cleared | car speed and text speed kept when `main_restarted` is set, else both set to 1 |
+| `main_scene_request` cleared | 0x24 bytes; current and requested loop set to -1 |
 | `player_init` (0x801971D4) | the player's status |
 | start values | `vars[0x5F]` = 3; `vars[0xA..0xD]` and `vars[0x1B]` = 100; hour `vars[0x3E]` = 5, minute 0; the drain minute and count 0 |
 | `effect_clear_alarms`, `vehicle_train_init_state` | the alarm slots and the train |
-| `sprite_title_run` (0x801A5254) | the title screen, given `mail_main_restarted` |
+| `sprite_title_run` (0x801A5254) | the title screen, given `main_restarted` |
 | `kaj_srand_ticks` (0x801CD808) | seeds `rand` from the timer ticks; then the HUD: sprites 0x400 and 0x409, `event_draw_hud` (0x8018A24C) |
 
-The inner loop runs while the back-to-title flag `scene_request.quit` is 0. It copies the
+The inner loop runs while the back-to-title flag `main_scene_request.quit` is 0. It copies the
 requested loop into the current one and calls one of three scene loops:
 
 | Loop | Function | Place |
 | --- | --- | --- |
 | 0 | `object_room_run` (0x80194E5C, object.c) | a single scene such as the office (OFC.S) |
-| 1 | `block_building_main` (0x8017E544, block.c) | a building made of blocks, with elevator rides between floors |
-| 2 | `thing_game_loop` (0x801A9070, thing.c) | the town, on foot, in the car or on the train |
+| 1 | `building_main` (0x8017E544, building.c) | a building made of blocks, with elevator rides between floors |
+| 2 | `town_game_loop` (0x801A9070, town.c) | the town, on foot, in the car or on the train |
 
-When the inner loop ends, `main` sets `mail_main_restarted` to 1 and goes round again to the
+When the inner loop ends, `main` sets `main_restarted` to 1 and goes round again to the
 title. `player_finish_death` (0x80197688) sets the back-to-title flag when the dead player is not
 infected; an infected player wakes up changed instead
 ([energy at 0](../discoveries.md#-energy-at-0-is-death-and-only-a-hit-to-the-head-makes-you-wake-up-changed)).
@@ -81,13 +81,13 @@ timer. `kaj_event_flush` (0x801CC514) drops queued events by type mask and id, a
 | 0 | no event: run one frame | `kaj_event_get` when the queue is empty |
 | 2 | alarm | `kaj_timer_handler` when an alarm is due |
 | 4 | clock tick | `kaj_timer_handler` every `timer_period` ticks |
-| 0x10 | enter an area | `object_deliver_area_events` (0x80194FAC) |
-| 0x20 | leave an area | `object_deliver_area_events`, `player_leave_trigger` (0x80199FD8) |
+| 0x10 | enter an area | `player_deliver_area_events` (0x80194FAC) |
+| 0x20 | leave an area | `player_deliver_area_events`, `player_leave_trigger` (0x80199FD8) |
 | 0x100 | task finished | `kaj_event_run_tss`, `kaj_tss_kill` |
 | 0x200 | model animation finished | `mod_finish_handler` (0x8018E7EC) |
 
 Enter, leave and animation events start as user events opened by `event_open`: 0xF3000000 runs
-`object_deliver_area_events`, 0xF3000001 `player_leave_trigger`, 0xF3000002 `mod_finish_handler`.
+`player_deliver_area_events`, 0xF3000001 `player_leave_trigger`, 0xF3000002 `mod_finish_handler`.
 `player_check_ground` (0x80195098) delivers the first two, `mod_update_all` (0x8018DE58) the third.
 
 ## The timer and alarms
@@ -138,21 +138,21 @@ The clock is in src/game/event.c. `event_clock_tick` (0x8018AA00) adds a minute
 minute ([energy](../discoveries.md#-energy-drains-faster-the-longer-you-stay-awake)) and updates
 the daylight when its loop asks, as the building, station and town loops do
 ([fog](rendering.md#fog-and-the-time-of-day)). Scenes add handling through the hooks: the
-station sets `event_tick_hook` to `sprite_station_update`, the train to `thing_train_tick_hook`.
+station sets `event_tick_hook` to `sprite_station_update`, the train to `town_train_tick_hook`.
 
-`mail_step_frame(mode, a, b)` (0x8018C2FC) is one frame. It calls `action_update`; in modes 0 and
-1 `npc_update_all`, `door_update_all` and `mod_npcrec_update_all`, in mode 2 `vehicle_update`;
+`main_step_frame(mode, a, b)` (0x8018C2FC) is one frame. It calls `action_update`; in modes 0 and
+1 `actor_update_all`, `door_update_all` and `npc_rec_update_all`, in mode 2 `vehicle_update`;
 then `mod_update_all`, `thing_update_all` and `player_update`; in modes 1 and 2 the flame and
 colour cycle effects; and last `roadmap_draw_frame(mode)` (0x801A0418), which draws and flips.
 `kaj_view_flip` (0x801D1AAC) waits with `VSync(2)` and stores the refreshes the frame took in
 `vsync_delta`, which movement, turning and timers multiply by
 ([frame timing](../discoveries.md#-the-game-times-every-frame-so-a-slow-machine-makes-it-choppy-not-slow)).
-`mail_wait` (0x8018C1B0) runs frames until the `vsync_delta` values add up to its last argument
+`main_wait` (0x8018C1B0) runs frames until the `vsync_delta` values add up to its last argument
 times 30, answering events meanwhile.
 
 ## Changing place
 
-A place change is a request in `scene_request` (0x801E0340):
+A place change is a request in `main_scene_request` (0x801E0340):
 
 | Field | Meaning |
 | --- | --- |
@@ -163,10 +163,10 @@ A place change is a request in `scene_request` (0x801E0340):
 | `change` | set by a request, cleared when taken |
 | `path`, `yaw`, `pos_x`, `pos_y`, `pos_z` | a scene file path the loader never opens ([scene files](../discoveries.md#-the-game-still-names-scene-files-the-disc-does-not-have)), arrival angle and position |
 
-`mail_goto_ofc` (0x8018C414) asks for loop 0 and "\S\OFC.S;1", `mail_goto_twn` (0x8018C50C) for
-loop 2 and "\S\TWN.S;1" with a position, `mail_goto_building` (0x8018C554) for loop 1 with a
-three-letter name at +0x20 (`block_building_load` makes "\S\%s.S;1" of it) and a variant from a
+`main_goto_ofc` (0x8018C414) asks for loop 0 and "\S\OFC.S;1", `main_goto_twn` (0x8018C50C) for
+loop 2 and "\S\TWN.S;1" with a position, `main_goto_building` (0x8018C554) for loop 1 with a
+three-letter name at +0x20 (`building_load` makes "\S\%s.S;1" of it) and a variant from a
 game variable (0, 10, 1000, 2000 give 0, 2, 3, 4, other values 1). Scripts call them through
-`action_cmd_change_scene` (0x80173054). `mail_take_scene_change` (0x8018C170) takes the `change`
+`action_cmd_change_scene` (0x80173054). `main_take_scene_change` (0x8018C170) takes the `change`
 flag each frame and resets the pad; the loop fades out, the finished fade (a 0x100 event) ends
 the loop, and `main` reads the new requested loop.

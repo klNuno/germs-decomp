@@ -4,7 +4,7 @@
 #include "common.h"
 #include "game/types.h"
 
-/* View of ActionCmd for the handlers that read the target +4 as u16 (lhu): npc_exec_command, door_exec_command. */
+/* View of ActionCmd for the handlers that read the target +4 as u16 (lhu): actor_exec_command, door_exec_command. */
 typedef struct ActionCmdShort {
     u16 opcode;
     u16 sub;

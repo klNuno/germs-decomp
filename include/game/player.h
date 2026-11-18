@@ -5,7 +5,7 @@
 #include "game/types.h"
 
 /* Functions of src/game/player.c that other files call or a table names. */
-s32 object_deliver_area_events(void);
+s32 player_deliver_area_events(void);
 void player_set_view(Player *player, s16 keep_cell);
 void player_init(void);
 void player_place_for_scene(u16 entry);

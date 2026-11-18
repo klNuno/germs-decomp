@@ -37,15 +37,15 @@ typedef struct VehicleRecord {
     s32 model0_offset;
     s32 model1_offset;
 } VehicleRecord;
-static void thing_train_calc_stops(TrainState *train);
+static void vehicle_train_calc_stops(TrainState *train);
 extern Thing *player_status_vehicle[];
 extern CarState vehicle_car_state;
-s16 thing_car_exit_prompt_on;
-s32 thing_car_speed_div;
+s16 vehicle_car_exit_prompt_on;
+s32 vehicle_car_speed_div;
 extern Vehicle *object_scene_vehicle[];
 extern s32 kaj_system_vsync_delta[];
 
-static void thing_train_calc_stops(TrainState *train) {
+static void vehicle_train_calc_stops(TrainState *train) {
     train->placed = 0;
     if (train->direction != 0) {
         train->mark_start = (train->station - 1) * 100000 - 195000;
@@ -60,7 +60,7 @@ static void thing_train_calc_stops(TrainState *train) {
     }
 }
 
-static void thing_car_init(Vehicle *car, Player *player) {
+static void vehicle_car_init(Vehicle *car, Player *player) {
     s32 v[3];
     SVector sv;
     s32 flag;
@@ -117,7 +117,7 @@ static void thing_car_init(Vehicle *car, Player *player) {
     player_set_view(player, 1);
     state->stopped = 0;
     state->slowed = 0;
-    thing_car_exit_prompt_on = 0;
+    vehicle_car_exit_prompt_on = 0;
     state->steer = 0;
     state->brake = 0;
     state->throttle = 0;
@@ -153,18 +153,18 @@ static void thing_car_init(Vehicle *car, Player *player) {
     navi->arrow_sprite = 0;
     switch ((s16)game->car_speed_setting) { /* read signed in this unit */
     case 2:
-        thing_car_speed_div = 500;
+        vehicle_car_speed_div = 500;
         break;
     case 1:
-        thing_car_speed_div = 400;
+        vehicle_car_speed_div = 400;
         break;
     case 0:
-        thing_car_speed_div = 300;
+        vehicle_car_speed_div = 300;
         break;
     }
 }
 
-static inline s32 thing_car_get_out_try_spot(Vehicle *car, Player *player, s32 *px, s32 *py, s32 *pz, s32 ang) {
+static inline s32 vehicle_car_get_out_try_spot(Vehicle *car, Player *player, s32 *px, s32 *py, s32 *pz, s32 ang) {
     s32 x;
     s32 z;
     x = car->pos_x + ((*px * rcos(ang) + *pz * rsin(ang)) >> 12);
@@ -179,7 +179,7 @@ static inline s32 thing_car_get_out_try_spot(Vehicle *car, Player *player, s32 *
     return 0;
 }
 
-static void thing_car_get_out(Vehicle *car) {
+static void vehicle_car_get_out(Vehicle *car) {
     s32 x;
     s32 y;
     s32 z;
@@ -195,16 +195,16 @@ static void thing_car_get_out(Vehicle *car) {
     ang = (car->rot_y << 12) / 360;
     x = -245;
     z = 0;
-    if (!thing_car_get_out_try_spot(car, player, &x, &y, &z, ang)) {
+    if (!vehicle_car_get_out_try_spot(car, player, &x, &y, &z, ang)) {
         x = 245;
         z = 0;
-        if (!thing_car_get_out_try_spot(car, player, &x, &y, &z, ang)) {
+        if (!vehicle_car_get_out_try_spot(car, player, &x, &y, &z, ang)) {
             x = 0;
             z = -490;
-            if (!thing_car_get_out_try_spot(car, player, &x, &y, &z, ang)) {
+            if (!vehicle_car_get_out_try_spot(car, player, &x, &y, &z, ang)) {
                 x = 0;
                 z = 490;
-                if (!thing_car_get_out_try_spot(car, player, &x, &y, &z, ang)) {
+                if (!vehicle_car_get_out_try_spot(car, player, &x, &y, &z, ang)) {
                     z = 0;
                     y = 0;
                     x = 0;
@@ -216,17 +216,17 @@ static void thing_car_get_out(Vehicle *car) {
     vehicle_navi_show(NULL, 0, 1);
     sprite_delete(4);
     vehicle_navi[0] = 0;
-    mail_goto_twn(x, y, z, car->rot_y, 0);
+    main_goto_twn(x, y, z, car->rot_y, 0);
 }
 
-static void thing_train_init(Vehicle *car, Player *player) {
+static void vehicle_train_init(Vehicle *car, Player *player) {
     SVector sv;
     VehicleRecord *hdr = car->data;
     TrainState *train = &vehicle_train_state;
 
     car->kind = hdr->kind;
     car->ot_layer = 0;
-    thing_train_calc_stops(train);
+    vehicle_train_calc_stops(train);
     if (hdr->model0_offset != 0) {
         kaj_tmd_load(&car->model0, (u8 *)car->data + hdr->model0_offset, &car->coord.flg);
     }
@@ -260,7 +260,7 @@ static void thing_train_init(Vehicle *car, Player *player) {
     car->coord.flg = 0;
 }
 
-static void thing_train_update(Player *player) {
+static void vehicle_train_drive(Player *player) {
     s32 v[4];
     s32 flag;
     Vehicle *car = object_scene_vehicle[0];
@@ -283,7 +283,7 @@ static void thing_train_update(Player *player) {
                 if (++train->station >= 7) {
                     train->station = 6;
                 }
-                thing_train_calc_stops(train);
+                vehicle_train_calc_stops(train);
                 vehicle_train_set_doors(1);
                 train->arrive_digit_dir1 = (s16)game->vars[0x3F] % 10;
                 if (train->arrive_digit_dir1 >= 5) {
@@ -317,7 +317,7 @@ static void thing_train_update(Player *player) {
                 if (--train->station == 0) {
                     train->station = 1;
                 }
-                thing_train_calc_stops(train);
+                vehicle_train_calc_stops(train);
                 vehicle_train_set_doors(1);
                 train->arrive_digit_dir0 = (s16)game->vars[0x3F] % 10;
                 if (train->arrive_digit_dir0 >= 5) {
@@ -352,12 +352,12 @@ static void thing_train_update(Player *player) {
 
 extern Player *player_status_player[];
 extern Vehicle *object_scene_vehicle[];
-static void thing_car_init(Vehicle *car, Player *player);
-static void thing_train_init(Vehicle *car, Player *player);
+static void vehicle_car_init(Vehicle *car, Player *player);
+static void vehicle_train_init(Vehicle *car, Player *player);
 extern SceneTables object_scene_tables;
-static void thing_car_get_out(Vehicle *car);
+static void vehicle_car_get_out(Vehicle *car);
 static void vehicle_car_drive(Player *player);
-static void thing_train_update(Player *player);
+static void vehicle_train_drive(Player *player);
 typedef struct TimHandle { u16 x; u16 y; u8 pad4[0x10]; s16 pixel_shift; } TimHandle;
 extern PlayerStatus player_status;
 extern s16 vehicle_navi[];
@@ -366,11 +366,11 @@ extern char vehicle_str_file[];
 extern char vehicle_str_alloc_pointer[];
 extern char vehicle_str_alloc_buffer[];
 extern EventState event_state;
-void text_show(char *str, s32 mode, s32 circle_set, s32 circle_flags, s32 cross_set, s32 cross_flags, s32 se);
+void dialog_show(char *str, s32 mode, s32 circle_set, s32 circle_flags, s32 cross_set, s32 cross_flags, s32 se);
 extern s32 vehicle_str_sb1[];
 extern s32 vehicle_str_rw1[];
-void mail_goto_building(s32 form, s32 *name, s32 var, s32 map_letter, s32 map_entry, s32 yaw, s32 scene_index, s32 trigger, s32 script_entry);
-extern SceneRequest scene_request;
+void main_goto_building(s32 form, s32 *name, s32 var, s32 map_letter, s32 map_entry, s32 yaw, s32 scene_index, s32 trigger, s32 script_entry);
+extern SceneRequest main_scene_request;
 extern KajSystem kaj_system;
 extern RoadMap roadmap_state;
 static void vehicle_navi_open_menu(void);
@@ -383,10 +383,10 @@ extern CarState vehicle_car_state;
 static s16 vehicle_car_stopped_input(void);
 static void vehicle_navi_update(Vehicle *car, Player *player);
 s16 vehicle_car_turn_sfx_on;
-s16 thing_car_exit_prompt_on;
-s32 thing_car_speed_div;
+s16 vehicle_car_exit_prompt_on;
+s32 vehicle_car_speed_div;
 s32 roadmap_get_state(void);
-extern ScreenLight screen_light;
+extern ScreenLight roadmap_screen_light;
 extern s16 roadmap_draw_flags;
 
 INCLUDE_RODATA("asm/nonmatchings/game/vehicle", vehicle_str_alloc_pointer);
@@ -417,9 +417,9 @@ static void vehicle_car_drive(Player *player) {
     sv.vz = (state->steer << 12) / 360;
     RotMatrix(&sv, car->coord2.coord_m);
     car->coord2.flg = 0;
-    speed_div = thing_car_speed_div;
+    speed_div = vehicle_car_speed_div;
     if (state->slowed != 0) {
-        speed_div = thing_car_speed_div * 3;
+        speed_div = vehicle_car_speed_div * 3;
     }
     if (state->gear == 1) {
         revs = state->brake * 30 + 800;
@@ -500,18 +500,18 @@ static void vehicle_car_drive(Player *player) {
         }
     }
     if (state->stopped != 0) {
-        if (roadmap_get_state() != 0 || mail_menu_get_state() != 0) {
-            if (thing_car_exit_prompt_on != 0) {
-                thing_car_exit_prompt_on = 0;
+        if (roadmap_get_state() != 0 || menu_get_state() != 0) {
+            if (vehicle_car_exit_prompt_on != 0) {
+                vehicle_car_exit_prompt_on = 0;
             }
-        } else if (thing_car_exit_prompt_on == 0) {
+        } else if (vehicle_car_exit_prompt_on == 0) {
             /* car prompt: get out */
-            text_show(" 7\203N\203\213\203}1\202\251\202\347\215~\202\350\202\351     3\201\233", 1, -1, 0, -1, 0, 1);
-            thing_car_exit_prompt_on = 1;
+            dialog_show(" 7\203N\203\213\203}1\202\251\202\347\215~\202\350\202\351     3\201\233", 1, -1, 0, -1, 0, 1);
+            vehicle_car_exit_prompt_on = 1;
         }
-    } else if (thing_car_exit_prompt_on != 0) {
-        text_close();
-        thing_car_exit_prompt_on = 0;
+    } else if (vehicle_car_exit_prompt_on != 0) {
+        dialog_close();
+        vehicle_car_exit_prompt_on = 0;
     }
 }
 
@@ -719,15 +719,15 @@ void vehicle_train_exit_prompt(s16 show) {
                 }
                 if (player->vehicle_mode == 2) {
                     /* train prompt: get off */
-                    text_show(" 7\223d\216\3241\202\251\202\347\215~\202\350\202\351      3\201\233", 1, -1, 8, -1, 0, 1);
+                    dialog_show(" 7\223d\216\3241\202\251\202\347\215~\202\350\202\351      3\201\233", 1, -1, 8, -1, 0, 1);
                 } else if (player->vehicle_mode == 3) {
                     /* subway prompt: get off */
-                    text_show(" 7\222n\211\272\223S1\202\251\202\347\215~\202\350\202\351     3\201\233", 1, -1, 8, -1, 0, 1);
+                    dialog_show(" 7\222n\211\272\223S1\202\251\202\347\215~\202\350\202\351     3\201\233", 1, -1, 8, -1, 0, 1);
                 }
             }
         }
     } else if (train->prompt_on != 0) {
-        text_close();
+        dialog_close();
         action_reset(1);
         train->prompt_on = 0;
         if (player->flags & 4) {
@@ -745,23 +745,23 @@ s16 vehicle_train_get_off(s16 result) {
     if (mode == 3) {
         result = 0;
         if (train->direction != 0) {
-            mail_goto_building(1, vehicle_str_sb1, 9, 0x41, 1, 0x5A, 6, train->station + 0xF90000, 0);
+            main_goto_building(1, vehicle_str_sb1, 9, 0x41, 1, 0x5A, 6, train->station + 0xF90000, 0);
         } else {
-            mail_goto_building(1, vehicle_str_sb1, 9, 0x41, 2, -0x5A, 6, train->station + 0xF90000, 0);
+            main_goto_building(1, vehicle_str_sb1, 9, 0x41, 2, -0x5A, 6, train->station + 0xF90000, 0);
         }
     } else if (mode == 2) {
         result = 0;
         if (train->direction != 0) {
-            mail_goto_building(1, vehicle_str_rw1, 9, 0x41, (s16)(train->station * 2 - 1), 0x5A, 0x11, train->station + 0xF60000, 0);
+            main_goto_building(1, vehicle_str_rw1, 9, 0x41, (s16)(train->station * 2 - 1), 0x5A, 0x11, train->station + 0xF60000, 0);
         } else {
-            mail_goto_building(1, vehicle_str_rw1, 9, 0x41, (s16)(train->station * 2), -0x5A, 0x11, train->station + 0xF60000, 0);
+            main_goto_building(1, vehicle_str_rw1, 9, 0x41, (s16)(train->station * 2), -0x5A, 0x11, train->station + 0xF60000, 0);
         }
     }
     return result;
 }
 
 s16 vehicle_train_end_of_line(s16 result) {
-    SceneRequest *request = &scene_request;
+    SceneRequest *request = &main_scene_request;
     TrainState *train;
     u16 mode = player_status_player[0]->vehicle_mode;
 
@@ -769,13 +769,13 @@ s16 vehicle_train_end_of_line(s16 result) {
     if (mode == 3) {
         if (train->direction != 0) {
             if (train->station == 6) {
-                mail_goto_building(1, vehicle_str_sb1, 9, 0x41, 1, 0x5A, 6, train->station + 0xF90000, 0);
+                main_goto_building(1, vehicle_str_sb1, 9, 0x41, 1, 0x5A, 6, train->station + 0xF90000, 0);
                 result = 0;
                 request->change = 1;
             }
         } else {
             if (train->station == 1) {
-                mail_goto_building(1, vehicle_str_sb1, 9, 0x41, 2, -0x5A, 6, train->station + 0xF90000, 0);
+                main_goto_building(1, vehicle_str_sb1, 9, 0x41, 2, -0x5A, 6, train->station + 0xF90000, 0);
                 result = 0;
                 request->change = 1;
             }
@@ -783,13 +783,13 @@ s16 vehicle_train_end_of_line(s16 result) {
     } else if (mode == 2) {
         if (train->direction != 0) {
             if (train->station == 3) {
-                mail_goto_building(1, vehicle_str_rw1, 9, 0x41, 5, 0x5A, 0x11, train->station + 0xF60000, 0);
+                main_goto_building(1, vehicle_str_rw1, 9, 0x41, 5, 0x5A, 0x11, train->station + 0xF60000, 0);
                 result = 0;
                 request->change = 1;
             }
         } else {
             if (train->station == 1) {
-                mail_goto_building(1, vehicle_str_rw1, 9, 0x41, 2, -0x5A, 0x11, train->station + 0xF60000, 0);
+                main_goto_building(1, vehicle_str_rw1, 9, 0x41, 2, -0x5A, 0x11, train->station + 0xF60000, 0);
                 result = 0;
                 request->change = 1;
             }
@@ -845,7 +845,7 @@ static void vehicle_navi_update(Vehicle *car, Player *player) {
     s16 dest_angle;
     s32 arrow;
 
-    if (mail_menu_get_state() == 0 && navi->active != 0 && navi->dest_sprite != NULL && navi->arrow_sprite != NULL) {
+    if (menu_get_state() == 0 && navi->active != 0 && navi->dest_sprite != NULL && navi->arrow_sprite != NULL) {
         dx = vehicle_navi_dest_xz[navi->dest * 2] - player->world_x;
         dz = vehicle_navi_dest_xz[navi->dest * 2 + 1] - player->world_z;
         dist = SquareRoot0(dx * dx + dz * dz);
@@ -866,8 +866,8 @@ static void vehicle_navi_update(Vehicle *car, Player *player) {
         }
         sprite_fill_clut(4, 1, 12, 0);
         sprite_fill_clut(4, 1, dist, 0x1F);
-        dest_angle = mail_wrap_angle(ratan2(dx, dz) * 0x1680 >> 16);
-        arrow = (mail_wrap_angle(dest_angle - mail_wrap_angle(car->rot_y)) + 23) / 45;
+        dest_angle = main_wrap_angle(ratan2(dx, dz) * 0x1680 >> 16);
+        arrow = (main_wrap_angle(dest_angle - main_wrap_angle(car->rot_y)) + 23) / 45;
         if (arrow >= 8) {
             arrow = 0;
         }
@@ -888,7 +888,7 @@ static void vehicle_navi_open_menu(void) {
         navi->dest_sprite->visible = 0;
         navi->dest_sprite = NULL;
     }
-    mail_menu_open(navi->menu_reset, 0x40B, 0x40C, 0xF, 6, NULL, 4, 0x2969, 0x2BFF);
+    menu_open(navi->menu_reset, 0x40B, 0x40C, 0xF, 6, NULL, 4, 0x2969, 0x2BFF);
     if (navi->menu_reset != 0) {
         navi->menu_reset = 0;
     }
@@ -897,21 +897,21 @@ static void vehicle_navi_open_menu(void) {
 static s16 vehicle_car_stopped_input(void) {
     RoadMap *roadmap = &roadmap_state;
     CarNavi *navi = (CarNavi *)vehicle_navi;
-    s16 menu_state = mail_menu_get_state();
+    s16 menu_state = menu_get_state();
 
     if (menu_state == 1) {
         if (!(kaj_system.pad_prev & 0x20) && (kaj_system.pad_now & 0x20)) {
             vehicle_navi[0] = 1;
             sound_se_play(0x11);
-            mail_menu_close();
+            menu_close();
         } else if (!(kaj_system.pad_prev & 0x40) && (kaj_system.pad_now & 0x40)) {
             vehicle_navi[0] = 0;
             sound_se_play(8);
-            mail_menu_close();
+            menu_close();
         } else if (!(kaj_system.pad_prev & 0x1000) && (kaj_system.pad_now & 0x1000)) {
-            navi->dest = mail_menu_move(1);
+            navi->dest = menu_move(1);
         } else if (!(kaj_system.pad_prev & 0x4000) && (kaj_system.pad_now & 0x4000)) {
-            navi->dest = mail_menu_move(0);
+            navi->dest = menu_move(0);
         }
         return 0;
     }
@@ -921,7 +921,7 @@ static s16 vehicle_car_stopped_input(void) {
             return 1;
         }
         if (roadmap->mode == 0 && !(kaj_system.pad_prev & 0x800) && (kaj_system.pad_now & 0x800)) {
-            text_close();
+            dialog_close();
             vehicle_navi_open_menu();
         }
         return -1;
@@ -1090,11 +1090,11 @@ void vehicle_create(Vehicle **out, u32 size) {
 void vehicle_init(Vehicle *car) {
     switch (player_status_player[0]->vehicle_mode) {
     case 1:
-        thing_car_init(car, player_status_player[0]);
+        vehicle_car_init(car, player_status_player[0]);
         break;
     case 2:
     case 3:
-        thing_train_init(car, player_status_player[0]);
+        vehicle_train_init(car, player_status_player[0]);
         break;
     }
     object_scene_vehicle[0] = car;
@@ -1105,7 +1105,7 @@ void vehicle_free(void) {
     Vehicle *vehicle = tables->vehicle;
     if (vehicle != NULL) {
         if (vehicle->kind == 1) {
-            thing_car_get_out(vehicle);
+            vehicle_car_get_out(vehicle);
         }
         free3(vehicle->model0);
         if (vehicle->model1 != NULL) {
@@ -1121,7 +1121,7 @@ void vehicle_free(void) {
 void vehicle_draw(ViewBuffer *view) {
     s32 ls[8];
     Vehicle *car;
-    ScreenLight *light = &screen_light;
+    ScreenLight *light = &roadmap_screen_light;
     s16 dusk_cleared;
 
     car = object_scene_vehicle[0];
@@ -1167,7 +1167,7 @@ void vehicle_update(void) {
         vehicle_car_drive(player_status_player[0]);
     } else if (mode >= 2) {
         if (mode < 4) {
-            thing_train_update(player_status_player[0]);
+            vehicle_train_drive(player_status_player[0]);
         }
     }
 }
@@ -1228,7 +1228,7 @@ void vehicle_navi_set_enabled(s16 enabled) {
     } else {
         sound_se_play(8);
     }
-    mail_menu_close();
+    menu_close();
 }
 
 void vehicle_train_set_doors(s16 opening) {

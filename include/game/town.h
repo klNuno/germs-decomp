@@ -5,6 +5,6 @@
 #include "game/types.h"
 
 /* Functions of src/game/town.c that other files call or a table names. */
-void thing_game_loop(void);
+void town_game_loop(void);
 
 #endif

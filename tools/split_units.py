@@ -7,6 +7,8 @@
 
 Ported from lsd-decomp. apply reads each old unit from src/<dir>/<addr>.c, or from git REV when the
 file is gone (default 4efff08, the last commit with address units), so the split can be replayed.
+Since 2026-11-18 the names follow their files (FIRST_FUNC and LAST_FUNC too): a replay from 4efff08
+needs config/layout.tsv as of 1f3e774, whose names match that tree's build/germs.elf.
 Function addresses come from build/germs.elf: run it after a green `make check` of the address-unit
 tree. It writes the new C files, rewrites the game and kaj entries of config/splat.yaml and removes
 the old units. Then run `make split` twice (INCLUDE_ASM and INCLUDE_RODATA paths name the new files)
@@ -70,7 +72,7 @@ TEXT_COMMENTS = {
     'game/shop': 'no assert: a normal function after roadmap.c\'s deferred inline tail',
     'game/sound': 'sound.c asserts',
     'game/sprite': 'sprite.c asserts',
-    'game/thing': 'thing.c asserts; thing_list through gp from sprite_thing_refresh_all',
+    'game/thing': 'thing.c asserts; thing_list through gp from thing_refresh_all',
     'game/town': 'no assert: a string after thing.c\'s jump table; its end is a guess',
     'game/vehicle': 'vehicle.c asserts; its start is a guess',
     'kaj/event': 'Sony code on both sides; event.c asserts',
@@ -885,10 +887,10 @@ matches as long as each file declares the gp symbols it uses (rule 1 below).
 
 ## Open doubts
 
-1. card/dialog: the cut after `menu_card_run` is a guess, and the pause menu (`menu_list_page` on) might be
+1. card/dialog: the cut after `card_run` is a guess, and the pause menu (`dialog_menu_list_page` on) might be
    card.c's tail or a file of its own. menu.c and text.c would sort after door, so the text windows were named
    dialog.c to keep the order.
-2. mail/main: main.c is a file only because of its name. `mail_main_restarted`, main's .sdata flag, sits after
+2. mail/main: main.c is a file only because of its name. `main_restarted`, main's .sdata flag, sits after
    mail.c's file name string, which fits but does not prove it.
 3. effect.c is large (50 functions): the weapon and item part (`effect_weapon_unequip` on) could be a file of its
    own sorting between effect and event; no cut shows it.
@@ -896,11 +898,11 @@ matches as long as each file declares the gp symbols it uses (rule 1 below).
 5. object.c's office loop (`object_room_*`) could be office.c, between object and player; no cut shows it.
 6. sprite.c holds the title, station and phone screens. station.c would sort between sprite and thing; title.c
    and phone.c would break the order.
-7. town/vehicle: the .rodata allows any cut up to `vehicle_create`. The cut at `thing_train_calc_stops` follows
-   the gp users of `thing_car_exit_prompt_on` and `thing_car_speed_div`, which are .sbss and so not proof.
+7. town/vehicle: the .rodata allows any cut up to `vehicle_create`. The cut at `vehicle_train_calc_stops` follows
+   the gp users of `vehicle_car_exit_prompt_on` and `vehicle_car_speed_div`, which are .sbss and so not proof.
 8. heap.c may be cdmgr.c's tail: its functions are called only from cdmgr.c, and its .sdata is read only by itself.
 9. actor.c against npc.c: both hold NPC code. The first must sort between action and ai, so it cannot be npc.c.
-10. `text_type_step` has no visible reference (no caller, no table); its file follows only from its position.
+10. `dialog_type_step` has no visible reference (no caller, no table); its file follows only from its position.
 
 ## Headers
 
@@ -922,9 +924,9 @@ matches as long as each file declares the gp symbols it uses (rule 1 below).
   on its own with `tools/unit_check.sh`. Those 27 are action_run_npc_event, action_run_trigger_enter,
   action_run_trigger_leave, effect_inventory_has_room, effect_item_add, effect_item_remove, effect_weapon_add,
   effect_weapon_input, kaj_ll_at_tail, kaj_map_city_ready, kaj_map_load_city_dir, kaj_map_load_place_dir,
-  mail_angle_to_dir8, mail_check_schedule, mail_goto_building, mail_take_scene_change, mod_set_anim_by_id,
+  main_angle_to_dir8, mail_check_schedule, main_goto_building, main_take_scene_change, mod_set_anim_by_id,
   player_set_item, player_set_weapon, player_take_hit, roadmap_get_state, sprite_copy_cell,
-  sprite_phone_save_exit, text_show, text_show_profile, text_show_timed and thing_run_script. The other two,
+  sprite_phone_save_exit, dialog_show, dialog_show_profile, dialog_show_timed and thing_run_script. The other two,
   kaj_tim_load and kaj_tim_free, name a `TimHandle` that two files define differently. Each header lists its own
   exceptions in a closing comment.
 - A function that no other file references by symbol is `static` (205 of them). That includes the eight

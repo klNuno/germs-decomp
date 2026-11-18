@@ -23,6 +23,6 @@ typedef struct {
 } GameVars_u8017EBF8;
 
 /* Functions of src/game/card.c that other files call or a table names. */
-s16 menu_card_run(s16 load_mode, s16 in_office);
+s16 card_run(s16 load_mode, s16 in_office);
 
 #endif

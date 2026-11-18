@@ -60,7 +60,7 @@ typedef struct ModObjTable {
     ModDobj *top;
     s32 count;
 } ModObjTable;
-extern ScreenLight screen_light;
+extern ScreenLight roadmap_screen_light;
 extern PlayerStatus player_status;
 
 INCLUDE_RODATA("asm/nonmatchings/game/mod", mod_str_alloc_model);
@@ -174,7 +174,7 @@ void mod_create(s16 *data) {
     mod->data = data;
     id = *data;
     if (id < 0x440) {
-        npc = npc_find(1, id);
+        npc = actor_find(1, id);
         if (npc != NULL && npc->state == 6) {
             mod_setup(mod, 0, 0, 8);
         } else {
@@ -251,12 +251,12 @@ void mod_free_pooled(void) {
         if (mod != NULL && mod->owns_data == 0) {
             id = mod->id;
             if (id >= 0x440) {
-                rec = mod_npcrec_find(id - 0x440);
+                rec = npc_rec_find(id - 0x440);
                 if (rec != NULL) {
                     rec->shown = 1;
                 }
             } else {
-                npc = npc_find(1, mod->id);
+                npc = actor_find(1, mod->id);
                 if (npc != NULL) {
                     npc->placed = 0;
                 }
@@ -332,7 +332,7 @@ static inline void mod_draw_objects(ViewBuffer *view, Model *mod, u16 ot_layer) 
     ModObjTable *table;
     ModDobj *dobj;
     s32 i = 0;
-    ScreenLight *light = &screen_light;
+    ScreenLight *light = &roadmap_screen_light;
     table = mod->obj_table;
     dobj = table->top;
     for (; i < table->count; i++, dobj++) {
@@ -500,12 +500,12 @@ void mod_on_data_free(s16 *data) {
         id = *mod->data;
         mod_free_by_id(id);
         if (id >= 0x440) {
-            rec = mod_npcrec_find(id - 0x440);
+            rec = npc_rec_find(id - 0x440);
             if (rec != NULL) {
                 rec->shown = 1;
             }
         } else {
-            npc = npc_find(1, id);
+            npc = actor_find(1, id);
             if (npc != NULL) {
                 npc->placed = 0;
             }
@@ -589,7 +589,7 @@ void mod_free_all(void) {
         }
         kaj_ll_remove_to_prev(list);
     }
-    mod_npcrec_reset_all();
+    npc_rec_reset_all();
 }
 
 Model *mod_find(u16 id) {

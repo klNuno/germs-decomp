@@ -33,7 +33,7 @@ s32 ai_cur_grid;
 NpcStats *ai_cur_stats;
 NpcBody *ai_cur_body;
 extern s16 ai_dir_angle[];
-s16 mail_angle_to_dir8(s16 angle);
+s16 main_angle_to_dir8(s16 angle);
 static void ai_turn_step(Npc *npc);
 static void ai_move_toward(Npc *npc, s16 mode, s32 dist, s32 waypoint);
 static s16 ai_heading_to(Npc *npc, s16 target);
@@ -229,7 +229,7 @@ static void ai_turn_step(Npc *npc) {
                 turn = -step;
             }
         }
-        npc->yaw = mail_wrap_angle(npc->yaw + turn);
+        npc->yaw = main_wrap_angle(npc->yaw + turn);
         if (ai_cur_model != NULL && ai_cur_model->ready != 0) {
             rot.vx = (npc->pitch << 12) / 360;
             rot.vy = (npc->yaw << 12) / 360;
@@ -256,14 +256,14 @@ static s16 ai_heading_to(Npc *npc, s16 target) {
         dx = player->pos_x + player->cell_x * 12500 - npc->pos_x;
         dz = player->pos_z + player->cell_z * 12500 - npc->pos_z;
     } else {
-        other = npc_find(0, target);
+        other = actor_find(0, target);
         if (other == 0) {
             return 0;
         }
         dx = other->pos_x - npc->pos_x;
         dz = other->pos_z - npc->pos_z;
     }
-    return mail_wrap_angle((ratan2(dx, dz) * 360 >> 12) - 180);
+    return main_wrap_angle((ratan2(dx, dz) * 360 >> 12) - 180);
 }
 
 static s32 ai_player_in_front(Npc *npc) {
@@ -276,7 +276,7 @@ static s32 ai_player_in_front(Npc *npc) {
     if (dx >= -9999 && dx < 10000 && dz >= -9999 && dz < 10000) {
         return 1;
     }
-    switch ((s16)mail_angle_to_dir4(npc->yaw - 180)) {
+    switch ((s16)main_angle_to_dir4(npc->yaw - 180)) {
     case 0:
         if (dx < 0) {
             return 0;
@@ -368,7 +368,7 @@ static s16 ai_find_target(Npc *npc, s16 turn_mode) {
     }
     if (found != 0) {
         if (best_id >= 0) {
-            diff = mail_wrap_angle(player_heading - npc_heading);
+            diff = main_wrap_angle(player_heading - npc_heading);
             if (diff < 10 || diff > 350) {
                 npc->flags |= 4;
             }
@@ -416,7 +416,7 @@ static s16 ai_try_move(Npc *npc, AiPoint *delta, s16 angle) {
     z = npc->pos_z + delta->z - player->cell_z * 12500;
     off_x = radius * rsin(angle) >> 12;
     off_z = radius * rcos(angle) >> 12;
-    if (npc_find_at_point(npc->id, x + off_x, npc->pos_y, z + off_z) >= 0) {
+    if (actor_find_at_point(npc->id, x + off_x, npc->pos_y, z + off_z) >= 0) {
         return 0;
     }
     radius += 600;
@@ -455,7 +455,7 @@ static inline s32 ai_move_toward_try_dir(Npc *npc, s16 dir, s32 dist, s16 waypoi
     s16 angle;
     npc->target_yaw = ai_dir_angle[dir];
     ai_turn_step(npc);
-    angle = (mail_wrap_angle(npc->target_yaw - 180) << 12) / 360;
+    angle = (main_wrap_angle(npc->target_yaw - 180) << 12) / 360;
     delta.x = dist * rsin(angle) >> 12;
     delta.y = 0;
     delta.z = dist * rcos(angle) >> 12;
@@ -479,7 +479,7 @@ static void ai_move_toward(Npc *npc, s16 mode, s32 dist, s32 waypoint) {
     s16 dir;
     s32 k;
 
-    cur = mail_angle_to_dir8(npc->yaw - 180);
+    cur = main_angle_to_dir8(npc->yaw - 180);
     back = ai_dir_reverse[cur];
     dirs[1] = 8;
     dirs[0] = 8;
@@ -494,12 +494,12 @@ static void ai_move_toward(Npc *npc, s16 mode, s32 dist, s32 waypoint) {
             dx = player->pos_x + player->cell_x * 12500 - npc->pos_x;
             dz = player->pos_z + player->cell_z * 12500 - npc->pos_z;
         } else {
-            target = npc_find(0, npc->target);
+            target = actor_find(0, npc->target);
             if (target == 0 || target->target != -1) {
                 goto fallback;
             }
-            offset = npc_get_radius(target) + ai_cur_body->radius * 10;
-            angle = (mail_wrap_angle(target->yaw - 270) << 12) / 360;
+            offset = actor_get_radius(target) + ai_cur_body->radius * 10;
+            angle = (main_wrap_angle(target->yaw - 270) << 12) / 360;
             if (target->id & 1) {
                 offset = -offset;
             }
@@ -597,11 +597,11 @@ static void ai_walk(Npc *npc, s16 mode, s32 dist) {
             return;
         }
     }
-    dir = mail_angle_to_dir8(npc->target_yaw - 180);
+    dir = main_angle_to_dir8(npc->target_yaw - 180);
     if ((rand() & 3) != 1) {
         npc->target_yaw = ai_dir_angle[dir];
         ai_turn_step(npc);
-        angle = (mail_wrap_angle(npc->target_yaw - 180) << 12) / 360;
+        angle = (main_wrap_angle(npc->target_yaw - 180) << 12) / 360;
         delta.x = dist * rsin(angle) >> 12;
         delta.y = 0;
         delta.z = dist * rcos(angle) >> 12;
@@ -627,7 +627,7 @@ static s32 ai_step_back(Npc *npc, s32 dist) {
     i = 0;
     back_dist = -dist;
     for (; i < 7; i++) {
-        angle = (mail_wrap_angle(npc->target_yaw + ai_probe_angle[i] - 180) << 12) / 360;
+        angle = (main_wrap_angle(npc->target_yaw + ai_probe_angle[i] - 180) << 12) / 360;
         delta.x = back_dist * rsin(angle) >> 12;
         delta.y = 0;
         delta.z = back_dist * rcos(angle) >> 12;
@@ -650,7 +650,7 @@ static s32 ai_sidestep(Npc *npc, s32 dist) {
     s16 moved;
 
     for (i = 4; i > 0; i--) {
-        angle = (mail_wrap_angle(npc->target_yaw + ai_probe_angle[i] - 180) << 12) / 360;
+        angle = (main_wrap_angle(npc->target_yaw + ai_probe_angle[i] - 180) << 12) / 360;
         delta.x = dist * rsin(angle) >> 12;
         delta.y = 0;
         delta.z = dist * rcos(angle) >> 12;
@@ -736,7 +736,7 @@ static void ai_face_player(Npc *npc) {
     SVector rot;
 
     if (ai_cur_model != 0 && ai_cur_model->ready != 0) {
-        npc->yaw = mail_wrap_angle((ratan2(player->pos_x + player->cell_x * 12500 - npc->pos_x, player->pos_z + player->cell_z * 12500 - npc->pos_z) * 360 >> 12) - 180);
+        npc->yaw = main_wrap_angle((ratan2(player->pos_x + player->cell_x * 12500 - npc->pos_x, player->pos_z + player->cell_z * 12500 - npc->pos_z) * 360 >> 12) - 180);
         rot.vx = (npc->pitch << 12) / 360;
         rot.vy = (npc->yaw << 12) / 360;
         rot.vz = (npc->roll << 12) / 360;
@@ -753,11 +753,11 @@ void ai_update_stand(Npc *npc) {
     ai_cur_body = 0;
     ai_cur_block = (Block *)npc->block;
     ai_cur_model = mod_find(npc->model_id);
-    ai_cur_stats = npc_find_stats(npc->stats_id);
+    ai_cur_stats = actor_find_stats(npc->stats_id);
     if (ai_cur_stats == 0) {
         ai_cur_stats = &ai_default_stats;
     }
-    ai_cur_body = npc_find_body(npc->body_id);
+    ai_cur_body = actor_find_body(npc->body_id);
     if (ai_cur_body == 0) {
         ai_cur_body = &ai_default_body;
     }
@@ -796,11 +796,11 @@ void ai_update_move(Npc *npc, s16 mode) {
     ai_cur_body = 0;
     ai_cur_block = (Block *)npc->block;
     ai_cur_model = mod_find(npc->model_id);
-    ai_cur_stats = npc_find_stats(npc->stats_id);
+    ai_cur_stats = actor_find_stats(npc->stats_id);
     if (ai_cur_stats == 0) {
         ai_cur_stats = &ai_default_stats;
     }
-    ai_cur_body = npc_find_body(npc->body_id);
+    ai_cur_body = actor_find_body(npc->body_id);
     if (ai_cur_body == 0) {
         ai_cur_body = &ai_default_body;
     }
@@ -860,11 +860,11 @@ void ai_update_move(Npc *npc, s16 mode) {
     ai_cur_body = 0;
     ai_cur_block = (Block *)npc->block;
     ai_cur_model = mod_find(npc->model_id);
-    ai_cur_stats = npc_find_stats(npc->stats_id);
+    ai_cur_stats = actor_find_stats(npc->stats_id);
     if (ai_cur_stats == 0) {
         ai_cur_stats = &ai_default_stats;
     }
-    ai_cur_body = npc_find_body(npc->body_id);
+    ai_cur_body = actor_find_body(npc->body_id);
     if (ai_cur_body == 0) {
         ai_cur_body = &ai_default_body;
     }
@@ -907,11 +907,11 @@ void ai_fire(Npc *npc) {
     ai_cur_block = (Block *)npc->block;
     player = player_status_player[0];
     ai_cur_model = mod_find(npc->model_id);
-    ai_cur_stats = npc_find_stats(npc->stats_id);
+    ai_cur_stats = actor_find_stats(npc->stats_id);
     if (ai_cur_stats == 0) {
         ai_cur_stats = &ai_default_stats;
     }
-    ai_cur_body = npc_find_body(npc->body_id);
+    ai_cur_body = actor_find_body(npc->body_id);
     if (ai_cur_body == 0) {
         ai_cur_body = &ai_default_body;
     }
@@ -1076,9 +1076,9 @@ s16 ai_in_aim_cone(Npc *npc, s16 npc_aims, s16 weapon_id) {
     }
     heading = ratan2(dx, dz) * 360 >> 12;
     if (npc_aims != 0) {
-        diff = mail_wrap_angle(heading - npc->yaw + 180);
+        diff = main_wrap_angle(heading - npc->yaw + 180);
     } else {
-        diff = mail_wrap_angle(heading - player->yaw);
+        diff = main_wrap_angle(heading - player->yaw);
     }
     if (diff <= lim || diff >= 360 - lim) {
         if (npc_aims != 0) {

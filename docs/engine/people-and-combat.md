@@ -12,10 +12,10 @@ A scene brings five tables, loaded by `object_load_other` (0x801907C8) into `obj
 
 | Chunk | Record | Found by | Holds |
 | --- | --- | --- | --- |
-| `ACTR` | `Npc`, 0x4C bytes | `npc_find` (0x801762F4) | the people of the variant (below) |
-| `CHAR` | `NpcBody` | `npc_find_body` (0x801767D4) | a body: an id, `radius` at +0xA, three 0x20-byte strings |
-| `ENMY` | `NpcStats` | `npc_find_stats` (0x80176890) | fighting values (below) |
-| `NPC ` | `NpcRecord` | `mod_cmd_npcrec` (0x8018EED4) | scripted figures with a model, a pose, `shown` and a move task |
+| `ACTR` | `Npc`, 0x4C bytes | `actor_find` (0x801762F4) | the people of the variant (below) |
+| `CHAR` | `NpcBody` | `actor_find_body` (0x801767D4) | a body: an id, `radius` at +0xA, three 0x20-byte strings |
+| `ENMY` | `NpcStats` | `actor_find_stats` (0x80176890) | fighting values (below) |
+| `NPC ` | `NpcRecord` | `npc_rec_cmd` (0x8018EED4) | scripted figures with a model, a pose, `shown` and a move task |
 | `WEPN` | `WeaponRecord` | `effect_weapon_find` (0x80188FEC) | the weapons (below) |
 
 `action_init_npcs` (0x8017519C) runs when `ACTR` loads: it multiplies the two stored positions by 10, places each
@@ -45,10 +45,10 @@ The `Npc` fields keep placeholder names in the code; their roles, read from the 
 
 ## Animation and the frame
 
-`npc_update_all` (0x801759B0) runs from `mail_step_frame` (0x8018C2FC) in the office and buildings. It first
+`actor_update_all` (0x801759B0) runs from `main_step_frame` (0x8018C2FC) in the office and buildings. It first
 resolves the player's shot (`player_shoot_target`, 0x80198720), then for each active person:
 
-| Condition | Animation (`npc_update_anim`, 0x8017546C) | Then |
+| Condition | Animation (`actor_update_anim`, 0x8017546C) | Then |
 | --- | --- | --- |
 | mode 2, not yet dead | 7 | state 6, runs the death set, sound 0x14 |
 | state 0 | 0 | `ai_update_stand` (0x80178D04) |
@@ -57,14 +57,14 @@ resolves the player's shot (`player_shoot_target`, 0x80198720), then for each ac
 | flag 0x400 | 5 | `ai_fire` (0x8017917C) when the animation reaches its fire frame |
 | flag 0x200 / 0x100 | 2 / 1 | stand, or `ai_update_move` with mode 2 |
 
-The flags at 0x100 and above win over the state. A death set numbered 1000 raises `npc_death_set_1000` while it runs. At the
+The flags at 0x100 and above win over the state. A death set numbered 1000 raises `actor_death_set_1000` while it runs. At the
 end the frame picks the player's next target (`player_pick_target`, 0x801985AC) and clears the two alert flags
 (below). Talking to a person (trigger kind 0xFC) goes through `action_run_npc_event` (0x801752F4): a dead person
 runs set 0x400, a hostile one never talks, others run the talk set on enter and the leave set on leave.
 
 ## Commands from scripts
 
-Opcode 1 of an action calls `npc_exec_command` (0x80175CD8) on the person whose id is the target:
+Opcode 1 of an action calls `actor_exec_command` (0x80175CD8) on the person whose id is the target:
 
 | Sub | Effect |
 | --- | --- |
@@ -137,7 +137,7 @@ coordinate units (`player_shoot_target`, 0x80198720, multiplies each by 10 befor
 
 ## Damage and death
 
-`npc_apply_damage` (0x80175FA8) takes a class, a damage and a miss flag. Stats `on_hit` 1 makes the person hostile and
+`actor_apply_damage` (0x80175FA8) takes a class, a damage and a miss flag. Stats `on_hit` 1 makes the person hostile and
 drops a scripted walk, 2 makes it hostile and walking. A miss sets flag 0x1000. Otherwise the defence roll is a
 random number below stats `defence` (0x7FFF means immune), cut to two thirds unless the stats `resist_types` bit for
 the weapon class (1 << class) is set. What is left comes off the hit points and gives twice its value as class
@@ -147,7 +147,7 @@ times 1 for kind 0, 2 for kinds 1 and 2, 3 for 3 to 5, 4 for 16 to 18, 6 for 19.
 ## Arrests
 
 Killing a human (kind 0) adds 1 to two counters of `PlayerStatus`, +0x32 (never reset here) and +0x2E.
-`mail_goto_ofc` (0x8018C414) checks +0x2E when the player next goes to the office, with +0x30 counting the arrests.
+`main_goto_ofc` (0x8018C414) checks +0x2E when the player next goes to the office, with +0x30 counting the arrests.
 The first comes at 3 kills, the second at 5 more (unless game variable 17 is already 100, which it then sets); each
 loads the office's arrest variant and resets the counter, and there is no third
 ([arrests](../discoveries.md#-three-civilian-kills-get-you-arrested-and-five-more-the-second-time)). Game variable

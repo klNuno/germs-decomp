@@ -39,7 +39,7 @@ s16 event_blink0_timer;
 s16 event_blink1_timer;
 s16 event_blink2_timer;
 extern GameVars action_vars;
-extern ScreenLight screen_light;
+extern ScreenLight roadmap_screen_light;
 static void event_draw_clock_digits(s32 field, s16 value);
 static void event_update_daylight(s32 force);
 extern PlayerStatus player_status;
@@ -64,14 +64,14 @@ extern LimbColor event_limb_colors[];
 void mail_check_schedule(s16 day, s16 hour);
 s16 (*event_enter_hook)(KajEvent *a);
 s16 action_run_trigger_enter(void *trigger);
-void text_show(char *str, s32 mode, s32 circle_set, s32 circle_flags, s32 cross_set, s32 cross_flags, s32 se);
+void dialog_show(char *str, s32 mode, s32 circle_set, s32 circle_flags, s32 cross_set, s32 cross_flags, s32 se);
 static void event_drain_gauge(PlayerStatus *status);
 u16 event_blink0_color;
 u16 event_blink1_color;
 u16 event_blink2_color;
 
 void event_open(void) {
-    event_enter_id = OpenEvent(0xF3000000, 2, 0x1000, object_deliver_area_events);
+    event_enter_id = OpenEvent(0xF3000000, 2, 0x1000, player_deliver_area_events);
     event_leave_id = OpenEvent(0xF3000001, 2, 0x1000, player_leave_trigger);
     event_mod_finish_id = OpenEvent(0xF3000002, 2, 0x1000, mod_finish_handler);
     if (event_enter_id == -1 || event_leave_id == -1 || event_mod_finish_id == -1) {
@@ -120,7 +120,7 @@ void event_handle_enter(KajEvent *ev) {
         if (thing_run_script(thing_type, thing_id, 1) == 0) {
             if (thing_type == 0 && thing_id == 0) {
                 /* car prompt: get in */
-                text_show(" 7\203N\203\213\203}1\202\311\217\346\202\351       3\201\233", 1, -1, 8, -1, 0, 1);
+                dialog_show(" 7\203N\203\213\203}1\202\311\217\346\202\351       3\201\233", 1, -1, 8, -1, 0, 1);
             } else {
                 player->flags &= 0xFFFB;
                 action_reset(0);
@@ -132,31 +132,31 @@ void event_handle_enter(KajEvent *ev) {
     case 0xFE:
         if ((s16)game->vars[0x3E] < 5) {
             /* shop opening hours sign */
-            text_show("\211c\213\306\216\236\212\324 \202T\201F\202O\202O\201`\202Q\202S\201F\202O\202O", 1, -1, 0, -1, 0, 1);
+            dialog_show("\211c\213\306\216\236\212\324 \202T\201F\202O\202O\201`\202Q\202S\201F\202O\202O", 1, -1, 0, -1, 0, 1);
         } else {
             switch (((u8 *)&ev->param1)[1]) {
             case 1:
                 /* bus stop prompt, first route */
-                text_show(" 7\203o\203X\222\342 \202b\202P\202O\202P\214n\223\235   3\201\233", 1, -1, 8, -1, 0, 1);
+                dialog_show(" 7\203o\203X\222\342 \202b\202P\202O\202P\214n\223\235   3\201\233", 1, -1, 8, -1, 0, 1);
                 break;
             case 2:
                 /* bus stop prompt, second route */
-                text_show(" 7\203o\203X\222\342 \202b\202P\202O\202Q\214n\223\235   3\201\233", 1, -1, 8, -1, 0, 1);
+                dialog_show(" 7\203o\203X\222\342 \202b\202P\202O\202Q\214n\223\235   3\201\233", 1, -1, 8, -1, 0, 1);
                 break;
             case 3:
                 /* bus stop prompt, third route */
-                text_show(" 7\203o\203X\222\342 \202b\202P\202O\202R\214n\223\235   3\201\233", 1, -1, 8, -1, 0, 1);
+                dialog_show(" 7\203o\203X\222\342 \202b\202P\202O\202R\214n\223\235   3\201\233", 1, -1, 8, -1, 0, 1);
                 break;
             default:
                 /* bus stop sign, no route */
-                text_show(" 7\203o\203X\222\342", 1, -1, 0, -1, 0, 1);
+                dialog_show(" 7\203o\203X\222\342", 1, -1, 0, -1, 0, 1);
                 break;
             }
         }
         break;
     case 0xFF:
         /* phone box prompt */
-        text_show(" 7\223d\230b\203{\203b\203N\203X       3\201\233", 1, -1, 8, -1, 0, 1);
+        dialog_show(" 7\223d\230b\203{\203b\203N\203X       3\201\233", 1, -1, 8, -1, 0, 1);
         break;
     case 0x80:
         block_enter_area(ev->param1);
@@ -180,7 +180,7 @@ void event_handle_leave(KajEvent *ev) {
     state->trigger_type = ev->param0;
     if (state->trigger_type != 0x40) {
         action_reset(0);
-        text_close();
+        dialog_close();
     }
     if (event_leave_hook != NULL && event_leave_hook(ev) != 0) {
         return;
@@ -214,7 +214,7 @@ void event_handle_leave(KajEvent *ev) {
 s16 event_handle_effect_done(KajEvent *ev) {
     GameVars *game = &action_vars;
     Player *player = player_status_player[0];
-    MailMenu *menu = &game->mail_menu;
+    ListMenu *menu = &game->menu_list;
     s16 handled = 0;
 
     kaj_tss_release(ev->param0);
@@ -245,7 +245,7 @@ s16 event_handle_effect_done(KajEvent *ev) {
         menu->state = 0;
         game->menu_busy = 0;
         if (menu->icon_sprite == -2) {
-            mail_menu_clear_rows(menu);
+            menu_clear_rows(menu);
         }
         if (player->flags & 0x4000) {
             ev->param0 = 999999;
@@ -548,7 +548,7 @@ void event_draw_hud(void) {
 }
 
 static void event_update_daylight(s32 force) {
-    ScreenLight *light = &screen_light;
+    ScreenLight *light = &roadmap_screen_light;
     GameVars *game = &action_vars;
     s16 hour = game->vars[0x3E];
     s16 step;
@@ -720,7 +720,7 @@ void event_show_clock(s16 light_on) {
     event_draw_clock_digits(0, game->vars[0x3D] + 1);
     event_draw_clock_digits(1, game->vars[0x3E]);
     event_draw_clock_digits(2, game->vars[0x3F]);
-    screen_light.daylight_on = light_on;
+    roadmap_screen_light.daylight_on = light_on;
     SetFarColor(0, 0, 0);
     if (light_on != 0) {
         event_update_daylight(1);

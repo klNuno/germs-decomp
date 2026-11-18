@@ -69,7 +69,7 @@ static void block_set_zone_flags(s32 x, s32 z);
 extern Vehicle *object_scene_vehicle[];
 static s32 block_hit_tris(TmdTri *prims, s32 verts, s32 normals, Vec3 *offset, s32 count, s32 x, s32 z, s32 height_out);
 static s32 block_hit_quads(TmdTri *prims, s32 verts, s32 normals, Vec3 *offset, s32 count, s32 x, s32 z, s32 height_out);
-extern SceneRequestBuilding scene_request;
+extern SceneRequestBuilding main_scene_request;
 extern char block_str_err_alloc_buf[];
 s32 __nedf2(double arg0, double arg1);
 static s16 block_point_in_poly(PolyVert *verts, s32 count, s32 x, s32 z);
@@ -104,8 +104,8 @@ typedef struct {
 } BlockDataHeader;
 extern CarState vehicle_car_state;
 static s32 block_test_player_inside(Player *player, u16 mode, Block *block, s32 *lo, s32 *hi);
-s32 mail_angle_to_dir8(s16 angle);
-extern ScreenLight screen_light;
+s32 main_angle_to_dir8(s16 angle);
+extern ScreenLight roadmap_screen_light;
 
 void block_setup(Block *block, u16 mode) {
     s32 offsets[5];
@@ -192,7 +192,7 @@ void block_draw_all(ViewBuffer *view, u16 mode) {
     s32 ls[8];
     BlockList *list = block_list;
     Player *player = player_status_player[0];
-    ScreenLight *light = &screen_light;
+    ScreenLight *light = &roadmap_screen_light;
     Block *block;
 
     if (list->count == 0) {
@@ -387,7 +387,7 @@ void block_update_visibility(u16 mode) {
                     block->player_inside = 1;
                     block->visible = 1;
                 } else {
-                    block->visible = block_in_view_dir((s16)mail_angle_to_dir8(player->yaw), lo, hi);
+                    block->visible = block_in_view_dir((s16)main_angle_to_dir8(player->yaw), lo, hi);
                 }
             }
         }
@@ -478,7 +478,7 @@ static void block_load_all(u16 mode) {
         }
     }
     if (mode == 1) {
-        npc_update_blocks();
+        actor_update_blocks();
     }
 }
 
@@ -510,7 +510,7 @@ static void block_set_zone_flags(s32 x, s32 z) {
 
 void block_set_mode(u16 mode) {
     s32 pos[4];
-    SceneRequestBuilding *req = &scene_request;
+    SceneRequestBuilding *req = &main_scene_request;
     Player *player = player_status_player[0];
     GameVars *vars;
 
@@ -565,7 +565,7 @@ void block_set_mode(u16 mode) {
     }
     block_load_all(mode);
     door_refresh_all();
-    sprite_thing_refresh_all();
+    thing_refresh_all();
     block_reloaded = 0;
 }
 
@@ -609,7 +609,7 @@ void block_stream_update(u16 mode) {
             }
         }
         if (mode == 1) {
-            npc_update_blocks();
+            actor_update_blocks();
         }
         kaj_cdmgr_poll();
     } else if (status == 1 || kaj_cdmgr_poll() != 0) {
@@ -1479,7 +1479,7 @@ void block_free(Block *block) {
 
 Block *block_find_at(s32 x, s32 y, s32 z) {
     BlockList *list = block_list;
-    SceneRequestBuilding *req = &scene_request;
+    SceneRequestBuilding *req = &main_scene_request;
 
     if (list->count == 0) {
         return NULL;

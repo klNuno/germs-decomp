@@ -23,11 +23,11 @@ extern s32 kaj_system_vsync_delta[];
 extern PlayerStatus player_status;
 extern s16 ai_door_noise;
 extern s16 ai_weapon_noise;
-static s16 npc_update_anim(Npc *npc, s16 state);
+static s16 actor_update_anim(Npc *npc, s16 state);
 void mod_set_anim_by_id();
-s16 npc_death_set_1000;
+s16 actor_death_set_1000;
 
-static s16 npc_update_anim(Npc *npc, s16 state) {
+static s16 actor_update_anim(Npc *npc, s16 state) {
     PlayerStatus *status = &player_status;
     Inventory *inventory = status->inventory;
     Model *model;
@@ -127,7 +127,7 @@ static s16 npc_update_anim(Npc *npc, s16 state) {
         if (npc == status->target_npc) {
             inventory->armed = 1;
         }
-        stats = npc_find_stats(npc->stats_id);
+        stats = actor_find_stats(npc->stats_id);
         if (stats == NULL) {
             return 0;
         }
@@ -188,7 +188,7 @@ static s16 npc_update_anim(Npc *npc, s16 state) {
     return 0;
 }
 
-void npc_update_all(void) {
+void actor_update_all(void) {
     Npc *npc;
     Model *model;
     ActionSet *set;
@@ -230,9 +230,9 @@ void npc_update_all(void) {
                             npc->flags = 0;
                             set = action_find_set(npc->death_set);
                             if (set != NULL) {
-                                npc_death_set_1000 = 0;
+                                actor_death_set_1000 = 0;
                                 if (npc->death_set == 1000) {
-                                    npc_death_set_1000 = 1;
+                                    actor_death_set_1000 = 1;
                                 }
                                 do {
                                     set = action_run_set(set, 0, 0);
@@ -246,31 +246,31 @@ void npc_update_all(void) {
                             mod_set_anim_by_id(npc->model_id, 7, 0);
                         }
                     } else if (npc->state == 0) {
-                        npc_update_anim(npc, 0);
+                        actor_update_anim(npc, 0);
                         ai_update_stand(npc);
                     } else if (npc->state == 1) {
                         if (npc->mode == 0) {
-                            npc_update_anim(npc, 1);
+                            actor_update_anim(npc, 1);
                             ai_update_move(npc, 0);
                         } else if (npc->mode == 1) {
-                            npc_update_anim(npc, 1);
+                            actor_update_anim(npc, 1);
                             ai_update_move(npc, 1);
                         }
                     }
                 } else if (npc->state != 6) {
                     if (flags & 0x800) {
-                        npc_update_anim(npc, 4);
+                        actor_update_anim(npc, 4);
                     } else if (flags & 0x1000) {
-                        npc_update_anim(npc, 3);
+                        actor_update_anim(npc, 3);
                     } else if (flags & 0x400) {
-                        if (npc_update_anim(npc, 5) != 0) {
+                        if (actor_update_anim(npc, 5) != 0) {
                             ai_fire(npc);
                         }
                     } else if (flags & 0x200) {
-                        npc_update_anim(npc, 2);
+                        actor_update_anim(npc, 2);
                         ai_update_stand(npc);
                     } else if (flags & 0x100) {
-                        npc_update_anim(npc, 1);
+                        actor_update_anim(npc, 1);
                         ai_update_move(npc, 2);
                     }
                 }
@@ -282,7 +282,7 @@ void npc_update_all(void) {
     }
 }
 
-void npc_exec_command(Action *action) {
+void actor_exec_command(Action *action) {
     SceneTables *tables = &object_scene_tables;
     Npc *npc = tables->npcs;
     ActionCmdShort *cmd = (ActionCmdShort *)action->cmd;
@@ -356,7 +356,7 @@ done:
     }
 }
 
-void npc_apply_damage(Npc *npc, s32 weapon_class, s32 damage, s16 miss) {
+void actor_apply_damage(Npc *npc, s32 weapon_class, s32 damage, s16 miss) {
     PlayerStatus *status = &player_status;
     NpcStats *stats;
     s32 defence_roll;
@@ -366,7 +366,7 @@ void npc_apply_damage(Npc *npc, s32 weapon_class, s32 damage, s16 miss) {
     if (npc->hp <= 0) {
         return;
     }
-    stats = npc_find_stats(npc->stats_id);
+    stats = actor_find_stats(npc->stats_id);
     if (stats == NULL) {
         return;
     }
@@ -473,7 +473,7 @@ void npc_apply_damage(Npc *npc, s32 weapon_class, s32 damage, s16 miss) {
     event_set_blink(0, 1);
 }
 
-void npc_free_all(void) {
+void actor_free_all(void) {
     SceneTables *p = &object_scene_tables;
     if (p->npc_count != 0) {
         if (p->npcs != NULL) {
@@ -484,7 +484,7 @@ void npc_free_all(void) {
     }
 }
 
-Npc *npc_find(s16 by_model, u16 id) {
+Npc *actor_find(s16 by_model, u16 id) {
     SceneTables *p = &object_scene_tables;
     Npc *npc = p->npcs;
     s32 i;
@@ -505,7 +505,7 @@ Npc *npc_find(s16 by_model, u16 id) {
     return NULL;
 }
 
-void npc_draw_all(s32 view) {
+void actor_draw_all(s32 view) {
     SceneTables *p = &object_scene_tables;
     Npc *npc = p->npcs;
     Block *block;
@@ -526,7 +526,7 @@ void npc_draw_all(s32 view) {
     }
 }
 
-s16 npc_find_at_point(s16 skip_id, s32 x, s32 y, s32 z) {
+s16 actor_find_at_point(s16 skip_id, s32 x, s32 y, s32 z) {
     SceneTables *p = &object_scene_tables;
     Npc *npc = p->npcs;
     Model *model;
@@ -549,7 +549,7 @@ s16 npc_find_at_point(s16 skip_id, s32 x, s32 y, s32 z) {
     return -2;
 }
 
-void npc_update_blocks(void) {
+void actor_update_blocks(void) {
     SceneTables *p = &object_scene_tables;
     Npc *npc = p->npcs;
     s32 i;
@@ -560,7 +560,7 @@ void npc_update_blocks(void) {
     }
 }
 
-void npc_rebase_all(s32 x, s32 y, s32 z) {
+void actor_rebase_all(s32 x, s32 y, s32 z) {
     SceneTables *p = &object_scene_tables;
     Npc *npc = p->npcs;
     Model *model;
@@ -582,15 +582,15 @@ void npc_rebase_all(s32 x, s32 y, s32 z) {
     }
 }
 
-u16 npc_get_radius(Npc *npc) {
-    NpcBody *body = npc_find_body(npc->body_id);
+u16 actor_get_radius(Npc *npc) {
+    NpcBody *body = actor_find_body(npc->body_id);
     if (body == NULL) {
         return 600;
     }
     return body->radius * 10;
 }
 
-void npc_free_bodies(void) {
+void actor_free_bodies(void) {
     SceneTables *p = &object_scene_tables;
     if (p->npc_body_count != 0) {
         if (p->npc_bodies != NULL) {
@@ -601,7 +601,7 @@ void npc_free_bodies(void) {
     }
 }
 
-NpcBody *npc_find_body(s16 id) {
+NpcBody *actor_find_body(s16 id) {
     SceneTables *p = &object_scene_tables;
     NpcBody *body = p->npc_bodies;
     s32 i;
@@ -616,7 +616,7 @@ NpcBody *npc_find_body(s16 id) {
     return NULL;
 }
 
-void npc_free_stats(void) {
+void actor_free_stats(void) {
     SceneTables *p = &object_scene_tables;
     if (p->npc_stats_count != 0) {
         if (p->npc_stats != NULL) {
@@ -627,7 +627,7 @@ void npc_free_stats(void) {
     }
 }
 
-NpcStats *npc_find_stats(s16 id) {
+NpcStats *actor_find_stats(s16 id) {
     SceneTables *p = &object_scene_tables;
     NpcStats *stats = p->npc_stats;
     s32 i;

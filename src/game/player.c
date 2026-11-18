@@ -66,12 +66,12 @@ typedef struct PlayerMove {
     s16 delta_roll;
 } PlayerMove;
 
-extern AreaTrigger object_area_current;
-extern AreaTrigger object_area_previous;
+extern AreaTrigger player_area_current;
+extern AreaTrigger player_area_previous;
 extern Player player_character;
 s16 player_area_leave_pending;
 
-s32 object_deliver_area_events(void) {
+s32 player_deliver_area_events(void) {
     Player *player = &player_character;
     KajEvent *ev;
 
@@ -80,26 +80,26 @@ s32 object_deliver_area_events(void) {
         player_area_leave_pending = 0;
         ev = kaj_event_push(0x20);
         if (ev != NULL) {
-            ev->param1 = object_area_previous.trigger;
-            ev->param0 = object_area_previous.trigger_type;
-            ev->param2 = object_area_previous.scene_trigger;
+            ev->param1 = player_area_previous.trigger;
+            ev->param0 = player_area_previous.trigger_type;
+            ev->param2 = player_area_previous.scene_trigger;
         }
     }
     ev = kaj_event_push(0x10);
     if (ev != NULL) {
-        ev->param1 = object_area_current.trigger;
-        ev->param0 = object_area_current.trigger_type;
-        ev->param2 = object_area_current.scene_trigger;
+        ev->param1 = player_area_current.trigger;
+        ev->param0 = player_area_current.trigger_type;
+        ev->param2 = player_area_current.scene_trigger;
     }
-    object_area_previous.trigger_type = object_area_current.trigger_type;
-    object_area_previous.trigger = object_area_current.trigger;
-    object_area_previous.scene_trigger = object_area_current.scene_trigger;
+    player_area_previous.trigger_type = player_area_current.trigger_type;
+    player_area_previous.trigger = player_area_current.trigger;
+    player_area_previous.scene_trigger = player_area_current.scene_trigger;
     player->flags |= 4;
     return 0;
 }
 s32 player_last_trigger;
-extern AreaTrigger object_area_current;
-extern AreaTrigger object_area_previous;
+extern AreaTrigger player_area_current;
+extern AreaTrigger player_area_previous;
 s16 player_area_leave_pending;
 s32 player_pick_trigger_hook;
 s16 player_blocked_by_area;
@@ -159,7 +159,7 @@ static s16 player_check_ground(Player *player, s32 col, s16 sidestep, s16 slide)
         if (kind == 0xFC0000) {
             trigger_type = 0xFC;
             trigger = col & 0xFFFFFF;
-            npc = npc_find(0, col);
+            npc = actor_find(0, col);
             if (npc != NULL && npc->state == 6) {
                 if (sidestep != 0) {
                     player->move_state = 3;
@@ -251,9 +251,9 @@ static s16 player_check_ground(Player *player, s32 col, s16 sidestep, s16 slide)
     if (enter_only != 0) {
         if (trigger != player_last_trigger && trigger != 0xFFFFFF) {
             EnterCriticalSection();
-            object_area_current.trigger_type = trigger_type;
-            object_area_current.scene_trigger = (s32)scene_trigger;
-            object_area_current.trigger = trigger;
+            player_area_current.trigger_type = trigger_type;
+            player_area_current.scene_trigger = (s32)scene_trigger;
+            player_area_current.trigger = trigger;
             DeliverEvent(0xF3000000, 2);
             player_last_trigger = trigger;
             ExitCriticalSection();
@@ -263,20 +263,20 @@ static s16 player_check_ground(Player *player, s32 col, s16 sidestep, s16 slide)
         if (player_last_trigger != 0xFFFFFF) {
             if (trigger != 0xFFFFFF) {
                 player_area_leave_pending = 1;
-                object_area_current.trigger_type = trigger_type;
-                object_area_current.trigger = trigger;
-                object_area_current.scene_trigger = (s32)scene_trigger;
+                player_area_current.trigger_type = trigger_type;
+                player_area_current.trigger = trigger;
+                player_area_current.scene_trigger = (s32)scene_trigger;
                 DeliverEvent(0xF3000000, 2);
             } else {
-                object_area_current.trigger_type = object_area_previous.trigger_type;
-                object_area_current.trigger = object_area_previous.trigger;
-                object_area_current.scene_trigger = object_area_previous.scene_trigger;
+                player_area_current.trigger_type = player_area_previous.trigger_type;
+                player_area_current.trigger = player_area_previous.trigger;
+                player_area_current.scene_trigger = player_area_previous.scene_trigger;
                 DeliverEvent(0xF3000001, 2);
             }
         } else {
-            object_area_current.trigger_type = trigger_type;
-            object_area_current.scene_trigger = (s32)scene_trigger;
-            object_area_current.trigger = trigger;
+            player_area_current.trigger_type = trigger_type;
+            player_area_current.scene_trigger = (s32)scene_trigger;
+            player_area_current.trigger = trigger;
             DeliverEvent(0xF3000000, 2);
         }
         player_last_trigger = trigger;
@@ -356,10 +356,10 @@ static void player_wrap_cell(Player *player) {
     player->world_x = (player->pos_x + x) / 100;
     player->world_y = (player->pos_y + y) / 100;
     player->world_z = (player->pos_z + x) / 100;
-    npc_rebase_all(x, y, z);
+    actor_rebase_all(x, y, z);
     block_set_origin(x, y, z);
     door_rebase_all(x, y, z);
-    mod_npcrec_rebase_all(x, y, z);
+    npc_rec_rebase_all(x, y, z);
     thing_set_origin(x, y, z);
     if (player->vehicle_mode != 0) {
         vehicle_set_origin(x, y, z);
@@ -392,8 +392,8 @@ static void player_update_view(Player *player, s16 *view_rot, u16 mode) {
     player->view_dirty = 0;
 }
 s32 player_last_trigger;
-extern AreaTrigger object_area_current;
-extern AreaTrigger object_area_previous;
+extern AreaTrigger player_area_current;
+extern AreaTrigger player_area_previous;
 extern Player player_character;
 s16 effect_item_add(s16 item_id, s16 kind);
 s16 effect_item_remove(s16 item_id, s16 kind);
@@ -416,18 +416,18 @@ typedef struct {
     s16 menu_busy;
 } GameVars_u80195DF0;
 extern GameVars_u80195DF0 action_vars;
-void text_show(char *str, s32 mode, s32 circle_set, s32 circle_flags, s32 cross_set, s32 cross_flags, s32 se);
+void dialog_show(char *str, s32 mode, s32 circle_set, s32 circle_flags, s32 cross_set, s32 cross_flags, s32 se);
 extern EventState event_state;
 extern s16 player_part_damage_caps[];
 static void player_finish_death(void);
 extern SceneTables object_scene_tables;
 extern KajSystem kaj_system;
 extern Inventory player_inventory;
-extern SceneRequest scene_request;
+extern SceneRequest main_scene_request;
 extern s32 player_str_scene_cmn[];
-void mail_goto_building(s32 form, s32 *name, s32 var, s32 map_letter, s32 map_entry, s32 yaw, s32 scene_index, s32 trigger, s32 script_entry);
+void main_goto_building(s32 form, s32 *name, s32 var, s32 map_letter, s32 map_entry, s32 yaw, s32 scene_index, s32 trigger, s32 script_entry);
 extern s16 ai_weapon_noise;
-extern s16 screen_light_fade_active[];
+extern s16 roadmap_screen_light_fade_active[];
 u16 roadmap_get_state(void);
 extern char player_str_cured[];
 extern char player_str_body_light[];
@@ -458,7 +458,7 @@ typedef struct {
     u8 unk60[4];
     s32 pivot_z;
 } CarState_u80195DF0;
-extern ScreenLight screen_light;
+extern ScreenLight roadmap_screen_light;
 static void player_wrap_cell(Player *player);
 static void player_start_death(u16 mode, PlayerStatus *status, Player *player);
 static void player_move_on_foot(Player *player, u16 mode, s16 stream, s16 visibility);
@@ -472,7 +472,7 @@ static s16 player_check_ground(Player *player, s32 col, s16 sidestep, s16 slide)
 extern CarState_u80195DF0 vehicle_car_state;
 static void player_place_in_car(Player *player, Vehicle *vehicle, CarState_u80195DF0 *car, s32 dx, s32 dz, s16 dyaw, s16 last);
 static s32 player_pick_hit_part(s16 dir);
-s16 mail_angle_to_dir8(s16 angle);
+s16 main_angle_to_dir8(s16 angle);
 static void player_move_to_step(TssSlot *task);
 static void player_move_to_done(TssSlot *task);
 s16 player_blocked_by_area;
@@ -857,13 +857,13 @@ static void player_move_on_foot(Player *player, u16 mode, s16 stream, s16 visibi
                     px = (s * 600) >> 12;
                     pz = (c * 600) >> 12;
                 }
-                rec_id = mod_npcrec_find_at_point(player->pos_x + px, player->pos_y - player->eye_height, player->pos_z + pz);
+                rec_id = npc_rec_find_at_point(player->pos_x + px, player->pos_y - player->eye_height, player->pos_z + pz);
                 if (rec_id >= 0) {
                     col = rec_id + 0xF70000;
                 } else {
-                    npc_id = npc_find_at_point(-1, player->pos_x + px, player->pos_y - player->eye_height, player->pos_z + pz);
+                    npc_id = actor_find_at_point(-1, player->pos_x + px, player->pos_y - player->eye_height, player->pos_z + pz);
                     if (npc_id >= 0) {
-                        npc = npc_find(0, npc_id);
+                        npc = actor_find(0, npc_id);
                         if (npc != NULL && npc->state == 6) {
                             y = npc->pos_y + player->cell_y * 32000;
                         }
@@ -984,8 +984,8 @@ void player_init(void) {
 
 void player_place_for_scene(u16 entry) {
     PlayerStatus *status = &player_status;
-    ScreenLight *light = &screen_light;
-    SceneRequest *request = &scene_request;
+    ScreenLight *light = &roadmap_screen_light;
+    SceneRequest *request = &main_scene_request;
     Player *player;
     s16 rot[3];
     s32 v;
@@ -994,12 +994,12 @@ void player_place_for_scene(u16 entry) {
     status->infected = 0;
     light->fog_on = 0;
     request->change = 0;
-    object_area_previous.trigger_type = 0;
-    object_area_current.trigger_type = 0;
-    object_area_current.trigger = 0xFFFFFF;
-    object_area_previous.trigger = 0xFFFFFF;
-    object_area_previous.scene_trigger = 0;
-    object_area_current.scene_trigger = 0;
+    player_area_previous.trigger_type = 0;
+    player_area_current.trigger_type = 0;
+    player_area_current.trigger = 0xFFFFFF;
+    player_area_previous.trigger = 0xFFFFFF;
+    player_area_previous.scene_trigger = 0;
+    player_area_current.scene_trigger = 0;
     player = &player_character;
     player->flags &= ~4;
     player->reground = 1;
@@ -1089,7 +1089,7 @@ void player_place_for_scene(u16 entry) {
 
 static void player_finish_death(void) {
     PlayerStatus *status = &player_status;
-    SceneRequest *request = &scene_request;
+    SceneRequest *request = &main_scene_request;
     GameVars_u80195DF0 *vars = &action_vars;
     s32 i;
     s16 v;
@@ -1133,7 +1133,7 @@ static void player_finish_death(void) {
             status->limb_state[i] = 0;
             vars->limb_damage[i] = 0;
         }
-        mail_goto_building(1, player_str_scene_cmn, 0x18, 0x41, 7, 0xB4, 0x15, 0x500F07, 1);
+        main_goto_building(1, player_str_scene_cmn, 0x18, 0x41, 7, 0xB4, 0x15, 0x500F07, 1);
         event_draw_gauge(status);
         event_draw_limb_status(status);
     } else {
@@ -1146,7 +1146,7 @@ static void player_start_death(u16 mode, PlayerStatus *status, Player *player) {
     GameVars_u80195DF0 *vars = &action_vars;
     s32 drop;
 
-    if (screen_light_fade_active[0] == 0 && vars->menu_busy == 0 && roadmap_get_state() == 0
+    if (roadmap_screen_light_fade_active[0] == 0 && vars->menu_busy == 0 && roadmap_get_state() == 0
         && player->vehicle_mode != 1 && !(player->flags & 0x8000) && !(player->flags & 0x4802)) {
         player->flags |= 0x800;
         if (player->vehicle_mode != 0) {
@@ -1319,7 +1319,7 @@ void player_add_exp(s32 exp) {
 loop:
     status->level++;
     if (status->level < 100) {
-        status->next_exp = mail_exp_for_level(status->level);
+        status->next_exp = main_exp_for_level(status->level);
     }
     status->stat0 += rand() % 3;
     if ((u16)status->stat0 > 100) {
@@ -1403,7 +1403,7 @@ void player_take_hit(Npc *npc, s32 weapon_kind, s32 damage) {
     if (status->energy > 0) {
         div = 1;
         defense = rand() % (u16)status->stat3;
-        dir = mail_angle_to_dir8(player->yaw - npc->yaw);
+        dir = main_angle_to_dir8(player->yaw - npc->yaw);
         switch (dir) {
         case 6:
             damage = damage * 3 / 2;
@@ -1518,7 +1518,7 @@ void player_shoot_target(void) {
     if (inventory->armed == 0 || target == NULL || target->mode == 2 || (target->flags & 0x200) || !(target->flags & 2)) {
         return;
     }
-    reach = npc_get_radius(target) + 600;
+    reach = actor_get_radius(target) + 600;
     k = (u16)target->target_dist;
     dist = k - reach;
     if (dist < 0) {
@@ -1558,7 +1558,7 @@ void player_shoot_target(void) {
     }
     if (chance < 20) {
         if (chance == 0) {
-            npc_apply_damage(target, weapon->weapon_class, 0, 0);
+            actor_apply_damage(target, weapon->weapon_class, 0, 0);
             return;
         }
         if (chance < 0) {
@@ -1598,7 +1598,7 @@ void player_shoot_target(void) {
         miss = 1;
         damage = 0;
     }
-    npc_apply_damage(target, weapon->weapon_class, damage, miss);
+    actor_apply_damage(target, weapon->weapon_class, damage, miss);
 }
 
 static void player_move_to_step(TssSlot *task) {
@@ -1798,15 +1798,15 @@ void player_recover(s32 x, s32 y, s32 z, s16 wake) {
         }
         sprite_set_clut_entry(0x400, 0x45, 0);
         /* recovery line: mutation cured */
-        text_show(player_str_cured, 1, -1, 0, -1, 0, 0);
+        dialog_show(player_str_cured, 1, -1, 0, -1, 0, 0);
     } else {
         injured = player_is_injured();
         if (injured == 0 && wake == 0) {
             /* recovery line: body */
-            text_show(player_str_body_light, 1, -1, 0, -1, 0, 0);
+            dialog_show(player_str_body_light, 1, -1, 0, -1, 0, 0);
         } else {
             /* recovery line: wounds */
-            text_show(player_str_wounds_healed, 1, -1, 0, -1, 0, 0);
+            dialog_show(player_str_wounds_healed, 1, -1, 0, -1, 0, 0);
         }
     }
     for (i = 0; i < 5; i++) {
@@ -2040,12 +2040,12 @@ void player_weapon_sound(s16 kind, s16 start) {
 
 void player_reset_triggers(s16 reground) {
     player_last_trigger = 0xFFFFFF;
-    object_area_previous.trigger_type = 0;
-    object_area_current.trigger_type = 0;
-    object_area_previous.trigger = 0xFFFFFF;
-    object_area_current.trigger = 0xFFFFFF;
-    object_area_previous.scene_trigger = 0;
-    object_area_current.scene_trigger = 0;
+    player_area_previous.trigger_type = 0;
+    player_area_current.trigger_type = 0;
+    player_area_previous.trigger = 0xFFFFFF;
+    player_area_current.trigger = 0xFFFFFF;
+    player_area_previous.scene_trigger = 0;
+    player_area_current.scene_trigger = 0;
     player_character.reground = reground;
     player_character.view_dirty = 1;
     player_character.flags &= ~4;
@@ -2164,13 +2164,13 @@ s32 player_leave_trigger(void) {
     UnDeliverEvent(0xF3000001, 2);
     event = kaj_event_push(0x20);
     if (event != NULL) {
-        event->param1 = object_area_current.trigger;
-        event->param0 = object_area_current.trigger_type;
-        event->param2 = object_area_current.scene_trigger;
+        event->param1 = player_area_current.trigger;
+        event->param0 = player_area_current.trigger_type;
+        event->param2 = player_area_current.scene_trigger;
     }
-    object_area_previous.trigger_type = object_area_current.trigger_type;
-    object_area_previous.trigger = object_area_current.trigger;
-    object_area_previous.scene_trigger = object_area_current.scene_trigger;
+    player_area_previous.trigger_type = player_area_current.trigger_type;
+    player_area_previous.trigger = player_area_current.trigger;
+    player_area_previous.scene_trigger = player_area_current.scene_trigger;
     player->flags &= ~4;
     return 0;
 }
@@ -2299,7 +2299,7 @@ s32 player_update_map(PlayerStatus *status) {
                         navi->dest_sprite->visible = 0;
                     }
                 }
-                text_close();
+                dialog_close();
                 map->mode = 2;
                 map->zoomed = 0;
                 effect_start_sprite_slide(2, 0x405, 1);

@@ -50,19 +50,19 @@ typedef struct {
     u32 job;
     CardSlot slots[4];
 } CardMenu;
-extern SceneRequest scene_request;
-static void menu_card_init_slots(CardMenu *card, s32 clear_icons);
-static void menu_card_set_message(CardMenu *card, s32 result);
-static s32 menu_card_load(CardMenu *card);
-static s32 menu_card_save(CardMenu *card, s32 overwrite);
-static s32 menu_card_scan(CardMenu *card);
-extern CardIconClut menu_card_icon_clut;
-extern CardMenu menu_card_state;
-static void menu_card_process(CardMenu *card);
-static s16 menu_card_handle_input(CardMenu *card);
-s32 mail_take_scene_change(void);
+extern SceneRequest main_scene_request;
+static void card_init_slots(CardMenu *card, s32 clear_icons);
+static void card_set_message(CardMenu *card, s32 result);
+static s32 card_load(CardMenu *card);
+static s32 card_save(CardMenu *card, s32 overwrite);
+static s32 card_scan(CardMenu *card);
+extern CardIconClut card_icon_clut;
+extern CardMenu card_state;
+static void card_process(CardMenu *card);
+static s16 card_handle_input(CardMenu *card);
+s32 main_take_scene_change(void);
 extern KajSystem kaj_system;
-static void menu_card_move_cursor(CardMenu *card, s16 up);
+static void card_move_cursor(CardMenu *card, s16 up);
 extern s16 kaj_system_pad_mode[];
 /* Local view of Player: this unit reads 0x1C-0x38 as scalars, the shared type has one record at 0x18. */
 typedef struct {
@@ -84,9 +84,9 @@ typedef struct {
     s32 player[0xE];
     u8 pad1D0[0x2C];
 } SaveData;
-extern char menu_str_save_title[];
-extern u8 menu_card_icon_image[];
-extern s16 scene_request_change[];
+extern char card_str_save_title[];
+extern u8 card_icon_image[];
+extern s16 main_scene_request_change[];
 typedef struct {
     char name[0x14];
     s32 attr;
@@ -95,9 +95,9 @@ typedef struct {
     s32 head;
     char system[0x4];
 } DirEntry;
-extern char menu_card_dir_pattern[];
+extern char card_dir_pattern[];
 
-static void menu_card_init_slots(CardMenu *card, s32 clear_icons) {
+static void card_init_slots(CardMenu *card, s32 clear_icons) {
     Rect rect;
     void *buf;
     CardSlot *slot;
@@ -116,7 +116,7 @@ static void menu_card_init_slots(CardMenu *card, s32 clear_icons) {
         slot->block_count = 1;
         memset(slot->title, 0, 0x40);
         memset(slot->reserved, 0, 0x1C);
-        slot->icon_clut = menu_card_icon_clut;
+        slot->icon_clut = card_icon_clut;
     }
     sprite_fill_clut(0x200, 4, 7, 0xC252);
     sprite_fill_clut(0x200, 9, 0xC, 0xC252);
@@ -142,9 +142,9 @@ static void menu_card_init_slots(CardMenu *card, s32 clear_icons) {
     }
 }
 
-INCLUDE_RODATA("asm/nonmatchings/game/card", menu_str_save_title);
+INCLUDE_RODATA("asm/nonmatchings/game/card", card_str_save_title);
 
-static void menu_card_set_message(CardMenu *card, s32 result) {
+static void card_set_message(CardMenu *card, s32 result) {
     s32 cell;
 
     if (result < 0x64) {
@@ -152,11 +152,11 @@ static void menu_card_set_message(CardMenu *card, s32 result) {
         case 0:
             return;
         case 1:
-            menu_card_init_slots(card, 1);
+            card_init_slots(card, 1);
             card->message = 0x66;
             break;
         case 2:
-            menu_card_init_slots(card, 1);
+            card_init_slots(card, 1);
             card->message = 0x67;
             break;
         case 3:
@@ -222,7 +222,7 @@ static void menu_card_set_message(CardMenu *card, s32 result) {
     sprite_set_cell(0x203, 0, cell);
 }
 
-static inline s32 menu_card_load_read_frame(u8 *buf, s32 block) {
+static inline s32 card_load_read_frame(u8 *buf, s32 block) {
     s32 cmd;
     s32 result;
     for (;;) {
@@ -245,7 +245,7 @@ static inline s32 menu_card_load_read_frame(u8 *buf, s32 block) {
     return result;
 }
 
-static inline s16 menu_card_load_check_sum(u8 *sec) {
+static inline s16 card_load_check_sum(u8 *sec) {
     u8 sum;
     s32 i;
     sum = 0;
@@ -258,7 +258,7 @@ static inline s16 menu_card_load_check_sum(u8 *sec) {
     return 1;
 }
 
-static s32 menu_card_load(CardMenu *card) {
+static s32 card_load(CardMenu *card) {
     SaveData save;
     u8 sec[0x80];
     PlayerStatus *status = &player_status;
@@ -271,7 +271,7 @@ static s32 menu_card_load(CardMenu *card) {
     s32 i;
 
     slot = &card->slots[card->cursor];
-    menu_card_set_message(card, 0x65);
+    card_set_message(card, 0x65);
     roadmap_draw_frame(3);
     ret = MemCardOpen(0, slot->file_name, 1);
     if (ret != 0) {
@@ -280,19 +280,19 @@ static s32 menu_card_load(CardMenu *card) {
     memset(&save, 0, sizeof(save));
     for (i = 0; i < 4; i++) {
         memset(sec, 0, 0x80);
-        ret = menu_card_load_read_frame(sec, i * 2 + 2);
+        ret = card_load_read_frame(sec, i * 2 + 2);
         if (ret != 0) {
             goto error;
         }
-        if (menu_card_load_check_sum(sec)) {
+        if (card_load_check_sum(sec)) {
             memcpy((u8 *)&save + i * 0x7F, sec, 0x7F);
         } else {
             memset(sec, 0, 0x80);
-            ret = menu_card_load_read_frame(sec, i * 2 + 3);
+            ret = card_load_read_frame(sec, i * 2 + 3);
             if (ret != 0) {
                 goto error;
             }
-            if (menu_card_load_check_sum(sec)) {
+            if (card_load_check_sum(sec)) {
                 memcpy((u8 *)&save + i * 0x7F, sec, 0x7F);
             } else {
                 ret = 0x68;
@@ -310,9 +310,9 @@ static s32 menu_card_load(CardMenu *card) {
     vars->drain_count = 0;
     vars->drain_minute = vars->vars[0x3F] % 10;
     if (save.in_office != 0) {
-        mail_goto_ofc(1, 1, 1, 0);
+        main_goto_ofc(1, 1, 1, 0);
     } else {
-        mail_goto_twn(player->exit_pos_x, player->exit_pos_y, player->exit_pos_z, player->exit_yaw, 0);
+        main_goto_twn(player->exit_pos_x, player->exit_pos_y, player->exit_pos_z, player->exit_yaw, 0);
     }
     return 0x6C;
 error:
@@ -320,7 +320,7 @@ error:
     return ret;
 }
 
-static inline s32 menu_card_save_write_frame(void *buf, s32 block) {
+static inline s32 card_save_write_frame(void *buf, s32 block) {
     s32 cmd;
     s32 result;
     for (;;) {
@@ -339,14 +339,14 @@ static inline s32 menu_card_save_write_frame(void *buf, s32 block) {
     }
 }
 
-static inline void menu_card_save_digits(char *out, s32 n) {
+static inline void card_save_digits(char *out, s32 n) {
     out[0] = out[2] = 0x82;
     out[1] = n / 10 + 0x4F;
     out[3] = n % 10 + 0x4F;
     out[4] = 0;
 }
 
-static s32 menu_card_save(CardMenu *card, s32 overwrite) {
+static s32 card_save(CardMenu *card, s32 overwrite) {
     SaveData save;
     u8 sec[0x80];
     char day_str[8];
@@ -378,19 +378,19 @@ static s32 menu_card_save(CardMenu *card, s32 overwrite) {
             return ret;
         }
     }
-    menu_card_set_message(card, 0x65);
+    card_set_message(card, 0x65);
     roadmap_draw_frame(3);
     ret = MemCardOpen(0, slot->file_name, 2);
     if (ret != 0) {
         return ret;
     }
-    menu_card_save_digits(day_str, vars->vars[0x3D] + 1);
-    menu_card_save_digits(hour_str, vars->vars[0x3E]);
-    menu_card_save_digits(minute_str, vars->vars[0x3F]);
-    menu_card_save_digits(slot_str, card->cursor + 1);
+    card_save_digits(day_str, vars->vars[0x3D] + 1);
+    card_save_digits(hour_str, vars->vars[0x3E]);
+    card_save_digits(minute_str, vars->vars[0x3F]);
+    card_save_digits(slot_str, card->cursor + 1);
     memset(header + 4, 0, 0x40);
     /* memory card save title format: game name, day, hour, minute, slot */
-    sprintf(header + 4, menu_str_save_title, day_str, hour_str, minute_str, slot_str);
+    sprintf(header + 4, card_str_save_title, day_str, hour_str, minute_str, slot_str);
     memset(&save, 0, sizeof(save));
     memcpy(save.vars, vars, sizeof(save.vars));
     memcpy(save.settings, car_speed, sizeof(save.settings));
@@ -398,10 +398,10 @@ static s32 menu_card_save(CardMenu *card, s32 overwrite) {
     memcpy(save.inventory, inventory, sizeof(save.inventory));
     memcpy(save.player, player, sizeof(save.player));
     save.in_office = card->in_office;
-    if (menu_card_save_write_frame(header, 0) != 0) {
+    if (card_save_write_frame(header, 0) != 0) {
         goto error;
     }
-    if (menu_card_save_write_frame(menu_card_icon_image, 1) != 0) {
+    if (card_save_write_frame(card_icon_image, 1) != 0) {
         goto error;
     }
     for (i = 0; i < 4; i++) {
@@ -413,15 +413,15 @@ static s32 menu_card_save(CardMenu *card, s32 overwrite) {
             sum ^= *p++;
         }
         *p = sum;
-        if (menu_card_save_write_frame(sec, i * 2 + 2) != 0) {
+        if (card_save_write_frame(sec, i * 2 + 2) != 0) {
             goto error;
         }
-        if (menu_card_save_write_frame(sec, i * 2 + 3) != 0) {
+        if (card_save_write_frame(sec, i * 2 + 3) != 0) {
             goto error;
         }
     }
     MemCardClose();
-    scene_request_change[0] = 1;
+    main_scene_request_change[0] = 1;
     return 0x6C;
 error:
     MemCardClose();
@@ -431,7 +431,7 @@ error:
     return 0x68;
 }
 
-static s32 menu_card_scan(CardMenu *card) {
+static s32 card_scan(CardMenu *card) {
     DirEntry entries[15];
     s32 count;
     s32 cmd;
@@ -452,7 +452,7 @@ static s32 menu_card_scan(CardMenu *card) {
     u8 *title;
     CardSlot *slot;
 
-    ret = MemCardGetDirentry(0, menu_card_dir_pattern, entries, &count, 0, 15);
+    ret = MemCardGetDirentry(0, card_dir_pattern, entries, &count, 0, 15);
     if (ret != 0) {
         return ret;
     }
@@ -534,7 +534,7 @@ static s32 menu_card_scan(CardMenu *card) {
     return 0x64;
 }
 
-static void menu_card_move_cursor(CardMenu *card, s16 up) {
+static void card_move_cursor(CardMenu *card, s16 up) {
     s32 i;
     s32 se;
 
@@ -576,7 +576,7 @@ loop:
     sound_se_play(se);
 }
 
-static s16 menu_card_handle_input(CardMenu *card) {
+static s16 card_handle_input(CardMenu *card) {
     s32 cmd;
     s32 result;
     s32 ok;
@@ -584,7 +584,7 @@ static s16 menu_card_handle_input(CardMenu *card) {
     s32 se;
     SceneRequest *req;
 
-    req = &scene_request;
+    req = &main_scene_request;
     if (kaj_system_pad_mode[0] != 1 || card->message == 0x65 || card->message == 0x6C) {
         return 0;
     }
@@ -614,7 +614,7 @@ static s16 menu_card_handle_input(CardMenu *card) {
                     card->job = 0;
                 case 1:
                 case 2:
-                    menu_card_set_message(card, result);
+                    card_set_message(card, result);
                     ok = 0;
                     break;
                 default:
@@ -674,19 +674,19 @@ static s16 menu_card_handle_input(CardMenu *card) {
             if (card->message == 0x6B || (card->load_mode == 0 && card->message == 0x6A)) {
                 pressed = 1;
                 se = 8;
-                menu_card_set_message(card, 0x64);
+                card_set_message(card, 0x64);
             } else {
                 sound_se_play(8);
-                mail_wait(3, 0, 0, 1);
+                main_wait(3, 0, 0, 1);
                 req->change = 1;
             }
         } else if (!(kaj_system.pad_prev & 0x1000) && (kaj_system.pad_now & 0x1000)) {
             if (card->message == 0x64) {
-                menu_card_move_cursor(card, 1);
+                card_move_cursor(card, 1);
             }
         } else if (!(kaj_system.pad_prev & 0x4000) && (kaj_system.pad_now & 0x4000)) {
             if (card->message == 0x64) {
-                menu_card_move_cursor(card, 0);
+                card_move_cursor(card, 0);
             }
         }
         ok = pressed;
@@ -697,7 +697,7 @@ static s16 menu_card_handle_input(CardMenu *card) {
     return 0;
 }
 
-static void menu_card_process(CardMenu *card) {
+static void card_process(CardMenu *card) {
     s32 cmd;
     s32 result;
     s32 r;
@@ -717,20 +717,20 @@ static void menu_card_process(CardMenu *card) {
                 card->job = 0xB;
                 card->message = -1;
             } else {
-                menu_card_set_message(card, r);
+                card_set_message(card, r);
             }
             break;
         case 11:
-            menu_card_set_message(card, menu_card_scan(card));
+            card_set_message(card, card_scan(card));
             break;
         case 12:
-            menu_card_set_message(card, menu_card_load(card));
+            card_set_message(card, card_load(card));
             break;
         case 13:
-            menu_card_set_message(card, menu_card_save(card, 0));
+            card_set_message(card, card_save(card, 0));
             break;
         case 14:
-            menu_card_set_message(card, menu_card_save(card, 1));
+            card_set_message(card, card_save(card, 1));
             break;
         }
         break;
@@ -746,7 +746,7 @@ static void menu_card_process(CardMenu *card) {
                 card->card_found = a;
                 MemCardAccept(0);
             } else {
-                menu_card_set_message(card, result);
+                card_set_message(card, result);
             }
             break;
         case 2:
@@ -754,7 +754,7 @@ static void menu_card_process(CardMenu *card) {
                 card->job = 0xB;
                 card->message = -1;
             } else {
-                menu_card_set_message(card, result);
+                card_set_message(card, result);
             }
             break;
         }
@@ -762,14 +762,14 @@ static void menu_card_process(CardMenu *card) {
     }
 }
 
-s16 menu_card_run(s16 load_mode, s16 in_office) {
+s16 card_run(s16 load_mode, s16 in_office) {
     s32 ev[6];
     CardMenu *card;
     s16 done = 0;
     s16 ready;
     s32 i;
 
-    card = &menu_card_state;
+    card = &card_state;
     if (load_mode != 0) {
         object_load_res(4, -1);
     } else {
@@ -783,15 +783,15 @@ s16 menu_card_run(s16 load_mode, s16 in_office) {
     card->in_office = in_office;
     card->message = -1;
     card->job = 0;
-    menu_card_init_slots(card, 0);
+    card_init_slots(card, 0);
     MemCardStart();
     kaj_timer_enable();
     kaj_pad_reset(1);
     while (done == 0) {
         switch (kaj_event_get(ev)) {
         case 0:
-            ready = menu_card_handle_input(card);
-            if ((s16)mail_take_scene_change() != 0) {
+            ready = card_handle_input(card);
+            if ((s16)main_take_scene_change() != 0) {
                 if (in_office != 0 || (card->loaded != 0 && load_mode != 0)) {
                     effect_start_fade(1, 3);
                 } else {
@@ -808,7 +808,7 @@ s16 menu_card_run(s16 load_mode, s16 in_office) {
             continue;
         }
         if (ready != 0) {
-            menu_card_process(card);
+            card_process(card);
         }
         thing_update_all();
         roadmap_draw_frame(3);

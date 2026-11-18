@@ -104,7 +104,7 @@ segments:
       - [0x37D0, .rodata, kaj/cdmgr]
       - [0x37F8, .rodata, kaj/map]
       - [0x3854, c, game/action]  # likely; start of .text; assert in action_load_set
-      - [0x5C6C, c, game/actor]  # likely; no assert: jtbl cut (npc jump tables at 4 mod 8)
+      - [0x5C6C, c, game/actor]  # likely; no assert: jtbl cut (actor.c's jump tables at 4 mod 8)
       - [0x70F8, c, game/ai]  # likely; no assert: gp cut (ai_door_noise is lui before, gp from ai_find_target)
       - [0xA048, c, game/block]  # likely; block.c asserts; ends where block_area_flames stops being read through gp
       - [0xDE04, c, game/building]  # likely; no assert: starts after block.c; card strings follow its jump table
@@ -124,7 +124,7 @@ segments:
       - [0x31020, c, game/shop]  # likely; no assert: a normal function after roadmap.c's deferred inline tail
       - [0x3297C, c, game/sound]  # likely; sound.c asserts
       - [0x345D4, c, game/sprite]  # likely; sprite.c asserts
-      - [0x37434, c, game/thing]  # likely; thing.c asserts; thing_list through gp from sprite_thing_refresh_all
+      - [0x37434, c, game/thing]  # likely; thing.c asserts; thing_list through gp from thing_refresh_all
       - [0x38B70, c, game/town]  # guess; no assert: a string after thing.c's jump table; its end is a guess
       - [0x3990C, c, game/vehicle]  # guess; vehicle.c asserts; its start is a guess
       - [0x3D1D0, asm, psyq/801AC9D0]  # LIBAPI,LIBC,LIBC2,LIBCARD,LIBCD,LIBETC,LIBGPU,LIBGS,LIBGTE,LIBMATH,LIBMCRD,LIBSN,LIBSND,LIBSPU

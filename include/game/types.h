@@ -286,7 +286,7 @@ typedef struct EffectAlarm {
     s16 active;
 } EffectAlarm;
 
-typedef struct MailMenu {
+typedef struct ListMenu {
     s16 state;
     s16 index;
     s16 cursor_entry;
@@ -302,7 +302,7 @@ typedef struct MailMenu {
     s16 rows;
     s16 count;
     s16 *list;
-} MailMenu;
+} ListMenu;
 
 typedef struct GameVars {
     u16 vars[0x5A];
@@ -317,7 +317,7 @@ typedef struct GameVars {
     u16 car_speed_setting;
     u16 text_speed_setting;
     EffectAlarm alarms[4];
-    MailMenu mail_menu;
+    ListMenu menu_list;
     s32 effect_task;
     s32 narration_task;
     s16 menu_busy;

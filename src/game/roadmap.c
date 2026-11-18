@@ -24,7 +24,7 @@
 extern RoadMap roadmap_state;
 typedef struct { s16 active; s16 frames_left; u8 red; u8 green; u8 blue; u8 unk7; } RoadmapFlash;
 RoadmapFlash roadmap_flash;
-extern ScreenLight screen_light;
+extern ScreenLight roadmap_screen_light;
 typedef struct { u8 unk0[0x18]; void *(*handler)(); s32 unk1C; } RoadmapPrimHandler;
 extern RoadmapPrimHandler roadmap_prim_handlers[8];
 typedef struct { s32 ndiv; s32 pih; s32 piv; u16 clut; u16 tpage; } DivPolygon;
@@ -652,7 +652,7 @@ typedef struct {
 s32 Clip3FP(SVector *v0, SVector *v1, SVector *v2, ClipVertex **evmx);
 
 static void *roadmap_draw_f3(RoadmapPrimF3 *op, SVector *vp, void *packet, s32 count, s32 shift, GsOT *ot) {
-    ScreenLight *light = &screen_light;
+    ScreenLight *light = &roadmap_screen_light;
     ClipVertex **evmx = roadmap_clip_evmx;
     RoadmapPrimWork w;
     s32 flag;
@@ -812,7 +812,7 @@ s32 Clip3GP(SVector *v0, SVector *v1, SVector *v2, RoadmapRgb *rgb0, RoadmapRgb 
             ClipVertex **evmx);
 
 static void *roadmap_draw_g3(RoadmapPrimG3 *op, SVector *vp, void *packet, s32 count, s32 shift, GsOT *ot) {
-    ScreenLight *light = &screen_light;
+    ScreenLight *light = &roadmap_screen_light;
     ClipVertex **evmx = roadmap_clip_evmx;
     RoadmapPrimWork w;
     s32 flag;
@@ -998,7 +998,7 @@ static void *roadmap_draw_g3(RoadmapPrimG3 *op, SVector *vp, void *packet, s32 c
 
 static void *roadmap_draw_ft3(RoadmapPrimFT3 *op, SVector *vp, void *packet, s32 count, s32 shift, GsOT *ot) {
     DivPolygon *divp = &roadmap_divpoly3;
-    ScreenLight *light = &screen_light;
+    ScreenLight *light = &roadmap_screen_light;
     RoadmapBounds b;
     s16 tex_mode[2];
     s32 flag;
@@ -1171,7 +1171,7 @@ static void *roadmap_draw_ft3(RoadmapPrimFT3 *op, SVector *vp, void *packet, s32
 
 static void *roadmap_draw_gt3(RoadmapPrimGT3 *op, SVector *vp, void *packet, s32 count, s32 shift, GsOT *ot) {
     DivPolygon *divp = &roadmap_divpoly3;
-    ScreenLight *light = &screen_light;
+    ScreenLight *light = &roadmap_screen_light;
     RoadmapBounds b;
     s16 tex_mode[2];
     s32 flag;
@@ -1386,7 +1386,7 @@ typedef struct {
 s32 Clip4FP(SVector *v0, SVector *v1, SVector *v2, SVector *v3, ClipVertex **evmx);
 
 static void *roadmap_draw_f4(RoadmapPrimF4 *op, SVector *vp, void *packet, s32 count, s32 shift, GsOT *ot) {
-    ScreenLight *light = &screen_light;
+    ScreenLight *light = &roadmap_screen_light;
     ClipVertex **evmx = roadmap_clip_evmx;
     RoadmapPrimWork w;
     s32 flag;
@@ -1595,7 +1595,7 @@ s32 Clip4GP(SVector *v0, SVector *v1, SVector *v2, SVector *v3, RoadmapRgb *rgb0
             RoadmapRgb *rgb2, RoadmapRgb *rgb3, ClipVertex **evmx);
 
 static void *roadmap_draw_g4(RoadmapPrimG4 *op, SVector *vp, void *packet, s32 count, s32 shift, GsOT *ot) {
-    ScreenLight *light = &screen_light;
+    ScreenLight *light = &roadmap_screen_light;
     ClipVertex **evmx = roadmap_clip_evmx;
     RoadmapPrimWork w;
     s32 flag;
@@ -1823,7 +1823,7 @@ static void *roadmap_draw_g4(RoadmapPrimG4 *op, SVector *vp, void *packet, s32 c
 
 static void *roadmap_draw_ft4(RoadmapPrimFT4 *op, SVector *vp, void *packet, s32 count, s32 shift, GsOT *ot) {
     DivPolygon *divp = &roadmap_divpoly4;
-    ScreenLight *light = &screen_light;
+    ScreenLight *light = &roadmap_screen_light;
     RoadmapBounds b;
     s16 tex_mode[2];
     s32 flag;
@@ -2018,7 +2018,7 @@ static void *roadmap_draw_ft4(RoadmapPrimFT4 *op, SVector *vp, void *packet, s32
 
 static void *roadmap_draw_gt4(RoadmapPrimGT4 *op, SVector *vp, void *packet, s32 count, s32 shift, GsOT *ot) {
     DivPolygon *divp = &roadmap_divpoly4;
-    ScreenLight *light = &screen_light;
+    ScreenLight *light = &roadmap_screen_light;
     RoadmapBounds b;
     s16 tex_mode[2];
     s32 flag;
@@ -2259,7 +2259,7 @@ static void *roadmap_draw_gt4(RoadmapPrimGT4 *op, SVector *vp, void *packet, s32
 }
 
 void *roadmap_add_sprite(RoadmapSprite *sprite, void *packet, u32 *ot_base) {
-    ScreenLight *light = &screen_light;
+    ScreenLight *light = &roadmap_screen_light;
     u8 *pkt;
     SprtPacket *sp;
     u32 *ot;
@@ -2325,7 +2325,7 @@ void *roadmap_add_sprite(RoadmapSprite *sprite, void *packet, u32 *ot_base) {
 /* Inline copy of roadmap_add_flash_quad (defined further down in the unit): the draw call below
  * keeps its body, including the missing return when the packet buffer is full. */
 static inline PolyF4Packet *roadmap_add_flash_quad_inline(RoadmapFlash *flash, PolyF4Packet *tile, u32 *ot) {
-    ScreenLight *light = &screen_light;
+    ScreenLight *light = &roadmap_screen_light;
     u8 rgb[3];
     if ((u32)kaj_view_packet_used() <= 0xAFFA) {
         ((u8 *)tile)[3] = 5;
@@ -2393,15 +2393,15 @@ void roadmap_init_draw(void) {
     roadmap_divpoly3.pih = 0x140;
     roadmap_divpoly4.piv = 0xF0;
     roadmap_divpoly3.piv = 0xF0;
-    screen_light.fade_level = 0x1000;
-    screen_light.daylight_on = 0;
-    screen_light.fog_on = 0;
-    screen_light.fade_active = 0;
-    screen_light.clip_mode = 0;
-    screen_light.ot_bias = 3;
-    screen_light.bg_color_pending = 0;
-    screen_light.daylight_step = 0;
-    screen_light.dark = 0;
+    roadmap_screen_light.fade_level = 0x1000;
+    roadmap_screen_light.daylight_on = 0;
+    roadmap_screen_light.fog_on = 0;
+    roadmap_screen_light.fade_active = 0;
+    roadmap_screen_light.clip_mode = 0;
+    roadmap_screen_light.ot_bias = 3;
+    roadmap_screen_light.bg_color_pending = 0;
+    roadmap_screen_light.daylight_step = 0;
+    roadmap_screen_light.dark = 0;
     flash = &roadmap_flash;
     roadmap_flash.active = 0;
     flash->frames_left = 0;
@@ -2417,7 +2417,7 @@ void roadmap_init_draw(void) {
 }
 
 void roadmap_draw_frame(u16 mode) {
-    ScreenLight *light = &screen_light;
+    ScreenLight *light = &roadmap_screen_light;
     ViewBuffer *view;
     s32 dusk;
 
@@ -2425,7 +2425,7 @@ void roadmap_draw_frame(u16 mode) {
     roadmap_daylight_level = light->daylight_step * 42 + light->daylight_step * 2 / 3 + 0x600;
     roadmap_frame_mode = mode;
     roadmap_draw_flags = 0;
-    if (screen_light.daylight_on != 0 && light->dark == 1) {
+    if (roadmap_screen_light.daylight_on != 0 && light->dark == 1) {
         dusk = 0x3D - light->daylight_step;
         roadmap_ft_color_r = (dusk * 0x1334 >> 12) - 0x80;
         roadmap_ft_color_g = (dusk * 0x1334 >> 12) - 0x80;
@@ -2444,10 +2444,10 @@ void roadmap_draw_frame(u16 mode) {
     }
     view = kaj_view_begin_frame();
     sprite_draw_all(view);
-    mod_npcrec_draw_all((s32)view);
-    npc_draw_all((s32)view);
+    npc_rec_draw_all((s32)view);
+    actor_draw_all((s32)view);
     roadmap_draw_flash(view);
-    sprite_thing_draw_all(view);
+    thing_draw_all(view);
     door_draw_all(view);
     mod_draw_player(view, mode);
     vehicle_draw(view);
@@ -2487,7 +2487,7 @@ void roadmap_start_flash(s32 red, s32 green, s32 blue, s32 duration) {
 }
 
 PolyF4Packet *roadmap_add_flash_quad(RoadmapFlash *flash, PolyF4Packet *tile, u32 *ot) {
-    ScreenLight *light = &screen_light;
+    ScreenLight *light = &roadmap_screen_light;
     u8 rgb[3];
 
     if ((u32)kaj_view_packet_used() <= 0xAFFA) {

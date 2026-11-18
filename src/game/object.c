@@ -106,7 +106,7 @@ typedef struct {
 } GameVars_u8018FA18;
 extern GameVars_u8018FA18 action_vars;
 RoomPhone object_room_phone;
-void text_show(char *str, s32 mode, s32 circle_set, s32 circle_flags, s32 cross_set, s32 cross_flags, s32 se);
+void dialog_show(char *str, s32 mode, s32 circle_set, s32 circle_flags, s32 cross_set, s32 cross_flags, s32 se);
 RoomStorage object_room_storage;
 u16 object_room_choice_color;
 u16 object_room_choice_cursor_color;
@@ -136,8 +136,8 @@ extern s32 object_scene_mail[];
 extern u8 *sound_vab_stream_body_buf[];
 static void object_room_storage_open(s16 reopen, char *line);
 s16 object_room_exit_pending;
-extern u16 scene_request_arrival[];
-extern SceneRequest scene_request;
+extern u16 main_scene_request_arrival[];
+extern SceneRequest main_scene_request;
 static s32 object_room_on_enter(KajEvent *ev);
 static s32 object_room_on_effect_done(KajEvent *ev);
 static void object_room_pick_desk_action(s32 *out);
@@ -146,7 +146,7 @@ static void object_room_on_mod_finish(KajEvent *ev);
 static void object_room_update_input(void);
 static void object_room_quit(void);
 static void object_room_init(void);
-s32 mail_take_scene_change(void);
+s32 main_take_scene_change(void);
 static void object_room_check_calls(void);
 static void object_iff_open(IffContext **out, s32 res_file, s32 index);
 static void object_read_chunks(IffContext *iff, s32 request, s32 progress, s32 filter_id);
@@ -610,7 +610,7 @@ static void object_load_thng(IffContext *iff, s32 size) {
         }
         iff->pos += size - 0x7F8;
     }
-    sprite_thing_init(thing);
+    thing_init_from_record(thing);
     thing_list_add((s32)thing);
 }
 
@@ -1113,7 +1113,7 @@ void object_load_scene(void) {
     u8 *p2;
     u8 *loc2;
 
-    request = &scene_request;
+    request = &main_scene_request;
     object_iff_open(&iff, 0, request->scene_index);
     q = iff;
     q->pos = 0;
@@ -1421,23 +1421,23 @@ static s32 object_room_on_enter(KajEvent *ev) {
     switch (ev->param1) {
     case 0xFA0000:
         /* desk prompt: leave the desk */
-        text_show(" 8\212\3671\202\251\202\347\227\243\202\352\202\351       3\201\233", 1, -1, 8, -1, 0, 1);
+        dialog_show(" 8\212\3671\202\251\202\347\227\243\202\352\202\351       3\201\233", 1, -1, 8, -1, 0, 1);
         break;
     case 0xFA0001:
         /* desk prompt: start the computer */
-        text_show(" 8\203R\203\223\203s\203\205\201[\203^1\202\360\213N\223\256\202\267\202\351  3\201\233", 1, -1, 8, -1, 0, 1);
+        dialog_show(" 8\203R\203\223\203s\203\205\201[\203^1\202\360\213N\223\256\202\267\202\351  3\201\233", 1, -1, 8, -1, 0, 1);
         break;
     case 0xFA0002:
         /* desk prompt: write the diary */
-        text_show(" 8\223\372\213L1\202\360\202\302\202\257\202\351       3\201\233", 1, -1, 8, -1, 0, 1);
+        dialog_show(" 8\223\372\213L1\202\360\202\302\202\257\202\351       3\201\233", 1, -1, 8, -1, 0, 1);
         break;
     case 0xFA0003:
         if (phone->state == 1) {
             /* phone prompt: answer */
-            text_show(" 8\223d\230b1\202\360\202\306\202\351        3\201\233", 1, -1, 8, -1, 0, 1);
+            dialog_show(" 8\223d\230b1\202\360\202\306\202\351        3\201\233", 1, -1, 8, -1, 0, 1);
         } else if (phone->state == 2) {
             /* phone prompt: make a call */
-            text_show(" 8\223d\230b1\202\360\202\251\202\257\202\351       3\201\233", 1, -1, 8, -1, 0, 1);
+            dialog_show(" 8\223d\230b1\202\360\202\251\202\257\202\351       3\201\233", 1, -1, 8, -1, 0, 1);
         }
         break;
     default:
@@ -1457,7 +1457,7 @@ static s32 object_room_on_effect_done(KajEvent *ev) {
     storage = &object_room_storage;
     player = player_status_player[0];
     kind = ev->param2;
-    mode = scene_request_arrival[0];
+    mode = main_scene_request_arrival[0];
     if (kind == 4) {
         if (object_room_exit_pending != 0) {
             object_room_exit_pending = 0;
@@ -1465,7 +1465,7 @@ static s32 object_room_on_effect_done(KajEvent *ev) {
         }
         if (player->flags & 0x10) {
             /* drowsiness narration */
-            text_show(" \202\310\202\361\202\276\202\251\201A\202\244\202\306\202\244\202\306\202\265\202\304\202\253\202\275", 1, -1, 0, -1, 0, 0);
+            dialog_show(" \202\310\202\361\202\276\202\251\201A\202\244\202\306\202\244\202\306\202\265\202\304\202\253\202\275", 1, -1, 0, -1, 0, 0);
             kaj_view_set_bg_color(0, 0, 0);
             effect_start_fade(10, 3);
         }
@@ -1474,8 +1474,8 @@ static s32 object_room_on_effect_done(KajEvent *ev) {
             game->fade_tss = -1;
         }
         player_rest(0, 0xDAC, 0, 0xC80);
-        text_close();
-        mail_wait(0, 0, 0, 4);
+        dialog_close();
+        main_wait(0, 0, 0, 4);
         effect_start_fade(9, 3);
     } else if (kind == 9) {
         if (ev->param1 == 0) {
@@ -1492,10 +1492,10 @@ static s32 object_room_on_effect_done(KajEvent *ev) {
         if (!(player->flags & 0x4000)) {
             if (storage->choice != 0) {
                 /* storage prompt: choose a weapon to leave */
-                text_show(" 1\227a\202\257\202\3518\225\220\212\3551\202\360\225\373\214\374\203L\201[\217\343\211\272\202\305, \221I\202\361\202\305\211\272\202\263\202\242,      \214\210\222\350 3\201\233 1\226\337\202\351 4\201~", 3, -1, 0, -1, 0, 1);
+                dialog_show(" 1\227a\202\257\202\3518\225\220\212\3551\202\360\225\373\214\374\203L\201[\217\343\211\272\202\305, \221I\202\361\202\305\211\272\202\263\202\242,      \214\210\222\350 3\201\233 1\226\337\202\351 4\201~", 3, -1, 0, -1, 0, 1);
             } else {
                 /* storage prompt: choose a weapon to take */
-                text_show(" 1\216\363\202\257\216\346\202\3518\225\220\212\3551\202\360\225\373\214\374\203L\201[\217\343\211\272\202\305, \221I\202\361\202\305\211\272\202\263\202\242,      \214\210\222\350 3\201\233 1\226\337\202\351 4\201~", 3, -1, 0, -1, 0, 1);
+                dialog_show(" 1\216\363\202\257\216\346\202\3518\225\220\212\3551\202\360\225\373\214\374\203L\201[\217\343\211\272\202\305, \221I\202\361\202\305\211\272\202\263\202\242,      \214\210\222\350 3\201\233 1\226\337\202\351 4\201~", 3, -1, 0, -1, 0, 1);
             }
         }
     } else if (kind == 12) {
@@ -1507,7 +1507,7 @@ static s32 object_room_on_effect_done(KajEvent *ev) {
             sound_bgm_play(0);
         }
     } else if (kind == 8) {
-        mail_wait(0, 0, 0, 2);
+        main_wait(0, 0, 0, 2);
         if (player->view_dirty == 0) {
             player->view_dirty = 1;
         }
@@ -1631,7 +1631,7 @@ static s16 object_room_storage_input(void) {
     if (object_room_storage.open == 0) {
         return 0;
     }
-    menu_state = mail_menu_get_state();
+    menu_state = menu_get_state();
     if (storage->stage == 0 && menu_state == 0) {
         if (!(kaj_system.pad_prev & 0x20) && (kaj_system.pad_now & 0x20)) {
             can_swap = effect_weapon_list(storage->choice, &count, object_room_storage_list);
@@ -1649,25 +1649,25 @@ static s16 object_room_storage_input(void) {
                     storage2 = &object_room_storage;
                     sprite_set_visible(0, 0);
                     if (line != NULL) {
-                        text_show(line, 1, -1, 0, -1, 0, 4);
+                        dialog_show(line, 1, -1, 0, -1, 0, 4);
                     } else {
                         storage2->open = 0;
                         storage2->stage = 0;
                         storage2->choice = 1;
-                        text_close();
+                        dialog_close();
                     }
                     if (line == NULL) {
-                        mail_wait(0, 0, 0, 1);
+                        main_wait(0, 0, 0, 1);
                         return 1;
                     }
-                    mail_wait(0, 0, 0, 3);
+                    main_wait(0, 0, 0, 3);
                     storage2->open = 1;
                     storage2->stage = 0;
                     storage2->choice = 1;
                     sprite_set_visible(0, 1);
                     sprite_set_clut_entry(0, 4, object_room_choice_cursor_color);
                     sprite_set_clut_entry(0, 5, object_room_choice_color);
-                    text_show(object_room_str_storage, 3, -1, 0, -1, 0, 1);
+                    dialog_show(object_room_str_storage, 3, -1, 0, -1, 0, 1);
                 }
             } else {
                 storage->stage = 2;
@@ -1684,25 +1684,25 @@ static s16 object_room_storage_input(void) {
                         storage2 = &object_room_storage;
                         sprite_set_visible(0, 0);
                         if (line != NULL) {
-                            text_show(line, 1, -1, 0, -1, 0, 4);
+                            dialog_show(line, 1, -1, 0, -1, 0, 4);
                         } else {
                             storage2->open = 0;
                             storage2->stage = 0;
                             storage2->choice = 1;
-                            text_close();
+                            dialog_close();
                         }
                         if (line == NULL) {
-                            mail_wait(0, 0, 0, 1);
+                            main_wait(0, 0, 0, 1);
                             return 1;
                         }
-                        mail_wait(0, 0, 0, 3);
+                        main_wait(0, 0, 0, 3);
                         storage2->open = 1;
                         storage2->stage = 0;
                         storage2->choice = 1;
                         sprite_set_visible(0, 1);
                         sprite_set_clut_entry(0, 4, object_room_choice_cursor_color);
                         sprite_set_clut_entry(0, 5, object_room_choice_color);
-                        text_show(object_room_str_storage, 3, -1, 0, -1, 0, 1);
+                        dialog_show(object_room_str_storage, 3, -1, 0, -1, 0, 1);
                     }
                 } else {
                     {
@@ -1714,25 +1714,25 @@ static s16 object_room_storage_input(void) {
                         storage2 = &object_room_storage;
                         sprite_set_visible(0, 0);
                         if (line != NULL) {
-                            text_show(line, 1, -1, 0, -1, 0, 4);
+                            dialog_show(line, 1, -1, 0, -1, 0, 4);
                         } else {
                             storage2->open = 0;
                             storage2->stage = 0;
                             storage2->choice = 1;
-                            text_close();
+                            dialog_close();
                         }
                         if (line == NULL) {
-                            mail_wait(0, 0, 0, 1);
+                            main_wait(0, 0, 0, 1);
                             return 1;
                         }
-                        mail_wait(0, 0, 0, 3);
+                        main_wait(0, 0, 0, 3);
                         storage2->open = 1;
                         storage2->stage = 0;
                         storage2->choice = 1;
                         sprite_set_visible(0, 1);
                         sprite_set_clut_entry(0, 4, object_room_choice_cursor_color);
                         sprite_set_clut_entry(0, 5, object_room_choice_color);
-                        text_show(object_room_str_storage, 3, -1, 0, -1, 0, 1);
+                        dialog_show(object_room_str_storage, 3, -1, 0, -1, 0, 1);
                     }
                 }
             }
@@ -1741,7 +1741,7 @@ static s16 object_room_storage_input(void) {
             sound_se_play(0x11);
             storage->cursor = 0;
             sprite_set_visible(0, 0);
-            mail_menu_open(1, 0x40B, 0x402, count, 6, object_room_storage_list, 4, 0x2969, 0x2BFF);
+            menu_open(1, 0x40B, 0x402, count, 6, object_room_storage_list, 4, 0x2969, 0x2BFF);
             return 1;
         }
         if (!(kaj_system.pad_prev & 0x40) && (kaj_system.pad_now & 0x40)) {
@@ -1753,8 +1753,8 @@ static s16 object_room_storage_input(void) {
             storage2->open = 0;
             storage2->stage = 0;
             storage2->choice = 1;
-            text_close();
-            mail_wait(0, 0, 0, 1);
+            dialog_close();
+            main_wait(0, 0, 0, 1);
             return 1;
         }
         if ((!(kaj_system.pad_prev & 0x1000) && (kaj_system.pad_now & 0x1000)) ||
@@ -1771,18 +1771,18 @@ static s16 object_room_storage_input(void) {
             if (!(kaj_system.pad_prev & 0x20) && (kaj_system.pad_now & 0x20)) {
                 sound_se_play(0x11);
                 effect_weapon_swap_stock(storage->choice, object_room_storage_list[storage->cursor]);
-                mail_menu_close();
+                menu_close();
                 return 1;
             }
             if (!(kaj_system.pad_prev & 0x40) && (kaj_system.pad_now & 0x40)) {
                 sound_se_play(8);
-                mail_menu_close();
+                menu_close();
                 return 1;
             }
             if (!(kaj_system.pad_prev & 0x1000) && (kaj_system.pad_now & 0x1000)) {
-                storage->cursor = mail_menu_move(1);
+                storage->cursor = menu_move(1);
             } else if (!(kaj_system.pad_prev & 0x4000) && (kaj_system.pad_now & 0x4000)) {
-                storage->cursor = mail_menu_move(0);
+                storage->cursor = menu_move(0);
             }
         }
     }
@@ -1800,7 +1800,7 @@ static void object_room_do_action(PlayerStatus *status) {
     s32 k;
     s16 mode;
 
-    request = &scene_request;
+    request = &main_scene_request;
     ev_state = &event_state;
     phone = &object_room_phone;
     game = &action_vars;
@@ -1808,9 +1808,9 @@ static void object_room_do_action(PlayerStatus *status) {
     player = status->player;
 
     if (mode == 3) {
-        text_next_page(ev_state);
+        dialog_next_page(ev_state);
     } else if (mode == 2 && (ev_state->circle_flags & 8)) {
-        text_close();
+        dialog_close();
         sound_se_play(event_state.trigger == 0xFA0000 ? 0xE : 0x11);
         switch ((u32)event_state.trigger) {
         case 0xFA0000:
@@ -1845,12 +1845,12 @@ static void object_room_do_action(PlayerStatus *status) {
             sprite_set_visible(0, k);
             sprite_set_clut_entry(0, 4, object_room_choice_cursor_color);
             sprite_set_clut_entry(0, 5, object_room_choice_color);
-            text_show(object_room_str_storage, 3, -1, 0, -1, 0, k);
+            dialog_show(object_room_str_storage, 3, -1, 0, -1, 0, k);
             break;
         case 0xF0FF46:
             if (status->naps_today >= 2) {
                 /* sofa nap limit per day */
-                text_show("\203\134\203\164\203\100\201\133\202\305\202\314\211\274\226\260\202\315\201\101\202\120\223\372\202\121\211\361\202\334\202\305", 1, -1, 0, -1, 0, 4);
+                dialog_show("\203\134\203\164\203\100\201\133\202\305\202\314\211\274\226\260\202\315\201\101\202\120\223\372\202\121\211\361\202\334\202\305", 1, -1, 0, -1, 0, 4);
                 break;
             }
             status->naps_today++;
@@ -1895,7 +1895,7 @@ static void object_room_update_input(void) {
             if (!(status->player->flags & 0x40)) {
                 s16 state = ev_state->state;
                 if (state == 2 && (status->player->flags & 1)) {
-                    text_close();
+                    dialog_close();
                     sound_se_play(0xE);
                     player_start_move_to(2, 1, 0x76C, 0, 0x19C8, 0, 0xB4, 0, state);
                     ev_state->state = 0;
@@ -1920,14 +1920,14 @@ static void object_room_init(void) {
     s32 k;
 
     status = &player_status;
-    request = &scene_request;
+    request = &main_scene_request;
     player = status->player;
     object_room_exit_pending = 0;
     sprite_set_visible(0x410, 1);
     player_place_for_scene(0);
     object_load_scene();
     action_reset(1);
-    mod_npcrec_show(0, 1);
+    npc_rec_show(0, 1);
     thing_set_active(3, 2, 1);
     thing_set_animate(3, 2, 1);
     thing_set_flag10(3, 2, 1);
@@ -1998,11 +1998,11 @@ static void object_room_quit(void) {
     event_effect_done_hook = 0;
     event_mod_finish_hook = 0;
     status->model = 0;
-    text_close();
+    dialog_close();
     action_reset(1);
     action_free_triggers();
     action_free_all_sets();
-    npc_free_bodies();
+    actor_free_bodies();
     door_free_all();
     mod_free_all();
     sprite_delete(0);
@@ -2039,7 +2039,7 @@ static void object_room_main(void) {
     s16 done;
     s16 m;
 
-    mode = scene_request_arrival[0];
+    mode = main_scene_request_arrival[0];
     done = 0;
     object_room_init();
     kaj_timer_enable();
@@ -2051,7 +2051,7 @@ static void object_room_main(void) {
         sound_bgm_play(1);
     case 2:
         effect_fade_set_black();
-        text_start_narration((s32)object_scene_tables.texts[(s16)mode - 1]);
+        dialog_start_narration((s32)object_scene_tables.texts[(s16)mode - 1]);
         break;
     }
     m = mode;
@@ -2074,7 +2074,7 @@ static void object_room_main(void) {
             continue;
         case 0:
             object_room_update_input();
-            if ((s16)mail_take_scene_change() != 0 && object_room_exit_action != 2) {
+            if ((s16)main_take_scene_change() != 0 && object_room_exit_action != 2) {
                 kaj_view_set_bg_color(0, 0, 0);
                 effect_start_fade(1, 3);
             }
@@ -2087,11 +2087,11 @@ static void object_room_main(void) {
             continue;
         }
         if (m != 0) {
-            text_narration_cues(m - 1);
+            dialog_narration_cues(m - 1);
         }
         object_room_check_calls();
         effect_start_alarm(0, 0x400, rand() % 10 + 10);
-        mail_step_frame(0, 0, 0);
+        main_step_frame(0, 0, 0);
     }
     kaj_timer_disable();
     object_room_quit();
@@ -2103,18 +2103,18 @@ static void object_room_storage_open(s16 reopen, char *line) {
     if (reopen == 0) {
         sprite_set_visible(0, 0);
         if (line != NULL) {
-            text_show(line, 1, -1, 0, -1, 0, 4);
+            dialog_show(line, 1, -1, 0, -1, 0, 4);
         } else {
             storage->open = 0;
             storage->stage = 0;
             storage->choice = 1;
-            text_close();
+            dialog_close();
         }
         if (line == NULL) {
-            mail_wait(0, 0, 0, 1);
+            main_wait(0, 0, 0, 1);
             return;
         }
-        mail_wait(0, 0, 0, 3);
+        main_wait(0, 0, 0, 3);
     }
     storage->open = 1;
     storage->stage = 0;
@@ -2122,7 +2122,7 @@ static void object_room_storage_open(s16 reopen, char *line) {
     sprite_set_visible(0, 1);
     sprite_set_clut_entry(0, 4, object_room_choice_cursor_color);
     sprite_set_clut_entry(0, 5, object_room_choice_color);
-    text_show(object_room_str_storage, 3, -1, 0, -1, 0, 1);
+    dialog_show(object_room_str_storage, 3, -1, 0, -1, 0, 1);
 }
 
 static void object_room_pick_desk_action(s32 *out) {
@@ -2196,7 +2196,7 @@ static void object_room_on_mod_finish(KajEvent *ev) {
                 sound_se_stop(0x33);
             }
         } else if (model->anim == 2) {
-            text_close();
+            dialog_close();
             player->flags &= ~0x40;
             phone->ringing = 0;
             phone->state = 0;
@@ -2214,14 +2214,14 @@ void object_room_run(void) {
         object_room_main();
         switch (object_room_exit_action) {
         case 1:
-            menu_run();
+            dialog_menu_run();
             object_room_exit_action = 0;
             break;
         case 2:
             sprite_set_visible(0x400, 0);
             sprite_set_visible(0x409, 0);
-            menu_card_run(0, 1);
-            mail_goto_ofc(0, 1, 0, 0);
+            card_run(0, 1);
+            main_goto_ofc(0, 1, 0, 0);
             object_room_exit_action = 0;
             sprite_set_visible(0x400, 1);
             sprite_set_visible(0x409, 1);

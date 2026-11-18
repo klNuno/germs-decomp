@@ -18,9 +18,9 @@
 
 extern SceneTables object_scene_tables;
 extern EventState event_state;
-extern NpcRecord *mod_npcrec_table[];
+extern NpcRecord *npc_rec_table[];
 extern s16 action_vars[];
-static void mod_place_npcrec(NpcRecord *rec, Model *mod);
+static void npc_rec_place(NpcRecord *rec, Model *mod);
 typedef struct {
     s32 from_x;
     s32 from_y;
@@ -49,12 +49,12 @@ typedef struct {
     NpcRecord *rec;
 } NpcRecMove;
 extern Player *player_status_player[];
-static void mod_npcrec_move_step(TssSlot *task);
-static void mod_npcrec_move_end(TssSlot *task);
+static void npc_rec_move_step(TssSlot *task);
+static void npc_rec_move_end(TssSlot *task);
 void mod_set_anim_by_id(u16 id, s16 anim, s16 frames);
-static void mod_npcrec_move_to(NpcRecord *rec, s32 x, s32 y, s32 z, s16 rot_x, s16 rot_y, s16 rot_z, s32 seconds);
+static void npc_rec_move_to(NpcRecord *rec, s32 x, s32 y, s32 z, s16 rot_x, s16 rot_y, s16 rot_z, s32 seconds);
 
-static void mod_place_npcrec(NpcRecord *rec, Model *mod) {
+static void npc_rec_place(NpcRecord *rec, Model *mod) {
     Player *player = player_status_player[0];
     SVector rot;
 
@@ -68,7 +68,7 @@ static void mod_place_npcrec(NpcRecord *rec, Model *mod) {
     mod->coord_flg = 0;
 }
 
-static void mod_npcrec_move_step(TssSlot *task) {
+static void npc_rec_move_step(TssSlot *task) {
     NpcRecMove *move = task->data;
     NpcRecord *rec = move->rec;
     Model *mod;
@@ -81,11 +81,11 @@ static void mod_npcrec_move_step(TssSlot *task) {
     rec->rot_z = move->from_rot_z + move->delta_rot_z * task->cur / task->target;
     mod = mod_find(rec->model);
     if (mod != NULL) {
-        mod_place_npcrec(rec, mod);
+        npc_rec_place(rec, mod);
     }
 }
 
-static void mod_npcrec_move_to(NpcRecord *rec, s32 x, s32 y, s32 z, s16 rot_x, s16 rot_y, s16 rot_z, s32 seconds) {
+static void npc_rec_move_to(NpcRecord *rec, s32 x, s32 y, s32 z, s16 rot_x, s16 rot_y, s16 rot_z, s32 seconds) {
     TssSlot *task;
     NpcRecMove *move;
 
@@ -93,10 +93,10 @@ static void mod_npcrec_move_to(NpcRecord *rec, s32 x, s32 y, s32 z, s16 rot_x, s
     task->type = 5;
     task->step = 1;
     task->delay = 2;
-    task->on_step = mod_npcrec_move_step;
+    task->on_step = npc_rec_move_step;
     task->cur = 0;
-    task->on_end = mod_npcrec_move_end;
-    task->on_kill = mod_npcrec_move_end;
+    task->on_end = npc_rec_move_end;
+    task->on_kill = npc_rec_move_end;
     task->target = seconds * 30;
     if (rec->pos_x == x && rec->pos_y == y && rec->pos_z == z &&
         rec->rot_x == rot_x && rec->rot_y == rot_y && rec->rot_z == rot_z) {
@@ -151,7 +151,7 @@ loop:
     rec->moving = 1;
 }
 
-void mod_cmd_npcrec(Action *action, EventState *event) {
+void npc_rec_cmd(Action *action, EventState *event) {
     SceneTables *p = &object_scene_tables;
     NpcRecord *rec = p->npc_records;
     ActionCmdShort *cmd = (ActionCmdShort *)action->cmd;
@@ -186,7 +186,7 @@ done:
         break;
     case 1:
         found->model = atoi(action->args[0]);
-        table = mod_npcrec_table[0];
+        table = npc_rec_table[0];
         vars = action_vars;
         shown_rec = table + cmd->target;
         if (vars[cmd->target] == 0) {
@@ -208,7 +208,7 @@ done:
         if (mod->ready == 0) {
             mod_setup(mod, 0, 2, 0);
         }
-        mod_place_npcrec(shown_rec, mod);
+        npc_rec_place(shown_rec, mod);
         shown_rec->shown = 2;
         break;
     case 3:
@@ -221,7 +221,7 @@ done:
             event->state = 4;
             event->wait_flags |= 0x10;
         }
-        mod_npcrec_move_to(found, x, y, z, 0, rot_y, 0, seconds);
+        npc_rec_move_to(found, x, y, z, 0, rot_y, 0, seconds);
         break;
     case 4:
         if (atoi(action->args[1]) == 1) {
@@ -233,7 +233,7 @@ done:
     }
 }
 
-void mod_npcrec_update_all(void) {
+void npc_rec_update_all(void) {
     NpcRecord *rec;
     Player *player;
     Model *mod;
@@ -253,15 +253,15 @@ void mod_npcrec_update_all(void) {
                         if (mod->ready == 0) {
                             mod_setup(mod, 0, 2, 0);
                         }
-                        mod_place_npcrec(rec, mod);
+                        npc_rec_place(rec, mod);
                         rec->shown = 2;
                     }
                 } else if (rec->enabled != 0 && rec->moving == 0 && rec->id != 0) {
-                    rec->rot_y = mail_wrap_angle((ratan2(player->pos_x + player->cell_x * 12500 - rec->pos_x,
+                    rec->rot_y = main_wrap_angle((ratan2(player->pos_x + player->cell_x * 12500 - rec->pos_x,
                                                      player->pos_z + player->cell_z * 12500 - rec->pos_z) * 360 >> 12) - 180);
                     mod2 = mod_find(rec->model);
                     if (mod2 != NULL) {
-                        mod_place_npcrec(rec, mod2);
+                        npc_rec_place(rec, mod2);
                     }
                 }
             }
@@ -269,13 +269,13 @@ void mod_npcrec_update_all(void) {
     }
 }
 
-void mod_npcrec_show(u16 id, s16 force) {
+void npc_rec_show(u16 id, s16 force) {
     NpcRecord *rec;
     s16 *vars;
     NpcRecord *table;
     Model *mod;
 
-    table = mod_npcrec_table[0];
+    table = npc_rec_table[0];
     vars = action_vars;
     rec = table + id;
     if (vars[id] != 0 || force != 0) {
@@ -293,13 +293,13 @@ void mod_npcrec_show(u16 id, s16 force) {
             if (mod->ready == 0) {
                 mod_setup(mod, 0, 2, 0);
             }
-            mod_place_npcrec(rec, mod);
+            npc_rec_place(rec, mod);
             rec->shown = 2;
         }
     }
 }
 
-void mod_npcrec_free_table(void) {
+void npc_rec_free_table(void) {
     SceneTables *p = &object_scene_tables;
     if (p->npc_record_count != 0) {
         if (p->npc_records != NULL) {
@@ -310,7 +310,7 @@ void mod_npcrec_free_table(void) {
     }
 }
 
-NpcRecord *mod_npcrec_find(u16 id) {
+NpcRecord *npc_rec_find(u16 id) {
     SceneTables *p = &object_scene_tables;
     s32 n = p->npc_record_count;
     NpcRecord *rec = p->npc_records;
@@ -327,7 +327,7 @@ NpcRecord *mod_npcrec_find(u16 id) {
     return NULL;
 }
 
-void mod_npcrec_rebase_all(s32 origin_x, s32 origin_y, s32 origin_z) {
+void npc_rec_rebase_all(s32 origin_x, s32 origin_y, s32 origin_z) {
     SceneTables *p = &object_scene_tables;
     NpcRecord *rec = p->npc_records;
     Model *mod;
@@ -349,7 +349,7 @@ void mod_npcrec_rebase_all(s32 origin_x, s32 origin_y, s32 origin_z) {
     }
 }
 
-void mod_npcrec_draw_all(s32 view) {
+void npc_rec_draw_all(s32 view) {
     SceneTables *p = &object_scene_tables;
     NpcRecord *rec = p->npc_records;
     Model *mod;
@@ -368,7 +368,7 @@ void mod_npcrec_draw_all(s32 view) {
     }
 }
 
-s16 mod_npcrec_find_at_point(s32 x, s32 y, s32 z) {
+s16 npc_rec_find_at_point(s32 x, s32 y, s32 z) {
     SceneTables *p = &object_scene_tables;
     NpcRecord *rec = p->npc_records;
     Model *mod;
@@ -391,7 +391,7 @@ s16 mod_npcrec_find_at_point(s32 x, s32 y, s32 z) {
     return -2;
 }
 
-void mod_npcrec_reset_all(void) {
+void npc_rec_reset_all(void) {
     SceneTables *p = &object_scene_tables;
     NpcRecord *rec = p->npc_records;
     s32 i;
@@ -401,7 +401,7 @@ void mod_npcrec_reset_all(void) {
     }
 }
 
-static void mod_npcrec_move_end(TssSlot *task) {
+static void npc_rec_move_end(TssSlot *task) {
     EventState *s = &event_state;
     NpcRecMove *move = task->data;
     NpcRecord *rec = move->rec;
@@ -416,7 +416,7 @@ static void mod_npcrec_move_end(TssSlot *task) {
     rec->moving = 0;
     mod = mod_find(rec->model);
     if (mod != NULL) {
-        mod_place_npcrec(rec, mod);
+        npc_rec_place(rec, mod);
     }
     if (s->wait_flags & 0x10) {
         s->wait_flags &= ~0x10;

@@ -562,7 +562,7 @@ void sound_footstep_update(Player_u801A217C *player) {
     if (sound_footstep_phase > period32) {
         sound_footstep_phase = period32;
     }
-    wrapped = mail_wrap_angle(angle);
+    wrapped = main_wrap_angle(angle);
     player->bob_y = rsin((s16)((wrapped << 12) / 360)) * 25 / 4096 + 25;
     if (step != sound_footstep_count) {
         sound_se_play(3);

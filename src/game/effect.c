@@ -29,7 +29,7 @@
  * File boundaries: likely (docs/layout.md): effect.c asserts.
  */
 
-extern ScreenLight screen_light;
+extern ScreenLight roadmap_screen_light;
 extern GameVars action_vars;
 extern EffectAlarm effect_alarms[4];
 void *effect_flame_small_bufs;
@@ -64,7 +64,7 @@ typedef struct Elevator {
     s16 state;
 } Elevator;
 Elevator effect_elevator;
-extern BuildingState block_building_state;
+extern BuildingState building_state;
 extern Inventory *player_status_inventory[];
 extern SceneTables object_scene_tables;
 Rect effect_flame_large_rect;
@@ -82,7 +82,7 @@ extern s32 event_effect_done_hook;
 static void effect_elevator_enter(void);
 static void effect_elevator_update(void);
 static void effect_elevator_input(void);
-extern SceneRequest scene_request[];
+extern SceneRequest main_scene_request[];
 extern PlayerStatus player_status;
 extern s16 effect_item_menu_list[];
 s16 effect_item_sel;
@@ -93,11 +93,11 @@ static void effect_sprite_slide_step(TssSlot *task);
 static void effect_sprite_slide_end(TssSlot *task);
 extern u8 effect_flame_small_cluts[][0x20];
 extern char effect_str_elevator_prompt[];
-void text_show(char *str, s32 mode, s32 circle_set, s32 circle_flags, s32 cross_set, s32 cross_flags, s32 se);
+void dialog_show(char *str, s32 mode, s32 circle_set, s32 circle_flags, s32 cross_set, s32 cross_flags, s32 se);
 s16 effect_item_scene_kind;
 s16 effect_item_prompt_shown;
 typedef struct BuildingEntry { u16 entry; u16 unk2; u16 unk4; } BuildingEntry;
-extern BuildingEntry block_building_state_entry;
+extern BuildingEntry building_state_entry;
 extern char effect_str_scene_idc[];
 extern char effect_str_scene_htl[];
 extern char effect_str_scene_cmn[];
@@ -119,7 +119,7 @@ extern char effect_str_wound_heal_full[];
 extern char effect_str_body_much_lighter[];
 /* refined: unk2 u16, unk4 text, unk26 s16 (was u8 unk2[0x26]) */
 /* refined: unk26[0x22] split into unk26[6], s16 unk2C, unk2E[0x1A] */
-void text_show_timed(s16 mode, s16 big, char *str, s16 se, s32 seconds);
+void dialog_show_timed(s16 mode, s16 big, char *str, s16 se, s32 seconds);
 extern s32 kaj_system_vsync_delta[];
 static void effect_weapon_draw_panel(s16 show, s16 with_text);
 extern char effect_str_item_prompt[];
@@ -275,7 +275,7 @@ void effect_flame_large_update(void) {
 
 void effect_start_fade(s32 kind, s32 seconds) {
     GameVars *game = &action_vars;
-    ScreenLight *light = &screen_light;
+    ScreenLight *light = &roadmap_screen_light;
     TssSlot *node;
 
     node = kaj_tss_alloc(4);
@@ -303,7 +303,7 @@ void effect_start_fade(s32 kind, s32 seconds) {
 }
 
 void effect_fade_reset(void) {
-    ScreenLight *light = &screen_light;
+    ScreenLight *light = &roadmap_screen_light;
     if (light->fade_active != 0) {
         light->fade_level = 0x1000;
         light->fade_active = 0;
@@ -311,7 +311,7 @@ void effect_fade_reset(void) {
 }
 
 void effect_fade_set_black(void) {
-    ScreenLight *light = &screen_light;
+    ScreenLight *light = &roadmap_screen_light;
     if (light->fade_active == 0) {
         light->fade_level = 0;
         light->fade_active = 1;
@@ -319,7 +319,7 @@ void effect_fade_set_black(void) {
 }
 
 void effect_fade_set_dim(void) {
-    ScreenLight *light = &screen_light;
+    ScreenLight *light = &roadmap_screen_light;
     if (light->fade_active == 0) {
         light->fade_level = 0x400;
         light->fade_active = 1;
@@ -523,7 +523,7 @@ static s32 effect_elevator_on_task_end(s32 *ev) {
     if (player->flags & 0x80) {
         kaj_pad_reset(1);
         sprite_set_visible(2, 1);
-        text_show(effect_str_elevator_prompt, 3, -1, 0, -1, 0, 1);
+        dialog_show(effect_str_elevator_prompt, 3, -1, 0, -1, 0, 1);
         return 0;
     }
     for (i = 0; i < 2; i++) {
@@ -565,7 +565,7 @@ static void effect_elevator_exit(void) {
 }
 
 static void effect_elevator_move_doors(Elevator *elevator, s16 open) {
-    SceneRequest *request = scene_request;
+    SceneRequest *request = main_scene_request;
     Door *door;
     s16 v;
     s32 i;
@@ -577,8 +577,8 @@ static void effect_elevator_move_doors(Elevator *elevator, s16 open) {
             continue;
         }
         if (open != 0) {
-            if (block_building_state.building == 0) {
-                switch (block_building_state_entry.entry) {
+            if (building_state.building == 0) {
+                switch (building_state_entry.entry) {
                 case 28:
                     v = i * 0x140 - 0xA0;
                     break;
@@ -596,8 +596,8 @@ static void effect_elevator_move_doors(Elevator *elevator, s16 open) {
             memset(&request[1], 0, 4);
             ((s16 *)&request->pos_x)[1] = 0x41;
             ((s16 *)&request->pos_y)[0] = elevator->target_floor;
-            if (block_building_state.building == 0) {
-                switch (block_building_state_entry.entry) {
+            if (building_state.building == 0) {
+                switch (building_state_entry.entry) {
                 case 28:
                     strncpy((char *)&request[1], effect_str_scene_idc, 3);
                     ((s16 *)&request->pos_y)[1] = 0xB4;
@@ -659,13 +659,13 @@ static void effect_elevator_input(void) {
         }
     } else if (!(kaj_system.pad_prev & 0x40) && (kaj_system.pad_now & 0x40)) {
         sound_se_play(8);
-        text_close();
+        dialog_close();
         effect_elevator_exit();
     } else if (!(kaj_system.pad_prev & 0x20) && (kaj_system.pad_now & 0x20)) {
         if (elevator->floor != elevator->target_floor) {
             mod_free_pooled();
             sound_se_play(0x11);
-            text_close();
+            dialog_close();
             effect_elevator_move_doors(elevator, 0);
         }
     }
@@ -726,7 +726,7 @@ static void effect_elevator_update(void) {
         if ((u16)door_state == 1 && (u16)elevator->state == 2) {
             elevator->state = 0;
             kaj_pad_reset(1);
-            text_show(effect_str_elevator_prompt, 3, -1, 0, -1, 0, (u16)door_state);
+            dialog_show(effect_str_elevator_prompt, 3, -1, 0, -1, 0, (u16)door_state);
         }
         if ((u16)door_state == 0 && (u16)elevator->state == 1) {
             elevator->floor = elevator->target_floor;
@@ -765,7 +765,7 @@ void effect_elevator_run(void) {
             kaj_event_done(buf);
             continue;
         }
-        mail_step_frame(1, 1, 1);
+        main_step_frame(1, 1, 1);
     } while (done == 0);
     kaj_timer_disable();
     event_effect_done_hook = 0;
@@ -778,8 +778,8 @@ void effect_elevator_init(s16 floor) {
     elevator->target_floor = floor;
     elevator->floor = floor;
     elevator->state = 0;
-    if (block_building_state.building == 0) {
-        bstate = &block_building_state;
+    if (building_state.building == 0) {
+        bstate = &building_state;
         switch (bstate->entry) {
         case 28:
             elevator->top_floor = 3;
@@ -876,11 +876,11 @@ static void effect_weapon_draw_panel(s16 show, s16 with_text) {
             sprite_set_cell(0x402, (s16)(id / 9), (s16)(id % 9));
             if (with_text != 0) {
                 /* weapon menu prompt: equip or unequip */
-                text_show("  8\225\220\212\3551\202\360\225\373\214\374\203L\201[\217\343\211\272\202\305,  \221I\202\361\202\305\211\272\202\263\202\242,    \225\220\221\225 3\201\233 1\225\220\221\225\211\360\217\234 4\201~", 3, -1, 0, -1, 0, 1);
+                dialog_show("  8\225\220\212\3551\202\360\225\373\214\374\203L\201[\217\343\211\272\202\305,  \221I\202\361\202\305\211\272\202\263\202\242,    \225\220\221\225 3\201\233 1\225\220\221\225\211\360\217\234 4\201~", 3, -1, 0, -1, 0, 1);
             }
         }
     } else {
-        text_close();
+        dialog_close();
     }
 }
 
@@ -1236,13 +1236,13 @@ done:
             }
             if (status->energy == 0xFF && full == 0) {
                 ret = 1;
-                text_show_timed(b, 1, buf, kind, 2);
+                dialog_show_timed(b, 1, buf, kind, 2);
                 memset(buf, 0, 0x80);
                 /* energy back to full */
                 strncpy(buf, effect_str_energy_full, 0x29);
             }
         }
-        text_show_timed(b, 1, buf, kind, 2);
+        dialog_show_timed(b, 1, buf, kind, 2);
         break;
     case 3:
         injured = player_is_injured();
@@ -1286,7 +1286,7 @@ done:
             break;
         }
         event_advance_clock(item->value, 1);
-        text_show(buf, 1, -1, 0, -1, 0, kind);
+        dialog_show(buf, 1, -1, 0, -1, 0, kind);
         break;
     case 1:
         break;
@@ -1294,7 +1294,7 @@ done:
         return -1;
     }
     if (close_text != 0) {
-        text_close();
+        dialog_close();
     }
     return ret;
 }
@@ -1308,7 +1308,7 @@ void effect_item_use_selected(void) {
 
     if (effect_item_sel >= 0) {
         id = effect_item_menu_list[effect_item_sel];
-        result = effect_item_use(status, scene_request[0].loop, id, effect_item_full, 1);
+        result = effect_item_use(status, main_scene_request[0].loop, id, effect_item_full, 1);
         if (result >= 0) {
             if (result != 0) {
                 effect_item_full = 1;
@@ -1349,10 +1349,10 @@ static s16 effect_item_menu_show(PlayerStatus *status, s16 scene_kind, s16 open)
                 effect_item_menu_list[n++] = inv->item_ids[i];
             }
         }
-        return mail_menu_open(1, 0x40B, -2, inv->item_count, 6, effect_item_menu_list, 4, 0x2969, 0x2BFF);
+        return menu_open(1, 0x40B, -2, inv->item_count, 6, effect_item_menu_list, 4, 0x2969, 0x2BFF);
     }
     sound_se_play(effect_item_sel < 0 ? 8 : 0x11);
-    return mail_menu_close();
+    return menu_close();
 }
 
 s16 effect_item_input(PlayerStatus *status, s16 scene_kind) {
@@ -1362,11 +1362,11 @@ s16 effect_item_input(PlayerStatus *status, s16 scene_kind) {
     Inventory *inv = status->inventory;
 
     if (player->flags & 0x4000) {
-        if (mail_menu_get_state() == 1) {
+        if (menu_get_state() == 1) {
             if (effect_item_prompt_shown == 0) {
                 effect_item_prompt_shown = 1;
                 /* item menu prompt */
-                text_show(effect_str_item_prompt, 3, -1, 0, -1, 0, 1);
+                dialog_show(effect_str_item_prompt, 3, -1, 0, -1, 0, 1);
             }
             if (!(kaj_system.pad_prev & 0x20) && (kaj_system.pad_now & 0x20)) {
                 if (effect_item_sel < 0) {
@@ -1379,9 +1379,9 @@ s16 effect_item_input(PlayerStatus *status, s16 scene_kind) {
                 }
                 effect_item_menu_show(status, n, 0);
             } else if (!(kaj_system.pad_prev & 0x1000) && (kaj_system.pad_now & 0x1000)) {
-                effect_item_sel = mail_menu_move(1);
+                effect_item_sel = menu_move(1);
             } else if (!(kaj_system.pad_prev & 0x4000) && (kaj_system.pad_now & 0x4000)) {
-                effect_item_sel = mail_menu_move(0);
+                effect_item_sel = menu_move(0);
             }
         }
         return 1;
@@ -1400,9 +1400,9 @@ s16 effect_item_input(PlayerStatus *status, s16 scene_kind) {
             player->flags |= 0x4000;
         }
     }
-    if (effect_item_prompt_shown != 0 && mail_menu_get_state() == 0) {
+    if (effect_item_prompt_shown != 0 && menu_get_state() == 0) {
         effect_item_prompt_shown = 0;
-        text_close();
+        dialog_close();
     }
     return 0;
 }

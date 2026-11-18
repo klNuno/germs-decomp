@@ -36,9 +36,9 @@ typedef struct Thing {
 } Thing;
 
 /* Functions of src/game/thing.c that other files call or a table names. */
-void sprite_thing_init(Thing *thing);
-void sprite_thing_refresh_all(void);
-void sprite_thing_draw_all(ViewBuffer *view);
+void thing_init_from_record(Thing *thing);
+void thing_refresh_all(void);
+void thing_draw_all(ViewBuffer *view);
 void thing_update_all(void);
 void thing_create(Thing **out, u32 record_size);
 void thing_list_add(s32 thing);

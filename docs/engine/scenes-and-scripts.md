@@ -8,30 +8,30 @@ town and buildings in [town and vehicles](town-and-vehicles.md).
 
 ## The scene request
 
-One `SceneRequest` at 0x801E0340, `scene_request`, says which scene runs next. Three functions of
-[mail.c](../../src/game/mail.c) fill it:
+One `SceneRequest` at 0x801E0340, `main_scene_request`, says which scene runs next. Three functions of
+[main.c](../../src/game/main.c) fill it:
 
 | Function | Loop | Scene index | Variant |
 | --- | --- | --- | --- |
-| `mail_goto_ofc` (0x8018C414) | 0, the office (`\S\OFC.S`) | 0 | 0, or 1 for the arrest version (below) |
-| `mail_goto_twn` (0x8018C50C) | 2, the town (`\S\TWN.S`) | 1 | 0 |
-| `mail_goto_building` (0x8018C554) | 1, a building | from the door command | from the building's game variable |
+| `main_goto_ofc` (0x8018C414) | 0, the office (`\S\OFC.S`) | 0 | 0, or 1 for the arrest version (below) |
+| `main_goto_twn` (0x8018C50C) | 2, the town (`\S\TWN.S`) | 1 | 0 |
+| `main_goto_building` (0x8018C554) | 1, a building | from the door command | from the building's game variable |
 
 The halfwords at +0 to +8 are: the loop running, the loop asked for, the scene index in `SCE.S`, the variant, and a
 flag that ends the game and goes back to the title. Every request raises +0xA (`change`), which each scene loop
-polls through `mail_take_scene_change` (0x8018C170). `main` (0x8018BDE8) calls `object_room_run` (0x80194E5C,
-office), `block_building_main` (0x8017E544, building) or `thing_game_loop` (0x801A9070, town) until the end flag.
+polls through `main_take_scene_change` (0x8018C170). `main` (0x8018BDE8) calls `object_room_run` (0x80194E5C,
+office), `building_main` (0x8017E544, building) or `town_game_loop` (0x801A9070, town) until the end flag.
 
-`mail_goto_building` turns the building's variable into a variant: 0 gives 0, 10 gives 2, 1000 gives 3, 2000 gives
-4, anything else 1.  `mail_goto_ofc` asks for variant 1 when the kill counters of `PlayerStatus` reach 3, then 5
+`main_goto_building` turns the building's variable into a variant: 0 gives 0, 10 gives 2, 1000 gives 3, 2000 gives
+4, anything else 1.  `main_goto_ofc` asks for variant 1 when the kill counters of `PlayerStatus` reach 3, then 5
 ([arrests](../discoveries.md#-three-civilian-kills-get-you-arrested-and-five-more-the-second-time)), unless game
 variable 48 is set or the player is changed.
 
 ## Loading a scene
 
 `object_load_scene` (0x801926B4, [object.c](../../src/game/object.c)) is called by the enter
-functions of the three loops: `object_room_init` (0x8019430C), `block_building_load` (0x8017DFA4) and
-`thing_field_enter` (0x801A88B4). It opens `SCE.S` through `object_iff_open` (0x80192380) and reads the scene's
+functions of the three loops: `object_room_init` (0x8019430C), `building_load` (0x8017DFA4) and
+`town_enter` (0x801A88B4). It opens `SCE.S` through `object_iff_open` (0x80192380) and reads the scene's
 directory sector. Entry 0 holds the data common to all variants with four counts (bodies, people records, weapons,
 items), entry variant + 1 the variant's data with its own (people, triggers, action sets, stats).
 
@@ -74,7 +74,7 @@ one true otherwise), the set's actions go into the queue; next mode 1 or 2 then 
 
 ## The action queue
 
-`action_queue` is a `kaj_ll` list of pending actions. `action_update` (0x8017345C) runs from `mail_step_frame`
+`action_queue` is a `kaj_ll` list of pending actions. `action_update` (0x8017345C) runs from `main_step_frame`
 (0x8018C2FC) once a frame, before anything else moves, and acts on `event_state.state`: 0 idle, 1 run the head
 action, 2 a prompt waits for CIRCLE or CROSS, 3 a text page is full and its arrow (sprite 0x40A) blinks every 8
 frames, 4 wait until every bit of `wait_flags` is clear. An empty queue calls `action_reset(1)` (0x80174840), which
@@ -83,13 +83,13 @@ puts the state back to 0. The opcode of the popped action picks its handler:
 | Op | Handler | What it does |
 | --- | --- | --- |
 | 0 | in `action_update` | trigger: sub 0 sets its enter or leave set, 1 `enabled`, 2 the walk flag `passable` |
-| 1 | `npc_exec_command` (0x80175CD8) | a person ([commands to people](people-and-combat.md#commands-from-scripts)) |
+| 1 | `actor_exec_command` (0x80175CD8) | a person ([commands to people](people-and-combat.md#commands-from-scripts)) |
 | 2 | `thing_cmd_set_active` (0x801A8264) | shows or hides a scene object |
 | 3 | `sound_bgm_play` (0x801A3BCC) or `sound_bgm_fade_out(3)` (0x801A3CC0) | music, see [sound and music](sound-and-music.md) |
 | 4 | `door_exec_command` (0x8018519C) | opens or closes a door |
-| 5 | `text_exec_command` (0x801837F0) | text, narration and timed lines ([menus, text and save](menus-text-and-save.md)) |
-| 6 | `action_cmd_change_scene` (0x80173054) | sub 0 office, 1 and 3 building (`mail_goto_building`), 2 town |
-| 7 | `mod_cmd_npcrec` (0x8018EED4) | the scripted figures of the `NPC ` table: show, move, animate |
+| 5 | `dialog_exec_command` (0x801837F0) | text, narration and timed lines ([menus, text and save](menus-text-and-save.md)) |
+| 6 | `action_cmd_change_scene` (0x80173054) | sub 0 office, 1 and 3 building (`main_goto_building`), 2 town |
+| 7 | `npc_rec_cmd` (0x8018EED4) | the scripted figures of the `NPC ` table: show, move, animate |
 | 8 | `player_exec_command` (0x80199034) | sub 0 item, 1 walk to a point, 2 weapon, 3 player flag 0x100, 4 energy |
 | 9 | `sound_exec_command` (0x801A324C) | a note through `sound_se_play_note` (0x801A2C60) |
 | 10 | `action_cmd_var` (0x80173250) | game variable arithmetic (below) |
@@ -104,18 +104,18 @@ dropped. `action_reset(0)`, which `event_handle_leave` (0x801895E0) calls when t
 removes the same kinds from the queue, as `action_flush_queue(0)` (0x80174A14) does without touching the state.
 
 `event_state` (`EventState`, 0x801DFFE8) holds the trigger being answered, the queue state, a flags word and a set
-for each of CIRCLE and CROSS, and the wait timer and bits. `text_show` (0x80183E88) and `text_exec_command` sub 1
-store the two sets and set state 2. In a building, `block_update_input` (0x8017DD70) runs `block_on_action`
+for each of CIRCLE and CROSS, and the wait timer and bits. `dialog_show` (0x80183E88) and `dialog_exec_command` sub 1
+store the two sets and set state 2. In a building, `building_update_input` (0x8017DD70) runs `building_on_action`
 (0x8017DAE8) on CIRCLE, which runs `circle_set`, and runs `cross_set` itself on CROSS when `cross_flags` has bit 2;
-the office and the town do the same in `object_room_update_input` (0x80194140) and `thing_field_input` (0x801A8768).
+the office and the town do the same in `object_room_update_input` (0x80194140) and `town_input` (0x801A8768).
 The wait bits:
 
 | Bit | Set by | Cleared by |
 | --- | --- | --- |
 | 1 | opcode 11 sub 0 | `action_update` when the timer runs out |
 | 4 | `door_exec_command` (last argument 1) | the door movers (`door_move_x`, 0x80184814, and the others) at the end of the move |
-| 8 | `mod_cmd_npcrec` sub 4, animate a figure (argument 1 at 1) | `mod_finish_handler` (0x8018E7EC), when animation 2 ends |
-| 0x10 | `mod_cmd_npcrec` sub 3, move a figure (last argument 1) | `mod_npcrec_move_end` (0x8018F958) |
+| 8 | `npc_rec_cmd` sub 4, animate a figure (argument 1 at 1) | `mod_finish_handler` (0x8018E7EC), when animation 2 ends |
+| 0x10 | `npc_rec_cmd` sub 3, move a figure (last argument 1) | `npc_rec_move_end` (0x8018F958) |
 | 0x20 | `player_exec_command` sub 1 (last argument 1) | `player_move_to_done` (0x8019A07C) |
 
 ## Area triggers
@@ -123,8 +123,8 @@ The wait bits:
 Triggers are painted into the floor. `block_hit_tris` (0x8017B1E8) and `block_hit_quads` (0x8017B3E8) return the
 colour of the floor polygon under a point as a 24-bit code (red, green, blue), and `player_check_ground`
 (0x80195098) reads the high byte as the kind and the code as the trigger id. A change of code is stored in
-`object_area_current` and sent as a BIOS event (`DeliverEvent`, 0xF3000000 enter or 0xF3000001 leave, opened by
-`event_open`, 0x8018920C). Its handler, `object_deliver_area_events` (0x80194FAC), pushes kaj events 0x20 (leave the
+`player_area_current` and sent as a BIOS event (`DeliverEvent`, 0xF3000000 enter or 0xF3000001 leave, opened by
+`event_open`, 0x8018920C). Its handler, `player_deliver_area_events` (0x80194FAC), pushes kaj events 0x20 (leave the
 old one) and 0x10 (enter); each scene loop passes them to `event_handle_enter` (0x80189350) and `event_handle_leave`
 ([event.c](../../src/game/event.c)):
 
@@ -163,8 +163,8 @@ variable `target` by the argument, subs 6 to 8 by another variable. Variables th
 | Variable | Use in code |
 | --- | --- |
 | 6 | 1 while changed (`player_finish_death`, 0x80197688) |
-| 9 to 27 | one per building or group, read by `mail_goto_building`; 10, 11, 12, 13 and 27 start at 100 (`main`) |
-| 17, 48 | 17 set to 100 by the second arrest; no arrest while 48 is set (`mail_goto_ofc`) |
+| 9 to 27 | one per building or group, read by `main_goto_building`; 10, 11, 12, 13 and 27 start at 100 (`main`) |
+| 17, 48 | 17 set to 100 by the second arrest; no arrest while 48 is set (`main_goto_ofc`) |
 | 61 to 64 | day, hour, minute and day parity ([the clock](../discoveries.md#-the-clock-counts-minutes-and-stops-at-day-99)) |
 | 95 | the mail arrival counter, 3 at a new game |
 | 96 onward | one byte per mail: bit 7 received, bit 6 read ([mails](player-and-survival.md#the-clock-and-the-mails)) |

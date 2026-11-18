@@ -31,42 +31,42 @@
  */
 
 extern GameVars action_vars;
-s16 block_wake_index;
-static void block_building_run(void);
-u16 block_elevator_ride;
+s16 building_wake_index;
+static void building_run(void);
+u16 building_elevator_ride;
 extern Player *player_status_player[];
 extern EventState event_state;
-extern SceneRequestBuilding scene_request;
-BuildingState block_building_state;
-void text_show_profile(s16 npc_id);
-void text_show(char *str, s32 mode, s32 circle_set, s32 circle_flags, s32 cross_set, s32 cross_flags, s32 se);
+extern SceneRequestBuilding main_scene_request;
+BuildingState building_state;
+void dialog_show_profile(s16 npc_id);
+void dialog_show(char *str, s32 mode, s32 circle_set, s32 circle_flags, s32 cross_set, s32 cross_flags, s32 se);
 extern PlayerStatus player_status;
 extern KajSystem kaj_system;
-extern ShopState roadmap_shop[];
+extern ShopState shop_state[];
 s16 effect_weapon_input(PlayerStatus *status);
-static void block_on_action(PlayerStatus *status);
-s16 block_scene_daylight;
+static void building_on_action(PlayerStatus *status);
+s16 building_scene_daylight;
 extern s32 (*event_effect_done_hook)(KajEvent *arg0);
 extern s32 (*event_enter_hook)(KajEvent *arg0);
-static s32 block_on_effect_done(KajEvent *ev);
-static s32 block_on_enter(KajEvent *ev);
+static s32 building_on_effect_done(KajEvent *ev);
+static s32 building_on_enter(KajEvent *ev);
 extern void (*event_tick_hook)(void);
 extern s32 (*event_leave_hook)();
-static void block_building_load(void);
-static void block_update_input(void);
-s16 mail_take_scene_change(void);
-static void block_bus_input(s16 building, s16 start_floor, s16 *floor);
-extern s32 block_bus_stops[];
+static void building_load(void);
+static void building_update_input(void);
+s16 main_take_scene_change(void);
+static void building_bus_input(s16 building, s16 start_floor, s16 *floor);
+extern s32 building_bus_stops[];
 extern TrainState vehicle_train_state;
-extern s16 roadmap_shop_topic;
-extern s32 block_wake_positions[];
+extern s16 shop_topic;
+extern s32 building_wake_positions[];
 
-static s32 block_on_effect_done(KajEvent *ev) {
+static s32 building_on_effect_done(KajEvent *ev) {
     GameVars *vars = &action_vars;
-    SceneRequestBuilding *req = &scene_request;
+    SceneRequestBuilding *req = &main_scene_request;
     Player *player = player_status_player[0];
     TrainState *train = &vehicle_train_state;
-    ShopState *d = roadmap_shop;
+    ShopState *d = shop_state;
     EventState *event = &event_state;
     s32 effect_id = ev->param2;
     s16 set_id;
@@ -74,7 +74,7 @@ static s32 block_on_effect_done(KajEvent *ev) {
     u16 f;
 
     if (effect_id == 0) {
-        switch (block_building_state.building) {
+        switch (building_state.building) {
         case 7:
             break;
         case 5:
@@ -84,7 +84,7 @@ static s32 block_on_effect_done(KajEvent *ev) {
             sound_bgm_play(1);
             break;
         }
-        if (block_building_state.building == 1 || block_building_state.building == 2) {
+        if (building_state.building == 1 || building_state.building == 2) {
             sound_se_play(0x1D);
         } else {
             sound_se_play_note(10, 0x29, 0, 0x3C, 0x7F, 0x7F, 1);
@@ -103,12 +103,12 @@ static s32 block_on_effect_done(KajEvent *ev) {
         }
     } else if (effect_id == 11) {
         if (!(player->flags & 0x4000)) {
-            text_show(*(char **)d->texts, 3, -1, 0, -1, 0, 1); /* texts read as strings here */
+            dialog_show(*(char **)d->texts, 3, -1, 0, -1, 0, 1); /* texts read as strings here */
         }
     } else if (effect_id == 12) {
         if (!(player->flags & 0x4000)) {
-            set_id = roadmap_shop_finish(block_building_state.building);
-            if (block_building_state.building == 8 && roadmap_shop_topic >= 0) {
+            set_id = shop_finish(building_state.building);
+            if (building_state.building == 8 && shop_topic >= 0) {
                 if (set_id >= 0) {
                     set = action_find_set(set_id);
                     if (set != NULL) {
@@ -124,7 +124,7 @@ static s32 block_on_effect_done(KajEvent *ev) {
                         } while (set != NULL);
                     }
                 } else {
-                    roadmap_shop_open_menu(block_building_state.building, 0);
+                    shop_open_menu(building_state.building, 0);
                 }
             }
         }
@@ -135,19 +135,19 @@ static s32 block_on_effect_done(KajEvent *ev) {
             req->change = 1;
         } else if (f & 0x20) {
             /* sleep narration, first line */
-            text_show(" \211\241\202\311\202\310\202\351\202\306\201\101\220\133\202\242\226\260\202\350\202\311\202\302\202\242\202\275", 1, -1, 0, -1, 0, 0);
+            dialog_show(" \211\241\202\311\202\310\202\351\202\306\201\101\220\133\202\242\226\260\202\350\202\311\202\302\202\242\202\275", 1, -1, 0, -1, 0, 0);
             effect_start_fade(10, 3);
         } else if (f & 8) {
-            if (block_building_state.building == 9) {
+            if (building_state.building == 9) {
                 /* sleep narration, second line */
-                text_show(" 6\226\332\202\360\225\302\202\266\202\304\201\105\201\105\201\105", 1, -1, 0, -1, 0, 0);
+                dialog_show(" 6\226\332\202\360\225\302\202\266\202\304\201\105\201\105\201\105", 1, -1, 0, -1, 0, 0);
             } else {
                 /* sleep narration, third line */
-                text_show(" \210\323\216\257\202\252\211\223\202\264\202\251\202\301\202\304\202\242\202\255", 1, -1, 0, -1, 0, 0);
+                dialog_show(" \210\323\216\257\202\252\211\223\202\264\202\251\202\301\202\304\202\242\202\255", 1, -1, 0, -1, 0, 0);
             }
             effect_start_fade(10, 3);
-        } else if ((block_building_state.building == 3 || block_building_state.building == 6) && d->at_counter != 0) {
-            roadmap_shop_open_menu(block_building_state.building, 0);
+        } else if ((building_state.building == 3 || building_state.building == 6) && d->at_counter != 0) {
+            shop_open_menu(building_state.building, 0);
         }
     } else if (effect_id == 10) {
         if (ev->param1 == 0) {
@@ -155,16 +155,16 @@ static s32 block_on_effect_done(KajEvent *ev) {
         }
         f = player->flags;
         if (f & 0x20) {
-            player_rest(1, block_wake_positions[block_wake_index * 3], block_wake_positions[block_wake_index * 3 + 1], block_wake_positions[block_wake_index * 3 + 2]);
-            text_close();
+            player_rest(1, building_wake_positions[building_wake_index * 3], building_wake_positions[building_wake_index * 3 + 1], building_wake_positions[building_wake_index * 3 + 2]);
+            dialog_close();
         } else if (f & 8) {
-            if (block_building_state.building == 9) {
+            if (building_state.building == 9) {
                 player_recover(500, 0, 0x3390, 0);
             } else {
-                player_recover(block_wake_positions[block_wake_index * 3], block_wake_positions[block_wake_index * 3 + 1], block_wake_positions[block_wake_index * 3 + 2], 1);
+                player_recover(building_wake_positions[building_wake_index * 3], building_wake_positions[building_wake_index * 3 + 1], building_wake_positions[building_wake_index * 3 + 2], 1);
             }
         }
-        mail_wait(1, 1, 1, 4);
+        main_wait(1, 1, 1, 4);
         effect_start_fade(9, 3);
     } else if (effect_id == 9) {
         if (ev->param1 == 0) {
@@ -177,35 +177,35 @@ static s32 block_on_effect_done(KajEvent *ev) {
             player->flags = f & ~8;
         }
     } else if (effect_id == 13) {
-        if (block_building_state.building == 0) {
+        if (building_state.building == 0) {
             sound_bgm_play(1);
         }
     }
     return 0;
 }
 
-static void block_on_action(PlayerStatus *status) {
+static void building_on_action(PlayerStatus *status) {
     EventState *event = &event_state;
     BuildingState *bstate;
     void *set;
     s16 state = event->state;
 
     if (state == 3) {
-        text_next_page(event);
+        dialog_next_page(event);
         return;
     }
     if (state != 2) {
         return;
     }
-    block_elevator_ride = 0;
+    building_elevator_ride = 0;
     if (!(event->circle_flags & 8)) {
         return;
     }
     sound_se_play(0x11);
-    text_close();
+    dialog_close();
     switch (event->trigger_type) {
     case 0xFC:
-        text_show_profile(event_state.trigger);
+        dialog_show_profile(event_state.trigger);
         break;
     case 0x10:
         switch (event_state.trigger) {
@@ -217,7 +217,7 @@ static void block_on_action(PlayerStatus *status) {
             break;
         default:
             if ((event->trigger & 0xFFFF00) == 0x104000) {
-                block_elevator_ride = 1;
+                building_elevator_ride = 1;
                 effect_elevator_init((u8)event->trigger);
                 goto loop;
             }
@@ -225,27 +225,27 @@ static void block_on_action(PlayerStatus *status) {
         }
         break;
     case 0x60:
-        if (block_building_state.building == 2) {
+        if (building_state.building == 2) {
             sprite_station_exit_to_town();
-        } else if (block_building_state.building >= 3 && block_building_state.building < 8) {
-            bstate = &block_building_state;
-            roadmap_shop_exit_to_town(block_building_state.building, bstate->entry);
+        } else if (building_state.building >= 3 && building_state.building < 8) {
+            bstate = &building_state;
+            shop_exit_to_town(building_state.building, bstate->entry);
         } else {
             goto loop;
         }
         break;
     case 0x30:
-        if (block_building_state.building != 3 && block_building_state.building != 6) {
-            roadmap_shop_open_menu(block_building_state.building, event_state.trigger);
+        if (building_state.building != 3 && building_state.building != 6) {
+            shop_open_menu(building_state.building, event_state.trigger);
             break;
         }
     default:
         if (event->trigger >= 0xF02150 && event->trigger < 0xF02155) {
             if (status->hours_awake < 6) {
-                text_show(" \202\275\202\301\202\325\202\350\202\306\201A\220\207\226\260\202\315\202\306\202\352\202\304\202\242\202\351", 1, -1, 0, -1, 0, 4);
+                dialog_show(" \202\275\202\301\202\325\202\350\202\306\201A\220\207\226\260\202\315\202\306\202\352\202\304\202\242\202\351", 1, -1, 0, -1, 0, 4);
                 break;
             }
-            block_wake_index = event->trigger & 0xF;
+            building_wake_index = event->trigger & 0xF;
         }
     loop:
         set = action_find_set(event->circle_set);
@@ -259,7 +259,7 @@ static void block_on_action(PlayerStatus *status) {
     event->circle_flags &= ~8;
 }
 
-static void block_update_input(void) {
+static void building_update_input(void) {
     PlayerStatus *status = &player_status;
     Player *player = status->player;
     s32 pad;
@@ -271,10 +271,10 @@ static void block_update_input(void) {
         return;
     }
     pad = kaj_pad_read();
-    if (block_building_state.building < 3 && effect_item_input(status, 1) != 0) {
+    if (building_state.building < 3 && effect_item_input(status, 1) != 0) {
         return;
     }
-    if (roadmap_shop_update_input(status) != 0) {
+    if (shop_update_input(status) != 0) {
         return;
     }
     if (effect_weapon_input(status) != 0) {
@@ -282,23 +282,23 @@ static void block_update_input(void) {
     }
     if (player->flags & 4) {
         if (!(kaj_system.pad_prev & 0x20) && (kaj_system.pad_now & 0x20)) {
-            block_on_action(status);
+            building_on_action(status);
             return;
         }
         if (!(kaj_system.pad_prev & 0x40) && (kaj_system.pad_now & 0x40)) {
             EventState *event = &event_state;
-            ShopState *r = roadmap_shop;
+            ShopState *r = shop_state;
             void *set;
 
             if (event->state == 2 && (event->cross_flags & 2)) {
                 sound_se_play(8);
-                text_close();
+                dialog_close();
                 if (event->trigger_type == 0x30) {
-                    switch (block_building_state.building) {
+                    switch (building_state.building) {
                     case 4:
                     case 5:
                         r->to_inventory = 1;
-                        roadmap_shop_open_menu(block_building_state.building, event_state.trigger);
+                        shop_open_menu(building_state.building, event_state.trigger);
                         break;
                     }
                 } else {
@@ -318,18 +318,18 @@ static void block_update_input(void) {
     player_handle_pad(status, 1, pad);
 }
 
-static void block_building_load(void) {
+static void building_load(void) {
     char path[16];
-    SceneRequestBuilding *req = &scene_request;
+    SceneRequestBuilding *req = &main_scene_request;
     BuildingState *bstate;
 
     action_reset(1);
-    event_effect_done_hook = block_on_effect_done;
-    bstate = &block_building_state;
+    event_effect_done_hook = building_on_effect_done;
+    bstate = &building_state;
     bstate->entry = req->entry;
-    block_scene_daylight = 0;
-    block_building_state.building = req->building;
-    if (block_elevator_ride == 1) {
+    building_scene_daylight = 0;
+    building_state.building = req->building;
+    if (building_elevator_ride == 1) {
         return;
     }
     sprite_set_visible(0x410, 1);
@@ -339,7 +339,7 @@ static void block_building_load(void) {
     req->path = path;
     object_load_scene();
     effect_weapon_load_models();
-    switch (block_building_state.building) {
+    switch (building_state.building) {
     case 0:
         switch (bstate->entry) {
         case 4:
@@ -349,24 +349,24 @@ static void block_building_load(void) {
             thing_set_animate(3, 9, 1);
             break;
         case 22:
-            mod_npcrec_show(5, 1);
+            npc_rec_show(5, 1);
             thing_set_active(3, 6, 1);
             thing_set_animate(3, 6, 1);
             break;
         case 23:
-            mod_npcrec_show(2, 0);
-            event_enter_hook = block_on_enter;
+            npc_rec_show(2, 0);
+            event_enter_hook = building_on_enter;
             break;
         case 28:
             thing_set_active(3, 5, 1);
             thing_set_animate(3, 5, 1);
             break;
         case 30:
-            mod_npcrec_show(1, 1);
+            npc_rec_show(1, 1);
             effect_flame_small_init(0);
             break;
         case 7:
-            mod_npcrec_show(2, 0);
+            npc_rec_show(2, 0);
         case 9:
             effect_flame_small_init(1);
             effect_flame_large_init();
@@ -377,43 +377,43 @@ static void block_building_load(void) {
         case 31:
         case 32:
         case 34:
-            mod_npcrec_show(1, 1);
+            npc_rec_show(1, 1);
             break;
         case 39:
-            mod_npcrec_show(3, 0);
+            npc_rec_show(3, 0);
         case 1:
         case 15:
-            mod_npcrec_show(2, 0);
+            npc_rec_show(2, 0);
             break;
         }
         break;
     case 1:
-        block_scene_daylight = block_building_state.building;
+        building_scene_daylight = building_state.building;
     case 2:
         sprite_station_init();
         break;
     default:
-        roadmap_shop_init(bstate->building);
+        shop_init(bstate->building);
         break;
     }
     if (req->entry_se != 0) {
         sound_se_play(0x21);
     }
-    event_show_clock(block_scene_daylight);
+    event_show_clock(building_scene_daylight);
     sprite_set_visible(0x410, 0);
 }
 
-static void block_building_run(void) {
+static void building_run(void) {
     s32 ev[6];
     s16 done;
 
-    block_building_load();
+    building_load();
     done = 0;
     kaj_timer_enable();
-    if (block_elevator_ride == 0) {
+    if (building_elevator_ride == 0) {
         effect_start_fade(0, 3);
     } else {
-        block_elevator_ride = 0;
+        building_elevator_ride = 0;
         kaj_pad_reset(1);
     }
     while (done == 0) {
@@ -422,21 +422,21 @@ static void block_building_run(void) {
             event_handle_enter(ev);
             continue;
         case 0x400:
-            roadmap_shop_open_topic_list();
+            shop_open_topic_list();
             continue;
         case 0x20:
             event_handle_leave(ev);
             continue;
         case 0x4:
-            event_handle_tick(block_scene_daylight);
+            event_handle_tick(building_scene_daylight);
             continue;
         case 0x200:
             event_handle_mod_finish(ev);
             continue;
         case 0x0:
-            block_update_input();
-            if (mail_take_scene_change() != 0) {
-                if (block_elevator_ride == 0) {
+            building_update_input();
+            if (main_take_scene_change() != 0) {
+                if (building_elevator_ride == 0) {
                     effect_start_fade(1, 3);
                 } else {
                     kaj_pad_reset(0);
@@ -451,7 +451,7 @@ static void block_building_run(void) {
             kaj_event_done(ev);
             continue;
         }
-        mail_step_frame(1, 1, 1);
+        main_step_frame(1, 1, 1);
     }
     kaj_timer_disable();
     event_enter_hook = 0;
@@ -459,17 +459,17 @@ static void block_building_run(void) {
     event_effect_done_hook = 0;
     event_tick_hook = 0;
     action_reset(1);
-    text_close();
-    if (block_elevator_ride != 1) {
+    dialog_close();
+    if (building_elevator_ride != 1) {
         block_stream_stop();
         sound_bgm_stop();
         sound_se_stop_all();
         effect_flame_small_free();
         effect_flame_large_free();
         action_free_triggers();
-        npc_free_all();
-        npc_free_bodies();
-        npc_free_stats();
+        actor_free_all();
+        actor_free_bodies();
+        actor_free_stats();
         effect_weapon_reset();
         action_free_all_sets();
         block_free_all();
@@ -484,32 +484,32 @@ static void block_building_run(void) {
     }
 }
 
-static s32 block_on_enter(KajEvent *ev) {
+static s32 building_on_enter(KajEvent *ev) {
     s32 code = ev->param1;
 
     if (code == 0xF0233C) {
-        block_wake_index = 5;
+        building_wake_index = 5;
     } else if (code == 0xF02350) {
-        block_wake_index = 6;
+        building_wake_index = 6;
     } else if (code == 0xF0235A) {
-        block_wake_index = 7;
+        building_wake_index = 7;
     }
     return 0;
 }
 
-void block_building_main(void) {
-    block_elevator_ride = 0;
+void building_main(void) {
+    building_elevator_ride = 0;
     block_create_all();
     while (1) {
-        block_building_run();
-        if (block_elevator_ride != 1) {
+        building_run();
+        if (building_elevator_ride != 1) {
             break;
         }
         effect_elevator_run();
     }
 }
 
-static void block_bus_input(s16 building, s16 start_floor, s16 *floor) {
+static void building_bus_input(s16 building, s16 start_floor, s16 *floor) {
     s32 se;
     s16 played;
     s32 i;
@@ -525,13 +525,13 @@ static void block_bus_input(s16 building, s16 start_floor, s16 *floor) {
                 se = 0x11;
             }
             stop = (building * 11 + *floor - 12) * 3;
-            mail_goto_twn(block_bus_stops[stop] * 10, 0, block_bus_stops[stop + 1] * 10, block_bus_stops[stop + 2], 0);
+            main_goto_twn(building_bus_stops[stop] * 10, 0, building_bus_stops[stop + 1] * 10, building_bus_stops[stop + 2], 0);
         } else if (!(kaj_system.pad_prev & 0x40) && (kaj_system.pad_now & 0x40)) {
             played = 1;
             se = 8;
             *floor = start_floor;
             stop = (building * 11 + start_floor - 12) * 3;
-            mail_goto_twn(block_bus_stops[stop] * 10, 0, block_bus_stops[stop + 1] * 10, block_bus_stops[stop + 2], 0);
+            main_goto_twn(building_bus_stops[stop] * 10, 0, building_bus_stops[stop + 1] * 10, building_bus_stops[stop + 2], 0);
         } else if (!(kaj_system.pad_prev & 0x1000) && (kaj_system.pad_now & 0x1000)) {
             played = 1;
             se = 0xF;
@@ -589,7 +589,7 @@ static void block_bus_input(s16 building, s16 start_floor, s16 *floor) {
     }
 }
 
-void block_bus_run(s16 building, s16 start_floor) {
+void building_bus_run(s16 building, s16 start_floor) {
     s32 ev[6];
     s16 floor;
     s16 done;
@@ -607,7 +607,7 @@ void block_bus_run(s16 building, s16 start_floor) {
     sprite_set_visible((u16)building, 1);
     sprite_set_clut_entry(0, (building << 4) + start_floor, 0x29F);
     sprite_set_clut_entry(0, start_floor, 0x1D5F);
-    mail_wait(3, 0, 0, 2);
+    main_wait(3, 0, 0, 2);
     kaj_pad_reset(1);
     kaj_timer_enable();
     do {
@@ -616,8 +616,8 @@ void block_bus_run(s16 building, s16 start_floor) {
             event_handle_tick(1);
             continue;
         case 0x0:
-            block_bus_input(building, start_floor, &floor);
-            if (mail_take_scene_change() != 0) {
+            building_bus_input(building, start_floor, &floor);
+            if (main_take_scene_change() != 0) {
                 effect_start_fade(1, 3);
             }
             break;

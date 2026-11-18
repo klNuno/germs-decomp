@@ -41,8 +41,8 @@ src/game/sound.c holds sound.c. A bank is a VAB that the scene loader receives i
 
 `sound_se_pop` (0x801A2288) keys off the top bank's voices, closes it with `SsVabClose` and frees
 it. `sound_se_pop_scene` (0x801A23B4) pops while the top bank's flag is above 0; the three scene
-loops call it with `sound_bgm_close` when they end: `object_room_quit`, `block_building_run` and
-`thing_field_leave` (0x801A8B38). `sound_se_pop_all` (0x801A3A54) has no caller.
+loops call it with `sound_bgm_close` when they end: `object_room_quit`, `building_run` and
+`town_leave` (0x801A8B38). `sound_se_pop_all` (0x801A3A54) has no caller.
 
 ## Sound effects
 
@@ -76,9 +76,9 @@ then sets each sequence to the music volume with `SsSepSetVol` and keeps the new
 
 | Function | Calls | Used by |
 | --- | --- | --- |
-| `sound_bgm_play(seq)` (0x801A3BCC) | `sound_bgm_stop` for the old, `SsSepPlay` of the new when it differs | scripts (command 3), the scene loops after the first fade, `menu_run` |
+| `sound_bgm_play(seq)` (0x801A3BCC) | `sound_bgm_stop` for the old, `SsSepPlay` of the new when it differs | scripts (command 3), the scene loops after the first fade, `dialog_menu_run` |
 | `sound_bgm_stop` (0x801A3C58) | `SsSepStop`, `SsSepSetVol` back to the music volume | |
-| `sound_bgm_fade_out(n)` (0x801A3CC0) | task 0xD from the volume to 0 over n x 30, `sound_bgm_fade_step` (0x801A3D74) sets `SsSepSetVol` | command 3 with a sub-op, `text_narration_cues` |
+| `sound_bgm_fade_out(n)` (0x801A3CC0) | task 0xD from the volume to 0 over n x 30, `sound_bgm_fade_step` (0x801A3D74) sets `SsSepSetVol` | command 3 with a sub-op, `dialog_narration_cues` |
 | `sound_bgm_close` (0x801A3B5C) | `SsSepClose` | the scene loops when they end |
 
 Which sequence plays is chosen per place in the code:
@@ -86,13 +86,13 @@ Which sequence plays is chosen per place in the code:
 | Where | Sequence |
 | --- | --- |
 | a room (`object_room_on_effect_done`, after the fade in) | 0; 1 when the room starts with narration (`object_room_main`) |
-| a building (`block_on_effect_done`) | 0 in building 5, none in building 7, else 1 |
-| the town (`thing_field_task_hook`) | 0 |
-| the pause menu (`menu_run`, 0x80182300) | 2 |
+| a building (`building_on_effect_done`) | 0 in building 5, none in building 7, else 1 |
+| the town (`town_task_hook`) | 0 |
+| the pause menu (`dialog_menu_run`, 0x80182300) | 2 |
 | a script (`action_update`, command 3) | the number in its argument |
 
 Two other places set the music volume with `SsSepSetVol`: `door_fade_step` (0x80185918), at the
-end of every screen fade ([effects](rendering.md#effects)), and `roadmap_fade_screen_music`
+end of every screen fade ([effects](rendering.md#effects)), and `shop_fade_screen_music`
 (0x801A0D58).
 
 ## Footsteps
@@ -118,4 +118,4 @@ Player movement is on [player and survival](player-and-survival.md).
 | `SsUtKeyOnV` | `sound_se_play`, `sound_se_play_note` |
 | `SsUtKeyOffV` | `sound_se_play`, `sound_se_play_note`, `sound_se_stop`, `sound_se_stop_all`, `sound_se_pop`, `sound_se_pop_scene` |
 | `SsSepOpen`, `SsSepClose`, `SsSepPlay`, `SsSepStop` | `sound_bgm_open`, `sound_bgm_close`, `sound_bgm_play`, `sound_bgm_stop` (one each) |
-| `SsSepSetVol` | `sound_bgm_open`, `sound_bgm_stop`, `sound_bgm_fade_step`, `door_fade_step`, `roadmap_fade_screen_music` |
+| `SsSepSetVol` | `sound_bgm_open`, `sound_bgm_stop`, `sound_bgm_fade_step`, `door_fade_step`, `shop_fade_screen_music` |

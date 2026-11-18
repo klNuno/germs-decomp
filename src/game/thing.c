@@ -18,7 +18,7 @@
 /*
  * The things (scene objects): update, scripts, markers, hit tests.
  *
- * File boundaries: likely (docs/layout.md): thing.c asserts; thing_list through gp from sprite_thing_refresh_all.
+ * File boundaries: likely (docs/layout.md): thing.c asserts; thing_list through gp from thing_refresh_all.
  */
 
 s16 kaj_ll_at_tail(SpriteList *list);
@@ -54,10 +54,10 @@ typedef struct {
     s32 model_offset;
     s32 hit_model_offset;
 } ThingRecord;
-extern ScreenLight screen_light;
+extern ScreenLight roadmap_screen_light;
 extern s16 roadmap_draw_flags;
 
-void sprite_thing_init(Thing *thing) {
+void thing_init_from_record(Thing *thing) {
     SVector sv;
     ThingRecord *src = thing->record;
     Player *player = player_status_player[0];
@@ -97,7 +97,7 @@ void sprite_thing_init(Thing *thing) {
     }
 }
 
-void sprite_thing_refresh_all(void) {
+void thing_refresh_all(void) {
     SVector sv;
     SpriteList *list = thing_list;
     Player *player = player_status_player[0];
@@ -127,11 +127,11 @@ void sprite_thing_refresh_all(void) {
     }
 }
 
-void sprite_thing_draw_all(ViewBuffer *view) {
+void thing_draw_all(ViewBuffer *view) {
     s32 ls[8];
     SpriteList *list = thing_list;
     Player *player = player_status_player[0];
-    ScreenLight *light = &screen_light;
+    ScreenLight *light = &roadmap_screen_light;
     Thing *thing;
     s16 flags;
 
@@ -173,12 +173,12 @@ void sprite_thing_draw_all(ViewBuffer *view) {
     }
 }
 
-static void sprite_thing_update_marker(Player *player, Thing *marker, Npc *target) {
+static void thing_update_target_marker(Player *player, Thing *marker, Npc *target) {
     SVector sv;
     NpcBody *body;
     s32 y;
 
-    body = npc_find_body(target->body_id);
+    body = actor_find_body(target->body_id);
     y = target->pos_y - 2200;
     if (body != NULL && body->height != 0) {
         y = target->pos_y - body->height * 10 - 300;
@@ -197,7 +197,7 @@ static void sprite_thing_update_marker(Player *player, Thing *marker, Npc *targe
     marker->coord_flg = 0;
 }
 
-static void sprite_thing_update_fly_in(Thing *thing) {
+static void thing_update_title_fly_in(Thing *thing) {
     SVector sv;
     KajSystem *sys = &kaj_system;
 
@@ -232,7 +232,7 @@ extern char thing_str_file[];
 extern PlayerStatus player_status;
 extern KajSystem kaj_system;
 extern s16 block_reloaded;
-static void sprite_thing_update_fly_in(Thing *thing);
+static void thing_update_title_fly_in(Thing *thing);
 
 INCLUDE_RODATA("asm/nonmatchings/game/thing", thing_str_alloc_pointer);
 
@@ -318,7 +318,7 @@ void thing_update_all(void) {
                             thing->coord_flg = 0;
                             break;
                         case 7:
-                            sprite_thing_update_marker(player, thing, status->target_npc);
+                            thing_update_target_marker(player, thing, status->target_npc);
                             break;
                         case 8:
                             thing->rot_y += kaj_system.vsync_delta * 5 / 2;
@@ -347,7 +347,7 @@ void thing_update_all(void) {
                             thing->coord_flg = 0;
                             break;
                         case 10:
-                            sprite_thing_update_fly_in(thing);
+                            thing_update_title_fly_in(thing);
                             break;
                         }
                         break;

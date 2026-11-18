@@ -25,7 +25,7 @@ typedef struct {
 } SceneRequestBuilding;
 
 /* Functions of src/game/building.c that other files call or a table names. */
-void block_building_main(void);
-void block_bus_run(s16 building, s16 start_floor);
+void building_main(void);
+void building_bus_run(s16 building, s16 start_floor);
 
 #endif

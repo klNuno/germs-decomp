@@ -39,7 +39,7 @@ s16 kaj_ll_at_tail(SpriteList *list);
 static void sprite_title_show_menu(s16 wait);
 extern TrainState vehicle_train_state;
 extern Player *player_status_player[];
-void text_show(char *str, s32 mode, s32 circle_set, s32 circle_flags, s32 cross_set, s32 cross_flags, s32 se);
+void dialog_show(char *str, s32 mode, s32 circle_set, s32 circle_flags, s32 cross_set, s32 cross_flags, s32 se);
 extern char sprite_phone_str_anything_else[];
 s16 sprite_phone_save;
 static void sprite_phone_loop(void);
@@ -61,7 +61,7 @@ s16 sprite_title_choice;
 s16 sprite_title_menu_active;
 s16 sprite_title_cursor_frame;
 s16 sprite_title_cursor_moving;
-extern BuildingState block_building_state;
+extern BuildingState building_state;
 extern u16 action_vars_minute[];
 static s32 sprite_station_on_leave(KajEvent *ev);
 static void sprite_station_copy_signs(TrainState *train, BuildingState *bstate);
@@ -72,7 +72,7 @@ extern s32 (*event_leave_hook)(KajEvent *arg0);
 extern void (*event_tick_hook)(void);
 extern s32 sprite_station_exit_points[];
 extern s32 sprite_str_scene_gst[];
-void mail_goto_building(s32 form, s32 *name, s32 var, s32 map_letter, s32 map_entry, s32 yaw, s32 scene_index, s32 trigger, s32 script_entry);
+void main_goto_building(s32 form, s32 *name, s32 var, s32 map_letter, s32 map_entry, s32 yaw, s32 scene_index, s32 trigger, s32 script_entry);
 extern u16 vehicle_train_state_door_state[];
 extern SceneTables object_scene_tables;
 extern s32 event_effect_done_hook;
@@ -84,13 +84,13 @@ s16 sprite_phone_menu_state;
 s16 sprite_phone_menu_cursor;
 void kaj_tim_load(void *handle, void *tim_file, u16 mode, s16 keep_clut);
 extern KajSystem kaj_system;
-extern SceneRequest scene_request[];
+extern SceneRequest main_scene_request[];
 static s32 sprite_title_on_effect_done(KajEvent *ev);
 extern char sprite_station_str_exit_only[];
 extern s32 kaj_system_vsync_delta[];
 static void sprite_title_handle_input(void);
 static void sprite_title_init(s16 restarted);
-s32 mail_take_scene_change(void);
+s32 main_take_scene_change(void);
 extern s32 object_scene_texts[];
 extern EventState event_state;
 static void sprite_phone_pick_trigger(s32 *out);
@@ -100,7 +100,7 @@ static s32 sprite_phone_on_effect_done(KajEvent *ev);
 extern s32 player_pick_trigger_hook;
 extern s32 event_alarm_hook;
 extern PlayerStatus player_status;
-extern ScreenLight screen_light;
+extern ScreenLight roadmap_screen_light;
 extern s16 action_vars_menu_busy[];
 static void sprite_phone_update(void);
 /* phone menu confirm line, choice 1 */
@@ -558,7 +558,7 @@ void sprite_set_cell(s32 id, s32 col, s32 row) {
 }
 
 static void sprite_title_handle_input(void) {
-    SceneRequest *request = scene_request;
+    SceneRequest *request = main_scene_request;
     s16 play;
     s32 se_id;
 
@@ -572,7 +572,7 @@ static void sprite_title_handle_input(void) {
         play = 1;
         if (sprite_title_choice != 0) {
             se_id = 2;
-            mail_goto_ofc(1, 1, 1, 1);
+            main_goto_ofc(1, 1, 1, 1);
         } else {
             se_id = 0x11;
             sprite_title_load = 1;
@@ -628,7 +628,7 @@ static void sprite_title_init(s16 restarted) {
             thing->coord_tz = thing->pos_z;
         }
     } else {
-        text_close();
+        dialog_close();
         sprite_set_visible(0, 1);
         sprite_set_visible(1, 1);
         sprite_set_visible(2, 1);
@@ -662,7 +662,7 @@ static void sprite_title_loop(s16 restarted) {
         switch (kaj_event_get(buf)) {
         case 0:
             sprite_title_handle_input();
-            if ((s16)mail_take_scene_change() != 0) {
+            if ((s16)main_take_scene_change() != 0) {
                 if (sprite_title_load == 0) {
                     effect_start_fade(1, 3);
                 } else {
@@ -676,7 +676,7 @@ static void sprite_title_loop(s16 restarted) {
             if (restarted != 0 && buf[4] == 0) {
                 thing_set_active(3, 10, 1);
                 thing_set_animate(3, 10, 1);
-                text_start_narration(object_scene_texts[0]);
+                dialog_start_narration(object_scene_texts[0]);
             }
             continue;
         default:
@@ -729,7 +729,7 @@ loop:
     if (sprite_title_load != 1) {
         return;
     }
-    if (menu_card_run(1, 0) == 0) {
+    if (card_run(1, 0) == 0) {
         goto loop;
     }
     sprite_title_load = 0;
@@ -759,9 +759,9 @@ static s32 sprite_title_on_effect_done(KajEvent *ev) {
 
 static void sprite_title_show_menu(s16 wait) {
     if (wait != 0) {
-        mail_wait(3, 0, 0, 2);
+        main_wait(3, 0, 0, 2);
     }
-    text_close();
+    dialog_close();
     sprite_set_visible(0, 1);
     sprite_set_visible(1, 1);
     sprite_set_visible(2, 1);
@@ -775,7 +775,7 @@ static void sprite_title_show_menu(s16 wait) {
 }
 
 static s32 sprite_station_on_enter(KajEvent *ev) {
-    BuildingState *bstate = &block_building_state;
+    BuildingState *bstate = &building_state;
     TrainState *train = &vehicle_train_state;
 
     switch (ev->param1) {
@@ -789,17 +789,17 @@ static s32 sprite_station_on_enter(KajEvent *ev) {
     case 0xF00110:
         if (bstate->building == 1) {
             if (bstate->entry == 3) {
-                text_show(sprite_station_str_exit_only, 1, -1, 0, -1, 0, 1);
+                dialog_show(sprite_station_str_exit_only, 1, -1, 0, -1, 0, 1);
             }
         } else if (bstate->building == 2) {
             if (bstate->entry == 6) {
-                text_show(sprite_station_str_exit_only, 1, -1, 0, -1, 0, 1);
+                dialog_show(sprite_station_str_exit_only, 1, -1, 0, -1, 0, 1);
             }
         }
         break;
     case 0xF00120:
         if (bstate->entry == 1) {
-            text_show(sprite_station_str_exit_only, 1, -1, 0, -1, 0, 1);
+            dialog_show(sprite_station_str_exit_only, 1, -1, 0, -1, 0, 1);
         }
         break;
     default:
@@ -809,7 +809,7 @@ static s32 sprite_station_on_enter(KajEvent *ev) {
 }
 
 static void sprite_station_update(void) {
-    BuildingState *bstate = &block_building_state;
+    BuildingState *bstate = &building_state;
     TrainState *train = &vehicle_train_state;
     s16 minute_digit = (s16)action_vars_minute[0] % 10;
 
@@ -833,12 +833,12 @@ static void sprite_station_update(void) {
 INCLUDE_RODATA("asm/nonmatchings/game/sprite", sprite_station_str_exit_only);
 
 void sprite_station_show_prompt(s16 show) {
-    BuildingState *bstate = &block_building_state;
+    BuildingState *bstate = &building_state;
     TrainState *train = &vehicle_train_state;
 
     if (show != 0) {
         if (train->prompt_on == 0 && train->direction != 0 && train->trigger == 0x100010) {
-            if (block_building_state.building == 2 && bstate->entry != 6) {
+            if (building_state.building == 2 && bstate->entry != 6) {
                 train->prompt_on = 1;
                 event_state.trigger = train->trigger;
                 event_state.trigger_type = (train->trigger >> 16) & 0xFF;
@@ -850,7 +850,7 @@ void sprite_station_show_prompt(s16 show) {
                     if (event_state.state != 2) {
                         event_state.state = 2;
                     }
-                    text_show(line, 1, -1, 8, -1, 0, 1);
+                    dialog_show(line, 1, -1, 8, -1, 0, 1);
                     if (!(player->flags & 4)) {
                         player->flags |= 4;
                     }
@@ -867,13 +867,13 @@ void sprite_station_show_prompt(s16 show) {
                     if (event_state.state != 2) {
                         event_state.state = 2;
                     }
-                    text_show(line, 1, -1, 8, -1, 0, 1);
+                    dialog_show(line, 1, -1, 8, -1, 0, 1);
                     if (!(player->flags & 4)) {
                         player->flags |= 4;
                     }
                 }
             } else {
-                text_show(sprite_station_str_exit_only, 1, -1, 0, -1, 0, 1);
+                dialog_show(sprite_station_str_exit_only, 1, -1, 0, -1, 0, 1);
             }
         } else if (train->prompt_on == 0 && train->direction == 0 && train->trigger == 0x100020) {
             if (bstate->building == 2 && bstate->entry != 1) {
@@ -888,7 +888,7 @@ void sprite_station_show_prompt(s16 show) {
                     if (event_state.state != 2) {
                         event_state.state = 2;
                     }
-                    text_show(line, 1, -1, 8, -1, 0, 1);
+                    dialog_show(line, 1, -1, 8, -1, 0, 1);
                     if (!(player->flags & 4)) {
                         player->flags |= 4;
                     }
@@ -905,13 +905,13 @@ void sprite_station_show_prompt(s16 show) {
                     if (event_state.state != 2) {
                         event_state.state = 2;
                     }
-                    text_show(line, 1, -1, 8, -1, 0, 1);
+                    dialog_show(line, 1, -1, 8, -1, 0, 1);
                     if (!(player->flags & 4)) {
                         player->flags |= 4;
                     }
                 }
             } else {
-                text_show(sprite_station_str_exit_only, 1, -1, 0, -1, 0, 1);
+                dialog_show(sprite_station_str_exit_only, 1, -1, 0, -1, 0, 1);
             }
         }
     } else {
@@ -919,7 +919,7 @@ void sprite_station_show_prompt(s16 show) {
 
         if (train->prompt_on != 0) {
             train->prompt_on = 0;
-            text_close();
+            dialog_close();
             action_reset(1);
             if (player->flags & 4) {
                 player->flags &= ~4;
@@ -977,24 +977,24 @@ static void sprite_station_copy_signs(TrainState *train, BuildingState *bstate) 
 void sprite_station_board_train(s16 direction) {
     Player *player = player_status_player[0];
     u16 v = vehicle_train_state_door_state[0];
-    BuildingState *bstate = &block_building_state;
+    BuildingState *bstate = &building_state;
 
     if (v == 1) {
         if (direction != 0) {
-            if (block_building_state.building == 1) {
+            if (building_state.building == 1) {
                 player->vehicle_mode = 2;
-                mail_goto_twn(0x4CA2C, 0, (bstate->entry - 1) * 100000 - 195000, 270, 0);
+                main_goto_twn(0x4CA2C, 0, (bstate->entry - 1) * 100000 - 195000, 270, 0);
             } else {
                 player->vehicle_mode = 3;
-                mail_goto_twn(0x4A31C, 0, (bstate->entry - 1) * 100000 - 195000, 270, 0);
+                main_goto_twn(0x4A31C, 0, (bstate->entry - 1) * 100000 - 195000, 270, 0);
             }
         } else {
-            if (block_building_state.building == 1) {
+            if (building_state.building == 1) {
                 player->vehicle_mode = 2;
-                mail_goto_twn(0x4BF3C, 0, (bstate->entry - 1) * 100000 - 200000, 90, 0);
+                main_goto_twn(0x4BF3C, 0, (bstate->entry - 1) * 100000 - 200000, 90, 0);
             } else {
                 player->vehicle_mode = 3;
-                mail_goto_twn(0x4982C, 0, (bstate->entry - 1) * 100000 - 200000, 90, 0);
+                main_goto_twn(0x4982C, 0, (bstate->entry - 1) * 100000 - 200000, 90, 0);
             }
         }
     }
@@ -1011,22 +1011,22 @@ void sprite_station_init(void) {
     } else {
         vehicle_train_place();
     }
-    sprite_station_copy_signs(train, &block_building_state);
+    sprite_station_copy_signs(train, &building_state);
     event_enter_hook = sprite_station_on_enter;
     event_leave_hook = sprite_station_on_leave;
     event_tick_hook = sprite_station_update;
 }
 
 void sprite_station_exit_to_town(void) {
-    BuildingState *bstate = &block_building_state;
+    BuildingState *bstate = &building_state;
     s32 point;
 
-    if (block_building_state.building == 2) {
-        if (bstate->entry == block_building_state.building) {
-            mail_goto_building(1, sprite_str_scene_gst, 0x13, 0x41, 3, 0x5A, 7, 0, 0);
+    if (building_state.building == 2) {
+        if (bstate->entry == building_state.building) {
+            main_goto_building(1, sprite_str_scene_gst, 0x13, 0x41, 3, 0x5A, 7, 0, 0);
         } else {
             point = (bstate->entry - 1) * 3;
-            mail_goto_twn(sprite_station_exit_points[point], 0, sprite_station_exit_points[point + 1], sprite_station_exit_points[point + 2], 1);
+            main_goto_twn(sprite_station_exit_points[point], 0, sprite_station_exit_points[point + 1], sprite_station_exit_points[point + 2], 1);
         }
     }
 }
@@ -1048,7 +1048,7 @@ static s32 sprite_station_on_leave(KajEvent *ev) {
 INCLUDE_RODATA("asm/nonmatchings/game/sprite", sprite_phone_str_greeting);
 
 static void sprite_phone_update(void) {
-    SceneRequest *request = scene_request;
+    SceneRequest *request = main_scene_request;
     PlayerStatus *status = &player_status;
     s16 *menu = &sprite_phone_menu_state;
     s16 pad_mode = kaj_system.pad_mode;
@@ -1071,7 +1071,7 @@ static void sprite_phone_update(void) {
                 PlayerExit *exit = &player2->exit;
 
                 if (ev_state->state == 2 && (ev_state->circle_flags & 8)) {
-                    text_close();
+                    dialog_close();
                     sound_se_play(0x11);
                     switch (event_state.trigger) {
                     case 0xFB0000:
@@ -1081,7 +1081,7 @@ static void sprite_phone_update(void) {
                         }
                         break;
                     case 0xFB0001:
-                        mail_goto_twn(exit->pos_x, exit->pos_y, exit->pos_z, exit->yaw, 0);
+                        main_goto_twn(exit->pos_x, exit->pos_y, exit->pos_z, exit->yaw, 0);
                         break;
                     }
                     ev_state->state = 1;
@@ -1093,9 +1093,9 @@ static void sprite_phone_update(void) {
                 if (player->flags & 0x40) {
                     return;
                 }
-                text_close();
+                dialog_close();
                 sound_se_play(8);
-                mail_goto_twn(exit->pos_x, exit->pos_y, exit->pos_z, exit->yaw, 0);
+                main_goto_twn(exit->pos_x, exit->pos_y, exit->pos_z, exit->yaw, 0);
                 ev_state->state = 0;
             }
         }
@@ -1105,7 +1105,7 @@ static void sprite_phone_update(void) {
         case 1:
             switch (menu[1]) {
             case 0:
-                text_close();
+                dialog_close();
                 sprite_set_visible(0x206, 0);
                 sprite_set_visible(0x205, 0);
                 sprite_phone_save = 1;
@@ -1113,16 +1113,16 @@ static void sprite_phone_update(void) {
                 break;
             case 1:
                 sprite_phone_menu_state = 3;
-                text_show(sprite_phone_str_move_car, 3, -1, 0, -1, 0, 0);
+                dialog_show(sprite_phone_str_move_car, 3, -1, 0, -1, 0, 0);
                 break;
             case 2:
                 sprite_phone_menu_state = 4;
-                text_show(sprite_phone_str_coming, 3, -1, 0, -1, 0, 0);
+                dialog_show(sprite_phone_str_coming, 3, -1, 0, -1, 0, 0);
                 break;
             case 3:
                 sprite_phone_menu_state = 0;
                 /* phone farewell */
-                text_show(" 2\202\273\202\352\202\305\202\315\202\250\213\103\202\360\202\302\202\257\202\304", 1, -1, 0, -1, 0, 0);
+                dialog_show(" 2\202\273\202\352\202\305\202\315\202\250\213\103\202\360\202\302\202\257\202\304", 1, -1, 0, -1, 0, 0);
                 sprite_set_visible(0x206, 0);
                 sprite_set_visible(0x205, 0);
                 sprite_phone_menu_state = 0;
@@ -1156,7 +1156,7 @@ static void sprite_phone_update(void) {
         default:
             return;
         }
-        text_show(sprite_phone_str_anything_else, 3, -1, 0, -1, 0, 0);
+        dialog_show(sprite_phone_str_anything_else, 3, -1, 0, -1, 0, 0);
         menu[0] = 1;
         return;
     } else if (!(kaj_system.pad_prev & 0x40) && (kaj_system.pad_now & 0x40)) {
@@ -1164,7 +1164,7 @@ static void sprite_phone_update(void) {
         switch (menu[0]) {
         case 1:
             /* phone farewell */
-            text_show(" 2\202\273\202\352\202\305\202\315\202\250\213\103\202\360\202\302\202\257\202\304", 1, -1, 0, -1, 0, 0);
+            dialog_show(" 2\202\273\202\352\202\305\202\315\202\250\213\103\202\360\202\302\202\257\202\304", 1, -1, 0, -1, 0, 0);
             sprite_set_visible(0x206, 0);
             sprite_set_visible(0x205, 0);
             sprite_phone_menu_state = 0;
@@ -1172,7 +1172,7 @@ static void sprite_phone_update(void) {
             break;
         case 3:
         case 4:
-            text_show(sprite_phone_str_anything_else, 3, -1, 0, -1, 0, 0);
+            dialog_show(sprite_phone_str_anything_else, 3, -1, 0, -1, 0, 0);
             menu[0] = 1;
             break;
         }
@@ -1230,7 +1230,7 @@ static void sprite_phone_loop(void) {
     s32 buf[6];
     s16 done = 0;
     s16 light_was_on = 0;
-    ScreenLight *light = &screen_light;
+    ScreenLight *light = &roadmap_screen_light;
     PlayerStatus *status;
     PlayerStatus *status2;
     PlayerStatus *status3;
@@ -1293,7 +1293,7 @@ static void sprite_phone_loop(void) {
             continue;
         case 0:
             sprite_phone_update();
-            if ((s16)mail_take_scene_change() != 0) {
+            if ((s16)main_take_scene_change() != 0) {
                 if (sprite_phone_save == 0) {
                     effect_start_fade(1, 3);
                 } else {
@@ -1308,7 +1308,7 @@ static void sprite_phone_loop(void) {
             kaj_event_done(buf);
             continue;
         }
-        mail_step_frame(3, 0, 0);
+        main_step_frame(3, 0, 0);
     }
     kaj_timer_disable();
     status3 = &player_status;
@@ -1320,7 +1320,7 @@ static void sprite_phone_loop(void) {
         event_enter_hook = 0;
         event_alarm_hook = 0;
         event_effect_done_hook = 0;
-        text_close();
+        dialog_close();
         block_free_owned();
         mod_free_all();
         sound_se_pop();
@@ -1353,11 +1353,11 @@ static s32 sprite_phone_on_enter(KajEvent *ev) {
     switch (ev->param1) {
     case 0xFB0000:
         /* phone box prompt: make a call */
-        text_show(" 8\223d\230b1\202\360\202\251\202\257\202\351       3\201\233", 1, -1, 8, -1, 0, 1);
+        dialog_show(" 8\223d\230b1\202\360\202\251\202\257\202\351       3\201\233", 1, -1, 8, -1, 0, 1);
         break;
     case 0xFB0001:
         /* phone box prompt: go outside */
-        text_show(" \212O\202\311\217o\202\351         3\201\233", 1, -1, 8, -1, 0, 1);
+        dialog_show(" \212O\202\311\217o\202\351         3\201\233", 1, -1, 8, -1, 0, 1);
         break;
     default:
         return 0;
@@ -1380,7 +1380,7 @@ static s32 sprite_phone_on_effect_done(KajEvent *ev) {
             game->effect_task = -1;
         }
         /* sprite_phone_str_greeting */
-        text_show(sprite_phone_str_greeting, 3, -1, 0, -1, 0, 0);
+        dialog_show(sprite_phone_str_greeting, 3, -1, 0, -1, 0, 0);
         sprite_set_visible(0x206, 1);
         sprite_fill_clut(0x206, 5, 7, 0x24C6);
         sprite_set_clut_entry(0x206, 4, 0x24DF);
@@ -1397,9 +1397,9 @@ void sprite_phone_run(void) {
         if (sprite_phone_save != 1) {
             break;
         }
-        menu_card_run(0, 0);
+        card_run(0, 0);
         /* phone menu: anything else */
-        text_show(sprite_phone_str_anything_else, 3, -1, 0, -1, 0, 0);
+        dialog_show(sprite_phone_str_anything_else, 3, -1, 0, -1, 0, 0);
         sprite_set_visible(0x206, 1);
         sprite_set_visible(0x205, 1);
     }

@@ -27,7 +27,7 @@
  * File boundaries: guess (docs/layout.md): main, a file only by its name.
  */
 
-extern SceneRequest scene_request;
+extern SceneRequest main_scene_request;
 extern GameVars action_vars;
 extern SceneTables object_scene_tables;
 extern PlayerStatus player_status;
@@ -50,7 +50,7 @@ typedef struct {
     u8 unk1E[2];
     char scene_name[4];
 } BuildingRequest;
-s16 mail_main_restarted;
+s16 main_restarted;
 extern s32 event_effect_done_hook;
 extern s32 event_alarm_hook;
 extern s32 event_tick_hook;
@@ -93,8 +93,8 @@ void main(void) {
     object_load_res(1, 0);
     game = &action_vars;
     while (1) {
-        request_init = &scene_request;
-        restarted = mail_main_restarted;
+        request_init = &main_scene_request;
+        restarted = main_restarted;
         if (restarted != 0) {
             car_speed = game->car_speed_setting;
             text_speed = game->text_speed_setting;
@@ -125,9 +125,9 @@ void main(void) {
         game->drain_minute = 0;
         game->drain_count = 0;
         effect_clear_alarms();
-        request = &scene_request;
+        request = &main_scene_request;
         vehicle_train_init_state();
-        sprite_title_run(mail_main_restarted);
+        sprite_title_run(main_restarted);
         kaj_srand_ticks();
         sprite_set_visible(0x400, 1);
         sprite_set_visible(0x409, 1);
@@ -138,26 +138,26 @@ void main(void) {
             }
             switch (request->loop) {
             case 1:
-                block_building_main();
+                building_main();
                 break;
             case 0:
                 object_room_run();
                 break;
             case 2:
-                thing_game_loop();
+                town_game_loop();
                 break;
             }
         }
         request->quit = 0;
         sprite_set_visible(0x400, 0);
         sprite_set_visible(0x409, 0);
-        if (mail_main_restarted == 0) {
-            mail_main_restarted = 1;
+        if (main_restarted == 0) {
+            main_restarted = 1;
         }
     }
 }
 
-s32 mail_angle_to_dir8(s16 angle) {
+s32 main_angle_to_dir8(s16 angle) {
     s32 b;
 
 loop:
@@ -175,8 +175,8 @@ loop:
     return 2;
 }
 
-s32 mail_take_scene_change(void) {
-    SceneRequest *p = &scene_request;
+s32 main_take_scene_change(void) {
+    SceneRequest *p = &main_scene_request;
     if (p->change == 0) {
         return 0;
     }
@@ -185,7 +185,7 @@ s32 mail_take_scene_change(void) {
     return 1;
 }
 
-void mail_wait(s32 mode, s32 stream, s32 visibility, s32 seconds) {
+void main_wait(s32 mode, s32 stream, s32 visibility, s32 seconds) {
     s32 buf[6];
     s32 frames;
     for (frames = seconds * 30; frames > 0;) {
@@ -213,18 +213,18 @@ void mail_wait(s32 mode, s32 stream, s32 visibility, s32 seconds) {
                 thing_update_all();
                 roadmap_draw_frame(3);
             } else {
-                do { mail_step_frame(mode, stream, visibility); } while (0);
+                do { main_step_frame(mode, stream, visibility); } while (0);
             }
     }
 }
 
-void mail_step_frame(u16 mode, s16 b, s16 c) {
+void main_step_frame(u16 mode, s16 b, s16 c) {
     GameVars *game = &action_vars;
     action_update();
     if (mode < 2) {
-        npc_update_all();
+        actor_update_all();
         door_update_all();
-        mod_npcrec_update_all();
+        npc_rec_update_all();
     } else if (mode == 2) {
         vehicle_update();
     }
@@ -245,8 +245,8 @@ void mail_step_frame(u16 mode, s16 b, s16 c) {
     roadmap_draw_frame(mode);
 }
 
-void mail_goto_ofc(s16 a, s16 yaw, s16 c, s16 d) {
-    SceneRequest *request = &scene_request;
+void main_goto_ofc(s16 a, s16 yaw, s16 c, s16 d) {
+    SceneRequest *request = &main_scene_request;
     PlayerStatus *status = &player_status;
     GameVars *game = &action_vars;
     request->yaw = yaw;
@@ -283,8 +283,8 @@ void mail_goto_ofc(s16 a, s16 yaw, s16 c, s16 d) {
     }
 }
 
-void mail_goto_twn(s32 x, s32 y, s32 z, s16 yaw, s16 e) {
-    SceneRequest *request = &scene_request;
+void main_goto_twn(s32 x, s32 y, s32 z, s16 yaw, s16 e) {
+    SceneRequest *request = &main_scene_request;
     request->change = 1;
     request->next_loop = 2;
     request->variant = 0;
@@ -297,8 +297,8 @@ void mail_goto_twn(s32 x, s32 y, s32 z, s16 yaw, s16 e) {
     request->loop_param = e;
 }
 
-void mail_goto_building(u16 form, char *name, s16 var, s16 map_letter, u16 map_entry, u16 yaw, u16 scene_index, u32 trigger, u16 script_entry) {
-    BuildingRequest *request = (BuildingRequest *)&scene_request;
+void main_goto_building(u16 form, char *name, s16 var, s16 map_letter, u16 map_entry, u16 yaw, u16 scene_index, u32 trigger, u16 script_entry) {
+    BuildingRequest *request = (BuildingRequest *)&main_scene_request;
     GameVars *game = &action_vars;
 
     request->change = 1;
@@ -353,7 +353,7 @@ void mail_goto_building(u16 form, char *name, s16 var, s16 map_letter, u16 map_e
     }
 }
 
-s16 mail_wrap_angle(s16 angle) {
+s16 main_wrap_angle(s16 angle) {
     do {
         if (angle < 0) angle += 360;
         if (angle >= 360) angle -= 360;
@@ -361,7 +361,7 @@ s16 mail_wrap_angle(s16 angle) {
     return angle;
 }
 
-s32 mail_angle_to_dir4(s16 angle) {
+s32 main_angle_to_dir4(s16 angle) {
     s32 b;
 
 loop:
@@ -375,7 +375,7 @@ loop:
     return 2;
 }
 
-s32 mail_exp_for_level(s32 level) {
+s32 main_exp_for_level(s32 level) {
     s32 i;
     s32 exp;
     if (level == 1) return 0;

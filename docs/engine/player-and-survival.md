@@ -21,7 +21,7 @@ empty item slots and one empty weapon slot.
 
 ## Moving on foot
 
-`player_update` (0x801979B4) runs from `mail_step_frame` (0x8018C2FC) each frame. It starts a death when energy is
+`player_update` (0x801979B4) runs from `main_step_frame` (0x8018C2FC) each frame. It starts a death when energy is
 0, clamps the pitch and wraps the yaw, then calls the mover for `vehicle_mode`. The pad is read before, by
 `player_handle_pad` (0x80199548), from the scene loops' input functions:
 
@@ -38,8 +38,8 @@ town it stays as it is. Player flag 0x100 (opcode 8 sub 3 of a script) stops the
 
 `player_move_on_foot` (0x80196AE0) turns the step into x and z with `rsin` and `rcos` of the yaw, moves the body,
 then looks for what it meets. Only the first two tests probe 600 units ahead of the moved position (behind when
-backing up): a scripted figure (code 0xF7, `mod_npcrec_find_at_point`, 0x8018F7D0) and a person (0xFC,
-`npc_find_at_point`, 0x80176464). The others use the moved position itself: a scene object (0xFD, `thing_hit_test`,
+backing up): a scripted figure (code 0xF7, `npc_rec_find_at_point`, 0x8018F7D0) and a person (0xFC,
+`actor_find_at_point`, 0x80176464). The others use the moved position itself: a scene object (0xFD, `thing_hit_test`,
 0x801A7CF0), or else the floor (`block_find_surface`, 0x8017BD24, or `block_find_surface_nearest` in mode 1).
 `player_check_ground` (0x80195098) takes the code: it refuses the move on a trigger whose walk flag is 0 and sends
 trigger events when the code changes ([area triggers](scenes-and-scripts.md#area-triggers)); when it accepts,
@@ -125,7 +125,7 @@ chiropractor](../discoveries.md#-the-chiropractor-sells-time-1-3-or-6-hours-that
 `player_add_exp` (0x80197D64) adds experience and, while it reaches `next_exp`, raises the level, adds 0 to 2 to
 each of the four stats (each capped at 100) and recomputes the weapon rates. The level has no cap inside the loop:
 only the entry returns at level 100, and a step that reaches 100 leaves `next_exp` unchanged, so the final test can
-run the loop again. The next threshold is `mail_exp_for_level(level)` (0x8018C810): 0 for level 1, 324 for 2, then
+run the loop again. The next threshold is `main_exp_for_level(level)` (0x8018C810): 0 for level 1, 324 for 2, then
 steps of 405, 567, 729 and on, each 162 more than the last. It is called with the new level, so the threshold just
 reached is stored again and the loop runs once more: in the matching C, the first 324 points give level 3 at once.
 Class experience goes through `player_add_skill_exp` (0x80197BB0).

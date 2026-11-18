@@ -35,7 +35,7 @@ Both then put the two environments, count the frame and draw the table from its 
 ## The town renderer
 
 src/game/roadmap.c holds roadmap.c. `roadmap_draw_frame(mode)` (0x801A0418) copies the light
-levels of `screen_light` (0x801E1040) into `roadmap_brightness` and `roadmap_daylight_level`,
+levels of `roadmap_screen_light` (0x801E1040) into `roadmap_brightness` and `roadmap_daylight_level`,
 computes the textured colour (0x60 grey, or a tint from the daylight step when the light switch
 and the dark flag are on) and the flag word that tells the handlers what to apply (dusk 1, depth cue 2, fade
 4). Then it draws in this order:
@@ -44,9 +44,9 @@ and the dark flag are on) and the flag word that tells the handlers what to appl
 | --- | --- | --- |
 | 1 | `kaj_view_begin_frame` | the next buffer |
 | 2 | `sprite_draw_all` (0x801A4554) | every visible sprite of `sprite_list` |
-| 3 | `mod_npcrec_draw_all` (0x8018F6E8), `npc_draw_all` (0x80176370) | person models |
+| 3 | `npc_rec_draw_all` (0x8018F6E8), `actor_draw_all` (0x80176370) | person models |
 | 4 | `roadmap_draw_flash` (0x801A00EC) | a full-screen flash tile while one runs |
-| 5 | `sprite_thing_draw_all` (0x801A7084), `door_draw_all` (0x80185664) | things and doors |
+| 5 | `thing_draw_all` (0x801A7084), `door_draw_all` (0x80185664) | things and doors |
 | 6 | `mod_draw_player` (0x8018DBA4) | the player model and, when drawn, the weapon |
 | 7 | `vehicle_draw` (0x801AC30C) | the car or the train |
 | 8 | `block_draw_all` (0x80179C50) | the town or building blocks |
@@ -65,7 +65,7 @@ word.
 colour index and scaled by the brightness, and reloads the palette first when it is marked dirty.
 `roadmap_draw_sprite_frame` (0x801A05EC) draws one sprite alone in a full frame; the loader uses it
 for its loading sprites ([the chunk walk](files-and-cd.md#the-chunk-walk)). `roadmap_start_flash`
-(0x801A0690) starts a coloured flash, red when the player is hit; `roadmap_fade_screen_music`
+(0x801A0690) starts a coloured flash, red when the player is hit; `shop_fade_screen_music`
 (0x801A0D58) fades the screen and the music volume together frame by frame.
 
 ## Models and animation
@@ -79,7 +79,7 @@ loop flag and a speed of 1 to 3 frames per draw by `vsync_delta`. Each frame `mo
 moves every playing model on with `kaj_tod_set_frame` ([TOD](files-and-cd.md#tim-tmd-and-tod)) and
 delivers user event 0xF3000002 when one ends, which becomes event 0x200. `mod_find` (0x8018E56C)
 finds a model by id; weapon models carry the weapon id plus 0x400. The "NPC " records of a scene
-are models too (`mod_npcrec_` functions; see [people and combat](people-and-combat.md)).
+are models too (`npc_rec_` functions in npc.c; see [people and combat](people-and-combat.md)).
 
 ## Sprites and colour tables
 
@@ -116,7 +116,7 @@ src/game/effect.c holds effect.c. Its timed effects are kaj tasks
 | large flame | `effect_flame_large_update` (0x80186010) | the same on two 0x400-byte images, weights 1, 2, 3, 2 |
 | colour cycle | `effect_clut_cycle_update` (0x801865C0) | turns entries 1 to 14 of the palette at (0x60, 0x1E6) |
 
-The flame and colour cycle updates run from `mail_step_frame` while game variables at
+The flame and colour cycle updates run from `main_step_frame` while game variables at
 `action_vars` +0x250, +0x252 and +0x254 are set. `effect_clut_rotate` (0x8018677C) turns a
 16-colour palette for the loading sprite. effect.c also holds the elevator, weapon and item
 screens ([player and survival](player-and-survival.md)).
@@ -124,7 +124,7 @@ screens ([player and survival](player-and-survival.md)).
 ## Fog and the time of day
 
 `event_update_daylight` (0x8018A3F8, event.c) sets the far colour from the hour in
-`action_vars.vars[0x3E]` when the light switch `screen_light.daylight_on` is on:
+`action_vars.vars[0x3E]` when the light switch `roadmap_screen_light.daylight_on` is on:
 
 | Hour | Far colour | Dark flag |
 | --- | --- | --- |
@@ -147,7 +147,7 @@ No function is left in assembly. Nineteen were set aside at first because they m
 the scratchpad or drive the GTE: `roadmap_draw_f3`, `roadmap_draw_g3`, `roadmap_draw_ft3`,
 `roadmap_draw_gt3`, `roadmap_draw_f4`, `roadmap_draw_g4`, `roadmap_draw_ft4`, `roadmap_draw_gt4`,
 `roadmap_add_clipped_f3`, `roadmap_add_clipped_g3`, `roadmap_draw_flash`,
-`roadmap_draw_sprite_frame`, `sprite_draw_all`, `sprite_thing_draw_all`, `door_draw_all`,
+`roadmap_draw_sprite_frame`, `sprite_draw_all`, `thing_draw_all`, `door_draw_all`,
 `mod_draw`, `mod_draw_player`, `vehicle_draw` and `block_draw_all`. They are C now, with the GTE
 and scratchpad code in the PSY-Q style macros of `include/gte.h`. The twentieth, `player_set_view`
 (0x8019555C), rebuilds the view matrix and is C too.
