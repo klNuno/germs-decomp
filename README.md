@@ -34,8 +34,8 @@ never shows.
   build with 0x100 extra bytes before `main` played the same opening as the retail one in an emulator: the
   62 screenshots sampled from the logos to the office computer are identical, the program counter 0x100 higher
   at every sample.
-- **32 findings** in [docs/discoveries.md](docs/discoveries.md), 16 of them checked in an emulator and 11 in
-  part; 27 of the 36 questions of [docs/mysteries.md](docs/mysteries.md) answered.
+- **37 findings** in [docs/discoveries.md](docs/discoveries.md), 22 of them checked in an emulator and 11 in
+  part; 34 of the 36 questions of [docs/mysteries.md](docs/mysteries.md) answered, the last two in part.
 
 ## Progress
 
@@ -51,7 +51,7 @@ them: they are not part of Germs.
 - [The game has an ending](docs/discoveries.md#-the-game-has-an-ending-a-narration-in-the-office-then-a-town-at-peace), against the "no ending" some players report: a narration in the office, then every building set to "at peace" and free play.
 - [Time alone never spreads the invasion](docs/discoveries.md#-time-alone-never-spreads-the-invasion-buildings-fall-on-a-schedule-when-you-pass-a-door): five buildings fall on a set day and hour, but only when you walk through a door; the rest fall as a chain.
 - [Energy at 0 is death, and only a hit to the head makes you wake up changed](docs/discoveries.md#-energy-at-0-is-death-and-only-a-hit-to-the-head-makes-you-wake-up-changed): starving is always game over, never the mine.
-- [The blue wheel is the weapon's hit rate](docs/discoveries.md#-the-blue-wheel-is-the-weapons-hit-rate-and-the-five-classes-are-levels-up-to-100), not weapon experience, and the cheat value "one point below the maximum" is level 93 of 100.
+- [Seventeen buildings have a door spot on the street and nothing behind it](docs/discoveries.md#-seventeen-buildings-have-a-door-spot-on-the-street-and-nothing-behind-it): nothing on the disc lies behind them, City Hall and the Yamasaki mansion are candidates, and the "blue door" is the town's common blue panel.
 - [The burger shop secretly serves changed food](docs/discoveries.md#-the-burger-shop-secretly-serves-changed-food-and-even-days-swap-its-hours) under the same menu, at hours that swap on even days.
 
 ## Where to read

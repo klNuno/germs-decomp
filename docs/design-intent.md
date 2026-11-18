@@ -59,7 +59,7 @@ Three claims on the atwiki page are said to come from the developers but give no
 
 ## What the clock is allowed to touch
 
-**The code says.** The clock writes the day, the hour, the minute and the parity, and nothing else of the story. On the hour it may send mail: twelve mails at eight fixed times, all on days 1 to 4, four of them under story conditions, and none after the ending ([the timed mails](discoveries.md#-the-timed-mails-are-written-in-the-code-for-days-1-to-4)). Three shops close at night (the burger shop 08:00 to 21:59, the Italian restaurant 11:00 to 21:59, a shop the code calls `MPS` 05:00 to 23:59); the chiropractor and the other big buildings never shut; the hospital has one door for humans that keeps 07:00 to 19:59 and one that does not, and its desk keeps the same hours ([opening hours](discoveries.md#-only-three-shops-close-at-night-the-opening-hours-sit-in-the-towns-door-scripts)). The five scheduled falls of the invasion also sit on days 1 to 4: the cathedral on day 1 at 17:00, Indenco on day 1 at 20:00, `STH` on day 2 at 12:00, Hotel Seasons on day 3 at 14:00 and the coal mine on day 4 at 12:00 ([the invasion schedule](discoveries.md#-time-alone-never-spreads-the-invasion-buildings-fall-on-a-schedule-when-you-pass-a-door)).
+**The code says.** The clock writes the day, the hour, the minute and the parity, and nothing else of the story. On the hour it may send mail: twelve mails at eight fixed times, all on days 1 to 4, four of them under story conditions, and none after the ending; the other mails come from story scenes, never from the clock ([the timed mails](discoveries.md#-the-timed-mails-are-written-in-the-code-for-days-1-to-4)). Three shops close at night (the burger shop 08:00 to 21:59, the Italian restaurant 11:00 to 21:59, a shop the code calls `MPS` 05:00 to 23:59); the chiropractor and the other big buildings never shut; the hospital has one door for humans that keeps 07:00 to 19:59 and one that does not, and its desk and one of its exam rooms keep the same hours ([opening hours](discoveries.md#-only-three-shops-close-at-night-the-opening-hours-sit-in-the-towns-door-scripts)). The five scheduled falls of the invasion also sit on days 1 to 4: the cathedral on day 1 at 17:00, Indenco on day 1 at 20:00, `STH` on day 2 at 12:00, Hotel Seasons on day 3 at 14:00 and the coal mine on day 4 at 12:00 ([the invasion schedule](discoveries.md#-time-alone-never-spreads-the-invasion-buildings-fall-on-a-schedule-when-you-pass-a-door)).
 
 **The creators said.** Nothing on the hours or the mails. The mail times players listed come from the fandom wiki, not from the developers.
 
@@ -89,11 +89,11 @@ Three claims on the atwiki page are said to come from the developers but give no
 
 ## Food and healing without money
 
-**The code says.** Each dish adds a fixed amount of energy, 5 to 80 points; eating on a full bar costs half the dish's value and puts its whole value on the torso; "changed" dishes with a negative value hurt a human and feed a changed player. The shop code reads no money ([food](discoveries.md#-food-adds-a-fixed-amount-of-energy-and-eating-on-a-full-bar-hurts-your-torso)). The chiropractor sells courses of 1, 3 or 6 hours that take 60, 180 or 360 points of damage off every part; the hours are the price ([the chiropractor](discoveries.md#-the-chiropractor-sells-time-1-3-or-6-hours-that-heal-as-much)). The hospital's injection heals every part at once, free and without losing time, but its doctor needs a story flag whose source we have not found ([the hospital](discoveries.md#-the-hospital-heals-every-wound-at-once-for-free-and-without-losing-time)). Neither refills the energy bar. The burger shop's menu never changes, yet at some hours it serves the changed version of what you order, and the hours swap on even days; only the staff's goodbye line hints at it ([the burger shop](discoveries.md#-the-burger-shop-secretly-serves-changed-food-and-even-days-swap-its-hours)).
+**The code says.** Each dish adds a fixed amount of energy, 5 to 80 points; eating on a full bar costs half the dish's value and puts its whole value on the torso; "changed" dishes with a negative value hurt a human and feed a changed player. The shop code reads no money ([food](discoveries.md#-food-adds-a-fixed-amount-of-energy-and-eating-on-a-full-bar-hurts-your-torso)). The chiropractor sells courses of 1, 3 or 6 hours that take 60, 180 or 360 points of damage off every part; the hours are the price ([the chiropractor](discoveries.md#-the-chiropractor-sells-time-1-3-or-6-hours-that-heal-as-much)). The hospital's injection heals every part at once, free and without losing time, but its doctor treats you only if you come in wounded ([the hospital](discoveries.md#-the-hospital-heals-every-wound-at-once-for-free-and-without-losing-time)). Neither refills the energy bar. The burger shop's menu never changes, yet at some hours it serves the changed version of what you order, and the hours swap on even days; only the staff's goodbye line hints at it ([the burger shop](discoveries.md#-the-burger-shop-secretly-serves-changed-food-and-even-days-swap-its-hours)).
 
 **The creators said.** Nothing on money or food. The manual is cited only for the chiropractor healing the body parts (manual).
 
-**Our reading.** With no money, the clock is the currency: sleep costs hours, the chiropractor sells hours, and the free hospital is guarded by its own hours and a flag. That is consistent with the clock being the pressure on the body. The burger shop is a planted horror detail: an ordinary menu in an invaded town that sometimes feeds you something else, with a snigger as the only clue. Since the shop's own code tests the hour of entry and the parity for this alone, someone wrote this joke on purpose.
+**Our reading.** With no money, the clock is the currency: sleep costs hours, the chiropractor sells hours, and the free hospital is guarded by its own hours and turns away the unhurt. That is consistent with the clock being the pressure on the body. The burger shop is a planted horror detail: an ordinary menu in an invaded town that sometimes feeds you something else, with a snigger as the only clue. Since the shop's own code tests the hour of entry and the parity for this alone, someone wrote this joke on purpose.
 
 **How sure.** High on time as the price, medium on the burger shop as a deliberate joke.
 
@@ -119,13 +119,13 @@ Three claims on the atwiki page are said to come from the developers but give no
 
 ## The police and civilian kills
 
-**The code says.** The game counts civilians you kill, and only them: mutants never count. With 3 kills you are arrested the next time the office loads; 5 more give the second arrest, which also sets a story flag players tie to the police station. Nobody arrests a changed player or after the ending. The office computer shows your total as red figures, and after an arrest leaving the office refills your energy ([arrests](discoveries.md#-three-civilian-kills-get-you-arrested-and-five-more-the-second-time)).
+**The code says.** The game counts civilians you kill, and only them: mutants never count. With 3 kills you are arrested the next time the office loads; 5 more give the second arrest, which turns the police station into its invaded version and puts you in its cell. Nobody arrests a changed player or after the ending. The office computer shows your total as red figures, and after an arrest leaving the office refills your energy ([arrests](discoveries.md#-three-civilian-kills-get-you-arrested-and-five-more-the-second-time)).
 
 **The creators said.** The manual (p.2, with GameFAQs and jawiki) says anyone can be killed, shop staff included, that important people come back, and that too many kills lead to arrest.
 
 **Our reading.** Killing is allowed and counted rather than forbidden, and the count sits in plain view on the computer. The arrest does not happen in the street, which has no police and no passers-by; it waits for the office, the one place the story keeps returning to. The first arrest costs little (it even refills your energy), so it works as a warning; the second has a story consequence. The line the game draws is between humans and the changed, the same line the manual's yellow text draws.
 
-**How sure.** High on the rules (they match the manual), medium on the arrest as a warning; that the second arrest's flag is the police station's state is not checked.
+**How sure.** High on the rules (they match the manual), medium on the arrest as a warning.
 
 ## The dead and their lingering thoughts
 
@@ -149,7 +149,7 @@ Three claims on the atwiki page are said to come from the developers but give no
 
 ## The town's size and what can be entered
 
-**The code says.** The town is a grid of 50 m blocks that stream around you. It spans about 4.75 by 4.9 km, with about 6 km² in use, the area of a 2.5 km square; a separate strip of 316 blocks lies 500 m beyond its edge. One unit of the world is one centimetre: your eyes are 1.70 m above the street and you walk at 2.4 m a second ([the town's size](discoveries.md#-the-town-is-a-grid-of-50-m-blocks-about-48-km-across)). The disc holds 24 scenes, the office, the town, the waterway, mine level 2 and the 20 places the town's doors lead to; none is left over for City Hall or the Yamasaki mansion ([open question 23](mysteries.md#hidden-and-cut-content)).
+**The code says.** The town is a grid of 50 m blocks that stream around you. It spans about 4.75 by 4.9 km, with about 6 km² in use, the area of a 2.5 km square; a separate strip of 316 blocks lies 500 m beyond its edge. One unit of the world is one centimetre: your eyes are 1.70 m above the street and you walk at 2.4 m a second ([the town's size](discoveries.md#-the-town-is-a-grid-of-50-m-blocks-about-48-km-across)). The disc holds 24 scenes, the office, the town, the waterway, mine level 2 and the 20 places the town's doors lead to; none is left over for City Hall or the Yamasaki mansion. The street has door spots for 17 buildings that have nothing else behind them ([dead door spots](discoveries.md#-seventeen-buildings-have-a-door-spot-on-the-street-and-nothing-behind-it)).
 
 **The creators said.** The back insert and the KAJ brochure give 2.5 km square; the manual gives 3 km square (back insert, KAJ brochure, manual). The block streaming is said to have led to KAJ's later product splume (splume history, with jawiki).
 
@@ -163,7 +163,7 @@ Three claims on the atwiki page are said to come from the developers but give no
 
 **The creators said.** The manual lists "the whole city at peace" among the states of each building (manual p.2), so the end state is in the manual. Nothing else: the claim that the developers called the ending missing on purpose has no source (atwiki).
 
-**Our reading.** The ending is a state of the town more than a scene: one value written into every building. After it arrests stop, the burger shop serves normal food and no mail comes by time, while the clock, hunger and fatigue go on and death becomes final; what the open buildings hold then was not explored. The places that stay shut are the places of the conspiracy (Indenco, the mine, the waterway); either the story is meant to be over there, or no one built a peaceful version, and the code cannot tell which. A narration without music followed by ordinary play is easy to miss as an ending, which may be why several players reported none. A tally that tests only the sum, with one agent left unguarded, reads as a slip, not a puzzle, since the other two agents guard their count.
+**Our reading.** The ending is a state of the town more than a scene: one value written into every building. After it arrests stop, the burger shop serves normal food and no mail comes by time, while the clock, hunger and fatigue go on and death becomes final; the open buildings hold 37 calm people, and only one infected hotel guest, who only talks. The places that stay shut are the places of the conspiracy (Indenco, the mine, the waterway); either the story is meant to be over there, or no one built a peaceful version, and the code cannot tell which. A narration without music followed by ordinary play is easy to miss as an ending, which may be why several players reported none. A tally that tests only the sum, with one agent left unguarded, reads as a slip, not a puzzle, since the other two agents guard their count.
 
 **How sure.** High that the ending exists and what it resets, medium on the slip, low on why the shut places have no peaceful version.
 
@@ -191,11 +191,11 @@ Three claims on the atwiki page are said to come from the developers but give no
 | The town is 2.5 km square | Back insert, KAJ brochure | Right for the area; the town is not a square |
 | There is no ending | atwiki, HG101, a niconico uploader | A narration in the office, then free play in a town at peace |
 | The developers left out the ending on purpose | atwiki, no source | There is an ending |
-| HP, fatigue and stamina are three values | jawiki, GameFAQs | One energy value; fatigue is the hours awake that multiply its drain |
+| HP, fatigue and stamina are three values | jawiki, GameFAQs | Three things, but not three bars: stamina is the energy, fatigue the hours awake that multiply its drain, HP the five body parts; the status page never shows the energy |
 | Being hit lowers stamina | jawiki | Only a hit to the head takes energy |
 | The blue wheel shows weapon experience | fandom Weapons | It shows the hit rate; experience is a class level |
 | The cheat value is one point below the maximum | DuckStation cheat file | Level 93 of 100 |
-| The way to mine level 2 is one way | niconico player | Its door back is in the data |
+| The way to mine level 2 is one way | niconico player | Its door back to level 1 works |
 | The hospital keeps short hours | GameFAQs | In part: one of its two town doors and its desk keep 07:00 to 19:59, the other door opens at any hour |
 | A changed player gets a better gun shop | niconico player | No second list; a level of 100 picks the top list |
 
@@ -204,15 +204,11 @@ Where the code agrees with the creators, it agrees well: the five states of each
 ## What we still do not understand
 
 - **Day 99.** Why the calendar stops there, when nothing reads that day.
-- **The mails and the falls.** Whether the three mails that share an hour with a scheduled fall announce it; the mails are pictures and were not compared. The story-driven mails are still open ([open question 2](mysteries.md#time-and-days)).
-- **The hospital's doctor.** For a human, the doctor and the bed need a story flag that no script we read sets.
-- **The status screen.** Whether it shows HP as a value of its own besides energy ([open question 6](mysteries.md#survival)).
-- **The second arrest.** That its flag is the police station's state comes from players, not from a check.
+- **The mails and the falls.** Whether the three mails that share an hour with a scheduled fall announce it; the mails are pictures and were not compared.
 - **The strip beyond the town.** 316 blocks 500 m past the edge, not visited.
-- **The shut buildings.** City Hall, the Yamasaki mansion and two South End buildings, and whether they were ever meant to open ([open question 23](mysteries.md#hidden-and-cut-content)).
-- **Faces and colour.** Whether every face was planned, and whether the town was once in colour; both rest on rumours the code has not answered yet ([open questions 25 and 26](mysteries.md#hidden-and-cut-content)).
+- **The shut buildings.** Whether City Hall and the Yamasaki mansion are among the 17 door spots with nothing behind them, and which; no data names them ([dead door spots](discoveries.md#-seventeen-buildings-have-a-door-spot-on-the-street-and-nothing-behind-it)).
+- **Colour.** Whether an earlier build of the town was in colour; the disc has no trace of one ([the town's colour](discoveries.md#-no-colour-version-of-the-town-is-left-on-the-disc)).
 - **The movie.** What it was made for.
 - **The weapon field from 3 to 60.** What it was for, if it was ever read.
-- **After the ending.** What the open buildings hold; they were not walked.
 
 Open questions on the code side are tracked in [the mysteries page](mysteries.md).
