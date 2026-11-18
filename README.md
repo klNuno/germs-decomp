@@ -6,10 +6,8 @@ The goal is C that rebuilds the retail executable byte for byte, and through it 
 game works: the city, the scenes, the weapons, the per-limb damage and what the disc holds that the game
 never shows.
 
-<img src="docs/img/game/clock-day99.png" width="24%" alt="The HUD clock stuck on day 99 after two midnights">
-<img src="docs/img/game/mutant-wakes-in-mine.png" width="24%" alt="Awake in the coal mine among mutants, the body figure pink">
-<img src="docs/img/game/profile-panel.png" width="24%" alt="The lingering-thoughts card of a dead mutant: name, job, age, height, blood type">
-<img src="docs/img/game/energy0-game-over.png" width="24%" alt="The GAME OVER screen after energy reached 0">
+<p><img src="docs/img/game/movie-canyon.png" width="24%" alt="A frame of the unused movie on the disc: a silver craft flying low into a canyon under a blue sky"> <img src="docs/img/game/cast-card-naomi-male.png" width="24%" alt="A lingering-thoughts card no person opens: Naomi's profile, with the sex given as male"> <img src="docs/img/game/hit-roll-hit.png" width="24%" alt="Mine level 1 with the MP5K: the word HIT beside the target mark as a mutant is thrown back"> <img src="docs/img/game/fujita-gift-pistol.png" width="24%" alt="Fujita at his table handing over the free self-defence pistol, the gift line at the bottom of the screen"></p>
+<p><img src="docs/img/game/burger-shop-changed-food.png" width="24%" alt="The burger shop under its usual menu, serving a changed burger that hurts the player"> <img src="docs/img/game/clock-day99.png" width="24%" alt="The HUD clock stuck on day 99 after two midnights"> <img src="docs/img/game/town-night-windows.png" width="24%" alt="A grey town street at 19:01 with warm yellow light in the windows"> <img src="docs/img/game/energy0-game-over.png" width="24%" alt="The GAME OVER screen after energy reached 0"></p>
 
 ## At a glance
 
@@ -34,8 +32,9 @@ never shows.
   build with 0x100 extra bytes before `main` played the same opening as the retail one in an emulator: the
   62 screenshots sampled from the logos to the office computer are identical, the program counter 0x100 higher
   at every sample.
-- **37 findings** in [docs/discoveries.md](docs/discoveries.md), 22 of them checked in an emulator and 11 in
-  part; 34 of the 36 questions of [docs/mysteries.md](docs/mysteries.md) answered, the last two in part.
+- **47 findings** in [docs/discoveries.md](docs/discoveries.md), 27 of them checked in an emulator and 13 in
+  part, five of them also heard from the emulator's sound, 39 shown in pictures; all 36 questions of
+  [docs/mysteries.md](docs/mysteries.md) answered within the scope each answer states.
 
 ## Progress
 
@@ -50,9 +49,9 @@ them: they are not part of Germs.
 
 - [The game has an ending](docs/discoveries.md#-the-game-has-an-ending-a-narration-in-the-office-then-a-town-at-peace), against the "no ending" some players report: a narration in the office, then every building set to "at peace" and free play.
 - [Time alone never spreads the invasion](docs/discoveries.md#-time-alone-never-spreads-the-invasion-buildings-fall-on-a-schedule-when-you-pass-a-door): five buildings fall on a set day and hour, but only when you walk through a door; the rest fall as a chain.
-- [Energy at 0 is death, and only a hit to the head makes you wake up changed](docs/discoveries.md#-energy-at-0-is-death-and-only-a-hit-to-the-head-makes-you-wake-up-changed): starving is always game over, never the mine.
-- [Seventeen buildings have a door spot on the street and nothing behind it](docs/discoveries.md#-seventeen-buildings-have-a-door-spot-on-the-street-and-nothing-behind-it): nothing on the disc lies behind them, City Hall and the Yamasaki mansion are candidates, and the "blue door" is the town's common blue panel.
-- [The burger shop secretly serves changed food](docs/discoveries.md#-the-burger-shop-secretly-serves-changed-food-and-even-days-swap-its-hours) under the same menu, at hours that swap on even days.
+- [The main characters all have lingering-thoughts cards that can never open](docs/discoveries.md#-the-main-characters-all-have-lingering-thoughts-cards-that-can-never-open): 29 cards with no person to open them, one of them making Naomi a man.
+- [The movie on the disc is a silent 82-second reel](docs/discoveries.md#-the-movie-on-the-disc-is-a-silent-82-second-reel-the-game-can-never-play) of flying craft, stored four times, with no shot of space and no code that could play it.
+- [The game times every frame](docs/discoveries.md#-the-game-times-every-frame-so-a-slow-machine-makes-it-choppy-not-slow), so a slow emulator makes it choppy: in DuckStation the coal mine runs at 20 frames a second and needs 140 % CPU for 30, and the 190 % players advise was the first setting tested where a library wait gave up, in the office.
 
 ## Where to read
 
@@ -86,14 +85,16 @@ make split && make check        # splits the executable, builds it from src/, co
 ## How it was made
 
 The C, the names, the docs and the emulator checks were written by AI agents, mostly Claude Opus 5.5 (some
-matching waves by Claude Fable 5.2), with reviews by GPT-6.1 Sol. A change was kept only when `make check`
+matching waves by Claude Fable 5.2), with reviews by GPT-6.1 and GPT-6.2 Sol. A change was kept only when `make check`
 still matched.
 
 ## Legal
 
-Fan project, not affiliated with KAJ or its successors. It ships no game asset: no executable, no disc
-data, no audio, no dump of the game's text or images, and you need your own copy of the game to build
-anything. The only game images are the small emulator screenshots that illustrate the findings. A takedown request from the rights holder will be honored.
+Fan project, not affiliated with KAJ or its successors. It ships no executable, no disc image or disc
+file, no audio and no dump of the game's text or images. The only game images it holds are illustrations:
+small emulator screenshots of the findings and three frames of the unused movie decoded from the disc. The
+spectrograms are pictures of sound recorded from the emulator, not game images. Building anything still needs
+your own original disc. A takedown request from the rights holder will be honored.
 
 ## Credits
 

@@ -4,7 +4,7 @@ All sound goes through Sony's LIBSND. The kaj library starts and stops it; the g
 keeps a stack of VAB banks, plays sound effects on eight voices of its own and plays one SEP of
 up to three sequences per scene as music. Banks and music arrive as chunks of the scene or
 resource files ([the chunk walk](files-and-cd.md#the-chunk-walk)). The game has no streamed audio
-and no movie player ([the movie](../discoveries.md#-the-movie-on-the-disc-can-never-play)).
+and no movie player ([the movie](../discoveries.md#-the-movie-on-the-disc-is-a-silent-82-second-reel-the-game-can-never-play)).
 
 ## Start-up
 
