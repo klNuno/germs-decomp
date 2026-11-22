@@ -1,15 +1,11 @@
 # Player and survival
 
-<sub>[germs-decomp](../../README.md) / [Engine](README.md) / Player and survival</sub>
-
 The player is one `Player` record (`player_character`, the body in the world) and one `PlayerStatus`
 (`player_status`, the numbers: energy, level, stats, hours awake). Most of the code that moves the body sits in one
 file without an assert, [player.c](../../src/game/player.c), whose functions carry a `player_` label; the clock, the
 gauges and the body parts are in event.c and the mails in mail.c. This page follows the body
 from the pad to the floor, then the survival rules. The findings about each rule are in
-[discoveries](../discoveries.md) and only linked here.
-
-**On this page:** [The records](#the-records) · [Moving on foot](#moving-on-foot) · [In the car and on the train](#in-the-car-and-on-the-train) · [The view](#the-view) · [Energy and hours awake](#energy-and-hours-awake) · [Body parts](#body-parts) · [Death and the changed state](#death-and-the-changed-state) · [Food and healing](#food-and-healing) · [Experience and levels](#experience-and-levels) · [The clock and the mails](#the-clock-and-the-mails)
+[the findings](../discoveries.md) and only linked here.
 
 ## The records
 
@@ -150,6 +146,3 @@ order taken from the counter (variable 95). `mail_receive` ignores a mail alread
 (0x8018ACAC) builds a mail from its `MAIL` chunk (up to four page sprites) and `mail_list_open` (0x8018B810) lists
 the received ones in order. The menus that show them are in [menus, text and save](menus-text-and-save.md).
 
----
-
-Previous: [People and combat](people-and-combat.md) · [Engine index](README.md)

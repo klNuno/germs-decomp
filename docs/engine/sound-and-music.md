@@ -1,14 +1,10 @@
 # Sound and music
 
-<sub>[germs-decomp](../../README.md) / [Engine](README.md) / Sound and music</sub>
-
 All sound goes through Sony's LIBSND. The kaj library starts and stops it; the game's sound.c
 keeps a stack of VAB banks, plays sound effects on eight voices of its own and plays one SEP of
 up to three sequences per scene as music. Banks and music arrive as chunks of the scene or
 resource files ([the chunk walk](files-and-cd.md#the-chunk-walk)). The game has no streamed audio
 and no movie player ([the movie](../discoveries.md#-the-movie-on-the-disc-is-a-silent-82-second-reel-the-game-can-never-play)).
-
-**On this page:** [Start-up](#start-up) · [Sound banks](#sound-banks) · [Sound effects](#sound-effects) · [Music](#music) · [Footsteps](#footsteps) · [LIBSND calls](#libsnd-calls)
 
 ## Start-up
 
@@ -124,6 +120,3 @@ Player movement is on [player and survival](player-and-survival.md).
 | `SsSepOpen`, `SsSepClose`, `SsSepPlay`, `SsSepStop` | `sound_bgm_open`, `sound_bgm_close`, `sound_bgm_play`, `sound_bgm_stop` (one each) |
 | `SsSepSetVol` | `sound_bgm_open`, `sound_bgm_stop`, `sound_bgm_fade_step`, `door_fade_step`, `shop_fade_screen_music` |
 
----
-
-Previous: [Rendering](rendering.md) · Next: [Menus, text and the save](menus-text-and-save.md) · [Engine index](README.md)

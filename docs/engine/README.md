@@ -1,7 +1,5 @@
 # Engine docs
 
-<sub>[germs-decomp](../../README.md) / Engine</sub>
-
 How Germs: Nerawareta Machi works, for a programmer who opens the code for the first time. Each
 page explains one system from the code: the functions that run it, the data it reads, and the
 flow of a frame or an event, with links to the files and functions. For what a player sees,
@@ -13,22 +11,28 @@ follow the links to [the findings](../discoveries.md); for the names, see
 
 Machinery:
 
-| Page | What it covers |
-| --- | --- |
-| [Boot and the main loop](boot-and-loop.md) | `main`, the kaj start-up, the event queue, the vertical blank timer and alarms, tasks, one frame of the game and the scene request |
-| [Files and the CD](files-and-cd.md) | SCE.S and RES.R with their offset tables, the chunk walk and its loaders, the CD manager and its pools, town cells and streamed places, TIM, TMD and TOD |
-| [Rendering](rendering.md) | The two buffers and the flip, ordering tables, the primitive handlers, models and animation, sprites and palettes, effects, fog by the hour, the functions once kept in assembly |
-| [Sound and music](sound-and-music.md) | VAB banks and their stream, sound effects on eight voices, one SEP of music per scene, footsteps, and every LIBSND call |
-| [Menus, text and the save](menus-text-and-save.md) | The office menu and its status page, Kanji ROM text, narration and profiles, the memory card screen, the save, the pad |
+- [Boot and the main loop](boot-and-loop.md): `main`, the kaj start-up, the event queue, the
+  vertical blank timer and alarms, tasks, one frame of the game and the scene request.
+- [Files and the CD](files-and-cd.md): SCE.S and RES.R with their offset tables, the chunk walk and
+  its loaders, the CD manager and its pools, town cells and streamed places, TIM, TMD and TOD.
+- [Rendering](rendering.md): the two buffers and the flip, ordering tables, the primitive handlers,
+  models and animation, sprites and palettes, effects, fog by the hour, the functions once kept in
+  assembly.
+- [Sound and music](sound-and-music.md): VAB banks and their stream, sound effects on eight voices,
+  one SEP of music per scene, footsteps, and every LIBSND call.
+- [Menus, text and the save](menus-text-and-save.md): the office menu and its status page, Kanji ROM
+  text, narration and profiles, the memory card screen, the save, the pad.
 
 The game:
 
-| Page | What it covers |
-| --- | --- |
-| [Scenes and scripts](scenes-and-scripts.md) | A scene from request to running, action sets and the action queue, things with scripts, area triggers, doors and the game variables |
-| [Town and vehicles](town-and-vehicles.md) | Town blocks, streaming and collision, buildings, the car, the train, the car navigation and the shops |
-| [People and combat](people-and-combat.md) | People and enemies, their records, movement and attacks, the hit roll, weapons, damage, death and arrests |
-| [Player and survival](player-and-survival.md) | The player on foot and in vehicles, energy, hours awake, body parts, the changed state, food and healing, the clock and the mails |
+- [Scenes and scripts](scenes-and-scripts.md): a scene from request to running, action sets and the
+  action queue, things with scripts, area triggers, doors and the game variables.
+- [Town and vehicles](town-and-vehicles.md): town blocks, streaming and collision, buildings, the
+  car, the train, the car navigation and the shops.
+- [People and combat](people-and-combat.md): people and enemies, their records, movement and
+  attacks, the hit roll, weapons, damage, death and arrests.
+- [Player and survival](player-and-survival.md): the player on foot and in vehicles, energy, hours
+  awake, body parts, the changed state, food and healing, the clock and the mails.
 
 ## Where to start reading the code
 

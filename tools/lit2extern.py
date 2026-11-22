@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Licence: MIT for the code written for this project only; game-derived data and Sony names in it are excluded (LICENSING.md).
 """Replace the string literals of a candidate file with the D_ symbols that hold them.
 
   tools/lit2extern.py FUNC FILE.c

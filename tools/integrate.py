@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Licence: MIT for the code written for this project only; game-derived data and Sony names in it are excluded (LICENSING.md).
 """Move a matched function from a scratch C file into its unit in src/, then prove the whole build.
 
   tools/integrate.py FUNC FILE.c [--no-check]

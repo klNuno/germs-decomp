@@ -1,15 +1,11 @@
 # Menus, text and the save
 
-<sub>[germs-decomp](../../README.md) / [Engine](README.md) / Menus, text and the save</sub>
-
 Two files with no assert hold this part: src/game/card.c, the memory card screen, and
 src/game/dialog.c, the menu opened in the office and the text window that draws Shift-JIS strings
 with the BIOS Kanji ROM; door.c follows them. This page covers the menus and the status page, text
 drawing, narration and profiles, the memory card screen and the save, and the pad. Each menu is
 a modal loop over `kaj_event_get` like the scene loops ([one frame](boot-and-loop.md#one-frame-of-the-game))
 and draws only sprites ([sprites](rendering.md#sprites-and-colour-tables)).
-
-**On this page:** [The office menu](#the-office-menu) · [Text drawing with the Kanji ROM](#text-drawing-with-the-kanji-rom) · [Narration and profiles](#narration-and-profiles) · [The memory card](#the-memory-card) · [The pad](#the-pad)
 
 ## The office menu
 
@@ -125,6 +121,3 @@ On foot, `player_handle_pad` (0x80199548) turns the bits into motion: pitch, yaw
 in the car and the train), forward and back with a run ramp, and side steps slowed by a hurt leg
 ([hurt legs](../discoveries.md#-hurt-legs-slow-you-down-and-one-hurt-arm-spoils-your-aim)).
 
----
-
-Previous: [Sound and music](sound-and-music.md) · Next: [Scenes and scripts](scenes-and-scripts.md) · [Engine index](README.md)

@@ -1,3 +1,4 @@
+# Licence: MIT for the code written for this project only; game-derived data and Sony names in it are excluded (LICENSING.md).
 """Citations of old address units that tools/split_units.py cite cannot settle from the line alone:
 (path, old unit, words of the line) -> the file (dir/name) or files (a tuple) that hold what the line
 cites. For the split of commit 4efff08 (paths and names are those of that commit). Prose that named

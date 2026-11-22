@@ -1,7 +1,5 @@
 # disks
 
-<sub>[germs-decomp](../README.md) / disks</sub>
-
 Put your own dump of the game disc here. Git ignores everything in this folder except this file.
 
 Expected names:

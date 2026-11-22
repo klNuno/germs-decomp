@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Licence: MIT for the code written for this project only; game-derived data and Sony names in it are excluded (LICENSING.md).
 """Find PSY-Q library OBJs linked into the game executable.
 
 Scans extract/SLPS_021.07 for every OBJ signature of every SDK version in

@@ -1,14 +1,10 @@
 # People and combat
 
-<sub>[germs-decomp](../../README.md) / [Engine](README.md) / People and combat</sub>
-
 The people of a scene (passers-by, shop staff, the infected) are `Npc` records loaded from the scene file. Two files
 move them: [actor.c](../../src/game/actor.c) holds the table, the animation, the script commands and the damage, and
 [ai.c](../../src/game/ai.c) holds the AI: line of sight, target choice, walking and firing. Neither file has an
 assert string, so both names are ours ([layout](../layout.md)). This page also follows a shot from the player to a person and back,
 down to death and arrest. The scripts that drive people are in [scenes and scripts](scenes-and-scripts.md).
-
-**On this page:** [Records from the scene](#records-from-the-scene) · [The person table](#the-person-table) · [Animation and the frame](#animation-and-the-frame) · [Commands from scripts](#commands-from-scripts) · [Targets and line of sight](#targets-and-line-of-sight) · [Movement and attack decisions](#movement-and-attack-decisions) · [The enemy's hit roll](#the-enemys-hit-roll) · [The player's shot](#the-players-shot) · [Weapons and their records](#weapons-and-their-records) · [Damage and death](#damage-and-death) · [Arrests](#arrests)
 
 ## Records from the scene
 
@@ -157,6 +153,3 @@ loads the office's arrest variant and resets the counter, and there is no third
 ([arrests](../discoveries.md#-three-civilian-kills-get-you-arrested-and-five-more-the-second-time)). Game variable
 48 or the changed state (`mutant`) skips the check.
 
----
-
-Previous: [Town and vehicles](town-and-vehicles.md) · Next: [Player and survival](player-and-survival.md) · [Engine index](README.md)

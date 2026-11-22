@@ -1,12 +1,8 @@
 # What the community already knows
 
-<sub>[germs-decomp](../README.md) / Community knowledge</sub>
-
 What players, wikis and earlier projects knew about Germs: Nerawareta Machi (SLPS-02107, KAJ, 1999-07-22) when this project started, gathered on 2026-11-16. "Code" means read in the game's code or data by an earlier project; "observed" means seen by players; "rumour" means said without evidence anyone can check. Nothing here is trusted until this project's own code reading confirms it; where the code already answers, the row says "Our check" and links to [discoveries.md](discoveries.md). Open questions are in [mysteries.md](mysteries.md).
 
 Source keys used in the tables (full URLs in [Sources](#sources)): **fandom** (the Germs fandom wiki, page named after it), **jawiki** (Japanese Wikipedia), **atwiki** (Game Catalog @Wiki), **HG101** (Hardcore Gaming 101), **GameFAQs** (the FAQ by whowasphone404, v2 of 2025-01-07), **hiddenblur** (the Germs-english translation project's docs), **pastebin** (DuckStation cheat file linked from Romhack Plaza), **nico** (niconico video descriptions, by video id), **manual** (as transcribed on the fandom Manual page).
-
-**On this page:** [Game rules](#game-rules) · [World and places](#world-and-places) · [Bugs and oddities](#bugs-and-oddities) · [Hidden and cut content](#hidden-and-cut-content) · [Technical](#technical) · [Earlier projects](#earlier-projects) · [Staff and development](#staff-and-development) · [Where sources disagree](#where-sources-disagree) · [Sources](#sources)
 
 ## Game rules
 

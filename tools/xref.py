@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Licence: MIT for the code written for this project only; game-derived data and Sony names in it are excluded (LICENSING.md).
 """Cross-references of every symbol in asm/ (functions and data), the evidence base for naming.
 
   tools/xref.py NAME_OR_ADDR ...     card per symbol: unit, size, strings, callees, callers, data, users

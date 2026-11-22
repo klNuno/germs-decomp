@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Licence: MIT for the code written for this project only; game-derived data and Sony names in it are excluded (LICENSING.md).
 """Rename parameters and locals of one function, with evidence.
 
     tools/local_rename.py LOCALS.tsv [--dry-run]

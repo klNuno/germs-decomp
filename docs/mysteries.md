@@ -1,12 +1,8 @@
 # Open questions
 
-<sub>[germs-decomp](../README.md) / Mysteries</sub>
-
 What this project wants to learn about Germs: Nerawareta Machi from its code. Each question says why it is still open and where in the code the answer should be. A question is ticked when the code answers it within the scope the answer states, with a link to the entry in [discoveries.md](discoveries.md) that cites the functions and addresses; what stays outside that scope is written after "Cannot be settled". What players and earlier projects already know: [community-knowledge.md](community-knowledge.md).
 
 36 questions, all answered within their stated scope. Where a part cannot be settled from this disc or in an emulator, the question says so.
-
-**On this page:** [Time and days](#time-and-days) · [Survival](#survival) · [Combat](#combat) · [People, police and mutation](#people-police-and-mutation) · [The ending](#the-ending) · [Hidden and cut content](#hidden-and-cut-content) · [Bugs](#bugs) · [Data and formats](#data-and-formats)
 
 ## Time and days
 

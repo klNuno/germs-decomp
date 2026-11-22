@@ -1,3 +1,4 @@
+-- Licence: MIT for the code written for this project only; game-derived data and Sony names in it are excluded (LICENSING.md).
 -- Loaded first by tools/emu/run.sh. Counts vsyncs, prints registers, captures frames, quits.
 local function env(name, default) return tonumber(os.getenv(name) or "") or default end
 local function hex(v) return string.format("0x%08x", tonumber(v) % 4294967296) end

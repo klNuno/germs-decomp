@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Licence: MIT for the code written for this project only; game-derived data and Sony names in it are excluded (LICENSING.md).
 """Match one function in isolation, built exactly like the game (flags come from the Makefile).
 
   tools/fmatch.py diff FUNC FILE.c [--gcc 2.7.2-psx] [--aspsx 2.56] [--cflags "-G8"] [--maspsx "-G8"] [--all]

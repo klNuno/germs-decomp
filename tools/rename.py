@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Licence: MIT for the code written for this project only; game-derived data and Sony names in it are excluded (LICENSING.md).
 """Give symbols their names: config/symbol_addrs.txt plus every use in src/, include/ and work/.
 
   tools/rename.py NAMES_FILE [--dry-run] [--check]
