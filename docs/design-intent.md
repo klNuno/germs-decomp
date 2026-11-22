@@ -1,5 +1,7 @@
 # What the code tells us about what the creators meant
 
+<sub>[germs-decomp](../README.md) / Design intent</sub>
+
 This page reads the whole game as a design. It is written for a player, not a programmer. Every part keeps the code, the creators' words and our reading apart, and says how sure the reading is:
 
 - **The code says**: a fact read in the game's program, with a link to the finding that proves it.
@@ -8,6 +10,8 @@ This page reads the whole game as a design. It is written for a player, not a pr
 - **How sure**: how much weight the reading can bear.
 
 The proof of every code fact (function name, address, whether it was checked in the emulator) is in [the findings](discoveries.md) and in [the engine pages](engine/README.md). No interview with the developers is known, in Japanese or in English, so this page has far less of the creators' voice than a page like it could have for another game. Where the developers' material says nothing on a theme, the part says so instead of filling the gap. Nothing here is quoted: the developers' material is paraphrased as [community-knowledge.md](community-knowledge.md) reports it, with the same source keys.
+
+**On this page:** [Summary in ten lines](#summary-in-ten-lines) · [Who said what, and where](#who-said-what-and-where) · [The big picture](#the-big-picture) · [The clock and the calendar](#the-clock-and-the-calendar) · [What the clock is allowed to touch](#what-the-clock-is-allowed-to-touch) · [The invasion: a chain of doors and days](#the-invasion-a-chain-of-doors-and-days) · [Energy, sleep and the body](#energy-sleep-and-the-body) · [Food and healing without money](#food-and-healing-without-money) · [Combat: dice and levels](#combat-dice-and-levels) · [Death and being changed](#death-and-being-changed) · [The police and civilian kills](#the-police-and-civilian-kills) · [The dead and their lingering thoughts](#the-dead-and-their-lingering-thoughts) · [Naomi as scenery](#naomi-as-scenery) · [The town's size and what can be entered](#the-towns-size-and-what-can-be-entered) · [The ending and free play after it](#the-ending-and-free-play-after-it) · [Cut and unreachable content](#cut-and-unreachable-content) · [Where the code contradicts what people say](#where-the-code-contradicts-what-people-say) · [What we still do not understand](#what-we-still-do-not-understand)
 
 ## Summary in ten lines
 

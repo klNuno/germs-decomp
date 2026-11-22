@@ -1,6 +1,10 @@
 # Naming guide
 
+<sub>[germs-decomp](../README.md) / Naming guide</sub>
+
 How names are given in this project: the placeholder names a symbol keeps until it is understood, the form of our own names, the evidence a name needs, the tools that apply a name, and the glossary of the module words used in the code and the docs. A wrong name costs more than no name: a name goes in only with evidence, and the evidence is written next to it.
+
+**On this page:** [Placeholder names](#placeholder-names) · [Our names](#our-names) · [Evidence](#evidence) · [Tools](#tools) · [Glossary of modules](#glossary-of-modules)
 
 ## Placeholder names
 
@@ -44,7 +48,7 @@ Every function and global name sits in `config/symbol_addrs.txt` with its eviden
 Game code, in link order. The module word is the source file name: the one the asserts print, or ours for a file with no assert (in italics).
 
 | Module | Covers |
-|---|---|
+| --- | --- |
 | `action` | The action queue and the scene's action sets (`ASET` records): load, run, flush, test the inventory, change scene |
 | *`actor`* | People and enemies as records: animation, the commands scenes send them, damage, bodies, stats |
 | *`ai`* | Their behaviour: targets, line of sight, moves, aim and fire |

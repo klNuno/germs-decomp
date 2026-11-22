@@ -1,10 +1,14 @@
 # Boot and the main loop
 
+<sub>[germs-decomp](../../README.md) / [Engine](README.md) / Boot and the main loop</sub>
+
 When the console starts the game, `main` sets up the developer's own library (the kaj library),
 creates the lists every scene fills, then loops over three kinds of scene: a room, a building and
 the town. Each scene runs an event loop on one event queue, fed by a vertical blank timer, by tasks
 and by the game's user events. How a scene loads is on [scenes and scripts](scenes-and-scripts.md);
 the drawing of a frame is on [rendering](rendering.md).
+
+**On this page:** [From main to the scene loop](#from-main-to-the-scene-loop) · [The kaj start-up](#the-kaj-start-up) · [The event queue](#the-event-queue) · [The timer and alarms](#the-timer-and-alarms) · [Tasks](#tasks) · [One frame of the game](#one-frame-of-the-game) · [Changing place](#changing-place)
 
 ## From main to the scene loop
 
@@ -170,3 +174,7 @@ game variable (0, 10, 1000, 2000 give 0, 2, 3, 4, other values 1). Scripts call 
 `action_cmd_change_scene` (0x80173054). `main_take_scene_change` (0x8018C170) takes the `change`
 flag each frame and resets the pad; the loop fades out, the finished fade (a 0x100 event) ends
 the loop, and `main` reads the new requested loop.
+
+---
+
+Next: [Files and the CD](files-and-cd.md) · [Engine index](README.md)

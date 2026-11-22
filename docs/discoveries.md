@@ -1,5 +1,7 @@
 # Discoveries
 
+<sub>[germs-decomp](../README.md) / Discoveries</sub>
+
 What reading the game's code taught us about Germs: Nerawareta Machi. Each finding below says in plain words what happens when you play, then keeps the proof (functions, addresses, how it was checked) folded under "Technical details". What players and earlier projects already knew is in [community-knowledge.md](community-knowledge.md); open questions live in [mysteries.md](mysteries.md).
 
 Status of each finding:
@@ -21,13 +23,15 @@ Names in the technical details are the ones this project gave, each with its evi
 
 ## The findings at a glance
 
-Time
+**[Time](#time)**
+
 - 🧩 [The clock counts minutes and stops at day 99](#-the-clock-counts-minutes-and-stops-at-day-99): one game minute every 600 screen refreshes, 10 seconds, which is the 6x speed players measured. 🎮
 - 🧩 [The timed mails are written in the code, for days 1 to 4](#-the-timed-mails-are-written-in-the-code-for-days-1-to-4): twelve mails at eight fixed times, four of them under story conditions, two of the times nobody listed; the clock sends mail and nothing else. The other twenty: three at the start and seventeen sent by story scenes, each mail by exactly one sender. 🎮 partly
 - 🆕 [The burger shop secretly serves changed food, and even days swap its hours](#-the-burger-shop-secretly-serves-changed-food-and-even-days-swap-its-hours): the menu on screen never changes, the food does; the only code that reads the day's parity. 🎮 partly
 - 🧩 [Only three shops close at night: the opening hours sit in the town's door scripts](#-only-three-shops-close-at-night-the-opening-hours-sit-in-the-towns-door-scripts): the burger shop, the Italian restaurant and the shop the code calls `MPS`; the chiropractor and every big building never shut. 🎮 partly
 
-Survival
+**[Survival](#survival)**
+
 - 🧩 [Energy drains faster the longer you stay awake](#-energy-drains-faster-the-longer-you-stay-awake): 1 point every 10 game minutes, up to 32 after 96 hours awake, and a hurt torso multiplies it. 🎮
 - 🔄 [Body part damage heals by the hour, unless it is at the worst level](#-body-part-damage-heals-by-the-hour-unless-it-is-at-the-worst-level): the parts are head, two arms, torso and legs, not the cheat author's order, and there are four colours, not three. 🎮
 - 🧩 [Hurt legs slow you down, and one hurt arm spoils your aim](#-hurt-legs-slow-you-down-and-one-hurt-arm-spoils-your-aim): 90 % or 70 % of your speed, up to 30 % of your hit chance, and the head and the other arm do nothing. 🎮 partly
@@ -38,18 +42,21 @@ Survival
 - 🔄 [Energy at 0 is death, and only a hit to the head makes you wake up changed](#-energy-at-0-is-death-and-only-a-hit-to-the-head-makes-you-wake-up-changed): starving is always game over. 🎮
 - 🧩 [Being changed is one flag: a pink body, fast healing and no fatigue](#-being-changed-is-one-flag-a-pink-body-fast-healing-and-no-fatigue): wounds heal four times faster, every stat is set to 100, four places shut their doors, and the cure puts every building's state back. 🎮
 
-People
+**[People](#people)**
+
 - ✅ [The profile panel is the lingering thoughts of the dead](#-the-profile-panel-is-the-lingering-thoughts-of-the-dead): walk into a dead body and press CIRCLE to read the card an earlier project found but never saw in play. 🎮
 - 🧩 [Three civilian kills get you arrested, and five more the second time](#-three-civilian-kills-get-you-arrested-and-five-more-the-second-time): mutants never count, nobody arrests a changed player, and the second arrest locks you in an invaded police station. 🎮
 - 🧩 [The dead come back when you return, unless their death script records the kill](#-the-dead-come-back-when-you-return-unless-their-death-script-records-the-kill): there is no respawn rule, and only 55 of the 412 person records have a death script that writes a story value. 🎮
 - 🧩 [Faceless people were built without a face, not left blank](#-faceless-people-were-built-without-a-face-not-left-blank): on the disc their heads carry no texture at all, modelled for flat colour rather than left waiting for a face; whether faces were planned earlier cannot be told. 🎮
 
-Combat
+**[Combat](#combat)**
+
 - 🔄 [The blue wheel is the weapon's hit rate, and the five classes are levels up to 100](#-the-blue-wheel-is-the-weapons-hit-rate-and-the-five-classes-are-levels-up-to-100): the cheat's "one point below the maximum" is level 93. 🎮
 - 🧩 [Every shot is a roll against the hit chance, and range cuts both chance and damage](#-every-shot-is-a-roll-against-the-hit-chance-and-range-cuts-both-chance-and-damage): three distances per weapon, a 20 % floor and 10 % less while walking or side-stepping, the result shown as HIT or Miss; Naomi is out of reach because she is not a person to the game, and her model has no hit animation. 🎮
 - 🔄 [The gun shop has three fixed lists of six, and every weapon it never sells has one giver](#-the-gun-shop-has-three-fixed-lists-of-six-and-every-weapon-it-never-sells-has-one-giver): the "better weapons" of a changed player are the level 40 list, nothing can be sold back, the baton is your first weapon, Fujita's two weapons wait for his mails, and his free pistol needs your second hand empty or holding the baton. 🎮 partly
 
-The town
+**[The town](#the-town)**
+
 - 🧩 [Each building's invasion state is one number, and the computer's dots show it](#-each-buildings-invasion-state-is-one-number-and-the-computers-dots-show-it): 0, 100, 10, 1000 or 2000, and the same number picks which version of the building you enter. 🎮
 - 🆕 [Time alone never spreads the invasion: buildings fall on a schedule when you pass a door](#-time-alone-never-spreads-the-invasion-buildings-fall-on-a-schedule-when-you-pass-a-door): five buildings have a day and hour, the rest fall as a chain. 🎮 partly
 - 🔄 [The town is a grid of 50 m blocks, about 4.8 km across](#-the-town-is-a-grid-of-50-m-blocks-about-48-km-across): the box's 2.5 km square is the area, not the shape. 🎮 partly
@@ -57,14 +64,17 @@ The town
 - 🧩 [No colour version of the town is left on the disc](#-no-colour-version-of-the-town-is-left-on-the-disc): grey palettes and grey vertices outside, coloured rooms inside, and warm windows at night. 🎮
 - 🔄 [The map shop sells 13 maps, six on screen at a time](#-the-map-shop-sells-13-maps-six-on-screen-at-a-time): the eleven places, the power plant's back door and the whole town; you carry one map at a time, and two map numbers were dropped. 📖
 
-Sound
+**[Sound](#sound)**
+
 - 🔄 [Eleven tunes, none unused, and a held drone in twelve places](#-eleven-tunes-none-unused-and-a-held-drone-in-twelve-places): 11 to 41 seconds a loop, not 14; the hotel's "noise" is a drums-only track, and where a building has no tune its drone is all you hear. 🎮 🔊
 
-The story
+**[The story](#the-story)**
+
 - 🔄 [Kouda's reward needs an agent tally of exactly 7, before the ending](#-koudas-reward-needs-an-agent-tally-of-exactly-7-before-the-ending): the three agents add 1, 2 and 4, only the total is tested, a second warehouse talk can spoil it, and mine level 2 has a working door back. 🎮 partly
 - ❌ [The game has an ending: a narration in the office, then a town at peace](#-the-game-has-an-ending-a-narration-in-the-office-then-a-town-at-peace): every building set to its "after" state, the clock to 05:00 (of the next day if it was 05:00 or later), and free play in a town of 37 calm people. 🎮
 
-Secrets and cut content
+**[Secrets and cut content](#secrets-and-cut-content)**
+
 - 🔄 [The movie on the disc is a silent 82-second reel the game can never play](#-the-movie-on-the-disc-is-a-silent-82-second-reel-the-game-can-never-play): flying craft over a canyon, deserts and through a ring tunnel, no shot of space, stored twice in each of its two files; no code opens it. 📖
 - 🧩 [The main characters all have lingering-thoughts cards that can never open](#-the-main-characters-all-have-lingering-thoughts-cards-that-can-never-open): 29 cards of the six main characters with no person to open them; one makes Naomi a man, and one names a scientist found nowhere else on the disc. 🎮
 - 🆕 [After the ending, the hospital's basement door leads into an empty waterway with no way out](#-after-the-ending-the-hospitals-basement-door-leads-into-an-empty-waterway-with-no-way-out): the waterway has no "at peace" version, so the game loads one with nobody and no working door. 🎮
@@ -75,15 +85,18 @@ Secrets and cut content
 - 🆕 [No cheat code and no debug menu: the only developer leftover is a crash report no retail console shows](#-no-cheat-code-and-no-debug-menu-the-only-developer-leftover-is-a-crash-report-no-retail-console-shows): no button combination anywhere, SQUARE is never read, and only L2 makes you run. 📖
 - 🆕 [Five script commands no scene uses, a spare hit-rate gauge, and two story values nothing reads](#-five-script-commands-no-scene-uses-a-spare-hit-rate-gauge-and-two-story-values-nothing-reads): left-over pieces of the script language and the code, none of them a test mode. 📖
 
-Data
+**[Data](#data)**
+
 - 🧩 [The weapon record: three requirements, accuracy, damage and three ranges](#-the-weapon-record-three-requirements-accuracy-damage-and-three-ranges): every field after the name, three of them never read, and the weapon panel's bars and range letter. 🎮 partly
 - 🧩 [A save holds 464 bytes of game state, stored twice with checksums](#-a-save-holds-464-bytes-of-game-state-stored-twice-with-checksums): five ranges of memory in a 508-byte buffer, and a second copy for when the first is damaged; the diary offers four records. 🎮 partly
 - 🧩 [The scene data: four counts per place, door triggers and people records](#-the-scene-data-four-counts-per-place-door-triggers-and-people-records): what the fields players could not read hold, the fighters' stat blocks included; no enemy throws. 📖
 
-Performance
+**[Performance](#performance)**
+
 - 🧩 [The game times every frame, so a slow machine makes it choppy, not slow](#-the-game-times-every-frame-so-a-slow-machine-makes-it-choppy-not-slow): 30 frames a second at best while the frame wait completes, movement scaled by the real frame time; in DuckStation the mine runs at 20 and needs 140 % CPU for 30, and at 190 % a library wait gave up in the office, which ran at 40. 🎮
 
-Bugs
+**[Bugs](#bugs)**
+
 - 🔄 [Boss music starts with the boss's speech, once per visit, and comes back only with a living boss](#-boss-music-starts-with-the-bosss-speech-once-per-visit-and-comes-back-only-with-a-living-boss): leaving the speech spot switches it off; on a later visit the cathedral, and the power plant in part, bring the bosses back alive and replay the speech; in these four buildings the track never starts again over a dead boss without a forced speech. 🎮 🔊 partly
 - ✅ [Mine level 1 has no tune, and its drone plays on under the Komuro boss track](#-mine-level-1-has-no-tune-and-its-drone-plays-on-under-the-komuro-boss-track): the mine's "music" is its ambience drone, as loud as the boss track; the earlier "it stops 14 seconds in" was an effect of loading an emulator save state. 🎮 🔊
 - 🆕 [A looping sound started again after a stop can outlive its scene](#-a-looping-sound-started-again-after-a-stop-can-outlive-its-scene): the game forgets it is playing, so the scene's "stop every sound" skips it; produced only by force. 🎮 🔊 forced
@@ -97,6 +110,8 @@ Bugs
 🎮 Checked in the game.
 
 <p><img src="img/game/clock-day99.png" alt="The office at night: the HUD clock reads day 99, 00:02, after two midnights forced past day 98" width="49%"></p>
+
+<sub>The HUD clock on day 99 at 00:02, after two midnights forced past day 98.</sub>
 
 The game clock moves one minute at a time. A timer counts screen refreshes and, every 600 of them, sends a "clock" event; at 60 refreshes a second that is one game minute every 10 seconds, so six game minutes per real minute, which matches the 6x speed players report. The number 600 is the value a known cheat writes to stop or speed up time: it is the period itself, so 2 makes a minute pass every two refreshes and 0xFFFF makes one pass about every 18 real minutes. At 60 minutes the hour goes up, at 24 hours the day goes up, and the calendar stops at day 99: every later midnight leaves the clock on day 99. Because the clock counts refreshes in an interrupt, it keeps the same pace however slowly the game draws.
 
@@ -114,6 +129,8 @@ The game clock moves one minute at a time. A timer counts screen refreshes and, 
 🎮 Partly checked: the timed mails were checked in memory; of the story mails, the three sent by the power plant's switch were seen arriving, with the place loaded and the switch prompt forced; the other fourteen are read in the scene scripts.
 
 <p><img src="img/game/story-mails-power-plant-switch.png" alt="The office computer's mail list with six mails: the three of a new game, then three that arrived from the power plant's switch, the last from Fujita" width="49%"></p>
+
+<sub>The office mail list after the power plant's switch: the three mails of a new game, then three new ones, the last from Fujita.</sub>
 
 Some mails reach the office computer at fixed hours. They are not read from a data file: the code that runs every game hour holds the whole list. Before the ending, twelve mails can come on the clock, at eight times: day 1 at 10:00, 17:00 and 21:00; day 2 at 10:00 and 16:00; day 3 at 10:00 (up to three mails) and 14:00 (up to two); day 4 at 12:00 (up to two). Four of them only come if a story step is done (or not done). After the ending, no mail arrives by time. Sending these mails is all the clock does to the story: it never moves the invasion, which spreads only when you pass certain doors ([the invasion schedule](#-time-alone-never-spreads-the-invasion-buildings-fall-on-a-schedule-when-you-pass-a-door)).
 
@@ -152,6 +169,8 @@ The game has 32 mails, and each one has exactly one sender. Three are already th
 
 <p><img src="img/game/burger-shop-menu-15h.png" alt="The burger shop counter at 15:11 with the order menu open on the same four burgers as in the morning" width="49%"> <img src="img/game/burger-shop-changed-food.png" alt="The burger shop at 15:11 after ordering the first burger: the line names a changed burger and a violent stomach ache" width="49%"></p>
 
+<sub>Left: the burger shop's menu at 15:11, the same four burgers as in the morning. Right: the first burger ordered at 15:11, a changed burger and a violent stomach ache.</sub>
+
 Every midnight the clock stores whether the day number is even, and only one piece of the game's code reads it: the burger shop in the shopping building. The scene scripts test it too, to pick which version of the room you walk into at the burger shop, the chain restaurant the code calls `FMR` and the Italian restaurant, and which person serves at some counters. Its menu always shows the same four burgers, four drinks and fries, but at some hours the kitchen serves the changed version of what you order: you ask for a hamburger and eat a changed burger, which takes energy from a human and hurts the torso (see [food](#-food-adds-a-fixed-amount-of-energy-and-eating-on-a-full-bar-hurts-your-torso)). The shop's door lets you in from 08:00 to 21:59 ([opening hours](#-only-three-shops-close-at-night-the-opening-hours-sit-in-the-towns-door-scripts)). On odd days the normal food comes from 08:00 to 13:59 and the changed food from 14:00 to closing time; on even days it is the other way round. The hour that counts is the one at which you entered the building. After the ending it always serves normal food, and while you are changed always the changed food, which then feeds you. The menu never tells; only the staff's goodbye line changes, to one that ends in a snigger (read in the code).
 
 <details><summary>Technical details</summary>
@@ -168,6 +187,8 @@ Every midnight the clock stores whether the day number is even, and only one pie
 🎮 Partly checked: the burger shop's door was run at 23:00 and at 12:00, with the hour and the door prompt forced; the other hours are read in the town's script.
 
 <p><img src="img/game/opening-hours-burger-closed.png" alt="The burger shop's doorway in the grey town at night, two red arrows on the building and a line at the bottom giving its hours, 8:00 to 22:00; the HUD clock reads 19:44" width="49%"> <img src="img/game/opening-hours-burger-open.png" alt="Inside the burger shop at 12:02: the counter, red stools and a chequered floor" width="49%"></p>
+
+<sub>Left: at night the burger shop's door shows its hours, 8:00 to 22:00 (the HUD clock still reads 19:44). Right: inside the burger shop at 12:02.</sub>
 
 There is no table of opening hours: each shop door in the town runs a small script that reads the hour when you press CIRCLE. Only three places ever close: the burger shop (open 08:00 to 21:59), the Italian restaurant (11:00 to 21:59) and a shop the code calls `MPS` (05:00 to 23:59). Outside those hours the door shows the opening hours and does not open. The deli, the army shop, the chiropractor, the chain restaurant the code calls `FMR` and every big building have no hour test on their doors. Indenco lets you in by its main door from 08:00 to 21:59 and by another door the rest of the time. The hospital has two town doors: one always opens, the other lets a human in only from 07:00 to 19:59, the hours of the outpatient desk and of one exam room inside; a changed player gets in by both at any hour ([the hospital](#-the-hospital-heals-every-wound-at-once-for-free-and-without-losing-time)). Inside buildings the hour moves people instead (in the hotel, for example), and inside Indenco it puts you back at the door outside 08:00 to 21:59 (read in the scripts). In the first picture the HUD clock still reads 19:44: the hour was forced to 23:00 in memory and the HUD only redraws at the next minute, while the game clock read 23:01.
 
@@ -188,6 +209,8 @@ There is no table of opening hours: each shop door in the town runs a small scri
 
 <p><img src="img/game/energy-rested-hud.png" alt="The HUD enlarged after 72 game minutes awake from a full rest: the energy grid on the left almost full" width="49%"> <img src="img/game/energy-awake88h-hud.png" alt="The same HUD at the same minute after 88 hours awake: the top rows of the energy grid dark" width="49%"></p>
 
+<sub>Left: the energy grid after 72 game minutes awake from a full rest. Right: the same minute after 88 hours awake, the top rows dark.</sub>
+
 The energy bar is your life, one number from 0 to 255. Every 10 game minutes it loses 1 point, more if you have been awake for long: 2 after 16 hours awake, 3 after 32, 4 after 48, 8 after 64, 16 after 80 and 32 after 96 hours. A hurt torso multiplies the loss by 1.5 (rounded down, so a loss of 1 stays 1), 2 or 4 depending on how bad it is. Every sixth drain also takes an extra amount set by the weapon in your hand (0 for the starting one). A nap of one hour takes 4 hours off the awake count; a full sleep resets it and lasts 7 hours, or until 08:00 when you go to bed from 21:00 to 02:59. Below a quarter of the bar, a warning sound starts, and stops when the bar rises again. Being changed cancels the awake-time part (see [being changed](#-being-changed-is-one-flag-a-pink-body-fast-healing-and-no-fatigue)).
 
 <details><summary>Technical details</summary>
@@ -204,6 +227,8 @@ The energy bar is your life, one number from 0 to 255. Every 10 game minutes it 
 🎮 Checked in the game.
 
 <p><img src="img/game/limbs-order.png" alt="The HUD body figure, enlarged: red head, yellow arm on the screen's left, blue arm on the screen's right, green torso and legs" width="49%"> <img src="img/game/limbs-levels.png" alt="The HUD body figure with yellow head and legs, red left arm, blue right arm and green torso" width="49%"></p>
+
+<sub>The HUD body figure. Left: red head, yellow arm on the screen's left, blue arm on the screen's right, green torso and legs. Right: yellow head and legs, red left arm, blue right arm, green torso.</sub>
 
 The five body part values are, in order: the head, the arm on the left of the screen, the arm on the right of the screen, the torso and the legs. Each holds damage. Below 16 the part is fine (green), from 16 it is yellow, from 166 red, and from 240 blue, the worst; the value never goes above 240. Every game hour, each part that is not blue heals 4 points. A blue part never heals by itself; it needs treatment. One oddity: the figure and the stored levels only change when something redraws them (a hit, an item, a cure), not when a part heals by the hour. While you are changed, when every part heals fast, a part keeps its old colour, and a part marked blue keeps the blue mark, until the next redraw.
 
@@ -222,6 +247,8 @@ The five body part values are, in order: the head, the arm on the left of the sc
 
 <p><img src="img/game/hurt-legs-blue.png" alt="The HUD body figure, enlarged: green head, arms and torso, blue legs" width="49%"></p>
 
+<sub>The HUD body figure with blue legs, every other part green.</sub>
+
 The colour of a body part is more than a warning, but only for three of the five parts. Legs at the red level make you walk, run and turn at 90 % of your normal speed, at the blue level at 70 %; they also weaken your guard in close combat, where one of the rolls that soften a blow is cut to two thirds (red) or half (blue). The arm on the left of the body figure lowers your chance to hit by 10 % (red) or 30 % (blue), whatever the weapon. A hurt torso makes you hungry faster ([energy](#-energy-drains-faster-the-longer-you-stay-awake)), and a hit on the head takes energy ([energy at 0](#-energy-at-0-is-death-and-only-a-hit-to-the-head-makes-you-wake-up-changed)). The head's own colour and the other arm's change nothing: no game rule reads them.
 
 <details><summary>Technical details</summary>
@@ -238,6 +265,8 @@ The colour of a body part is more than a warning, but only for three of the five
 🎮 Checked in the game (the counter prompt forced; a course used from the item menu with the bag and the wounds forced).
 
 <p><img src="img/game/chiropractor-courses.png" alt="The chiropractor's menu over the waiting room: three courses of 1, 3 and 6 hours, the cursor on 3 hours" width="32%"> <img src="img/game/chiropractor-course-in-item-menu.png" alt="The item menu in the hospital on day 1 at 10:11: the 1-hour course on the first row, above a hamburger" width="32%"> <img src="img/game/chiropractor-course-used-from-bag.png" alt="The same room at 11:11 after using the course from the menu: the menu closed and the body figure yellow" width="32%"></p>
+
+<sub>Left: the chiropractor's three courses, of 1, 3 and 6 hours. Middle: the 1-hour course in the item menu at 10:11. Right: at 11:11, after the course was used from the menu, the body figure is yellow.</sub>
 
 The chiropractor offers three courses, of 1, 3 and 6 hours. A course takes that much game time and removes 60, 180 or 360 points of damage from every body part at once, so the 6-hour course clears any wound, the worst level included. The hours pass on the clock as usual, so each of them also brings the normal hourly healing, and they count as rest, not as time awake (read in the code). With no wound a course only passes the time, and the line says your body feels lighter. Nothing is paid: the game has no money.
 
@@ -259,6 +288,8 @@ The courses are items of the game's item list, used by the same routine as food 
 
 <p><img src="img/game/hospital-before-hud.png" alt="The HUD enlarged before the bed: the body figure with a red head, a yellow body and a blue arm" width="49%"> <img src="img/game/hospital-after-healed.png" alt="The hospital one minute later, after the injection on the bed: the body figure all green, the energy grid unchanged and the healed line at the bottom, over a plain olive room left by the forced move" width="49%"></p>
 
+<sub>Left: the body figure before the exam bed, with a red head, a yellow body and a blue arm. Right: one minute later, after the injection, all green and the energy grid unchanged.</sub>
+
 At the hospital the doctor gives you an injection on the exam bed; you pass out and wake up at the same minute with every body part fully healed, the worst ones included. It costs nothing and no time, but it does not touch the energy bar. The building itself never closes: of its two doors in the town, one lets a human in only from 07:00 to 19:59, the other at any hour ([opening hours](#-only-three-shops-close-at-night-the-opening-hours-sit-in-the-towns-door-scripts)). The outpatient desk inside is open from 07:00 to 19:59. There is no story flag to earn: when you pass an exam room door, the game adds up the damage of your five body parts, and the doctor and the bed only treat you if that total is not zero. Come in unhurt and the bed does nothing. In the calm hospital one exam room keeps 07:00 to 19:59 and the other opens at any hour; in the invaded and freed hospital only one of the two is open. For a changed player the same bed is the cure (see [being changed](#-being-changed-is-one-flag-a-pink-body-fast-healing-and-no-fatigue)).
 
 <details><summary>Technical details</summary>
@@ -276,6 +307,8 @@ At the hospital the doctor gives you an injection on the exam bed; you pass out 
 
 <p><img src="img/game/status-page-wounds.png" alt="The office computer's first status page, enlarged: five long bars, a row of 16 small figures with 12 red, and five shorter wound bars in two columns" width="49%"></p>
 
+<sub>The office computer's first status page: five long bars, a row of 16 small figures (12 red) and five shorter wound bars.</sub>
+
 Players speak of three survival values, HP, fatigue and stamina. The game has all three, but as three different things, and its status page shows only two of them. "HP", what the hospital and the chiropractor heal, is the damage of the five body parts: the page's five wound bars. "Fatigue" is the count of hours awake: a bar of its own on the page. "Stamina" is the energy bar, your life ([energy](#-energy-drains-faster-the-longer-you-stay-awake)): it is on the field HUD and nowhere on the status page. The first page of the office computer's status screen shows, from the top: experience, current level, progress to the next level, civilians killed (up to 16 red figures, see [arrests](#-three-civilian-kills-get-you-arrested-and-five-more-the-second-time)), hours awake (full at 32), evasion skill, then the wounds of the head and torso in the left column and of the two arms and the legs in the right one. The page labels the arm that spoils your aim, the one on the left of the HUD figure, as the right arm: the figure faces you. CIRCLE turns to the second page, the five weapon class levels and the two carried weapons ([the blue wheel](#-the-blue-wheel-is-the-weapons-hit-rate-and-the-five-classes-are-levels-up-to-100)). Your four stats are not shown on either page.
 
 <details><summary>Technical details</summary>
@@ -292,6 +325,8 @@ Players speak of three survival values, HP, fatigue and stamina. The game has al
 🎮 Checked in the game (energy and inventory forced).
 
 <p><img src="img/game/food-overeat.png" alt="A meal eaten on a full bar: the DAMAGED mark beside the HUD and the overeating line at the bottom" width="49%"></p>
+
+<sub>A meal eaten on a full bar: the DAMAGED mark beside the HUD and the overeating line.</sub>
 
 Every dish and drink adds a fixed amount to the energy bar, from 5 to 80 points out of 255; when a dish fills the bar, a second line says your vitality is back to full. The limit is the full bar, not a number of meals: eat while the bar is full and you get sick, losing half the dish's value and taking its whole value as torso damage, and a hurt torso then makes you hungry faster ([energy](#-energy-drains-faster-the-longer-you-stay-awake)). Some menus serve "changed" food with a negative value: a human loses that much energy and takes it as torso damage, while a changed player is fed by it. In a restaurant you order up to three dishes; if you sit down with a full bar, or one dish fills it, the next ones make you sick. The most filling dish is the Italian restaurant's chef's choice, 80 points. Every restaurant is free: the game has no money. One oddity, read in the code: sickness never takes the torso past red, so overeating with a torso at the worst level brings it back to red.
 
@@ -313,6 +348,8 @@ The game's item list holds 74 items: 58 dishes and drinks, 13 maps and the chiro
 
 <p><img src="img/game/energy0-fall.png" alt="The view dropped to the floor of the office after energy reached 0" width="32%"> <img src="img/game/energy0-game-over.png" alt="The GAME OVER screen with its closing narration" width="32%"> <img src="img/game/mutant-wakes-in-mine.png" alt="The player awake in the coal mine among mutants, the body figure pink" width="32%"></p>
 
+<sub>Left: the view drops to the office floor when energy reaches 0. Middle: GAME OVER and its closing narration. Right: awake in the coal mine among mutants, the body figure pink.</sub>
+
 When energy reaches 0 you fall to the ground. What comes next depends on one flag: if an enemy hit you on the head since the last 10-minute energy tick, you wake up changed in the coal mine with a full bar. Otherwise it is GAME OVER, a short closing narration, and back to the title screen. Starving to 0 always goes through an energy tick, which clears that flag first, so starving is always game over. Only hits to the head take energy at all; hits elsewhere damage the body part. After the ending, every death is game over.
 
 <details><summary>Technical details</summary>
@@ -330,7 +367,11 @@ When energy reaches 0 you fall to the ground. What comes next depends on one fla
 
 <p><img src="img/game/mutant-figure.png" alt="The HUD body figure with the changed flag: torso and legs pink, a red shape around the head" width="32%"> <img src="img/game/cure-injection.png" alt="A black screen with the doctor's injection line, the body figure pink with the shape around the head" width="32%"> <img src="img/game/cure-recovered.png" alt="The hospital's waiting hall on day 4 at 19:46 after an injection given through a forced bed prompt: benches and lights in the upper half, the floor dark, the body figure green again and the line saying the mutant state is over" width="32%"></p>
 
+<sub>Left: the changed body figure, torso and legs pink, a red shape around the head. Middle: the doctor's injection line. Right: the hospital's waiting hall after the injection, the body figure green again.</sub>
+
 <p><img src="img/game/changed-indenco-closed.png" alt="The grey square in front of Indenco on day 1 at 05:12, the body figure pink, and the closed line at the bottom" width="49%"></p>
+
+<sub>A changed player in front of Indenco on day 1 at 05:12: the door shows its closed line.</sub>
 
 Being "changed" is one flag in memory, at `0x801E073C`. The game sets it when you wake up in the mine (see above) and clears it when the hospital cures you. While it is set, the undamaged parts of the body figure turn pink and a shape appears around the head; every body part heals 16 points an hour, even the worst ones; lack of sleep no longer speeds up the energy drain; and your level and ten stats are set to 100, while the game keeps your real ones. The cure is the same injection on the hospital's exam bed that heals a human ([the hospital](#-the-hospital-heals-every-wound-at-once-for-free-and-without-losing-time)): you pass out, the figure turns green, a line says you recovered from the mutant state, and your real level and stats come back, with the story flags the change had overwritten. Every wound is healed too, and neither the clock nor the energy bar moves.
 
@@ -354,6 +395,8 @@ Playing on while changed leads nowhere, as a player wrote in 2008. On the change
 
 <p><img src="img/game/profile-dead-prompt.png" alt="The view from inside a dead mutant's body: a line at the bottom of the screen ending in a circle button icon" width="49%"> <img src="img/game/profile-panel.png" alt="A person's profile panel over the mine: name, job, age, sex, height 260 cm, blood type and lines of text" width="49%"></p>
 
+<sub>Left: inside a dead mutant's body, the line ends in a circle button icon. Right: the profile panel, with name, job, age, sex, height and blood type.</sub>
+
 A dead person does not block your way: you can walk into the body. When you do, a line says that thoughts remain in the body, with a circle button icon; pressing CIRCLE opens a card with the person's name, job, age, sex, height and blood type, and a few lines of what they were thinking. The translation project had found the code that draws this four-line panel but never saw it in play; it is this card. Mutants have cards too: the mine's twenty people include heights of 250 to 320 cm. The main characters have cards too, but none of them can ever open ([the cast's cards](#-the-main-characters-all-have-lingering-thoughts-cards-that-can-never-open)).
 
 <details><summary>Technical details</summary>
@@ -370,6 +413,8 @@ A dead person does not block your way: you can walk into the body. When you do, 
 🎮 Checked in the game (the counters forced, the arrest triggered by pad).
 
 <p><img src="img/game/arrests-kill-count.png" alt="The office computer's status page: a row of 16 small figures, the first 8 red, among the stat bars" width="49%"> <img src="img/game/police-second-arrest-invaded.png" alt="The police station's cell after a second arrest: bars in front, and nobody guarding outside" width="49%"></p>
+
+<sub>Left: the status page's row of 16 small figures, the first 8 red. Right: the police cell after a second arrest, nobody guarding outside.</sub>
 
 The game counts the civilians you kill, and only them: mutants and other enemies never count. With 3 kills, you are arrested the next time the game loads your office: when you come back to it, close the office computer, write the diary, or load a save made there. After that, 5 more kills give the second arrest, and this one turns the police station against you: you wake up in its cell, but the station is now its invaded version, with no guard outside the bars (picture; after the first arrest a policeman stands there), three changed officers, a boss with 1000 HP and one human left. Kill the boss and talk to that man, and the station is empty from then on (read in the scripts; the empty version was loaded in the emulator). A second arrest made after you cleared it invades it again (read in the code). While you are changed, or after the ending, nobody arrests you; kills made while changed still count, so the arrest can wait for the cure (read in the code). The office computer's status page shows your total as up to 16 red figures. After an arrest, leaving the office refills your energy bar. The office phone has one message once you have killed someone and another after the first arrest.
 
@@ -390,6 +435,8 @@ The game counts the civilians you kill, and only them: mutants and other enemies
 
 <p><img src="img/game/dead-mutant-on-floor.png" alt="Mine level 1 on day 1: a changed miner lying dead on the floor beside a green bench" width="49%"> <img src="img/game/dead-mutant-back-after-reload.png" alt="The same spot after the mine is loaded again: the same miner standing at the same bench" width="49%"></p>
 
+<sub>Left: a dead changed miner on mine level 1. Right: the same miner standing at the same bench after the mine loads again.</sub>
+
 A person you kill stays dead only while you stay in the place. Every time a place loads, its people are read again from the disc at full health, so when you leave and come back they stand where they stood. There is no "respawn" rule and no list of the dead: the only memory of a death is a story value that the person's death script writes and that the place's scripts test when it loads, to hide that person or change the scene. Of the 412 person records of all places (the same character often has one in several versions of a place), only 55 have a death script that writes a story value, and that value does not always hide the person: some only change what others say, or count kills. 225 records have no death script at all. Everyone else comes back, which is what players saw in the hospital, where one worker always returns.
 
 <details><summary>Technical details</summary>
@@ -406,6 +453,8 @@ A person you kill stays dead only while you stay in the place. Every time a plac
 🎮 Checked in the game (only the scene loads forced).
 
 <p><img src="img/game/face-textured-chiropractor.png" alt="Close view of the chiropractor's receptionist: a face with eyes, nose and dark hair" width="49%"> <img src="img/game/face-untextured-grand-station.png" alt="Close view of a man in a red suit at Grand Station: his head is one plain grey shape with no features" width="49%"></p>
+
+<sub>Left: the chiropractor's receptionist, with a face. Right: a man at Grand Station whose head is one plain grey shape.</sub>
 
 Most people in the game have no face, and on the disc that is how their heads are made. A faceless head is a plain shape painted in flat colour, with no place for a picture on it at all; there is no blank face picture waiting to be filled and no code that swaps faces. Only 14 of the 201 people models have a head built for a face picture, and every figure the story places by script (Naomi and the other five stage figures) has one. The same body exists in both forms, one with a face and one without, so the faceless heads on the disc were modelled for flat colour, not faces that went missing from these models. Whether faces were planned for everyone at an earlier stage of the work cannot be told from the disc.
 
@@ -426,6 +475,8 @@ Most people in the game have no face, and on the disc that is how their heads ar
 
 <p><img src="img/game/hit-rate-wheel-20.png" alt="The HUD enlarged: the outer ring of the blue wheel almost all dark, hit rate 20" width="32%"> <img src="img/game/hit-rate-wheel-100.png" alt="The HUD enlarged: the outer ring of the blue wheel fully lit, hit rate 100" width="32%"> <img src="img/game/weapon-classes-status.png" alt="The office computer's second status page: five attack skill bars at full, half, a quarter, three quarters and one cell, then the carried weapon's class, level and hit-rate bars" width="32%"></p>
 
+<sub>Left: the blue wheel's outer ring at hit rate 20. Middle: at hit rate 100. Right: the second status page, with the five attack skill bars and the carried weapon's class, level and hit rate.</sub>
+
 Each of the five weapon classes (bare hands, throwing, short range, long range and special weapons) has a level from 1 to 100 and an experience count toward the next level; a sixth pair of the same kind is your skill at evading attacks. A hit adds twice the damage that got through to the class of the weapon used, and being hit adds to evasion. Going from level 1 to 2 takes 324 points, from 2 to 3 takes 405, and each later level 162 more than the one before, so reaching level 100 from level 1 takes 810,000 points. The blue ring on the HUD is not this experience: it shows the current weapon's hit rate, from 20 to 100 %, in 16 cells. That rate is the weapon's accuracy, lowered when your level, one of your four stats or the class level is below what the weapon asks for; above those requirements (5 to 50 for the class) more levels add nothing. The class levels are the bars on the second status page of the office computer. The known cheat value `0x3B2A005D` is level 93 with 15,146 points, one point short of level 94, not the maximum, which is `0x00000064`. The classes: hand to hand holds the baton, knife, stun gun, morning star and katana; throwing only the boomerang; short range the self-defence pistol, crossbow, Beretta and MP5K; long range the Ithaca M37, M47 Dragon and M16A1; special the five special weapons.
 
 <details><summary>Technical details</summary>
@@ -442,6 +493,8 @@ Each of the five weapon classes (bare hands, throwing, short range, long range a
 🎮 Checked in the game (aim and fire forced, walking and side-stepping by pad; the HIT and Miss words seen with the weapon and its hit rate forced; Naomi's absence from the people tables and her model's animations seen in memory; the running state and the height limit are read in the code).
 
 <p><img src="img/game/hit-roll-hit.png" alt="Mine level 1 with the MP5K at 05:11: the word HIT in white beside the target mark, and a mutant at the left thrown back by the hit" width="49%"> <img src="img/game/hit-roll-miss.png" alt="The same room and mutant at 05:12, the hit rate forced down: the word Miss in blue beside the target mark, and the mutant standing" width="49%"></p>
+
+<sub>Left: HIT in white, and the mutant thrown back. Right: Miss in blue with the hit rate forced down, and the mutant standing.</sub>
 
 When your attack animation reaches its firing frame, the game picks the nearest person in your aim who has noticed you and rolls a number from 0 to 99; the shot hits when the number is below the hit chance. The result blinks beside the target mark for a moment: HIT in white when the shot hits and does damage, Miss in blue when the roll fails (pictures: the same mutant at almost the same distance, with a chance of 100 % and then 20 %). A hit whose damage the target's defence cancels shows Miss too (read in the code). Each weapon has three distances. Closer than the first, the chance is only 20 %, but a hit does full damage. Between the first and the second, the chance is the weapon's hit rate (the [blue wheel](#-the-blue-wheel-is-the-weapons-hit-rate-and-the-five-classes-are-levels-up-to-100)) and the damage is full. From the second to the third, chance and damage both fall off in a straight line. Beyond the third the shot only alerts the target, and so does a shot so close to the third distance that the chance rounds down to 0 (an MP5K at 29,999 of its 30,000 units). Otherwise, within range, the chance never drops below 20 %, but two penalties come after that floor: 10 % less while you walk (forward, back, or forward while side-stepping) or side-step, none while you stand or run, and 10 % or 30 % less when the arm on the left of the body figure is red or blue. Hand-to-hand weapons also need the target at about your height. A hit then loses a random part of the target's defence, two thirds of it unless the target resists that class. Three special weapons have favourite targets: the electromagnetic wave gun does double damage to one kind of mutant, and the Crystal and the Hieronymus Machine half damage to humans and to that same kind.
 
@@ -466,6 +519,8 @@ Naomi can never be aimed at, and no flag is needed for that: to the game she is 
 🎮 Partly checked: the three lists, the refusal and the baton in hand at a new game were seen in the emulator (level, hour and scene forced), and Fujita's pistol was obtained by pad with nothing forced in memory once at his door (the town reached by a forced scene request); the other gifts are read in the scene scripts.
 
 <p><img src="img/game/baton-new-game-panel.png" alt="A new game on day 1 at 10:10, in the hospital: the weapon panel open on the baton, with its level, attack and hit-rate bars and the range scale with S lit" width="32%"> <img src="img/game/gun-shop-hands-full.png" alt="Inside the gun shop, the clerk at the back of the room and the refusal line at the bottom: both hands are full" width="32%"> <img src="img/game/fujita-gift-pistol.png" alt="Fujita's house on day 4 at 19:55: Fujita by the table and the line at the bottom saying the self-defence pistol was obtained" width="32%"></p>
+
+<sub>Left: a new game starts with the baton. Middle: the gun shop refuses a third weapon when both hands are full. Right: Fujita hands over the self-defence pistol.</sub>
 
 The gun shop shows six weapons chosen by your level: under 20, 20 to 39, or 40 and up, and each band always shows the same six. The shop sorts the eleven weapons it can sell by the level each asks for and takes six in a row from the bottom, the middle or the top. Under level 20: the crossbow, the boomerang, the self-defence pistol, the knife, the stun gun and the Beretta. From 20 to 39: the knife, the stun gun, the Beretta, the Ithaca M37, the M16A1 and the morning star. From 40 on: the Beretta, the Ithaca, the M16A1, the morning star, the MP5K and the katana. There is no fourth band and no list for a changed player: a changed player's level is 100, so the shop shows the 40 list, the "better weapons" players saw. Nothing can be sold back: the game has no money at all, the shop opens straight onto its list of six, the clerk says there are no returns, and with a weapon in both hands it refuses to give a third (second picture). The only place to put a weapon down is the storage in your office, which keeps any number but will not take your last one.
 
@@ -511,6 +566,8 @@ Fujita also gives a free self-defence pistol on your first visit to his house, w
 
 <p><img src="img/game/invasion-state-freed.png" alt="The office computer's town overview with the Grand Station card: three of its five dots lit, yellow, red and green" width="49%"> <img src="img/game/invasion-state-changed.png" alt="The same overview with the thermal power plant card: all five dots lit, the last one purple" width="49%"></p>
 
+<sub>The office computer's town overview. Left: the Grand Station card, three of five dots lit. Right: the thermal power plant card, all five lit, the last purple.</sub>
+
 The office computer's town overview has a card for eight buildings, each with five dots. Behind them the game keeps one number per building, and the dots simply show it: one dot lit for 0, not yet invaded; two for any other value, usually 100, invaded; three for 10, freed; four for 1000, the town at peace after the ending; five for 2000, you have changed. The same number picks which version of the building you walk into, so each building has up to five versions on the disc: calm, invaded, freed, at peace and changed. Inside an invaded building the scripts also move the number in small steps (the power plant takes 10, 20 or 40 off its 100, `F1H` sets 80, 85, 90 or 95), so values from 1 to 99 exist too; they all show as two dots. A new game starts with the power plant, `PSG`, `F1H` and the second mine level already invaded. The shops share one more number, which is your own state: 100 as a human, 1000 after the ending and 2000 while changed.
 
 <details><summary>Technical details</summary>
@@ -529,6 +586,8 @@ The office computer's town overview has a card for eight buildings, each with fi
 
 <p><img src="img/game/invasion-office-door-day1.png" alt="The town on day 1 at 17:23, facing the newspaper office between two red arrows, with the door prompt at the bottom" width="49%"> <img src="img/game/invasion-cathedral-invaded-day1.png" alt="The office computer's overview with the cathedral card: two of its five dots lit, yellow and red" width="49%"></p>
 
+<sub>Left: the newspaper office's town door on day 1 at 17:23. Right: the cathedral card on day 1, two of five dots lit.</sub>
+
 The clock never touches the invasion: sit in the office for days and every building stays as it was. Five buildings have a day and hour from which they fall, but the change happens only when you step out of the newspaper office into the town (the spot by its town door, first picture) or reach that building's own door: the cathedral from day 1 at 17:00, Indenco from day 1 at 20:00 (at its own doors only), the place the code calls `STH` from day 2 at 12:00, Hotel Seasons from day 3 at 14:00 and the coal mine from day 4 at 12:00. A building only falls from "not yet invaded", so one you already freed stays freed. Everything else spreads as a chain: leaving the office for the first time invades Grand Station; freeing the cathedral invades the Temple of the Universe and the underground waterway; freeing the hotel invades the Temple; freeing the mine invades the hospital; beating the hospital's boss frees the hospital, the waterway and Indenco at once, and another hospital script invades `OMH`; a script in `F1H` invades the seaside warehouses (read in the scripts).
 
 <details><summary>Technical details</summary>
@@ -545,6 +604,8 @@ The clock never touches the invasion: sit in the office for days and every build
 🎮 Partly checked: the unit and the block lookup were seen in the emulator; the block counts are read from the town's map file.
 
 <p><img src="img/game/town-map-select.png" alt="The town map opened with SELECT in a street on day 4 at 19:43: the whole town, a red circle on the player, and the bus and subway legend" width="49%"></p>
+
+<sub>The town map opened with SELECT: the whole town and a red circle on the player.</sub>
 
 The town is cut into square blocks of 50 m that stream in around you as you move. The map's grid is 108 by 128 blocks (5.4 by 6.4 km), but only 2,717 blocks hold anything, about 6.8 km². The town itself spans 95 by 98 blocks, about 4.75 by 4.9 km, with 2,401 blocks in use, about 6 km²; a separate strip of 316 blocks lies 500 m beyond its edge (not visited). The squares draw on 1,772 block pieces stored on the disc, all of them placed but [one](#-one-town-block-and-four-room-pieces-are-on-the-disc-but-never-placed). So the box's "2.5 km square" is right for the area, about that of a 2.45 km square, but the town is not a square: it is nearly 5 km across. The "3 km square" of the manual matches neither. One unit of the game's world is one centimetre: your eyes are 1.70 m above the street, and you walk at 2.4 m a second.
 
@@ -563,6 +624,8 @@ The town is cut into square blocks of 50 m that stream in around you as you move
 
 <p><img src="img/game/dead-door-spot.png" alt="A grey building in the town by day with two shut glass doors in front: standing on its door spot and pressing the button does nothing" width="49%"></p>
 
+<sub>A door spot with nothing behind it: two shut glass doors that the button does not open.</sub>
+
 The town's ground marks the spot in front of each door you can use. Seventeen buildings have such a spot too, 28 door spots in all, but nothing on the disc stands behind them: no place to load, no room, no script, no destination for the car. Walk onto one and press the button and nothing happens, while the same move on a real door loads the building (picture). City Hall, the Yamasaki mansion and the South End buildings of the bus map are candidates for these seventeen, but the data has no names, so whether they are among them, and which spot would be which, can only be guessed from the map: two of them stand next to the coal mine at the south end, the likeliest the mansion and the South End buildings; one, an arcade with arches near the centre, is a candidate for City Hall. The "blue door" players saw behind City Hall's arches is no special door: it is the one slate-blue texture of the town's facades, used on 1,593 surfaces all over town, most of them far from any door spot.
 
 <details><summary>Technical details</summary>
@@ -579,6 +642,8 @@ The town's ground marks the spot in front of each door you can use. Seventeen bu
 🎮 Checked in the game (the hour forced to reach the evening).
 
 <p><img src="img/game/town-night-windows.png" alt="A town street at 19:01: grey buildings and road, with warm yellow light in the windows" width="49%"></p>
+
+<sub>A grey town street at 19:01, with warm yellow light in the windows.</sub>
 
 The town is grey because its data is grey, not because a colour picture is turned grey on the way to the screen. Its textures use grey palettes and its models grey or white vertex colours, while the rooms inside buildings are in colour. The drawing code would show a coloured town as it is: it passes any coloured vertex through. The few colours outside are signs, arrows, one blue panel, and at night the windows, which light up warm yellow (picture). So nothing on the disc backs the rumour of a town in colour early in development; whether an earlier build was in colour cannot be settled from this disc alone.
 
@@ -613,6 +678,8 @@ The map shop's list holds 13 maps, not six: one for each of the eleven places it
 🎮 🔊 Checked in the game and heard: the eleven tunes and two of the drones were recorded, each building reached by a forced scene request from the office and two of the office's tunes started by forced calls; which place holds which tune and drone is read in the disc data.
 
 <p><img src="img/game/sound-hotel-track-drums-only.png" alt="Spectrogram of 29 seconds of the hotel's track: separate vertical strikes from low to very high pitches, no steady horizontal line of a melody, over a constant noise floor" width="49%"> <img src="img/game/sound-hospital-drone.png" alt="Spectrogram of 29 seconds in the hospital: an even band of noise at every pitch with bright steady lines low down and faint regular pulses, the same from start to end" width="49%"></p>
+
+<sub>Spectrograms of 29 seconds. Left: the hotel's track, drum strikes and no melody. Right: the hospital's drone, the same from start to end.</sub>
 
 Germs has eleven different tunes, and every one of them plays somewhere. Three belong to the office: its theme, the tune of the scenes that open with a narration, and the pause menu's tune. One boss track, the same bytes in eleven scenes, is started by the boss's speech in nine of them. Seven buildings have a track of their own: the thermal power plant, the cathedral, `F1H`, the seaside warehouses, Hotel Seasons, the Temple of the Universe and mine level 2. A tune lasts from 11 to 41 seconds before it starts again; only the boss track and the warehouses' are close to the 14 seconds players quote. The hotel's track sounds like noise because it is drums only: one part on a nine-piece drum kit, with no melody at all (first picture). The town, Indenco, the stations, Grand Station, the shops, the waterway and the small places have no music, and the hospital, the police station, `PSG` and mine level 1 have only the boss track. The only music nothing plays is two exact copies of the boss track, in `F1H` and the Temple, whose scripts never ask for it.
 
@@ -652,6 +719,8 @@ Under the music, twelve places also play a held drone from the moment you arrive
 
 <p><img src="img/game/kouda-reward-m47.png" alt="A dark screen in the hotel on day 1 at 05:20 with the line saying the M47 Dragon was obtained" width="49%"> <img src="img/game/mine2-door-back.png" alt="Mine level 2 a few steps from the arrival point: the pink body figure and a door prompt with the circle sign, leading back to level 1" width="49%"></p>
 
+<sub>Left: Kouda's reward, the M47 Dragon. Right: the door prompt on mine level 2 that leads back to level 1.</sub>
+
 Kouda, whom you first meet at Grand Station, later waits in Hotel Seasons, and gives you the M47 Dragon when you come back after meeting the three other agents: the one in the seaside warehouses, the one in a hotel room and the one in the hospital. The game keeps one tally to which they add 1, 2 and 4, and Kouda tests only that it reads exactly 7. The normal way is one talk with each: 1 + 2 + 4. The hotel room agent counts once, and the hospital agent's spot switches off once the tally reaches 4. The warehouse agent's talk has no "already met" check: each talk while the warehouses are still invaded adds 1 again. So three warehouse talks and the hospital agent also make 7, without the hotel room agent, while a second warehouse talk after all three meetings makes 8. Nothing ever takes from the tally, so a total above 7 loses the reward for good. Two other things lose it. The ending: after it, the hotel no longer has the reward scene. And the hospital agent's window: that agent exists only while the hospital is invaded, so beating the hospital's boss first removes the agent, until beating mine level 1's boss invades the hospital again. Killing Kouda is not one of them in the data: the death only switches Kouda's spot off for that visit, records nothing, and the spot is switched on again by the hotel's script (read in the scripts, not played). The trip from the hospital to mine level 2 that players call one way is not: a few steps from where you arrive on level 2, a door prompt offers the coal mine's first level, and CIRCLE takes you back up to level 1's stairs (picture). What makes it risky is that the last boss and the ending wait at its end.
 
 <details><summary>Technical details</summary>
@@ -668,6 +737,8 @@ Kouda, whom you first meet at Grand Station, later waits in Hotel Seasons, and g
 🎮 Checked in the game with the ending forced: the office's ending request was made by hand; the last boss was not fought.
 
 <p><img src="img/game/ending-narration.png" alt="The ending narration's first page, complete: three lines of white text at the bottom of a black screen" width="49%"> <img src="img/game/after-ending-office.png" alt="The office after the ending narration, day 2 at 05:09: the computer on the desk with its prompt at the bottom, the body figure green" width="49%"></p>
+
+<sub>Left: the first page of the ending narration. Right: the office after it, on day 2 at 05:09.</sub>
 
 When the last boss on mine level 2 dies, it opens an exit that takes you to the office, and the ending plays there: a narration on a black screen, with no music. Then the game resets the town for good: every building goes to its "at peace" state, every wound is healed, the energy bar is set to 201 of 255, and the clock moves to 05:00: of the next morning if it was already 05:00 or later, of the same day otherwise. Then you play on from the office with the clock running. From then on nobody arrests you, any death is game over, the burger shop always serves normal food and no mail comes by time. Indenco, `OMH`, `STH`, the coal mine, the waterway and mine level 2 have no "at peace" version, so their doors stay shut (seen at Indenco), all but one: the hospital's basement door still opens, into an [empty waterway with no way out](#-after-the-ending-the-hospitals-basement-door-leads-into-an-empty-waterway-with-no-way-out). The hotel's Kouda scene is gone. The sixteen buildings that open again are quiet: 37 people in all, none hostile, 29 of them with something to say. The cathedral keeps 2 people, the hotel 6, the gun shop 6, the police station 5; `F1H`, `SB1`, the warehouses and the railway station `RW1` are empty. The only infected person left in town is one hotel guest upstairs, and that guest only talks.
 
@@ -690,6 +761,8 @@ When the last boss on mine level 2 dies, it opens an exit that takes you to the 
 
 <p><img src="img/game/movie-canyon.png" alt="Movie frame: a silver craft seen from behind, flying low into a canyon with brick walls under a deep blue sky" width="32%"> <img src="img/game/movie-ship-formation.png" alt="Movie frame: a silver jet with twin cockpits flying over a desert with tall rock spires in daylight" width="32%"> <img src="img/game/movie-ring-tunnel.png" alt="Movie frame: two drones flying through a black tunnel of grey and red rings" width="32%"></p>
 
+<sub>Three frames of the unused movie. Left: a craft flying low into a canyon. Middle: a jet over desert spires. Right: two drones in a tunnel of rings.</sub>
+
 The disc carries a 50 MB video file, `M.STR`, and a second file with the same content, `D.STR`, both dated 1995-10-20, four years before the rest of the disc. Decoded, it is a silent computer graphics reel of flying craft, about 82 seconds long: a run low through a canyon with brick walls, spider-like drones over a dome at night, a formation of silver jets over desert spires, a two-legged walker with orange pods on a night desert, a long flight through a tunnel of red and white rings, and rock towers by the water at dusk (pictures). It has no title, logo or text, and no sound at all. Each file holds the reel twice in a row, so the disc stores it four times. Players remember craft flying through a canyon and into space: the canyon is there, but no frame shows space. Nothing in the reel ties it to Germs, and what it was made for is unknown. The game cannot show it: the executable never names either file and has no code that drives the PlayStation's video decoder.
 
 <details><summary>Technical details</summary>
@@ -709,6 +782,8 @@ The disc carries a 50 MB video file, `M.STR`, and a second file with the same co
 
 <p><img src="img/game/cast-card-naomi-mine.png" alt="Naomi Scully's profile card drawn over the coal mine: name, job, age 31, female, 167 cm, blood type O, and lines of text" width="49%"> <img src="img/game/cast-card-naomi-male.png" alt="Naomi Scully's profile card as stored with Grand Station, over a red hall: the same name, job, age, height and blood type, but male" width="49%"></p>
 
+<sub>Left: Naomi's card over the coal mine, female. Right: her card stored with Grand Station, male.</sub>
+
 Every main character has a [lingering-thoughts card](#-the-profile-panel-is-the-lingering-thoughts-of-the-dead) on the disc, with age, height, blood type and a few lines of thought: your own character, Fujita, Naomi Scully, Mark Nashimoto, Inspector Imaizumi and Wilhelm. There are 29 such cards spread over the places' data, and none can ever open. A card opens only for a dead person of the place you are in, and the main characters are never people of a place: they are figures the story scripts show and move, which nothing can kill. The copies do not all agree. The card stored with Grand Station makes Naomi a man (second picture; her other cards say female, first picture); one on mine level 2 holds your own character's card under Mark's number; and the one in the place the code calls `STH` gives the scientist's number to a "Luke Tougou", 54, 170 cm tall, a name found nowhere else on the disc, perhaps an earlier name for the character. One person in the cathedral points to a card that does not exist, so walking into that body after killing it opens nothing.
 
 <details><summary>Technical details</summary>
@@ -726,6 +801,8 @@ Every main character has a [lingering-thoughts card](#-the-profile-panel-is-the-
 
 <p><img src="img/game/after-ending-waterway-empty.png" alt="The underground waterway on day 2 at 05:16, after the ending: a dark tunnel with nobody in it" width="49%"></p>
 
+<sub>The underground waterway after the ending, on day 2 at 05:16, with nobody in it.</sub>
+
 After the [ending](#-the-game-has-an-ending-a-narration-in-the-office-then-a-town-at-peace) the hospital is one of the buildings that open again, and its door down to the underground waterway still works. But the waterway has no "at peace" version, and the door asks for it anyway, so the game loads an empty waterway: the tunnels are there and you can walk them, but nobody is in them and not one door or spot does anything (picture). There is no phone and no diary to save at, so the only way out is to reset or load a save. It is the only door of the town after the ending that leads to a place with no "at peace" version: the doors to the others only show their closed line.
 
 <details><summary>Technical details</summary>
@@ -742,6 +819,8 @@ After the [ending](#-the-game-has-an-ending-a-narration-in-the-office-then-a-tow
 🎮 Partly checked: the unused version was loaded by a forced scene request; that no door leads to it is read in the scene scripts.
 
 <p><img src="img/game/old-man-house-unused-version.png" alt="Inside the old man's house in its unused version, day 1 at 05:10: an empty wooden hall with a table on the left and a passage ahead" width="49%"></p>
+
+<sub>The old man's house in its unused version: an empty wooden hall.</sub>
 
 The house the map shop calls the old man of the mountain's house, `OMH` in the code, has three versions on the disc: calm, invaded, and a third, freed one: a quiet house with nobody inside, made for after the one person in the invaded house dies. Killing that person does mark the house as freed, but the town door lets you in only while the house is calm or invaded; for "freed" it falls through to its closed line. So the freed house never loads, and while the house is in that state its door stays shut (read in the scripts). Loaded by force, it is an ordinary walkable house with four spots and no one in it (picture).
 
@@ -790,6 +869,8 @@ All 24 scenes live in one big file, `SCE.S`. Yet the game still writes the path 
 🎮 🔊 Checked in the game and heard, forced: each sound was played by a forced call, three of them through an effect record patched in memory; that nothing in play reaches them is read in the code and the scene scripts.
 
 <p><img src="img/game/sound-unused-beep-loop.png" alt="Spectrogram of five seconds: a short burst of noise at every pitch, then a steady tone near 2.2 kHz with evenly spaced harmonics above it, pulsing about five times a second to the end" width="49%"></p>
+
+<sub>Spectrogram of five seconds of an unused sound: a burst of noise, then a tone near 2.2 kHz pulsing about five times a second.</sub>
 
 The game's sound banks hold five sounds that are never heard in play. Two are finished sound effects with their own entry in the game's list of effects, which no code and no script ever plays: a buzzy chime of about one second, filed between two neighbouring sounds of the common bank, and a bright half-second beep. Three more are instruments of the second bank that no effect, no script and no tune uses: a short metallic clink, a loud roar of noise that loops without end, and a beeping tone near 2.2 kHz that loops too (picture). Every other instrument is used, and every sample on the disc belongs to one. None of the samples heard holds speech; the building effects of bank 4 and banks 3 and 5 to 9 were read, not heard. The [eleven tunes](#-eleven-tunes-none-unused-and-a-held-drone-in-twelve-places) are all played somewhere.
 
@@ -855,6 +936,8 @@ The scene scripts are written in a small command language, and the game understa
 
 <p><img src="img/game/weapon-panel-mp5k.png" alt="The weapon panel opened with SELECT in the hospital, day 1 at 10:10: the MP5K with its level, attack and hit-rate bars and the range scale S, M, L with M lit" width="49%"></p>
 
+<sub>The MP5K's weapon panel: level, attack and hit-rate bars, and the range scale with M lit.</sub>
+
 The disc holds one record of 96 bytes for each of the 18 weapons. After the name come: an extra energy cost taken every sixth drain of the energy bar (0 for most weapons, 20 for the Hieronymus Machine); a required player level (0 to 50), a required stat with which of your four stats it is, and a required class level (5 to 50), which together set how much of the weapon's accuracy you get; the frame of the attack animation that fires; the accuracy (60 to 100); the damage (30 to 255); and the three distances of the [hit roll](#-every-shot-is-a-roll-against-the-hit-chance-and-range-cuts-both-chance-and-damage). The gun shop uses the required level to choose and sort what it sells. The weapon panel, opened with SELECT inside a building, shows three of these numbers as bars, the required level, the damage and the accuracy, and the weapon's class as a range letter: S for the bare-hands class, M for throwing and short-range weapons, L for long-range ones, none for the specials (picture). Three fields are never read by the game: one always 0, one a copy of the class, and one holding values from 3 to 60 whose meaning is lost.
 
 <details><summary>Technical details</summary>
@@ -894,6 +977,8 @@ The disc holds one record of 96 bytes for each of the 18 weapons. After the name
 🎮 Partly checked: the office diary's save screen was opened by pad with nothing forced, and nothing was saved; what a save holds is read in the code.
 
 <p><img src="img/game/save-diary-records.png" alt="The office diary's save screen: four records numbered 01 to 04, each with empty day, hour and minute fields, the cursor on the first, and the buttons to save or go back" width="49%"></p>
+
+<sub>The office diary's save screen with its four records.</sub>
 
 A save keeps where you saved (the office diary or a public phone), all the game variables (story flags, building states, the clock, the body part damage, the mail count), the two settings of the options page, your energy, level, stats, weapon skills, kill and arrest counters and body part levels, your weapons and items, and your position in town. Those 464 bytes go into a 508-byte buffer whose last 44 bytes stay zero; the buffer is cut into four pieces; each is written twice with a checksum, and loading uses the second copy of a piece when the first is damaged. The state of the scene you are in and of the shops is not saved: it is rebuilt on loading.
 
@@ -981,6 +1066,8 @@ Each of the 24 places in `SCE.S` starts with a small directory: one entry for th
 
 <p><img src="img/game/duckstation-mine-cpu-100-20fps.png" alt="The coal mine among mutants in DuckStation at 100 % CPU, the pink body figure on the HUD, the emulator's counter at the top right reading 19.94 frames a second" width="49%"> <img src="img/game/duckstation-mine-cpu-140-30fps.png" alt="The same view of the coal mine in DuckStation at 140 % CPU, the counter reading 29.91 frames a second" width="49%"></p>
 
+<sub>The coal mine in DuckStation. Left: at 100 % CPU, 19.94 frames a second. Right: at 140 % CPU, 29.91.</sub>
+
 The game draws at most 30 frames a second, as long as its wait for every second screen refresh runs to its end. After each frame it measures how many screen refreshes the frame really took and moves doors, text, turning, enemies and timers by that much, and skips animation frames when it runs late. So when the console, or an emulator, cannot keep up, the game gets choppy rather than slower; the clock does not depend on it at all. The busiest scene measured is the coal mine with a changed player among mutants. In DuckStation at its normal CPU speed it runs at 20 frames a second (first picture), and from 140 % CPU on at the full 30 (second picture); 139 % still gives 20, and 90 % drops it to 15. PCSX-Redux puts that scene's work at 3.33 screen refreshes a frame, DuckStation at 2.79 (about 16 % less), and PCSX-Redux shows 15 frames a second at normal speed. The office runs at 30 in both. That is why players speed up the emulated CPU.
 
 The 190 % that players advise clears the mine, but in this DuckStation version it was also the first setting tested where something else breaks. The console library's wait for the next screen refresh does not count time: it counts passes of a loop, and gives up after a fixed number of them. At 190 % and 200 % the emulated CPU spent them before the refresh came in the office, the wait gave up, and some frames came every refresh instead of every second one: the office ran at about 40 frames a second instead of 30. The mine showed no such timeout even at 200 %, since its busy frames leave short waits; a lighter scene than the office could reach one at a lower setting. Walking and timers keep their pace, since they follow the measured time. An animation fixes its pace when it starts, by the frame's length then, so one started on a 1-refresh frame would run up to twice its speed while frames stay that short (a prediction from the code; not timed). So 140 % to 185 % gave the mine its full speed with no timeout in the two scenes tested. On a console at normal speed, an estimate from the emulated loop timing puts the wait's budget at about 1.9 refreshes, more than any wait there needs. Animations are also off at slow rates: while frames keep taking 3 or 5 refreshes, attacks and other animations run at 67 % or 80 % of their speed, so in DuckStation's mine at a steady 20 frames a second they run at 67 % (read in the code). The two emulators show the mine at 15 and at 20 frames a second; a real PlayStation was not measured and may match neither.
@@ -1018,6 +1105,8 @@ The 190 % that players advise clears the mine, but in this DuckStation version i
 
 <p><img src="img/game/sound-cathedral-boss-track-forced-talk.png" alt="Spectrogram of 29 seconds in the cathedral: for the first 1.5 seconds its own track, then the boss track's dense, regular pattern of bands repeating to the end" width="49%"></p>
 
+<sub>Spectrogram of 29 seconds in the cathedral: its own track for 1.5 seconds, then the boss track to the end.</sub>
+
 A boss's music does not start with the fight: it starts with the boss's speech, when you walk into the spot where the boss talks to you. Until then the boss stands friendly and cannot be fought; the speech turns it hostile and starts the boss track. The boss's death fades the music out, and where the building has a track of its own, that track then starts again from its beginning (heard at the cathedral); `PSG` has only the boss track, so after the fade only its drone is left. At the cathedral each boss's death looks at the building's state before taking its share off, and fades the music only if the state was 0 to 40 before the death: from 80, the value a waterway visit leaves, the third death fades it; from 100 no death does, and the boss track plays on over the dead bosses. In the four buildings of the table below, walking out of the speech spot switches the spot off, so the speech runs once per visit. Their bosses do not switch the spot off when they die; whether a player can stay inside the spot through a fight was not checked.
 
 On a later visit the building is read again from the disc, its spots and its people with it ([the dead come back](#-the-dead-come-back-when-you-return-unless-their-death-script-records-the-kill)). At the cathedral, killing all three bosses can leave the building freed (it does when its state was at 80, a value its scripts set), and the freed cathedral is a different version. The state picks the version that loads: 0, 10, 1000 and 2000 load other versions, any other value loads version 1, the one with the speech. If the cathedral's state ends at any other value, with a boss still standing or not, the next visit loads version 1: the three bosses are back, alive and friendly, and walking into the spot runs the speech again, which turns them hostile and starts the boss track. That is a rematch, not music over a dead body. At the power plant the speech comes back the same way only if the building's state was above 90 when the boss died. At `PSG` the death takes the state out of the speech's range, and at the warehouses it frees the building, whose freed version has no speech spot: neither comes back.
@@ -1049,6 +1138,8 @@ So in these four buildings the boss track never starts again over a dead boss in
 🎮 🔊 Checked in the game and heard: the arrival and the boss's speech were recorded in one unbroken session from the office, with mine level 1 reached by a forced scene request and the speech run by hand; the fight itself was not played.
 
 <p><img src="img/game/komuro-card.png" alt="Mine level 1 at 05:11 with the boss's profile card open over the scene: a portrait and lines of text" width="49%"> <img src="img/game/sound-komuro-fight-drone-under-boss-track.png" alt="Spectrogram of 28 seconds from the Komuro speech: steady lines and gliding curves at 500 to 800 Hz and a line near 4.6 kHz from the start, then from 6 seconds the boss track's dense bands, with the gliding curves still running under them to the end" width="49%"></p>
+
+<sub>Left: Komuro's profile card on mine level 1. Right: spectrogram from his speech, the drone's gliding curves running on under the boss track.</sub>
 
 The coal mine's first level has no tune of its own: its music bank holds only the boss track, so on arrival the game asks for a building track and gets nothing. What players hear there as the mine's music is the mine's [drone](#-eleven-tunes-none-unused-and-a-held-drone-in-twelve-places): a howling, sonar-like electronic sound, two steady tones with whistles gliding up and down over them, swelling in pulses and repeating every 11.75 seconds, held on a sound voice of its own from the moment you arrive until you leave. During the speech of the boss, Komuro (named on its profile card, first picture), the boss track starts, about 20 seconds after the speech begins, and nothing stops the drone: no stop call is skipped, there is simply no mine track for the boss track to replace. The drone is about as loud as the boss track. Recorded from the moment the boss track started, the two played together for 61.7 seconds, more than four passes of the boss track (second picture: the drone's gliding curves run under the boss track to the end). Nothing in the code stops the drone before you leave, so they should play together for the whole fight; the fight itself was not played.
 
@@ -1102,6 +1193,8 @@ The game reads the pad once a frame through Sony's library, which takes the butt
 🎮 Checked in the game (the parked car's place, your position and the get-in prompt forced; driven by pad).
 
 <p><img src="img/game/car-stuck-wall.png" alt="The view from the driver's seat against a wall in the town, the prompt to get out of the car at the bottom" width="49%"></p>
+
+<sub>The car stopped dead against a wall, with the prompt to get out.</sub>
 
 The car has no step height and no wall check of its own. It climbs any kerb: the pavements are 25 cm above the road and it simply rides up. But while any of its four corners is on a pavement it crawls at a third of its speed, and when all four are back on the road the pedal is cut to a quarter. The snag is the stop rule: if a single corner would end up where there is no ground at all, at a wall, a building or the side of a tunnel with no pavement, the whole move is undone and the pedal and gear drop to zero, so the car stops dead and the prompt to get out shows (picture). It never slides along the wall: holding the pedal only repeats the stop, and even steering at full lock for over ten seconds turned it 2 degrees. Calling it to a phone is not the only way out: backing up frees it at once, unless both ends touch.
 

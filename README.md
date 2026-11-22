@@ -2,12 +2,19 @@
 
 A matching decompilation of **Germs: Nerawareta Machi** (PlayStation, KAJ, 1999), retail release SLPS-02107.
 
+**Status: 655 of 655 functions in C, and the build is byte-identical to the retail executable.**
+
 The goal is C that rebuilds the retail executable byte for byte, and through it an understanding of how the
 game works: the city, the scenes, the weapons, the per-limb damage and what the disc holds that the game
 never shows.
 
 <p><img src="docs/img/game/movie-canyon.png" width="24%" alt="A frame of the unused movie on the disc: a silver craft flying low into a canyon under a blue sky"> <img src="docs/img/game/cast-card-naomi-male.png" width="24%" alt="A lingering-thoughts card no person opens: Naomi's profile, with the sex given as male"> <img src="docs/img/game/hit-roll-hit.png" width="24%" alt="Mine level 1 with the MP5K: the word HIT beside the target mark as a mutant is thrown back"> <img src="docs/img/game/fujita-gift-pistol.png" width="24%" alt="Fujita at his table handing over the free self-defence pistol, the gift line at the bottom of the screen"></p>
+
+<sub>Left to right: [a frame of the unused movie](docs/discoveries.md#-the-movie-on-the-disc-is-a-silent-82-second-reel-the-game-can-never-play), [Naomi's card listing her sex as male](docs/discoveries.md#-the-main-characters-all-have-lingering-thoughts-cards-that-can-never-open), [a shot that rolls a hit](docs/discoveries.md#-every-shot-is-a-roll-against-the-hit-chance-and-range-cuts-both-chance-and-damage), [Fujita's free pistol](docs/discoveries.md#-the-gun-shop-has-three-fixed-lists-of-six-and-every-weapon-it-never-sells-has-one-giver).</sub>
+
 <p><img src="docs/img/game/burger-shop-changed-food.png" width="24%" alt="The burger shop under its usual menu, serving a changed burger that hurts the player"> <img src="docs/img/game/clock-day99.png" width="24%" alt="The HUD clock stuck on day 99 after two midnights"> <img src="docs/img/game/town-night-windows.png" width="24%" alt="A grey town street at 19:01 with warm yellow light in the windows"> <img src="docs/img/game/energy0-game-over.png" width="24%" alt="The GAME OVER screen after energy reached 0"></p>
+
+<sub>Left to right: [the burger shop's changed food](docs/discoveries.md#-the-burger-shop-secretly-serves-changed-food-and-even-days-swap-its-hours), [the clock stuck on day 99](docs/discoveries.md#-the-clock-counts-minutes-and-stops-at-day-99), [the grey town at night](docs/discoveries.md#-no-colour-version-of-the-town-is-left-on-the-disc), [game over at energy 0](docs/discoveries.md#-energy-at-0-is-death-and-only-a-hit-to-the-head-makes-you-wake-up-changed).</sub>
 
 ## At a glance
 
@@ -53,17 +60,34 @@ them: they are not part of Germs.
 - [The movie on the disc is a silent 82-second reel](docs/discoveries.md#-the-movie-on-the-disc-is-a-silent-82-second-reel-the-game-can-never-play) of flying craft, stored four times, with no shot of space and no code that could play it.
 - [The game times every frame](docs/discoveries.md#-the-game-times-every-frame-so-a-slow-machine-makes-it-choppy-not-slow), so a slow emulator makes it choppy: in DuckStation the coal mine runs at 20 frames a second and needs 140 % CPU for 30, and the 190 % players advise was the first setting tested where a library wait gave up, in the office.
 
-## Where to read
+## Documentation
+
+For players:
 
 | Page | What it holds |
-|---|---|
-| [docs/discoveries.md](docs/discoveries.md) | What the code taught us about the game, for players first, with the proof folded under each finding |
-| [docs/mysteries.md](docs/mysteries.md) | The questions this project wants the code to answer, ticked as they are answered |
-| [docs/community-knowledge.md](docs/community-knowledge.md) | What players, wikis, cheat makers and earlier projects already knew, with sources |
-| [docs/naming.md](docs/naming.md) | How names are given, the evidence they need, the tools, and the glossary of modules |
-| [docs/engine/](docs/engine/README.md) | How the engine works, one page per system, for a programmer opening the code: boot and the loop, files and the CD, rendering, sound, menus and the save, scenes and scripts, the town, people and combat, the player |
-| [docs/design-intent.md](docs/design-intent.md) | What the code says about what the creators meant, for players: code facts, the creators' words where they exist, and our reading kept apart |
-| [docs/layout.md](docs/layout.md) | The source files in link order, each cut with its evidence and how sure it is |
+| --- | --- |
+| [Discoveries](docs/discoveries.md) | The 47 findings, for players first, with the proof folded under each one |
+| [Mysteries](docs/mysteries.md) | The 36 questions the project set out to answer, ticked as they are answered |
+| [Design intent](docs/design-intent.md) | What the code says about what the creators meant, kept apart from their words and our reading |
+| [Community knowledge](docs/community-knowledge.md) | What players, wikis, cheat makers and earlier projects already knew, with sources |
+
+For programmers:
+
+| Page | What it holds |
+| --- | --- |
+| [Engine index](docs/engine/README.md) | How the engine works, one page per system, and where to start reading the code |
+| [Boot and the main loop](docs/engine/boot-and-loop.md) | `main`, the kaj start-up, the event queue, timers, tasks and one frame |
+| [Files and the CD](docs/engine/files-and-cd.md) | SCE.S and RES.R, the chunk walk, the CD manager, streamed places, TIM, TMD and TOD |
+| [Rendering](docs/engine/rendering.md) | The two buffers, ordering tables, primitive handlers, models, sprites, effects and fog |
+| [Sound and music](docs/engine/sound-and-music.md) | VAB banks, sound effects, one SEP of music per scene, footsteps and LIBSND |
+| [Menus, text and the save](docs/engine/menus-text-and-save.md) | The office menu, Kanji ROM text, narration and profiles, the memory card, the pad |
+| [Scenes and scripts](docs/engine/scenes-and-scripts.md) | The scene request, action sets and the action queue, area triggers, doors, game variables |
+| [Town and vehicles](docs/engine/town-and-vehicles.md) | Town blocks, streaming, collision, buildings, the car, the train and the shops |
+| [People and combat](docs/engine/people-and-combat.md) | People and enemies, movement and attacks, the hit roll, weapons, damage and arrests |
+| [Player and survival](docs/engine/player-and-survival.md) | The player on foot and in vehicles, energy, body parts, food, the clock and the mails |
+| [Source file layout](docs/layout.md) | The 36 source files in link order, each cut with its evidence and how sure it is |
+| [Naming guide](docs/naming.md) | How names are given, the evidence they need, the tools and the glossary of modules |
+| [The disc](disks/README.md) | Where to put your own dump of the disc and the names the build expects |
 
 ## Building
 
@@ -104,4 +128,4 @@ leads; no code or name was taken from them.
 Built with splat, spimdisasm, maspsx, m2c, decomp-permuter, asm-differ, mipsmatch, objdiff, mkpsxiso,
 old-gcc and PCSX-Redux; Sony's library functions were identified with lab313ru's psx_psyq_signatures.
 `include/include_asm.h`, `macro.inc`, `labels.inc` and `gte_macros.inc` are splat's generated files (MIT,
-Copyright (c) 2021 Ethan Roseman).
+Copyright (c) 2021 Ethan Roseman; the full notice is in [include/LICENSE-splat.txt](include/LICENSE-splat.txt)).

@@ -1,11 +1,15 @@
 # Town and vehicles
 
+<sub>[germs-decomp](../../README.md) / [Engine](README.md) / Town and vehicles</sub>
+
 The world of Germs is built from blocks: pieces of map with a floor model, up to three other models and an optional
 grid for the enemies. The town streams its blocks by cells around the player, a building loads its rooms. This page
 covers the blocks of [block.c](../../src/game/block.c), how the code finds the ground under a
 point, the buildings and their state ([building.c](../../src/game/building.c)), the town loop of
 [town.c](../../src/game/town.c) with the car and the train of [vehicle.c](../../src/game/vehicle.c), and the shops of
 [shop.c](../../src/game/shop.c). How a scene file is read is in [scenes and scripts](scenes-and-scripts.md).
+
+**On this page:** [Town blocks](#town-blocks) · [Streaming](#streaming) · [Visibility](#visibility) · [Ground height and collision](#ground-height-and-collision) · [The arena](#the-arena) · [Buildings and their state](#buildings-and-their-state) · [The town loop](#the-town-loop) · [The car](#the-car) · [Car navigation](#car-navigation) · [The train](#the-train) · [Shops](#shops)
 
 ## Town blocks
 
@@ -167,3 +171,7 @@ gives level advice, kind 9 uses the bought item at once between screen fades (`e
 the food shops either hand over up to three items or eat them at once with `effect_item_use` (a meal adds 1 to
 `meal_count`, GameVars + 0x92). `shop_exit_to_town` (0x801A1FD4) puts the player back in the town at the shop's exit
 point. What the food and the clinics do is in [player and survival](player-and-survival.md#food-and-healing).
+
+---
+
+Previous: [Scenes and scripts](scenes-and-scripts.md) · Next: [People and combat](people-and-combat.md) · [Engine index](README.md)

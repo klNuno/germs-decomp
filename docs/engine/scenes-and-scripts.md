@@ -1,10 +1,14 @@
 # Scenes and scripts
 
+<sub>[germs-decomp](../../README.md) / [Engine](README.md) / Scenes and scripts</sub>
+
 Every place in Germs (the office, the town, each building, shop and station) is a scene of the file `SCE.S`. It
 brings its own script: action sets that the code queues and runs one command per frame, area triggers drawn into the
 floor, scene objects and doors, and the people of the place. This page follows a scene from the request that asks
 for it to the commands its scripts send. The people themselves are in [people and combat](people-and-combat.md), the
 town and buildings in [town and vehicles](town-and-vehicles.md).
+
+**On this page:** [The scene request](#the-scene-request) · [Loading a scene](#loading-a-scene) · [Action sets](#action-sets) · [The action queue](#the-action-queue) · [Area triggers](#area-triggers) · [Scene objects and doors](#scene-objects-and-doors) · [Game variables](#game-variables)
 
 ## The scene request
 
@@ -168,3 +172,7 @@ variable `target` by the argument, subs 6 to 8 by another variable. Variables th
 | 61 to 64 | day, hour, minute and day parity ([the clock](../discoveries.md#-the-clock-counts-minutes-and-stops-at-day-99)) |
 | 95 | the mail arrival counter, 3 at a new game |
 | 96 onward | one byte per mail: bit 7 received, bit 6 read ([mails](player-and-survival.md#the-clock-and-the-mails)) |
+
+---
+
+Previous: [Menus, text and the save](menus-text-and-save.md) · Next: [Town and vehicles](town-and-vehicles.md) · [Engine index](README.md)

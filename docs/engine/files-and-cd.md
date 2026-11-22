@@ -1,5 +1,7 @@
 # Files and the CD
 
+<sub>[germs-decomp](../../README.md) / [Engine](README.md) / Files and the CD</sub>
+
 The game reads the disc in two ways. Scenes and resources come from two packed files, SCE.S and
 RES.R, read straight through LIBCD by object.c and cut into tagged chunks, one loader per tag.
 The town and the buildings stream their blocks while the player moves, through the kaj CD
@@ -7,6 +9,8 @@ manager, which caches files in memory pools and moves them when it compacts a po
 covers both paths and the TIM, TMD and TOD formats. What a scene does with its chunks is on
 [scenes and scripts](scenes-and-scripts.md); the blocks the stream feeds are on
 [town and vehicles](town-and-vehicles.md).
+
+**On this page:** [SCE.S](#sces) · [The chunk walk](#the-chunk-walk) · [RES.R](#resr) · [The CD manager](#the-cd-manager) · [Town cells and streamed places](#town-cells-and-streamed-places) · [TIM, TMD and TOD](#tim-tmd-and-tod)
 
 ## SCE.S
 
@@ -162,3 +166,7 @@ kaj/tod.c has no assert; its `kaj_tod_` functions play TOD animation. `kaj_tod_s
 | 8 | create or kill an object (`kaj_tod_create_obj`, `kaj_tod_remove_obj`) |
 
 Models and their frames are on [rendering](rendering.md#models-and-animation).
+
+---
+
+Previous: [Boot and the main loop](boot-and-loop.md) · Next: [Rendering](rendering.md) · [Engine index](README.md)

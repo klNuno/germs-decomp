@@ -1,13 +1,17 @@
 # What the community already knows
 
+<sub>[germs-decomp](../README.md) / Community knowledge</sub>
+
 What players, wikis and earlier projects knew about Germs: Nerawareta Machi (SLPS-02107, KAJ, 1999-07-22) when this project started, gathered on 2026-11-16. "Code" means read in the game's code or data by an earlier project; "observed" means seen by players; "rumour" means said without evidence anyone can check. Nothing here is trusted until this project's own code reading confirms it; where the code already answers, the row says "Our check" and links to [discoveries.md](discoveries.md). Open questions are in [mysteries.md](mysteries.md).
 
 Source keys used in the tables (full URLs in [Sources](#sources)): **fandom** (the Germs fandom wiki, page named after it), **jawiki** (Japanese Wikipedia), **atwiki** (Game Catalog @Wiki), **HG101** (Hardcore Gaming 101), **GameFAQs** (the FAQ by whowasphone404, v2 of 2025-01-07), **hiddenblur** (the Germs-english translation project's docs), **pastebin** (DuckStation cheat file linked from Romhack Plaza), **nico** (niconico video descriptions, by video id), **manual** (as transcribed on the fandom Manual page).
 
+**On this page:** [Game rules](#game-rules) · [World and places](#world-and-places) · [Bugs and oddities](#bugs-and-oddities) · [Hidden and cut content](#hidden-and-cut-content) · [Technical](#technical) · [Earlier projects](#earlier-projects) · [Staff and development](#staff-and-development) · [Where sources disagree](#where-sources-disagree) · [Sources](#sources)
+
 ## Game rules
 
 | Topic | Known | Status | Source |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | Clock | Game time runs 6 times faster than real time; the clock (day, hour, minute) is always on screen | observed | jawiki, GameFAQs how-to-play |
 | Clock period | A cheat writes 0x0258 (600) to 0x801E6DB0 as "normal" time, 2 as fast, 0xFFFF as stopped. Our check: 600 is the number of vertical blanks between two clock events, one game minute; the day counter stops at day 99. Both seen in the emulator ([the clock](discoveries.md#-the-clock-counts-minutes-and-stops-at-day-99)) | code | pastebin TimeControl |
 | Time skips | The 24-hour chiropractor can pass time until the next event; the office sofa allows a nap up to twice a day; the hotel lets you sleep. Our check: the chiropractor sells three courses of 1, 3 and 6 hours that take 60, 180 or 360 points of damage off every body part; with no wound they only pass the time, seen in the emulator ([the chiropractor](discoveries.md#-the-chiropractor-sells-time-1-3-or-6-hours-that-heal-as-much)). Its door tests no hour, so it is open around the clock ([opening hours](discoveries.md#-only-three-shops-close-at-night-the-opening-hours-sit-in-the-towns-door-scripts)) | observed | jawiki, GameFAQs buildings |
@@ -52,7 +56,7 @@ Source keys used in the tables (full URLs in [Sources](#sources)): **fandom** (t
 ## World and places
 
 | Topic | Known | Status | Source |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | Town | An unnamed former coal town in rural America with many residents of Japanese descent, sea to the south and mountains on three sides; GameFAQs calls it "Newtown" after the hospital's name | observed | jawiki, fandom City, GameFAQs |
 | Size | 2.5 km square on the back insert and the KAJ brochure; 3 km square in the manual, jawiki and GameFAQs; fandom says "about 3 square kilometers". Our check: about 6 km² of 50 m blocks, the area of a 2.5 km square, spread over about 4.75 by 4.9 km ([the town's size](discoveries.md#-the-town-is-a-grid-of-50-m-blocks-about-48-km-across)) | observed | earlier survey links, jawiki, fandom City |
 | Streaming | The town is cut into 50 m square blocks loaded around the player; the idea led KAJ to splume | observed | jawiki, GameFAQs |
@@ -70,7 +74,7 @@ Source keys used in the tables (full URLs in [Sources](#sources)): **fandom** (t
 ## Bugs and oddities
 
 | Topic | Known | Status | Source |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | Boss music | Killing a boss before entering its dialogue radius skips the boss music, which can then start after the boss is dead. Our check, for four buildings (power plant, `PSG`, cathedral, warehouses): corrected; the boss track starts with the boss's speech, the boss cannot be fought before it, and in these four leaving the speech spot switches the spot off, so the speech runs once per visit. At the cathedral a death fades the track only if the building's state was 0 to 40 before it: from 80, at the third death; from 100, at none. A later visit that loads the speech's version brings the bosses back alive, and the speech turns them hostile again, at the cathedral and, in part, the power plant; the track never starts again over a dead boss. It was heard after the cathedral's fade only with the fade and the speech forced. The other bosses were not checked ([boss music](discoveries.md#-boss-music-starts-with-the-bosss-speech-once-per-visit-and-comes-back-only-with-a-living-boss)) | observed | fandom Soundtrack |
 | Komuro fight | The coal mine music keeps playing under the boss music. Our check: confirmed by ear in the emulator; mine level 1 has no tune, its "music" is its ambience drone, held on a voice of its own, and the boss track plays over it at about the same loudness, heard for 61.7 seconds from the speech; nothing in the code stops the drone before you leave, so it should last the whole fight, which was not played; no stop call is skipped. The boss's card names Komuro ([the mine's drone](discoveries.md#-mine-level-1-has-no-tune-and-its-drone-plays-on-under-the-komuro-boss-track)) | observed | fandom Soundtrack |
 | Car stuck | The car catches on kerbs and tunnel edges; only a phone call frees it. Our check: corrected; walls and tunnel sides stop it dead, kerbs only slow it, and backing up frees it, seen in the emulator ([the car](discoveries.md#-the-car-climbs-any-kerb-but-stops-dead-when-a-corner-leaves-the-ground)) | observed | atwiki |
@@ -83,7 +87,7 @@ Source keys used in the tables (full URLs in [Sources](#sources)): **fandom** (t
 ## Hidden and cut content
 
 | Topic | Known | Status | Source |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | Hidden movie | A movie of two craft flying through a canyon and into space (atwiki), alien craft over another planet (HG101), two fighters flying through structures (GameFAQs); no way to see it in the game. A niconico uploader called it the opening, but it does not play at boot. Our check: the game has no way to open it; decoded, it is a silent reel of about 82 seconds, stored twice in each file, with the canyon but no shot of space ([the movie](discoveries.md#-the-movie-on-the-disc-is-a-silent-82-second-reel-the-game-can-never-play)) | observed | atwiki, HG101, GameFAQs |
 | Movie origin | Guesses: a test of video playback, or footage from another KAJ project. Our check: a 1995 reel of flying craft with no title, text or sound; nothing in it ties it to Germs, and what it was made for cannot be told from the disc ([the movie](discoveries.md#-the-movie-on-the-disc-is-a-silent-82-second-reel-the-game-can-never-play)) | rumour | GameFAQs |
 | Separate scene files | The exe names `\S\%s.S;1`, `\S\OFC.S;1` and `\S\TWN.S;1`, files the disc does not have. Our check: leftovers, the loader only opens `SCE.S` and `RES.R` ([scene files](discoveries.md#-the-game-still-names-scene-files-the-disc-does-not-have)) | code | this project |
@@ -101,7 +105,7 @@ Source keys used in the tables (full URLs in [Sources](#sources)): **fandom** (t
 - RAM addresses known from cheats and the translation project:
 
 | Address | What | Source |
-|---|---|---|
+| --- | --- | --- |
 | 0x801E0710 | Energy (infinite energy writes 200). Also the base of the structure the movement code receives | psxdatacenter (GLADIATOR), hiddenblur controls.md |
 | 0x801E041C to 0x801E0424 | Five body-part values | pastebin |
 | 0x801E0620 | Player structure (pointer at +0x5C of 0x801E0710) | hiddenblur controls.md |
@@ -118,7 +122,7 @@ Source keys used in the tables (full URLs in [Sources](#sources)): **fandom** (t
 | 0x801D7780, 0x801D7744 | Offset tables of the 24 `SCE.S` scenes and 15 `RES.R` blocks | hiddenblur disc-survey.md |
 
 | Format | Content | Decoded by | State |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | SCE.S | Scenes: DIR sector, MIDI or VAB, AREA chunks with ASET, ENMY, ACTR | hiddenblur | Container and text complete (rebuilds byte for byte); DIR fields a to d, AREA triggers, ENMY, ACTR unknown. Our check: the DIR fields are four counts, and the trigger, person and `ENMY` stat block fields are named from their readers ([the scene data](discoveries.md#-the-scene-data-four-counts-per-place-door-triggers-and-people-records)) |
 | RES.R | 15 blocks, TIMs, item and food names, `WEPN` | hiddenblur | Names and pictures read; weapon stats after +0x24 unknown. Our check: every field after +0x24 named from its readers ([the weapon record](discoveries.md#-the-weapon-record-three-requirements-accuracy-damage-and-three-ranges)) |
 | C/CITY.MP, .F, .BC | Town map | nobody | Unknown. Our check: `C/CITY.MP` holds the bounds and a 108 by 128 grid of 50 m blocks ([the town's size](discoveries.md#-the-town-is-a-grid-of-50-m-blocks-about-48-km-across)) |
@@ -137,7 +141,7 @@ Source keys used in the tables (full URLs in [Sources](#sources)): **fandom** (t
 ## Staff and development
 
 | Topic | Known | Status | Source |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | Developer | KAJ (株式会社ケー・エー・ジェー), a CG house founded 1992; "KEJ" on some databases is a misreading | observed | disc label, psxdatacenter, jawiki |
 | First game | KAJ's first game, after CG work for NHK | observed | GameFAQs, atwiki |
 | Team | Six developers: Masaharu Endo, Chiharu Kajizuka, Izumi Matsumoto, Misako Saito, Masato Hara, Hiroko Ebihara (credits as transcribed, spelling may be off) | observed | fandom, GameFAQs credits, atwiki |

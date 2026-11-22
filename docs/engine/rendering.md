@@ -1,5 +1,7 @@
 # Rendering
 
+<sub>[germs-decomp](../../README.md) / [Engine](README.md) / Rendering</sub>
+
 Every frame of the game is drawn by one function, `roadmap_draw_frame`, into one of two buffers
 set up by the kaj view.c. The 3D parts (blocks, doors, people, things, the player, the car) go
 through Sony's LIBGS sort routine with the game's own primitive handlers, which cut, light and fog
@@ -7,6 +9,8 @@ each polygon; sprites are added as plain SPRT packets. This page covers the buff
 the ordering tables, the town renderer, models, sprites and their colour tables, the effects, the
 fog by time of day and the functions kept in assembly. The frame loop that calls the drawing is on
 [boot and loop](boot-and-loop.md#one-frame-of-the-game).
+
+**On this page:** [Frame buffers and the flip](#frame-buffers-and-the-flip) · [The town renderer](#the-town-renderer) · [Models and animation](#models-and-animation) · [Sprites and colour tables](#sprites-and-colour-tables) · [Effects](#effects) · [Fog and the time of day](#fog-and-the-time-of-day) · [Functions once kept in assembly](#functions-once-kept-in-assembly)
 
 ## Frame buffers and the flip
 
@@ -158,3 +162,7 @@ right after the clip call. GCC 2.8.1 only gives the packet pointer `poly` a save
 `poly` lives across a call; that branch, which jumps to the code that reads `poly`, makes it live
 across the clip call when the register allocator looks, and the combiner folds the test away
 before any code is written. Without it, the closest C costs one extra register copy.
+
+---
+
+Previous: [Files and the CD](files-and-cd.md) · Next: [Sound and music](sound-and-music.md) · [Engine index](README.md)
