@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Licence: MIT for the code written for this project only; game-derived data and Sony names in it are excluded (LICENSING.md).
+# Licence: MIT for klNuno's own code only; game-derived data and Sony names in it are excluded (LICENSING.md).
 """Where the built exe differs from the original: the first differing words, by function.
 
   tools/exediff.py [N] [--text]   (N differing runs to print, default 5)

@@ -1,4 +1,4 @@
-# Licence: MIT for the code written for this project only; game-derived data and Sony names in it are excluded (LICENSING.md).
+# Licence: MIT for klNuno's own code only; game-derived data and Sony names in it are excluded (LICENSING.md).
 """Convert a PCSX-Redux screenshot dump (frameNNNNN-WxH-BPP.raw) to PNG next to it."""
 import re
 import sys

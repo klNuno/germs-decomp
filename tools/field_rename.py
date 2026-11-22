@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Licence: MIT for the code written for this project only; game-derived data and Sony names in it are excluded (LICENSING.md).
+# Licence: MIT for klNuno's own code only; game-derived data and Sony names in it are excluded (LICENSING.md).
 """Rename struct fields with evidence, everywhere the compiler says they are used.
 
     tools/field_rename.py FIELDS.tsv [--dry-run] [--units src/game/X.c ...]

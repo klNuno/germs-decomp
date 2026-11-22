@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Licence: MIT for the code written for this project only; game-derived data and Sony names in it are excluded (LICENSING.md).
+# Licence: MIT for klNuno's own code only; game-derived data and Sony names in it are excluded (LICENSING.md).
 """Inventory of the functions still in asm: size, calls, gp, rodata and jump-table use.
 
   tools/fn_index.py [--json build/fn_index.json] [--leaf] [--max-size 0x40] [--no-gp] [--no-rodata]

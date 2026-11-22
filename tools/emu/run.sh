@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Licence: MIT for the code written for this project only; game-derived data and Sony names in it are excluded (LICENSING.md).
+# Licence: MIT for klNuno's own code only; game-derived data and Sony names in it are excluded (LICENSING.md).
 # Run the game headless in PCSX-Redux (no window, sound only to a file) and drive it with Lua.
 #   tools/emu/run.sh [extra.lua ...]
 # tools/emu/probe.lua always runs first; it reads these variables:

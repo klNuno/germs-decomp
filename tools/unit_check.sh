@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Licence: MIT for the code written for this project only; game-derived data and Sony names in it are excluded (LICENSING.md).
+# Licence: MIT for klNuno's own code only; game-derived data and Sony names in it are excluded (LICENSING.md).
 # Check one game unit on its own: it must assemble to the same bytes as the reference build.
 #   tools/unit_check.sh --save              after a green `make check`: keep build/src/**/*.o as the reference
 #   tools/unit_check.sh src/game/event.c     build that file alone (in a temp dir) and compare it

@@ -1,4 +1,4 @@
-# Licence: MIT for the code written for this project only; game-derived data and Sony names in it are excluded (LICENSING.md).
+# Licence: MIT for klNuno's own code only; game-derived data and Sony names in it are excluded (LICENSING.md).
 """Re-encode splat asm to Shift-JIS on stdout: splat decodes the game's strings to UTF-8
 with Python's codec, so the same codec gives the original bytes back.
 

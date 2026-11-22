@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Licence: MIT for the code written for this project only; game-derived data and Sony names in it are excluded (LICENSING.md).
+# Licence: MIT for klNuno's own code only; game-derived data and Sony names in it are excluded (LICENSING.md).
 # Install the pinned decomp toolchain into tools/ and .venv/. Safe to re-run.
 #   tools/setup.sh          install, verified against tools/toolchain.sha256 and tools/requirements.lock
 #   tools/setup.sh --lock   rewrite both lock files first (only when bumping tools/versions.env)

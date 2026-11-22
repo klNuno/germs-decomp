@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Licence: MIT for the code written for this project only; game-derived data and Sony names in it are excluded (LICENSING.md).
+# Licence: MIT for klNuno's own code only; game-derived data and Sony names in it are excluded (LICENSING.md).
 """After `make split`: write the PS-X EXE header's addresses as symbols.
 
     python3 tools/postsplit.py

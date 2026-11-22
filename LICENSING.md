@@ -6,9 +6,11 @@ There is no top-level `LICENSE` file on purpose: such a file would read as a lic
 
 ## Files under the MIT licence
 
-These files were written for this project and are licensed under the MIT licence below. The Python, shell and Lua tool sources and the two Git hooks carry a comment line that starts `Licence: MIT for the code written for this project only` and points here. It is not an SPDX tag on purpose: an SPDX tag would claim the whole file, and some of these files hold content the project cannot license (below).
+These files are klNuno's own work, written for this project or, for many tools, copied from lsd-decomp (below), and are licensed under the MIT licence below. The Python, shell and Lua tool sources and the two Git hooks carry a comment line that starts `Licence: MIT for klNuno's own code only` and points here. It is not an SPDX tag on purpose: an SPDX tag would claim the whole file, and some of these files hold content the project cannot license (below).
 
-The licence covers only what this project wrote in these files: the code, its comments and the documentation's prose. Some of them also hold content that is not the project's to license, such as addresses, sizes and layout tables of the retail executable, names of the game and of its reconstructed functions and data, quoted game text, and the names of Sony's SDK libraries and functions. That content stays with its rights holders wherever it appears, and the MIT licence grants nothing in it.
+The licence covers only klNuno's own work in these files: the code, its comments and the documentation's prose, the code copied from lsd-decomp included. Some of them also hold content that is not the project's to license, such as addresses, sizes and layout tables of the retail executable, names of the game and of its reconstructed functions and data, quoted game text, and the names of Sony's SDK libraries and functions. That content stays with its rights holders wherever it appears, and the MIT licence grants nothing in it.
+
+Many of the tools began as copies of the tools of [lsd-decomp](https://github.com/klNuno/lsd-decomp): `tools/split_units.py` says so in its header, and `tools/fmatch.py`, `tools/fn_index.py`, `tools/sjis.py`, `tools/psyq/match.py`, `tools/emu/raw2png.py` and most of the others share much of their code with lsd-decomp's tools of the same name. The copies in this repository are klNuno's, the holder named in the notice below, who licenses them here under the same MIT terms, whatever licence lsd-decomp itself carries.
 
 | Path | What it is |
 | --- | --- |
@@ -70,4 +72,4 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-In this notice, "the Software" means only the parts written by this project of the files listed under [Files under the MIT licence](#files-under-the-mit-licence), as limited in that section.
+In this notice, "the Software" means only klNuno's own work in the files listed under [Files under the MIT licence](#files-under-the-mit-licence), as limited in that section.
